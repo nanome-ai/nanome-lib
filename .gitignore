@@ -1,0 +1,12 @@
+.vs/
+*__pycache__*
+.vscode/
+*.user
+*.pyproj
+*.sln
+test_outputs/
+doc/build/
+doc/source/nanome.*
+doc/source/modules.rst
+*.pyc
+doc/source/_build/
