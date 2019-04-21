@@ -16,7 +16,7 @@ class _Molecule(_Base):
             return cls()
 
         def __init__(self):
-            self._name = ""
+            self._name = "molecule"
             self._associated = {}
 
     def get_atom_iterator(self):

@@ -2,14 +2,13 @@ from . import UIBase
 from nanome._internal._ui import _Slider
 
 class Slider(_Slider, UIBase):
-    def __init__(self, 
-                 name = "slider", 
+    def __init__(self,  
                  min_val     = None, 
                  max_val     = None, 
                  current_val = None):
         # type: (str, float, float, float)
         _Slider.__init__(self)
-        UIBase.__init__(self, name)
+        UIBase.__init__(self)
         if min_val != None:
             self.min_value = min_val
         if max_val != None:

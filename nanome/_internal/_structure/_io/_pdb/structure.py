@@ -15,7 +15,7 @@ def structure(content):
     for i in range(num_molecules):
         molecule = structure_molecule(atoms_by_molecule[i], content.compnds)
         molecule.molecular._name = str(i)
-        complex.molecules.append(molecule)
+        complex._molecules.append(molecule)
     # Done
     return complex
         

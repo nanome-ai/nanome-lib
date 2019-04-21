@@ -67,8 +67,8 @@ def CreateList():
     prefabButton.text.active = True
     prefabButton.set_all_text("Molecule Button")
     prefabButton.register_pressed_callback(prefab_button_pressed_callback)
-    child1.add_content(prefabLabel)
-    child2.add_content(prefabButton)
+    child1.set_content(prefabLabel)
+    child2.set_content(prefabButton)
 
     list_content = []
     for _ in range(0, 10):
@@ -121,7 +121,7 @@ def run(counter):
     run_test(create_test("list_and_clone_test", test_serializer, (_UIBaseSerializer(), CreateList(), options)), counter)
     test_node = CreateLayoutNode()
     test_node._child_ids = []
-    test_node._content_ids = []
+    test_node._content_id = None
     run_test(create_test("layout_test", test_serializer, (_LayoutNodeSerializer(), test_node)), counter)
 
     # run_test(test_menu_serialization, counter)

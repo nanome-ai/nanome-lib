@@ -21,7 +21,7 @@ class Plugin(_Plugin):
     :type category: str
     :type has_advanced: bool
     """
-    def run(self, host = '127.0.0.1', port = 8888):
+    def run(self, host = '127.0.0.1', port = 8888, key_file = "nts_key"):
         """
         | Starts the plugin by connecting to the server specified.
         | If arguments (-a, -p) are given when starting plugin, host/port will be ignored.
@@ -34,6 +34,7 @@ class Plugin(_Plugin):
         """
         self.__host = host
         self.__port = port
+        self.__key_file = key_file
         self.__parse_args()
         Logs.debug("Start plugin")
         self.__run()

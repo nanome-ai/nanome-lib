@@ -46,14 +46,14 @@ class _ProcessNetwork(object):
             return False
 
         if payload:
-            try:
-                received_object, command_id, request_id = self._serializer.deserialize_command(payload, self.__version_table)
-            except:
+            received_object, command_hash, request_id = self._serializer.deserialize_command(payload, self.__version_table)
+            if received_object == None and command_hash == None and request_id == None:
                 return True # Happens if deserialize_command returns None, an error message is already displayed in that case
+                
             try:
-                callback = self._serializer._command_callbacks[command_id]
+                callback = self._serializer._command_callbacks[command_hash]
             except:
-                Logs.error("Received a command without callback associated:", command_id)
+                Logs.error("Received a command without callback associated:", command_hash)
                 return True
             callback(self, received_object, request_id)
         return True

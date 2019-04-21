@@ -73,11 +73,11 @@ class Atom(_Atom):
             self._surface_color = value
         
         @property
-        def surface_transparency(self):
-            return self._surface_transparency
-        @surface_transparency.setter
-        def surface_transparency(self, value):
-            self._surface_transparency = value
+        def surface_opacity(self):
+            return self._surface_opacity
+        @surface_opacity.setter
+        def surface_opacity(self, value):
+            self._surface_opacity = value
     _Atom.Rendering._create = Rendering
 
     class Molecular(_Atom.Molecular):

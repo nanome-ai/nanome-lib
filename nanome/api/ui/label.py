@@ -4,10 +4,10 @@ from nanome.util.text_settings import VertAlignOptions, HorizAlignOptions
 from . import UIBase
 
 class Label(_Label, UIBase):
-    def __init__(self, name = "label", text = None):
+    def __init__(self, text = None):
         # type: (str, str)
         _Label.__init__(self)
-        UIBase.__init__(self, name)
+        UIBase.__init__(self)
         if text != None:
             self.text_value = text
     @property

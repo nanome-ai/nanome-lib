@@ -43,10 +43,11 @@ def _receive_menu(network, arg, request_id):
             for child_id in node._child_ids:
                 l_node.add_child(node_dict[child_id])
             del node._child_ids
-            l_node.clear_content()
-            for content_id in node._content_ids:
-                l_node.add_content(content_dict[content_id])
-            del node._content_ids
+            if (node._content_id == None):
+                l_node.set_content(None)
+            else:
+                l_node.set_content(content_dict[node._content_id])
+            del node._content_id
         #corrects the root.
         plugin_menu.root = node_dict[root_id]
         network._call(request_id, plugin_menu)

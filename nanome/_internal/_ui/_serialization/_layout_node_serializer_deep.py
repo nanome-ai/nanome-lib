@@ -7,7 +7,8 @@ from nanome._internal._util._serializers import _TypeSerializer
 class _LayoutNodeSerializerDeep(_TypeSerializer):
     def __init__(self):
         self._layout_array = _ArraySerializer()
-        self._content_array = _ArraySerializer()
+        self._layout_array.set_type(self)
+        self._content_serializer = _UIBaseSerializer()
         self._inited = False
 
     def version(self):
@@ -16,15 +17,7 @@ class _LayoutNodeSerializerDeep(_TypeSerializer):
     def name(self):
         return "LayoutNodeDeep"
 
-    def _init_serializers(self):
-        if (self._inited == False):
-            self._inited = True
-            self._layout_array.set_type(_LayoutNodeSerializerDeep())
-            self._content_array.set_type(_UIBaseSerializer())
-
     def serialize(self, version, value, context):
-        self._init_serializers()
-
         context.write_int(value._id)
         context.write_bool(value._enabled)
         context.write_int(value._layer)
@@ -38,11 +31,12 @@ class _LayoutNodeSerializerDeep(_TypeSerializer):
         context.write_float(value._padding[2])
         context.write_float(value._padding[3])
         context.write_using_serializer(self._layout_array, value._children)
-        context.write_using_serializer(self._content_array, value._content)
+        has_content = value._content != None
+        context.write_bool(has_content)
+        if (has_content):
+            context.write_using_serializer(self._content_serializer, value._content)
 
     def deserialize(self, version, context):
-        self._init_serializers()
-
         result = _LayoutNode._create()
         result._id = context.read_int()
         result._enabled = context.read_bool()
@@ -57,5 +51,7 @@ class _LayoutNodeSerializerDeep(_TypeSerializer):
                            context.read_float(),
                            context.read_float())
         result._children = context.read_using_serializer(self._layout_array)
-        result._contents = context.read_using_serializer(self._content_array)
+        has_content = context.read_bool()
+        if (has_content):
+            result._content = context.read_using_serializer(self._content_serializer)
         return result

@@ -3,10 +3,10 @@ from nanome.util.text_settings import VertAlignOptions, HorizAlignOptions
 from . import UIBase
 
 class Button(_Button, UIBase):
-    def __init__(self, name = "button", text = None):
+    def __init__(self, text = None):
         # type: (str, str)
         _Button.__init__(self)
-        UIBase.__init__(self, name)
+        UIBase.__init__(self)
         self.text = self._text
         if (text != None):
             self.set_all_text(text)

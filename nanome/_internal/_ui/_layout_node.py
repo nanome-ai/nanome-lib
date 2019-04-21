@@ -21,7 +21,7 @@ class _LayoutNode(object):
         self._padding_type = _LayoutNode.PaddingTypes.fixed
         self._padding = (0.0, 0.0, 0.0, 0.0)
         self._children = []
-        self._content = []
+        self._content = None
         #API
         self._name = name
         self._parent = None
@@ -29,9 +29,6 @@ class _LayoutNode(object):
 
     def get_children(self):
         return self._children
-
-    def get_content(self):
-        return self._content
     
     class PaddingTypes(IntEnum):
         fixed = 0
@@ -46,17 +43,16 @@ class _LayoutNode(object):
         vertical = 0
         horizontal = 1
 
-    def add_content(self, ui_content):
+    def get_content(self):
+        return self._content
+
+    def set_content(self, ui_content):
         #add to curr parent
-        self._content.append(ui_content)
+        self._content = ui_content
         self._save_changes()
 
-    def remove_content(self, ui_content):
-        self._content.remove(ui_content)
-        self._save_changes()
-
-    def clear_content(self):
-        self._content = []
+    def remove_content(self):
+        self._content = None
         self._save_changes()
 
     def add_child(self, child_node):
@@ -92,8 +88,8 @@ class _LayoutNode(object):
 
     def _copy_values_deep(self, other):
         self.copy_values_shallow(other)
-        for content in other._content:
-            self._content.append(content._clone())
+        if (other._content != None):
+            self._content = other._content._clone()
         for child in other._children:
             self._children.append(child._clone())
 
@@ -105,14 +101,16 @@ class _LayoutNode(object):
 #region non-api functions
     def _find_content(self, content_id):
         found_val = None
-        for content in self._content:
-            if content._content_id == content_id:
-                return content
-            elif isinstance(content, _UIList):
-                for node in content.items:
-                    found_val = node._find_content(content_id)
-                    if found_val != None:
-                        return found_val
+        content = self._content
+        if self._content != None and content._content_id == content_id:
+            return content
+
+        if isinstance(content, _UIList):
+            for node in content.items:
+                found_val = node._find_content(content_id)
+                if found_val != None:
+                    return found_val
+
         for child in self._children:
             found_val = child._find_content(content_id)
             if found_val != None:
@@ -120,7 +118,8 @@ class _LayoutNode(object):
         return None
 
     def _append_all_content(self, all_content = []):
-        all_content.extend(self._content)
+        if (self._content != None):
+            all_content.append(self._content)
         for child in self._children:
             child._append_all_content(all_content)
         return all_content

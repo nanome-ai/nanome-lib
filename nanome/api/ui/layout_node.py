@@ -96,27 +96,6 @@ class LayoutNode(_LayoutNode):
     def parent(self, value):
         self._parent = value
     #endregion
-    #region API Essentials
-    def find_content(self, name, recursively = False):
-        # type: (str, bool) -> UIBase
-        """
-        | Checks child nodes for an attached content of the matching name.
-        | If "recursively" is True, this also checks all descending nodes' contents.
-
-        :param name: Name of the content to find.
-        :type name: str
-        :return: Content with matching name.
-        :rtype: :class:`~nanome.api.ui.ui_base.UIBase`
-        """
-        for content in self.get_content():
-            if name == content.name:
-                return content
-        if recursively:
-            for child in self.get_children():
-                res = child.find_content(name, True)
-                if res != None:
-                    return res
-        return None
 
     def find_node(self, name, recursively = True):
         # type: (str, bool) -> LayoutNode
@@ -174,50 +153,50 @@ class LayoutNode(_LayoutNode):
         self.sizing_type = _LayoutNode.SizingTypes.expand
     #endregion
     #region Content adders
-    def add_new_button(self, name = "button", text = None):
+    def add_new_button(self, text = None):
         # type: (str, str) -> Button
-        button = Button(name=name, text=text)
-        self.add_content(button)
+        button = Button(text=text)
+        self.set_content(button)
         return button
 
-    def add_new_label(self, name = "label", text = None):
+    def add_new_label(self, text = None):
         # type: (str, str) -> Label
-        label = Label(name=name, text=text)
-        self.add_content(label)
+        label = Label(text=text)
+        self.set_content(label)
         return label
 
-    def add_new_text_input(self, name = "text input"):
+    def add_new_text_input(self):
         # type: (str) -> TextInput
-        text_input = TextInput(name=name)
-        self.add_content(text_input)
+        text_input = TextInput()
+        self.set_content(text_input)
         return text_input
 
-    def add_new_slider(self, name = "slider"):
+    def add_new_slider(self, min_value = 0, max_value = 10, current_value = 5):
         # type: (str) -> Slider
-        slider = Slider(name=name)
-        self.add_content(slider)
+        slider = Slider(min_value, max_value, current_value)
+        self.set_content(slider)
         return slider
 
-    def add_new_mesh(self, name = "mesh"):
+    def add_new_mesh(self):
         # type: (str) -> Mesh
-        mesh = Mesh(name=name)
-        self.add_content(mesh)
+        mesh = Mesh()
+        self.set_content(mesh)
         return mesh
 
-    def add_new_image(self, name = "image"):
-        image = Image(name=name)
-        self.add_content(image)
+    def add_new_image(self, file_path = ""):
+        image = Image(file_path)
+        self.set_content(image)
         return image
 
     def add_new_loading_bar(self):
         loadingBar = LoadingBar()
-        self.add_content(loadingBar)
+        self.set_content(loadingBar)
         return loadingBar
 
-    def add_new_list(self, name = "list"):
+    def add_new_list(self):
         # type: (str) -> UIList
-        list_ = UIList(name=name)
-        self.add_content(list_)
+        list_ = UIList()
+        self.set_content(list_)
         return list_
     #endregion
 _LayoutNode._create = LayoutNode

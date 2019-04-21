@@ -20,9 +20,10 @@ def parse_json(node_json):
     for child_obj in child_list:
         node.add_child(parse_json(child_obj))
 
-    content_list = node_json["contents"]
-    for content_obj in content_list:
-        node.add_content(_ui_base_json.parse_json(content_obj))
+    content_json = node_json["content"]
+    if (content_json != None):
+        content_obj = _ui_base_json.parse_json(content_json)
+        node.set_content(content_obj)
     return node
 
 def write_json(node):
@@ -45,7 +46,5 @@ def write_json(node):
     for child in node.get_children():
         node_json["children"].append(write_json(child))
     #convert all contents
-    node_json["contents"] = []
-    for content in node.get_content():
-        node_json["contents"].append(_ui_base_json.write_json(content))
+    node_json["content"] = _ui_base_json.write_json(node.get_content())
     return node_json

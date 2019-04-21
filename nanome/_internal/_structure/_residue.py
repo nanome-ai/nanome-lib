@@ -23,7 +23,7 @@ class _Residue(_Base):
             self._ribboned = True
             self._ribbon_size = 0.0
             self._ribbon_mode = _Residue.RibbonMode.AdaptiveTube 
-            self._ribbon_color = Color.Red()
+            self._ribbon_color = Color.Clear()
 
     class Molecular(object):
         @classmethod
@@ -33,7 +33,7 @@ class _Residue(_Base):
         def __init__(self):
             self._type = "ARG" #RESIDUEDATA
             self._serial = 0
-            self._name = ""
+            self._name = "res"
             self._secondary_structure = _Residue.SecondaryStructure.Unknown
 
     class RibbonMode(Enum):

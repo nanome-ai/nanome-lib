@@ -26,6 +26,7 @@ def run(counter):
     run_test(test_equality, counter)
     run_test(test_pdb, counter)
     run_test(test_sdf, counter)
+    run_test(test_iterators, counter)
     prep_timer_test()
     run_timed_test(time_test_serializer, counter, 1, 2.9)
     #run_test(compare_mmcif_pdb, counter)
@@ -54,8 +55,6 @@ def test_structures():
     create_residue()
     create_chain()
     create_molecule()
-    test_complex = create_complex()
-    test_iterators(test_complex)
 
 def flip_x_positions(complex):
     for molecule in complex.molecules:
@@ -66,20 +65,13 @@ def flip_x_positions(complex):
     return complex
 
 def compare_atom_positions(complex1, complex2):
-    for m in range(len(complex1.molecules)):
-        molecule1 = complex1.molecules[m]
-        molecule2 = complex2.molecules[m]
-        for c in range(len(molecule1.chains)):
-            chain1 = molecule1.chains[c]
-            chain2 = molecule2.chains[c]
-            for r in range(len(chain1.residues)):
-                residue1 = chain1.residues[r]
-                residue2 = chain2.residues[r]
-                for a in range(len(residue1.atoms)):
-                    atom1 = residue1.atoms[a]
-                    atom2 = residue2.atoms[a]
-                    assert_equal(atom1.molecular.position.x, atom2.molecular.position.x, options)
-                    assert_equal(atom1, atom2, options)
+    a1 = complex1.atoms
+    a2 = complex2.atoms
+    for a,_ in enumerate(complex1.atoms):
+        atom1 = next(a1)
+        atom2 = next(a2)
+        assert_equal(atom1.molecular.position.x, atom2.molecular.position.x, options)
+        assert_equal(atom1, atom2, options)
 
 #Testing save load
 #PDB
@@ -189,18 +181,59 @@ def test_serializers():
     workspace2 = receive_workspace.deserialize(context_d)
     assert_equal(workspace1, workspace2, options)
     
-def test_iterators(complex):
-    it = complex.get_atom_iterator()
+def test_iterators():
+    input_dir = test_assets + ("\\sdf\\Thrombin_100cmpds (1).sdf")
+    output_dir = test_output_dir + ("\\testOutput.sdf")
+
+    #complex level
+    complex = struct.Complex.io.from_sdf(input_dir)
+    a = 0
+    for atom in complex.atoms:
+        a += 1
+    assert(a==5721)
+    a = 0
+    for residue in complex.residues:
+        for atom in residue.atoms:
+            a +=1
+    assert(a==5721)
+    a=0
+    for chain in complex.chains:
+        for atom in chain.atoms:
+            a+=1
+    assert(a==5721)
+    a = 0
     for molecule in complex.molecules:
-        for chain in molecule.chains:
-            for residue in chain.residues:
-                for atom in residue.atoms:
-                    it_atom = None
-                    try:
-                        it_atom = next(it)
-                    except StopIteration:
-                        pass
-                    assert_equal(atom, it_atom, options)
+        for atom in molecule.atoms:
+            a+=1
+    assert(a==5721)
+    a = 0
+    #gets first molecule
+    molecule = next(complex.molecules)
+    for residue in molecule.residues:
+        for atom in residue.atoms:
+            a+=1
+    assert(a==76)
+    a=0
+    for chain in molecule.chains:
+        for atom in chain.atoms:
+            a+=1
+    assert(a==76)
+    a=0
+    for residue in molecule.residues:
+        for atom in residue.atoms:
+            a+=1
+    assert(a==76)
+    a=0
+    chain = next(molecule.chains)
+    for residue in chain.residues:
+        for atom in residue.atoms:
+            a+=1
+    assert(a==76)
+    b=False
+    for residue in chain.residues:
+        for _ in residue.bonds:
+            b=True
+    assert(b)
 
 def create_atom():
     val = struct.Atom()
@@ -212,7 +245,7 @@ def create_atom():
     val.rendering.atom_color = Color.White()
     val.rendering.surface_rendering = True
     val.rendering.surface_color = Color.White()
-    val.rendering.surface_transparency = 1
+    val.rendering._surface_opacity = 1
     val.rendering._hydrogened = False
     val.rendering._watered = False
     val.rendering._het_atomed = False
@@ -240,8 +273,8 @@ def create_bond():
 def create_residue():
     val = struct.Residue()
     val.index = 1000
-    val.atoms = [struct.Atom(), create_atom(), struct.Atom(), create_atom()]
-    val.bonds = [create_bond(), create_bond(), create_bond(), create_bond()]
+    val._atoms = [struct.Atom(), create_atom(), struct.Atom(), create_atom()]
+    val._bonds = [create_bond(), create_bond(), create_bond(), create_bond()]
     val.rendering.modified = True
     val.rendering.ribboned = True
     val.rendering.ribbon_size = 1
@@ -256,14 +289,14 @@ def create_residue():
 def create_chain():
     val = struct.Chain()
     val.index = 1000
-    val.residues = [struct.Residue(), create_residue(), struct.Residue(), create_residue()]
+    val._residues = [struct.Residue(), create_residue(), struct.Residue(), create_residue()]
     val.molecular.name = "fdasa1234"
     return val
 
 def create_molecule():
     val = struct.Molecule()
     val.index = 1000
-    val.chains = [struct.Chain(), create_chain(), struct.Chain(), create_chain()]
+    val._chains = [struct.Chain(), create_chain(), struct.Chain(), create_chain()]
     val.molecular.name = "MIOLECASDFULE"
     val.molecular._associated = dict([("key1", "val1"), ("key2","val2"),("key3", "val3"), ("key4","val4")])
     return val
@@ -271,7 +304,7 @@ def create_molecule():
 def create_complex():
     val = struct.Complex()
     val.index = 1000
-    val.molecules = [struct.Molecule(), create_molecule(), struct.Molecule(), create_molecule()]
+    val._molecules = [struct.Molecule(), create_molecule(), struct.Molecule(), create_molecule()]
     val.rendering.boxed = True
     val.rendering.visible = False
     val.rendering.computing = False

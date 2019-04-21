@@ -2,10 +2,10 @@ from nanome._internal._ui import _TextInput
 from . import UIBase
 
 class TextInput(_TextInput, UIBase):
-    def __init__(self, name = "text_input"):
+    def __init__(self):
         # type: (str)
         _TextInput.__init__(self)
-        UIBase.__init__(self, name)
+        UIBase.__init__(self)
 
     @property
     def max_length(self):

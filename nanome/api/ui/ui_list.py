@@ -2,10 +2,10 @@ from nanome._internal._ui import _UIList
 from . import UIBase
 
 class UIList(_UIList, UIBase):
-    def __init__(self, name = "list"):
+    def __init__(self):
         # type: (str)
         _UIList.__init__(self)
-        UIBase.__init__(self, name)
+        UIBase.__init__(self)
 
     @property
     def items(self):

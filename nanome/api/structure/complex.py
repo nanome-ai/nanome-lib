@@ -9,13 +9,12 @@ class Complex(_Complex):
         self.molecular = self._molecular
         self.transform = self._transform
         self.io = ComplexIO(self)
-    
-    @property
-    def molecules(self):
-        return self._molecules
-    @molecules.setter
-    def molecules(self, value):
-        self._molecules = value
+
+    def add_molecule(self, molecule):
+        self._molecules.append(molecule)
+
+    def remove_molecule(self, molecule):
+        self._molecules.remove(molecule)
 
     class Rendering(_Complex.Rendering):
         @property
@@ -72,7 +71,34 @@ class Complex(_Complex):
             self._rotation = value
     _Complex.Transform._create = Transform
 
+    #Generators:
+    @property
+    def molecules(self):
+        for molecule in self._molecules:
+            yield molecule
 
+    @property
+    def chains(self):
+        for molecule in self.molecules:
+            for chain in molecule.chains:
+                yield chain
 
+    @property
+    def residues(self):
+        for chain in self.chains:
+            for residue in chain.residues:
+                yield residue
+
+    @property
+    def atoms(self):
+        for residue in self.residues:
+            for atom in residue.atoms:
+                yield atom
+                
+    @property
+    def bonds(self):
+        for residue in self.residues:
+            for bond in residue.bonds:
+                yield bond
 Complex.io._setup_addon(Complex)
 _Complex._create = Complex

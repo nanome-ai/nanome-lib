@@ -26,7 +26,7 @@ class _UpdateStructures(_TypeSerializer):
         return 0
 
     def serialize(self, version, value, context):
-        #value is a bond[]
+        #value is a structure[]
 
         atoms = []
         bonds = []

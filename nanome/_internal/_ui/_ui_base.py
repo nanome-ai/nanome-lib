@@ -8,7 +8,7 @@ class _UIBase(object):
         _UIBase.id_gen += 1
 
     def _copy_values_deep(self, other):
-        self._name = other._name
+        pass
 
     def _clone(self):
         result = self.__class__()

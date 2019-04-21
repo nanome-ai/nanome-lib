@@ -3,10 +3,10 @@ from . import UIBase
 from nanome._internal._ui import _Mesh
 
 class Mesh(_Mesh, UIBase):
-    def __init__(self, name = "mesh"):
+    def __init__(self):
         # type: (_Button)
         _Mesh.__init__(self)
-        UIBase.__init__(self, name)
+        UIBase.__init__(self)
 
     @property
     def mesh_color(self):

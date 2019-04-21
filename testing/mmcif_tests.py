@@ -103,20 +103,13 @@ def count_structures(complex):
     Logs.debug("atom_counter:", atom_counter)
 
 def compare_atom_positions(complex1, complex2):
-    for m in range(len(complex1.molecules)):
-        molecule1 = complex1.molecules[m]
-        molecule2 = complex2.molecules[m]
-        for c in range(len(molecule1.chains)):
-            chain1 = molecule1.chains[c]
-            chain2 = molecule2.chains[c]
-            for r in range(len(chain1.residues)):
-                residue1 = chain1.residues[r]
-                residue2 = chain2.residues[r]
-                for a in range(len(residue1.atoms)):
-                    atom1 = residue1.atoms[a]
-                    atom2 = residue2.atoms[a]
-                    difference = atom1.molecular.position.x - atom2.molecular.position.x
-                    assert(difference <.001)
-                    assert(difference > -.001)
-                    options2 = TestOptions(ignore_vars=["_serial", "_remarks", "_associated", "_position"])
-                    assert_equal(atom1, atom2, options2)
+    a1 = complex1.atoms
+    a2 = complex2.atoms
+    for a,_ in enumerate(complex1.atoms):
+        atom1 = next(a1)
+        atom2 = next(a2)
+        difference = atom1.molecular.position.x - atom2.molecular.position.x
+        assert(difference <.001)
+        assert(difference > -.001)
+        options2 = TestOptions(ignore_vars=["_serial", "_remarks", "_associated", "_position"])
+        assert_equal(atom1, atom2, options2)

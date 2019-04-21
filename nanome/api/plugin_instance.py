@@ -44,27 +44,27 @@ class PluginInstance(_PluginInstance):
         """
         | Called whenever a complex is added to the workspace.
         """
-        Logs.warning('Callback on_complex_added not defined. Ignoring')
+        pass
 
     def on_complex_removed(self):
         """
         | Called whenever a complex is removed from the workspace.
         """
-        Logs.warning('Callback on_complex_removed not defined. Ignoring')
+        pass
 
     def request_workspace(self, callback = None):
         """
         | Request the entire workspace, in deep mode
         """
-        id = self._network._send(_Messages.request_workspace)
-        self.__save_callback(id, callback)
+        id = self._network._send(_Messages.workspace_request)
+        self._save_callback(id, callback)
 
     def request_complex_list(self, callback = None):
         """
         | Request the list of all complexes in the workspace, in shallow mode
         """
-        id = self._network._send(_Messages.request_complex_list)
-        self.__save_callback(id, callback)
+        id = self._network._send(_Messages.complex_list_request)
+        self._save_callback(id, callback)
 
     def request_complexes(self, id_list, callback = None):
         """
@@ -74,8 +74,8 @@ class PluginInstance(_PluginInstance):
         :param id_list: List of indices
         :type id_list: list of :class:`int`
         """
-        id = self._network._send(_Messages.request_complexes, id_list)
-        self.__save_callback(id, callback)
+        id = self._network._send(_Messages.complexes_request, id_list)
+        self._save_callback(id, callback)
 
     def update_workspace(self, workspace):
         """
@@ -84,7 +84,7 @@ class PluginInstance(_PluginInstance):
         :param workspace: New workspace
         :type workspace: :class:`~nanome.api.structure.workspace.Workspace`
         """
-        self._network._send(_Messages.update_workspace, workspace)
+        self._network._send(_Messages.workspace_update, workspace)
 
     def send_notification(self, type, message):
         """
@@ -98,9 +98,9 @@ class PluginInstance(_PluginInstance):
         #avoids unnecessary dependencies.
         #needs to match the command serializer.
         args = (type, message)
-        self._network._send(_Messages.send_notification, args)
+        self._network._send(_Messages.notification_send, args)
 
-    def update_structures_deep(self, structures):
+    def update_structures_deep(self, structures, callback = None):
         """
         | Update the specific molecular structures in the scene to match the structures in parameter.
         | Will also update descendent structures and can be used to remove descendent structures.
@@ -108,7 +108,8 @@ class PluginInstance(_PluginInstance):
         :param structures: List of molecular structures to update.
         :type structures: list of :class:`~nanome.api.structure.base.Base`
         """
-        self._network._send(_Messages.update_structures_deep, structures)
+        id = self._network._send(_Messages.structures_deep_update, structures)
+        self._save_callback(id, callback)
 
     def update_structures_shallow(self, structures):
         """
@@ -118,7 +119,27 @@ class PluginInstance(_PluginInstance):
         :param structures: List of molecular structures to update.
         :type structures: list of :class:`~nanome.api.structure.base.Base`
         """
-        self._network._send(_Messages.update_structures_shallow, structures)
+        self._network._send(_Messages.structures_shallow_update, structures)
+
+    def zoom_on_structures(self, structures):
+        """
+        | Repositions and resizes the workspace such that the provided structure(s) will be in the 
+        | center of the users view.
+
+        :param structures: Molecular structure(s) to update.
+        :type structures: list of :class:`~nanome.api.structure.base.Base`
+        """
+        self._network._send(_Messages.structures_zoom, structures)
+
+    def center_on_structures(self, structures):
+        """
+        | Repositions the workspace such that the provided structure(s) will be in the 
+        | center of the world.
+
+        :param structures: Molecular structure(s) to update.
+        :type structures: list of :class:`~nanome.api.structure.base.Base`
+        """
+        self._network._send(_Messages.structures_center, structures)
 
     def add_to_workspace(self, complex_list):
         """
@@ -136,7 +157,7 @@ class PluginInstance(_PluginInstance):
         :param menu: Menu to update
         :type menu: :class:`~nanome.api.ui.menu.Menu`
         """
-        self._network._send(_Messages.update_menu, menu)
+        self._network._send(_Messages.menu_update, menu)
         
     def update_content(self, content):
         """
@@ -145,7 +166,7 @@ class PluginInstance(_PluginInstance):
         :param content: UI element to update
         :type content: :class:`~nanome.api.ui.ui_base`
         """
-        self._network._send(_Messages.update_content, content)
+        self._network._send(_Messages.content_update, content)
 
     def request_directory(self, path, callback = None, pattern = "*"):
         """
@@ -159,8 +180,8 @@ class PluginInstance(_PluginInstance):
         options = DirectoryRequestOptions()
         options._directory_name = path
         options._pattern = pattern
-        id = self._network._send(_Messages.request_directory, options)
-        self.__save_callback(id, callback)
+        id = self._network._send(_Messages.directory_request, options)
+        self._save_callback(id, callback)
 
     def request_files(self, file_list, callback = None):
         """
@@ -169,8 +190,8 @@ class PluginInstance(_PluginInstance):
         :param file_list: List of file name (with path) to read. E.g. ["a.sdf", "../b.sdf"] will read a.sdf in running directory, b.sdf in parent directory, and return them
         :type file_list: list of :class:`str`
         """
-        id = self._network._send(_Messages.request_file, file_list)
-        self.__save_callback(id, callback)
+        id = self._network._send(_Messages.file_request, file_list)
+        self._save_callback(id, callback)
 
     def save_files(self, file_list, callback = None):
         """
@@ -179,16 +200,35 @@ class PluginInstance(_PluginInstance):
         :param file_list: List of files to save with their content
         :type file_list: list of :class:`~nanome.util.file.FileSaveData`
         """
-        id = self._network._send(_Messages.save_file, file_list)
-        self.__save_callback(id, callback)
+        id = self._network._send(_Messages.file_save, file_list)
+        self._save_callback(id, callback)
 
-    
+    def create_stream(self, atom_indices_list, callback):
+        """
+        | Create a stream allowing to continuously update many atoms positions
 
-    def __save_callback(self, id, callback):
+        :param atom_indices_list: List of indices of all atoms that should be in the stream
+        :type atom_indices_list: list of :class:`int`
+        """
+        id = self._network._send(_Messages.stream_create, atom_indices_list)
+        self._save_callback(id, callback)
+
+    def add_bonds(self, complex_list, callback):
+        """
+        | Request Nanome to add bonds to a list of complexes
+
+        :param complex_list: List of complexes to add bonds to
+        :type complex_list: list of :class:`~nanome.api.structure.complex.Complex`
+        """
+        id = self._network._send(_Messages.bonds_add, complex_list)
+        self._save_callback(id, callback)
+
+    @classmethod
+    def _save_callback(cls, id, callback):
         if callback == None:
-            _PluginInstance.__callbacks[id] = lambda res : None
+            cls.__callbacks[id] = lambda res : None
         else:
-            _PluginInstance.__callbacks[id] = callback
+            cls.__callbacks[id] = callback
 
     class PluginListButtonType(IntEnum):
         run = 0
@@ -221,7 +261,7 @@ class PluginInstance(_PluginInstance):
         else:
             current_usable[0] = usable
 
-        self._network._send(_Messages.set_plugin_list_button, (button, text, usable))
+        self._network._send(_Messages.plugin_list_button_set, (button, text, usable))
         
 class _DefaultPlugin(PluginInstance):
     def __init__(self):

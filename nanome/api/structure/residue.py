@@ -6,19 +6,17 @@ class Residue(_Residue):
         self.rendering = self._rendering
         self.molecular = self._molecular
 
-    @property
-    def atoms(self):
-        return self._atoms
-    @atoms.setter
-    def atoms(self, value):
-        self._atoms = value
+    def add_atom(self, atom):
+        self._atoms.append(atom)
 
-    @property
-    def bonds(self):
-        return self._bonds
-    @bonds.setter
-    def bonds(self, value):
-        self._bonds = value
+    def remove_atom(self, atom):
+        self._atoms.remove(atom)
+    
+    def add_bond(self, bond):
+        self._bonds.append(bond)
+
+    def remove_bond(self, bond):
+        self._bonds.remove(bond)
 
     class Rendering(_Residue.Rendering):
         @property
@@ -86,5 +84,15 @@ class Residue(_Residue):
         def secondary_structure(self, value):
             self._secondary_structure = value
     _Residue.Molecular._create = Molecular
+
+    @property
+    def atoms(self):
+        for atom in self._atoms:
+            yield atom
+
+    @property
+    def bonds(self):
+        for bond in self._bonds:
+            yield bond
 
 _Residue._create = Residue

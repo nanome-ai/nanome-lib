@@ -31,7 +31,7 @@ class _Atom(_Base):
             self._atom_color = Color.Clear()
             self._surface_rendering = False
             self._surface_color = Color.Clear()
-            self._surface_transparency = 0.0
+            self._surface_opacity = 1.0
             #No API
             self._atomed = True #NOT IN PROTOCOL
             self._hydrogened = True

@@ -16,7 +16,7 @@ class _Chain(_Base):
             return cls()
 
         def __init__(self):
-            self._name = ""
+            self._name = "chain"
 
     def get_atom_iterator(self):
         iterator = _Chain.AtomIterator(self)

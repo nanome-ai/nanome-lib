@@ -12,7 +12,7 @@ import cProfile
 __metaclass__ = type
 class _Plugin(object):
     __serializer = Serializer()
-    _plugin_id = 0
+    _plugin_id = -1
 
     def __parse_args(self):
         for i in range(1, len(sys.argv)):
@@ -21,6 +21,7 @@ class _Plugin(object):
                 Logs.debug(" -h  display this help")
                 Logs.debug(" -a  connects to a NTS at the specified IP address")
                 Logs.debug(" -p  connects to a NTS at the specified port")
+                Logs.debug(" -k  specifies a key file to use to connect to NTS")
                 sys.exit(0)
             elif sys.argv[i] == "-a":
                 if i >= len(sys.argv):
@@ -38,6 +39,20 @@ class _Plugin(object):
                     Logs.error("Error: -p argument has to be an integer")
                     sys.exit(1)
                 i += 1
+            elif sys.argv[i] == "-k":
+                if i >= len(sys.argv):
+                    Logs.error("Error: -k requires an argument")
+                    sys.exit(1)
+                self.__key_file = sys.argv[i + 1]
+                i += 1
+
+    def __read_key_file(self):
+        try:
+            f = open(self.__key_file, "r")
+            key = f.read()
+            return key
+        except:
+            return None
 
     def _on_packet_received(self, packet):
         if packet.packet_type == Network._Packet.packet_type_message_to_plugin:
@@ -61,6 +76,17 @@ class _Plugin(object):
             _Plugin._plugin_id = packet.plugin_id
             Logs.debug("Registered with plugin ID", _Plugin._plugin_id, "\n=======================================\n")
 
+        elif packet.packet_type == Network._Packet.packet_type_plugin_disconnection:
+            if _Plugin._plugin_id == -1:
+                if self._description['auth'] == None:
+                    Logs.error("Connection refused by NTS. Are you missing a security key file?")
+                else:
+                    Logs.error("Connection refused by NTS. Your security key file might be invalid")
+                sys.exit(1)
+            else:
+                Logs.debug("Connection ended by NTS")
+                sys.exit(0)
+
         elif packet.packet_type == Network._Packet.packet_type_client_disconnection:
             try:
                 id = packet.session_id
@@ -74,10 +100,11 @@ class _Plugin(object):
 
     def __run(self):
         _Plugin.instance = self
+        self._description['auth'] = self.__read_key_file()
         self._network = Network._NetInstance(self, _Plugin._on_packet_received)
         self._network.connect(self.__host, self.__port)
         packet = Network._Packet()
-        packet.set(0, Network._Packet.packet_type_plugin_connection, _Plugin._plugin_id)
+        packet.set(0, Network._Packet.packet_type_plugin_connection, 0)
         packet.write_string(json.dumps(self._description))
         self._network.send(packet)
         self.__loop()
@@ -116,7 +143,7 @@ class _Plugin(object):
 
     @classmethod
     def _launch_plugin_profile(cls, plugin_class, session_id, pipe, serializer, plugin_id, version_table, original_version_table):
-        cProfile.runctx('Plugin._launch_plugin(plugin_class, session_id, pipe, serializer, plugin_id, version_table, original_version_table)', globals(), locals(), 'profile.out')
+        cProfile.runctx('_Plugin._launch_plugin(plugin_class, session_id, pipe, serializer, plugin_id, version_table, original_version_table)', globals(), locals(), 'profile.out')
 
     @classmethod
     def _launch_plugin(cls, plugin_class, session_id, pipe, serializer, plugin_id, version_table, original_version_table):
@@ -132,6 +159,7 @@ class _Plugin(object):
             'name': name,
             'description': description,
             'category': category,
-            'hasAdvanced': has_advanced
+            'hasAdvanced': has_advanced,
+            'auth': None
         }
         self._plugin_class = None

@@ -23,7 +23,7 @@ class _AtomSerializer(_TypeSerializer):
         context.write_using_serializer(self.color, value._rendering._atom_color)
         context.write_bool(value._rendering.surface_rendering)
         context.write_using_serializer(self.color, value._rendering._surface_color)
-        context.write_float(value._rendering._surface_transparency)
+        context.write_float(value._rendering._surface_opacity)
 
         context.write_bool(value._rendering._hydrogened)
         context.write_bool(value._rendering._watered)
@@ -43,7 +43,9 @@ class _AtomSerializer(_TypeSerializer):
     def deserialize(self, version, context):
         # type: (_Atom, _ContextDeserialization) -> _Atom
         atom = _Atom._create()
-        atom.index = context.read_long()
+        index = context.read_long()
+        if index >= 0:
+            atom.index = index
         atom._rendering._selected = context.read_bool()
         atom_mode = context.read_int()
         atom._rendering._atom_mode = _Atom.AtomRenderingMode(atom_mode)
@@ -53,7 +55,7 @@ class _AtomSerializer(_TypeSerializer):
         atom._rendering._surface_rendering = context.read_bool()
         atom._rendering._surface_color = context.read_using_serializer(
             self.color)
-        atom._rendering._surface_transparency = context.read_float()
+        atom._rendering._surface_opacity = context.read_float()
 
         atom._rendering._hydrogened = context.read_bool()
         atom._rendering._watered = context.read_bool()

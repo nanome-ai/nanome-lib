@@ -18,5 +18,6 @@ def write_json(menu):
     menu_dict["title"] = menu.title
     menu_dict["width"] = menu.width
     menu_dict["height"] = menu.height
+    menu_dict["version"] = 0
     menu_dict["effective_root"] = _layout_node_json.write_json(menu.root)
     return menu_dict

@@ -1,5 +1,6 @@
 from .. import _Data
 import struct
+from nanome.util import Logs
 
 class _PacketDebuggingException(Exception):
 	def __init__(self):

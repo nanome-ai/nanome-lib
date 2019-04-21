@@ -31,10 +31,10 @@ class _LayoutNodeSerializer(_TypeSerializer):
         for child in value._children:
             child_ids.append(child._id)
         context.write_using_serializer(self.array, child_ids)
-        content_ids = []
-        for content in value._content:
-            content_ids.append(content._content_id)
-        context.write_using_serializer(self.array, content_ids)
+        has_content = value._content != None
+        context.write_bool(has_content)
+        if (has_content):
+            context.write_int(value._content._content_id)
 
     def deserialize(self, version, context):
         layout_node = _LayoutNode._create()
@@ -51,5 +51,9 @@ class _LayoutNodeSerializer(_TypeSerializer):
                                 context.read_float(), 
                                 context.read_float())
         layout_node._child_ids = context.read_using_serializer(self.array)
-        layout_node._content_ids = context.read_using_serializer(self.array)
+        has_content = context.read_bool()
+        if (has_content):
+            layout_node._content_id = context.read_int()
+        else:
+            layout_node._content_id = None
         return layout_node

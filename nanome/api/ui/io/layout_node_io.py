@@ -13,6 +13,7 @@ class LayoutNodeIO(_Addon):
         node_json["title"] == "node"
         node_json["width"] = 1
         node_json["height"] = 1
+        node_json["version"] = 0
 
         node_json["effective_root"] = _layout_node_json.write_json(self.base_object)
         node_string = json.dumps(node_json)

@@ -140,8 +140,8 @@ class UIPlugin(nanome.PluginInstance):
         prefabButton.text.active = True
         prefabButton.set_all_text("Molecule Button")
         prefabButton.register_pressed_callback(prefab_button_pressed_callback)
-        child1.add_content(prefabLabel)
-        child2.add_content(prefabButton)
+        child1.set_content(prefabLabel)
+        child2.set_content(prefabButton)
 
         list_content = []
         for i in range(0, 10):
@@ -167,16 +167,16 @@ class UIPlugin(nanome.PluginInstance):
         ln_contentBase.add_child(ln_textInput)
         ln_contentBase.add_child(ln_list) 
         ln_contentBase.add_child(ln_loading_bar)
-        ln_label.add_content(label)
-        ln_button.add_content(button)
-        ln_slider.add_content(slider)
-        ln_textInput.add_content(textInput)
-        ln_list.add_content(list)
+        ln_label.set_content(label)
+        ln_button.set_content(button)
+        ln_slider.set_content(slider)
+        ln_textInput.set_content(textInput)
+        ln_list.set_content(list)
         return content
 
     def __init__(self):
         pass
-        
+
 if __name__ == "__main__":
     plugin = nanome.Plugin("UI Plugin", "A simple plugin demonstrating how plugin system can be used to extend Nanome capabilities", "Test", False)
     plugin.set_plugin_class(UIPlugin)
