@@ -1,12 +1,9 @@
-rm build/doctrees/*
-rm build/html/*
-rm source/_build/* -r
+rm -rf build/doctrees/*
+rm -rf build/html/*
+rm -rf source/_build/*
 
-if [ $# -ne 0 ]
-then
-    replace=$1
-    sed -i "s/version = .*/version = '${replace}'/g" source/conf.py
-fi
+export NANOME_DOC_BUILD
+NANOME_DOC_BUILD="sh"
 
 sphinx-apidoc -M -l -f -e -o source/ ../nanome
 ./make.bat html

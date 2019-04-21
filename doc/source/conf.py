@@ -39,9 +39,17 @@ def clean_files(_, exception):
     with open('_build/html/api.html', 'w' ) as f:
         f.write(content_new)
 
-def setup(app):
+def connect_setup(app):
     app.connect('builder-inited', run_apidoc)
     app.connect('build-finished', clean_files)
+
+def setup(app):
+    try:
+        import os
+        if os.environ['NANOME_DOC_BUILD'] != "sh":
+            connect_setup(app)
+    except:
+        connect_setup(app)
 
 # -- Path setup --------------------------------------------------------------
 
@@ -60,7 +68,7 @@ copyright = '2019, Nanome'
 author = 'Nanome'
 
 # The short X.Y version
-version = '0.1.0'
+version = ''
 # The full version, including alpha/beta/rc tags
 release = ''
 

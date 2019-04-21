@@ -35,17 +35,13 @@ Overriding these functions in your plugin will give you several entry points:
     def on_advanced_settings(self):
         pass
 
-If you don't want to create a class, you can register callbacks for all functions before calling nanome.Plugin.run:
+    # Called whenever a complex is added to the workspace.
+    def on_complex_added(self):
+        pass
 
-.. code-block:: python
-
-    if __name__ == "__main__":
-        plugin = nanome.Plugin(...)
-        plugin.on_start(start_fct)
-        plugin.on_update(update_fct)
-        plugin.on_run(run_fct)
-        # Same pattern works for all existing callbacks
-        plugin.run('127.0.0.1', 8888)
+    # Called whenever a complex is removed from the workspace.
+    def on_complex_removed(self):
+        pass
 
 Workspace
 ---------

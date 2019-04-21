@@ -18,28 +18,17 @@ How-to
 
 Example Plugin
 ^^^^^^^^^^^^^^
+
 .. literalinclude:: ../../RemoveHydrogens.py
     :language: python
 
-Start the plugin
-^^^^^^^^^^^^^^^^
-Starting a plugin is fairly easy:
+Installation
+^^^^^^^^^^^^
 
-.. code-block:: bash
+.. toctree::
+   :maxdepth: 1
 
-    $ python RemoveHydrogens.py
-
-To choose the IP address and the port of your server, you have two options:
-
-Using arguments. More temporary
-  .. code-block:: bash
-
-    $ python RemoveHydrogens.py -a 123.456.789.0 -p 4567
-
-Changing the script (plugin.run, last line in the previous example). More permanent
-  .. code-block:: python
-
-    plugin.run('123.456.789.0', 4567)
+   installation
 
 Table of Contents
 -----------------

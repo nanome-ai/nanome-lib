@@ -2,7 +2,7 @@ from distutils.core import setup
 setup(
 	name = 'nanome',
 	packages = ['nanome'],
-	version = '0.1',
+	version = '0.0.1',
 	license='MIT',
 	description = 'Python API for Nanome Plugins',
 	author = 'Nanome',
