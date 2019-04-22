@@ -12,3 +12,4 @@ doc/source/modules.rst
 doc/source/_build/
 dist/
 nanome.egg-info/
+build/

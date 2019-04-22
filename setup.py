@@ -1,14 +1,19 @@
+import pathlib
 from setuptools import find_packages, setup
+
+README = (pathlib.Path(__file__).parent / "README.md").read_text()
+
 setup(
 	name = 'nanome',
-	packages = ['nanome'],
-	version = '0.0.2',
+	packages=find_packages(exclude=["testing","doc"]),
+	version = '0.0.3',
 	license='MIT',
 	description = 'Python API for Nanome Plugins',
+	long_description = README,
+    long_description_content_type = "text/markdown",
 	author = 'Nanome',
 	author_email = 'hello@nanome.ai',
 	url = 'https://github.com/nanome-ai/nanome',
-	download_url = 'https://github.com/nanome-ai/nanome/archive/v0.0.1.tar.gz',
 	keywords = ['virtual-reality', 'chemistry', 'python', 'api', 'plugin'],
 	install_requires=[],
 	classifiers=[
