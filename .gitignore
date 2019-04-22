@@ -10,3 +10,5 @@ doc/source/nanome.*
 doc/source/modules.rst
 *.pyc
 doc/source/_build/
+dist/
+nanome.egg-info/
