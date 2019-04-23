@@ -121,7 +121,7 @@ class PluginInstance(_PluginInstance):
         """
         self._network._send(_Messages.structures_shallow_update, structures)
 
-    def zoom_on_structures(self, structures, callback):
+    def zoom_on_structures(self, structures, callback=None):
         """
         | Repositions and resizes the workspace such that the provided structure(s) will be in the 
         | center of the users view.
@@ -132,7 +132,7 @@ class PluginInstance(_PluginInstance):
         id = self._network._send(_Messages.structures_zoom, structures)
         self._save_callback(id, callback)
 
-    def center_on_structures(self, structures, callback):
+    def center_on_structures(self, structures, callback=None):
         """
         | Repositions the workspace such that the provided structure(s) will be in the 
         | center of the world.
