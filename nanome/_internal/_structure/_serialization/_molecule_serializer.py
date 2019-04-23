@@ -20,7 +20,7 @@ class _MoleculeSerializer(_TypeSerializer):
         return "Molecule"
 
     def serialize(self, version, value, context):
-        context.write_long(value.index)
+        context.write_long(value._index)
 
         if (self.shallow):
             context.write_using_serializer(self.array, [])
@@ -32,7 +32,7 @@ class _MoleculeSerializer(_TypeSerializer):
 
     def deserialize(self, version, context):
         molecule = _Molecule._create()
-        molecule.index = context.read_long()
+        molecule._index = context.read_long()
 
         molecule._chains = context.read_using_serializer(self.array)
         molecule._molecular._name = context.read_using_serializer(self.string)
