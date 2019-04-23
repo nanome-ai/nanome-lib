@@ -26,14 +26,14 @@ class _PositionStructures(_TypeSerializer):
 
         for val in value:
             if isinstance(val, _Atom):
-                atom_ids.append(val.index)
+                atom_ids.append(val._index)
             elif isinstance(val, _Bond):
-                atom_ids.append(val._atom1.index)
-                atom_ids.append(val._atom2.index)
+                atom_ids.append(val._atom1._index)
+                atom_ids.append(val._atom2._index)
             #all other base objects implement the atoms generator
             elif isinstance(val, _Base):
                 for atom in val.atoms:
-                    atom_ids.append(atom.index)
+                    atom_ids.append(atom._index)
 
         context.write_using_serializer(self.array_serializer, atom_ids)
 
