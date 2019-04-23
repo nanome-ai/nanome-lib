@@ -21,7 +21,7 @@ class _ResidueSerializer(_TypeSerializer):
         return "Residue"
 
     def serialize(self, version, value, context):
-        context.write_long(value._index)
+        context.write_long(value.index)
 
         self.array.set_type(self.atom)
         if (self.shallow):
@@ -46,7 +46,7 @@ class _ResidueSerializer(_TypeSerializer):
 
     def deserialize(self, version, context):
         residue = _Residue._create()
-        residue._index = context.read_long()
+        residue.index = context.read_long()
 
         self.array.set_type(self.atom)
         residue._atoms = context.read_using_serializer(self.array)
