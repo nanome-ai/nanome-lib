@@ -1,6 +1,9 @@
 from nanome._internal._structure._complex import _Complex
-from nanome.util import Vector3, Quaternion
+from nanome.util import Vector3, Quaternion, Matrix
 from .io import ComplexIO
+
+from math import cos, sin
+
 class Complex(_Complex):
     io = ComplexIO()
     def __init__(self):
@@ -69,6 +72,41 @@ class Complex(_Complex):
         @rotation.setter
         def rotation(self, value):
             self._rotation = value
+
+        def get_absolute_to_relative_matrix(self):
+            rot_x = Matrix(4, 4)
+            rot_x[1][1] = cos(self._rotation.x)
+            rot_x[1][2] = -sin(self._rotation.x)
+            rot_x[2][1] = sin(self._rotation.x)
+            rot_x[2][2] = cos(self._rotation.x)
+            rot_x[0][0] = 1
+            rot_y = Matrix(4, 4)
+            rot_y[2][2] = cos(self._rotation.y)
+            rot_y[2][0] = -sin(self._rotation.y)
+            rot_y[0][2] = sin(self._rotation.y)
+            rot_y[0][0] = cos(self._rotation.y)
+            rot_y[1][1] = 1
+            rot_z = Matrix(4, 4)
+            rot_z[0][0] = cos(self._rotation.z)
+            rot_z[0][1] = -sin(self._rotation.z)
+            rot_z[1][0] = sin(self._rotation.z)
+            rot_z[1][1] = cos(self._rotation.z)
+            rot_z[2][2] = 1
+            rotation = rot_z * rot_y * rot_x
+
+            translation = Matrix.create_identity(4)
+            translation[0][3] = self._position.x
+            translation[1][3] = self._position.y
+            translation[2][3] = self._position.z
+            
+            transformation = translation * rotation
+            return transformation
+
+        def get_relative_to_absolute_matrix(self):
+            result = self.get_absolute_to_relative_matrix()
+            result = result.get_inverse()
+            return result
+
     _Complex.Transform._create = Transform
 
     #Generators:
