@@ -145,3 +145,18 @@ class Matrix(object):
         result[2][0] = vector.z
         result[3][0] = 1
         return result
+
+    @classmethod
+    def from_quaternion(cls, quaternion):
+        result = cls(4, 4)
+        result[0][0] = 1 - 2 * quaternion.y * quaternion.y - 2 * quaternion.z * quaternion.z
+        result[0][1] = 2 * quaternion.x * quaternion.y - 2 * quaternion.z * quaternion.w
+        result[0][2] = 2 * quaternion.x * quaternion.z + 2 * quaternion.y * quaternion.w
+        result[1][0] = 2 * quaternion.x * quaternion.y + 2 * quaternion.z * quaternion.w
+        result[1][1] = 1 - 2 * quaternion.x * quaternion.x - 2 * quaternion.z * quaternion.z
+        result[1][2] = 2 * quaternion.y * quaternion.z - 2 * quaternion.x * quaternion.w
+        result[2][0] = 2 * quaternion.x * quaternion.z - 2 * quaternion.y * quaternion.w
+        result[2][1] = 2 * quaternion.y * quaternion.z + 2 * quaternion.x * quaternion.w
+        result[2][2] = 1 - 2 * quaternion.x * quaternion.x - 2 * quaternion.y * quaternion.y
+        result[3][3] = 1
+        return result
