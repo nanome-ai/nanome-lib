@@ -24,12 +24,14 @@ class _ImageSerializer(_TypeSerializer):
             data = f.read()
         context.write_using_serializer(self.data, data)
         context.write_using_serializer(self.color, value._color)
+        context.write_uint(value._scaling_option)
 
     def deserialize(self, version, context):
         value = _Image._create()
         value._content_id = context.read_int()
         context.read_using_serializer(self.data) #skipping data.
         value._color = context.read_using_serializer(self.color)
+        value._scaling_option = context.read_uint()
         return value
 
 _UIBaseSerializer.register_type("Image", _UIBaseSerializer.ContentType.eimage, _ImageSerializer())

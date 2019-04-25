@@ -23,4 +23,12 @@ class Image(_Image, UIBase):
     def file_path(self, value):
         self._file_path = value
 
+    @property
+    def scaling_option(self):
+        return self._scaling_option
+    
+    @scaling_option.setter
+    def scaling_option(self, value):
+        self._scaling_option = value
+
 _Image._create = Image

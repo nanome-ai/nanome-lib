@@ -30,3 +30,7 @@ class MenuIO(_Addon):
         except:
             Logs.error("Json does not correctly represent a menu.")
             raise
+
+    def update_json(self, path):
+        menu = self.from_json(path)
+        menu.io.to_json(path)
