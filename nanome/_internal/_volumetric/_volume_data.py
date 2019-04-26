@@ -2,7 +2,11 @@ class _VolumeData(object):
     def __init__(self, 
                  size_x, size_y, size_z, 
                  delta_x, delta_y, delta_z):
-        self._data = []        
+        #byte array for speed.
+        #if we later speed up array serializer
+        #or make this an API, we should
+        #convert to float []
+        self._data = [] 
 
         self._size_x = size_x
         self._size_y = size_y

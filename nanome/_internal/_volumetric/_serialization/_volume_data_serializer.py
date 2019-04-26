@@ -24,7 +24,8 @@ class _VolumeDataSerializer(_TypeSerializer):
         context.write_float(value._origin_y)
         context.write_float(value._origin_z)
 
-        context.write_int(len(value._data))
+        #reading as float so we divide length by 4
+        context.write_uint(len(value._data)/4)
         context.write_bytes(value._data)
 
     def deserialize(self, version, context):
@@ -42,7 +43,8 @@ class _VolumeDataSerializer(_TypeSerializer):
         result._origin_y = context.read_float()
         result._origin_z = context.read_float()
 
-        length = context.read_int()
+        #was written as float so we multiply length by 4
+        length = context.read_uint()*4
         result._data = context.read_bytes(length)
 
         return result

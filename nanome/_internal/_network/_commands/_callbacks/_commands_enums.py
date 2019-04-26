@@ -44,6 +44,7 @@ class _Commands(__CommandEnum):
     stream_interrupt = auto()
     stream_feed_done = auto()
     structures_deep_update_done = auto()
+    upload_cryo_em_done = auto()
 
 # /!\ /!\ /!\
 # Values names are really important here, as they are hashed, and need to match Nanome
@@ -72,6 +73,7 @@ class _Messages(__CommandEnum):
     stream_feed = auto()
     structures_zoom = auto()
     structures_center = auto()
+    upload_cryo_em = auto()
 
 class _Hashes():
     CommandHashes = [None] * len(_Commands)

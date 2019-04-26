@@ -1,4 +1,6 @@
 # from ..._volume_data import _VolumeData
+import os
+import gzip
 class _VolumeData(object):
     def __init__(self, 
                  size_x, size_y, size_z, 
@@ -25,8 +27,12 @@ int_unpack = struct.Struct('!i').unpack_from
 def parse_file(path):
     try:
         data = []
-        with open(path, mode='rb') as f:
-            data = f.read()
+        if (os.path.splitext(path)[1] == ".gz"):
+            with gzip.open(path, mode='rb') as f:
+                data = f.read()
+        else:
+            with open(path, mode='rb') as f:
+                data = f.read()
         if data == []:
             return None
         result = parse_data(data)
@@ -88,9 +94,7 @@ def parse_data(bytes):
     return map
 
 import os 
-dir_path = os.path.dirname(os.path.realpath(__file__)) + "/test.map"
-with open(dir_path, mode='rb') as f:
-    data = f.read()
-    map = parse_data(data)
-    print("deltas: ", str(map._delta_x), str(map._delta_y), str(map._delta_z))
-    print("deltas: ", str(map._size_x), str(map._size_y), str(map._size_z))
+dir_path = os.path.dirname(os.path.realpath(__file__)) + "/test.map.gz"
+map = parse_file(dir_path)
+print("deltas: ", str(map._delta_x), str(map._delta_y), str(map._delta_z))
+print("deltas: ", str(map._size_x), str(map._size_y), str(map._size_z))
