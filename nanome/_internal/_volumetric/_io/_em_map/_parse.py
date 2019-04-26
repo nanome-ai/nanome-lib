@@ -1,24 +1,6 @@
-# from ..._volume_data import _VolumeData
+from ..._volume_data import _VolumeData
 import os
 import gzip
-class _VolumeData(object):
-    def __init__(self, 
-                 size_x, size_y, size_z, 
-                 delta_x, delta_y, delta_z):
-        self._data = []        
-
-        self._size_x = size_x
-        self._size_y = size_y
-        self._size_z = size_z
-        
-        self._delta_x = delta_x
-        self._delta_y = delta_y
-        self._delta_z = delta_z
-
-        self._origin_x = 0.0
-        self._origin_y = 0.0
-        self._origin_z = 0.0
-
 import struct
 
 float_unpack = struct.Struct('!f').unpack_from
@@ -40,12 +22,6 @@ def parse_file(path):
     except:
         print("Could not read pdb file: " + path)
         raise
-
-# def read_float(self):
-#     pre = self._buffered_computed
-#     result = _Data.int_unpack(self._received_bytes, pre)[0]
-#     self.consume_data(4)
-#     return result
 
 def read_buffer(bytes):
     header_size = 1024
@@ -92,9 +68,3 @@ def parse_data(bytes):
     map.data = body
 
     return map
-
-import os 
-dir_path = os.path.dirname(os.path.realpath(__file__)) + "/test.map.gz"
-map = parse_file(dir_path)
-print("deltas: ", str(map._delta_x), str(map._delta_y), str(map._delta_z))
-print("deltas: ", str(map._size_x), str(map._size_y), str(map._size_z))

@@ -89,7 +89,7 @@ add_command(CommandCallbacks._Commands.structures_deep_update_done, CommandSeria
 add_command(CommandCallbacks._Commands.bonds_add_result, CommandSerializers._AddBonds())
 
 #Volume
-add_command(CommandCallbacks._Commands.up, CommandSerializers._UploadCryoEMDone())
+add_command(CommandCallbacks._Commands.upload_cryo_em_done, CommandSerializers._UploadCryoEMDone())
 
 #ui
 add_command(CommandCallbacks._Commands.menu_toggle, CommandSerializers._MenuCallback())

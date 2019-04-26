@@ -8,6 +8,9 @@ class TestOptions():
         self.accurate_floats = accurate_floats
         self.print_float_warnings = print_float_warnings
 
+def get_test_assets():
+    return os.getcwd() + ("\\testing\\test_assets")
+
 def assert_equal(first, second, options = None):
     if (options == None):
         options = TestOptions()
