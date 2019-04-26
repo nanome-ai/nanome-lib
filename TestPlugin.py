@@ -25,9 +25,14 @@ class TestPlugin(nanome.PluginInstance):
         # Access the API to add a button on modify menu, name Split, section Editing, and sending event MenuButtonClicked
         nanome.util.Logs.debug("Start TestPlugin")
         self._start_timer = timer()
-        
+
+import sys, inspect
+import test_plugins
 if __name__ == "__main__":
-    # Creates the plugin, and start listening
-    plugin = nanome.Plugin("TestPlugin", "An absolutely useless plugin but we need to start somewhere, right?", "Test", True)
-    plugin.set_plugin_class(TestPlugin)
+    plugin_name = "test_plugins." + sys.argv[1]
+    del sys.argv[1]
+    clsmembers = inspect.getmembers(sys.modules[plugin_name], inspect.isclass)
+    plugin_class = clsmembers[0][0]
+    plugin = nanome.Plugin("Testing Plugin", "Plugin is being run using the tester plugin.", "Test", True)
+    plugin.set_plugin_class(plugin_class)
     plugin.run('127.0.0.1', 8888)
