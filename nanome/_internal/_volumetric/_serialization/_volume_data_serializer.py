@@ -25,7 +25,7 @@ class _VolumeDataSerializer(_TypeSerializer):
         context.write_float(value._origin_z)
 
         #reading as float so we divide length by 4
-        context.write_uint(len(value._data)/4)
+        context.write_uint(int(len(value._data)/4))
         context.write_bytes(value._data)
 
     def deserialize(self, version, context):

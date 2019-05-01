@@ -23,13 +23,14 @@ def parse_file(path):
         print("Could not read pdb file: " + path)
         raise
 
-def read_buffer(bytes):
+def read_buffer(bytes_):
     header_size = 1024
-    header = struct.unpack(str(256)+"i", bytes[:header_size])
-    unit_cell = struct.unpack(str(6)+"f", bytes[40:64])
+    header = struct.unpack(str(256)+"i", bytes_[:header_size])
+    unit_cell = struct.unpack(str(6)+"f", bytes_[40:64])
     symmetry_size = header[23]
-    symmetry = bytes[header_size:symmetry_size]
-    body = bytes[header_size+symmetry_size:]
+    symmetry = bytes_[header_size:header_size + symmetry_size]
+    body = bytes_[header_size+symmetry_size:]
+    assert(len(body) % 4 == 0)
     return header, unit_cell, symmetry, body
 
 def parse_data(bytes):
@@ -65,6 +66,6 @@ def parse_data(bytes):
     symmetrySizeByte = header[23]
     if (symmetrySizeByte != 0):
         raise Exception("CryoEM> contains symmetry operation.")
-    map.data = body
+    map._data = body
 
     return map

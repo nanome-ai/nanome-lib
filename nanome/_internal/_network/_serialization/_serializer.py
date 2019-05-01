@@ -133,7 +133,7 @@ add_message(CommandCallbacks._Messages.structures_zoom, CommandSerializers._Posi
 add_message(CommandCallbacks._Messages.structures_center, CommandSerializers._PositionStructures())
 
 #volume
-add_message(CommandCallbacks._Messages.upload_cryo_em, CommandSerializers._UpdateWorkspace())
+add_message(CommandCallbacks._Messages.upload_cryo_em, CommandSerializers._UploadCryoEM())
 
 #ui
 add_message(CommandCallbacks._Messages.menu_update, CommandSerializers._UpdateMenu())
