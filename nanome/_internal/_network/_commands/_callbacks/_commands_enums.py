@@ -31,6 +31,9 @@ class _Commands(__CommandEnum):
     text_submit = auto()
     text_change = auto()
     slider_change = auto()
+    image_press = auto()
+    image_held = auto()
+    image_release = auto()
     #Other callbacks
     complexes_receive = auto()
     advanced_settings = auto()

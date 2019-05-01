@@ -20,8 +20,9 @@ class _ImageSerializer(_TypeSerializer):
         context.write_int(value._content_id)
         context.write_using_serializer(self.string, value._file_path)
         data = []
-        with open(value._file_path, "rb") as f:
-            data = f.read()
+        if (value._file_path != ""):
+            with open(value._file_path, "rb") as f:
+                data = f.read()
         context.write_using_serializer(self.data, data)
         context.write_using_serializer(self.color, value._color)
         context.write_uint(value._scaling_option)
