@@ -64,3 +64,33 @@ def _button_pressed(network, arg, request_id):
         btn._on_button_pressed()
     else:
         Logs.error("Can't find UI content for callback")
+        
+def _image_pressed(network, arg, request_id):
+    image_id = arg[0]
+    x = arg[1]
+    y = arg[2]
+    img = _Menu._get_plugin_menu()._find_content(image_id)
+    if img != None:
+        img._on_image_pressed(x, y)
+    else:
+        Logs.error("Can't find UI content for callback")
+
+def _image_held(network, arg, request_id):
+    image_id = arg[0]
+    x = arg[1]
+    y = arg[2]
+    img = _Menu._get_plugin_menu()._find_content(image_id)
+    if img != None:
+        img._on_image_held(x, y)
+    else:
+        Logs.error("Can't find UI content for callback")
+
+def _image_released(network, arg, request_id):
+    image_id = arg[0]
+    x = arg[1]
+    y = arg[2]
+    img = _Menu._get_plugin_menu()._find_content(image_id)
+    if img != None:
+        img._on_image_released(x, y)
+    else:
+        Logs.error("Can't find UI content for callback")

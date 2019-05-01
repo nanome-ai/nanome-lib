@@ -13,9 +13,31 @@ class _Image(_UIBase):
         self._file_path = ""
         self._color = Color.White()
         self._scaling_option = ScalingOptions.stretch
+        self._pressed_callback = lambda : None
+        self._held_callback = lambda : None
+        self._released_callback = lambda : None
         
+    def _on_image_pressed (self, x, y):
+        self._pressed_callback(self, x, y)
+
+    def _on_image_held (self, x, y):
+        self._held_callback(self, x, y)
+
+    def _on_image_released (self, x, y):
+        self._released_callback(self, x, y)
+
+    def _register_pressed_callback(self, func):
+        self._pressed_callback = func
+
+    def _register_held_callback(self, func):
+        self._held_callback = func
+
+    def _register_released_callback(self, func):
+        self._released_callback = func
+
     def _copy_values_deep(self, other):
         super()._copy_values_deep(other)
         self._color = other._color
         self._file_path = other._file_path
-
+        self._held_callback = other._held_callback
+        self._released_callback = other._released_callback
