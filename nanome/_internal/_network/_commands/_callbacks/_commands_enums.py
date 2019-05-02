@@ -44,6 +44,7 @@ class _Commands(__CommandEnum):
     stream_interrupt = auto()
     stream_feed_done = auto()
     structures_deep_update_done = auto()
+    position_structures_done = auto()
 
 # /!\ /!\ /!\
 # Values names are really important here, as they are hashed, and need to match Nanome
