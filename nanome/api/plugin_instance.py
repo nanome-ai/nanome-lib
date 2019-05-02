@@ -121,7 +121,7 @@ class PluginInstance(_PluginInstance):
         """
         self._network._send(_Messages.structures_shallow_update, structures)
 
-    def zoom_on_structures(self, structures):
+    def zoom_on_structures(self, structures, callback=None):
         """
         | Repositions and resizes the workspace such that the provided structure(s) will be in the 
         | center of the users view.
@@ -129,9 +129,10 @@ class PluginInstance(_PluginInstance):
         :param structures: Molecular structure(s) to update.
         :type structures: list of :class:`~nanome.api.structure.base.Base`
         """
-        self._network._send(_Messages.structures_zoom, structures)
+        id = self._network._send(_Messages.structures_zoom, structures)
+        self._save_callback(id, callback)
 
-    def center_on_structures(self, structures):
+    def center_on_structures(self, structures, callback=None):
         """
         | Repositions the workspace such that the provided structure(s) will be in the 
         | center of the world.
@@ -139,8 +140,9 @@ class PluginInstance(_PluginInstance):
         :param structures: Molecular structure(s) to update.
         :type structures: list of :class:`~nanome.api.structure.base.Base`
         """
-        self._network._send(_Messages.structures_center, structures)
-
+        id = self._network._send(_Messages.structures_center, structures)
+        self._save_callback(id, callback)
+        
     def add_to_workspace(self, complex_list):
         """
         | Add a list of complexes to the current workspace
