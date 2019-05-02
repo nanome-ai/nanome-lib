@@ -1,9 +1,10 @@
 from .. import _VolumeData
-from nanome._internal._util._serializers import _TypeSerializer
+from nanome._internal._util._serializers import _TypeSerializer, _FloatSerializer, _ArraySerializer
 
 class _VolumeDataSerializer(_TypeSerializer):
     def __init__(self):
-        pass
+        self.float_array = _ArraySerializer()
+        self.float_array.set_type(_FloatSerializer())
     def version(self):
         return 0
 
@@ -24,9 +25,7 @@ class _VolumeDataSerializer(_TypeSerializer):
         context.write_float(value._origin_y)
         context.write_float(value._origin_z)
 
-        #reading as float so we divide length by 4
-        context.write_uint(int(len(value._data)/4))
-        context.write_bytes(value._data)
+        context.write_using_serializer(self.float_array, value._data)
 
     def deserialize(self, version, context):
         result = _VolumeData(0,0,0,0,0,0)
@@ -43,8 +42,6 @@ class _VolumeDataSerializer(_TypeSerializer):
         result._origin_y = context.read_float()
         result._origin_z = context.read_float()
 
-        #was written as float so we multiply length by 4
-        length = context.read_uint()*4
-        result._data = context.read_bytes(length)
+        result._data = context.read_using_serializer(self.float_array)
 
         return result

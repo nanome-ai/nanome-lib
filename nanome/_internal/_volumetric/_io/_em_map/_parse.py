@@ -24,13 +24,13 @@ def parse_file(path):
         raise
 
 def read_buffer(bytes_):
-    header_size = 1024
+    header_size = 1024 #size in bytes
     header = struct.unpack(str(256)+"i", bytes_[:header_size])
     unit_cell = struct.unpack(str(6)+"f", bytes_[40:64])
-    symmetry_size = header[23]
+    symmetry_size = header[23] #size in bytes
     symmetry = bytes_[header_size:header_size + symmetry_size]
-    body = bytes_[header_size+symmetry_size:]
-    assert(len(body) % 4 == 0)
+    body_length = int((len(bytes_)-(header_size+symmetry_size))/4) #length in floats
+    body = struct.unpack(str(body_length) + "f", bytes_[header_size+symmetry_size:])
     return header, unit_cell, symmetry, body
 
 def parse_data(bytes):
