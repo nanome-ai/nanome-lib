@@ -1,7 +1,8 @@
 from nanome._internal._structure._atom import _Atom
 from nanome.util import Vector3, Color
+from . import Base
 
-class Atom(_Atom):
+class Atom(_Atom, Base):
     """    
     Represents an Atom
 
@@ -12,7 +13,7 @@ class Atom(_Atom):
     """
 
     def __init__(self):
-        _Atom.__init__(self)
+        super(Atom, self).__init__()
         self.rendering = self._rendering
         self.molecular = self._molecular
 
