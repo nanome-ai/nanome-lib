@@ -14,4 +14,5 @@ from ._menu import _receive_menu
 from ._run import _run
 from ._ui_callbacks import _button_pressed, _menu_toggled, _slider_changed, _slider_released, _text_changed, _text_submit, _image_pressed, _image_held, _image_released
 from ._update_structures_deep_done import _update_structures_deep_done
+from ._position_structures_done import _position_structures_done
 from ._workspace_callbacks import _receive_workspace, _complex_added, _complex_removed

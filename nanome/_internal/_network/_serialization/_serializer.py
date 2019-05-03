@@ -86,6 +86,7 @@ add_command(CommandCallbacks._Commands.complex_remove, CommandSerializers._Compl
 add_command(CommandCallbacks._Commands.complex_list_receive, CommandSerializers._ReceiveComplexList())
 add_command(CommandCallbacks._Commands.complexes_receive, CommandSerializers._ReceiveComplexes())
 add_command(CommandCallbacks._Commands.structures_deep_update_done, CommandSerializers._UpdateStructuresDeepDone())
+add_command(CommandCallbacks._Commands.position_structures_done, CommandSerializers._PositionStructuresDone())
 add_command(CommandCallbacks._Commands.bonds_add_result, CommandSerializers._AddBonds())
 
 #ui
@@ -167,6 +168,7 @@ add_callback(CommandCallbacks._Commands.workspace_receive, CommandCallbacks._rec
 add_callback(CommandCallbacks._Commands.complex_add, CommandCallbacks._complex_added)
 add_callback(CommandCallbacks._Commands.complex_remove, CommandCallbacks._complex_removed)
 add_callback(CommandCallbacks._Commands.structures_deep_update_done, CommandCallbacks._update_structures_deep_done)
+add_callback(CommandCallbacks._Commands.position_structures_done, CommandCallbacks._position_structures_done)
 add_callback(CommandCallbacks._Commands.bonds_add_result, CommandCallbacks._add_bonds_result)
 add_callback(CommandCallbacks._Commands.complexes_receive, CommandCallbacks._receive_complexes)
 
