@@ -15,6 +15,7 @@ class _Atom(_Base):
         self._molecular = _Atom.Molecular._create()
         #internal
         self._serial = _Atom._atom_count
+        self._bonds = []
         _Atom._atom_count += 1
 
     class Rendering(object):
@@ -63,3 +64,8 @@ class _Atom(_Base):
         Wire = 2
         VanDerWaals = 3
         Point = 4
+
+    @property
+    def bonds(self):
+        for bond in self._bonds:
+            yield bond

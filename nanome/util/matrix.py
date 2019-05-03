@@ -50,8 +50,10 @@ class Matrix(object):
         return result
 
     def __mul__(self, matrix):
+        is_vector = False
         if isinstance(matrix, Vector3):
             matrix = Matrix.from_vector3(matrix)
+            is_vector = True
 
         rank_m, rank_n = matrix.get_rank()
         if self.__n != rank_m:
@@ -64,6 +66,8 @@ class Matrix(object):
             for j in range(transpose.__m):
                 result[i][j] = sum([cur[0] * cur[1] for cur in zip(self.__rows[i], transpose[j])])
 
+        if is_vector:
+            result = Vector3(result[0][0], result[1][0], result[2][0])
         return result
 
     def __iadd__(self, matrix):
@@ -90,7 +94,7 @@ class Matrix(object):
         return self
 
     def get_transpose(self):
-        result = Matrix(self.__m, self.__n)
+        result = Matrix(self.__n, self.__m)
         result.__rows = Matrix.__transpose_rows(self.__rows, self.__m, self.__n)
         return result
 
@@ -99,8 +103,9 @@ class Matrix(object):
         return [[rows[j][i] for j in range(m)] for i in range(n)]
 
     def get_minor(self, i, j):
-        result = Matrix(i, j)
-        result.__rows = [row[:j] + row[j+1:] for row in (self.__rows[:i] + self.__rows[i+1:])]
+        rows = [row[:j] + row[j+1:] for row in (self.__rows[:i] + self.__rows[i+1:])]
+        result = Matrix(len(rows), len(rows[0]))
+        result.__rows = rows
         return result
 
     def get_determinant(self):

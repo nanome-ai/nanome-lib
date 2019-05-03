@@ -73,7 +73,7 @@ class Complex(_Complex):
         def rotation(self, value):
             self._rotation = value
 
-        def get_absolute_to_relative_matrix(self):
+        def get_workspace_to_complex_matrix(self):
             rotation = Matrix.from_quaternion(self._rotation)
 
             translation = Matrix.identity(4)
@@ -84,8 +84,8 @@ class Complex(_Complex):
             transformation = translation * rotation
             return transformation
 
-        def get_relative_to_absolute_matrix(self):
-            result = self.get_absolute_to_relative_matrix()
+        def get_complex_to_workspace_matrix(self):
+            result = self.get_workspace_to_complex_matrix()
             result = result.get_inverse()
             return result
 

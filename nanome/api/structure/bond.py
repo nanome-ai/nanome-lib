@@ -19,11 +19,10 @@ class Bond(_Bond):
 
         :type: :class:`~nanome.api.structure.atom.Atom`
         """
-
-        return self._atom1
+        return self._get_atom1()
     @atom1.setter
     def atom1(self, value):
-        self._atom1 = value
+        self._set_atom1(value)
 
     @property
     def atom2(self):
@@ -32,10 +31,10 @@ class Bond(_Bond):
         
         :type: :class:`~nanome.api.structure.atom.Atom`
         """
-        return self._atom2
+        return self._get_atom2()
     @atom2.setter
     def atom2(self, value):
-        self._atom2 = value
+        self._set_atom2(value)
 
     class Molecular(object):
         @property

@@ -13,16 +13,16 @@ class _QuaternionSerializer(_TypeSerializer):
         return "Quaternion"
 
     def serialize(self, version, value, context):
-        context.write_float(value._w)
         context.write_float(value._x)
         context.write_float(value._y)
         context.write_float(value._z)
+        context.write_float(value._w)
 
     def deserialize(self, version, context):
         quaternion = Quaternion()
-        w = context.read_float()
         x = context.read_float()
         y = context.read_float()
         z = context.read_float()
-        quaternion.set(w,x,y,z)
+        w = context.read_float()
+        quaternion.set(x, y, z, w)
         return quaternion
