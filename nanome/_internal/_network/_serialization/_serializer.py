@@ -95,9 +95,9 @@ add_command(CommandCallbacks._Commands.slider_release, CommandSerializers._Slide
 add_command(CommandCallbacks._Commands.slider_change, CommandSerializers._SliderCallback())
 add_command(CommandCallbacks._Commands.text_submit, CommandSerializers._TextInputCallback())
 add_command(CommandCallbacks._Commands.text_change, CommandSerializers._TextInputCallback())
-add_command(CommandCallbacks._Commands.image_press, CommandSerializers._ImageCallback)
-add_command(CommandCallbacks._Commands.image_held, CommandSerializers._ImageCallback)
-add_command(CommandCallbacks._Commands.image_release, CommandSerializers._ImageCallback)
+add_command(CommandCallbacks._Commands.image_press, CommandSerializers._ImageCallback())
+add_command(CommandCallbacks._Commands.image_held, CommandSerializers._ImageCallback())
+add_command(CommandCallbacks._Commands.image_release, CommandSerializers._ImageCallback())
 
 #file
 add_command(CommandCallbacks._Commands.directory_receive, CommandSerializers._DirectoryRequest())

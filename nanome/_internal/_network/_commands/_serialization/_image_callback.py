@@ -18,6 +18,6 @@ class _ImageCallback(_TypeSerializer):
 
     def deserialize(self, version, context):
         id = context.read_int()
-        x = context.read_int()
-        y = context.read_int()
+        x = context.read_float()
+        y = context.read_float()
         return id, x, y
