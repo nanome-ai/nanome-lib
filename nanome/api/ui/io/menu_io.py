@@ -30,7 +30,15 @@ class MenuIO(_Addon):
         except:
             Logs.error("Json does not correctly represent a menu.")
             raise
+            
 
     def update_json(self, path):
+        """
+        | Updates a menu written for an old version of the library.
+        | Call once before reading and run once. Then you can remove the call.
+
+        :param path: path to the menu you wish to update.
+        :type path: str
+        """
         menu = self.from_json(path)
         menu.io.to_json(path)

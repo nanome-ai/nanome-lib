@@ -39,5 +39,6 @@ class _Image(_UIBase):
         super()._copy_values_deep(other)
         self._color = other._color
         self._file_path = other._file_path
+        self._pressed_callback = other._pressed_callback
         self._held_callback = other._held_callback
         self._released_callback = other._released_callback
