@@ -1,4 +1,5 @@
 from . import *
+from .base import Base
 from .atom import Atom
 from .bond import Bond
 from .residue import Residue

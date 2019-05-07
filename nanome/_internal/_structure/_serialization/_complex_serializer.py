@@ -23,7 +23,7 @@ class _ComplexSerializer(_TypeSerializer):
         return "Complex"
 
     def serialize(self, version, value, context):
-        context.write_long(value.index)
+        context.write_long(value._index)
         if (self.shallow):
             context.write_using_serializer(self.array, [])
         else:
@@ -42,7 +42,7 @@ class _ComplexSerializer(_TypeSerializer):
 
     def deserialize(self, version, context):
         complex = _Complex._create()
-        complex.index = context.read_long()
+        complex._index = context.read_long()
 
         complex._molecules = context.read_using_serializer(self.array)
         complex._rendering._boxed = context.read_bool()

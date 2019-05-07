@@ -1,10 +1,12 @@
 from nanome._internal._structure._complex import _Complex
 from nanome.util import Vector3, Quaternion
 from .io import ComplexIO
-class Complex(_Complex):
+from . import Base
+
+class Complex(_Complex, Base):
     io = ComplexIO()
     def __init__(self):
-        _Complex.__init__(self)
+        super(Complex, self).__init__()
         self.rendering = self._rendering
         self.molecular = self._molecular
         self.transform = self._transform

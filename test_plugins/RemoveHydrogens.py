@@ -25,13 +25,11 @@ class RemoveHydrogens(nanome.PluginInstance):
     def on_workspace_received(self, workspace):
         for complex in workspace.complexes:
             count = 0
-            for molecule in complex.molecules:
-                for chain in molecule.chains:
-                    for residue in chain.residues:
-                        for i in range(len(residue.atoms) - 1, -1, -1):
-                            if RemoveHydrogens._should_be_removed(residue.atoms[i]): # If this atom is an H, delete it
-                                count += 1
-                                del residue.atoms[i]
+            for residue in complex.residues:
+                for i in range(len(residue._atoms) - 1, -1, -1):
+                    if RemoveHydrogens._should_be_removed(residue._atoms[i]): # If this atom is an H, delete it
+                        count += 1
+                        del residue._atoms[i]
             Logs.debug(count, "hydrogens removed for", complex.molecular.name)
         self.update_workspace(workspace) # Update Nanome workspace, in "deep" mode
         

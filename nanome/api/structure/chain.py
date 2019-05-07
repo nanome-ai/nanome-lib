@@ -1,8 +1,9 @@
 from nanome._internal._structure._chain import _Chain
+from . import Base
 
-class Chain(_Chain):
+class Chain(_Chain, Base):
     def __init__(self):
-        _Chain.__init__(self)
+        super(Chain, self).__init__()
         self.molecular = self._molecular
 
     def add_residue(self, residue):
