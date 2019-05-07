@@ -97,7 +97,7 @@ add_command(CommandCallbacks._Commands.slider_change, CommandSerializers._Slider
 add_command(CommandCallbacks._Commands.text_submit, CommandSerializers._TextInputCallback())
 add_command(CommandCallbacks._Commands.text_change, CommandSerializers._TextInputCallback())
 add_command(CommandCallbacks._Commands.image_press, CommandSerializers._ImageCallback())
-add_command(CommandCallbacks._Commands.image_held, CommandSerializers._ImageCallback())
+add_command(CommandCallbacks._Commands.image_hold, CommandSerializers._ImageCallback())
 add_command(CommandCallbacks._Commands.image_release, CommandSerializers._ImageCallback())
 
 #file
@@ -181,7 +181,7 @@ add_callback(CommandCallbacks._Commands.text_submit, CommandCallbacks._text_subm
 add_callback(CommandCallbacks._Commands.text_change, CommandCallbacks._text_changed)
 add_callback(CommandCallbacks._Commands.button_press, CommandCallbacks._button_pressed)
 add_callback(CommandCallbacks._Commands.image_press, CommandCallbacks._image_pressed)
-add_callback(CommandCallbacks._Commands.image_held, CommandCallbacks._image_held)
+add_callback(CommandCallbacks._Commands.image_hold, CommandCallbacks._image_hold)
 add_callback(CommandCallbacks._Commands.image_release, CommandCallbacks._image_released)
 
 #file

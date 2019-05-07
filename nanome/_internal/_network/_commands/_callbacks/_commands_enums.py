@@ -32,7 +32,7 @@ class _Commands(__CommandEnum):
     text_change = auto()
     slider_change = auto()
     image_press = auto()
-    image_held = auto()
+    image_hold = auto()
     image_release = auto()
     #Other callbacks
     complexes_receive = auto()
