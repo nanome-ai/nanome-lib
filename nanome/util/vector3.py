@@ -12,7 +12,7 @@ class Vector3(object):
 
     def __str__(self):
         s = ' '.join([str(self._positions[0]), str(self._positions[1]), str(self._positions[2])])
-        return s + '\n'
+        return s
 
     def get_copy(self):
         return Vector3(self._positions[0], self._positions[1], self._positions[2])

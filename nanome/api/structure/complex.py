@@ -75,13 +75,14 @@ class Complex(_Complex):
 
         def get_workspace_to_complex_matrix(self):
             rotation = Matrix.from_quaternion(self._rotation)
+            rotation.transpose()
 
             translation = Matrix.identity(4)
-            translation[0][3] = self._position.x
-            translation[1][3] = self._position.y
-            translation[2][3] = self._position.z
+            translation[0][3] = -self._position.x
+            translation[1][3] = -self._position.y
+            translation[2][3] = -self._position.z
             
-            transformation = translation * rotation
+            transformation = rotation * translation
             return transformation
 
         def get_complex_to_workspace_matrix(self):

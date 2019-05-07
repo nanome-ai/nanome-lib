@@ -22,7 +22,7 @@ class Matrix(object):
         
     def __str__(self):
         s = '\n'.join([' '.join([str(item) for item in row]) for row in self.__rows])
-        return s + '\n'
+        return s
 
     def __eq__(self, matrix):
         return matrix.__rows == self.__rows
