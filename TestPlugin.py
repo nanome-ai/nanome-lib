@@ -8,7 +8,7 @@ if __name__ == "__main__":
     module_name = "test_plugins." + class_name
     del sys.argv[1]
     if module_name not in sys.modules:
-        raise "No module: " + module_name
+        raise Exception("No module: " + module_name)
     clsmembers = inspect.getmembers(sys.modules[module_name], inspect.isclass)
     plugin_class = None
     for clsmember in clsmembers:
@@ -17,6 +17,6 @@ if __name__ == "__main__":
             break
     if plugin_class == None:
         raise "No class " + class_name + " in module " + module_name
-    plugin = nanome.Plugin("Testing Plugin", "Plugin is being run using the tester plugin.", "Test", True)
+    plugin = nanome.Plugin(class_name, "Plugin is being run using the tester plugin.", "Test", True)
     plugin.set_plugin_class(plugin_class)
     plugin.run('127.0.0.1', 8888)

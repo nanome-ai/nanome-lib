@@ -15,7 +15,7 @@ class _BondSerializer(_TypeSerializer):
         return "Bond"
 
     def serialize(self, version, value, context):
-        context.write_long(value.index)
+        context.write_long(value._index)
 
         context.write_int(value._molecular._kind)
         #nothing to do with shallow yet 
@@ -25,7 +25,7 @@ class _BondSerializer(_TypeSerializer):
     def deserialize(self, version, context):
         # type: (_Atom, _ContextDeserialization) -> _Bond
         bond = _Bond._create()
-        bond.index = context.read_long()
+        bond._index = context.read_long()
 
         kind = context.read_int()
         bond._molecular._kind = _Bond.Kind(kind)

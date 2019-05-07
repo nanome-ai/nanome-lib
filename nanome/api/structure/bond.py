@@ -1,6 +1,7 @@
 from nanome._internal._structure._bond import _Bond
+from . import Base
 
-class Bond(_Bond):
+class Bond(_Bond, Base):
     """    
     Represents a Bond between two atoms
 
@@ -9,7 +10,7 @@ class Bond(_Bond):
     """
 
     def __init__(self):
-        _Bond.__init__(self)
+        super(Bond, self).__init__()
         self.molecular = self._molecular
 
     @property

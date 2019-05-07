@@ -14,7 +14,7 @@ class _Button(_UIBase):
         self._unusable = False
         self._text = _Button.ButtonText._create()
         #API
-        self._pressed_callback = lambda : None
+        self._pressed_callback = lambda _: None
 
     def _on_button_pressed (self):
         self._pressed_callback(self)
