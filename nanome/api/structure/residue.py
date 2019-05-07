@@ -1,8 +1,9 @@
 from nanome._internal._structure._residue import _Residue
+from . import Base
 
-class Residue(_Residue):
+class Residue(_Residue, Base):
     def __init__(self):
-        _Residue.__init__(self)
+        super(Residue, self).__init__()
         self.rendering = self._rendering
         self.molecular = self._molecular
 

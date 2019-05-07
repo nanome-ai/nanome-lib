@@ -15,7 +15,7 @@ class _AtomSerializer(_TypeSerializer):
         return "Atom"
 
     def serialize(self, version, value, context):
-        context.write_long(value.index)
+        context.write_long(value._index)
         context.write_bool(value._rendering._selected)
         context.write_int(value._rendering._atom_mode)
         context.write_bool(value._rendering._labeled)
@@ -45,7 +45,7 @@ class _AtomSerializer(_TypeSerializer):
         atom = _Atom._create()
         index = context.read_long()
         if index >= 0:
-            atom.index = index
+            atom._index = index
         atom._rendering._selected = context.read_bool()
         atom_mode = context.read_int()
         atom._rendering._atom_mode = _Atom.AtomRenderingMode(atom_mode)
