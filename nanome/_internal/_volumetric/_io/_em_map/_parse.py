@@ -20,7 +20,7 @@ def parse_file(path):
         result = parse_data(data)
         return result
     except:
-        print("Could not read pdb file: " + path)
+        print("Could not read em file: " + path)
         raise
 
 def read_buffer(bytes_):
