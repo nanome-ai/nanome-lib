@@ -10,7 +10,7 @@ class Quaternion(object):
     
     def __str__(self):
         s = ' '.join([str(self._x), str(self._y), str(self._z), str(self._w)])
-        return s + '\n'
+        return s
 
     def set(self, x, y, z, w):
         self._x = float(x)
