@@ -43,33 +43,33 @@ class _LayoutNode(object):
         vertical = 0
         horizontal = 1
 
-    def get_content(self):
+    def _get_content(self):
         return self._content
 
-    def set_content(self, ui_content):
+    def _set_content(self, ui_content):
         #add to curr parent
         self._content = ui_content
         self._save_changes()
 
-    def remove_content(self):
+    def _remove_content(self):
         self._content = None
         self._save_changes()
 
-    def add_child(self, child_node):
+    def _add_child(self, child_node):
         #remove from old parent
         if (child_node._parent != None):
-            child_node._parent.remove_child(child_node)
+            child_node._parent._remove_child(child_node)
         #add to curr parent
         self._children.append(child_node)
         child_node._parent = self
         self._save_changes()
 
-    def remove_child(self, child_node):
+    def _remove_child(self, child_node):
         self._children.remove(child_node)
         child_node._parent = None
         self._save_changes()
 
-    def clear_children(self):
+    def _clear_children(self):
         for child in self._children:
             child._parent = None
         self._children = []

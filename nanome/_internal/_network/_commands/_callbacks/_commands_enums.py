@@ -11,6 +11,7 @@ import sys
 class __CommandEnum(IntEnum):
     if sys.version_info >= (3, 6): # Tmp hack
         # Override for auto()
+        @staticmethod
         def _generate_next_value_(name, start, count, last_values):
             return IntEnum._generate_next_value_(name, 0, count, last_values)
     else:
@@ -19,11 +20,23 @@ class __CommandEnum(IntEnum):
 # /!\ /!\ /!\
 # Values names are really important here, as they are hashed, and need to match Nanome
 class _Commands(__CommandEnum):
+    #Control Commands
     connect = auto()
     run = auto()
+    advanced_settings = auto()
+    controller_response = auto()
+
+    #Workspace Commands
     workspace_receive = auto()
+    complex_add = auto()
+    complex_remove = auto()
+    complexes_receive = auto()
     complex_list_receive = auto()
-    #UI callbacks======
+    bonds_add_result = auto()
+    stream_create_result = auto()
+    stream_interrupt = auto()
+
+    #UI Commands======
     menu_receive = auto()
     menu_toggle = auto()
     button_press = auto()
@@ -34,48 +47,53 @@ class _Commands(__CommandEnum):
     image_press = auto()
     image_hold = auto()
     image_release = auto()
-    #Other callbacks
-    complexes_receive = auto()
-    advanced_settings = auto()
+
+    #File Commands
     directory_receive = auto()
     file_receive = auto()
     file_save_result_receive = auto()
-    complex_add = auto()
-    complex_remove = auto()
-    bonds_add_result = auto()
-    stream_create_result = auto()
-    stream_interrupt = auto()
-    stream_feed_done = auto()
+
+    #Done Commands
     structures_deep_update_done = auto()
     position_structures_done = auto()
+    stream_feed_done = auto()
 
 # /!\ /!\ /!\
 # Values names are really important here, as they are hashed, and need to match Nanome
 class _Messages(__CommandEnum):
     # Tmp hack
     reset_auto()
-    
+
+    #Control Messages
     connect = auto()
-    workspace_request = auto()
-    complex_list_request = auto()
-    workspace_update = auto()
-    menu_update = auto()
-    content_update = auto()
-    complexes_request = auto()
-    add_to_workspace = auto()
-    directory_request = auto()
-    file_request = auto()
-    file_save = auto()
     plugin_list_button_set = auto()
+    notification_send = auto()
+    controller_request = auto()
+
+    #Workspace Messages
+    workspace_request = auto()
+    workspace_update = auto()
+    add_to_workspace = auto()
     structures_deep_update = auto()
     structures_shallow_update = auto()
-    notification_send = auto()
+    structures_zoom = auto()
+    structures_center = auto()
+    complex_list_request = auto()
+    complexes_request = auto()
     bonds_add = auto()
+
     stream_create = auto()
     stream_destroy = auto()
     stream_feed = auto()
-    structures_zoom = auto()
-    structures_center = auto()
+
+    #UI Messages
+    menu_update = auto()
+    content_update = auto()
+
+    #File Messages
+    directory_request = auto()
+    file_request = auto()
+    file_save = auto()
 
 class _Hashes():
     CommandHashes = [None] * len(_Commands)

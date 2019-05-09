@@ -78,6 +78,7 @@ def add_command(command, serializer):
 add_command(CommandCallbacks._Commands.connect, CommandSerializers._Connect())
 add_command(CommandCallbacks._Commands.run, CommandSerializers._Run())
 add_command(CommandCallbacks._Commands.advanced_settings, CommandSerializers._AdvancedSettings())
+add_command(CommandCallbacks._Commands.controller_response, CommandSerializers._ControllerResponse())
 
 #workspace
 add_command(CommandCallbacks._Commands.workspace_receive, CommandSerializers._ReceiveWorkspace())
@@ -120,6 +121,7 @@ def add_message(command, serializer):
 
 #control
 add_message(CommandCallbacks._Messages.connect, CommandSerializers._Connect())
+add_message(CommandCallbacks._Messages.controller_request, CommandSerializers._ControllerRequest())
 
 #workspace
 add_message(CommandCallbacks._Messages.workspace_update, CommandSerializers._UpdateWorkspace())
@@ -161,6 +163,7 @@ def add_callback(command, callback):
 add_callback(CommandCallbacks._Commands.connect, CommandCallbacks._connect)
 add_callback(CommandCallbacks._Commands.run, CommandCallbacks._run)
 add_callback(CommandCallbacks._Commands.advanced_settings, CommandCallbacks._advanced_settings)
+add_callback(CommandCallbacks._Commands.controller_response, CommandCallbacks._controller_response)
 
 #workspace
 add_callback(CommandCallbacks._Commands.complex_list_receive, CommandCallbacks._receive_complex_list)

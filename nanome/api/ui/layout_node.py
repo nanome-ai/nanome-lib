@@ -97,6 +97,24 @@ class LayoutNode(_LayoutNode):
         self._parent = value
     #endregion
 
+    def get_content(self):
+        return self._get_content()
+
+    def set_content(self, ui_content):
+        self._set_content(ui_content)
+
+    def remove_content(self):
+        self._remove_content()
+
+    def add_child(self, child_node):
+        self._add_child(child_node)
+
+    def remove_child(self, child_node):
+        self._remove_child(child_node)
+
+    def clear_children(self):
+        self._clear_children()
+
     def find_node(self, name, recursively = True):
         # type: (str, bool) -> LayoutNode
         """
