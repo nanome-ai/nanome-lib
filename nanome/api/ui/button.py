@@ -13,7 +13,6 @@ class Button(_Button, UIBase):
 
     def register_pressed_callback(self, func):
         _Button._register_pressed_callback(self, func)
-    
 
     def set_all_text(self, text):
         # type: (str)

@@ -1,9 +1,9 @@
 from nanome._internal._structure._molecule import _Molecule
+from . import Base
 
-
-class Molecule(_Molecule):
+class Molecule(_Molecule, Base):
     def __init__(self):
-        _Molecule.__init__(self)
+        super(Molecule, self).__init__()
         self.molecular = self._molecular
         
     def add_chain(self, chain):

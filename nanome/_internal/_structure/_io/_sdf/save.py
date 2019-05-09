@@ -48,7 +48,7 @@ def to_file(path, complex, options=None):
         for chain in chains:
             for residue in chain._residues:
                 for atom in residue.atoms:
-                    serial_by_atom_index[atom.index] = atom_serial
+                    serial_by_atom_index[atom._index] = atom_serial
                     saved_atom = Results.SavedAtom()
                     saved_atom.serial = atom_serial
                     saved_atom.atom = atom
@@ -60,10 +60,10 @@ def to_file(path, complex, options=None):
             if (options.write_bonds) or (options.write_het_bonds and chain.molecular._name[0] == 'H'):
                 for residue in chain._residues:
                     for bond in residue._bonds:
-                        if bond.atom1.index in serial_by_atom_index and bond.atom2.index in serial_by_atom_index:
+                        if bond.atom1._index in serial_by_atom_index and bond.atom2._index in serial_by_atom_index:
                             saved_bond = Results.SavedBond()
-                            saved_bond.serial_atom1 = serial_by_atom_index[bond.atom1.index]
-                            saved_bond.serial_atom2 = serial_by_atom_index[bond.atom2.index]
+                            saved_bond.serial_atom1 = serial_by_atom_index[bond.atom1._index]
+                            saved_bond.serial_atom2 = serial_by_atom_index[bond.atom2._index]
                             saved_bond.bond = bond
                             result.saved_bonds.append(saved_bond)
                             number_bonds += 1

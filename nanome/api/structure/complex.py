@@ -1,13 +1,14 @@
 from nanome._internal._structure._complex import _Complex
-from nanome.util import Vector3, Quaternion, Matrix
+from nanome.util import Matrix
 from .io import ComplexIO
+from . import Base
 
-from math import cos, sin
 
-class Complex(_Complex):
+class Complex(_Complex, Base):
     io = ComplexIO()
+
     def __init__(self):
-        _Complex.__init__(self)
+        super(Complex, self).__init__()
         self.rendering = self._rendering
         self.molecular = self._molecular
         self.transform = self._transform
@@ -26,14 +27,14 @@ class Complex(_Complex):
         @boxed.setter
         def boxed(self, value):
             self._boxed = value
-        
+
         @property
         def visible(self):
             return self._visible
         @visible.setter
         def visible(self, value):
             self._visible = value
-        
+
         @property
         def computing(self):
             return self._computing
@@ -65,7 +66,7 @@ class Complex(_Complex):
         @position.setter
         def position(self, value):
             self._position = value
-        
+
         @property
         def rotation(self):
             return self._rotation
@@ -81,7 +82,7 @@ class Complex(_Complex):
             translation[0][3] = -self._position.x
             translation[1][3] = -self._position.y
             translation[2][3] = -self._position.z
-            
+
             transformation = rotation * translation
             return transformation
 
@@ -115,11 +116,13 @@ class Complex(_Complex):
         for residue in self.residues:
             for atom in residue.atoms:
                 yield atom
-                
+
     @property
     def bonds(self):
         for residue in self.residues:
             for bond in residue.bonds:
                 yield bond
+
+
 Complex.io._setup_addon(Complex)
 _Complex._create = Complex

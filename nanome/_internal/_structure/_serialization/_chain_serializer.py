@@ -18,7 +18,7 @@ class _ChainSerializer(_TypeSerializer):
         return "Chain"
 
     def serialize(self, version, value, context):
-        context.write_long(value.index)
+        context.write_long(value._index)
         if (self.shallow):
             context.write_using_serializer(self.array_serializer, [])
         else:
@@ -27,7 +27,7 @@ class _ChainSerializer(_TypeSerializer):
 
     def deserialize(self, version, context):
         chain = _Chain._create()
-        chain.index = context.read_long()
+        chain._index = context.read_long()
 
         chain._residues = context.read_using_serializer(self.array_serializer)
         chain._molecular._name = context.read_using_serializer(self.string)
