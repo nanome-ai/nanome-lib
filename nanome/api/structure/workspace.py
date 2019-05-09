@@ -1,7 +1,5 @@
 from nanome._internal._structure._workspace import _Workspace
-from nanome.util import Vector3, Quaternion, Matrix, Logs
 
-from math import cos, sin
 
 class Workspace(_Workspace):
     def __init__(self):
@@ -14,7 +12,7 @@ class Workspace(_Workspace):
     @complexes.setter
     def complexes(self, value):
         self._complexes = value
-    
+
     class Transform(_Workspace.Transform):
         @property
         def position(self):
@@ -29,7 +27,7 @@ class Workspace(_Workspace):
         @rotation.setter
         def rotation(self, value):
             self._rotation = value
-        
+
         @property
         def scale(self):
             return self._scale
@@ -38,4 +36,6 @@ class Workspace(_Workspace):
             self._scale = value
 
     _Workspace.Transform._create = Transform
+
+
 _Workspace._create = Workspace
