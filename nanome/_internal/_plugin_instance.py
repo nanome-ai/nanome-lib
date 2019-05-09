@@ -25,11 +25,10 @@ class _PluginInstance(object):
             while self._network._receive():
                 self.update()
 
-                current_time = timer()
-                dt = last_update - current_time
-                sleep_time = min(UPDATE_RATE - dt, MINIMUM_SLEEP)
-                last_update = current_time
+                dt = last_update - timer()
+                sleep_time = max(UPDATE_RATE - dt, MINIMUM_SLEEP)
                 time.sleep(sleep_time)
+                last_update = timer()
 
         except KeyboardInterrupt:
             return
@@ -37,7 +36,7 @@ class _PluginInstance(object):
             Logs.error(traceback.format_exc())
             self._network._close()
             return
-        
+
     def __init__(self, session_id, pipe, serializer, plugin_id, version_table, original_version_table):
         self._network = _ProcessNetwork(self, session_id, pipe, serializer, plugin_id, version_table)
         Logs.debug("Plugin constructed for session", session_id)
