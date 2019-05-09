@@ -23,4 +23,20 @@ class Image(_Image, UIBase):
     def file_path(self, value):
         self._file_path = value
 
+    @property
+    def scaling_option(self):
+        return self._scaling_option
+    
+    @scaling_option.setter
+    def scaling_option(self, value):
+        self._scaling_option = value
+
+    def register_pressed_callback(self, func):
+        _Image._register_pressed_callback(self, func)
+
+    def register_held_callback(self, func):
+        _Image._register_held_callback(self, func)
+
+    def register_released_callback(self, func):
+        _Image._register_released_callback(self, func)
 _Image._create = Image
