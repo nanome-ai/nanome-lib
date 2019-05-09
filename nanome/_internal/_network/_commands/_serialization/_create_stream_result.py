@@ -17,5 +17,4 @@ class _CreateStreamResult(_TypeSerializer):
     def deserialize(self, version, context):
         err = context.read_byte()
         id = context.read_uint()
-        Logs.debug("received StreamCreationResult", err, id)
         return (err, id)

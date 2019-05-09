@@ -2,19 +2,48 @@ import math
 
 class Vector3(object):
     def __init__(self, x=0, y=0, z=0):
-        self.x = float(x)
-        self.y = float(y)
-        self.z = float(z)
+        self._positions = [float(x), float(y), float(z)]
+
+    def __getitem__(self, i):
+        return self._positions[i]
+
+    def __setitem__(self, i, value):
+        self._positions[i] = float(value)
+
+    def __str__(self):
+        s = ' '.join([str(self._positions[0]), str(self._positions[1]), str(self._positions[2])])
+        return s
 
     def get_copy(self):
-        return Vector3(self.x, self.y, self.z)
+        return Vector3(self._positions[0], self._positions[1], self._positions[2])
 
     @classmethod
     def distance(cls, v1, v2):
         return math.sqrt((v2.x - v1.x) ** 2 + (v2.y - v1.y) ** 2 + (v2.z - v1.z) ** 2)
 
     def __add__(self, other):
-        return Vector3(self.x + other.x, self.y + other.y, self.z + other.z)
+        return Vector3(self._positions[0] + other.x, self._positions[1] + other.y, self._positions[2] + other.z)
     
-    def unpack (self):
-        return self.x, self.y, self.z
+    def unpack(self):
+        return self._positions[0], self._positions[1], self._positions[2]
+
+    @property
+    def x(self):
+        return self._positions[0]
+    @x.setter
+    def x(self, value):
+        self._positions[0] = float(value)
+
+    @property
+    def y(self):
+        return self._positions[1]
+    @y.setter
+    def y(self, value):
+        self._positions[1] = float(value)
+
+    @property
+    def z(self):
+        return self._positions[2]
+    @z.setter
+    def z(self, value):
+        self._positions[2] = float(value)
