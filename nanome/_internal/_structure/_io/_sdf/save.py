@@ -123,7 +123,7 @@ def add_bonds(lines, saved_bonds):
             linked[key1] = True
             bond = saved_bond.bond
             idx += 1
-            new_line = "M V30"
+            new_line = "M  V30"
             new_line += " "
             new_line += str(idx)
             new_line += " "

@@ -29,13 +29,13 @@ class Octree:
             Logs.error("Maximum recursion depth reached. Make sure you don't add more than the max_objects number of objects with the exact same position.")
             raise
     
-    def get_near(self, pos, radius):
+    def get_near(self, pos, radius, max_result_nb = None):
         near_objs = []
-        self.get_near_append(pos, radius, near_objs)
+        self.get_near_append(pos, radius, near_objs, max_result_nb)
         return near_objs
 
-    def get_near_append(self, pos, radius, out_list):
-        self._root.near(pos, radius*radius, out_list)
+    def get_near_append(self, pos, radius, out_list, max_result_nb = None):
+        self._root.near(pos, radius*radius, out_list, max_result_nb)
         return out_list
 
     def print_out(self):
@@ -103,16 +103,26 @@ class Octree:
                     for branch in self.branches:
                         branch.print_out(depth+1)
 
-        def near(self, pos, radiusSqr, near_objs):
+        def near(self, pos, radiusSqr, near_objs, max_result_nb = None):
             #sqr comparison to avoid root
             if (Octree._OctNode._sqr_distance(pos, self.position) <= self.sqrRadius + radiusSqr):
                 if (self.branches != None):
                     for branch in self.branches:
-                        branch.near(pos, radiusSqr, near_objs)
+                        max_result_nb = branch.near(pos, radiusSqr, near_objs, max_result_nb)
+                        # if a child branch got the max nb of result, return
+                        if max_result_nb != None and max_result_nb <= 0:
+                            return max_result_nb
                 else:
                     for entry in self.here:
                         if (Octree._OctNode._sqr_distance(pos, entry.pos) < radiusSqr):
                             near_objs.append(entry.data)
+                            # if this branch got the max nb of result, return
+                            if max_result_nb != None:
+                                max_result_nb -= 1
+                                if max_result_nb <= 0:
+                                    return max_result_nb
+
+                return max_result_nb
 
 
         @staticmethod
