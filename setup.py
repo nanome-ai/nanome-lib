@@ -6,7 +6,7 @@ README = (pathlib.Path(__file__).parent / "README.md").read_text()
 setup(
 	name = 'nanome',
 	packages=find_packages(exclude=["testing","doc"]),
-	version = '0.0.3',
+	version = '0.1.0',
 	license='MIT',
 	description = 'Python API for Nanome Plugins',
 	long_description = README,
