@@ -6,6 +6,7 @@ from nanome.util.image_settings import ScalingOptions
 class ControllerPlugin(nanome.PluginInstance):
     def __init__(self):
         self.outstanding_requests = 0
+        self.i = 0
 
     # Function called when Nanome connects to the Plugin, after its instantiation
     def start(self):
@@ -24,22 +25,26 @@ class ControllerPlugin(nanome.PluginInstance):
 
     def update(self):
         if (self.outstanding_requests == 0):
-            nanome.util.Logs.debug("sending reqs")
-            self.update_menu(nanome.ui.Menu.get_plugin_menu())
+            nanome.util.Logs.debug("sending reqs" + str(self.i))
+            self.i = 0
             self.outstanding_requests = 3
             self.request_controller(nanome.util.enums.ControllerType.head, self.on_controller_request)
             self.request_controller(nanome.util.enums.ControllerType.left, self.on_controller_request)
             self.request_controller(nanome.util.enums.ControllerType.right, self.on_controller_request)
+        else:
+            self.i += 1
 
     def on_controller_request(self, controller):
-        nanome.util.Logs.debug("received req")
         self.outstanding_requests -= 1
         root = nanome.ui.Menu.get_plugin_menu().root
         if(controller.controller_type == nanome.util.enums.ControllerType.head):
+            nanome.util.Logs.debug("received head")
             self.update_controller(root.find_node("head"), controller)
-        if(controller.controller_type == nanome.util.enums.ControllerType.left):
+        elif(controller.controller_type == nanome.util.enums.ControllerType.left):
+            nanome.util.Logs.debug("received left")
             self.update_controller(root.find_node("left"), controller)
-        if(controller.controller_type == nanome.util.enums.ControllerType.right):
+        elif(controller.controller_type == nanome.util.enums.ControllerType.right):
+            nanome.util.Logs.debug("received right")
             self.update_controller(root.find_node("right"), controller)
 
     def update_controller(self, node, controller):
@@ -61,9 +66,12 @@ class ControllerPlugin(nanome.PluginInstance):
         button1_pressed.text_value = ("button1_pressed: " + str(controller.button1_pressed))
         button2_pressed = node.find_node("button2_pressed").get_content()
         button2_pressed.text_value = ("button2_pressed: " + str(controller.button2_pressed))
+        self.update_menu(nanome.ui.Menu.get_plugin_menu())
 
     def create_controller_feedback(self):
         menu = nanome.ui.Menu.get_plugin_menu()
+        menu.height = 1.5
+        menu.width = 1
         root = menu.root
         INODE = nanome._internal._ui._LayoutNode
         root.layout_orientation = INODE.LayoutTypes.horizontal
