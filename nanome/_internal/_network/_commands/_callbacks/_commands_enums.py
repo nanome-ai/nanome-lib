@@ -25,6 +25,7 @@ class _Commands(__CommandEnum):
     run = auto()
     advanced_settings = auto()
     controller_response = auto()
+    controller_callback = auto()
 
     #Workspace Commands
     workspace_receive = auto()
@@ -69,6 +70,8 @@ class _Messages(__CommandEnum):
     plugin_list_button_set = auto()
     notification_send = auto()
     controller_request = auto()
+    controller_hook = auto()
+    controller_unhook = auto()
 
     #Workspace Messages
     workspace_request = auto()

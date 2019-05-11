@@ -2,6 +2,7 @@ from nanome.util import Logs, DirectoryRequestOptions, IntEnum
 from nanome._internal import _PluginInstance
 from nanome._internal._network import _ProcessNetwork
 from nanome._internal._network._commands._callbacks import _Messages
+from nanome.api.user import User
 
 import inspect
 import sys
@@ -14,7 +15,7 @@ class PluginInstance(_PluginInstance):
     | Start, update, and all methods starting by "on" can be overridden by user, in order to get requests results
     """
     def __init__(self):
-        super(PluginInstance, self).__init__()
+        self.user = User(self)
 
     def start(self):
         """
@@ -223,16 +224,6 @@ class PluginInstance(_PluginInstance):
         :type complex_list: list of :class:`~nanome.api.structure.complex.Complex`
         """
         id = self._network._send(_Messages.bonds_add, complex_list)
-        self._save_callback(id, callback)
-
-    def request_controller(self, controller_type, callback):
-        """
-        | Request the current status of a controller of the rooms presenter.
-
-        :param controller_type: The controller you wish to request.
-        :type controller_type: nanome.util.enums.ControllerType
-        """
-        id = self._network._send(_Messages.controller_request, controller_type)
         self._save_callback(id, callback)
 
     @classmethod

@@ -16,4 +16,4 @@ from ._ui_callbacks import _button_pressed, _menu_toggled, _slider_changed, _sli
 from ._update_structures_deep_done import _update_structures_deep_done
 from ._position_structures_done import _position_structures_done
 from ._workspace_callbacks import _receive_workspace, _complex_added, _complex_removed
-from ._controller_callbacks import _controller_response
+from ._controller_callbacks import _controller_response, _controller_callback

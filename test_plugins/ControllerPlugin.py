@@ -5,6 +5,7 @@ from nanome.util.image_settings import ScalingOptions
 
 class ControllerPlugin(nanome.PluginInstance):
     def __init__(self):
+        super(ControllerPlugin, self).__init__()
         self.outstanding_requests = 0
         self.i = 0
 
@@ -28,9 +29,9 @@ class ControllerPlugin(nanome.PluginInstance):
             nanome.util.Logs.debug("sending reqs" + str(self.i))
             self.i = 0
             self.outstanding_requests = 3
-            self.request_controller(nanome.util.enums.ControllerType.head, self.on_controller_request)
-            self.request_controller(nanome.util.enums.ControllerType.left, self.on_controller_request)
-            self.request_controller(nanome.util.enums.ControllerType.right, self.on_controller_request)
+            self.user.request_controller(nanome.util.enums.ControllerType.head, self.on_controller_request)
+            self.user.request_controller(nanome.util.enums.ControllerType.left, self.on_controller_request)
+            self.user.request_controller(nanome.util.enums.ControllerType.right, self.on_controller_request)
         else:
             self.i += 1
 

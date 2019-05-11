@@ -12,7 +12,7 @@ class _ControllerRequest(_TypeSerializer):
         return "ControllerRequest"
 
     def serialize(self, version, value, context):
-        context.write_int(value)
+        context.write_uint(value)
 
     def deserialize(self, version, data):
         return None
