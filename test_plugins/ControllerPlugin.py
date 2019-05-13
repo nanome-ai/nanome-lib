@@ -1,6 +1,7 @@
 import nanome
 import os
 import sys
+from nanome.util.enums import ControllerType, ControllerButtons, ControllerEvents
 from nanome.util.image_settings import ScalingOptions
 
 class ControllerPlugin(nanome.PluginInstance):
@@ -15,6 +16,28 @@ class ControllerPlugin(nanome.PluginInstance):
     # Function called when user clicks on the "Run" button in Nanome
     def on_run(self):
         self.open_menu()
+        self.user.register_callback(ControllerType.left, ControllerButtons.trigger, ControllerEvents.pressed, self.left_trigger_pressed)
+        self.user.register_callback(ControllerType.right, ControllerButtons.grip, ControllerEvents.released, self.right_grip_released)
+        self.user.register_callback(ControllerType.left, ControllerButtons.button1, ControllerEvents.held, self.left_button1_held)
+        self.user.register_callback(ControllerType.right, ControllerButtons.button2, ControllerEvents.held, self.right_button2_held)
+        self.user.register_callback(ControllerType.right, ControllerButtons.button2, ControllerEvents.released, self.right_button2_released)
+
+    def left_trigger_pressed(self, controller):
+        nanome.util.Logs.debug("left trigger presesd.")
+
+    def right_grip_released(self, controller):
+        nanome.util.Logs.debug("right grip released")
+
+    def left_button1_held(self, controller):
+        nanome.util.Logs.debug("left button1 held")
+
+    def right_button2_held(self, controller):
+        nanome.util.Logs.debug("right button2 held")
+
+    def right_button2_released(self, controller):
+        nanome.util.Logs.debug("right button2 released")
+        self.user.register_callback(ControllerType.right, ControllerButtons.button2, ControllerEvents.held, None)
+        self.user.register_callback(ControllerType.right, ControllerButtons.button2, ControllerEvents.released, None)
 
     def on_advanced_settings(self):
         self.open_menu()
@@ -26,12 +49,12 @@ class ControllerPlugin(nanome.PluginInstance):
 
     def update(self):
         if (self.outstanding_requests == 0):
-            nanome.util.Logs.debug("sending reqs" + str(self.i))
+            # nanome.util.Logs.debug("sending reqs" + str(self.i))
             self.i = 0
             self.outstanding_requests = 3
-            self.user.request_controller(nanome.util.enums.ControllerType.head, self.on_controller_request)
-            self.user.request_controller(nanome.util.enums.ControllerType.left, self.on_controller_request)
-            self.user.request_controller(nanome.util.enums.ControllerType.right, self.on_controller_request)
+            # self.user.request_controller(nanome.util.enums.ControllerType.head, self.on_controller_request)
+            # self.user.request_controller(nanome.util.enums.ControllerType.left, self.on_controller_request)
+            # self.user.request_controller(nanome.util.enums.ControllerType.right, self.on_controller_request)
         else:
             self.i += 1
 
@@ -39,13 +62,13 @@ class ControllerPlugin(nanome.PluginInstance):
         self.outstanding_requests -= 1
         root = nanome.ui.Menu.get_plugin_menu().root
         if(controller.controller_type == nanome.util.enums.ControllerType.head):
-            nanome.util.Logs.debug("received head")
+            # nanome.util.Logs.debug("received head")
             self.update_controller(root.find_node("head"), controller)
         elif(controller.controller_type == nanome.util.enums.ControllerType.left):
-            nanome.util.Logs.debug("received left")
+            # nanome.util.Logs.debug("received left")
             self.update_controller(root.find_node("left"), controller)
         elif(controller.controller_type == nanome.util.enums.ControllerType.right):
-            nanome.util.Logs.debug("received right")
+            # nanome.util.Logs.debug("received right")
             self.update_controller(root.find_node("right"), controller)
 
     def update_controller(self, node, controller):

@@ -8,14 +8,15 @@ class User (_User):
     def register_callback(self, controller_type, controller_button, controller_event, callback):
         controller_button_events = self._callback_dict[controller_type][controller_button]
         remove_hook = callback == None
-        send_hook = controller_button_events[controller_event] == None
 
-        if (send_hook and not remove_hook):
+        if (not remove_hook):
             #send hook
-            self._plugin_instance._network._send()
-        elif (remove_hook and not send_hook):
+            args = (controller_type, controller_button, controller_event)
+            self._plugin_instance._network._send(_Messages.controller_hook, args)
+        elif (remove_hook):
             #send remove
-            pass
+            args = (controller_type, controller_button, controller_event)
+            self._plugin_instance._network._send(_Messages.controller_unhook, args)
         controller_button_events[controller_event] = callback
     
     def request_controller(self, controller_type, callback):
