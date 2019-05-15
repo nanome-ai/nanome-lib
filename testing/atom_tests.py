@@ -28,7 +28,7 @@ def run(counter):
     run_test(test_sdf, counter)
     run_test(test_iterators, counter)
     prep_timer_test()
-    run_timed_test(time_test_serializer, counter, 1, 2.9)
+    run_timed_test(time_test_serializer, counter, 1, 10)#normally 2.9 
     #run_test(compare_mmcif_pdb, counter)
 
 def test_equality():
