@@ -17,8 +17,8 @@ from nanome.util import Logs
 
 import tkinter as tk
 
-test_assets = os.getcwd() + ("\\testing\\test_assets")
-test_output_dir = os.getcwd() + ("\\testing\\test_outputs")
+test_assets = os.getcwd() + ("/testing/test_assets")
+test_output_dir = os.getcwd() + ("/testing/test_outputs")
 options = TestOptions(ignore_vars=["_serial", "_remarks", "_associated"])
 
 
@@ -33,8 +33,8 @@ def run(counter):
 # Testing save load
 # MMCIF
 def test_1fsv():
-    input_dir = test_assets + ("\\mmcif\\1fsv.cif")
-    output_dir = test_output_dir + ("\\testOutput.cif")
+    input_dir = test_assets + ("/mmcif/1fsv.cif")
+    output_dir = test_output_dir + ("/testOutput.cif")
 
     complex1 = struct.Complex.io.from_mmcif(input_dir)
     complex1.io.to_mmcif(output_dir)
@@ -57,8 +57,8 @@ def test_1fsv():
 
 #weird cif from CCDC
 def test_tebgit():
-    input_dir = test_assets + ("\\mmcif\\tebgit.cif")
-    output_dir = test_output_dir + ("\\testOutput.cif")
+    input_dir = test_assets + ("/mmcif/tebgit.cif")
+    output_dir = test_output_dir + ("/testOutput.cif")
 
     complex1 = struct.Complex.io.from_mmcif(input_dir)
     #fact checks

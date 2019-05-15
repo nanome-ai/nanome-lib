@@ -7,8 +7,8 @@ from testing import utilities as util
 
 import os
 
-test_assets = os.getcwd() + ("\\testing\\test_assets")
-test_output_dir = os.getcwd() + ("\\testing\\test_outputs")
+test_assets = os.getcwd() + ("/testing/test_assets")
+test_output_dir = os.getcwd() + ("/testing/test_outputs")
 if not os.path.isdir(test_output_dir):
     os.makedirs(test_output_dir)
 

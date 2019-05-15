@@ -7,8 +7,8 @@ from nanome._internal._network._serialization._context import _ContextDeserializ
 # from nanome.serialization.commands import ReceiveMenu, UpdateMenu
 from testing.utilities import *
 
-test_assets = os.getcwd() + ("\\testing\\test_assets")
-test_output_dir = os.getcwd() + ("\\testing\\test_outputs")
+test_assets = os.getcwd() + ("/testing/test_assets")
+test_output_dir = os.getcwd() + ("/testing/test_outputs")
 
 #testing structures
 def test_ui():
