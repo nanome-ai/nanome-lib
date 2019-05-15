@@ -28,10 +28,10 @@ def get_download_path():
 
 import nanome
 
-all_good = True
-all_good = all_good = util.run_test_group(api_tests)
-all_good = all_good = util.run_test_group(atom_tests)
-all_good = all_good = util.run_test_group(mmcif_tests)
-all_good = all_good = util.run_test_group(ui_tests)
-all_good = all_good = util.run_test_group(json_tests)
-assert(all_good)
+all_tests_passed = True
+all_tests_passed = all_tests_passed and util.run_test_group(api_tests)
+all_tests_passed = all_tests_passed and util.run_test_group(atom_tests)
+all_tests_passed = all_tests_passed and util.run_test_group(mmcif_tests)
+all_tests_passed = all_tests_passed and util.run_test_group(ui_tests)
+all_tests_passed = all_tests_passed and util.run_test_group(json_tests)
+assert(all_tests_passed)
