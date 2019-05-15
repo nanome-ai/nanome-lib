@@ -188,6 +188,10 @@ def run_test_group(test, options = TestOptions()):
     counter = TestCounter()
     test.run(counter)
     Logs.debug("tests passed: ", str(counter.passed)+"/"+str(counter.total))
+    if (counter.passed < counter.total):
+        return False
+    else:
+        return True
 
 def run_test(test, counter):
     try:
