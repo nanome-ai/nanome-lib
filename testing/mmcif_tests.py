@@ -15,8 +15,6 @@ from testing.utilities import *
 
 from nanome.util import Logs
 
-import tkinter as tk
-
 test_assets = os.getcwd() + ("/testing/test_assets")
 test_output_dir = os.getcwd() + ("/testing/test_outputs")
 options = TestOptions(ignore_vars=["_serial", "_remarks", "_associated"])
