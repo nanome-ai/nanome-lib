@@ -2,17 +2,17 @@ import struct
 
 
 class _Data(object):
-    bool_pack = struct.Struct('!?').pack_into
-    float_pack = struct.Struct('!f').pack_into
-    long_pack = struct.Struct('!q').pack_into
-    int_pack = struct.Struct('!i').pack_into
-    uint_pack = struct.Struct('!I').pack_into
+    bool_pack = struct.Struct('<?').pack_into
+    float_pack = struct.Struct('<f').pack_into
+    long_pack = struct.Struct('<q').pack_into
+    int_pack = struct.Struct('<i').pack_into
+    uint_pack = struct.Struct('<I').pack_into
 
-    bool_unpack = struct.Struct('!?').unpack_from
-    float_unpack = struct.Struct('!f').unpack_from
-    long_unpack = struct.Struct('!q').unpack_from
-    int_unpack = struct.Struct('!i').unpack_from
-    uint_unpack = struct.Struct('!I').unpack_from
+    bool_unpack = struct.Struct('<?').unpack_from
+    float_unpack = struct.Struct('<f').unpack_from
+    long_unpack = struct.Struct('<q').unpack_from
+    int_unpack = struct.Struct('<i').unpack_from
+    uint_unpack = struct.Struct('<I').unpack_from
 
     def __init__(self):
         self._buffered_computed = 0
