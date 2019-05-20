@@ -6,7 +6,6 @@ from nanome.util.image_settings import ScalingOptions
 
 class ControllerPlugin(nanome.PluginInstance):
     def __init__(self):
-        super(ControllerPlugin, self).__init__()
         self.outstanding_requests = 0
         self.i = 0
 
