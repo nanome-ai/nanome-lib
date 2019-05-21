@@ -12,11 +12,17 @@ test_output_dir = os.getcwd() + ("/testing/test_outputs")
 
 #testing structures
 def test_ui():
+    Logs.debug("button")
     button = UI.Button()
+    Logs.debug("Label")
     label = UI.Label()
+    Logs.debug("Mesh")
     mesh = UI.Mesh()
+    Logs.debug("Slider")
     slider = UI.Slider()
+    Logs.debug("TextInput")
     text_input = UI.TextInput()
+    Logs.debug("Menu")
     # ui_base = UI.UIBase()
     menu = UI.Menu()
 
