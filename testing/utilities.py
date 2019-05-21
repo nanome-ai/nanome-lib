@@ -240,6 +240,7 @@ def test_serializer(serializer, obj_to_test, options=None):
     assert_equal(obj_to_test, result, options)
 
 def create_test(name, func, args):
+    Logs.debug("test: name")
     test = lambda: func(*args)
     test.__name__ = name
     return test
