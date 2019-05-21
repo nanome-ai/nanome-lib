@@ -23,7 +23,6 @@ def run(counter):
     run_test(test_structures, counter)
     run_test(test_equality, counter)
     run_test(test_pdb, counter)
-    run_test(test_sdf, counter)
     run_test(test_iterators, counter)
     prep_timer_test()
     run_timed_test(time_test_serializer, counter, 1, 10)#normally 2.9 
@@ -81,19 +80,6 @@ def test_pdb():
     complex1.io.to_pdb(output_dir)
 
     complex2 = struct.Complex.io.from_pdb(output_dir)
-
-    compare_atom_positions(complex1, complex2)
-    assert_equal(complex1, complex2, options)
-    assert_not_equal(complex2, struct.Complex(), options)
-#SDF
-def test_sdf():
-    input_dir = test_assets + ("/sdf/Thrombin_100cmpds (1).sdf")
-    output_dir = test_output_dir + ("/testOutput.sdf")
-
-    complex1 = struct.Complex.io.from_sdf(input_dir)
-    complex1.io.to_sdf(output_dir)
-
-    complex2 = struct.Complex.io.from_sdf(output_dir)
 
     compare_atom_positions(complex1, complex2)
     assert_equal(complex1, complex2, options)
