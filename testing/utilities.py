@@ -205,14 +205,23 @@ def run_test(test, counter):
         counter.passed += 1
 
 def run_timed_test(test, counter, loop_count = 1, maximum_time = -1.0):
+    Logs.debug("\trunning test", test.__name__)
+    counter.total += 1    
+    timed = True
     try:
-        Logs.debug("\trunning test", test.__name__)
-        counter.total += 1
         start_time = time.process_time_ns()
-        for _ in range(loop_count):
+    except AttributeError:
+        Logs.debug("No timer module. Defaulting to untimed test")
+        timed = False
+        maximum_time = -1
+    try:
+        if (timed):
+            for _ in range(loop_count):
+                test()
+            result_time = (time.process_time_ns() - start_time) / 1000000000.0
+            Logs.debug("\texecuted in", result_time, "seconds.", result_time/loop_count, "seconds per test.", "Reference time:", maximum_time, "seconds")
+        else:
             test()
-        result_time = (time.process_time_ns() - start_time) / 1000000000.0
-        Logs.debug("\texecuted in", result_time, "seconds.", result_time/loop_count, "seconds per test.", "Reference time:", maximum_time, "seconds")
     except Exception as e:
         Logs.error("\ttest failed.")
         Logs.error(e)
