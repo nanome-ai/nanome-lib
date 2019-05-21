@@ -2,7 +2,6 @@ from nanome.util import Vector3
 from . import _LayoutNode
 
 class _Menu(object):
-    _menu = None
 
     @classmethod
     def _create(cls):
@@ -32,16 +31,6 @@ class _Menu(object):
         self._opened_callback(self)
 
 #endregion
-
-    @classmethod
-    def _get_plugin_menu(cls):
-        if (_Menu._menu is None):
-            _Menu._menu = _Menu._create()
-        return _Menu._menu
-
-    @classmethod
-    def _set_plugin_menu(cls, val):
-        _Menu._menu = val
 
     def _find_content(self, content_id):
         return self._root._find_content(content_id)
