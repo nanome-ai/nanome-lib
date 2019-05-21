@@ -26,7 +26,6 @@ def run(counter):
     run_test(test_iterators, counter)
     prep_timer_test()
     run_timed_test(time_test_serializer, counter, 1, 10)#normally 2.9 
-    #run_test(compare_mmcif_pdb, counter)
 
 def test_equality():
     assert_equal(create_atom(), create_atom(), options)
@@ -73,24 +72,13 @@ def compare_atom_positions(complex1, complex2):
 #Testing save load
 #PDB
 def test_pdb():
-    input_dir = test_assets + ("/pdb/1a9l.pdb")
+    input_dir = test_assets + ("/pdb/1fsv.pdb")
     output_dir = test_output_dir + ("/testOutput.pdb")
 
     complex1 = struct.Complex.io.from_pdb(input_dir)
     complex1.io.to_pdb(output_dir)
 
     complex2 = struct.Complex.io.from_pdb(output_dir)
-
-    compare_atom_positions(complex1, complex2)
-    assert_equal(complex1, complex2, options)
-    assert_not_equal(complex2, struct.Complex(), options)
-
-def compare_mmcif_pdb():
-    input_dir1 = test_assets + ("/mmcif/1a9l.cif")
-    input_dir2 = test_assets + ("/pdb/1a9l.pdb")
-
-    complex1 = struct.Complex.io.from_mmcif(input_dir1)
-    complex2 = struct.Complex.io.from_pdb(input_dir2)
 
     compare_atom_positions(complex1, complex2)
     assert_equal(complex1, complex2, options)
