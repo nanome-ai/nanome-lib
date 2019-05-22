@@ -7,3 +7,4 @@ from .NotificationPlugin import NotificationPlugin
 from .LoadFile import LoadFile
 from .ImagePlugin import ImagePlugin
 from .DeepUpdatePlugin import DeepUpdatePlugin
+from .EMPlugin import EMPlugin

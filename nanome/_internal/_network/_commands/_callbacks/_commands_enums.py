@@ -19,12 +19,16 @@ class __CommandEnum(IntEnum):
 # /!\ /!\ /!\
 # Values names are really important here, as they are hashed, and need to match Nanome
 class _Commands(__CommandEnum):
+    # Tmp hack
+    reset_auto() #Not an enum
+
+    #Control
     connect = auto()
     run = auto()
-    workspace_receive = auto()
-    complex_list_receive = auto()
-    #UI callbacks======
-    menu_receive = auto()
+    advanced_settings = auto()
+
+    #UI
+    menu_response = auto()
     menu_toggle = auto()
     button_press = auto()
     slider_release = auto()
@@ -34,50 +38,72 @@ class _Commands(__CommandEnum):
     image_press = auto()
     image_hold = auto()
     image_release = auto()
-    #Other callbacks
-    complexes_receive = auto()
-    advanced_settings = auto()
-    directory_receive = auto()
-    file_receive = auto()
-    file_save_result_receive = auto()
-    complex_add = auto()
-    complex_remove = auto()
-    bonds_add_result = auto()
-    dssp_add_done = auto()
-    stream_create_result = auto()
-    stream_interrupt = auto()
-    stream_feed_done = auto()
+
+    #Structure
+    workspace_response = auto()
+    complex_list_response = auto()
+    complexes_response = auto()
     structures_deep_update_done = auto()
     position_structures_done = auto()
+    complex_add = auto()
+    complex_remove = auto()
+    bonds_add_done = auto()
+    dssp_add_done = auto()
+
+    #Stream
+    stream_create_done = auto()
+    stream_feed_done = auto()
+    stream_interrupt = auto()
+
+    #File
+    directory_response= auto()
+    file_response= auto()
+    file_save_done= auto()
+
+    #Other
+    upload_cryo_em_done = auto()
+
 
 # /!\ /!\ /!\
 # Values names are really important here, as they are hashed, and need to match Nanome
 class _Messages(__CommandEnum):
     # Tmp hack
-    reset_auto()
+    reset_auto() #Not an enum
     
+    #Control
     connect = auto()
-    workspace_request = auto()
-    complex_list_request = auto()
-    workspace_update = auto()
+    plugin_list_button_set = auto()
+
+    #UI
     menu_update = auto()
     content_update = auto()
-    complexes_request = auto()
+    notification_send = auto()
+
+    #Structure
+    structures_deep_update = auto()
+    structures_shallow_update = auto()
+    structures_zoom = auto()
+    structures_center = auto()
+    workspace_update = auto()
+    workspace_request = auto()
     add_to_workspace = auto()
+    complexes_request = auto()
+    complex_list_request = auto()
+    bonds_add = auto()
+    dssp_add = auto()
+
+    #Streams
+    stream_create = auto()
+    stream_feed = auto()
+    stream_destroy = auto()
+
+    #File
     directory_request = auto()
     file_request = auto()
     file_save = auto()
-    plugin_list_button_set = auto()
-    structures_deep_update = auto()
-    structures_shallow_update = auto()
-    notification_send = auto()
-    bonds_add = auto()
-    dssp_add = auto()
-    stream_create = auto()
-    stream_destroy = auto()
-    stream_feed = auto()
-    structures_zoom = auto()
-    structures_center = auto()
+
+    #Other
+    upload_cryo_em = auto()
 
 class _Hashes():
     CommandHashes = [None] * len(_Commands)

@@ -23,6 +23,8 @@ from ._request_complex_list import _RequestComplexList, _RequestComplexes
 from ._request_workspace import _RequestWorkspace
 from ._update_structures import _UpdateStructures
 from ._update_structures_deep_done import _UpdateStructuresDeepDone
+from ._upload_cryo_em import _UploadCryoEM
+from ._upload_cryo_em_done import _UploadCryoEMDone
 from ._set_plugin_list_button import _SetPluginListButton
 from ._menu_callback import _MenuCallback
 from ._button_callback import _ButtonCallback

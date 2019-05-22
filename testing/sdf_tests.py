@@ -14,57 +14,36 @@ options = TestOptions(ignore_vars=["_serial", "_remarks", "_associated"])
 
 
 def run(counter):
-    run_test(test_1fsv, counter)
-    run_test(test_tebgit, counter)
-    # run_test(test_1fsv, counter)
-    # run_test(test_1fsv, counter)
-    # run_test(test_1fsv, counter)
+    run_test(test_thrombin, counter)
 
 
 # Testing save load
 # MMCIF
-def test_1fsv():
-    input_dir = test_assets + ("/mmcif/1fsv.cif")
-    output_dir = test_output_dir + ("/testOutput.cif")
+def test_thrombin():
+    input_dir = test_assets + ("/sdf/small_thrombin.sdf")
+    output_dir = test_output_dir + ("/testOutput.sdf")
 
-    complex1 = struct.Complex.io.from_mmcif(input_dir)
-    complex1.io.to_mmcif(output_dir)
+    complex1 = struct.Complex.io.from_sdf(input_dir)
+    complex1.io.to_sdf(output_dir)
 
     #fact checks
     counters = count_structures(complex1)
     (molecule_count, chain_count, residue_count, bond_count, atom_count) = counters
-    assert(molecule_count == 1)
-    assert(chain_count == 1)
-    assert(residue_count == 28)
-    assert(bond_count == 0)
-    assert(atom_count == 504)
+    assert(molecule_count == 3)
+    assert(chain_count == 3)
+    assert(residue_count == 3)
+    assert(bond_count == 237)
+    assert(atom_count == 228)
     #
 
-    complex2 = struct.Complex.io.from_mmcif(output_dir)
-
-    compare_atom_positions(complex1, complex2)
-    assert_equal(complex1, complex2, options)
-    assert_not_equal(complex2, struct.Complex(), options)
-
-#weird cif from CCDC
-def test_tebgit():
-    input_dir = test_assets + ("/mmcif/tebgit.cif")
-    output_dir = test_output_dir + ("/testOutput.cif")
-
-    complex1 = struct.Complex.io.from_mmcif(input_dir)
-    #fact checks
-    counters = count_structures(complex1)
+    complex2 = struct.Complex.io.from_sdf(output_dir)
+    counters = count_structures(complex2)
     (molecule_count, chain_count, residue_count, bond_count, atom_count) = counters
-    assert(molecule_count == 1)
-    assert(chain_count == 1)
-    assert(residue_count == 1)
-    assert(bond_count == 0)
-    assert(atom_count == 28)
-    #
-
-    complex1.io.to_mmcif(output_dir)
-
-    complex2 = struct.Complex.io.from_mmcif(output_dir)
+    assert(molecule_count == 3)
+    assert(chain_count == 3)
+    assert(residue_count == 3)
+    assert(bond_count == 237)
+    assert(atom_count == 228)
 
     compare_atom_positions(complex1, complex2)
     assert_equal(complex1, complex2, options)

@@ -20,8 +20,8 @@ def parse_json(content_json):
 def write_json(label):
     content_json = {}
     content_json["text"] = label._text_value
-    content_json["text_vertical_align"] = label._text_vertical_align
-    content_json["text_horizontal_align"] = label._text_horizontal_align
+    content_json["text_vertical_align"] = int(label._text_vertical_align)
+    content_json["text_horizontal_align"] = int(label._text_horizontal_align)
     content_json["text_auto_size"] = label._text_auto_size
     content_json["text_min_size"] = label._text_min_size
     content_json["text_max_size"] = label._text_max_size

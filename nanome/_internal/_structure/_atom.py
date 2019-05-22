@@ -65,7 +65,3 @@ class _Atom(_Base):
         VanDerWaals = 3
         Point = 4
 
-    @property
-    def bonds(self):
-        for bond in self._bonds:
-            yield bond

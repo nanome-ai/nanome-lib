@@ -80,15 +80,18 @@ add_command(CommandCallbacks._Commands.run, CommandSerializers._Run())
 add_command(CommandCallbacks._Commands.advanced_settings, CommandSerializers._AdvancedSettings())
 
 #workspace
-add_command(CommandCallbacks._Commands.workspace_receive, CommandSerializers._ReceiveWorkspace())
+add_command(CommandCallbacks._Commands.workspace_response, CommandSerializers._ReceiveWorkspace())
 add_command(CommandCallbacks._Commands.complex_add, CommandSerializers._ComplexAddedRemoved())
 add_command(CommandCallbacks._Commands.complex_remove, CommandSerializers._ComplexAddedRemoved())
-add_command(CommandCallbacks._Commands.complex_list_receive, CommandSerializers._ReceiveComplexList())
-add_command(CommandCallbacks._Commands.complexes_receive, CommandSerializers._ReceiveComplexes())
+add_command(CommandCallbacks._Commands.complex_list_response, CommandSerializers._ReceiveComplexList())
+add_command(CommandCallbacks._Commands.complexes_response, CommandSerializers._ReceiveComplexes())
 add_command(CommandCallbacks._Commands.structures_deep_update_done, CommandSerializers._UpdateStructuresDeepDone())
 add_command(CommandCallbacks._Commands.position_structures_done, CommandSerializers._PositionStructuresDone())
-add_command(CommandCallbacks._Commands.bonds_add_result, CommandSerializers._AddBonds())
 add_command(CommandCallbacks._Commands.dssp_add_done, CommandSerializers._AddDSSP())
+add_command(CommandCallbacks._Commands.bonds_add_done, CommandSerializers._AddBonds())
+
+#Volume
+add_command(CommandCallbacks._Commands.upload_cryo_em_done, CommandSerializers._UploadCryoEMDone())
 
 #ui
 add_command(CommandCallbacks._Commands.menu_toggle, CommandSerializers._MenuCallback())
@@ -102,12 +105,12 @@ add_command(CommandCallbacks._Commands.image_hold, CommandSerializers._ImageCall
 add_command(CommandCallbacks._Commands.image_release, CommandSerializers._ImageCallback())
 
 #file
-add_command(CommandCallbacks._Commands.directory_receive, CommandSerializers._DirectoryRequest())
-add_command(CommandCallbacks._Commands.file_receive, CommandSerializers._FileRequest())
-add_command(CommandCallbacks._Commands.file_save_result_receive, CommandSerializers._FileSave())
+add_command(CommandCallbacks._Commands.directory_response, CommandSerializers._DirectoryRequest())
+add_command(CommandCallbacks._Commands.file_response, CommandSerializers._FileRequest())
+add_command(CommandCallbacks._Commands.file_save_done, CommandSerializers._FileSave())
 
 #streams
-add_command(CommandCallbacks._Commands.stream_create_result,CommandSerializers._CreateStreamResult())
+add_command(CommandCallbacks._Commands.stream_create_done,CommandSerializers._CreateStreamResult())
 add_command(CommandCallbacks._Commands.stream_interrupt, CommandSerializers._InterruptStream())
 add_command(CommandCallbacks._Commands.stream_feed_done, CommandSerializers._FeedStreamDone())
 
@@ -134,6 +137,9 @@ add_message(CommandCallbacks._Messages.bonds_add, CommandSerializers._AddBonds()
 add_message(CommandCallbacks._Messages.dssp_add, CommandSerializers._AddDSSP())
 add_message(CommandCallbacks._Messages.structures_zoom, CommandSerializers._PositionStructures())
 add_message(CommandCallbacks._Messages.structures_center, CommandSerializers._PositionStructures())
+
+#volume
+add_message(CommandCallbacks._Messages.upload_cryo_em, CommandSerializers._UploadCryoEM())
 
 #ui
 add_message(CommandCallbacks._Messages.menu_update, CommandSerializers._UpdateMenu())
@@ -165,18 +171,19 @@ add_callback(CommandCallbacks._Commands.run, CommandCallbacks._run)
 add_callback(CommandCallbacks._Commands.advanced_settings, CommandCallbacks._advanced_settings)
 
 #workspace
-add_callback(CommandCallbacks._Commands.complex_list_receive, CommandCallbacks._receive_complex_list)
-add_callback(CommandCallbacks._Commands.workspace_receive, CommandCallbacks._receive_workspace)
+add_callback(CommandCallbacks._Commands.complex_list_response, CommandCallbacks._receive_complex_list)
+add_callback(CommandCallbacks._Commands.workspace_response, CommandCallbacks._receive_workspace)
 add_callback(CommandCallbacks._Commands.complex_add, CommandCallbacks._complex_added)
 add_callback(CommandCallbacks._Commands.complex_remove, CommandCallbacks._complex_removed)
 add_callback(CommandCallbacks._Commands.structures_deep_update_done, CommandCallbacks._update_structures_deep_done)
+add_callback(CommandCallbacks._Commands.upload_cryo_em_done, CommandCallbacks._upload_cryo_em_done)
 add_callback(CommandCallbacks._Commands.position_structures_done, CommandCallbacks._position_structures_done)
-add_callback(CommandCallbacks._Commands.bonds_add_result, CommandCallbacks._add_bonds_result)
 add_callback(CommandCallbacks._Commands.dssp_add_done, CommandCallbacks._add_dssp_done)
-add_callback(CommandCallbacks._Commands.complexes_receive, CommandCallbacks._receive_complexes)
+add_callback(CommandCallbacks._Commands.bonds_add_done, CommandCallbacks._add_bonds_result)
+add_callback(CommandCallbacks._Commands.complexes_response, CommandCallbacks._receive_complexes)
 
 #ui
-add_callback(CommandCallbacks._Commands.menu_receive, CommandCallbacks._receive_menu)
+add_callback(CommandCallbacks._Commands.menu_response, CommandCallbacks._receive_menu)
 add_callback(CommandCallbacks._Commands.menu_toggle, CommandCallbacks._menu_toggled)
 add_callback(CommandCallbacks._Commands.slider_release, CommandCallbacks._slider_released)
 add_callback(CommandCallbacks._Commands.slider_change, CommandCallbacks._slider_changed)
@@ -188,11 +195,11 @@ add_callback(CommandCallbacks._Commands.image_hold, CommandCallbacks._image_held
 add_callback(CommandCallbacks._Commands.image_release, CommandCallbacks._image_released)
 
 #file
-add_callback(CommandCallbacks._Commands.directory_receive, CommandCallbacks._receive_directory)
-add_callback(CommandCallbacks._Commands.file_receive, CommandCallbacks._receive_file)
-add_callback(CommandCallbacks._Commands.file_save_result_receive, CommandCallbacks._receive_file_save_result)
+add_callback(CommandCallbacks._Commands.directory_response, CommandCallbacks._receive_directory)
+add_callback(CommandCallbacks._Commands.file_response, CommandCallbacks._receive_file)
+add_callback(CommandCallbacks._Commands.file_save_done, CommandCallbacks._receive_file_save_result)
 
 #streams
-add_callback(CommandCallbacks._Commands.stream_create_result, CommandCallbacks._receive_create_stream_result)
+add_callback(CommandCallbacks._Commands.stream_create_done, CommandCallbacks._receive_create_stream_result)
 add_callback(CommandCallbacks._Commands.stream_interrupt, CommandCallbacks._receive_interrupt_stream)
 add_callback(CommandCallbacks._Commands.stream_feed_done, CommandCallbacks._feed_stream_done)
