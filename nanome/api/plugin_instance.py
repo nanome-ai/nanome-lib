@@ -225,6 +225,16 @@ class PluginInstance(_PluginInstance):
         id = self._network._send(_Messages.bonds_add, complex_list)
         self._save_callback(id, callback)
 
+    def upload_cyro_em(self, path, callback = None):
+        """
+        | Renders a Cryo EM map in nanome.
+
+        :param path: path to the .map or .map.gz file containing the map.
+        :type path: str
+        """
+        id = self._network._send(_Messages.upload_cryo_em, path)
+        self._save_callback(id, callback)
+
     @classmethod
     def _save_callback(cls, id, callback):
         if callback == None:

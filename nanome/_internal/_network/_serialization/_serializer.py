@@ -89,6 +89,9 @@ add_command(CommandCallbacks._Commands.structures_deep_update_done, CommandSeria
 add_command(CommandCallbacks._Commands.position_structures_done, CommandSerializers._PositionStructuresDone())
 add_command(CommandCallbacks._Commands.bonds_add_done, CommandSerializers._AddBonds())
 
+#Volume
+add_command(CommandCallbacks._Commands.upload_cryo_em_done, CommandSerializers._UploadCryoEMDone())
+
 #ui
 add_command(CommandCallbacks._Commands.menu_toggle, CommandSerializers._MenuCallback())
 add_command(CommandCallbacks._Commands.button_press, CommandSerializers._ButtonCallback())
@@ -133,6 +136,9 @@ add_message(CommandCallbacks._Messages.bonds_add, CommandSerializers._AddBonds()
 add_message(CommandCallbacks._Messages.structures_zoom, CommandSerializers._PositionStructures())
 add_message(CommandCallbacks._Messages.structures_center, CommandSerializers._PositionStructures())
 
+#volume
+add_message(CommandCallbacks._Messages.upload_cryo_em, CommandSerializers._UploadCryoEM())
+
 #ui
 add_message(CommandCallbacks._Messages.menu_update, CommandSerializers._UpdateMenu())
 add_message(CommandCallbacks._Messages.content_update, CommandSerializers._UpdateContent())
@@ -168,6 +174,7 @@ add_callback(CommandCallbacks._Commands.workspace_response, CommandCallbacks._re
 add_callback(CommandCallbacks._Commands.complex_add, CommandCallbacks._complex_added)
 add_callback(CommandCallbacks._Commands.complex_remove, CommandCallbacks._complex_removed)
 add_callback(CommandCallbacks._Commands.structures_deep_update_done, CommandCallbacks._update_structures_deep_done)
+add_callback(CommandCallbacks._Commands.upload_cryo_em_done, CommandCallbacks._upload_cryo_em_done)
 add_callback(CommandCallbacks._Commands.position_structures_done, CommandCallbacks._position_structures_done)
 add_callback(CommandCallbacks._Commands.bonds_add_done, CommandCallbacks._add_bonds_result)
 add_callback(CommandCallbacks._Commands.complexes_response, CommandCallbacks._receive_complexes)

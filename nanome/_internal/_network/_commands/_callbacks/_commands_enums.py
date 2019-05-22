@@ -60,6 +60,8 @@ class _Commands(__CommandEnum):
     file_save_done= auto()
 
     #Other
+    upload_cryo_em_done = auto()
+
 
 # /!\ /!\ /!\
 # Values names are really important here, as they are hashed, and need to match Nanome
@@ -99,6 +101,7 @@ class _Messages(__CommandEnum):
     file_save = auto()
 
     #Other
+    upload_cryo_em = auto()
 
 class _Hashes():
     CommandHashes = [None] * len(_Commands)
