@@ -16,8 +16,8 @@ class _Packet(object):
     packet_type_plugin_disconnection = 5
     packet_type_client_disconnection = 6
     packet_type_master_change = 7
-    header_pack = struct.Struct('!HIBIi').pack
-    header_unpack = struct.Struct('!HIBIi').unpack
+    header_pack = struct.Struct('<HIBIi').pack
+    header_unpack = struct.Struct('<HIBIi').unpack
 
     @staticmethod
     def _has_brotli_compression():
