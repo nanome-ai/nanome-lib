@@ -104,6 +104,3 @@ def compare_atom_positions(complex1, complex2):
         assert(difference > -.001)
         options2 = TestOptions(ignore_vars=["_serial", "_remarks", "_associated", "_position"])
         assert_equal(atom1, atom2, options2)
-
-if __name__ == "__main__":
-    util.run_test_group(mmcif_tests)
