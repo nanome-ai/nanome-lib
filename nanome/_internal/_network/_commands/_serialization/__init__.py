@@ -1,6 +1,7 @@
 from . import *
 #classes
 from ._add_bonds import _AddBonds
+from ._add_dssp import _AddDSSP
 from ._add_to_workspace import _AddToWorkspace
 from ._advanced_settings import _AdvancedSettings
 from ._connect import _Connect

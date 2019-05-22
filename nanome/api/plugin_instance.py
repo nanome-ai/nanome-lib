@@ -225,6 +225,16 @@ class PluginInstance(_PluginInstance):
         id = self._network._send(_Messages.bonds_add, complex_list)
         self._save_callback(id, callback)
 
+    def add_dssp(self, complex_list, callback):
+        """
+        | Request Nanome to use DSSP in order to display ribbons
+
+        :param complex_list: List of complexes to add ribbons to
+        :type complex_list: list of :class:`~nanome.api.structure.complex.Complex`
+        """
+        id = self._network._send(_Messages.dssp_add, complex_list)
+        self._save_callback(id, callback)
+
     @classmethod
     def _save_callback(cls, id, callback):
         if callback == None:

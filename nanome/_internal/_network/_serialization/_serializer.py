@@ -88,6 +88,7 @@ add_command(CommandCallbacks._Commands.complexes_receive, CommandSerializers._Re
 add_command(CommandCallbacks._Commands.structures_deep_update_done, CommandSerializers._UpdateStructuresDeepDone())
 add_command(CommandCallbacks._Commands.position_structures_done, CommandSerializers._PositionStructuresDone())
 add_command(CommandCallbacks._Commands.bonds_add_result, CommandSerializers._AddBonds())
+add_command(CommandCallbacks._Commands.dssp_add_done, CommandSerializers._AddDSSP())
 
 #ui
 add_command(CommandCallbacks._Commands.menu_toggle, CommandSerializers._MenuCallback())
@@ -130,6 +131,7 @@ add_message(CommandCallbacks._Messages.complex_list_request, CommandSerializers.
 add_message(CommandCallbacks._Messages.add_to_workspace, CommandSerializers._AddToWorkspace())
 add_message(CommandCallbacks._Messages.complexes_request, CommandSerializers._RequestComplexes())
 add_message(CommandCallbacks._Messages.bonds_add, CommandSerializers._AddBonds())
+add_message(CommandCallbacks._Messages.dssp_add, CommandSerializers._AddDSSP())
 add_message(CommandCallbacks._Messages.structures_zoom, CommandSerializers._PositionStructures())
 add_message(CommandCallbacks._Messages.structures_center, CommandSerializers._PositionStructures())
 
@@ -170,6 +172,7 @@ add_callback(CommandCallbacks._Commands.complex_remove, CommandCallbacks._comple
 add_callback(CommandCallbacks._Commands.structures_deep_update_done, CommandCallbacks._update_structures_deep_done)
 add_callback(CommandCallbacks._Commands.position_structures_done, CommandCallbacks._position_structures_done)
 add_callback(CommandCallbacks._Commands.bonds_add_result, CommandCallbacks._add_bonds_result)
+add_callback(CommandCallbacks._Commands.dssp_add_done, CommandCallbacks._add_dssp_done)
 add_callback(CommandCallbacks._Commands.complexes_receive, CommandCallbacks._receive_complexes)
 
 #ui

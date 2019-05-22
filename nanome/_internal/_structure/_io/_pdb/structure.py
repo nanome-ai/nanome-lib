@@ -43,6 +43,7 @@ def structure_molecule(atoms, compnds):
             if not residue_id in all_residues:
                 residue = _Residue._create()
                 residue.molecular._name = ratom.residue_name
+                residue._molecular._type = residue.molecular._name
                 residue.molecular._serial = ratom.residue_serial_number
                 # residue.insertion_code = ratom.residue_insertion_code
                 all_residues[residue_id] = residue

@@ -21,8 +21,8 @@ class _Residue(_Base):
         def __init__(self):
             self._modified = False
             self._ribboned = True
-            self._ribbon_size = 0.0
-            self._ribbon_mode = _Residue.RibbonMode.AdaptiveTube 
+            self._ribbon_size = 1.0
+            self._ribbon_mode = _Residue.RibbonMode.SecondaryStructure
             self._ribbon_color = Color.Clear()
 
     class Molecular(object):
