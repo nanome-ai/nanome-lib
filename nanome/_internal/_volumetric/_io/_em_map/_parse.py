@@ -1,4 +1,5 @@
 from ..._volume_data import _VolumeData
+from nanome.util import Logs
 import os
 import gzip
 import struct
@@ -16,11 +17,11 @@ def parse_file(path):
             with open(path, mode='rb') as f:
                 data = f.read()
         if data == []:
-            return None
+            raise ValueError("File is empty.")
         result = parse_data(data)
         return result
     except:
-        print("Could not read em file: " + path)
+        Logs.error("Could not read em file: " + path)
         raise
 
 def read_buffer(bytes_):
