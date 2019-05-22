@@ -139,11 +139,11 @@ def compare_dicts(first, second, seen_cache, options = TestOptions()):
     return True, []
 
 def alter_object(target, seen_cache = {}):
-    # if previously_altered(target, seen_cache):
-    #     return target
+    if previously_altered(target, seen_cache):
+        return target
     obj_dict = target.__dict__
     for key, var in obj_dict.items():
-        obj_dict[key] = alter_value(var)
+        obj_dict[key] = alter_value(var, seen_cache)
     return target
 
 def alter_value(value, seen_cache = {}):
@@ -157,7 +157,7 @@ def alter_value(value, seen_cache = {}):
         return value
     else:
         try:
-            value = alter_object(value, seen_cache = {})
+            value = alter_object(value, seen_cache)
             return value
         except:
             if isinstance(value, bool):
@@ -192,6 +192,10 @@ def run_test_group(test, options = TestOptions()):
     counter = TestCounter()
     test.run(counter)
     Logs.debug("tests passed: ", str(counter.passed)+"/"+str(counter.total))
+    if (counter.passed < counter.total):
+        return False
+    else:
+        return True
 
 def run_test(test, counter):
     try:
@@ -205,14 +209,23 @@ def run_test(test, counter):
         counter.passed += 1
 
 def run_timed_test(test, counter, loop_count = 1, maximum_time = -1.0):
+    Logs.debug("\trunning test", test.__name__)
+    counter.total += 1    
+    timed = True
     try:
-        Logs.debug("\trunning test", test.__name__)
-        counter.total += 1
         start_time = time.process_time_ns()
-        for _ in range(loop_count):
+    except AttributeError:
+        Logs.debug("No timer module. Defaulting to untimed test")
+        timed = False
+        maximum_time = -1
+    try:
+        if (timed):
+            for _ in range(loop_count):
+                test()
+            result_time = (time.process_time_ns() - start_time) / 1000000000.0
+            Logs.debug("\texecuted in", result_time, "seconds.", result_time/loop_count, "seconds per test.", "Reference time:", maximum_time, "seconds")
+        else:
             test()
-        result_time = (time.process_time_ns() - start_time) / 1000000000.0
-        Logs.debug("\texecuted in", result_time, "seconds.", result_time/loop_count, "seconds per test.", "Reference time:", maximum_time, "seconds")
     except Exception as e:
         Logs.error("\ttest failed.")
         Logs.error(e)

@@ -12,6 +12,7 @@ from .logs import Logs
 from .octree import Octree
 from .quaternion import Quaternion
 from .vector3 import Vector3
+from .matrix import Matrix
 from .file import DirectoryErrorCode, DirectoryRequestResult, DirectoryRequestOptions, FileErrorCode, FileData, FileSaveData, DirectoryEntry
 #modules
 from . import text_settings

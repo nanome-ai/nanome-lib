@@ -31,8 +31,8 @@ def write_json(node):
     node_json["name"] = node._name
     node_json["enabled"] = node._enabled
     node_json["layer"] = node._layer
-    node_json["layout_orientation"] = node._layout_orientation
-    node_json["sizing_type"] = node._sizing_type
+    node_json["layout_orientation"] = int(node._layout_orientation)
+    node_json["sizing_type"] = int(node._sizing_type)
     node_json["sizing_value"] = node._sizing_value
     node_json["forward_dist"] = node._forward_dist
     node_json["padding_type"] = int(node._padding_type)

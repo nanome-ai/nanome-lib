@@ -1,4 +1,4 @@
-from enum import IntEnum
+from nanome.util import IntEnum
 from . import _UIBaseSerializer
 from .. import _Image
 from nanome._internal._util._serializers import _ColorSerializer, _ArraySerializer, _ByteSerializer, _StringSerializer, _TypeSerializer
