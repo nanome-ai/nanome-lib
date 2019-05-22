@@ -3,6 +3,7 @@ from . import *
 from ._commands_enums import _Commands, _Messages, _Hashes
 #functions
 from ._add_bonds_result import _add_bonds_result
+from ._add_dssp_done import _add_dssp_done
 from ._advanced_settings import _advanced_settings
 from ._complex_list import _receive_complex_list, _receive_complexes
 from ._create_stream_result import _receive_create_stream_result

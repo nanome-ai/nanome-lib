@@ -44,6 +44,7 @@ def structure(content):
                     all_molecules[molecule_id]._chains.append(chain)
                 residue = _Residue._create()
                 residue._molecular._name = c_atom.residue_name
+                residue._molecular._type = residue._molecular._name
                 residue._molecular.serial = c_atom.residue_serial
                 all_residues[residue_id] = residue
                 all_chains[chain_id]._residues.append(residue)

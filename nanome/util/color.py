@@ -1,6 +1,6 @@
 class Color(object):
-    def __init__(self, r=0, g=0, b=0, a=255, whole_num = -1):
-        if (whole_num >= 0):
+    def __init__(self, r=0, g=0, b=0, a=255, whole_num = None):
+        if (whole_num != None):
             self.set_color_int(whole_num)
         else:
             self.set_color_rgb(r,g,b,a)
@@ -17,6 +17,8 @@ class Color(object):
 
     @classmethod
     def from_int(cls, value):
+        if (value < 0): #convert to uint
+            value += 4294967295 #max int
         value = int(value)
         color = Color(whole_num=value)
         return color

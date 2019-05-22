@@ -295,8 +295,8 @@ def ParseLines(lines):
                 else:
                     parsed_file[category] = section_objects
         except Exception:
-            Logs.error("\tParse failed. Error on line:", lines.get_line_number())
-            Logs.error(traceback.format_exc())        
+            Logs.warning("Problem during parsing, skipping line. Error on line:", lines.get_line_number())
+            Logs.warning(traceback.format_exc())      
             lines.move_next()
     return parsed_file
 

@@ -48,6 +48,7 @@ class _Commands(__CommandEnum):
     complex_add = auto()
     complex_remove = auto()
     bonds_add_done = auto()
+    dssp_add_done = auto()
 
     #Stream
     stream_create_done = auto()
@@ -89,6 +90,7 @@ class _Messages(__CommandEnum):
     complexes_request = auto()
     complex_list_request = auto()
     bonds_add = auto()
+    dssp_add = auto()
 
     #Streams
     stream_create = auto()

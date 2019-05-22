@@ -21,6 +21,7 @@ def structure_molecule(model):
     molecule._chains.append(chain)
     residue = _Residue._create()
     residue.molecular._name = "SDF"
+    residue.molecular._type = residue.molecular._name
     residue.molecular.serial = 1
     chain._residues.append(residue)
     atoms_by_serial = {}
