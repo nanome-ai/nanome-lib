@@ -39,7 +39,7 @@ def write_json(button):
     content_json["text_size"] = button._text._size
     content_json["text_underlined"] = button._text._underlined
     content_json["text_bolded"] = button._text._bolded
-    content_json["text_vertical_align"] = button._text._vertical_align
-    content_json["text_horizontal_align"] = button._text._horizontal_align
+    content_json["text_vertical_align"] = int(button._text._vertical_align)
+    content_json["text_horizontal_align"] = int(button._text._horizontal_align)
     return content_json
     

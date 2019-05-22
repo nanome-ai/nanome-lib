@@ -135,11 +135,11 @@ def compare_dicts(first, second, seen_cache, options = TestOptions()):
     return True, []
 
 def alter_object(target, seen_cache = {}):
-    # if previously_altered(target, seen_cache):
-    #     return target
+    if previously_altered(target, seen_cache):
+        return target
     obj_dict = target.__dict__
     for key, var in obj_dict.items():
-        obj_dict[key] = alter_value(var)
+        obj_dict[key] = alter_value(var, seen_cache)
     return target
 
 def alter_value(value, seen_cache = {}):
@@ -153,7 +153,7 @@ def alter_value(value, seen_cache = {}):
         return value
     else:
         try:
-            value = alter_object(value, seen_cache = {})
+            value = alter_object(value, seen_cache)
             return value
         except:
             if isinstance(value, bool):

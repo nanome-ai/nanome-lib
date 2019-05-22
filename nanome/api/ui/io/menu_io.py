@@ -19,7 +19,7 @@ class MenuIO(_Addon):
 
     def from_json(self, path):
         try:
-            with open(path) as f:
+            with open(path, "r") as f:
                 menu_string = f.read()
                 menu_json = json.loads(menu_string)
         except:
