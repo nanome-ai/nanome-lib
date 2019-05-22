@@ -7,8 +7,8 @@ from nanome.api.structure import Complex, Workspace
 
 
 class LoadFile(nanome.PluginInstance):
-    filename = "\\mmcif\\tebgit.cif"
-    test_assets = os.getcwd() + ("\\testing\\test_assets")
+    filename = "/mmcif/tebgit.cif"
+    test_assets = os.getcwd() + ("/testing/test_assets")
 
     def start(self):
         print("Start Load File")

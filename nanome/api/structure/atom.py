@@ -17,6 +17,11 @@ class Atom(_Atom, Base):
         self.rendering = self._rendering
         self.molecular = self._molecular
 
+    @property
+    def bonds(self):
+        for bond in self._bonds:
+            yield bond
+
     class Rendering(_Atom.Rendering):
         def set_visible(self, value):
             self._atomed = value

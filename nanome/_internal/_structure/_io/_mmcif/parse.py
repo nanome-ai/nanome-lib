@@ -427,10 +427,15 @@ def record_chunk_string(line, start=1, end=2147483647):
     true_start = start - 1
     true_end = min(end, len(line))
     return line[true_start:true_end].strip()
-    
+
+# captures "<category>.<key> <value> "
+# there must be some whitespace between <key> and <value> and there can be any amount of whitespace at the end.
+# category is 1 word and optional,
+# key is 1 word
+# and the value can be either 1 word or any number of words wrapped in single quotes.
 category_regex = re.compile(r"^(?:([^\s]+)\.)?([^\s]+)(?:\s+((?:[^\s]*)|(?:\'.*\')))?\s*$")
 def get_data_category(line):
-    match = re.fullmatch(category_regex, line)
+    match = re.match(category_regex, line)
     if (match == None):
         Logs.error(line)
         return

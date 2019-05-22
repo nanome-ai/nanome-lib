@@ -1,4 +1,4 @@
-from enum import IntEnum
+from nanome.util import IntEnum
 from . import _UIBaseSerializer
 from .. import _LoadingBar
 from nanome._internal._util._serializers import _StringSerializer, _TypeSerializer

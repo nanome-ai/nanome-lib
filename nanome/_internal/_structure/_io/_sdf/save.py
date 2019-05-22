@@ -1,8 +1,8 @@
 from nanome._internal._structure import _Complex, _Molecule, _Chain, _Residue, _Atom, _Bond
-
+from nanome.util import Logs
 class Options(object):
     def __init__(self):
-        self.write_bonds = False
+        self.write_bonds = True
         self.write_het_bonds = True
 
 
@@ -37,7 +37,7 @@ def to_file(path, complex, options=None):
             lines.append("$$$$")
         number_atoms = 0
         number_bonds = 0
-        serial_by_atom_index = {}  #<long, int>
+        serial_by_atom_serial = {}  #<long, int>
         atom_serial = 1
 
         chains = molecule._chains
@@ -48,7 +48,7 @@ def to_file(path, complex, options=None):
         for chain in chains:
             for residue in chain._residues:
                 for atom in residue.atoms:
-                    serial_by_atom_index[atom._index] = atom_serial
+                    serial_by_atom_serial[atom._serial] = atom_serial
                     saved_atom = Results.SavedAtom()
                     saved_atom.serial = atom_serial
                     saved_atom.atom = atom
@@ -60,10 +60,10 @@ def to_file(path, complex, options=None):
             if (options.write_bonds) or (options.write_het_bonds and chain.molecular._name[0] == 'H'):
                 for residue in chain._residues:
                     for bond in residue._bonds:
-                        if bond.atom1._index in serial_by_atom_index and bond.atom2._index in serial_by_atom_index:
+                        if bond.atom1._serial in serial_by_atom_serial and bond.atom2._serial in serial_by_atom_serial:
                             saved_bond = Results.SavedBond()
-                            saved_bond.serial_atom1 = serial_by_atom_index[bond.atom1._index]
-                            saved_bond.serial_atom2 = serial_by_atom_index[bond.atom2._index]
+                            saved_bond.serial_atom1 = serial_by_atom_serial[bond.atom1._serial]
+                            saved_bond.serial_atom2 = serial_by_atom_serial[bond.atom2._serial]
                             saved_bond.bond = bond
                             result.saved_bonds.append(saved_bond)
                             number_bonds += 1

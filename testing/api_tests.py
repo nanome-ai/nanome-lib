@@ -3,8 +3,8 @@ from nanome._internal import _ui, _structure
 from nanome.api import ui, structure
 from testing.utilities import *
 
-test_assets = os.getcwd() + ("\\testing\\test_assets")
-test_output_dir = os.getcwd() + ("\\testing\\test_outputs")
+test_assets = os.getcwd() + ("/testing/test_assets")
+test_output_dir = os.getcwd() + ("/testing/test_outputs")
 
 def run(counter):
     run_test(test_ui_creates, counter)
