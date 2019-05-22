@@ -21,6 +21,7 @@ class _Complex(_Base):
 
         def __init__(self):
             self._boxed = False
+            self._locked = False
             self._visible = True
             self._computing = False
             self._current_frame = 0
