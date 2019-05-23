@@ -34,6 +34,8 @@ class Complex(_Complex, Base):
         @locked.setter
         def locked(self, value):
             self._locked = value
+            if (value):
+                self._boxed = True
 
         @property
         def visible(self):
