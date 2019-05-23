@@ -53,8 +53,7 @@ class _AtomSerializer(_TypeSerializer):
         atom._rendering._atom_rendering = context.read_bool()
         atom._rendering._atom_color = context.read_using_serializer(self.color)
         atom._rendering._surface_rendering = context.read_bool()
-        atom._rendering._surface_color = context.read_using_serializer(
-            self.color)
+        atom._rendering._surface_color = context.read_using_serializer(self.color)
         atom._rendering._surface_opacity = context.read_float()
 
         atom._rendering._hydrogened = context.read_bool()

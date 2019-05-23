@@ -33,7 +33,6 @@ class _ResidueSerializer(_TypeSerializer):
             context.write_using_serializer(self.array, [])
         else:
             context.write_using_serializer(self.array, value._bonds)
-        context.write_bool(value._rendering._modified)
         context.write_bool(value._rendering._ribboned)
         context.write_float(value._rendering._ribbon_size)
         context.write_int(value._rendering._ribbon_mode.value)
@@ -53,7 +52,6 @@ class _ResidueSerializer(_TypeSerializer):
         self.array.set_type(self.bond)
         residue._bonds = context.read_using_serializer(self.array)
         
-        residue._rendering._modified = context.read_bool()
         residue._rendering._ribboned = context.read_bool()
         residue._rendering._ribbon_size = context.read_float()
         mode = context.read_int()

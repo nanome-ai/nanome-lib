@@ -29,6 +29,7 @@ class _ComplexSerializer(_TypeSerializer):
         else:
             context.write_using_serializer(self.array, value._molecules)
         context.write_bool(value._rendering._boxed)
+        context.write_bool(value._rendering._locked)
         context.write_bool(value._rendering._visible)
         context.write_bool(value._rendering._computing)
         context.write_int(value._rendering._current_frame)
@@ -45,17 +46,16 @@ class _ComplexSerializer(_TypeSerializer):
         complex._index = context.read_long()
 
         complex._molecules = context.read_using_serializer(self.array)
+
         complex._rendering._boxed = context.read_bool()
+        complex._rendering._locked = context.read_bool()
         complex._rendering._visible = context.read_bool()
         complex._rendering._computing = context.read_bool()
         complex._rendering._current_frame = context.read_int()
 
         complex._molecular._name = context.read_using_serializer(self.string)
-        complex._transform._position = context.read_using_serializer(
-            self.vector)
-        complex._transform._rotation = context.read_using_serializer(
-            self.quaternion)
+        complex._transform._position = context.read_using_serializer(self.vector)
+        complex._transform._rotation = context.read_using_serializer(self.quaternion)
 
-        complex._molecular._remarks = context.read_using_serializer(
-            self.dictionary)
+        complex._molecular._remarks = context.read_using_serializer(self.dictionary)
         return complex

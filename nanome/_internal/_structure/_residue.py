@@ -19,7 +19,6 @@ class _Residue(_Base):
             return cls()
 
         def __init__(self):
-            self._modified = False
             self._ribboned = True
             self._ribbon_size = 1.0
             self._ribbon_mode = _Residue.RibbonMode.SecondaryStructure

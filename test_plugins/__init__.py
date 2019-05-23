@@ -8,3 +8,4 @@ from .LoadFile import LoadFile
 from .ImagePlugin import ImagePlugin
 from .DeepUpdatePlugin import DeepUpdatePlugin
 from .EMPlugin import EMPlugin
+from .SandBox import SandBox

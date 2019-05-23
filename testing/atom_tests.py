@@ -247,7 +247,6 @@ def create_residue():
     val.index = 1000
     val._atoms = [struct.Atom(), create_atom(), struct.Atom(), create_atom()]
     val._bonds = [create_bond(), create_bond(), create_bond(), create_bond()]
-    val.rendering.modified = True
     val.rendering.ribboned = True
     val.rendering.ribbon_size = 1
     val.rendering.ribbon_mode = struct.Residue.RibbonMode.Coil 
