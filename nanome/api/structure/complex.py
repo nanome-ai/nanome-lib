@@ -27,6 +27,13 @@ class Complex(_Complex, Base):
         @boxed.setter
         def boxed(self, value):
             self._boxed = value
+        
+        @property
+        def locked(self):
+            return self._locked
+        @locked.setter
+        def locked(self, value):
+            self._locked = value
 
         @property
         def visible(self):

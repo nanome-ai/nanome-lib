@@ -29,6 +29,7 @@ class _ComplexSerializer(_TypeSerializer):
         else:
             context.write_using_serializer(self.array, value._molecules)
         context.write_bool(value._rendering._boxed)
+        context.write_bool(value._rendering._locked)
         context.write_bool(value._rendering._visible)
         context.write_bool(value._rendering._computing)
         context.write_int(value._rendering._current_frame)

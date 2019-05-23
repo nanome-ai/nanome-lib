@@ -23,8 +23,11 @@ class SandBox(nanome.PluginInstance):
             if (complex is None):
                 Logs.debug("None received")
             else:
-                Logs.debug(complex.molecules)
-
+                Logs.debug(len(complex._molecules))
+                Logs.debug(complex.rendering.locked)
+                complex.rendering.locked = True
+                self.update_structures_shallow([complex])
+    
 
     def __init__(self):
         pass
