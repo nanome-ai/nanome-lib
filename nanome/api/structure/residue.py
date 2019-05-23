@@ -20,12 +20,6 @@ class Residue(_Residue, Base):
         self._bonds.remove(bond)
 
     class Rendering(_Residue.Rendering):
-        @property
-        def modified(self):
-            return self._modified
-        @modified.setter
-        def modified(self, value):
-            self._modified = value
         
         @property
         def ribboned(self):
