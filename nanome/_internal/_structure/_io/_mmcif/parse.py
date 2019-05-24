@@ -35,11 +35,15 @@ class _CIF_Lines(object):
 
 # using ParsedObject = Dictionary<string, string>
 # using ParsedFile = Dictionary<string, List<Dictionary<string, string>>>
-def parse_file(path):
+def parse_file(file):
     # Read the file system
     try:
-        with open(path) as f:
-            lines = [line.rstrip() for line in f]
+        if (isinstance(file, str)):
+            with open(file) as f:
+                lines = f.read()
+        else:
+            #assume its a file
+            lines = f.read()
         content = parse_string(lines)
         return content
     except:
@@ -48,6 +52,7 @@ def parse_file(path):
 
 
 def parse_string(lines):
+    lines = [line.rstrip() for line in lines]
     # Content structure
     lines = _CIF_Lines(lines)
     try:

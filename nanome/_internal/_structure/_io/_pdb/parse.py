@@ -1,17 +1,22 @@
 from .content import Content
 import re
 
-def parse_file(path):
+def parse_file(file):
     try:
-        with open(path) as f:
-            lines = [line.rstrip() for line in f]
+        if (isinstance(file, str)):
+            with open(file) as f:
+                lines = f.read()
+        else:
+            #assume its a file
+            lines = f.read()
         content = parse_string(lines)
         return content
     except:
-        print("Could not read pdb file: " + path)
+        print("Could not read pdb file: " + str(file))
         raise
 
 def parse_string(lines):
+    lines = [line.rstrip() for line in lines]
     content = Content()
     chain_idx = 0
     chain_offset = 0

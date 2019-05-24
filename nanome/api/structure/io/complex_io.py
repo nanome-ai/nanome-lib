@@ -1,7 +1,12 @@
+import nanome
 from nanome._internal._addon import _Addon
 from nanome._internal._structure._io import _pdb, _sdf, _mmcif
 
 class ComplexIO(_Addon):
+    PDBSaveOptions = nanome.util.complex_save_options.PDBSaveOptions
+    SDFSaveOptions = nanome.util.complex_save_options.SDFSaveOptions
+    MMCIFSaveOptions = nanome.util.complex_save_options.MMCIFSaveOptions
+
     def __init__(self, base_object=None):
         _Addon.__init__(self, base_object)
 
@@ -20,7 +25,7 @@ class ComplexIO(_Addon):
 
         _pdb.to_file(path, self.base_object, options)
 
-    def from_pdb(self, path, options = None):
+    def from_pdb(self, file = None, content = None):
         """
         | Loads the complex from a .pdb file
 
@@ -29,9 +34,11 @@ class ComplexIO(_Addon):
         :return: The complex read from the file
         :rtype: :class:`~nanome.api.structure.complex.Complex`
         """
-
-        content = _pdb.parse_file(path)
-        return _pdb.structure(content)
+        if (file != None):
+            result = _pdb.parse_file(file)
+        elif(content != None):
+            result = _pdb.parse_string(content)
+        return _pdb.structure(result)
 
     def to_sdf(self, path, options = None):
         """
@@ -48,7 +55,7 @@ class ComplexIO(_Addon):
 
         _sdf.to_file(path, self.base_object, options)
 
-    def from_sdf(self, path, options = None):
+    def from_sdf(self, file = None, content = None):
         """
         | Loads the complex from a .sdf file
 
@@ -58,8 +65,11 @@ class ComplexIO(_Addon):
         :rtype: :class:`~nanome.api.structure.complex.Complex`
         """
 
-        content = _sdf.parse_file(path)
-        return _sdf.structure(content)
+        if (file != None):
+            result = _sdf.parse_file(file)
+        elif(content != None):
+            result = _sdf.parse_string(content)
+        return _sdf.structure(result)
 
     def to_mmcif(self, path, options = None):
         """
@@ -76,7 +86,7 @@ class ComplexIO(_Addon):
 
         _mmcif.to_file(path, self.base_object, options)
 
-    def from_mmcif(self, path, options = None):
+    def from_mmcif(self, file = None, content = None):
         """
         | Loads the complex from a .cif file
 
@@ -86,5 +96,8 @@ class ComplexIO(_Addon):
         :rtype: :class:`~nanome.api.structure.complex.Complex`
         """
 
-        content = _mmcif.parse_file(path)
-        return _mmcif.structure(content)
+        if (file != None):
+            result = _mmcif.parse_file(file)
+        elif(content != None):
+            result = _mmcif.parse_string(content)
+        return _mmcif.structure(result)

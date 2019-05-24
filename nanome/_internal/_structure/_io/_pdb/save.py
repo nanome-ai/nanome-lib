@@ -1,3 +1,4 @@
+import nanome
 from nanome._internal._structure import _Complex, _Molecule, _Chain, _Residue, _Atom, _Bond
 
 class Results(object):
@@ -15,16 +16,9 @@ class Results(object):
             self.serial_atom1 = 0
             self.serial_atom2 = 0
             self.bond = None
-class Options(object):
-    def __init__(self):
-        self.write_hydrogens = True
-        self.write_ters = True
-        self.write_bonds = False
-        self.write_het_bonds = True
-        self.ignore_far_from_selected = False
-        self.ignore_far_from_selected_distance = 0
-        self.only_save_these_atoms = None
-          
+
+Options = nanome.util.complex_save_options.PDBSaveOptions
+
 def to_file(path, complex, options = None):
     # type: (str, _Complex, Options) -> Results
     result = Results()

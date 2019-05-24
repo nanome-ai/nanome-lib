@@ -1,3 +1,4 @@
+import nanome
 from nanome._internal._structure import _Complex, _Molecule, _Chain, _Residue, _Atom, _Bond
 
 class Results(object):
@@ -12,14 +13,7 @@ class Results(object):
             self.position = None
             self.model_number = 0
 
-
-class Options(object):
-    def __init__(self):
-        self.write_hydrogens = True
-        self.ignore_far_from_selected = False
-        self.ignore_far_from_selected_distance = 0
-        self.only_save_these_atoms = None
-
+Options = nanome.util.complex_save_options.MMCIFSaveOptions
 
 class ColumnWidths(object):
     def __init__(self):
