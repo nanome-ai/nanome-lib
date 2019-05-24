@@ -1,11 +1,11 @@
+import nanome
 from nanome._internal._ui import _Label
 from nanome.util.color import Color
-from nanome.util.enums import VertAlignOptions, HorizAlignOptions
 from . import UIBase
 
 class Label(_Label, UIBase):
-    HorizAlignOptions = _Label.HorizAlignOptions
-    VertAlignOptions = _Label.VertAlignOptions
+    HorizAlignOptions = nanome.util.enums.HorizAlignOptions
+    VertAlignOptions = nanome.util.enums.VertAlignOptions
 
     def __init__(self, text = None):
         # type: (str, str)

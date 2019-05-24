@@ -1,3 +1,4 @@
+import nanome
 from nanome._internal._structure._atom import _Atom
 from nanome.util import Vector3, Color
 from . import Base
@@ -11,7 +12,7 @@ class Atom(_Atom, Base):
     :ivar molecular: Contains molecular informations about the Atom
     :vartype molecular: :class:`~nanome.api.structure.atom.Atom.Molecular`
     """
-    AtomRenderingMode = _Atom.AtomRenderingMode
+    AtomRenderingMode = nanome.util.enums.AtomRenderingMode
 
     def __init__(self):
         super(Atom, self).__init__()

@@ -1,9 +1,11 @@
-from nanome.util.color import Color
+import nanome
 from . import UIBase
+from nanome.util.color import Color
 from nanome._internal._ui import _Image
 
 class Image(_Image, UIBase):
-    ScalingOptions = _Image.ScalingOptions
+    ScalingOptions = nanome.util.enums.ScalingOptions
+    
     def __init__(self, file_path):
         _Image.__init__(self)
         UIBase.__init__(self)

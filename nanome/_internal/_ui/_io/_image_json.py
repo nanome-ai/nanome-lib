@@ -6,7 +6,7 @@ def parse_json(content_json):
     image._color = Color.from_int(int(float((content_json["color"]))))
     image._file_path = str(content_json["file_path"])
     if ("scaling_option" in content_json):
-        image._scaling_option = ScalingOptions(int(float(content_json["scaling_option"])))
+        image._scaling_option = _Image.ScalingOptions(int(float(content_json["scaling_option"])))
     return image
 
 def write_json(image):

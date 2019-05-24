@@ -1,6 +1,5 @@
 import nanome
 from nanome._internal._structure._bond import _Bond
-from nanome.util import enums
 from . import Base
 
 
@@ -12,6 +11,7 @@ class Bond(_Bond, Base):
     :vartype molecular: :class:`~nanome.api.structure.bond.Bond.Molecular`
     """
     Kind = nanome.util.enums.Kind
+    
     def __init__(self):
         super(Bond, self).__init__()
         self.molecular = self._molecular
