@@ -11,6 +11,7 @@ class Atom(_Atom, Base):
     :ivar molecular: Contains molecular informations about the Atom
     :vartype molecular: :class:`~nanome.api.structure.atom.Atom.Molecular`
     """
+    AtomRenderingMode = nanome.util.enums.AtomRenderingMode
 
     def __init__(self):
         super(Atom, self).__init__()

@@ -1,10 +1,12 @@
-from nanome.util import Vector3, Color, IntEnum
+from nanome.util import Vector3, Color
 from . import _Base
 
 class _Atom(_Base):
     @classmethod
     def _create(cls):
         return cls()
+
+    AtomRenderingMode = nanome.util.enums.AtomRenderingMode
 
     _atom_count = 0
 
@@ -58,10 +60,4 @@ class _Atom(_Base):
             self._acceptor = False
             self._donor = False
 
-    class AtomRenderingMode(IntEnum):
-        BallStick = 0
-        Stick = 1
-        Wire = 2
-        VanDerWaals = 3
-        Point = 4
 

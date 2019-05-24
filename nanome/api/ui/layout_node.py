@@ -3,6 +3,10 @@ from nanome.api.ui import Button, Slider, UIList, Mesh, Label, TextInput, Image,
 from .io import LayoutNodeIO
 
 class LayoutNode(_LayoutNode):
+    PaddingTypes = nanome.util.enums.PaddingTypes
+    SizingTypes = nanome.util.enums.SizingTypes
+    LayoutTypes = nanome.util.enums.LayoutTypes
+
     io = LayoutNodeIO()
     def __init__(self, name = "node"):
         # type: (str)

@@ -6,7 +6,9 @@ try:
     from .enum import reset_auto
 except:
     pass
-    
+
+import .enums
+
 from .import_utils import ImportUtils
 from .logs import Logs
 from .octree import Octree

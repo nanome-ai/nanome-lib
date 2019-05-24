@@ -1,8 +1,8 @@
 from . import _Base
-from nanome.util import IntEnum
-
+from nanome.util import enums
 
 class _Bond(_Base):
+    Kind = nanome.util.enums.Kind
     @classmethod
     def _create(cls):
         return cls()
