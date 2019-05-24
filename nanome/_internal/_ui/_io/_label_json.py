@@ -1,4 +1,4 @@
-from nanome.util.text_settings import HorizAlignOptions, VertAlignOptions
+from nanome.util.enums import HorizAlignOptions, VertAlignOptions
 from nanome._internal._ui import _Label
 from nanome.util.color import Color
 

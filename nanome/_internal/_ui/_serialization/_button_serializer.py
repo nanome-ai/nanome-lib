@@ -1,5 +1,5 @@
 from nanome._internal._util._serializers import _StringSerializer
-from nanome.util.text_settings import VertAlignOptions, HorizAlignOptions
+from nanome.util.enums import VertAlignOptions, HorizAlignOptions
 from . import _UIBaseSerializer
 from .. import _Button
 

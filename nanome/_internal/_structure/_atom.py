@@ -1,15 +1,15 @@
+import nanome
 from nanome.util import Vector3, Color
 from . import _Base
 
 class _Atom(_Base):
+    AtomRenderingMode = nanome.util.enums.AtomRenderingMode
+
     @classmethod
     def _create(cls):
         return cls()
 
-    AtomRenderingMode = nanome.util.enums.AtomRenderingMode
-
     _atom_count = 0
-
     def __init__(self):
         super(_Atom, self).__init__()
         #data

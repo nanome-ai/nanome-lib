@@ -89,8 +89,8 @@ class UIPlugin(nanome.PluginInstance):
 
         button = nanome.ui.Button()
         button.text.active = True
-        button.text.vertical_align = nanome.util.text_settings.VertAlignOptions.Middle
-        button.text.horizontal_align = nanome.util.text_settings.HorizAlignOptions.Middle
+        button.text.vertical_align = nanome.util.enums.VertAlignOptions.Middle
+        button.text.horizontal_align = nanome.util.enums.HorizAlignOptions.Middle
         button.register_pressed_callback(button_pressed_callback)
 
         Logs.debug("Added button")

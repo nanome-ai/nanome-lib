@@ -1,4 +1,5 @@
 from . import _Base
+import nanome
 from nanome.util import enums
 
 class _Bond(_Base):

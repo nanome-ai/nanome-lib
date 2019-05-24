@@ -1,3 +1,4 @@
+import nanome
 from nanome.util import Vector3, IntEnum
 from nanome._internal._ui import _UIList
 

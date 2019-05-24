@@ -1,3 +1,4 @@
+import nanome
 from nanome._internal._structure._bond import _Bond
 from nanome.util import enums
 from . import Base

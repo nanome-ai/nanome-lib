@@ -1,7 +1,10 @@
 from . import _UIBase
-from nanome.util.text_settings import VertAlignOptions, HorizAlignOptions
+import nanome
 
 class _Button(_UIBase):
+
+    HorizAlignOptions = nanome.util.enums.HorizAlignOptions
+    VertAlignOptions = nanome.util.enums.VertAlignOptions
 
     @classmethod
     def _create(cls):
@@ -40,25 +43,25 @@ class _Button(_UIBase):
             self._size = 1.0
             self._underlined = False
             self._bolded = False
-            self._vertical_align =  VertAlignOptions.Middle
-            self._horizontal_align = HorizAlignOptions.Middle
+            self._vertical_align =  _Button.VertAlignOptions.Middle
+            self._horizontal_align = _Button.HorizAlignOptions.Middle
     
     def _copy_values_deep(self, other):
         super(_Button, self)._copy_values_deep(other)
         self._selected = other._selected
         self._unusable = other._unusable
-        self.text._active = other.text._active
-        self.text._value_idle = other.text._value_idle
-        self.text._value_selected = other.text._value_selected
-        self.text._value_highlighted = other.text._value_highlighted
-        self.text._value_selected_highlighted = other.text._value_selected_highlighted
-        self.text._value_unusable = other.text._value_unusable
-        self.text._auto_size = other.text._auto_size
-        self.text._min_size = other.text._min_size
-        self.text._max_size = other.text._max_size
-        self.text._size = other.text._size
-        self.text._underlined = other.text._underlined
-        self.text._bolded = other.text._bolded
-        self.text._vertical_align = other.text._vertical_align
-        self.text._horizontal_align = other.text._horizontal_align
+        self._text._active = other._text._active
+        self._text._value_idle = other._text._value_idle
+        self._text._value_selected = other._text._value_selected
+        self._text._value_highlighted = other._text._value_highlighted
+        self._text._value_selected_highlighted = other._text._value_selected_highlighted
+        self._text._value_unusable = other._text._value_unusable
+        self._text._auto_size = other._text._auto_size
+        self._text._min_size = other._text._min_size
+        self._text._max_size = other._text._max_size
+        self._text._size = other._text._size
+        self._text._underlined = other._text._underlined
+        self._text._bolded = other._text._bolded
+        self._text._vertical_align = other._text._vertical_align
+        self._text._horizontal_align = other._text._horizontal_align
         self._pressed_callback = other._pressed_callback

@@ -31,3 +31,19 @@ class ScalingOptions(IntEnum):
     stretch = 0
     fill = 1
     fit = 2
+
+class NotificationTypes(IntEnum):
+    message = 0
+    success = 1
+    warning = 2
+    error = 3
+
+class HorizAlignOptions(IntEnum):
+    Left = 0
+    Middle = 1
+    Right = 2
+    
+class VertAlignOptions(IntEnum):
+    Top = 0
+    Middle = 1
+    Bottom = 2
