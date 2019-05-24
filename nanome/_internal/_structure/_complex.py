@@ -25,6 +25,7 @@ class _Complex(_Base):
             self._visible = True
             self._computing = False
             self._current_frame = 0
+            self._selected = False #selected on live
             
     class Molecular(object):
         @classmethod
