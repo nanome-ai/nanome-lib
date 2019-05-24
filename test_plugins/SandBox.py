@@ -15,7 +15,7 @@ class SandBox(nanome.PluginInstance):
         ids = []
         Logs.debug("Requested complex list")
         for complex in complexes:
-            Logs.debug("selected: " + complex.rendering.get_selected())
+            Logs.debug("selected: " + str(complex.rendering.get_selected()))
             ids.append(complex._index)
             ids.append(7)
         self.request_complexes(ids, self.on_complexes_received)
@@ -26,8 +26,8 @@ class SandBox(nanome.PluginInstance):
             if (complex is None):
                 Logs.debug("None received")
             else:
-                Logs.debug("selected: " + complex.rendering.get_selected())
-                Logs.debug("locked " + complex.rendering.locked)
+                Logs.debug("selected: " + str(complex.rendering.get_selected()))
+                Logs.debug("locked " + str(complex.rendering.locked))
                 complex.rendering.locked = True
                 self.update_structures_shallow([complex])
     
