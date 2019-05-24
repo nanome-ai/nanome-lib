@@ -57,6 +57,11 @@ class Complex(_Complex, Base):
         @current_frame.setter
         def current_frame(self, value):
             self._current_frame = value
+
+        # returns true if the complex is selected on nanome.
+        def get_selected(self):
+            return self._selected
+
     _Complex.Rendering._create = Rendering
 
     class Molecular(_Complex.Molecular):
