@@ -1,9 +1,8 @@
 from . import _UIBase
 from nanome.util import Color
-from nanome.util.image_settings import ScalingOptions
 
 class _Image(_UIBase):
-
+    ScalingOptions = nanome.util.enums.ScalingOptions
     @classmethod
     def _create(cls):
         return cls()

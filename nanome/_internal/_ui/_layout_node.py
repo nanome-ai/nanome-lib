@@ -2,7 +2,6 @@ from nanome.util import Vector3, IntEnum
 from nanome._internal._ui import _UIList
 
 class _LayoutNode(object):
-
     PaddingTypes = nanome.util.enums.PaddingTypes
     SizingTypes = nanome.util.enums.SizingTypes
     LayoutTypes = nanome.util.enums.LayoutTypes

@@ -1,6 +1,5 @@
 from .. import _Image
 from nanome.util.color import Color
-from nanome.util.image_settings import ScalingOptions
 
 def parse_json(content_json):
     image = _Image._create()

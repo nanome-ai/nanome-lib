@@ -42,10 +42,3 @@ class _Bond(_Base):
 
         def __init__(self):
             self._kind = _Bond.Kind.CovalentSingle
-
-    class Kind(IntEnum):
-        CovalentSingle = 1
-        CovalentDouble = 2
-        CovalentTriple = 3
-        Hydrogen = 4
-        HydrogenWater = 5

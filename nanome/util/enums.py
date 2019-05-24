@@ -26,3 +26,8 @@ class SizingTypes(IntEnum):
 class LayoutTypes(IntEnum):
     vertical = 0
     horizontal = 1
+    
+class ScalingOptions(IntEnum):
+    stretch = 0
+    fill = 1
+    fit = 2
