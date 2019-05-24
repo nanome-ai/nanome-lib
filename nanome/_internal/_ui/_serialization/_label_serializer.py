@@ -1,10 +1,7 @@
-from nanome.util import IntEnum
 from .. import _Label
 from nanome._internal._util._serializers import _StringSerializer, _ColorSerializer
-from nanome.util.text_settings import VertAlignOptions, HorizAlignOptions
-
+from nanome.util.enums import VertAlignOptions, HorizAlignOptions
 from . import _UIBaseSerializer
-
 from nanome._internal._util._serializers import _TypeSerializer
 
 class _LabelSerializer(_TypeSerializer):

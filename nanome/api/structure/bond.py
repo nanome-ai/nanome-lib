@@ -1,3 +1,4 @@
+import nanome
 from nanome._internal._structure._bond import _Bond
 from . import Base
 
@@ -9,7 +10,8 @@ class Bond(_Bond, Base):
     :ivar molecular: Contains molecular informations about the Bond
     :vartype molecular: :class:`~nanome.api.structure.bond.Bond.Molecular`
     """
-
+    Kind = nanome.util.enums.Kind
+    
     def __init__(self):
         super(Bond, self).__init__()
         self.molecular = self._molecular
@@ -49,6 +51,4 @@ class Bond(_Bond, Base):
         def kind(self, value):
             self._kind = value
     _Bond.Molecular._create = Molecular
-
-
 _Bond._create = Bond

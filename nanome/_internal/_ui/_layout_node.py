@@ -1,7 +1,11 @@
+import nanome
 from nanome.util import Vector3, IntEnum
 from nanome._internal._ui import _UIList
 
 class _LayoutNode(object):
+    PaddingTypes = nanome.util.enums.PaddingTypes
+    SizingTypes = nanome.util.enums.SizingTypes
+    LayoutTypes = nanome.util.enums.LayoutTypes
 
     @classmethod
     def _create(cls):
@@ -29,19 +33,6 @@ class _LayoutNode(object):
 
     def get_children(self):
         return self._children
-    
-    class PaddingTypes(IntEnum):
-        fixed = 0
-        ratio = 1
-
-    class SizingTypes(IntEnum):
-        expand = 0
-        fixed = 1
-        ratio = 2
-
-    class LayoutTypes(IntEnum):
-        vertical = 0
-        horizontal = 1
 
     def get_content(self):
         return self._content

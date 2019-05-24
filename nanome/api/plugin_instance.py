@@ -91,7 +91,7 @@ class PluginInstance(_PluginInstance):
         | Send a notification to the user
 
         :param type: Type of notification to send.
-        :type workspace: :class:`~nanome.util.notification_types.NotificationTypes`
+        :type workspace: :class:`~nanome.util.enums.NotificationTypes`
         :param message: Text to display to the user.
         :type message: str
         """

@@ -1,8 +1,9 @@
 from . import _Base
-from nanome.util import IntEnum
-
+import nanome
 
 class _Bond(_Base):
+    Kind = nanome.util.enums.Kind
+
     @classmethod
     def _create(cls):
         return cls()
@@ -42,10 +43,3 @@ class _Bond(_Base):
 
         def __init__(self):
             self._kind = _Bond.Kind.CovalentSingle
-
-    class Kind(IntEnum):
-        CovalentSingle = 1
-        CovalentDouble = 2
-        CovalentTriple = 3
-        Hydrogen = 4
-        HydrogenWater = 5

@@ -1,8 +1,11 @@
+import nanome
 from nanome._internal._ui import _Button
-from nanome.util.text_settings import VertAlignOptions, HorizAlignOptions
 from . import UIBase
 
 class Button(_Button, UIBase):
+    HorizAlignOptions = nanome.util.enums.HorizAlignOptions
+    VertAlignOptions = nanome.util.enums.VertAlignOptions
+
     def __init__(self, text = None):
         # type: (str, str)
         _Button.__init__(self)

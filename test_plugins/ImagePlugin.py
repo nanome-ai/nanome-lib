@@ -1,7 +1,6 @@
 import nanome
 import os
 import sys
-from nanome.util.image_settings import ScalingOptions
 
 class ImagePlugin(nanome.PluginInstance):
     def __init__(self):
@@ -54,11 +53,11 @@ class ImagePlugin(nanome.PluginInstance):
         def image_setting(button):
             name = button.name
             if (name == "fill"):
-                self.image.scaling_option = ScalingOptions.fill
+                self.image.scaling_option = nanome.util.enums.ScalingOptions.fill
             if (name == "fit"):
-                self.image.scaling_option = ScalingOptions.fit
+                self.image.scaling_option = nanome.util.enums.ScalingOptions.fit
             if (name == "stretch"):
-                self.image.scaling_option = ScalingOptions.stretch
+                self.image.scaling_option = nanome.util.enums.ScalingOptions.stretch
             self.update_content(self.image)
 
         def setWidth(text_input):
