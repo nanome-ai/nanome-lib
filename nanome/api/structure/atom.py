@@ -26,7 +26,7 @@ class Atom(_Atom, Base):
 
     class Rendering(_Atom.Rendering):
         def set_visible(self, value):
-            self._atomed = value
+            self._atom_rendering = value
             self._hydrogened = value
             self._watered = value
             self._hetatomed = value

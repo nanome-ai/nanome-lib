@@ -39,9 +39,10 @@ class _ComplexSerializer(_TypeSerializer):
         context.write_using_serializer(self.quaternion, value._transform._rotation)
 
         context.write_using_serializer(self.dictionary, value._molecular._remarks)
-        
+
         #writing junk because selected flag is one directional.
         context.write_bool(False)
+        context.write_bool(value._rendering._surface_dirty)
 
     def deserialize(self, version, context):
         complex = _Complex._create()
@@ -63,5 +64,7 @@ class _ComplexSerializer(_TypeSerializer):
 
         #true iff at least 1 atom is selected in current molecule
         complex._rendering._selected = context.read_bool()
+        context.read_bool()  # Read surface dirty but ignore it
+        complex._rendering._surface_dirty = False
 
         return complex

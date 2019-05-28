@@ -26,6 +26,7 @@ class _Complex(_Base):
             self._computing = False
             self._current_frame = 0
             self._selected = False #selected on live
+            self._surface_dirty = False
             
     class Molecular(object):
         @classmethod
