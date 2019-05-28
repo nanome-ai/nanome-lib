@@ -27,6 +27,7 @@ class _Complex(_Base):
             self._current_frame = 0
             self._selected = False #selected on live
             self._surface_dirty = False
+            self._surface_refresh_rate = -1.0  # Not used yet, future auto surface refresh
             
     class Molecular(object):
         @classmethod

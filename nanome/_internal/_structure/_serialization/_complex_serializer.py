@@ -43,6 +43,7 @@ class _ComplexSerializer(_TypeSerializer):
         #writing junk because selected flag is one directional.
         context.write_bool(False)
         context.write_bool(value._rendering._surface_dirty)
+        context.write_float(value._rendering._surface_refresh_rate)
 
     def deserialize(self, version, context):
         complex = _Complex._create()
@@ -66,5 +67,6 @@ class _ComplexSerializer(_TypeSerializer):
         complex._rendering._selected = context.read_bool()
         context.read_bool()  # Read surface dirty but ignore it
         complex._rendering._surface_dirty = False
+        complex._rendering._surface_refresh_rate = context.read_float()
 
         return complex
