@@ -68,5 +68,8 @@ class _UpdateStructures(_TypeSerializer):
         context.write_using_serializer(self.dict, subcontext.payload["Atom"])
         context.write_bytes(subcontext.to_array())
 
+        for complex in complexes:
+            complex._rendering._surface_dirty = False
+
     def deserialize(self, version, context):
         return None

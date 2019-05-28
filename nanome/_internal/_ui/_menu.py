@@ -14,8 +14,8 @@ class _Menu(object):
         self._id = 0
         self.title = title
         self.locked = False
-        self._width = float(0)
-        self._height = float(0)
+        self._width = 0.7
+        self._height = 0.6
         #self.all_layout_nodes[]
         #self.all_contents[]
 

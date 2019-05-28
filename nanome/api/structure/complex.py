@@ -27,7 +27,7 @@ class Complex(_Complex, Base):
         @boxed.setter
         def boxed(self, value):
             self._boxed = value
-        
+
         @property
         def locked(self):
             return self._locked
@@ -61,6 +61,9 @@ class Complex(_Complex, Base):
         # returns true if the complex is selected on nanome.
         def get_selected(self):
             return self._selected
+
+        def set_surface_needs_redraw(self):
+            self._surface_dirty = True
 
     _Complex.Rendering._create = Rendering
 
