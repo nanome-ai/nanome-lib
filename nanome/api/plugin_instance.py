@@ -248,7 +248,7 @@ class PluginInstance(_PluginInstance):
     @classmethod
     def _save_callback(cls, id, callback):
         if callback == None:
-            cls.__callbacks[id] = lambda res : None
+            cls.__callbacks[id] = lambda _=None: None
         else:
             cls.__callbacks[id] = callback
 
