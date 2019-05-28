@@ -37,7 +37,10 @@ class ComplexIO(_Addon):
         if (file != None):
             result = _pdb.parse_file(file)
         elif(content != None):
-            result = _pdb.parse_string(content)
+            if (isinstance(content, str)):
+                result = _pdb.parse_string(content)
+            else:
+                result = _pdb.parse_lines(content)
         return _pdb.structure(result)
 
     def to_sdf(self, path, options = None):
@@ -68,7 +71,10 @@ class ComplexIO(_Addon):
         if (file != None):
             result = _sdf.parse_file(file)
         elif(content != None):
-            result = _sdf.parse_string(content)
+            if (isinstance(content, str)):
+                result = _sdf.parse_string(content)
+            else:
+                result = _sdf.parse_lines(content)
         return _sdf.structure(result)
 
     def to_mmcif(self, path, options = None):
@@ -99,5 +105,8 @@ class ComplexIO(_Addon):
         if (file != None):
             result = _mmcif.parse_file(file)
         elif(content != None):
-            result = _mmcif.parse_string(content)
+            if (isinstance(content, str)):
+                result = _mmcif.parse_string(content)
+            else:
+                result = _mmcif.parse_lines(content)
         return _mmcif.structure(result)

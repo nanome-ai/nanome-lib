@@ -44,14 +44,17 @@ def parse_file(file):
         else:
             #assume its a file
             lines = f.readlines()
-        content = parse_string(lines)
+        content = parse_lines(lines)
         return content
     except:
-        Logs.error("Could not read mmcif file:", path)
+        Logs.error("Could not read mmcif file:", file)
         raise
 
+def parse_string(content):
+    lines = content.splitlines()
+    return parse_lines(lines)
 
-def parse_string(lines):
+def parse_lines(lines):
     lines = [line.rstrip() for line in lines]
     # Content structure
     lines = _CIF_Lines(lines)

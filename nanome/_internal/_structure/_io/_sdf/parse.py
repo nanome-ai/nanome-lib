@@ -9,13 +9,17 @@ def parse_file(file):
         else:
             #assume its a file
             lines = f.readlines()
-        content = parse_string(lines)
+        content = parse_lines(lines)
         return content
     except:
-        print("Could not read sdf file: " + path)
+        print("Could not read sdf file: " + file)
         raise
 
-def parse_string(lines):
+def parse_string(content):
+    lines = content.splitlines()
+    return parse_lines(lines)
+
+def parse_lines(lines):
     lines = [line.rstrip() for line in lines]
     lines_by_model = []
     lines_by_model.append([])
