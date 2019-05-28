@@ -40,10 +40,10 @@ def parse_file(file):
     try:
         if (isinstance(file, str)):
             with open(file) as f:
-                lines = f.read()
+                lines = f.readlines()
         else:
             #assume its a file
-            lines = f.read()
+            lines = f.readlines()
         content = parse_string(lines)
         return content
     except:

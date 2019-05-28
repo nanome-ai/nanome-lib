@@ -12,10 +12,10 @@ def parse_file(path):
         data = []
         if (os.path.splitext(path)[1] == ".gz"):
             with gzip.open(path, mode='rb') as f:
-                data = f.read()
+                data = f.readlines()
         else:
             with open(path, mode='rb') as f:
-                data = f.read()
+                data = f.readlines()
         if data == []:
             raise ValueError("File is empty.")
         result = parse_data(data)

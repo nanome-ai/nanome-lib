@@ -20,15 +20,15 @@ class LoadFile(nanome.PluginInstance):
         if (ext == "pdb"):
             input_dir = (test_assets + filename)
             Logs.debug("reading " + input_dir)
-            complex1 = Complex.io.from_pdb(input_dir)
+            complex1 = Complex.io.from_pdb(file=input_dir)
         elif (ext == "cif"):
             input_dir = (test_assets + filename)
             Logs.debug("reading " + input_dir)
-            complex1 = Complex.io.from_mmcif(input_dir)
+            complex1 = Complex.io.from_mmcif(file=input_dir)
         elif (ext == "sdf"):
             input_dir = (test_assets + filename)
             Logs.debug("reading " + input_dir)
-            complex1 = Complex.io.from_sdf(input_dir)
+            complex1 = Complex.io.from_sdf(file=input_dir)
         else:
             raise Exception("invalid file: " + filename)
         workspace = Workspace()

@@ -75,10 +75,10 @@ def test_pdb():
     input_dir = test_assets + ("/pdb/1fsv.pdb")
     output_dir = test_output_dir + ("/testOutput.pdb")
 
-    complex1 = struct.Complex.io.from_pdb(input_dir)
+    complex1 = struct.Complex.io.from_pdb(file=input_dir)
     complex1.io.to_pdb(output_dir)
 
-    complex2 = struct.Complex.io.from_pdb(output_dir)
+    complex2 = struct.Complex.io.from_pdb(file=input_dir)
 
     compare_atom_positions(complex1, complex2)
     assert_equal(complex1, complex2, options)
