@@ -37,7 +37,9 @@ class _PluginInstance(object):
             self._network._close()
             return
 
-    def __init__(self, session_id, pipe, serializer, plugin_id, version_table, original_version_table):
+    def __init__(self, session_id, pipe, serializer, plugin_id, version_table, original_version_table, verbose):
+        Logs.set_verbose(verbose)
+        
         self._network = _ProcessNetwork(self, session_id, pipe, serializer, plugin_id, version_table)
         Logs.debug("Plugin constructed for session", session_id)
         self._network._send(_Messages.connect, [_Packet._has_brotli_compression(), original_version_table])

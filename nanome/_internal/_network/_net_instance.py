@@ -32,7 +32,7 @@ class _NetInstance(object):
         try:
             self._connection.connect((host, port))
             self._connection.setblocking(False)
-            Logs.debug("Connected to server", host, port)
+            Logs.message("Connected to server", host, port)
         except (ssl.SSLError, socket.error) as e:
             self._socket = None
             self._context = None
