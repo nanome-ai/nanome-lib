@@ -24,7 +24,7 @@ class _ImageSerializer(_TypeSerializer):
         data = []
         if (value._file_path != ""):
             with open(value._file_path, "rb") as f:
-                data = f.readlines()
+                data = f.read()
         context.write_using_serializer(self.data, data)
 
     def deserialize(self, version, context):

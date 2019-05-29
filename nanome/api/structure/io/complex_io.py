@@ -34,14 +34,7 @@ class ComplexIO(_Addon):
         :return: The complex read from the file
         :rtype: :class:`~nanome.api.structure.complex.Complex`
         """
-        if (file != None):
-            result = _pdb.parse_file(file)
-        elif(content != None):
-            if (isinstance(content, str)):
-                result = _pdb.parse_string(content)
-            else:
-                result = _pdb.parse_lines(content)
-        return _pdb.structure(result)
+        return self.__from_file(file, content, _pdb)
 
     def to_sdf(self, path, options = None):
         """
@@ -67,15 +60,7 @@ class ComplexIO(_Addon):
         :return: The complex read from the file
         :rtype: :class:`~nanome.api.structure.complex.Complex`
         """
-
-        if (file != None):
-            result = _sdf.parse_file(file)
-        elif(content != None):
-            if (isinstance(content, str)):
-                result = _sdf.parse_string(content)
-            else:
-                result = _sdf.parse_lines(content)
-        return _sdf.structure(result)
+        return self.__from_file(file, content, _sdf)
 
     def to_mmcif(self, path, options = None):
         """
@@ -101,12 +86,16 @@ class ComplexIO(_Addon):
         :return: The complex read from the file
         :rtype: :class:`~nanome.api.structure.complex.Complex`
         """
+        return self.__from_file(file, content, _mmcif)
 
+    def __from_file(self, file, content, parser):
         if (file != None):
-            result = _mmcif.parse_file(file)
+            result = parser.parse_file(file)
         elif(content != None):
             if (isinstance(content, str)):
-                result = _mmcif.parse_string(content)
+                result = parser.parse_string(content)
             else:
-                result = _mmcif.parse_lines(content)
-        return _mmcif.structure(result)
+                result = parser.parse_lines(content)
+        else:
+            raise ValueError("Cannot read from type None")
+        return parser.structure(result)

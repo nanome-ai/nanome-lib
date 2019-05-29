@@ -14,8 +14,26 @@ options = TestOptions(ignore_vars=["_serial", "_remarks", "_associated"])
 
 
 def run(counter):
+    run_test(read_all_ways, counter)
     run_test(test_thrombin, counter)
 
+
+def read_all_ways():
+    input_dir = test_assets + ("/sdf/small_thrombin.sdf")
+    #read path
+    complex1 = struct.Complex.io.from_sdf(file=input_dir)
+    with open(input_dir) as f:
+        complex2 = struct.Complex.io.from_sdf(file=f)
+    with open(input_dir) as f:
+        as_string = f.read()
+    with open(input_dir) as f:
+        as_lines = f.readlines()
+    complex3 = struct.Complex.io.from_sdf(content=as_string)
+    complex4 = struct.Complex.io.from_sdf(content=as_lines)
+    assert(complex1 != None)
+    assert(complex2 != None)
+    assert(complex3 != None)
+    assert(complex4 != None)
 
 # Testing save load
 # MMCIF

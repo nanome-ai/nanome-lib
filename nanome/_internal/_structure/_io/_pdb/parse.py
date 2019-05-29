@@ -8,11 +8,11 @@ def parse_file(file):
                 lines = f.readlines()
         else:
             #assume its a file
-            lines = f.readlines()
+            lines = file.readlines()
         content = parse_lines(lines)
         return content
     except:
-        print("Could not read pdb file: " + str(file))
+        print("Could not read pdb file:", file)
         raise
 
 def parse_string(content):
