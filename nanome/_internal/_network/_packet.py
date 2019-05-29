@@ -1,9 +1,7 @@
 from nanome.util import ImportUtils
 import struct
 
-brotli_compression = ImportUtils.check_import_exists("brotli")
-if brotli_compression == True:
-    import brotli
+import zlib
 
 class _Packet(object):
     packet_header_length = 15
@@ -18,10 +16,11 @@ class _Packet(object):
     packet_type_master_change = 7
     header_pack = struct.Struct('<HIBIi').pack
     header_unpack = struct.Struct('<HIBIi').unpack
+    __compress_obj = zlib.compressobj(4, zlib.DEFLATED, -zlib.MAX_WBITS)
 
     @staticmethod
-    def _has_brotli_compression():
-        return brotli_compression
+    def _compression_type():
+        return 2
 
     def write_string(self, str):
         self.payload_length += len(str)
@@ -37,15 +36,11 @@ class _Packet(object):
         return packed
 
     def compress(self):
-        if brotli_compression == False:
-            return
-        self.payload = brotli.compress(self.payload)
+        self.payload = _Packet.__compress_obj.compress(self.payload) + _Packet.__compress_obj.flush(zlib.Z_FULL_FLUSH)
         self.payload_length = len(self.payload)
 
     def decompress(self):
-        if brotli_compression == False:
-            return
-        self.payload = brotli.decompress(self.payload)
+        self.payload = zlib.decompress(self.payload, -zlib.MAX_WBITS)
         self.payload_length = len(self.payload)
 
     def get_header(self, data):
