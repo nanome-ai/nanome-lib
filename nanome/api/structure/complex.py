@@ -65,6 +65,13 @@ class Complex(_Complex, Base):
         def set_surface_needs_redraw(self):
             self._surface_dirty = True
 
+        @property
+        def box_label(self):
+            return self._box_label
+        @box_label.setter
+        def box_label(self, value):
+            self._box_label = value
+
     _Complex.Rendering._create = Rendering
 
     class Molecular(_Complex.Molecular):

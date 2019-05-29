@@ -17,7 +17,7 @@ class _ComplexSerializer(_TypeSerializer):
         self.dictionary.set_types(self.string, self.string)
 
     def version(self):
-        return 0
+        return 1 
 
     def name(self):
         return "Complex"
@@ -45,6 +45,10 @@ class _ComplexSerializer(_TypeSerializer):
         context.write_bool(value._rendering._surface_dirty)
         context.write_float(value._rendering._surface_refresh_rate)
 
+        if version >= 1:
+            context.write_using_serializer(self.string, value._rendering._box_label)
+
+
     def deserialize(self, version, context):
         complex = _Complex._create()
         complex._index = context.read_long()
@@ -68,5 +72,8 @@ class _ComplexSerializer(_TypeSerializer):
         context.read_bool()  # Read surface dirty but ignore it
         complex._rendering._surface_dirty = False
         complex._rendering._surface_refresh_rate = context.read_float()
+
+        if version >= 1:
+            complex._rendering._box_label = context.read_using_serializer(self.string)
 
         return complex
