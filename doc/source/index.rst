@@ -11,7 +11,7 @@ Requirements
 
 Dependencies
 ------------
-* **Optional**: brotli python package. If available, Nanome will automatically compress network packets
+None!
 
 How-to
 ------

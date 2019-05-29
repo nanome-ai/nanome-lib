@@ -14,9 +14,6 @@ class _NetInstance(object):
     payload_state = 1
 
     def __init__(self, instance, packet_callback):
-        if ImportUtils.check_import_exists("brotli") == False:
-            Logs.warning("brotli not found, network packets will not be compressed")
-
         self._instance = instance
         self._on_received_packet = packet_callback
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

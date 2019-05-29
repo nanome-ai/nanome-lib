@@ -13,7 +13,7 @@ class _Connect(_TypeSerializer):
         return "Connect"
 
     def serialize(self, version, value, data):
-        data.write_bool(value[0])
+        data.write_byte(value[0])
         data.write_using_serializer(self.__dictionary, value[1])
 
     def deserialize(self, version, data):

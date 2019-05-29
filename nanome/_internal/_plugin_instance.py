@@ -40,7 +40,7 @@ class _PluginInstance(object):
     def __init__(self, session_id, pipe, serializer, plugin_id, version_table, original_version_table):
         self._network = _ProcessNetwork(self, session_id, pipe, serializer, plugin_id, version_table)
         Logs.debug("Plugin constructed for session", session_id)
-        self._network._send(_Messages.connect, [_Packet._has_brotli_compression(), original_version_table])
+        self._network._send(_Messages.connect, [_Packet._compression_type(), original_version_table])
         self._run_text = "Run"
         self._run_usable = True
         self._advanced_settings_text = "Advanced Settings"
