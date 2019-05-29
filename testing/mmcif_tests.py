@@ -27,7 +27,7 @@ def test_1fsv():
     input_dir = test_assets + ("/mmcif/1fsv.cif")
     output_dir = test_output_dir + ("/testOutput.cif")
 
-    complex1 = struct.Complex.io.from_mmcif(input_dir)
+    complex1 = struct.Complex.io.from_mmcif(path=input_dir)
     complex1.io.to_mmcif(output_dir)
 
     #fact checks
@@ -40,7 +40,7 @@ def test_1fsv():
     assert(atom_count == 504)
     #
 
-    complex2 = struct.Complex.io.from_mmcif(output_dir)
+    complex2 = struct.Complex.io.from_mmcif(path=output_dir)
 
     compare_atom_positions(complex1, complex2)
     assert_equal(complex1, complex2, options)
@@ -51,7 +51,7 @@ def test_tebgit():
     input_dir = test_assets + ("/mmcif/tebgit.cif")
     output_dir = test_output_dir + ("/testOutput.cif")
 
-    complex1 = struct.Complex.io.from_mmcif(input_dir)
+    complex1 = struct.Complex.io.from_mmcif(path=input_dir)
     #fact checks
     counters = count_structures(complex1)
     (molecule_count, chain_count, residue_count, bond_count, atom_count) = counters
@@ -64,7 +64,7 @@ def test_tebgit():
 
     complex1.io.to_mmcif(output_dir)
 
-    complex2 = struct.Complex.io.from_mmcif(output_dir)
+    complex2 = struct.Complex.io.from_mmcif(path=output_dir)
 
     compare_atom_positions(complex1, complex2)
     assert_equal(complex1, complex2, options)

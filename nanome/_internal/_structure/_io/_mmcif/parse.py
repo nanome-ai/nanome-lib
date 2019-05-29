@@ -35,26 +35,15 @@ class _CIF_Lines(object):
 
 # using ParsedObject = Dictionary<string, string>
 # using ParsedFile = Dictionary<string, List<Dictionary<string, string>>>
-def parse_file(file):
-    # Read the file system
-    try:
-        if (isinstance(file, str)):
-            with open(file) as f:
-                lines = f.readlines()
-        else:
-            #assume its a file
-            lines = file.readlines()
-        content = parse_lines(lines)
-        return content
-    except:
-        Logs.error("Could not read mmcif file:", file)
-        raise
-
-def parse_string(content):
-    lines = content.splitlines()
-    return parse_lines(lines)
 
 def parse_lines(lines):
+    try:
+        return _parse_lines(lines)
+    except:
+        Logs.error("Could not read mmcif")
+        raise
+
+def _parse_lines(lines):
     lines = [line.rstrip() for line in lines]
     # Content structure
     lines = _CIF_Lines(lines)

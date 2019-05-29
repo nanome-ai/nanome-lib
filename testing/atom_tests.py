@@ -75,10 +75,10 @@ def test_pdb():
     input_dir = test_assets + ("/pdb/1fsv.pdb")
     output_dir = test_output_dir + ("/testOutput.pdb")
 
-    complex1 = struct.Complex.io.from_pdb(file=input_dir)
+    complex1 = struct.Complex.io.from_pdb(path=input_dir)
     complex1.io.to_pdb(output_dir)
 
-    complex2 = struct.Complex.io.from_pdb(file=input_dir)
+    complex2 = struct.Complex.io.from_pdb(path=input_dir)
 
     compare_atom_positions(complex1, complex2)
     assert_equal(complex1, complex2, options)
@@ -91,10 +91,10 @@ def prep_timer_test():
     input_dir = test_assets + ("/sdf/Thrombin_100cmpds (1).sdf") #withbonds
     #input_dir = test_assets + ("/pdb/1fsv.pdb") #smallboy
     #input_dir = test_assets + ("/pdb/1a9l.pdb") #bigboy
-    complex1 = struct.Complex.io.from_sdf(input_dir)
-    complex2 = struct.Complex.io.from_sdf(input_dir)
-    complex3 = struct.Complex.io.from_sdf(input_dir)
-    complex4 = struct.Complex.io.from_sdf(input_dir)
+    complex1 = struct.Complex.io.from_sdf(path=input_dir)
+    complex2 = struct.Complex.io.from_sdf(path=input_dir)
+    complex3 = struct.Complex.io.from_sdf(path=input_dir)
+    complex4 = struct.Complex.io.from_sdf(path=input_dir)
     global test_workspace
     test_workspace = create_workspace()
     test_workspace.complexes = [complex1, complex2, complex3, complex4]
@@ -158,7 +158,7 @@ def test_iterators():
     output_dir = test_output_dir + ("/testOutput.sdf")
 
     #complex level
-    complex = struct.Complex.io.from_sdf(input_dir)
+    complex = struct.Complex.io.from_sdf(path=input_dir)
     a = 0
     for atom in complex.atoms:
         a += 1
