@@ -14,9 +14,16 @@ class PluginInstance(_PluginInstance):
     | Constructor should never be called by the user as it is instantiated by network, when a session connects.
     | Start, update, and all methods starting by "on" can be overridden by user, in order to get requests results
     """
+    def __init__(self):
+        #!important: do not delete and leave empty to prevent double init.
+        pass
+
+    def __pseudo_init__(self):
+        self.menu = Menu()
+
     def __new__(cls):
         n = super(PluginInstance, cls).__new__(cls)
-        n.menu = Menu()
+        n.__pseudo_init__()
         return n
 
     def start(self):
