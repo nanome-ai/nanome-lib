@@ -84,6 +84,31 @@ class _Data(object):
         size = len(data)
         self.expand_data(size)
         self._received_bytes[pre:pre+size] = data
+
+    def write_floats(self, data):
+        pre = self._buffered_bytes + self._buffered_computed
+        size = len(data)
+        byte_size = size * 4
+        pack_into = struct.Struct(str(size) + "f").pack_into
+        self.expand_data(byte_size)
+        pack_into(self._received_bytes, pre, *data)
+
+    def write_ints(self, data):
+        pre = self._buffered_bytes + self._buffered_computed
+        size = len(data)
+        byte_size = size * 4
+        pack_into = struct.Struct(str(size) + "i").pack_into
+        self.expand_data(byte_size)
+        pack_into(self._received_bytes, pre, *data)
+
+    def write_longs(self, data):
+        pre = self._buffered_bytes + self._buffered_computed
+        size = len(data)
+        byte_size = size * 8
+        pack_into = struct.Struct(str(size) + "q").pack_into
+        self.expand_data(byte_size)
+        pack_into(self._received_bytes, pre, *data)
+
 #endregion
 #region read Data
     def consume_data(self, size):
