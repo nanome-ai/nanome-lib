@@ -202,7 +202,6 @@ class _Data(object):
         if byte_size > self._buffered_bytes:
             raise BufferError(
                 'Trying to read more data than available, check API compatibility')
-        print(len(self._received_bytes[self._buffered_computed:self._buffered_computed + size]))
         result = struct.unpack(str(size) + "i", self._received_bytes[self._buffered_computed:self._buffered_computed + byte_size])
         self.consume_data(byte_size)
         return result
