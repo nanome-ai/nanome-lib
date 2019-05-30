@@ -15,4 +15,5 @@ class _FloatSerializer(_TypeSerializer):
 
     def deserialize(self, version, context):
         return context.read_float()
-
+#to supress warning for unused serializer.
+_FloatSerializer()
