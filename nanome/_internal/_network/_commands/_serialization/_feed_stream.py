@@ -3,8 +3,7 @@ from nanome._internal._util._serializers import _TypeSerializer
 
 class _FeedStream(_TypeSerializer):
     def __init__(self):
-        self.__array = _ArraySerializer()
-        self.__array.set_type(_FloatSerializer())
+        pass
 
     def version(self):
         return 0
@@ -14,7 +13,7 @@ class _FeedStream(_TypeSerializer):
 
     def serialize(self, version, value, context):
         context.write_uint(value[0])
-        context.write_using_serializer(self.__array, value[1])
+        context.write_float_array(value[1])
 
     def deserialize(self, version, context):
         raise NotImplementedError

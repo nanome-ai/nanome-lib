@@ -8,8 +8,7 @@ import types
 
 class _PositionStructures(_TypeSerializer):
     def __init__(self):
-        self.array_serializer = _ArraySerializer()
-        self.array_serializer.set_type(_LongSerializer())
+        pass
 
     def name(self):
         return "PositionStructures"
@@ -35,7 +34,7 @@ class _PositionStructures(_TypeSerializer):
                 for atom in val.atoms:
                     atom_ids.append(atom._index)
 
-        context.write_using_serializer(self.array_serializer, atom_ids)
+        context.write_long_array(atom_ids)
 
     def deserialize(self, version, context):
         return None

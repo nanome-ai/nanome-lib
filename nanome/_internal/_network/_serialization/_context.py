@@ -89,6 +89,15 @@ class _ContextSerialization(object):
         self._data.write_uint(0xCAFEB006)
         self._data.write_uint(value)
 
+    def write_float_array(self, value):
+        self._data.write_float_array(value)
+
+    def write_int_array(self, value):
+        self._data.write_int_array(value)
+
+    def write_long_array(self, value):
+        self._data.write_long_array(value)
+
     def write_using_serializer(self, serializer, value):
         try:
             version = self.__version_table[serializer.name()]
@@ -197,6 +206,15 @@ class _ContextDeserialization(object):
         if debug_flag != 0xCAFEB006:
             self.__packet_debugging_exception._raise("uint")
         return self._data.read_uint()
+
+    def read_int_array(self):
+        return self._data.read_int_array()
+
+    def read_float_array(self):
+        return self._data.read_float_array()
+
+    def read_long_array(self):
+        return self._data.read_long_array()
 
     def read_using_serializer(self, serializer):
         try:
