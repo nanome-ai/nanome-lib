@@ -38,12 +38,6 @@ class Menu(_Menu):
     def height(self, value):
         self._height = value
     #endregion
-    @classmethod
-    def get_plugin_menu(cls):
-        return _Menu._get_plugin_menu()
-    @classmethod
-    def set_plugin_menu(cls, menu):
-        _Menu._set_plugin_menu(menu)
 
     def find_content(self, content_id):
         return self._find_content(content_id)

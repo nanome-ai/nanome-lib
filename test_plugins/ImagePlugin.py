@@ -16,15 +16,12 @@ class ImagePlugin(nanome.PluginInstance):
         self.open_menu()
 
     def open_menu(self):
-        menu = nanome.ui.Menu.get_plugin_menu()
-        menu.enabled = True
-        self.update_menu(menu)
-
+        self.menu.enabled = True
+        self.update_menu(self.menu)
 
     def create_image_menu(self):
-        menu = nanome.ui.Menu.io.from_json("ImageMenu.json")
-        root = menu.root
-        nanome.ui.Menu.set_plugin_menu(menu)
+        self.menu = nanome.ui.Menu.io.from_json("ImageMenu.json")
+        root = self.menu.root
         image_node = root.find_node("ImageNode")
         self.image = image_node.add_new_image(os.path.expanduser("~/Desktop/png.png"))
                 
@@ -67,9 +64,8 @@ class ImagePlugin(nanome.PluginInstance):
                 width = float(text)
             except:
                 width = 1.0
-            menu = nanome.ui.Menu.get_plugin_menu()
-            menu.width = width
-            self.update_menu(menu)
+            self.menu.width = width
+            self.update_menu(self.menu)
 
         def setHeight(text_input):
             text = text_input.input_text
@@ -78,8 +74,8 @@ class ImagePlugin(nanome.PluginInstance):
                 height = float(text)
             except:
                 height = 1.0
-            nanome.ui.Menu.get_plugin_menu().height = height
-            self.update_menu(menu)
+            self.menu.height = height
+            self.update_menu(self.menu)
 
         width = width_node.add_new_text_input()
         width.register_submitted_callback(setWidth)

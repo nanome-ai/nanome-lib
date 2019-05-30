@@ -2,6 +2,7 @@ from nanome.util import Logs, DirectoryRequestOptions, IntEnum
 from nanome._internal import _PluginInstance
 from nanome._internal._network import _ProcessNetwork
 from nanome._internal._network._commands._callbacks import _Messages
+from nanome.api.ui import Menu
 
 import inspect
 import sys
@@ -14,7 +15,16 @@ class PluginInstance(_PluginInstance):
     | Start, update, and all methods starting by "on" can be overridden by user, in order to get requests results
     """
     def __init__(self):
-        super(_PluginInstance, self).__init__()
+        #!important: do not delete and leave empty to prevent double init.
+        pass
+
+    def __pseudo_init__(self):
+        self.menu = Menu()
+
+    def __new__(cls):
+        n = super(PluginInstance, cls).__new__(cls)
+        n.__pseudo_init__()
+        return n
 
     def start(self):
         """

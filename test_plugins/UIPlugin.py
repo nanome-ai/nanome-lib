@@ -36,7 +36,7 @@ class UIPlugin(nanome.PluginInstance):
         self.update_menu(menu)
 
     def rebuild_menu(self):
-        menu = nanome.ui.Menu.get_plugin_menu()
+        menu = self.menu
         menu.title = "Example UI Plugin"
         menu._width = 1.0
         menu._height =  1.0
