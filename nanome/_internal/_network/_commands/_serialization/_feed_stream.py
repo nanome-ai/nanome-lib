@@ -1,4 +1,3 @@
-from nanome._internal._util._serializers import _ArraySerializer, _FloatSerializer
 from nanome._internal._util._serializers import _TypeSerializer
 
 class _FeedStream(_TypeSerializer):
