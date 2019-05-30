@@ -14,8 +14,26 @@ options = TestOptions(ignore_vars=["_serial", "_remarks", "_associated"])
 
 
 def run(counter):
+    run_test(read_all_ways, counter)
     run_test(test_thrombin, counter)
 
+
+def read_all_ways():
+    input_dir = test_assets + ("/sdf/small_thrombin.sdf")
+    #read path
+    complex1 = struct.Complex.io.from_sdf(path=input_dir)
+    with open(input_dir) as f:
+        complex2 = struct.Complex.io.from_sdf(file=f)
+    with open(input_dir) as f:
+        as_string = f.read()
+    with open(input_dir) as f:
+        as_lines = f.readlines()
+    complex3 = struct.Complex.io.from_sdf(string=as_string)
+    complex4 = struct.Complex.io.from_sdf(lines=as_lines)
+    assert(complex1 != None)
+    assert(complex2 != None)
+    assert(complex3 != None)
+    assert(complex4 != None)
 
 # Testing save load
 # MMCIF
@@ -23,7 +41,7 @@ def test_thrombin():
     input_dir = test_assets + ("/sdf/small_thrombin.sdf")
     output_dir = test_output_dir + ("/testOutput.sdf")
 
-    complex1 = struct.Complex.io.from_sdf(input_dir)
+    complex1 = struct.Complex.io.from_sdf(path=input_dir)
     complex1.io.to_sdf(output_dir)
 
     #fact checks
@@ -36,7 +54,7 @@ def test_thrombin():
     assert(atom_count == 228)
     #
 
-    complex2 = struct.Complex.io.from_sdf(output_dir)
+    complex2 = struct.Complex.io.from_sdf(path=output_dir)
     counters = count_structures(complex2)
     (molecule_count, chain_count, residue_count, bond_count, atom_count) = counters
     assert(molecule_count == 3)

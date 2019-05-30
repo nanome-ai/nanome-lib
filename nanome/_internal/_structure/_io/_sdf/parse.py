@@ -1,17 +1,16 @@
+from nanome.util import Logs
 from .content import Content
 import re
 
-def parse_file(path):
+def parse_lines(lines):
     try:
-        with open(path) as f:
-            lines = [line.rstrip() for line in f]
-        content = parse_string(lines)
-        return content
+        return _parse_lines(lines)
     except:
-        print("Could not read sdf file: " + path)
+        Logs.error("Could not read sdf")
         raise
 
-def parse_string(lines):
+def _parse_lines(lines):    
+    lines = [line.rstrip() for line in lines]
     lines_by_model = []
     lines_by_model.append([])
     for line in lines:

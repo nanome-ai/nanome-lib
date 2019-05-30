@@ -1,10 +1,8 @@
+import nanome
 from nanome._internal._structure import _Complex, _Molecule, _Chain, _Residue, _Atom, _Bond
 from nanome.util import Logs
-class Options(object):
-    def __init__(self):
-        self.write_bonds = True
-        self.write_het_bonds = True
 
+Options = nanome.util.complex_save_options.SDFSaveOptions
 
 class Results(object):
     def __init__(self):
@@ -57,7 +55,7 @@ def to_file(path, complex, options=None):
                     atom_serial += 1
                     number_atoms += 1
         for chain in chains:
-            if (options.write_bonds) or (options.write_het_bonds and chain.molecular._name[0] == 'H'):
+            if (options.write_all_bonds) or (options.write_het_bonds and chain.molecular._name[0] == 'H'):
                 for residue in chain._residues:
                     for bond in residue._bonds:
                         if bond.atom1._serial in serial_by_atom_serial and bond.atom2._serial in serial_by_atom_serial:

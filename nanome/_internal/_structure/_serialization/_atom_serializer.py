@@ -21,7 +21,7 @@ class _AtomSerializer(_TypeSerializer):
         context.write_bool(value._rendering._labeled)
         context.write_bool(value._rendering._atom_rendering)
         context.write_using_serializer(self.color, value._rendering._atom_color)
-        context.write_bool(value._rendering.surface_rendering)
+        context.write_bool(value._rendering._surface_rendering)
         context.write_using_serializer(self.color, value._rendering._surface_color)
         context.write_float(value._rendering._surface_opacity)
 
