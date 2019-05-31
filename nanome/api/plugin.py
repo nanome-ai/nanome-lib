@@ -21,6 +21,13 @@ class Plugin(_Plugin):
     :type category: str
     :type has_advanced: bool
     """
+    @classmethod
+    def setup(cls, name, description, category, has_advanced, plugin_class, host = '127.0.0.1', port = 8888, key_file = "nts_key"):
+        if not _Plugin._is_process():
+            plugin = cls(name, description, category, has_advanced)
+            plugin.set_plugin_class(plugin_class)
+            plugin.run(host, port, key_file)
+
     def run(self, host = '127.0.0.1', port = 8888, key_file = "nts_key"):
         """
         | Starts the plugin by connecting to the server specified.
