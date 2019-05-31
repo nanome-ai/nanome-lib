@@ -20,7 +20,8 @@ class _AtomSerializer(_TypeSerializer):
         context.write_bool(value._rendering._selected)
         context.write_int(value._rendering._atom_mode)
         context.write_bool(value._rendering._labeled)
-        context.write_using_serializer(self.string, value._rendering._label_text)
+        if (version > 0):
+            context.write_using_serializer(self.string, value._rendering._label_text)
         context.write_bool(value._rendering._atom_rendering)
         context.write_using_serializer(self.color, value._rendering._atom_color)
         context.write_bool(value._rendering._surface_rendering)

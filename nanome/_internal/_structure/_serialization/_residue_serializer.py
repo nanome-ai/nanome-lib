@@ -61,8 +61,9 @@ class _ResidueSerializer(_TypeSerializer):
         mode = context.read_int()
         residue._rendering._ribbon_mode = _Residue.RibbonMode(mode)
         residue._rendering._ribbon_color = context.read_using_serializer(self.color)
-        atom._rendering._labeled = context.read_bool()
-        atom._rendering._label_text = context.read_using_serializer(self.string)
+        if (version > 0):
+            residue._rendering._labeled = context.read_bool()
+            residue._rendering._label_text = context.read_using_serializer(self.string)
 
         residue._molecular._type = context.read_using_serializer(self.string)
         residue._molecular._serial = context.read_int()

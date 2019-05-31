@@ -26,11 +26,26 @@ class SandBox(nanome.PluginInstance):
             if (complex is None):
                 Logs.debug("None received")
             else:
-                Logs.debug("selected: " + str(complex.rendering.get_selected()))
-                Logs.debug("locked " + str(complex.rendering.locked))
                 complex.rendering.locked = True
-                self.update_structures_shallow([complex])
-    
+                self.label_all(complex)
+                self.update_structures_deep([complex])
+                
+
+    def label_all(self, complex):
+        all_labeled = True
+        all_text = True
+        for residue in complex.residues:
+            all_labeled = all_labeled and residue.rendering.labeled
+            all_text = all_text and residue.rendering.label_text == "RESIDUE"
+            residue.rendering.labeled = True
+            residue.rendering.label_text = "RESIDUE"
+            for atom in residue.atoms:
+                all_labeled = all_labeled and atom.rendering.labeled
+                all_text = all_text and atom.rendering.label_text == "ATOM"
+                atom.rendering.labeled = True
+                atom.rendering.label_text = "ATOM"
+        Logs.debug("labeled:", all_labeled)
+        Logs.debug("correct text:", all_text)
 
     def __init__(self):
         pass

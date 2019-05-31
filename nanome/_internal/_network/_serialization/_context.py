@@ -113,6 +113,9 @@ class _ContextSerialization(object):
     def get_packet_debugging(self):
         return self.__packet_debugging
 
+    def create_sub_context(self):
+        return _ContextSerialization(self.__version_table, self.__packet_debugging)
+
 class _ContextDeserialization(object):
     # pylint: disable=method-hidden
     def __init__(self, bytes, version_table = None, packet_debugging = False):
@@ -223,3 +226,6 @@ class _ContextDeserialization(object):
 
     def get_packet_debugging(self):
         return self.__packet_debugging
+
+    def create_sub_context(self):
+        return _ContextDeserialization(self.__version_table, self.__packet_debugging)
