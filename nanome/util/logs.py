@@ -13,7 +13,7 @@ class Logs(object):
         'error': {'color': '\x1b[91m', 'msg': 'Error: '}
     }
     _closing = '\x1b[0m'
-    __verbose = False
+    __verbose = None
 
     @classmethod
     def set_verbose(cls, value):
@@ -41,7 +41,10 @@ class Logs(object):
 
     @classmethod
     def debug(cls, *args):
-        if cls.__verbose:
+        if cls.__verbose == None:
+            Logs.warning("Debug used before plugin start.")
+            cls._print(cls._print_type['debug'], *args)
+        elif cls.__verbose == True:
             cls._print(cls._print_type['debug'], *args)
 
     @classmethod

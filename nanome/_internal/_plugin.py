@@ -15,6 +15,7 @@ class _Plugin(object):
     _plugin_id = -1
 
     def __parse_args(self):
+        Logs.set_verbose(False)
         for i in range(1, len(sys.argv)):
             if sys.argv[i] == "-h":
                 Logs.message("Usage:", sys.argv[1],"[-h] [-a ADDRESS] [-p PORT]")
@@ -138,21 +139,20 @@ class _Plugin(object):
         session = Network._Session(session_id, self._network)
         main_conn, process_conn = Pipe()
         session.plugin_pipe = main_conn
-        process = Process(target=_Plugin._launch_plugin, args=(self._plugin_class, session_id, process_conn, _Plugin.__serializer, _Plugin._plugin_id, version_table, _TypeSerializer.get_version_table()))
+        process = Process(target=_Plugin._launch_plugin, args=(self._plugin_class, session_id, process_conn, _Plugin.__serializer, _Plugin._plugin_id, version_table, _TypeSerializer.get_version_table(), Logs.is_verbose()))
         process.start()
         session.plugin_process = process
         self._sessions[session_id] = session
         Logs.debug("Registered new session:", session_id)
 
     @classmethod
-    def _launch_plugin_profile(cls, plugin_class, session_id, pipe, serializer, plugin_id, version_table, original_version_table):
-        cProfile.runctx('_Plugin._launch_plugin(plugin_class, session_id, pipe, serializer, plugin_id, version_table, original_version_table)', globals(), locals(), 'profile.out')
+    def _launch_plugin_profile(cls, plugin_class, session_id, pipe, serializer, plugin_id, version_table, original_version_table, verbose):
+        cProfile.runctx('_Plugin._launch_plugin(plugin_class, session_id, pipe, serializer, plugin_id, version_table, original_version_table, verbose)', globals(), locals(), 'profile.out')
 
     @classmethod
-    def _launch_plugin(cls, plugin_class, session_id, pipe, serializer, plugin_id, version_table, original_version_table):
-        Logs.debug("Creating process")
+    def _launch_plugin(cls, plugin_class, session_id, pipe, serializer, plugin_id, version_table, original_version_table, verbose):
         plugin = plugin_class()
-        _PluginInstance.__init__(plugin, session_id, pipe, serializer, plugin_id, version_table, original_version_table, Logs.is_verbose())
+        _PluginInstance.__init__(plugin, session_id, pipe, serializer, plugin_id, version_table, original_version_table, verbose)
         Logs.debug("Starting plugin")
         plugin._run()
 
