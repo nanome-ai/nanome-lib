@@ -15,13 +15,15 @@ class _Plugin(object):
     _plugin_id = -1
 
     def __parse_args(self):
+        Logs.set_verbose(False)
         for i in range(1, len(sys.argv)):
             if sys.argv[i] == "-h":
-                Logs.debug("Usage:", sys.argv[1],"[-h] [-a ADDRESS] [-p PORT]")
-                Logs.debug(" -h  display this help")
-                Logs.debug(" -a  connects to a NTS at the specified IP address")
-                Logs.debug(" -p  connects to a NTS at the specified port")
-                Logs.debug(" -k  specifies a key file to use to connect to NTS")
+                Logs.message("Usage:", sys.argv[1],"[-h] [-a ADDRESS] [-p PORT]")
+                Logs.message(" -h  display this help")
+                Logs.message(" -a  connects to a NTS at the specified IP address")
+                Logs.message(" -p  connects to a NTS at the specified port")
+                Logs.message(" -k  specifies a key file to use to connect to NTS")
+                Logs.message(" -v  enable verbose mode, to display Logs.debug")
                 sys.exit(0)
             elif sys.argv[i] == "-a":
                 if i >= len(sys.argv):
@@ -45,6 +47,8 @@ class _Plugin(object):
                     sys.exit(1)
                 self.__key_file = sys.argv[i + 1]
                 i += 1
+            elif sys.argv[i] == "-v":
+                Logs.set_verbose(True)
 
     def __read_key_file(self):
         try:
@@ -74,7 +78,7 @@ class _Plugin(object):
 
         elif packet.packet_type == Network._Packet.packet_type_plugin_connection:
             _Plugin._plugin_id = packet.plugin_id
-            Logs.debug("Registered with plugin ID", _Plugin._plugin_id, "\n=======================================\n")
+            Logs.message("Registered with plugin ID", _Plugin._plugin_id, "\n=======================================\n")
 
         elif packet.packet_type == Network._Packet.packet_type_plugin_disconnection:
             if _Plugin._plugin_id == -1:
@@ -135,21 +139,20 @@ class _Plugin(object):
         session = Network._Session(session_id, self._network)
         main_conn, process_conn = Pipe()
         session.plugin_pipe = main_conn
-        process = Process(target=_Plugin._launch_plugin, args=(self._plugin_class, session_id, process_conn, _Plugin.__serializer, _Plugin._plugin_id, version_table, _TypeSerializer.get_version_table()))
+        process = Process(target=_Plugin._launch_plugin, args=(self._plugin_class, session_id, process_conn, _Plugin.__serializer, _Plugin._plugin_id, version_table, _TypeSerializer.get_version_table(), Logs.is_verbose()))
         process.start()
         session.plugin_process = process
         self._sessions[session_id] = session
         Logs.debug("Registered new session:", session_id)
 
     @classmethod
-    def _launch_plugin_profile(cls, plugin_class, session_id, pipe, serializer, plugin_id, version_table, original_version_table):
-        cProfile.runctx('_Plugin._launch_plugin(plugin_class, session_id, pipe, serializer, plugin_id, version_table, original_version_table)', globals(), locals(), 'profile.out')
+    def _launch_plugin_profile(cls, plugin_class, session_id, pipe, serializer, plugin_id, version_table, original_version_table, verbose):
+        cProfile.runctx('_Plugin._launch_plugin(plugin_class, session_id, pipe, serializer, plugin_id, version_table, original_version_table, verbose)', globals(), locals(), 'profile.out')
 
     @classmethod
-    def _launch_plugin(cls, plugin_class, session_id, pipe, serializer, plugin_id, version_table, original_version_table):
-        Logs.debug("Creating process")
+    def _launch_plugin(cls, plugin_class, session_id, pipe, serializer, plugin_id, version_table, original_version_table, verbose):
         plugin = plugin_class()
-        _PluginInstance.__init__(plugin, session_id, pipe, serializer, plugin_id, version_table, original_version_table)
+        _PluginInstance.__init__(plugin, session_id, pipe, serializer, plugin_id, version_table, original_version_table, verbose)
         Logs.debug("Starting plugin")
         plugin._run()
 
