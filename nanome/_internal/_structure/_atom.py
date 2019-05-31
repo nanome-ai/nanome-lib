@@ -30,6 +30,7 @@ class _Atom(_Base):
             self._selected = False
             self._atom_mode = _Atom.AtomRenderingMode.BallStick
             self._labeled = False
+            self._label_text = ""
             self._atom_rendering = True
             self._atom_color = Color.Clear()
             self._surface_rendering = False

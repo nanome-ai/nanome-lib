@@ -15,7 +15,8 @@ class _ResidueSerializer(_TypeSerializer):
         self.string = _StringSerializer()
 
     def version(self):
-        return 0
+        #Version 0 corresponds to Nanome release 1.10
+        return 1
 
     def name(self):
         return "Residue"
@@ -37,6 +38,9 @@ class _ResidueSerializer(_TypeSerializer):
         context.write_float(value._rendering._ribbon_size)
         context.write_int(value._rendering._ribbon_mode.value)
         context.write_using_serializer(self.color, value._rendering._ribbon_color)
+        if (version > 0):
+            context.write_bool(value._rendering._labeled)
+            context.write_using_serializer(self.string, value._rendering._label_text)
 
         context.write_using_serializer(self.string, value._molecular._type)
         context.write_int(value._molecular._serial)
@@ -57,6 +61,8 @@ class _ResidueSerializer(_TypeSerializer):
         mode = context.read_int()
         residue._rendering._ribbon_mode = _Residue.RibbonMode(mode)
         residue._rendering._ribbon_color = context.read_using_serializer(self.color)
+        atom._rendering._labeled = context.read_bool()
+        atom._rendering._label_text = context.read_using_serializer(self.string)
 
         residue._molecular._type = context.read_using_serializer(self.string)
         residue._molecular._serial = context.read_int()

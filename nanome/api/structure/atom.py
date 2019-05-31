@@ -53,6 +53,13 @@ class Atom(_Atom, Base):
             self._labeled = value
         
         @property
+        def label_text(self):
+            return self._label_text
+        @label_text.setter
+        def label_text(self, value):
+            self._label_text = value
+
+        @property
         def atom_rendering(self):
             return self._atom_rendering
         @atom_rendering.setter
