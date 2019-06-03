@@ -29,8 +29,8 @@ class _ProcessNetwork(object):
         packet = _Packet()
         packet.set(self._session_id, _Packet.packet_type_message_to_client, self._plugin_id)
         packet.write(to_send)
-        if code != 0: # Messages.connect
-            packet.compress()
+        # if code != 0: # Messages.connect
+        #     packet.compress()
         self._process_conn.send(packet)
         self._command_id = (command_id + 1) % 4294967295 # Cap by uint max
         return command_id
