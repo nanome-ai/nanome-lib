@@ -53,5 +53,5 @@ class Vector3(object):
         return self
 
     @classmethod
-    def _get_inverted_handedness(cls, value):
+    def _get_inversed_handedness(cls, value):
         return Vector3(-value.x, value.y, value.z)
