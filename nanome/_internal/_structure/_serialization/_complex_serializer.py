@@ -3,6 +3,7 @@ from . import _MoleculeSerializer
 from .. import _Complex
 
 from nanome._internal._util._serializers import _TypeSerializer
+from nanome.util import Quaternion, Vector3
 
 
 class _ComplexSerializer(_TypeSerializer):
@@ -35,9 +36,10 @@ class _ComplexSerializer(_TypeSerializer):
         context.write_int(value._rendering._current_frame)
 
         context.write_using_serializer(self.string, value._molecular._name)
-        context.write_using_serializer(self.vector, value._transform._position)
-        context.write_using_serializer(self.quaternion, value._transform._rotation)
-
+        position = Vector3._get_inversed_handedness(value._transform._position)
+        context.write_using_serializer(self.vector, position)
+        rotation = Quaternion._get_inversed_handedness(value._transform._rotation)
+        context.write_using_serializer(self.quaternion, rotation)
         context.write_using_serializer(self.dictionary, value._molecular._remarks)
 
         #writing junk because selected flag is one directional.
@@ -58,8 +60,10 @@ class _ComplexSerializer(_TypeSerializer):
         complex._rendering._current_frame = context.read_int()
 
         complex._molecular._name = context.read_using_serializer(self.string)
-        complex._transform._position = context.read_using_serializer(self.vector)
-        complex._transform._rotation = context.read_using_serializer(self.quaternion)
+        position = context.read_using_serializer(self.vector)
+        complex._transform._position = position._inverse_handedness()
+        rotation = context.read_using_serializer(self.quaternion)
+        complex._transform._rotation = rotation._inverse_handedness()
 
         complex._molecular._remarks = context.read_using_serializer(self.dictionary)
 

@@ -33,3 +33,12 @@ class Quaternion(object):
     @property
     def w(self):
         return self._w
+
+    def _inverse_handedness(self):
+        self._y *= -1.0
+        self._z *= -1.0
+        return self
+
+    @classmethod
+    def _get_inversed_handedness(cls, value):
+        return Quaternion(value.x, -value.y, -value.z, value.w)
