@@ -19,7 +19,7 @@ class _AddToWorkspace(_TypeSerializer):
         return "AddToWorkspace"
 
     def serialize(self, version, value, context):
-        subcontext = _ContextSerialization(context.get_version_table(), context.get_packet_debugging())
+        subcontext = context.create_sub_context()
         subcontext.payload["Atom"] = {}
         subcontext.write_using_serializer(self.__array, value)
         context.write_using_serializer(self.dict, subcontext.payload["Atom"])

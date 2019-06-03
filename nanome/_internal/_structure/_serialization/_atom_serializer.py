@@ -9,7 +9,8 @@ class _AtomSerializer(_TypeSerializer):
         self.vector = _Vector3Serializer()
 
     def version(self):
-        return 0
+        #Version 0 corresponds to Nanome release 1.10
+        return 1
 
     def name(self):
         return "Atom"
@@ -19,6 +20,8 @@ class _AtomSerializer(_TypeSerializer):
         context.write_bool(value._rendering._selected)
         context.write_int(value._rendering._atom_mode)
         context.write_bool(value._rendering._labeled)
+        if (version > 0):
+            context.write_using_serializer(self.string, value._rendering._label_text)
         context.write_bool(value._rendering._atom_rendering)
         context.write_using_serializer(self.color, value._rendering._atom_color)
         context.write_bool(value._rendering._surface_rendering)
@@ -50,6 +53,8 @@ class _AtomSerializer(_TypeSerializer):
         atom_mode = context.read_int()
         atom._rendering._atom_mode = _Atom.AtomRenderingMode(atom_mode)
         atom._rendering._labeled = context.read_bool()
+        if (version > 0):
+            atom._rendering._label_text = context.read_using_serializer(self.string)
         atom._rendering._atom_rendering = context.read_bool()
         atom._rendering._atom_color = context.read_using_serializer(self.color)
         atom._rendering._surface_rendering = context.read_bool()

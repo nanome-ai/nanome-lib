@@ -48,6 +48,21 @@ class Residue(_Residue, Base):
         @ribbon_color.setter
         def ribbon_color(self, value):
             self._ribbon_color = value
+
+        @property
+        def labeled(self):
+            return self._labeled
+        @labeled.setter
+        def labeled(self, value):
+            self._labeled = value
+
+        @property
+        def label_text(self):
+            return self._label_text
+        @label_text.setter
+        def label_text(self, value):
+            self._label_text = value
+
     _Residue.Rendering._create = Rendering
 
     class Molecular(_Residue.Molecular):

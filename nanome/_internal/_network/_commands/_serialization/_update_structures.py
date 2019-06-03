@@ -49,7 +49,7 @@ class _UpdateStructures(_TypeSerializer):
             if isinstance(val, _Complex):
                 complexes.append(val)
 
-        subcontext = _ContextSerialization()
+        subcontext = context.create_sub_context()
         subcontext.payload["Atom"] = {}
 
         self.array_serializer.set_type(self.complex_serializer)

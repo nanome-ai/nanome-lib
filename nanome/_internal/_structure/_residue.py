@@ -23,6 +23,8 @@ class _Residue(_Base):
             self._ribbon_size = 1.0
             self._ribbon_mode = _Residue.RibbonMode.SecondaryStructure
             self._ribbon_color = Color.Clear()
+            self._labeled = False
+            self._label_text = ""
 
     class Molecular(object):
         @classmethod
