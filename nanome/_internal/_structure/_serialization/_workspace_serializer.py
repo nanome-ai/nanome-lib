@@ -27,8 +27,8 @@ class _WorkspaceSerializer(_TypeSerializer):
     def deserialize(self, version, context):
         workspace = _Workspace._create()
         workspace._complexes = context.read_using_serializer(self.array)
-        workspace.transform._position = context.read_using_serializer(self.vector)
-        workspace.transform._rotation = context.read_using_serializer(self.quaternion)
-        workspace.transform._scale = context.read_using_serializer(self.vector)
+        workspace._transform._position = context.read_using_serializer(self.vector)
+        workspace._transform._rotation = context.read_using_serializer(self.quaternion)
+        workspace._transform._scale = context.read_using_serializer(self.vector)
 
         return workspace

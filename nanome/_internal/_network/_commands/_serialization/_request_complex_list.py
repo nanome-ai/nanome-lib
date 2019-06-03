@@ -22,8 +22,7 @@ from nanome._internal._util._serializers import _TypeSerializer
 
 class _RequestComplexes(_TypeSerializer):
     def __init__(self):
-        self._array = _ArraySerializer()
-        self._array.set_type(_LongSerializer())
+        pass
 
     def version(self):
         return 0
@@ -32,7 +31,7 @@ class _RequestComplexes(_TypeSerializer):
         return "RequestComplexes"
 
     def serialize(self, version, value, context):
-        context.write_using_serializer(self._array, value)
+        context.write_long_array(value)
 
     def deserialize(self, version, context):
         return None
