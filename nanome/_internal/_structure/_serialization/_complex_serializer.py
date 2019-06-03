@@ -36,9 +36,9 @@ class _ComplexSerializer(_TypeSerializer):
         context.write_int(value._rendering._current_frame)
 
         context.write_using_serializer(self.string, value._molecular._name)
-        position = Vector3.get_inverted_handedness(value._transform._position)
+        position = Vector3._get_inverted_handedness(value._transform._position)
         context.write_using_serializer(self.vector, position)
-        rotation = Quaternion.get_inverted_handedness(value._transform._rotation)
+        rotation = Quaternion._get_inverted_handedness(value._transform._rotation)
         context.write_using_serializer(self.quaternion, rotation)
         context.write_using_serializer(self.dictionary, value._molecular._remarks)
 
@@ -61,9 +61,9 @@ class _ComplexSerializer(_TypeSerializer):
 
         complex._molecular._name = context.read_using_serializer(self.string)
         position = context.read_using_serializer(self.vector)
-        complex._transform._position = position.inverse_handedness()
+        complex._transform._position = position._inverse_handedness()
         rotation = context.read_using_serializer(self.quaternion)
-        complex._transform._rotation = rotation.inverse_handedness()
+        complex._transform._rotation = rotation._inverse_handedness()
 
         complex._molecular._remarks = context.read_using_serializer(self.dictionary)
 
