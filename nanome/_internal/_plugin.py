@@ -58,7 +58,7 @@ class _Plugin(object):
         if packet.packet_type == Network._Packet.packet_type_message_to_plugin:
             session_id = packet.session_id
             if session_id in self._sessions:
-                packet.decompress()
+                # packet.decompress()
                 self._sessions[session_id]._on_packet_received(packet.payload)
                 return
 

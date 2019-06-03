@@ -20,7 +20,7 @@ class _Packet(object):
 
     @staticmethod
     def _compression_type():
-        return 2
+        return 0
 
     def write_string(self, str):
         self.payload_length += len(str)
@@ -77,4 +77,4 @@ class _Packet(object):
         self.plugin_id = 0
         self.payload_length = 0
         self.payload = bytearray()
-        pass
+    
