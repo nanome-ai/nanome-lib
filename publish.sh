@@ -1,4 +1,4 @@
-if [ $# -eq 0 ] 
+if [ $# -eq 0 ]
 then
 	echo "No version bump. To bump version, pass major/minor/patch "
 else
@@ -7,9 +7,10 @@ fi
 
 rm -rf build
 rm -rf dist
-rm -rf nanome.egg-info
+rm -rf *.egg-info
 
-python setup.py sdist bdist_wheel
+python setup.py sdist
+python setup.py bdist_wheel --universal
 
 read -rp "Upload? [yes/no] "
 
