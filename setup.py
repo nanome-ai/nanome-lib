@@ -5,8 +5,8 @@ README = (pathlib.Path(__file__).parent / "README.md").read_text()
 
 setup(
 	name = 'nanome',
-	packages=find_packages(exclude=["testing","doc"]),
-	version = '0.1.0',
+	packages=find_packages(exclude=["testing","doc","test_plugins"]),
+	version = '0.2.0',
 	license='MIT',
 	description = 'Python API for Nanome Plugins',
 	long_description = README,
@@ -14,6 +14,7 @@ setup(
 	author = 'Nanome',
 	author_email = 'hello@nanome.ai',
 	url = 'https://github.com/nanome-ai/nanome',
+	platforms="any",
 	keywords = ['virtual-reality', 'chemistry', 'python', 'api', 'plugin'],
 	install_requires=[],
 	classifiers=[
