@@ -241,7 +241,7 @@ class Complex(_Complex, Base):
             return transformation
 
         def get_complex_to_workspace_matrix(self):
-            result = self.parent.et_workspace_to_complex_matrix()
+            result = self.parent.get_workspace_to_complex_matrix()
             result = result.get_inverse()
             return result
     #endregion

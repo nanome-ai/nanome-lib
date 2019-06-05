@@ -1,5 +1,4 @@
 import sys
-import warnings
 import functools
 if sys.version_info >= (3, 0):
     from ._logs_3 import _print
