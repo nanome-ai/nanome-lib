@@ -11,9 +11,9 @@ class RemoveHydrogens(nanome.PluginInstance):
     
     @staticmethod
     def _should_be_removed(atom):
-        if atom.rendering.selected == False:
+        if atom.selected == False:
             return False
-        if atom.molecular.symbol != 'H':
+        if atom.symbol != 'H':
             return False
         return True
 
@@ -30,7 +30,7 @@ class RemoveHydrogens(nanome.PluginInstance):
                     if RemoveHydrogens._should_be_removed(residue._atoms[i]): # If this atom is an H, delete it
                         count += 1
                         del residue._atoms[i]
-            Logs.debug(count, "hydrogens removed for", complex.molecular.name)
+            Logs.debug(count, "hydrogens removed for", complex.name)
         self.update_workspace(workspace) # Update Nanome workspace, in "deep" mode
         
 if __name__ == "__main__":

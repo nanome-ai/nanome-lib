@@ -16,9 +16,9 @@ class UpdateWorkspace(nanome.PluginInstance):
                         for bond in residue.bonds:
                             bond_count+=1
                         for atom in residue.atoms:
-                            atom.molecular.position.x = -atom.molecular.position.x
-                            atom.rendering.surface_rendering = True
-                            atom.rendering.surface_color = nanome.util.Color.Red()
+                            atom.position.x = -atom.position.x
+                            atom.surface_rendering = True
+                            atom.surface_color = nanome.util.Color.Red()
                             atom_count+=1
                             
         print("bonds:", bond_count)

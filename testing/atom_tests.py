@@ -57,7 +57,7 @@ def flip_x_positions(complex):
         for chain in molecule.chains:
             for residue in chain.residues:
                 for atom in residue.atoms:
-                    atom.molecular.position.x = -atom.molecular.position.x
+                    atom.position.x = -atom.position.x
     return complex
 
 def compare_atom_positions(complex1, complex2):
@@ -66,7 +66,7 @@ def compare_atom_positions(complex1, complex2):
     for a,_ in enumerate(complex1.atoms):
         atom1 = next(a1)
         atom2 = next(a2)
-        assert_equal(atom1.molecular.position.x, atom2.molecular.position.x, options)
+        assert_equal(atom1.position.x, atom2.position.x, options)
         assert_equal(atom1, atom2, options)
 
 #Testing save load
@@ -210,36 +210,26 @@ def test_iterators():
 def create_atom():
     val = struct.Atom()
     val.index = 1000
-    val.rendering.selected = True
-    val.rendering.atom_mode = 1  # BALLSTICK
-    val.rendering.labeled = True
-    val.rendering.atom_rendering = True
-    val.rendering.atom_color = Color.White()
-    val.rendering.surface_rendering = True
-    val.rendering.surface_color = Color.White()
-    val.rendering._surface_opacity = 1
-    val.rendering._hydrogened = False
-    val.rendering._watered = False
-    val.rendering._het_atomed = False
-    val.rendering._het_surfaced = False
-    val.molecular.symbol = "Carbon"
-    val.molecular.serial = 0
-    val.molecular.name = "default"
-    val.molecular.position = Vector3()
-    val.molecular.is_het = False
-    val.molecular._occupancy = 0
-    val.molecular._bfactor = 0
-    val.molecular._acceptor = False
-    val.molecular._donor = False
+    val.selected = True
+    val.atom_mode = 1  # BALLSTICK
+    val.labeled = True
+    val.atom_rendering = True
+    val.atom_color = Color.White()
+    val.surface_rendering = True
+    val.surface_color = Color.White()
+    val.surface_opacity = 1
+    val.symbol = "Carbon"
+    val.serial = 0
+    val.name = "default"
+    val.position = Vector3()
     return val
 
 def create_bond():
     val = struct.Bond()
     val.index = 1000
-    val.molecular = struct.Bond.Molecular()
     val.atom1 = create_atom()
     val.atom2 = create_atom()
-    val.molecular.kind = struct.Bond.Kind.CovalentDouble
+    val.kind = struct.Bond.Kind.CovalentDouble
     return val
 
 def create_residue():
@@ -247,48 +237,48 @@ def create_residue():
     val.index = 1000
     val._atoms = [struct.Atom(), create_atom(), struct.Atom(), create_atom()]
     val._bonds = [create_bond(), create_bond(), create_bond(), create_bond()]
-    val.rendering.ribboned = True
-    val.rendering.ribbon_size = 1
-    val.rendering.ribbon_mode = struct.Residue.RibbonMode.Coil 
-    val.rendering.ribbon_color = Color.White() 
-    val.molecular.type = "asdf" #RESIDUEDATA
-    val.molecular.serial = 1
-    val.molecular.name = "asdf1234"
-    val.molecular.secondary_structure = struct.Residue.SecondaryStructure.Sheet
+    val.ribboned = True
+    val.ribbon_size = 1
+    val.ribbon_mode = struct.Residue.RibbonMode.Coil 
+    val.ribbon_color = Color.White() 
+    val.type = "asdf" #RESIDUEDATA
+    val.serial = 1
+    val.name = "asdf1234"
+    val.secondary_structure = struct.Residue.SecondaryStructure.Sheet
     return val
 
 def create_chain():
     val = struct.Chain()
     val.index = 1000
     val._residues = [struct.Residue(), create_residue(), struct.Residue(), create_residue()]
-    val.molecular.name = "fdasa1234"
+    val.name = "fdasa1234"
     return val
 
 def create_molecule():
     val = struct.Molecule()
     val.index = 1000
     val._chains = [struct.Chain(), create_chain(), struct.Chain(), create_chain()]
-    val.molecular.name = "MIOLECASDFULE"
-    val.molecular._associated = dict([("key1", "val1"), ("key2","val2"),("key3", "val3"), ("key4","val4")])
+    val.name = "MIOLECASDFULE"
+    val._associated = dict([("key1", "val1"), ("key2","val2"),("key3", "val3"), ("key4","val4")])
     return val
 
 def create_complex():
     val = struct.Complex()
     val.index = 1000
     val._molecules = [struct.Molecule(), create_molecule(), struct.Molecule(), create_molecule()]
-    val.rendering.boxed = True
-    val.rendering.visible = False
-    val.rendering.computing = False
-    val.rendering.current_frame = 0
-    val.molecular.name = "COMPLEX_NAME"
-    val.molecular._remarks = dict([("key1", "val1"), ("key2","val2"),("key3", "val3"), ("key4","val4")])
-    val.transform.position = Vector3(1,2,3)
-    val.transform.rotation = Quaternion(1,2,3,4)
+    val.boxed = True
+    val.visible = False
+    val.computing = False
+    val.current_frame = 0
+    val.name = "COMPLEX_NAME"
+    val._remarks = dict([("key1", "val1"), ("key2","val2"),("key3", "val3"), ("key4","val4")])
+    val.position = Vector3(1,2,3)
+    val.rotation = Quaternion(1,2,3,4)
     return val
 
 def create_workspace():
     workspace = struct.Workspace()
     workspace.complexes = [struct.Complex(), create_complex(), struct.Complex(), create_complex()]
-    workspace.transform.position = Vector3(1,2,3)
-    workspace.transform.rotation = Quaternion(1,2,3,4)
+    workspace.position = Vector3(1,2,3)
+    workspace.rotation = Quaternion(1,2,3,4)
     return workspace
