@@ -42,13 +42,13 @@ def to_file(path, complex, options = None):
                 saved_atom_constraint = options.only_save_these_atoms
                 for atom in residue._atoms:
                     if saved_atom_constraint is None or atom in saved_atom_constraint:
-                        if options.write_hydrogens or atom.molecular.symbol != "H":
+                        if options.write_hydrogens or atom.symbol != "H":
                             serial_by_atom[atom] = atom_serial
                             lines.append(atom_to_string(atom_serial, atom, residue, chain))
                             saved_atom =  Results.SavedAtom()
                             saved_atom.serial = atom_serial
                             saved_atom.atom = atom
-                            saved_atom.position = atom.molecular._position
+                            saved_atom.position = atom._position
                             saved_atom.model_number = model_number
                             result.saved_atoms.append(saved_atom)
                             atom_serial += 1
@@ -56,7 +56,7 @@ def to_file(path, complex, options = None):
                lines.append(ter_to_string(atom_serial))
                atom_serial += 1
         for chain in chains:
-            chain_is_het = len(chain.molecular._name) >= 2 and chain.molecular._name[0] == 'H'
+            chain_is_het = len(chain._name) >= 2 and chain._name[0] == 'H'
             if options.write_bonds or (options.write_het_bonds and chain_is_het):
                 for residue in chain._residues:
                     for bond in residue._bonds:
@@ -91,17 +91,17 @@ def end_model():
 
 def atom_to_string(atom_serial, atom, residue, chain):
     # Prepare basic infos
-    chain_name = chain.molecular._name
+    chain_name = chain._name
     if (len(chain_name) > 1):
         chain_name = chain_name[1]
-    atom_element = atom.molecular.symbol
-    atom_position = atom.molecular._position
-    atom_name = atom.molecular._name
+    atom_element = atom.symbol
+    atom_position = atom._position
+    atom_name = atom._name
     if (atom_name == None):
        atom_name = atom_element
     # Choose record type
     record = "ATOM"
-    if (atom.molecular.is_het):
+    if (atom.is_het):
         record = "HETATM"
     if (len(chain_name) > 1):
         chain_name = chain_name.Substring(1, 1)
@@ -110,17 +110,17 @@ def atom_to_string(atom_serial, atom, residue, chain):
     line += " "
     line += pad_left(4, pad_right(3, atom_name))
     line += pad_left(1, "")
-    line += pad_left(3, residue.molecular._name)
+    line += pad_left(3, residue._name)
     line += (" ")
     line += pad_left(1, chain_name)
-    line += pad_left_int(4, residue.molecular.serial)
+    line += pad_left_int(4, residue.serial)
     line += (" ")
     line += ("   ")
     line += pad_left_float(8, atom_position.x, 3)
     line += pad_left_float(8, atom_position.y, 3)
     line += pad_left_float(8, atom_position.z, 3)
-    line += pad_left_float(6, atom.molecular._occupancy, 2)
-    line += pad_left_float(6, atom.molecular._bfactor, 2)
+    line += pad_left_float(6, atom._occupancy, 2)
+    line += pad_left_float(6, atom._bfactor, 2)
     line += pad_left(10, "")
     line += pad_left(2, atom_element)
     line += pad_left(2, "")

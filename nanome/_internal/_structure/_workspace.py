@@ -1,4 +1,4 @@
-from nanome.util import Vector3, Quaternion
+from nanome.util import Vector3, Quaternion, Logs
 from . import _Base
 
 class _Workspace(_Base):
@@ -8,18 +8,12 @@ class _Workspace(_Base):
         return cls()
 
     def __init__(self):
-        self._transform = _Workspace.Transform._create()
+        self._position = Vector3(0,0,0)
+        self._rotation = Quaternion(0,0,0,0)
+        self._scale = Vector3(1,1,1)
         self._complexes = []
 
-    class Transform(object):
-        @classmethod
-        def _create(cls):
-            return cls()
-        def __init__(self):
-            self._position = Vector3(0,0,0)
-            self._rotation = Quaternion(0,0,0,0)
-            self._scale = Vector3(1,1,1)
-
+    @Logs.deprecated()
     def get_atom_iterator(self):
         iterator = _Workspace.AtomIterator(self)
         return iter(iterator)

@@ -1,10 +1,10 @@
 from nanome._internal._structure._workspace import _Workspace
-
+from nanome.util import Logs
 
 class Workspace(_Workspace):
     def __init__(self):
         _Workspace.__init__(self)
-        self.transform = self._transform
+        self._transform = Workspace.Transform(self)
 
     @property
     def complexes(self):
@@ -13,29 +13,58 @@ class Workspace(_Workspace):
     def complexes(self, value):
         self._complexes = value
 
-    class Transform(_Workspace.Transform):
+    #region fields
+    @property
+    def position(self):
+        return self._position
+    @position.setter
+    def position(self, value):
+        self._position = value
+
+    @property
+    def rotation(self):
+        return self._rotation
+    @rotation.setter
+    def rotation(self, value):
+        self._rotation = value
+
+    @property
+    def scale(self):
+        return self._scale
+    @scale.setter
+    def scale(self, value):
+        self._scale = value
+    #endregion
+
+    #region deprecated
+    @property
+    @Logs.deprecated()
+    def transform(self):
+        return self._transform
+
+    class Transform(object):
+        def __init__(self, parent):
+            self.parent = parent
+
         @property
         def position(self):
-            return self._position
+            return self.parent.position
         @position.setter
         def position(self, value):
-            self._position = value
+            self.parent.position = value
 
         @property
         def rotation(self):
-            return self._rotation
+            return self.parent.rotation
         @rotation.setter
         def rotation(self, value):
-            self._rotation = value
+            self.parent.rotation = value
 
         @property
         def scale(self):
-            return self._scale
+            return self.parent.scale
         @scale.setter
         def scale(self, value):
-            self._scale = value
-
-    _Workspace.Transform._create = Transform
-
-
+            self.parent.scale = value
+    #endregion
 _Workspace._create = Workspace

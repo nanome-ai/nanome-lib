@@ -1,4 +1,5 @@
 import nanome
+from nanome.util import Logs
 from nanome._internal._structure._bond import _Bond
 from . import Base
 
@@ -6,15 +7,12 @@ from . import Base
 class Bond(_Bond, Base):
     """
     Represents a Bond between two atoms
-
-    :ivar molecular: Contains molecular informations about the Bond
-    :vartype molecular: :class:`~nanome.api.structure.bond.Bond.Molecular`
     """
     Kind = nanome.util.enums.Kind
     
     def __init__(self):
         super(Bond, self).__init__()
-        self.molecular = self._molecular
+        self._molecular = Bond.Molecular(self)
 
     @property
     def atom1(self):
@@ -42,13 +40,32 @@ class Bond(_Bond, Base):
     def atom2(self, value):
         self._atom2 = value
 
+    #region all fields
+    @property
+    def kind(self):
+        return self._kind
+
+    @kind.setter
+    def kind(self, value):
+        self._kind = value
+    #endregion
+
+    #region deprecated
+    @property
+    @Logs.deprecated()
+    def molecular(self):
+        return self._molecular
+
     class Molecular(object):
+        def __init__(self, parent):
+            self.parent = parent
+
         @property
         def kind(self):
-            return self._kind
+            return self.parent.kind
 
         @kind.setter
         def kind(self, value):
-            self._kind = value
-    _Bond.Molecular._create = Molecular
+            self.parent.kind = value
+    #endregion
 _Bond._create = Bond
