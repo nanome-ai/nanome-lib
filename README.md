@@ -4,7 +4,7 @@ This library allows users to create powerful plugins for Nanome (https://nanome.
 
 ### Examples
 
-*Coming soon*
+Check out our other repositories to see plugin examples ([docking](https://github.com/nanome-ai/plugin-docking), for instance)
 
 ### Installation
 

@@ -16,11 +16,11 @@ class Logs(object):
     __verbose = None
 
     @classmethod
-    def set_verbose(cls, value):
+    def _set_verbose(cls, value):
         cls.__verbose = value
 
     @classmethod
-    def is_verbose(cls):
+    def _is_verbose(cls):
         return cls.__verbose
 
     @classmethod
@@ -29,18 +29,43 @@ class Logs(object):
 
     @classmethod
     def error(cls, *args):
+        """
+        | Prints an error
+
+        :param args: Variable length argument list
+        :type args: Anything printable
+        """
         cls._print(cls._print_type['error'], *args)
 
     @classmethod
     def warning(cls, *args):
+        """
+        | Prints a warning
+
+        :param args: Variable length argument list
+        :type args: Anything printable
+        """
         cls._print(cls._print_type['warning'], *args)
 
     @classmethod
     def message(cls, *args):
+        """
+        | Prints a message
+
+        :param args: Variable length argument list
+        :type args: Anything printable
+        """
         cls._print(cls._print_type['debug'], *args)
 
     @classmethod
     def debug(cls, *args):
+        """
+        | Prints a debug message
+        | Prints only if plugin started in verbose mode (with -v argument)
+
+        :param args: Variable length argument list
+        :type args: Anything printable
+        """
         if cls.__verbose == None:
             Logs.warning("Debug used before plugin start.")
             cls._print(cls._print_type['debug'], *args)
@@ -48,8 +73,8 @@ class Logs(object):
             cls._print(cls._print_type['debug'], *args)
 
     @classmethod
-    def init(cls):
+    def _init(cls):
         if sys.platform == 'win32' and sys.stdout.isatty():
             cls._is_windows_cmd = True
 
-Logs.init()
+Logs._init()

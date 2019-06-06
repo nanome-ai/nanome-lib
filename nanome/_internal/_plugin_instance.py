@@ -38,7 +38,7 @@ class _PluginInstance(object):
             return
 
     def __init__(self, session_id, pipe, serializer, plugin_id, version_table, original_version_table, verbose):
-        Logs.set_verbose(verbose)
+        Logs._set_verbose(verbose)
         
         self._network = _ProcessNetwork(self, session_id, pipe, serializer, plugin_id, version_table)
         Logs.debug("Plugin constructed for session", session_id)

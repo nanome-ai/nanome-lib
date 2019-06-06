@@ -49,7 +49,7 @@ class Plugin(_Plugin):
     def set_plugin_class(self, plugin_class):
         """
         | Set plugin class to instantiate when a new session is connected
-        | If using a custom class, functions in :func:~nanome.api.plugin_instance._PluginInstance can be overriden
+        | The plugin class should interact with or override functions in :class:`~nanome.api.plugin_instance.PluginInstance` to interact with Nanome
 
         :param plugin_class: Plugin class to instantiate
         :type plugin_class: :class:`~nanome.api.plugin_instance.PluginInstance`
