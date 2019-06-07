@@ -4,13 +4,19 @@ from nanome.api.ui import Button, Slider, UIList, Mesh, Label, TextInput, Image,
 from .io import LayoutNodeIO
 
 class LayoutNode(_LayoutNode):
+    """
+    | Class containing UI elements. Layout nodes are used to architecture menus, by defining where one UI element should be placed relatively to another.
+    | One layout node can contain one UI element, and several children Layout Nodes.
+
+    :param name: Name of the node, used to identify it and find it later
+    :type name: :class:`str`
+    """
     PaddingTypes = nanome.util.enums.PaddingTypes
     SizingTypes = nanome.util.enums.SizingTypes
     LayoutTypes = nanome.util.enums.LayoutTypes
 
     io = LayoutNodeIO()
     def __init__(self, name = "node"):
-        # type: (str)
         _LayoutNode.__init__(self, name)
         self.io = LayoutNodeIO(self)
 
@@ -20,6 +26,12 @@ class LayoutNode(_LayoutNode):
     #region properties.
     @property
     def enabled(self):
+        """
+        | Defines if layout node is visible.
+        | If disabled, it will not influence the menu layout.
+
+        :type: :class:`bool`
+        """
         return self._enabled
     
     @enabled.setter
@@ -28,6 +40,11 @@ class LayoutNode(_LayoutNode):
 
     @property
     def name(self):
+        """
+        | Name of the node, used to identify it and find it later
+
+        :type: :class:`str`
+        """
         return self._name
     
     @name.setter
@@ -45,6 +62,11 @@ class LayoutNode(_LayoutNode):
 
     @property
     def layer(self):
+        """
+        | The node layer. A node on layer 0 and another on layer 1 will be on different layouts, possibly overlapping
+
+        :type: :class:`int`
+        """
         return self._layer
     
     @layer.setter
@@ -54,6 +76,11 @@ class LayoutNode(_LayoutNode):
 
     @property
     def layout_orientation(self):
+        """
+        | Defines if children node should be arranged vertically or horizontally
+
+        :type: :class:`~LayoutOrientation`
+        """
         return self._layout_orientation
     
     @layout_orientation.setter
@@ -63,6 +90,11 @@ class LayoutNode(_LayoutNode):
 
     @property
     def sizing_type(self):
+        """
+        | Defines how the node size in the layout should be calculated
+
+        :type: :class:`~SizingTypes`
+        """
         return self._sizing_type
     
     @sizing_type.setter
@@ -72,6 +104,12 @@ class LayoutNode(_LayoutNode):
 
     @property
     def sizing_value(self):
+        """
+        | Size of the node in its layout.
+        | Behavior is different depending of :attr:`~sizing_type`
+
+        :type: :class:`float`
+        """
         return self._sizing_value
     
     @sizing_value.setter
@@ -81,6 +119,11 @@ class LayoutNode(_LayoutNode):
 
     @property
     def forward_dist(self):
+        """
+        | Sets the depth distance (towards camera) of a node, relative to its parent
+
+        :type: :class:`float`
+        """
         return self._forward_dist
     
     @forward_dist.setter

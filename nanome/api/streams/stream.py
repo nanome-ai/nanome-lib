@@ -2,6 +2,12 @@ from nanome._internal._network._commands._callbacks import _Messages
 import nanome
 
 class Stream(object):
+    """
+    | Class allowing a plugin to move a lot of atoms, several times per second if needed.
+    | Created by calling :func:`~nanome.api.plugin_instance.PluginInstance.create_stream`
+
+    | When created, a stream is linked to a number of atoms. Each call to :func:`~update` will update all these atoms
+    """
     _streams = dict()
 
     def __init__(self, network, id):

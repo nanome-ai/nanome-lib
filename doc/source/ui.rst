@@ -1,10 +1,10 @@
-User Interface
-==============
+User Interface API
+==================
 
 Plugin Menu Creator
 ^^^^^^^^^^^^^^^^^^^
 
-In order to make menu creation easier, we provide the Plugin Menu Creator.
+In order to make menu creation easier, we provide a tool called Pluginator.
 
 .. todo::
     Write how to integrate plugin menu creator menus in a plugin
@@ -37,5 +37,18 @@ Currently available UI elements are:
 
 Following is an example of manual UI creation:
 
-.. literalinclude:: ../../UIPlugin.py
+.. literalinclude:: ../../test_plugins/UIPlugin.py
    :language: python
+
+Z-fighting problem
+^^^^^^^^^^^^^^^^^^
+
+A known problem, called z-fighting, is the following:
+
+.. image:: z-fighting.png
+  :width: 400
+  :alt: z-fighting
+
+If you look closely, you will see that the text intersects with its background. This happens when two objects are exactly on the same plan.
+
+To fix this issue, try to set the :attr:`~nanome.api.ui.layout_node.LayoutNode.forward_dist` of your foreground element (here, the text)

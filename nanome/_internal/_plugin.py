@@ -15,7 +15,7 @@ class _Plugin(object):
     _plugin_id = -1
 
     def __parse_args(self):
-        Logs.set_verbose(False)
+        Logs._set_verbose(False)
         for i in range(1, len(sys.argv)):
             if sys.argv[i] == "-h":
                 Logs.message("Usage:", sys.argv[1],"[-h] [-a ADDRESS] [-p PORT]")
@@ -48,7 +48,7 @@ class _Plugin(object):
                 self.__key_file = sys.argv[i + 1]
                 i += 1
             elif sys.argv[i] == "-v":
-                Logs.set_verbose(True)
+                Logs._set_verbose(True)
 
     def __read_key_file(self):
         try:
@@ -139,7 +139,7 @@ class _Plugin(object):
         session = Network._Session(session_id, self._network)
         main_conn, process_conn = Pipe()
         session.plugin_pipe = main_conn
-        process = Process(target=_Plugin._launch_plugin, args=(self._plugin_class, session_id, process_conn, _Plugin.__serializer, _Plugin._plugin_id, version_table, _TypeSerializer.get_version_table(), Logs.is_verbose()))
+        process = Process(target=_Plugin._launch_plugin, args=(self._plugin_class, session_id, process_conn, _Plugin.__serializer, _Plugin._plugin_id, version_table, _TypeSerializer.get_version_table(), Logs._is_verbose()))
         process.start()
         session.plugin_process = process
         self._sessions[session_id] = session

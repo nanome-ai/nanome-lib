@@ -7,8 +7,6 @@ class ComplexIO(_Addon):
     SDFSaveOptions = nanome.util.complex_save_options.SDFSaveOptions
     MMCIFSaveOptions = nanome.util.complex_save_options.MMCIFSaveOptions
 
-    _dummy = object()
-
     def __init__(self, base_object=None):
         _Addon.__init__(self, base_object)
 
@@ -28,18 +26,19 @@ class ComplexIO(_Addon):
         """
         | Loads the complex from a .pdb file
 
-        :param path: (optional) Path to the file containing the structure
-        :type path: str
-        :param file: (optional) Opened file containing the structure
-        :type file: file
-        :param lines: (optional) list of lines from the file
-        :type lines: list of str
-        :param string: (optional) contents of the file as a single string
-        :type string: str
         :return: The complex read from the file
         :rtype: :class:`~nanome.api.structure.complex.Complex`
+        :param kwargs: See below
+        :Keyword Arguments:
+            *path* (:class:`str`)
+                Path to the file containing the structure
+            *file* (:class:`file`)
+                Opened file containing the structure
+            *lines* (list of :class:`str`)
+                List of lines from the file
+            *string* (:class:`str`)
+                Contents of the file as a single string
         """
-
         return self.__from_file(kwargs, _pdb)
 
     def to_sdf(self, path, options = None):
@@ -58,16 +57,18 @@ class ComplexIO(_Addon):
         """
         | Loads the complex from a .sdf file
 
-        :param path: (optional) Path to the file containing the structure
-        :type path: str
-        :param file: (optional) Opened file containing the structure
-        :type file: file
-        :param lines: (optional) list of lines from the file
-        :type lines: list of str
-        :param string: (optional) contents of the file as a single string
-        :type string: str
         :return: The complex read from the file
         :rtype: :class:`~nanome.api.structure.complex.Complex`
+        :param kwargs: See below
+        :Keyword Arguments:
+            *path* (:class:`str`)
+                Path to the file containing the structure
+            *file* (:class:`file`)
+                Opened file containing the structure
+            *lines* (list of :class:`str`)
+                List of lines from the file
+            *string* (:class:`str`)
+                Contents of the file as a single string
         """
         return self.__from_file(kwargs, _sdf)
 
@@ -87,16 +88,18 @@ class ComplexIO(_Addon):
         """
         | Loads the complex from a .cif file
 
-        :param path: (optional) Path to the file containing the structure
-        :type path: str
-        :param file: (optional) Opened file containing the structure
-        :type file: file
-        :param lines: (optional) list of lines from the file
-        :type lines: list of str
-        :param string: (optional) contents of the file as a single string
-        :type string: str
         :return: The complex read from the file
         :rtype: :class:`~nanome.api.structure.complex.Complex`
+        :param kwargs: See below
+        :Keyword Arguments:
+            *path* (:class:`str`)
+                Path to the file containing the structure
+            *file* (:class:`file`)
+                Opened file containing the structure
+            *lines* (list of :class:`str`)
+                List of lines from the file
+            *string* (:class:`str`)
+                Contents of the file as a single string
         """
         return self.__from_file(kwargs, _mmcif)
 
