@@ -51,35 +51,35 @@ class ShallowUpdatePlugin(nanome.PluginInstance):
             if redcomplex:
                 print("complex colored")
                 count_structures(complex)
-                complex.molecular.name = "AAA"
-                complex.rendering.boxed = True
+                complex.name = "AAA"
+                complex.boxed = True
                 # redcomplex = False
                 dirty_structures.append(complex)
                 # continue
             for molecule in complex.molecules:
                 if redmolecule:
                     print("molecule colored")
-                    molecule.molecular.name = "BBB"
+                    molecule.name = "BBB"
                     # redmolecule = False
                     dirty_structures.append(molecule)
                     # continue
                 for chain in molecule.chains:
                     if redchain:
                         print("chain colored")
-                        chain.molecular.name = "CCC"
+                        chain.name = "CCC"
                         # redchain = False
                         dirty_structures.append(chain)
                         # continue
                     for residue in chain.residues:
                         if redresidue:
                             print("residue colored")
-                            residue.molecular.name = "DDD"
+                            residue.name = "DDD"
                             # redresidue = False
                             dirty_structures.append(residue)
                             # continue
                         for bond in residue.bonds:
                             if redbond:
-                                bond.molecular.kind = _Bond.Kind.CovalentTriple
+                                bond.kind = _Bond.Kind.CovalentTriple
                                 print("bond colored")
                                 # redbond = False
                                 dirty_structures.append(bond)
@@ -87,7 +87,7 @@ class ShallowUpdatePlugin(nanome.PluginInstance):
                         for atom in residue.atoms:
                             if redatom:
                                 print("atom colored")
-                                atom.molecular.name = "EEE"
+                                atom.name = "EEE"
                                 # redatom = False
                                 dirty_structures.append(atom)
                                 # continue                            

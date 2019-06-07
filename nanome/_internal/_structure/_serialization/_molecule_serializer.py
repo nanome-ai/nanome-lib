@@ -26,16 +26,16 @@ class _MoleculeSerializer(_TypeSerializer):
             context.write_using_serializer(self.array, [])
         else:
             context.write_using_serializer(self.array, value._chains)
-        context.write_using_serializer(self.string, value._molecular._name)
+        context.write_using_serializer(self.string, value._name)
         
-        context.write_using_serializer(self.dictionary, value._molecular._associated)
+        context.write_using_serializer(self.dictionary, value._associated)
 
     def deserialize(self, version, context):
         molecule = _Molecule._create()
         molecule._index = context.read_long()
 
         molecule._chains = context.read_using_serializer(self.array)
-        molecule._molecular._name = context.read_using_serializer(self.string)
+        molecule._name = context.read_using_serializer(self.string)
 
-        molecule._molecular._associated = context.read_using_serializer(self.dictionary)
+        molecule._associated = context.read_using_serializer(self.dictionary)
         return molecule
