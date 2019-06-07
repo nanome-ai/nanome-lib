@@ -76,7 +76,7 @@ def compare_values(first, second, seen_cache, options = TestOptions()):
         except:
             diff = False
             if isinstance(first, float) and not options.accurate_floats:
-                if (abs(first - second) > .001):
+                if (abs(first - second) > .00001):
                     diff = True
                 elif first != second and options.print_float_warnings:
                     Logs.debug("floating point variables slightly different")
