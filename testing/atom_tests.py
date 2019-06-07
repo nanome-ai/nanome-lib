@@ -6,6 +6,7 @@ import math
 from nanome.util import Color
 from nanome.util import Vector3
 from nanome.util import Quaternion
+from nanome.util import Matrix
 
 from nanome.api import structure as struct
 from nanome._internal._structure import _serialization as _seri
@@ -24,6 +25,7 @@ def run(counter):
     run_test(test_equality, counter)
     run_test(test_pdb, counter)
     run_test(test_iterators, counter)
+    run_test(test_matrices, counter)
     prep_timer_test()
     run_timed_test(time_test_serializer, counter, 1, 10)#normally 2.9 
 
@@ -282,3 +284,40 @@ def create_workspace():
     workspace.position = Vector3(1,2,3)
     workspace.rotation = Quaternion(1,2,3,4)
     return workspace
+
+def test_matrices():
+    a = Matrix(3, 4)
+    b = Matrix(4, 3)
+    v = Matrix(4, 1)
+    v[0][0] = 12.5
+    v[1][0] = 9.36
+    v[2][0] = 24.1
+    v[3][0] = 1.0
+    result_mul = Matrix(3, 3)
+    result_mul[0] = [42, 48, 54]
+    result_mul[1] = [114, 136, 158]
+    result_mul[2] = [186, 224, 262]
+    result_mul_v = Matrix(3, 1)
+    result_mul_v[0][0] = 60.56
+    result_mul_v[1][0] = 248.4
+    result_mul_v[2][0] = 436.24
+
+    for i in range(12):
+        a[int(i / 4)][int(i % 4)] = i
+        b[int(i / 3)][int(i % 3)] = i
+
+    assert_equal(a * b, result_mul)
+    assert_equal(a * v, result_mul_v)
+
+    res_atom_global_pos = Vector3(-20.33947, 0.1491127, -9.878754)
+    complex = struct.Complex()
+    atom = struct.Atom()
+    atom.position.set(7.2, 2.6, -21.56)
+    complex.position.set(-3.197371, -2.314157, 5.071643)
+    complex.rotation.set(0.09196287, 0.4834483, 0.3486853, 0.797646)
+    m = complex.get_complex_to_workspace_matrix()
+    m_inv = complex.get_workspace_to_complex_matrix()
+    atom_global_pos = m * atom.position
+
+    assert_equal(atom_global_pos, res_atom_global_pos)
+    assert_equal(m_inv * atom_global_pos, atom.position)

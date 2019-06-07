@@ -76,7 +76,7 @@ def compare_values(first, second, seen_cache, options = TestOptions()):
         except:
             diff = False
             if isinstance(first, float) and not options.accurate_floats:
-                if (abs(first - second) >.00001):
+                if (abs(first - second) > .001):
                     diff = True
                 elif first != second and options.print_float_warnings:
                     Logs.debug("floating point variables slightly different")
@@ -90,8 +90,11 @@ def compare_values(first, second, seen_cache, options = TestOptions()):
             else:
                 return True, []
         else:
-            if previously_evaluated(first, second, seen_cache):
-                return True, []
+            try:
+                if previously_evaluated(first, second, seen_cache):
+                    return True, []
+            except TypeError: # If type is unhashable
+                pass
             result, output = compare_values(first_dict, second_dict, seen_cache, options)
             output.insert(0, curr_type)
             return result, output
@@ -106,10 +109,9 @@ def compare_lists(first, second, seen_cache, options = TestOptions()):
         return False, output
     else:
         for i in range(first_len):
-            if not compare_values(first[i], second[i], seen_cache, options):
-                output = [("type: " + str(first[i].__class__))]
-                output[0] += ("\nindex: " + i)
-                return False, []
+            result, output = compare_values(first[i], second[i], seen_cache, options)
+            if result == False:
+                return False, output
     return True, []
 
 def compare_dicts(first, second, seen_cache, options = TestOptions()):

@@ -19,5 +19,9 @@ def test_menu_json():
         node._id = 0
     for node in menu2.get_all_nodes():
         node._id = 0
+    for content in menu.get_all_content():
+        content._content_id = 0
+    for content in menu2.get_all_content():
+        content._content_id = 0
     assert_equal(menu, menu2)
     pass
