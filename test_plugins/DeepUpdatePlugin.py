@@ -62,8 +62,8 @@ class DeepUpdatePlugin(nanome.PluginInstance):
         
     @staticmethod
     def red_atom(atom):
-        atom.rendering.surface_rendering = True
-        atom.rendering.surface_color = nanome.util.Color.Red()
+        atom.surface_rendering = True
+        atom.surface_color = nanome.util.Color.Red()
 
     @staticmethod
     def red_bond(bond):

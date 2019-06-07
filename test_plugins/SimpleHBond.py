@@ -11,9 +11,9 @@ class SimpleHBond(nanome.PluginInstance):
     
     @staticmethod
     def _is_good_element(atom, current_element = None):
-        if atom.molecular.symbol != 'H' and atom.molecular.symbol != 'O':
+        if atom.symbol != 'H' and atom.symbol != 'O':
             return False
-        if current_element == atom.molecular.symbol:
+        if current_element == atom.symbol:
             return False
         return True
 
@@ -22,16 +22,16 @@ class SimpleHBond(nanome.PluginInstance):
         visited_atoms.append(atom)
         # If we traveled at least minimum_bond_distance and distance is under maximum_angstrom_distance, we might have a HBond here
         if depth >= minimum_bond_distance \
-            and nanome.util.Vector3.distance(atom.molecular.position, original_atom.molecular.position) <= maximum_angstrom_distance \
-            and SimpleHBond._is_good_element(atom, original_atom.molecular.symbol):
+            and nanome.util.Vector3.distance(atom.position, original_atom.position) <= maximum_angstrom_distance \
+            and SimpleHBond._is_good_element(atom, original_atom.symbol):
             new_bond = nanome.structure.Bond()
-            new_bond.molecular.kind = nanome.structure.Bond.Kind.Hydrogen
+            new_bond.kind = nanome.structure.Bond.Kind.Hydrogen
             new_bond.atom1 = original_atom
             new_bond.atom2 = atom
             original_residue.bonds.append(new_bond)
         # Check all bonds related to current atom
         for bond in original_residue.bonds:
-            if bond.molecular.kind == nanome.structure.Bond.Kind.Hydrogen:
+            if bond.kind == nanome.structure.Bond.Kind.Hydrogen:
                 continue
             if bond.atom1.index == atom.index:
                 other_atom = bond.atom2
@@ -50,13 +50,13 @@ class SimpleHBond(nanome.PluginInstance):
                 for chain in molecule.chains:
                     for residue in chain.residues:
                         for current_atom in residue.atoms:
-                            if SimpleHBond._is_good_element(current_atom, atom.molecular.symbol) == False:
+                            if SimpleHBond._is_good_element(current_atom, atom.symbol) == False:
                                 continue
                             found = [x for x in visited_atoms if x.index == current_atom.index]
                             if len(found) == 0:
-                                if nanome.util.Vector3.distance(atom.molecular.position, current_atom.molecular.position) <= maximum_angstrom_distance:
+                                if nanome.util.Vector3.distance(atom.position, current_atom.position) <= maximum_angstrom_distance:
                                     new_bond = nanome.structure.Bond()
-                                    new_bond.molecular.kind = nanome.structure.Bond.Kind.Hydrogen
+                                    new_bond.kind = nanome.structure.Bond.Kind.Hydrogen
                                     new_bond.atom1 = atom
                                     new_bond.atom2 = current_atom
                                     original_residue.bonds.append(new_bond)
@@ -69,7 +69,7 @@ class SimpleHBond(nanome.PluginInstance):
                 for chain in molecule.chains:
                     for residue in chain.residues:
                         for i, b in reversed(list(enumerate(residue.bonds))):
-                            if b.molecular.kind == nanome.structure.Bond.Kind.Hydrogen:
+                            if b.kind == nanome.structure.Bond.Kind.Hydrogen:
                                 del residue.bonds[i]
                                 removed_hbonds = True
         return removed_hbonds
@@ -83,7 +83,7 @@ class SimpleHBond(nanome.PluginInstance):
                     for chain in molecule.chains:
                         for residue in chain.residues:
                             for atom in residue.atoms:
-                                if atom.rendering.selected == False:
+                                if atom.selected == False:
                                     continue
                                 if SimpleHBond._is_good_element(atom):
                                     visited_atoms = []

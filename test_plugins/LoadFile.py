@@ -44,7 +44,7 @@ class LoadFile(nanome.PluginInstance):
         atoms = []
         for complex in workspace.complexes:
             for atom in complex.atoms:
-                if atom.rendering.selected:
+                if atom.selected:
                     atoms.append(atom)
         if self.zoom:
             self.zoom_on_structures(atoms, lambda : print("Zoomed"))

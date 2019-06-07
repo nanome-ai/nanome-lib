@@ -29,23 +29,23 @@ class _ComplexSerializer(_TypeSerializer):
             context.write_using_serializer(self.array, [])
         else:
             context.write_using_serializer(self.array, value._molecules)
-        context.write_bool(value._rendering._boxed)
-        context.write_bool(value._rendering._locked)
-        context.write_bool(value._rendering._visible)
-        context.write_bool(value._rendering._computing)
-        context.write_int(value._rendering._current_frame)
+        context.write_bool(value._boxed)
+        context.write_bool(value._locked)
+        context.write_bool(value._visible)
+        context.write_bool(value._computing)
+        context.write_int(value._current_frame)
 
-        context.write_using_serializer(self.string, value._molecular._name)
-        position = Vector3._get_inversed_handedness(value._transform._position)
+        context.write_using_serializer(self.string, value._name)
+        position = Vector3._get_inversed_handedness(value._position)
         context.write_using_serializer(self.vector, position)
-        rotation = Quaternion._get_inversed_handedness(value._transform._rotation)
+        rotation = Quaternion._get_inversed_handedness(value._rotation)
         context.write_using_serializer(self.quaternion, rotation)
-        context.write_using_serializer(self.dictionary, value._molecular._remarks)
+        context.write_using_serializer(self.dictionary, value._remarks)
 
         #writing junk because selected flag is one directional.
         context.write_bool(False)
-        context.write_bool(value._rendering._surface_dirty)
-        context.write_float(value._rendering._surface_refresh_rate)
+        context.write_bool(value._surface_dirty)
+        context.write_float(value._surface_refresh_rate)
 
     def deserialize(self, version, context):
         complex = _Complex._create()
@@ -53,24 +53,24 @@ class _ComplexSerializer(_TypeSerializer):
 
         complex._molecules = context.read_using_serializer(self.array)
 
-        complex._rendering._boxed = context.read_bool()
-        complex._rendering._locked = context.read_bool()
-        complex._rendering._visible = context.read_bool()
-        complex._rendering._computing = context.read_bool()
-        complex._rendering._current_frame = context.read_int()
+        complex._boxed = context.read_bool()
+        complex._locked = context.read_bool()
+        complex._visible = context.read_bool()
+        complex._computing = context.read_bool()
+        complex._current_frame = context.read_int()
 
-        complex._molecular._name = context.read_using_serializer(self.string)
+        complex._name = context.read_using_serializer(self.string)
         position = context.read_using_serializer(self.vector)
-        complex._transform._position = position._inverse_handedness()
+        complex._position = position._inverse_handedness()
         rotation = context.read_using_serializer(self.quaternion)
-        complex._transform._rotation = rotation._inverse_handedness()
+        complex._rotation = rotation._inverse_handedness()
 
-        complex._molecular._remarks = context.read_using_serializer(self.dictionary)
+        complex._remarks = context.read_using_serializer(self.dictionary)
 
         #true iff at least 1 atom is selected in current molecule
-        complex._rendering._selected = context.read_bool()
+        complex._selected = context.read_bool()
         context.read_bool()  # Read surface dirty but ignore it
-        complex._rendering._surface_dirty = False
-        complex._rendering._surface_refresh_rate = context.read_float()
+        complex._surface_dirty = False
+        complex._surface_refresh_rate = context.read_float()
 
         return complex

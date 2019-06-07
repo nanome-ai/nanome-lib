@@ -7,40 +7,40 @@ def structure(content):
     complex = _Complex._create()
     for model in content.models:
         complex._molecules.append(structure_molecule(model))
-    complex.molecular._remarks = {}
+    complex._remarks = {}
     return complex
 
 
 def structure_molecule(model):
     # type: (Content.Model) -> Molecule
     molecule = _Molecule._create()
-    molecule.molecular._name = model.name
+    molecule._name = model.name
 
     chain = _Chain._create()
-    chain.molecular._name = "S"
+    chain._name = "S"
     molecule._chains.append(chain)
     residue = _Residue._create()
-    residue.molecular._name = "SDF"
-    residue.molecular._type = residue.molecular._name
-    residue.molecular.serial = 1
+    residue._name = "SDF"
+    residue._type = residue._name
+    residue.serial = 1
     chain._residues.append(residue)
     atoms_by_serial = {}
 
     for catom in model.atoms:
         atom = _Atom._create()
-        atom.molecular._symbol = catom.symbol
-        atom.molecular._serial = catom.serial
-        atom.molecular._position = Vector3(catom.x, catom.y, catom.z)
-        atom.molecular._name = catom.symbol
-        atom.molecular._is_het = True
+        atom._symbol = catom.symbol
+        atom._serial = catom.serial
+        atom._position = Vector3(catom.x, catom.y, catom.z)
+        atom._name = catom.symbol
+        atom._is_het = True
         residue._atoms.append(atom)
-        atoms_by_serial[atom.molecular._serial] = atom
+        atoms_by_serial[atom._serial] = atom
     for cbond in model.bonds:
         if cbond.serial_atom1 in atoms_by_serial and cbond.serial_atom2 in atoms_by_serial:
             bond = _Bond._create()
             bond._atom1 = atoms_by_serial[cbond.serial_atom1]
             bond._atom2 = atoms_by_serial[cbond.serial_atom2]
-            bond.molecular._kind = cbond.bond_order
+            bond._kind = cbond.bond_order
             residue._bonds.append(bond)
-    molecule.molecular._associated = model._associated
+    molecule._associated = model._associated
     return molecule

@@ -19,9 +19,9 @@ class RemoveHydrogens(nanome.PluginInstance):
     
     @staticmethod
     def _should_be_removed(atom):
-        if atom.rendering.selected == False:
+        if atom.selected == False:
             return False
-        if atom.molecular.symbol != 'H':
+        if atom.symbol != 'H':
             return False
         return True
 
@@ -48,6 +48,7 @@ class RemoveHydrogens(nanome.PluginInstance):
                 count += len(atoms_to_remove)
 
             Logs.debug(count, "hydrogens removed from", complex.molecular.name) # Displays a message in the console only if plugin started in verbose mode
+
         self.update_workspace(workspace) # Update Nanome workspace, in "deep" mode
 
 # Setup plugin information, register RemoveHydrogens as the class to instantiate, and connect to the server

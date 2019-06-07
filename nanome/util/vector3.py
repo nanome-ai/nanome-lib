@@ -27,6 +27,11 @@ class Vector3(object):
     def unpack(self):
         return self._positions[0], self._positions[1], self._positions[2]
 
+    def set(self, x, y, z):
+        self._positions[0] = x
+        self._positions[1] = y
+        self._positions[2] = z
+
     @property
     def x(self):
         return self._positions[0]

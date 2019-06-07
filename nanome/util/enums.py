@@ -14,6 +14,17 @@ class Kind(IntEnum):
     Hydrogen = 4
     HydrogenWater = 5
 
+class RibbonMode(IntEnum):
+    SecondaryStructure = 0
+    AdaptiveTube = 1
+    Coil = 2
+
+class SecondaryStructure(IntEnum):
+    Unknown = 0
+    Coil = 1
+    Sheet = 2
+    Helix = 3
+
 class PaddingTypes(IntEnum):
     fixed = 0
     ratio = 1
