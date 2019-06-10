@@ -36,7 +36,7 @@ class _ContextSerialization(object):
             self.write_uint = self.write_uint_debug
             self.write_using_serializer = self.write_using_serializer_debug
         self.__packet_debugging = packet_debugging
-        self._plugin_id = 0
+        self._plugin_id = plugin_id
 
     def has_packet_debugging(self):
         return self.__packet_debugging
