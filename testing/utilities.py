@@ -239,7 +239,7 @@ def run_timed_test(test, counter, loop_count = 1, maximum_time = -1.0):
 
 def test_serializer(serializer, obj_to_test, options=None):
     from nanome._internal._network._serialization._context import _ContextDeserialization, _ContextSerialization
-    context_s = _ContextSerialization()
+    context_s = _ContextSerialization(plugin_id=1500)
     serializer.serialize(serializer.version(), obj_to_test, context_s)
     context_d = _ContextDeserialization(context_s.to_array())
     result = serializer.deserialize(serializer.version(), context_d)

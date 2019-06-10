@@ -15,7 +15,7 @@ class _MeshSerializer(_TypeSerializer):
 
     def serialize(self, version, value, context):
         if (version == 0 ):
-            safe_id = context._plugin_id << 24
+            safe_id = (context._plugin_id << 24) & 0x7FFFFFFF
             safe_id |= value._content_id
         else:
             safe_id = value._content_id
