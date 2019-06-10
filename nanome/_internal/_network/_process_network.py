@@ -63,6 +63,7 @@ class _ProcessNetwork(object):
         self._session_id = session_id
         self._process_conn = pipe
         self._serializer = serializer
+        self._serializer._plugin_id = plugin_id
         self._plugin_id = plugin_id
         self._command_id = 0
         self.__version_table = version_table

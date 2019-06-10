@@ -2,6 +2,7 @@ import nanome
 import os
 import re
 import math
+import random
 
 from nanome.util import Color
 from nanome.util import Vector3
@@ -132,7 +133,7 @@ def time_test_serializer():
     update_workspace = _UpdateWorkspace()
     receive_workspace = _ReceiveWorkspace()
 
-    context_s = _ContextSerialization()
+    context_s = _ContextSerialization(plugin_id=random.randint(0, 0xFFFFFFFF))
     update_workspace.serialize(update_workspace.version, workspace1, context_s)
 
     #deserialize stuff
@@ -147,7 +148,7 @@ def test_serializers():
     update_workspace = _UpdateWorkspace()
     receive_workspace = _ReceiveWorkspace()
 
-    context_s = _ContextSerialization()
+    context_s = _ContextSerialization(plugin_id=random.randint(0, 0xFFFFFFFF))
     update_workspace.serialize(workspace1, context_s)
 
     #deserialize stuff

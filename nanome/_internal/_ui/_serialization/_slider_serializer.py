@@ -15,7 +15,12 @@ class _SliderSerializer(_TypeSerializer):
         return "Slider"
 
     def serialize(self, version, value, context):
-        context.write_int(value._content_id)
+        if (version == 0 ):
+            safe_id = (context._plugin_id << 24) & 0x7FFFFFFF
+            safe_id |= value._content_id
+        else:
+            safe_id = value._content_id
+        context.write_int(safe_id)
         context.write_float(value._current_value)
         context.write_float(value._min_value)
         context.write_float(value._max_value)
@@ -24,6 +29,9 @@ class _SliderSerializer(_TypeSerializer):
     def deserialize(self, version, context):
         value = _Slider._create()
         value._content_id = context.read_int()
+        if (version == 0):
+            id_mask = 0x00FFFFFF
+            value._content_id &= id_mask
         value._current_value = context.read_float()
         value._min_value =context.read_float()
         value._max_value =context.read_float()
