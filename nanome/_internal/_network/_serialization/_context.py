@@ -123,11 +123,12 @@ class _ContextSerialization(object):
         return self.__packet_debugging
 
     def create_sub_context(self):
-        return _ContextSerialization(self.__version_table, self.__packet_debugging)
+        sub_context = _ContextSerialization(self.__version_table, self.__packet_debugging)
+        return sub_context
 
 class _ContextDeserialization(object):
     # pylint: disable=method-hidden
-    def __init__(self, bytes, version_table = None, packet_debugging = False):
+    def __init__(self, bytes, version_table = None, packet_debugging = False, plugin_id = 0):
         self._data = _Data()
         self._data.received_data(bytes)
         self.payload = {}
@@ -143,6 +144,7 @@ class _ContextDeserialization(object):
             self.read_uint = self.read_uint_debug
             self.read_using_serializer = self.read_using_serializer_debug
         self.__packet_debugging = packet_debugging
+        self._plugin_id = 0
 
     def has_packet_debugging(self):
         return self.__packet_debugging

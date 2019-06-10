@@ -14,7 +14,12 @@ class _LayoutNodeSerializer(_TypeSerializer):
         return "LayoutNode"
     
     def serialize(self, version, value, context):
-        context.write_int(value._id)
+        if (version == 0 ):
+            safe_id = context._plugin_id << 24
+            safe_id |= value._id
+        else:
+            safe_id = value._id
+        context.write_int(safe_id)
         context.write_bool(value._enabled)
         context.write_int(value._layer)
         context.write_uint(value._layout_orientation)
@@ -38,6 +43,9 @@ class _LayoutNodeSerializer(_TypeSerializer):
     def deserialize(self, version, context):
         layout_node = _LayoutNode._create()
         layout_node._id = context.read_int()
+        if (version == 0):
+            id_mask = 0x00FFFFFF
+            layout_node._id = id_mask & layout_node._id
         layout_node._enabled = context.read_bool()
         layout_node._layer = context.read_int()
         layout_node._layout_orientation = _LayoutNode.LayoutTypes(context.read_uint())

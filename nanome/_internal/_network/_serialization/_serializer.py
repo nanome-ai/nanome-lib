@@ -13,7 +13,7 @@ class Serializer(object):
     _command_callbacks = dict()
 
     def serialize_message(self, request_id, message_type, arg, version_table):
-        context = _ContextSerialization(version_table, packet_debugging)
+        context = _ContextSerialization(version_table, packet_debugging, self._plugin_id)
         context.write_uint(request_id)
         command_hash = CommandCallbacks._Hashes.MessageHashes[message_type]
         context.write_uint(command_hash)
@@ -64,7 +64,8 @@ class Serializer(object):
         return command_hash == CommandCallbacks._Hashes.CommandHashes[CommandCallbacks._Commands.connect]
 
     def __init__(self):
-        pass
+        self._plugin_id = 0
+
 #-------------Commands-----------#
 # Commands are incoming (nanome -> plugin)
 
