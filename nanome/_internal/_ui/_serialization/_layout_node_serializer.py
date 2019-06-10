@@ -36,7 +36,7 @@ class _LayoutNodeSerializer(_TypeSerializer):
             content_id = value._content._content_id
             if (version == 0):
                 content_id = (context._plugin_id << 24) & 0x7FFFFFFF
-                content_id |= value._content_id
+                content_id |= value._content._content_id
             context.write_int(content_id)
 
     def deserialize(self, version, context):
