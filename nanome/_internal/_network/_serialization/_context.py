@@ -22,7 +22,7 @@ class _PacketDebuggingException(Exception):
 
 class _ContextSerialization(object):
     # pylint: disable=method-hidden
-    def __init__(self, version_table = None, packet_debugging = False, plugin_id = 0):
+    def __init__(self, plugin_id, version_table = None, packet_debugging = False):
         self._data = _Data()
         self.payload = {}
         self.__version_table = version_table
@@ -124,7 +124,7 @@ class _ContextSerialization(object):
         return self.__packet_debugging
 
     def create_sub_context(self):
-        sub_context = _ContextSerialization(self.__version_table, self.__packet_debugging, self._plugin_id)
+        sub_context = _ContextSerialization(self._plugin_id, self.__version_table, self.__packet_debugging)
         return sub_context
 
 class _ContextDeserialization(object):
