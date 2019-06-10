@@ -15,30 +15,6 @@ class Menu(_Menu):
 
     #region properties
     @property
-    def enabled(self):
-        return self._enabled
-    
-    @enabled.setter
-    def enabled(self, value):
-        self._enabled = value
-
-    @property
-    def title(self):
-        return self._title
-    
-    @title.setter
-    def title(self, value):
-        self._title = value
-
-    @property
-    def locked(self):
-        return self._locked
-    
-    @locked.setter
-    def locked(self, value):
-        self._locked = value
-
-    @property
     def root(self):
         return self._root
     
