@@ -16,7 +16,12 @@ class _TextInputSerializer(_TypeSerializer):
         return "TextInput"
 
     def serialize(self, version, value, context):
-        context.write_int(value._content_id)
+        if (version == 0 ):
+            safe_id = context._plugin_id << 24
+            safe_id |= value._content_id
+        else:
+            safe_id = value._content_id
+        context.write_int(safe_id)
         context.write_int(value._max_length)
         context.write_using_serializer(self.string, value._placeholder_text)
         context.write_using_serializer(self.string, value._input_text)
@@ -25,6 +30,9 @@ class _TextInputSerializer(_TypeSerializer):
     def deserialize(self, version, context):
         value = _TextInput._create()
         value._content_id = context.read_int()
+        if (version == 0):
+            id_mask = 0x00FFFFFF
+            value._content_id &= id_mask
         value._max_length = context.read_int()
         value._placeholder_text = context.read_using_serializer(self.string)
         value._input_text = context.read_using_serializer(self.string)

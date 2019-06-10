@@ -17,7 +17,12 @@ class _UIListSerializer(_TypeSerializer):
         return "List"
 
     def serialize(self, version, value, context):
-        context.write_int(value._content_id)
+        if (version == 0 ):
+            safe_id = context._plugin_id << 24
+            safe_id |= value._content_id
+        else:
+            safe_id = value._content_id
+        context.write_int(safe_id)
         context.write_using_serializer(self._array, value._items)
         context.write_int(value._display_columns)
         context.write_int(value._display_rows)
@@ -25,13 +30,16 @@ class _UIListSerializer(_TypeSerializer):
         context.write_bool(value._unusable)
 
     def deserialize(self, version, context):
-        result = _UIList._create()
-        result._content_id = context.read_int()
-        result._items = context.read_using_serializer(self._array)
-        result._display_columns = context.read_int()
-        result._display_rows = context.read_int()
-        result._total_columns = context.read_int()
-        result._unusable = context.read_bool()
-        return result
+        value = _UIList._create()
+        value._content_id = context.read_int()
+        if (version == 0):
+            id_mask = 0x00FFFFFF
+            value._content_id &= id_mask
+        value._items = context.read_using_serializer(self._array)
+        value._display_columns = context.read_int()
+        value._display_rows = context.read_int()
+        value._total_columns = context.read_int()
+        value._unusable = context.read_bool()
+        return value
 
 _UIBaseSerializer.register_type("UIList", _UIBaseSerializer.ContentType.elist, _UIListSerializer())

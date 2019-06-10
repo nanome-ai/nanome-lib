@@ -17,7 +17,12 @@ class _ImageSerializer(_TypeSerializer):
         return "Image"
 
     def serialize(self, version, value, context):
-        context.write_int(value._content_id)
+        if (version == 0 ):
+            safe_id = context._plugin_id << 24
+            safe_id |= value._content_id
+        else:
+            safe_id = value._content_id
+        context.write_int(safe_id)
         context.write_using_serializer(self.string, value._file_path)
         context.write_using_serializer(self.color, value._color)
         context.write_uint(value._scaling_option)
@@ -30,6 +35,9 @@ class _ImageSerializer(_TypeSerializer):
     def deserialize(self, version, context):
         value = _Image._create()
         value._content_id = context.read_int()
+        if (version == 0):
+            id_mask = 0x00FFFFFF
+            value._content_id &= id_mask
         value._file_path = context.read_using_serializrt(self.string)
         value._color = context.read_using_serializer(self.color)
         value._scaling_option = context.read_uint()
