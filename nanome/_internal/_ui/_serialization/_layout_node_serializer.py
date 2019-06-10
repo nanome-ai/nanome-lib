@@ -33,7 +33,11 @@ class _LayoutNodeSerializer(_TypeSerializer):
         has_content = value._content != None
         context.write_bool(has_content)
         if (has_content):
-            context.write_int(value._content._content_id)
+            content_id = value._content._content_id
+            if (version == 0):
+                content_id = (context._plugin_id << 24) & 0x7FFFFFFF
+                content_id |= value._content._content_id
+            context.write_int(content_id)
 
     def deserialize(self, version, context):
         layout_node = _LayoutNode._create()
@@ -53,6 +57,9 @@ class _LayoutNodeSerializer(_TypeSerializer):
         has_content = context.read_bool()
         if (has_content):
             layout_node._content_id = context.read_int()
+            if (version == 0):
+                id_mask = 0x00FFFFFF
+                layout_node._content_id &= id_mask
         else:
             layout_node._content_id = None
         return layout_node

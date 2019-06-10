@@ -2,6 +2,7 @@ from nanome.util import Logs
 import time
 import traceback
 import os
+import random
 
 class TestOptions():
     def __init__(self, ignore_vars = [], accurate_floats = False, print_float_warnings = False):
@@ -239,10 +240,10 @@ def run_timed_test(test, counter, loop_count = 1, maximum_time = -1.0):
 
 def test_serializer(serializer, obj_to_test, options=None):
     from nanome._internal._network._serialization._context import _ContextDeserialization, _ContextSerialization
-    context_s = _ContextSerialization()
-    serializer.serialize(serializer.version, obj_to_test, context_s)
+    context_s = _ContextSerialization(plugin_id=random.randint(0, 0xFFFFFFFF))
+    serializer.serialize(serializer.version(), obj_to_test, context_s)
     context_d = _ContextDeserialization(context_s.to_array())
-    result = serializer.deserialize(serializer.version, context_d)
+    result = serializer.deserialize(serializer.version(), context_d)
     assert_equal(obj_to_test, result, options)
 
 def create_test(name, func, args):
