@@ -11,7 +11,14 @@ class _TextInputCallback(_TypeSerializer):
         return "TextInputCallback"
         
     def serialize(self, version, value, context):
+        if (version == 0):
+            plugin_mask = (context._plugin_id << 24) & 0x7FFFFFFF
+            value[0] |= plugin_mask
         context.write_using_serializer(self.__tuple, value)
 
     def deserialize(self, version, context):
-        return context.read_using_serializer(self.__tuple)
+        tup = context.read_using_serializer(self.__tuple)
+        if (version == 0):
+            id_mask = 0x00FFFFFF
+            tup[0] &= id_mask
+        return tup
