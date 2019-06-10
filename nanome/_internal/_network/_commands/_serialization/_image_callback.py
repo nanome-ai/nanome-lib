@@ -14,7 +14,7 @@ class _ImageCallback(_TypeSerializer):
         #value is a tuple containing the image ID, the x coordinate and the y coordinate.
         if (version == 0):
             plugin_mask = (context._plugin_id << 24) & 0x7FFFFFFF
-            value[0] |= plugin_mask
+            value = (value[0] | plugin_mask, value[1], value[2])
         context.write_int(value[0])
         context.write_float(value[1])
         context.write_float(value[2])

@@ -20,5 +20,5 @@ class _TextInputCallback(_TypeSerializer):
         tup = context.read_using_serializer(self.__tuple)
         if (version == 0):
             id_mask = 0x00FFFFFF
-            tup[0] &= id_mask
+            tup = (tup[0] & id_mask, tup[1])
         return tup
