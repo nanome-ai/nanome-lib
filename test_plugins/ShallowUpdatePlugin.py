@@ -3,6 +3,16 @@ import sys
 import time
 from nanome._internal._structure import _Bond
 
+# Config
+
+NAME = "Shallow Update Plugin"
+DESCRIPTION = "A simple plugin demonstrating how plugin system can be used to extend Nanome capabilities"
+CATEGORY = "Simple Actions"
+HAS_ADVANCED_OPTIONS = False
+NTS_ADDRESS = '127.0.0.1'
+NTS_PORT = 8888
+
+# Plugin
 
 def count_structures(complex):
     molecule_counter = 0
@@ -101,7 +111,4 @@ class ShallowUpdatePlugin(nanome.PluginInstance):
     def __init__(self):
         pass
 
-if __name__ == "__main__":
-    plugin = nanome.Plugin("Shallow Update Plugin", "A simple plugin demonstrating how plugin system can be used to extend Nanome capabilities", "Test", False)
-    plugin.set_plugin_class(ShallowUpdatePlugin)
-    plugin.run('127.0.0.1', 8888)
+nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, ShallowUpdatePlugin, NTS_ADDRESS, NTS_PORT)

@@ -3,6 +3,17 @@ from nanome.util import Logs
 import sys
 import time
 
+# Config
+
+NAME = "UI Plugin"
+DESCRIPTION = "A simple plugin demonstrating how plugin system can be used to extend Nanome capabilities"
+CATEGORY = "Simple Actions"
+HAS_ADVANCED_OPTIONS = False
+NTS_ADDRESS = '127.0.0.1'
+NTS_PORT = 8888
+
+# Plugin
+
 def menu_closed_callback(menu): 
     Logs.debug("Menu closed: " + menu.title + " " + str(menu.enabled))
 
@@ -177,7 +188,4 @@ class UIPlugin(nanome.PluginInstance):
     def __init__(self):
         pass
 
-if __name__ == "__main__":
-    plugin = nanome.Plugin("UI Plugin", "A simple plugin demonstrating how plugin system can be used to extend Nanome capabilities", "Test", False)
-    plugin.set_plugin_class(UIPlugin)
-    plugin.run('127.0.0.1', 8888)
+nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, UIPlugin, NTS_ADDRESS, NTS_PORT)
