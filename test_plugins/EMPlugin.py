@@ -6,6 +6,17 @@ import testing.utilities
 from nanome.util import Logs
 from nanome.api.structure import Complex, Workspace
 
+# Config
+
+NAME = "EM Plugin"
+DESCRIPTION = "A simple plugin demonstrating how plugin system can be used to extend Nanome capabilities"
+CATEGORY = "Test"
+HAS_ADVANCED_OPTIONS = False
+NTS_ADDRESS = '127.0.0.1'
+NTS_PORT = 8888
+
+# Plugin
+
 class EMPlugin(nanome.PluginInstance):
     def start(self):
         print("Start Load File")
@@ -24,7 +35,4 @@ class EMPlugin(nanome.PluginInstance):
         self.zoom = True
         pass
 
-if __name__ == "__main__":
-    plugin = nanome.Plugin("EM Plugin", "A simple plugin demonstrating how plugin system can be used to extend Nanome capabilities", "Test", True)
-    plugin.set_plugin_class(EMPlugin)
-    plugin.run('127.0.0.1', 8888)
+nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, EMPlugin, NTS_ADDRESS, NTS_PORT)

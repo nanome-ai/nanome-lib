@@ -2,6 +2,18 @@ import nanome
 from nanome.util import Logs
 import sys
 import time
+
+# Config
+
+NAME = "Sand Box"
+DESCRIPTION = "A plugin that can be edited freely for testing."
+CATEGORY = "Simple Actions"
+HAS_ADVANCED_OPTIONS = False
+NTS_ADDRESS = '127.0.0.1'
+NTS_PORT = 8888
+
+# Plugin
+
 class SandBox(nanome.PluginInstance):
     def start(self):
         print("Started")
@@ -50,7 +62,4 @@ class SandBox(nanome.PluginInstance):
     def __init__(self):
         pass
 
-if __name__ == "__main__":
-    plugin = nanome.Plugin("Sand Box", "A plugin that can be edited freely for testing.", "Test", False)
-    plugin.set_plugin_class(SandBox)
-    plugin.run('127.0.0.1', 8888)
+nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, SandBox, NTS_ADDRESS, NTS_PORT)
