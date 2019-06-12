@@ -17,7 +17,6 @@ class _Plugin(object):
 
     def __parse_args(self):
         Logs._set_verbose(False)
-        write_to_config = False
         for i in range(1, len(sys.argv)):
             if sys.argv[i] == "-h":
                 Logs.message("Usage:", sys.argv[1],"[-h] [-a ADDRESS] [-p PORT]")
@@ -26,7 +25,6 @@ class _Plugin(object):
                 Logs.message(" -p  connects to a NTS at the specified port")
                 Logs.message(" -k  specifies a key file to use to connect to NTS")
                 Logs.message(" -v  enable verbose mode, to display Logs.debug")
-                Logs.message(" -w  saves arguments to the config file")
                 sys.exit(0)
             elif sys.argv[i] == "-a":
                 if i >= len(sys.argv):
@@ -52,12 +50,6 @@ class _Plugin(object):
                 i += 1
             elif sys.argv[i] == "-v":
                 Logs._set_verbose(True)
-            elif sys.argv[i] == "-w":
-                write_to_config = True
-        if write_to_config:
-            config.set("host", self.__host)
-            config.set("port", self.__port)
-            config.set("key_file", self.__key_file)
 
     def __read_key_file(self):
         try:

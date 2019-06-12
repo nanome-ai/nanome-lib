@@ -1,5 +1,6 @@
 import os
 import json
+from nanome.util import Logs
 
 default_json_string = """{ 
     "host":"127.0.0.1",
@@ -23,6 +24,7 @@ def _setup_file():
             return False
     if (not os.path.isfile(config)):
         try:
+            Logs.message("Creating config file: " + config_path)
             _setup_clean_config(config)
         except:
             return False
