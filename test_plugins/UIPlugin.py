@@ -180,4 +180,4 @@ class UIPlugin(nanome.PluginInstance):
 if __name__ == "__main__":
     plugin = nanome.Plugin("UI Plugin", "A simple plugin demonstrating how plugin system can be used to extend Nanome capabilities", "Test", False)
     plugin.set_plugin_class(UIPlugin)
-    plugin.run('127.0.0.1', 8888)
+    plugin.run('config', 'config')

@@ -19,4 +19,4 @@ if __name__ == "__main__":
         raise "No class " + class_name + " in module " + module_name
     plugin = nanome.Plugin(class_name, "Plugin is being run using the tester plugin.", "Test", True)
     plugin.set_plugin_class(plugin_class)
-    plugin.run('127.0.0.1', 8888)
+    plugin.run()
