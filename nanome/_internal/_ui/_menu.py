@@ -9,10 +9,10 @@ class _Menu(object):
 
     def __init__(self, title = "title"):
         #Protocol
-        self.enabled = True
+        self._enabled = True
         self._id = 0
-        self.title = title
-        self.locked = False
+        self._title = title
+        self._locked = False
         self._width = 0.7
         self._height = 0.6
         #self.all_layout_nodes[]
@@ -46,9 +46,9 @@ class _Menu(object):
         return all_nodes
 
     def _copy_data(self, other):
-        self.enabled = other.enabled
-        self.title = other.title
-        self.locked = other.locked
-        self._width = other.width
-        self._height = other.height
+        self._enabled = other._enabled
+        self._title = other._title
+        self._locked = other._locked
+        self._width = other._width
+        self._height = other._height
 

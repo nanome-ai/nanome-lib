@@ -5,7 +5,7 @@ def _menu_toggled(network, arg, request_id):
     enabled = arg
     active_menu = network._plugin.menu
     if active_menu != None:
-        active_menu.enabled = enabled
+        active_menu._enabled = enabled
         if enabled == True:
             active_menu._on_opened_callback()
         elif enabled == False:
