@@ -12,8 +12,10 @@ default_json = json.loads(default_json_string)
 
 def _setup_file():
     s = "/"
-
+    
     home = os.getenv('APPDATA')
+    if (home == None):
+        home = os.getenv('HOME')
     directory = home + s + ".nanome_lib"
     config = directory + s + "config.txt"
 
