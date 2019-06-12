@@ -24,7 +24,7 @@ def _setup_file():
             return False
     if (not os.path.isfile(config)):
         try:
-            Logs.message("Creating config file: " + config_path)
+            Logs.message("Creating config file with path " + config_path)
             _setup_clean_config(config)
         except:
             return False
