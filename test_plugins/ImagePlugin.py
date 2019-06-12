@@ -2,6 +2,17 @@ import nanome
 import os
 import sys
 
+# Config
+
+NAME = "Image Plugin"
+DESCRIPTION = "Image Plugin."
+CATEGORY = "Test"
+HAS_ADVANCED_OPTIONS = False
+NTS_ADDRESS = '127.0.0.1'
+NTS_PORT = 8888
+
+# Plugin
+
 class ImagePlugin(nanome.PluginInstance):
     def __init__(self):
         pass
@@ -91,10 +102,4 @@ class ImagePlugin(nanome.PluginInstance):
         self.image.register_held_callback(image_held)
 
 
-
-
-if __name__ == "__main__":
-    # Create the plugin, register Docking as the class to instantiate, and start listening
-    plugin = nanome.Plugin("Image Plugin", "Image Plugin.", "Test", False)
-    plugin.set_plugin_class(ImagePlugin)
-    plugin.run('127.0.0.1', 8888)
+nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, ImagePlugin, NTS_ADDRESS, NTS_PORT)

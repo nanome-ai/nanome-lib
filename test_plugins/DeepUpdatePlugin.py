@@ -1,6 +1,18 @@
 import nanome
 import sys
 import time
+
+# Config
+
+NAME = "Deep Update Plugin"
+DESCRIPTION = "A simple plugin demonstrating how plugin system can be used to extend Nanome capabilities"
+CATEGORY = "Test"
+HAS_ADVANCED_OPTIONS = False
+NTS_ADDRESS = '127.0.0.1'
+NTS_PORT = 8888
+
+# Plugin
+
 class DeepUpdatePlugin(nanome.PluginInstance):
     def start(self):
         print("Start UpdateWorkspace Plugin")
@@ -96,7 +108,4 @@ class DeepUpdatePlugin(nanome.PluginInstance):
     def __init__(self):
         pass
 
-if __name__ == "__main__":
-    plugin = nanome.Plugin("Deep Update Plugin", "A simple plugin demonstrating how plugin system can be used to extend Nanome capabilities", "Test", False)
-    plugin.set_plugin_class(DeepUpdatePlugin)
-    plugin.run('127.0.0.1', 8888)
+nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, DeepUpdatePlugin, NTS_ADDRESS, NTS_PORT)
