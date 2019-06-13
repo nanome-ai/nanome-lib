@@ -31,7 +31,10 @@ class _ProcessNetwork(object):
         packet.write(to_send)
         # if code != 0: # Messages.connect
         #     packet.compress()
-        self._process_conn.send(packet)
+        try:
+            self._process_conn.send(packet)
+        except (BrokenPipeError, IOError):
+            pass
         self._command_id = (command_id + 1) % 4294967295 # Cap by uint max
         return command_id
 
