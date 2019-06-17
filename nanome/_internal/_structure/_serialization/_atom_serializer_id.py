@@ -15,6 +15,7 @@ class _AtomSerializerID(_TypeSerializer):
 
     def serialize(self, version, value, context):
         context.write_long(value._serial)
+        print(value._serial)
         payload = context.payload["Atom"]
         payload[value._serial] = value
 
