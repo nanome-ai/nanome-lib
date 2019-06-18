@@ -19,7 +19,7 @@ from nanome.util import Logs
 
 test_assets = os.getcwd() + ("/testing/test_assets")
 test_output_dir = os.getcwd() + ("/testing/test_outputs")
-options = TestOptions(ignore_vars=["_serial", "_remarks", "_associated"])
+options = TestOptions(ignore_vars=["_unique_identifier", "_remarks", "_associated"])
 
 def run(counter):
     run_test(test_structures, counter)
