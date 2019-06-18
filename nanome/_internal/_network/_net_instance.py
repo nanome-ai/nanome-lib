@@ -68,6 +68,8 @@ class _NetInstance(object):
         except ssl.SSLEOFError:
             Logs.error("Connection closed by plugin server")
             return False
+        except KeyboardInterrupt:
+            return False
         except:
             Logs.error(traceback.format_exc())
             return False

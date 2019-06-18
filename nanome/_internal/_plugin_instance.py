@@ -32,6 +32,8 @@ class _PluginInstance(object):
 
         except KeyboardInterrupt:
             return
+        except (BrokenPipeError, IOError):
+            return
         except:
             Logs.error(traceback.format_exc())
             self._network._close()
