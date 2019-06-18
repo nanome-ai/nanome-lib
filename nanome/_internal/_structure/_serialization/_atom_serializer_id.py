@@ -14,12 +14,12 @@ class _AtomSerializerID(_TypeSerializer):
         return "AtomIndex"
 
     def serialize(self, version, value, context):
-        context.write_long(value._serial)
+        context.write_long(value._unique_identifier)
         payload = context.payload["Atom"]
-        payload[value._serial] = value
+        payload[value._unique_identifier] = value
 
     def deserialize(self, version, context):
-        serial = context.read_long()
+        uid = context.read_long()
         payload = context.payload["Atom"]
-        atom = payload[serial]
+        atom = payload[uid]
         return atom
