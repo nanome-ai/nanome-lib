@@ -8,9 +8,11 @@ class Molecule(_Molecule, Base):
         self._molecular = Molecule.Molecular(self)
         
     def add_chain(self, chain):
+        chain.index = -1
         self._chains.append(chain)
 
     def remove_chain(self, chain):
+        chain.index = -1
         self._chains.remove(chain)
 
     #Generators:
