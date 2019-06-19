@@ -26,7 +26,7 @@ def _setup_file():
             return False
     if (not os.path.isfile(config)):
         try:
-            Logs.message("Creating config file with path " + config_path)
+            Logs.message("Creating config file with path " + config)
             _setup_clean_config(config)
         except:
             return False
@@ -34,7 +34,7 @@ def _setup_file():
 
 def _setup_clean_config(config_path):
     with open(config_path, "w") as file:
-        file.dump(default_json, file)
+        json.dump(default_json, file)
 
 def fetch(key):
     if (config_path):
