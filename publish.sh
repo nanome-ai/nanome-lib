@@ -2,7 +2,7 @@ if [ $# -eq 0 ]
 then
 	echo "No version bump. To bump version, pass major/minor/patch "
 else
-	bumpversion $1
+	bump2version $1
 fi
 
 rm -rf build

@@ -39,6 +39,6 @@ class _Atom(_Base):
         self._het_atomed = True
         self._het_surfaced = True
         #internal
-        self._serial = _Atom._atom_count
+        self._unique_identifier = _Atom._atom_count
         self._bonds = []
         _Atom._atom_count += 1

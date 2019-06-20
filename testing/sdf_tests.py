@@ -10,7 +10,7 @@ from nanome.util import Logs
 
 test_assets = os.getcwd() + ("/testing/test_assets")
 test_output_dir = os.getcwd() + ("/testing/test_outputs")
-options = TestOptions(ignore_vars=["_serial", "_remarks", "_associated"])
+options = TestOptions(ignore_vars=["_unique_identifier", "_remarks", "_associated"])
 
 
 def run(counter):
@@ -99,5 +99,5 @@ def compare_atom_positions(complex1, complex2):
         difference = atom1.position.x - atom2.position.x
         assert(difference <.001)
         assert(difference > -.001)
-        options2 = TestOptions(ignore_vars=["_serial", "_remarks", "_associated", "_position"])
+        options2 = TestOptions(ignore_vars=["_unique_identifier", "_remarks", "_associated", "_position"])
         assert_equal(atom1, atom2, options2)
