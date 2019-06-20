@@ -33,8 +33,7 @@ class _AtomSerializer(_TypeSerializer):
         context.write_bool(value._het_atomed)
         context.write_bool(value._het_surfaced)
         context.write_using_serializer(self.string, value._symbol)
-        if (version == 0):
-            context.write_int(0)
+        context.write_int(value._serial)
         context.write_using_serializer(self.string, value._name)
         context.write_using_serializer(self.vector, value._position)
         context.write_bool(value._is_het)
@@ -68,8 +67,7 @@ class _AtomSerializer(_TypeSerializer):
         atom._het_surfaced = context.read_bool()
 
         atom._symbol = context.read_using_serializer(self.string)
-        if (version == 0):
-            context.read_int()
+        atom._serial = context.read_int()
         atom._name = context.read_using_serializer(self.string)
         atom._position = context.read_using_serializer(self.vector)
         atom._is_het = context.read_bool()
