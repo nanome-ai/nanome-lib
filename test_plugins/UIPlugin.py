@@ -188,4 +188,4 @@ class UIPlugin(nanome.PluginInstance):
     def __init__(self):
         pass
 
-nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, UIPlugin, NTS_ADDRESS, NTS_PORT)
+nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, UIPlugin)

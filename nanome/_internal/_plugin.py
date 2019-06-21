@@ -3,6 +3,7 @@ from nanome._internal import _network as Network
 from nanome._internal._network._serialization._serializer import Serializer
 from nanome._internal._util._serializers import _TypeSerializer
 from nanome.util.logs import Logs
+from nanome.util import config
 
 from multiprocessing import Process, Pipe, current_process
 import sys
