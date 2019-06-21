@@ -71,7 +71,9 @@ class UIPlugin(nanome.PluginInstance):
             self.update_content(self.loadingBar)
 
         def prefab_button_pressed_callback(button):
+            button.selected = not button.selected
             Logs.debug("Prefab button pressed: " + button.text.value_idle + " " + str(button._content_id))
+            self.update_content(button)
         
         content = nanome.ui.LayoutNode()
         ln_contentBase = nanome.ui.LayoutNode()

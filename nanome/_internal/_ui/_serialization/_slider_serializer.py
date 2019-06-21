@@ -9,7 +9,7 @@ class _SliderSerializer(_TypeSerializer):
         pass
 
     def version(self):
-        return 0
+        return 1
 
     def name(self):
         return "Slider"

@@ -2,7 +2,7 @@ from nanome._internal._util._serializers import _TypeSerializer
 
 class _SliderCallback(_TypeSerializer):
     def version(self):
-        return 0
+        return 1
 
     def name(self):
         return "SliderCallback"
