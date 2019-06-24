@@ -1,5 +1,7 @@
 import struct
 
+expand_size = 1048576  # 1 MB
+expand_buffer = bytearray(expand_size)
 
 class _Data(object):
     bool_pack = struct.Struct('<?').pack_into
@@ -28,20 +30,18 @@ class _Data(object):
 
     def expand_data(self, size):
         self._buffered_bytes += size
-        if (self._buffered_computed + self._buffered_bytes > self._end):
-            self._expand_data(size)
+        while (self._buffered_computed + self._buffered_bytes > self._end):
+            self._expand_data()
 
-    def _expand_data(self, size):
-        expand_size = 1048576 + size
-        expand = bytearray(expand_size)
-        self._received_bytes.extend(expand)
+    def _expand_data(self):
+        self._received_bytes.extend(expand_buffer)
         self._end += expand_size
 
     def has_enough(self, size):
         return self._buffered_bytes >= size
 
     def to_array(self):
-        return self._received_bytes[self._buffered_computed:self._buffered_computed+self._buffered_bytes]
+        return memoryview(self._received_bytes)[self._buffered_computed:self._buffered_computed+self._buffered_bytes]
         
 #region write Data
     def write_bool(self, value):
