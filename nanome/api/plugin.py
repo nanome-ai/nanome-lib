@@ -1,5 +1,6 @@
 from . import _DefaultPlugin
 from nanome._internal import _network as Network, _Plugin, _PluginInstance
+from nanome._internal._process import _ProcessManager
 from nanome._internal._network._serialization._serializer import Serializer
 from nanome.util.logs import Logs
 from nanome.util import config
@@ -28,6 +29,10 @@ class Plugin(_Plugin):
             plugin = cls(name, description, category, has_advanced)
             plugin.set_plugin_class(plugin_class)
             plugin.run(host, port, key_file)
+
+    @staticmethod
+    def set_maximum_processes_count(max_process_nb):
+        _ProcessManager._max_process_count = max_process_nb
 
     def run(self, host = "config", port = "config", key_file = "config"):
         """

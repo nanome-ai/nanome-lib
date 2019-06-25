@@ -1,6 +1,6 @@
 from nanome.util import Logs
 from . import _Packet
-from multiprocessing import Pipe
+
 
 # Plugin networking class, used from the instance processes
 class _ProcessNetwork(object):
@@ -10,7 +10,7 @@ class _ProcessNetwork(object):
 
     def on_advanced_settings(self):
         self._plugin.on_advanced_settings()
-        
+
     def on_complex_added(self):
         self._plugin.on_complex_added()
 
@@ -41,7 +41,7 @@ class _ProcessNetwork(object):
             has_data = self._process_conn.poll()
             if has_data:
                 payload = self._process_conn.recv()
-        except:
+        except BrokenPipeError:
             Logs.debug("Pipe has been closed, exiting process")
             return False
 
