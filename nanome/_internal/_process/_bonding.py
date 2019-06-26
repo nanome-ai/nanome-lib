@@ -1,4 +1,4 @@
-from nanome.util import Process
+from nanome.util import Process, Logs
 from nanome._internal._structure import _Complex, _Bond
 from nanome._internal._structure._io import _pdb, _sdf
 
@@ -25,7 +25,9 @@ class _Bonding():
 
         self.__proc = Process()
         self.__proc.executable_path = 'obabel'
-        self.__proc.args = ['BONDING', '-i', '"' + self.__input.name + '"', '"' + self.__output.name + '"']
+        self.__proc.args = ['-ipdb', self.__input.name, '-osdf', '-O' + self.__output.name]
+        self.__proc.output_text = True
+        self.__proc.on_error = self.__on_error
         self.__proc.on_done = self.__bonding_done
         if self.__fast_mode:
             self.__proc.args.append('-f')
@@ -51,11 +53,18 @@ class _Bonding():
 
         self.__proc.start()
 
-    def __bonding_done(self):
+    def __on_error(self, msg):
+        Logs.warning("[Bond Generation]", msg)
+
+    def __bonding_done(self, result_code):
+        if result_code == -1:
+            Logs.error("Couldn't execute openbabel to generate bonds")
+            self.__callback(self.__complexes)
+            return
         with open(self.__output.name) as f:
             lines = f.readlines()
         content = _sdf.parse_lines(lines)
-        result = parser.structure(content)
+        result = _sdf.structure(content)
         self.__match_and_bond(result)
         self.__next()
 

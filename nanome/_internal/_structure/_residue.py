@@ -14,7 +14,7 @@ class _Residue(_Base):
         super(_Residue, self).__init__()
         #molecular
         self._type = "ARG" #RESIDUEDATA
-        self._serial = 0
+        self._serial = 1
         self._name = "res"
         self._secondary_structure = _Residue.SecondaryStructure.Unknown
         #rendering
