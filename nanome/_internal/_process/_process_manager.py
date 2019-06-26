@@ -29,21 +29,24 @@ class _ProcessManager():
         self.__running = []
 
     def _update(self):
-        for i in range(len(self.__running) - 1, -1, -1):
-            proc = self.__running[i]
-            if self.__update_process(proc) == False:
-                del self.__running[i]
+        try:
+            for i in range(len(self.__running) - 1, -1, -1):
+                proc = self.__running[i]
+                if self.__update_process(proc) == False:
+                    del self.__running[i]
 
-        spawn_count = min(_ProcessManager._max_process_count - len(self.__running), len(self.__pending))
-        if spawn_count > 0:
-            while spawn_count > 0:
-                self.__start_process()
-                spawn_count -= 1
+            spawn_count = min(_ProcessManager._max_process_count - len(self.__running), len(self.__pending))
+            if spawn_count > 0:
+                while spawn_count > 0:
+                    self.__start_process()
+                    spawn_count -= 1
 
-            count_before_exec = 1
-            for entry in self.__pending:
-                entry.send(_ProcessManager.process_data_type_position_changed, [count_before_exec])
-                count_before_exec += 1
+                count_before_exec = 1
+                for entry in self.__pending:
+                    entry.send(_ProcessManager.process_data_type_position_changed, [count_before_exec])
+                    count_before_exec += 1
+        except:
+            Logs.error("Exception in process manager update:\n", traceback.format_exc())
 
     def __start_process(self):
         entry = self.__pending.popleft()
@@ -82,13 +85,17 @@ class _ProcessManager():
 
     def __update_process(self, entry):
         # Process stdout and stderr
-        output = ""
+        if entry.output_text:
+            output = ""
+            error = ""
+        else:
+            output = b""
+            error = b""
         try:
             while True:
                 output += entry.stdout_queue.get_nowait()
         except Empty:
             pass
-        error = ""
         try:
             while True:
                 error += entry.stderr_queue.get_nowait()
