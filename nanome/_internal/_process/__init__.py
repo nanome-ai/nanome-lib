@@ -3,3 +3,4 @@ from . import *
 from ._process_entry import _ProcessEntry
 from ._process_manager import _ProcessManager
 from ._process_manager_instance import _ProcessManagerInstance
+from ._bonding import _Bonding
