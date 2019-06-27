@@ -18,12 +18,12 @@ def parse_json(node_json):
                     float(node_json["padding_w"]))
     child_list = node_json["children"]
     for child_obj in child_list:
-        node.add_child(parse_json(child_obj))
+        node._add_child(parse_json(child_obj))
 
     content_json = node_json["content"]
     if (content_json != None):
         content_obj = _ui_base_json.parse_json(content_json)
-        node.set_content(content_obj)
+        node._set_content(content_obj)
     return node
 
 def write_json(node):
@@ -43,8 +43,8 @@ def write_json(node):
     node_json["padding_w"] = node._padding[3]
     #convert all children
     node_json["children"] = []
-    for child in node.get_children():
+    for child in node._get_children():
         node_json["children"].append(write_json(child))
     #convert all contents
-    node_json["content"] = _ui_base_json.write_json(node.get_content())
+    node_json["content"] = _ui_base_json.write_json(node._get_content())
     return node_json
