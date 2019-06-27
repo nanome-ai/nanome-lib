@@ -122,5 +122,4 @@ class _ProcessManager():
     def _received_request(self, request, session):
         entry = _ProcessEntry(request, session)
         self.__pending.append(entry)
-        Logs.debug("Received request")
         session.send_process_data([_ProcessManager.process_data_type_queued, request])

@@ -54,11 +54,12 @@ class _Bonding():
         self.__proc.start()
 
     def __on_error(self, msg):
-        Logs.warning("[Bond Generation]", msg)
+        if not "molecule converted" in msg:
+            Logs.warning("[Bond Generation]", msg)
 
     def __bonding_done(self, result_code):
         if result_code == -1:
-            Logs.error("Couldn't execute openbabel to generate bonds")
+            Logs.error("Couldn't execute openbabel to generate bonds. Is it installed?")
             self.__callback(self.__complexes)
             return
         with open(self.__output.name) as f:
