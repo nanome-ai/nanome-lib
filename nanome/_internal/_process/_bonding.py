@@ -7,14 +7,17 @@ import os
 
 
 class _Bonding():
-    def __init__(self, complex_list, callback):
+    def __init__(self, complex_list, callback, fast_mode=None):
         self.__complexes = complex_list
         self.__callback = callback
 
         atom_count = 0
-        for complex in complex_list:
-            atom_count += sum(1 for _ in complex.atoms)
-        self.__fast_mode = atom_count > 20000
+        if fast_mode == None:
+            for complex in complex_list:
+                atom_count += sum(1 for _ in complex.atoms)
+            self.__fast_mode = atom_count > 20000
+        else:
+            self.__fast_mode = fast_mode
 
     def _start(self):
         self.__complex_idx = 0
