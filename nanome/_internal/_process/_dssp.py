@@ -4,12 +4,14 @@ from nanome._internal._structure._io import _pdb
 
 import tempfile
 import os
+import stat
 import sys
 import traceback
 
-if sys.platform == "linux" or sys.platform == "linux2":
+if sys.platform.startswith("linux"):
     DSSP_PATH = os.path.join(os.path.dirname(__file__), '_external', '_dssp', 'dssp-linux')
-elif sys.platform == "win32":
+    os.chmod(DSSP_PATH, stat.S_IXGRP | stat.S_IEXEC)
+elif sys.platform.startswith("win"):
     DSSP_PATH = os.path.join(os.path.dirname(__file__), '_external', '_dssp', 'dssp-3.0.0-win32.exe')
 else:
     DSSP_PATH = None
