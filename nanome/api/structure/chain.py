@@ -8,9 +8,11 @@ class Chain(_Chain, Base):
         self._molecular = Chain.Molecular(self)
 
     def add_residue(self, residue):
+        residue.index = -1
         self._residues.append(residue)
 
     def remove_residue(self, residue):
+        residue.index = -1
         self._residues.remove(residue)
 
     #Generators:
