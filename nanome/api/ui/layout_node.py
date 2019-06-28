@@ -148,7 +148,7 @@ class LayoutNode(_LayoutNode):
     def parent(self, value):
         self._parent = value
     #endregion
-
+    #region API functions
     def find_node(self, name, recursively = True):
         # type: (str, bool) -> LayoutNode
         """
@@ -170,15 +170,36 @@ class LayoutNode(_LayoutNode):
                 break
         return res
         
-    #endregion
-    #region API Shortcuts
-
     def find_ancestor(self, name):
         if (self._parent != None):
             if (self._parent.name == name):
                 return self._parent
             return self._parent.find_ancestor(name)
         return None
+
+    def get_children(self):
+        return self._get_children()
+
+    def get_content(self):
+        return self._get_content()
+
+    def set_content(self, ui_content):
+        self._set_content(ui_content)
+
+    def remove_content(self):
+        self._remove_content()
+
+    def add_child(self, child_node):
+        self._add_child(child_node)
+
+    def remove_child(self, child_node):
+        self._remove_child(child_node)
+
+    def clear_children(self):
+        self._clear_children()
+
+    #endregion
+    #region API Shortcuts
 
     def create_child_node(self, name = ""):
         child = LayoutNode(name)
