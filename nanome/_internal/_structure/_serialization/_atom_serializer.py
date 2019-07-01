@@ -1,6 +1,9 @@
 from nanome._internal._util._serializers import _StringSerializer, _ColorSerializer, _Vector3Serializer
 from .. import _Atom
 from nanome._internal._util._serializers import _TypeSerializer
+from nanome.util import Logs
+
+cast_failed_warning = False
 
 class _AtomSerializer(_TypeSerializer):
     def __init__(self):
@@ -51,7 +54,14 @@ class _AtomSerializer(_TypeSerializer):
             atom._index = index
         atom._selected = context.read_bool()
         atom_mode = context.read_int()
-        atom._atom_mode = _Atom.AtomRenderingMode(atom_mode)
+        try:
+            atom._atom_mode = _Atom.AtomRenderingMode(atom_mode)
+        except ValueError:
+            global cast_failed_warning
+            if cast_failed_warning == False:
+                cast_failed_warning = True
+                Logs.warning("Received an unknown atom rendering mode. Library might outdated")
+            atom._atom_mode = _Atom.AtomRenderingMode.BallStick
         atom._labeled = context.read_bool()
         if (version > 0):
             atom._label_text = context.read_using_serializer(self.string)

@@ -2,6 +2,9 @@ from . import _AtomSerializerID
 from .. import _Bond
 
 from nanome._internal._util._serializers import _TypeSerializer
+from nanome.util import Logs
+
+cast_failed_warning = False
 
 class _BondSerializer(_TypeSerializer):
     def __init__(self, shallow = False):
@@ -28,7 +31,14 @@ class _BondSerializer(_TypeSerializer):
         bond._index = context.read_long()
 
         kind = context.read_int()
-        bond._kind = _Bond.Kind(kind)
+        try:
+            bond._kind = _Bond.Kind(kind)
+        except ValueError:
+            global cast_failed_warning
+            if cast_failed_warning == False:
+                cast_failed_warning = True
+                Logs.warning("Received an unknown bond type. Library might outdated")
+            bond._kind = _Bond.Kind(kind)
         bond._atom1 = context.read_using_serializer(self.atom_serializer)
         bond._atom2 = context.read_using_serializer(self.atom_serializer)
         return bond
