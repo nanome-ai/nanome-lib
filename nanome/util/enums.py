@@ -6,6 +6,8 @@ class AtomRenderingMode(IntEnum):
     Wire = 2
     VanDerWaals = 3
     Point = 4
+    BFactor = 5
+    Adaptive = 6
 
 class Kind(IntEnum):
     CovalentSingle = 1
