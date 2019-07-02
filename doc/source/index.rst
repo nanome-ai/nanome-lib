@@ -85,6 +85,7 @@ Required dependencies:
  - Ghostscript
  - ImageMagick
  - Nanome Library
+ - Libre Office
  - Nanome-Loaders Plugin
 
 *Instructions*
@@ -100,32 +101,34 @@ Required dependencies:
  - https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs927/gs927w64.exe
 6. Install ImageMagick
  - https://imagemagick.org/download/binaries/ImageMagick-7.0.8-50-Q16-x64-dll.exe
-7. Install the latest Nanome Lib through Pip
+7. Install Libre Office
+ - https://www.libreoffice.org/donate/dl/win-x86_64/6.2.4/en-US/LibreOffice_6.2.4_Win_x64.msi
+8. Install the latest Nanome Lib through Pip
  - enter ``pip install nanome``
-8. Install the Nanome Loaders Plugin
+9. Install the Nanome Loaders Plugin
  - Enter ``pip install nanome-loaders``
-9. Run the Nanome Loaders’ WebLoader plugin 
+10. Run the Nanome Loaders’ WebLoader plugin 
  - Enter ``nanome-web-loader -a localhost``
  - The ``-a`` denotes the address of the Plugin Server IP
 
 .. image:: ../docsAssets/running_plugin.png
    
-10. You now can open up your browser and go to http://localhost to see the Web Interface
+11. You now can open up your browser and go to http://localhost to see the Web Interface
 
 .. image:: ../docsAssets/webloader_browserprompt.png
 
-11. Drag and drop a sample PDF into the Web Interface. I have provided one for download here: https://drive.google.com/drive/folders/1JU4jVMH6X_uMjN03mIZCpm9rH62UCDVC?usp=sharing
+12. Drag and drop a sample PDF into the Web Interface. I have provided one for download here: https://drive.google.com/drive/folders/1JU4jVMH6X_uMjN03mIZCpm9rH62UCDVC?usp=sharing
 
 .. image:: ../docsAssets/webloader_uploaded.png
 
-12. Go ahead and launch Nanome and create a room in 2D mode. Navigate to the Plugins Menu through the button on the Entry Menu to see your plugin populated.
+13. Go ahead and launch Nanome and create a room in 2D mode. Navigate to the Plugins Menu through the button on the Entry Menu to see your plugin populated.
 
 *You can move windows around in 2D mode by right-clicking and dragging the window.
 ** Hit the escape key to see the controls and make changes to the application
 
 .. image:: ../docsAssets/2Dmode_plugins.png
 
-13. Activate the plugin, select your uploaded file and click Load. This will open a new window with your PDF and is resizable.
+14. Activate the plugin, select your uploaded file and click Load. This will open a new window with your PDF and is resizable.
 
 Additional Basic Examples
 -------------------------
