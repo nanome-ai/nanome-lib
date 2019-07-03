@@ -103,32 +103,50 @@ Required dependencies:
  - https://imagemagick.org/download/binaries/ImageMagick-7.0.8-50-Q16-x64-dll.exe
 7. Install Libre Office
  - https://www.libreoffice.org/donate/dl/win-x86_64/6.2.4/en-US/LibreOffice_6.2.4_Win_x64.msi
-8. Install the latest Nanome Lib through Pip
+8. Add Libre Office to the PATH environmental variable
+ - Search ‘env’ from the Windows Search Bar and click on the ‘Edit System Environment Variables’ in the control panel.
+
+ .. image:: ../docsAssets/search_env.png
+
+ - Click on the ‘Environment Variables’ button
+
+  .. image:: ../docsAssets/find_env.png
+
+ - Click the Edit button for the PATH variable
+
+  .. image:: ../docsAssets/edit_path.png
+
+ - Click the Browse button and select LibraOffice/program in the Program Files
+
+  .. image:: ../docsAssets/browse_path.png
+
+
+9. Install the latest Nanome Lib through Pip
  - enter ``pip install nanome``
-9. Install the Nanome Loaders Plugin
+10. Install the Nanome Loaders Plugin
  - Enter ``pip install nanome-loaders``
-10. Run the Nanome Loaders’ WebLoader plugin 
+11. Run the Nanome Loaders’ WebLoader plugin 
  - Enter ``nanome-web-loader -a localhost``
  - The ``-a`` denotes the address of the Plugin Server IP
 
 .. image:: ../docsAssets/running_plugin.png
    
-11. You now can open up your browser and go to http://localhost to see the Web Interface
+12. You now can open up your browser and go to http://localhost to see the Web Interface
 
 .. image:: ../docsAssets/webloader_browserprompt.png
 
-12. Drag and drop a sample PDF into the Web Interface. I have provided one for download here: https://drive.google.com/drive/folders/1JU4jVMH6X_uMjN03mIZCpm9rH62UCDVC?usp=sharing
+13. Drag and drop a sample PDF into the Web Interface. I have provided one for download here: https://drive.google.com/drive/folders/1JU4jVMH6X_uMjN03mIZCpm9rH62UCDVC?usp=sharing
 
 .. image:: ../docsAssets/webloader_uploaded.png
 
-13. Go ahead and launch Nanome and create a room in 2D mode. Navigate to the Plugins Menu through the button on the Entry Menu to see your plugin populated.
+14. Go ahead and launch Nanome and create a room in 2D mode. Navigate to the Plugins Menu through the button on the Entry Menu to see your plugin populated.
 
 *You can move windows around in 2D mode by right-clicking and dragging the window.
 ** Hit the escape key to see the controls and make changes to the application
 
 .. image:: ../docsAssets/2Dmode_plugins.png
 
-14. Activate the plugin, select your uploaded file and click Load. This will open a new window with your PDF and is resizable.
+15. Activate the plugin, select your uploaded file and click Load. This will open a new window with your PDF and is resizable.
 
 Additional Basic Examples
 -------------------------
