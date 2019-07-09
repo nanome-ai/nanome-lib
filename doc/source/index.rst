@@ -52,11 +52,12 @@ Using Plugins
 First, you want to locate the Config file (nanome-config.ini) of the Nanome Application in the builds folder.
 If you downloaded Nanome through the Oculus store, it will be available here:
 
-C:\Program Files\Oculus\Software\Software\nanome-nanome\Build
+C:\\Program Files\\Oculus\\Software\\Software\\nanome-nanome\\Build
 
 Open the nanome-config.ini file in a text editor and scroll down to the section named ‘ Nanome plugin server config’ and change to the following:
 
 Plugin-server-addr = 127.0.0.1
+
 Plugin-server-port = 8888
 
 *Launch a local Plugin Server*
@@ -91,10 +92,10 @@ Required dependencies:
 *Instructions*
 
 1. First, you need to install Python 
- - https://www.python.org/ftp/python/3.7.3/python-3.7.3.exe 
  - Don’t forget to click the checkbox to add Python3 to PATH
+ - https://www.python.org/ftp/python/3.7.3/python-3.7.3.exe 
 2. Open a command prompt
-3. Type ``python`` to verify the version is Python 3.0+, then exit()
+3. Type ``python`` to verify the version is Python 3.0+, then ``exit()``
 4. Upgrade your Pip library
  - ``python -m pip install --upgrade pip``
 5. Install GhostScript
@@ -106,13 +107,15 @@ Required dependencies:
 8. Add Libre Office to the PATH environmental variable
  - Search ‘env’ from the Windows Search Bar and click on the ‘Edit System Environment Variables’ in the control panel.
 
+
  .. image:: ../docsAssets/search_env.png
+
 
  - Click on the ‘Environment Variables’ button
 
   .. image:: ../docsAssets/find_env.png
 
- - Click the Edit button for the PATH variable
+ - Select the PATH variable and click the Edit button
 
   .. image:: ../docsAssets/edit_path.png
 
