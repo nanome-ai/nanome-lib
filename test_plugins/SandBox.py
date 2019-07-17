@@ -20,8 +20,27 @@ class SandBox(nanome.PluginInstance):
 
 
     def on_run(self):
-        self.request_workspace(self.x)
+        self.request_workspace(self.combine_frames)
         # self.request_complex_list(self.on_complex_list_received)
+
+    def combine_frames(self, workspace):
+        frames = []
+        for complex in workspace.complexes:
+            for molecule in complex.molecules:
+                molecule.index = -1
+                frames.append(molecule)
+            for chain in complex.chains:
+                chain.index = -1
+            for residue in complex.residues:
+                residue.index = -1
+            for atom in complex.atoms:
+                atom.index = -1
+            for bond in complex.bonds:
+                bond.index = -1
+
+        workspace.complexes[0]._molecules = frames
+        workspace.complexes = [workspace.complexes[0]]
+        self.update_workspace(workspace)
 
     def x(self, workspace):
         super_complex = None
