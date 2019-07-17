@@ -68,6 +68,13 @@ class Atom(_Atom, Base):
     @atom_color.setter
     def atom_color(self, value):
         self._atom_color = value
+
+    @property
+    def atom_scale(self):
+        return self._atom_scale
+    @atom_scale.setter
+    def atom_scale(self, value):
+        self._atom_scale = value
     
     @property
     def surface_rendering(self):
