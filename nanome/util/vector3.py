@@ -24,6 +24,9 @@ class Vector3(object):
     def __add__(self, other):
         return Vector3(self._positions[0] + other.x, self._positions[1] + other.y, self._positions[2] + other.z)
 
+    def __sub__(self, other):
+        return Vector3(self._positions[0] - other.x, self._positions[1] - other.y, self._positions[2] - other.z)
+
     def unpack(self):
         return self._positions[0], self._positions[1], self._positions[2]
 

@@ -5,7 +5,7 @@ class _TextInputCallback(_TypeSerializer):
         self.__tuple = _TupleSerializer(_IntSerializer(), _StringSerializer())
 
     def version(self):
-        return 0
+        return 1
 
     def name(self):
         return "TextInputCallback"

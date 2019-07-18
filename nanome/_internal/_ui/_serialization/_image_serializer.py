@@ -11,7 +11,7 @@ class _ImageSerializer(_TypeSerializer):
         self.string = _StringSerializer()
 
     def version(self):
-        return 0
+        return 1
 
     def name(self):
         return "Image"

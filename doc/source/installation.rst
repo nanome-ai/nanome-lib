@@ -20,8 +20,8 @@ Server
 A Nanome Transport Server (NTS) is required to run your plugins and connect them to Nanome.
 A public server will be available in the near future. If you need a NTS, please contact us.
 
-Start the plugin
-^^^^^^^^^^^^^^^^
+Running Your First Plugin
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Starting a plugin is fairly easy. If you copy-pasted the example plugin on the home page, in a file named "RemoveHydrogens.py", you can start your plugin like this:
 

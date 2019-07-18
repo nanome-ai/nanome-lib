@@ -14,15 +14,19 @@ class Residue(_Residue, Base):
         self._molecular = Residue.Molecular(self)
 
     def add_atom(self, atom):
+        atom.index = -1
         self._atoms.append(atom)
 
     def remove_atom(self, atom):
+        atom.index = -1
         self._atoms.remove(atom)
     
     def add_bond(self, bond):
+        bond.index = -1
         self._bonds.append(bond)
 
     def remove_bond(self, bond):
+        bond.index = -1
         self._bonds.remove(bond)
 
     @property

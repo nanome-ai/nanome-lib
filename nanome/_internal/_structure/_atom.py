@@ -31,6 +31,7 @@ class _Atom(_Base):
         self._label_text = ""
         self._atom_rendering = True
         self._atom_color = Color.Clear()
+        self._atom_scale = 0.5
         self._surface_rendering = False
         self._surface_color = Color.Clear()
         self._surface_opacity = 1.0

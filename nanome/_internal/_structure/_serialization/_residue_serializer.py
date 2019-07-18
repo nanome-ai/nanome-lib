@@ -2,8 +2,11 @@ from nanome._internal._util._serializers import _ArraySerializer, _StringSeriali
 from . import _AtomSerializerID
 from . import _BondSerializer
 from .. import _Residue
+from nanome.util import Logs
 
 from nanome._internal._util._serializers import _TypeSerializer
+
+cast_failed_warning = False
 
 class _ResidueSerializer(_TypeSerializer):
     def __init__(self, shallow = False):
@@ -48,6 +51,8 @@ class _ResidueSerializer(_TypeSerializer):
         context.write_int(value._secondary_structure.value)
 
     def deserialize(self, version, context):
+        global cast_failed_warning
+
         residue = _Residue._create()
         residue._index = context.read_long()
 
@@ -59,7 +64,13 @@ class _ResidueSerializer(_TypeSerializer):
         residue._ribboned = context.read_bool()
         residue._ribbon_size = context.read_float()
         mode = context.read_int()
-        residue._ribbon_mode = _Residue.RibbonMode(mode)
+        try:
+            residue._ribbon_mode = _Residue.RibbonMode(mode)
+        except ValueError:
+            if cast_failed_warning == False:
+                cast_failed_warning = True
+                Logs.warning("Received an unknown ribbon display mode. Library might outdated")
+            residue._ribbon_mode = _Residue.RibbonMode(mode)
         residue._ribbon_color = context.read_using_serializer(self.color)
         if (version > 0):
             residue._labeled = context.read_bool()
@@ -69,5 +80,11 @@ class _ResidueSerializer(_TypeSerializer):
         residue._serial = context.read_int()
         residue._name = context.read_using_serializer(self.string)
         secondary = context.read_int()
-        residue._secondary_structure = _Residue.SecondaryStructure(secondary)
+        try:
+            residue._secondary_structure = _Residue.SecondaryStructure(secondary)
+        except ValueError:
+            if cast_failed_warning == False:
+                cast_failed_warning = True
+                Logs.warning("Received an unknown residue secondary structure type. Library might outdated")
+            residue._secondary_structure = _Residue.SecondaryStructure(secondary)
         return residue

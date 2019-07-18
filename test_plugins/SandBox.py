@@ -20,7 +20,30 @@ class SandBox(nanome.PluginInstance):
 
 
     def on_run(self):
-        self.request_complex_list(self.on_complex_list_received)
+        self.request_workspace(self.x)
+        # self.request_complex_list(self.on_complex_list_received)
+
+    def x(self, workspace):
+        super_complex = None
+        super_residue = None
+        for complex in workspace.complexes:
+            super_complex = complex
+            for residue in complex.residues:
+                super_residue = residue
+                break
+            break
+        for complex in workspace.complexes:
+            for residue in complex.residues:
+                for atom in residue.atoms:
+                    if not super_residue is residue:
+                        atom.position = atom.position + complex.position - super_complex.position
+                        super_residue.add_atom(atom)
+                for bond in residue.bonds:
+                    if not super_residue is residue:
+                        super_residue.add_bond(bond)
+
+        workspace.complexes = [super_complex]
+        self.update_workspace(workspace)
 
     def on_complex_list_received(self, complexes):
         Logs.debug("complex received: ", complexes)

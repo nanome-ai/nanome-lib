@@ -8,7 +8,7 @@ class _LayoutNodeSerializer(_TypeSerializer):
         pass
 
     def version(self):
-        return 0
+        return 1
 
     def name(self):
         return "LayoutNode"

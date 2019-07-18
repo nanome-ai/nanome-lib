@@ -11,7 +11,7 @@ class _UIListSerializer(_TypeSerializer):
         self._array.set_type(_LayoutNodeSerializerDeep())
 
     def version(self):
-        return 0
+        return 1
 
     def name(self):
         return "List"

@@ -13,7 +13,7 @@ class Stream(object):
     def __init__(self, network, id):
         self.__network = network
         self.__id = id
-        self.__interrupt_callback = None
+        self.__interrupt_callback = lambda _: None
         Stream._streams[id] = self
 
     def update(self, position_list, done_callback = None):
