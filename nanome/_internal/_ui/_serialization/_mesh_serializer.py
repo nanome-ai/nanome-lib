@@ -8,7 +8,7 @@ class _MeshSerializer(_TypeSerializer):
         self.color = _ColorSerializer()
 
     def version(self):
-        return 0
+        return 1
 
     def name(self):
         return "Mesh"
