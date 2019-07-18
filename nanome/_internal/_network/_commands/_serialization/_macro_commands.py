@@ -1,13 +1,15 @@
-from nanome._internal._util._serializers import _TypeSerializer, _ArraySerializer
-from nanome._internal._macro._serialization import _MacroSerializer, _StringSerializer
+from nanome._internal._util._serializers import _TypeSerializer, _ArraySerializer, _StringSerializer
+from nanome._internal._macro._serialization import _MacroSerializer
 
 macro_serializer = _MacroSerializer()
 string_serializer = _StringSerializer()
 class _SaveMacro(_TypeSerializer):
     _macro_serializer = macro_serializer
     _string_serializer = string_serializer
+    
     def __init__(self):
         pass
+
     def version(self):
         return 0
 
@@ -25,8 +27,10 @@ class _SaveMacro(_TypeSerializer):
 class _DeleteMacro(_TypeSerializer):
     _macro_serializer = macro_serializer
     _string_serializer = string_serializer
+
     def __init__(self):
         pass
+
     def version(self):
         return 0
 
@@ -44,8 +48,10 @@ class _DeleteMacro(_TypeSerializer):
 class _RunMacro(_TypeSerializer):
     _macro_serializer = macro_serializer
     _string_serializer = string_serializer
+
     def __init__(self):
         pass
+
     def version(self):
         return 0
 
@@ -62,8 +68,10 @@ class _RunMacro(_TypeSerializer):
 class _GetMacros(_TypeSerializer):
     _macro_serializer = macro_serializer
     _string_serializer = string_serializer
+
     def __init__(self):
         pass
+
     def version(self):
         return 0
 
@@ -79,8 +87,11 @@ class _GetMacros(_TypeSerializer):
 class _GetMacrosResponse(_TypeSerializer):
     _macro_serializer = macro_serializer
     _string_serializer = string_serializer
+
     def __init__(self):
-        self.array_serializer = _ArraySerializer(self._macro_serializer)
+        self._array_serializer = _ArraySerializer()
+        self._array_serializer.set_type(self._macro_serializer)
+
     def version(self):
         return 0
 
@@ -91,13 +102,15 @@ class _GetMacrosResponse(_TypeSerializer):
         raise NotImplementedError
 
     def deserialize(self, version, context):
-        return context.read_using_serializer(self.array_serializer)
+        return context.read_using_serializer(self._array_serializer)
 
 class _StopMacro(_TypeSerializer):
     _macro_serializer = macro_serializer
     _string_serializer = string_serializer
+
     def __init__(self):
         pass
+
     def version(self):
         return 0
 
