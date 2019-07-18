@@ -1,5 +1,6 @@
 from . import _PluginInstance
 from nanome._internal import _network as Network
+from nanome._internal._process import _ProcessManager
 from nanome._internal._network._serialization._serializer import Serializer
 from nanome._internal._util._serializers import _TypeSerializer
 from nanome.util.logs import Logs
@@ -102,7 +103,7 @@ class _Plugin(object):
         elif packet.packet_type == Network._Packet.packet_type_client_disconnection:
             try:
                 id = packet.session_id
-                self._sessions[id].plugin_pipe.close()
+                self._sessions[id].close_pipes()
                 del self._sessions[id]
                 Logs.debug("Session", id, "disconnected")
             except:
@@ -119,6 +120,7 @@ class _Plugin(object):
         packet.set(0, Network._Packet.packet_type_plugin_connection, 0)
         packet.write_string(json.dumps(self._description))
         self._network.send(packet)
+        self._process_manager = _ProcessManager()
         self.__loop()
 
     def __loop(self):
@@ -133,21 +135,22 @@ class _Plugin(object):
                 for id in to_remove:
                     self._sessions[id]._send_disconnection_message(_Plugin._plugin_id)
                     del self._sessions[id]
+                self._process_manager._update()
         except KeyboardInterrupt:
             self.__exit()
 
     def __exit(self):
         Logs.debug('Exiting')
         for session in _Plugin.instance._sessions.values():
-            session.plugin_pipe.close()
+            session.close_pipes()
             session.plugin_process.join()
         sys.exit(0)
 
     def __on_client_connection(self, session_id, version_table):
-        session = Network._Session(session_id, self._network)
-        main_conn, process_conn = Pipe()
-        session.plugin_pipe = main_conn
-        process = Process(target=_Plugin._launch_plugin, args=(self._plugin_class, session_id, process_conn, _Plugin.__serializer, _Plugin._plugin_id, version_table, _TypeSerializer.get_version_table(), Logs._is_verbose()))
+        main_conn_net, process_conn_net = Pipe()
+        main_conn_proc, process_conn_proc = Pipe()
+        session = Network._Session(session_id, self._network, self._process_manager, main_conn_net, main_conn_proc)
+        process = Process(target=_Plugin._launch_plugin, args=(self._plugin_class, session_id, process_conn_net, process_conn_proc, _Plugin.__serializer, _Plugin._plugin_id, version_table, _TypeSerializer.get_version_table(), Logs._is_verbose()))
         process.start()
         session.plugin_process = process
         self._sessions[session_id] = session
@@ -158,13 +161,13 @@ class _Plugin(object):
         return current_process().name != 'MainProcess'
 
     @classmethod
-    def _launch_plugin_profile(cls, plugin_class, session_id, pipe, serializer, plugin_id, version_table, original_version_table, verbose):
-        cProfile.runctx('_Plugin._launch_plugin(plugin_class, session_id, pipe, serializer, plugin_id, version_table, original_version_table, verbose)', globals(), locals(), 'profile.out')
+    def _launch_plugin_profile(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose):
+        cProfile.runctx('_Plugin._launch_plugin(plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose)', globals(), locals(), 'profile.out')
 
     @classmethod
-    def _launch_plugin(cls, plugin_class, session_id, pipe, serializer, plugin_id, version_table, original_version_table, verbose):
+    def _launch_plugin(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose):
         plugin = plugin_class()
-        _PluginInstance.__init__(plugin, session_id, pipe, serializer, plugin_id, version_table, original_version_table, verbose)
+        _PluginInstance.__init__(plugin, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose)
         Logs.debug("Starting plugin")
         plugin._run()
 
