@@ -115,6 +115,9 @@ add_command(CommandCallbacks._Commands.stream_create_done,CommandSerializers._Cr
 add_command(CommandCallbacks._Commands.stream_interrupt, CommandSerializers._InterruptStream())
 add_command(CommandCallbacks._Commands.stream_feed_done, CommandSerializers._FeedStreamDone())
 
+#macros
+add_command(CommandCallbacks._Commands.get_macros_response, CommandSerializers._GetMacrosResponse())
+
 #-------------Messages-----------#
 # Messages are outgoing (plugin -> nanome)
 
@@ -152,6 +155,12 @@ add_message(CommandCallbacks._Messages.directory_request, CommandSerializers._Di
 add_message(CommandCallbacks._Messages.file_request, CommandSerializers._FileRequest())
 add_message(CommandCallbacks._Messages.file_save, CommandSerializers._FileSave())
 add_message(CommandCallbacks._Messages.plugin_list_button_set, CommandSerializers._SetPluginListButton())
+
+#macros
+add_message(CommandCallbacks._Messages.run_macro, CommandSerializers._RunMacro())
+add_message(CommandCallbacks._Messages.save_macro, CommandSerializers._SaveMacro())
+add_message(CommandCallbacks._Messages.delete_macro, CommandSerializers._DeleteMacro())
+add_message(CommandCallbacks._Messages.get_macros, CommandSerializers._GetMacros())
 
 #streams
 add_message(CommandCallbacks._Messages.stream_create, CommandSerializers._CreateStream())
@@ -204,3 +213,6 @@ add_callback(CommandCallbacks._Commands.file_save_done, CommandCallbacks._receiv
 add_callback(CommandCallbacks._Commands.stream_create_done, CommandCallbacks._receive_create_stream_result)
 add_callback(CommandCallbacks._Commands.stream_interrupt, CommandCallbacks._receive_interrupt_stream)
 add_callback(CommandCallbacks._Commands.stream_feed_done, CommandCallbacks._feed_stream_done)
+
+#macros
+add_callback(CommandCallbacks._Commands.get_macros_response, CommandCallbacks._receive_macros)

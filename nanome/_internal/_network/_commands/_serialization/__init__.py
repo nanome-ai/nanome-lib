@@ -37,3 +37,5 @@ from ._update_workspace import _UpdateWorkspace
 from ._position_structures import _PositionStructures
 from ._position_structures_done import _PositionStructuresDone
 from ._send_notification import _SendNotification
+
+from ._macro_commands import _RunMacro, _SaveMacro, _DeleteMacro, _GetMacros, _GetMacrosResponse

@@ -42,22 +42,22 @@ class Macro(_Macro):
     def logic(self, value):
         self._logic = value
 
-    def save(self):
-        pass
+    def save(self, all_users = False):
+        self._save(all_users)
 
     def run(self):
-        pass
+        self._run()
 
-    def delete(self):
-        pass
+    def delete(self, all_users = False):
+        self._delete(all_users)
 
     @classmethod
     def stop(cls):
-        pass
+        cls._stop()
     
     @classmethod
     def get_live(cls, callback):
-        pass
+        return cls._get_live(callback)
 
 
 _Macro._create = Macro
