@@ -67,7 +67,6 @@ class _ProcessManager():
             for line in iter(out.readline, sentinel):
                 queue_out.put(line)
             out.close()
-            Logs.debug("Done reading")
 
         try:
             entry.process = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, cwd=request.cwd_path, universal_newlines=has_text, close_fds=POSIX)
@@ -123,5 +122,4 @@ class _ProcessManager():
     def _received_request(self, request, session):
         entry = _ProcessEntry(request, session)
         self.__pending.append(entry)
-        Logs.debug("Received request")
         session.send_process_data([_ProcessManager.process_data_type_queued, request])
