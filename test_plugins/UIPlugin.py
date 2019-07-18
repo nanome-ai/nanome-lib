@@ -36,7 +36,7 @@ class UIPlugin(nanome.PluginInstance):
     inited = False
 
     def init(self):
-        menu = self.rebuild_menu()
+        self.menu = self.rebuild_menu()
 
     def start(self):
         Logs.debug("Start UI Plugin")
@@ -49,8 +49,8 @@ class UIPlugin(nanome.PluginInstance):
     def rebuild_menu(self):
         menu = self.menu
         menu.title = "Example UI Plugin"
-        menu._width = 1.0
-        menu._height =  1.0
+        menu.width = 1.0
+        menu.height =  1.0
         menu.register_closed_callback(menu_closed_callback)
         menu.register_opened_callback(menu_opened_callback)
         menu.root = self.create_content()
@@ -190,4 +190,4 @@ class UIPlugin(nanome.PluginInstance):
     def __init__(self):
         pass
 
-nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, UIPlugin, NTS_ADDRESS, NTS_PORT)
+nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, UIPlugin)

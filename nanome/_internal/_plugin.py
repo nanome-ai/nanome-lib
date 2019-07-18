@@ -3,6 +3,7 @@ from nanome._internal import _network as Network
 from nanome._internal._network._serialization._serializer import Serializer
 from nanome._internal._util._serializers import _TypeSerializer
 from nanome.util.logs import Logs
+from nanome.util import config
 
 from multiprocessing import Process, Pipe, current_process
 import sys
@@ -23,6 +24,7 @@ class _Plugin(object):
                 Logs.message(" -a  connects to a NTS at the specified IP address")
                 Logs.message(" -p  connects to a NTS at the specified port")
                 Logs.message(" -k  specifies a key file to use to connect to NTS")
+                Logs.message(" -n  name to display for this plugin in Nanome")
                 Logs.message(" -v  enable verbose mode, to display Logs.debug")
                 sys.exit(0)
             elif sys.argv[i] == "-a":
@@ -46,6 +48,12 @@ class _Plugin(object):
                     Logs.error("Error: -k requires an argument")
                     sys.exit(1)
                 self.__key_file = sys.argv[i + 1]
+                i += 1
+            elif sys.argv[i] == "-n":
+                if i >= len(sys.argv):
+                    Logs.error("Error: -n requires an argument")
+                    sys.exit(1)
+                self._description['name'] = sys.argv[i + 1]
                 i += 1
             elif sys.argv[i] == "-v":
                 Logs._set_verbose(True)

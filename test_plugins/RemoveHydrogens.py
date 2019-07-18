@@ -52,4 +52,4 @@ class RemoveHydrogens(nanome.PluginInstance):
         self.update_workspace(workspace) # Update Nanome workspace, in "deep" mode
 
 # Setup plugin information, register RemoveHydrogens as the class to instantiate, and connect to the server
-nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, RemoveHydrogens, NTS_ADDRESS, NTS_PORT)
+nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, RemoveHydrogens)
