@@ -1,5 +1,6 @@
 from nanome.util import Logs, DirectoryRequestOptions, IntEnum
 from nanome._internal import _PluginInstance
+from nanome._internal._process import _Bonding, _Dssp
 from nanome._internal._network import _ProcessNetwork
 from nanome._internal._network._commands._callbacks import _Messages
 from nanome.api.ui import Menu
@@ -225,25 +226,26 @@ class PluginInstance(_PluginInstance):
         id = self._network._send(_Messages.stream_create, atom_indices_list)
         self._save_callback(id, callback)
 
-    def add_bonds(self, complex_list, callback):
+    def add_bonds(self, complex_list, callback, fast_mode=None):
         """
-        | Request Nanome to add bonds to a list of complexes
+        | Calculate bonds
+        | Needs openbabel to be installed
 
         :param complex_list: List of complexes to add bonds to
         :type complex_list: list of :class:`~nanome.api.structure.complex.Complex`
         """
-        id = self._network._send(_Messages.bonds_add, complex_list)
-        self._save_callback(id, callback)
+        bonding = _Bonding(complex_list, callback, fast_mode)
+        bonding._start()
 
     def add_dssp(self, complex_list, callback):
         """
-        | Request Nanome to use DSSP in order to display ribbons
+        | Use DSSP to calculate secondary structures
 
         :param complex_list: List of complexes to add ribbons to
         :type complex_list: list of :class:`~nanome.api.structure.complex.Complex`
         """
-        id = self._network._send(_Messages.dssp_add, complex_list)
-        self._save_callback(id, callback)
+        dssp = _Dssp(complex_list, callback)
+        dssp._start()
 
     def upload_cyro_em(self, path, callback = None):
         """

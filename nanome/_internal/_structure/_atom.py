@@ -14,7 +14,7 @@ class _Atom(_Base):
         super(_Atom, self).__init__()
         #Molecular
         self._symbol = "Carbon"
-        self._serial = 0
+        self._serial = 1
         self._name = "default"
         self._position = Vector3()
         self._is_het = False
