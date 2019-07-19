@@ -38,4 +38,4 @@ from ._position_structures import _PositionStructures
 from ._position_structures_done import _PositionStructuresDone
 from ._send_notification import _SendNotification
 
-from ._macro_commands import _RunMacro, _SaveMacro, _DeleteMacro, _GetMacros, _GetMacrosResponse
+from ._macro_commands import _RunMacro, _SaveMacro, _DeleteMacro, _GetMacros, _GetMacrosResponse, _StopMacro

@@ -161,6 +161,7 @@ add_message(CommandCallbacks._Messages.run_macro, CommandSerializers._RunMacro()
 add_message(CommandCallbacks._Messages.save_macro, CommandSerializers._SaveMacro())
 add_message(CommandCallbacks._Messages.delete_macro, CommandSerializers._DeleteMacro())
 add_message(CommandCallbacks._Messages.get_macros, CommandSerializers._GetMacros())
+add_message(CommandCallbacks._Messages.stop_macro, CommandSerializers._StopMacro())
 
 #streams
 add_message(CommandCallbacks._Messages.stream_create, CommandSerializers._CreateStream())

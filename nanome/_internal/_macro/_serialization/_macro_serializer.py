@@ -11,7 +11,7 @@ class _MacroSerializer(_TypeSerializer):
         return 0
 
     def name(self):
-        return "Button"
+        return "Macro"
 
     def serialize(self, version, value, context):
         context.write_using_serializer(self.string, value.title)

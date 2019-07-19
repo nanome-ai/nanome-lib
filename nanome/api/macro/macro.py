@@ -8,15 +8,13 @@ class Macro(_Macro):
         self.logic = logic
         super(Macro, self).__init__()
 
-    @property
     @classmethod
-    def plugin_identifier(cls):
-        return cls._plugin_identifier
+    def get_plugin_identifier(cls):
+        return _Macro._plugin_identifier
     
-    @plugin_identifier.setter
     @classmethod
-    def plugin_identifier(cls, value):
-        cls._plugin_identifier = value
+    def set_plugin_identifier(cls, value):
+        _Macro._plugin_identifier = value
 
     @property
     def title(self):
@@ -58,6 +56,5 @@ class Macro(_Macro):
     @classmethod
     def get_live(cls, callback):
         return cls._get_live(callback)
-
 
 _Macro._create = Macro
