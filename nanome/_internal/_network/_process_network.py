@@ -5,6 +5,8 @@ from . import _Packet
 # Plugin networking class, used from the instance processes
 class _ProcessNetwork(object):
 
+    _instance = None
+
     def _on_run(self):
         self._plugin.on_run()
 
@@ -23,7 +25,9 @@ class _ProcessNetwork(object):
     def _close(self):
         self._process_conn.close()
 
-    def _send(self, code, arg = None):
+    @classmethod
+    def _send(cls, code, arg = None): 
+        self = cls._instance
         command_id = self._command_id
         to_send = self._serializer.serialize_message(command_id, code, arg, self.__version_table)
         packet = _Packet()
@@ -67,3 +71,5 @@ class _ProcessNetwork(object):
         self._plugin_id = plugin_id
         self._command_id = 0
         self.__version_table = version_table
+
+        _ProcessNetwork._instance = self

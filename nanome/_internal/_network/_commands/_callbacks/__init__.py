@@ -18,3 +18,4 @@ from ._update_structures_deep_done import _update_structures_deep_done
 from ._upload_cryo_em_done import _upload_cryo_em_done
 from ._position_structures_done import _position_structures_done
 from ._workspace_callbacks import _receive_workspace, _complex_added, _complex_removed
+from ._macro_callbacks import _receive_macros

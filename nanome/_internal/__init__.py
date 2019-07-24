@@ -9,3 +9,4 @@ from . import _structure
 from . import _ui
 from . import _network
 from . import _volumetric
+from . import _macro
