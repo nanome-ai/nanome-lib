@@ -35,7 +35,8 @@ class _NetInstance(object):
             self._context = None
             self._connection = None
             Logs.error("Cannot connect to plugin server at", host, port, e)
-            sys.exit(1)
+            return False
+        return True
 
     def send(self, packet):
         pack = packet.pack()
@@ -69,7 +70,7 @@ class _NetInstance(object):
             Logs.error("Connection closed by plugin server")
             return False
         except KeyboardInterrupt:
-            return False
+            raise
         except:
             Logs.error(traceback.format_exc())
             return False

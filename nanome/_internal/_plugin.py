@@ -7,9 +7,14 @@ from nanome.util.logs import Logs
 from nanome.util import config
 
 from multiprocessing import Process, Pipe, current_process
+from timeit import default_timer as timer
 import sys
 import json
 import cProfile
+import time
+
+try_reconnection_time = 20.0
+keep_alive_time_interval = 3600.0
 
 __metaclass__ = type
 class _Plugin(object):
@@ -108,27 +113,60 @@ class _Plugin(object):
                 Logs.debug("Session", id, "disconnected")
             except:
                 pass
+        elif packet.packet_type == Network._Packet.packet_type_keep_alive:
+            pass
         else:
             Logs.warning("Received a packet of unknown type", packet.packet_type, ". Ignoring")
 
     def __run(self):
         _Plugin.instance = self
         self._description['auth'] = self.__read_key_file()
-        self._network = Network._NetInstance(self, _Plugin._on_packet_received)
-        self._network.connect(self.__host, self.__port)
-        packet = Network._Packet()
-        packet.set(0, Network._Packet.packet_type_plugin_connection, 0)
-        packet.write_string(json.dumps(self._description))
-        self._network.send(packet)
         self._process_manager = _ProcessManager()
+        self.__connect()
         self.__loop()
 
+    def __connect(self):
+        self._network = Network._NetInstance(self, _Plugin._on_packet_received)
+        if self._network.connect(self.__host, self.__port):
+            if _Plugin._plugin_id >= 0:
+                plugin_id = _Plugin._plugin_id
+            else:
+                plugin_id = 0
+            packet = Network._Packet()
+            packet.set(0, Network._Packet.packet_type_plugin_connection, plugin_id)
+            packet.write_string(json.dumps(self._description))
+            self._network.send(packet)
+            self.__connected = True
+            self.__last_keep_alive = timer()
+            return True
+        else:
+            self.__disconnection_time = timer()
+            return False
+
     def __loop(self):
+        to_remove = []
         try:
             while True:
-                to_remove = []
+                if self.__connected == False:
+                    elapsed = timer() - self.__disconnection_time
+                    if elapsed >= try_reconnection_time:
+                        Logs.message("Trying to reconnect...")
+                        if self.__connect() == False:
+                            self.__disconnection_time = timer()
+                            continue
+                    else:
+                        time.sleep(try_reconnection_time - elapsed)
+                        continue
                 if self._network.receive() == False:
-                    self.__exit()
+                    self.__connected = False
+                    self.__disconnection_time = timer()
+                    continue
+                if timer() - self.__last_keep_alive >= keep_alive_time_interval:
+                    self.__last_keep_alive = timer()
+                    packet = Network._Packet()
+                    packet.set(_Plugin._plugin_id, Network._Packet.packet_type_keep_alive, 0)
+                    self._network.send(packet)
+                to_remove.clear()
                 for id, session in self._sessions.items():
                     if session._read_from_plugin() == False:
                         to_remove.append(id)
@@ -181,3 +219,4 @@ class _Plugin(object):
             'auth': None
         }
         self._plugin_class = None
+        self.__connected = False
