@@ -159,7 +159,7 @@ class _Plugin(object):
                         continue
                 if self._network.receive() == False:
                     self.__connected = False
-                    self.__disconnection_time = timer()
+                    self.__disconnect()
                     continue
                 if timer() - self.__last_keep_alive >= keep_alive_time_interval:
                     self.__last_keep_alive = timer()
@@ -176,6 +176,14 @@ class _Plugin(object):
                 self._process_manager._update()
         except KeyboardInterrupt:
             self.__exit()
+
+    def __disconnect(self):
+        to_remove = []
+        for id in self._sessions.keys():
+            to_remove.append(id)
+        for id in to_remove:
+            del self._sessions[id]
+        self.__disconnection_time = timer()
 
     def __exit(self):
         Logs.debug('Exiting')
