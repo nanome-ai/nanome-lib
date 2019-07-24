@@ -2,9 +2,8 @@ import nanome
 from nanome._internal._macro._macro import _Macro
 
 class Macro(_Macro):
-    def __init__(self, title = "", description = "", logic = ""):
+    def __init__(self, title = "", logic = ""):
         self.title = title
-        self.description = description
         self.logic = logic
         super(Macro, self).__init__()
 
@@ -23,14 +22,6 @@ class Macro(_Macro):
     @title.setter
     def title(self, value):
         self._title = value
-
-    @property
-    def description(self):
-        return self._description
-    
-    @description.setter
-    def description(self, value):
-        self._description = value
 
     @property
     def logic(self):

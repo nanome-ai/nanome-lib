@@ -15,12 +15,10 @@ class _MacroSerializer(_TypeSerializer):
 
     def serialize(self, version, value, context):
         context.write_using_serializer(self.string, value.title)
-        context.write_using_serializer(self.string, value.description)
         context.write_using_serializer(self.string, value.logic)
 
     def deserialize(self, version, context):
         result = _Macro._create()
         result._title = context.read_using_serializer(self.string)
-        result._description = context.read_using_serializer(self.string)
         result._logic = context.read_using_serializer(self.string)
         return result

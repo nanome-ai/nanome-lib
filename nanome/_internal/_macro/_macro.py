@@ -9,7 +9,6 @@ class _Macro(object):
 
     def __init__(self):
         self._title = ""
-        self._description = ""
         self._logic = ""
 
     @classmethod
