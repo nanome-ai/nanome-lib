@@ -14,6 +14,9 @@ def test_ui():
     mesh = UI.Mesh()
     slider = UI.Slider()
     text_input = UI.TextInput()
+    image = UI.Image()
+    loading_bar = UI.LoadingBar()
+    _list = UI.UIList()
     # ui_base = UI.UIBase()
     menu = UI.Menu()
 
