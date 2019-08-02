@@ -14,6 +14,7 @@ class _Packet(object):
     packet_type_plugin_disconnection = 5
     packet_type_client_disconnection = 6
     packet_type_master_change = 7
+    packet_type_keep_alive = 8
     header_pack = struct.Struct('<HIBIi').pack
     header_unpack = struct.Struct('<HIBIi').unpack
     __compress_obj = zlib.compressobj(4, zlib.DEFLATED, -zlib.MAX_WBITS)

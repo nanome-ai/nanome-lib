@@ -2,6 +2,10 @@ from nanome.util import Logs
 from . import _Packet
 import traceback
 
+
+stop_bytes = bytearray("CLOSEPIPE", "utf-8")
+
+
 # Plugin networking representation, used from the main process
 class _Session(object):
     def _read_from_plugin(self):
@@ -37,6 +41,7 @@ class _Session(object):
         self._net_plugin.send(packet)
 
     def close_pipes(self):
+        self._on_packet_received(stop_bytes)
         self._closed = True
         self.__net_plugin_pipe.close()
         self.__proc_plugin_pipe.close()

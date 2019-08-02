@@ -2,6 +2,9 @@ from nanome.util import Logs
 from . import _Packet
 
 
+stop_bytes = bytearray("CLOSEPIPE", "utf-8")
+
+
 # Plugin networking class, used from the instance processes
 class _ProcessNetwork(object):
 
@@ -36,7 +39,7 @@ class _ProcessNetwork(object):
         # if code != 0: # Messages.connect
         #     packet.compress()
         self._process_conn.send(packet)
-        self._command_id = (command_id + 1) % 4294967295 # Cap by uint max
+        self._command_id = (command_id + 1) % 4294967295  # Cap by uint max
         return command_id
 
     def _receive(self):
@@ -50,6 +53,10 @@ class _ProcessNetwork(object):
             return False
 
         if payload:
+            if payload == stop_bytes:
+                Logs.debug("Pipe has been closed, exiting process")
+                return False
+
             received_object, command_hash, request_id = self._serializer.deserialize_command(payload, self.__version_table)
             if received_object == None and command_hash == None and request_id == None:
                 return True # Happens if deserialize_command returns None, an error message is already displayed in that case
