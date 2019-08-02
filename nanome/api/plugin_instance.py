@@ -257,13 +257,6 @@ class PluginInstance(_PluginInstance):
         id = self._network._send(_Messages.upload_cryo_em, path)
         self._save_callback(id, callback)
 
-    @classmethod
-    def _save_callback(cls, id, callback):
-        if callback == None:
-            cls.__callbacks[id] = lambda _=None: None
-        else:
-            cls.__callbacks[id] = callback
-
     class PluginListButtonType(IntEnum):
         run = 0
         advanced_settings = 1

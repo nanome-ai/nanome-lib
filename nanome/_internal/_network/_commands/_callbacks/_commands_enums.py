@@ -60,6 +60,9 @@ class _Commands(__CommandEnum):
     file_response= auto()
     file_save_done= auto()
 
+    #Macro
+    get_macros_response = auto()
+
     #Other
     upload_cryo_em_done = auto()
 
@@ -101,6 +104,13 @@ class _Messages(__CommandEnum):
     directory_request = auto()
     file_request = auto()
     file_save = auto()
+
+    #Macro
+    save_macro = auto()
+    delete_macro = auto()
+    run_macro = auto()
+    stop_macro = auto()
+    get_macros = auto()
 
     #Other
     upload_cryo_em = auto()
