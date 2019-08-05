@@ -6,13 +6,15 @@ class _CreateStream(_TypeSerializer):
         pass
 
     def version(self):
-        return 0
+        return 1
 
     def name(self):
         return "StreamCreation"
 
     def serialize(self, version, value, context):
-        context.write_long_array(value)
+        if version > 0:
+            context.write_byte(value[0])
+        context.write_long_array(value[1])
 
     def deserialize(self, version, context):
         raise NotImplementedError

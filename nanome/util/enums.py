@@ -55,8 +55,13 @@ class HorizAlignOptions(IntEnum):
     Left = 0
     Middle = 1
     Right = 2
-    
+
 class VertAlignOptions(IntEnum):
     Top = 0
     Middle = 1
     Bottom = 2
+
+class StreamType(IntEnum):
+    Position = 0
+    Color = 1
+    Scale = 2

@@ -10,20 +10,22 @@ class Stream(object):
     """
     _streams = dict()
 
+    Type = nanome.util.enums.StreamType
+
     def __init__(self, network, id):
         self.__network = network
         self.__id = id
         self.__interrupt_callback = lambda _: None
         Stream._streams[id] = self
 
-    def update(self, position_list, done_callback = None):
+    def update(self, data, done_callback = None):
         """
-        | Send positions to the stream, updating all its atoms
+        | Send data to the stream, updating all its atoms
 
-        :param position_list: List of positions for all atoms in the stream. There should be three floats per atom: x, y, and z
-        :type position_list: list of :class:`float`
+        :param data: List of data to send. i.e, for position stream: x, y, z, x, y, z, etc. (atom 1, atom 2, etc.)
+        :type data: list of :class:`float` for position and scale streams, list of :class:`byte` for color streams
         """
-        id = self.__network._send(_Messages.stream_feed, (self.__id, position_list))
+        id = self.__network._send(_Messages.stream_feed, (self.__id, data))
         if done_callback == None:
             done_callback = lambda : None
         nanome.PluginInstance._save_callback(id, done_callback)
