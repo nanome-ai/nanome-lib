@@ -62,6 +62,10 @@ class VertAlignOptions(IntEnum):
     Bottom = 2
 
 class StreamType(IntEnum):
-    Position = 0
-    Color = 1
-    Scale = 2
+    position = 0
+    color = 1
+    scale = 2
+
+class StreamDataType(IntEnum):
+    float = 0
+    byte = 1

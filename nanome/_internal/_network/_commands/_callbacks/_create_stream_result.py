@@ -6,5 +6,5 @@ def _receive_create_stream_result(network, result, request_id):
     if result[0] != StreamCreationError.NoError:
         network._call(request_id, None, result[0])
         return
-    stream = Stream(network, result[1])
+    stream = Stream(network, result[1], result[2])
     network._call(request_id, stream, StreamCreationError.NoError)

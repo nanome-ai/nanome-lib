@@ -3,7 +3,6 @@ from nanome._internal import _PluginInstance
 from nanome._internal._process import _Bonding, _Dssp
 from nanome._internal._network import _ProcessNetwork
 from nanome._internal._network._commands._callbacks import _Messages
-from nanome.api import Stream
 from nanome.api.ui import Menu
 
 import inspect
@@ -217,7 +216,7 @@ class PluginInstance(_PluginInstance):
         id = self._network._send(_Messages.file_save, file_list)
         self._save_callback(id, callback)
 
-    @Logs.deprecated(PluginInstance.create_atom_stream)
+    @Logs.deprecated("create_atom_stream")
     def create_stream(self, atom_indices_list, callback):
         """
         | Create a stream allowing to continuously update many atoms positions
@@ -225,7 +224,7 @@ class PluginInstance(_PluginInstance):
         :param atom_indices_list: List of indices of all atoms that should be in the stream
         :type atom_indices_list: list of :class:`int`
         """
-        id = self._network._send(_Messages.stream_create, [Stream.Type.Position, atom_indices_list])
+        id = self._network._send(_Messages.stream_create, (Stream.Type.Position, atom_indices_list))
         self._save_callback(id, callback)
 
     def create_atom_stream(self, atom_indices_list, stream_type, callback):
@@ -237,7 +236,7 @@ class PluginInstance(_PluginInstance):
         :param stream_type: Type of stream to create
         :type stream_type: list of :class:`~nanome.api.stream.Stream.Type`
         """
-        id = self._network._send(_Messages.stream_create, [stream_type, atom_indices_list])
+        id = self._network._send(_Messages.stream_create, (stream_type, atom_indices_list))
         self._save_callback(id, callback)
 
     def add_bonds(self, complex_list, callback, fast_mode=None):
