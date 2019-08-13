@@ -15,6 +15,7 @@ Table of Contents
    ui
    file
    notification
+   api
    
 
 **Overview**
