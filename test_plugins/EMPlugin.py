@@ -23,7 +23,7 @@ class EMPlugin(nanome.PluginInstance):
 
     def on_run(self):
         path = testing.utilities.get_test_assets() + "volumetric\\cryo_em\\0170.map.gz"
-        self.upload_cyro_em(path, self.on_em_uploaded)
+        self.upload_cryo_em(path, self.on_em_uploaded)
     
     def on_advanced_settings(self):
         Logs.debug("adv pressed")
