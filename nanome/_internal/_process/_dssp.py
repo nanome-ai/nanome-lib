@@ -10,7 +10,7 @@ import traceback
 
 if sys.platform.startswith("linux"):
     DSSP_PATH = os.path.join(os.path.dirname(__file__), '_external', '_dssp', 'dssp-linux')
-    os.chmod(DSSP_PATH, stat.S_IXGRP | stat.S_IEXEC)
+    os.chmod(DSSP_PATH, 0o777)
 elif sys.platform.startswith("win"):
     DSSP_PATH = os.path.join(os.path.dirname(__file__), '_external', '_dssp', 'dssp-3.0.0-win32.exe')
 else:
