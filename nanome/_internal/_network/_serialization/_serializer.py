@@ -168,6 +168,9 @@ add_message(CommandCallbacks._Messages.stream_create, CommandSerializers._Create
 add_message(CommandCallbacks._Messages.stream_feed, CommandSerializers._FeedStream())
 add_message(CommandCallbacks._Messages.stream_destroy, CommandSerializers._DestroyStream())
 
+#others
+add_message(CommandCallbacks._Messages.open_url, CommandSerializers._OpenURL())
+
 #-------------Callbacks-----------#
 # Callbacks are things to do after the command is decoded (plugin -> plugin)
 

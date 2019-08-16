@@ -14,6 +14,7 @@ from ._feed_stream_done import _FeedStreamDone
 from ._file_request import _FileRequest
 from ._file_save import _FileSave
 from ._interrupt_stream import _InterruptStream
+from ._open_url import _OpenURL
 from ._run import _Run
 from ._receive_workspace import _ReceiveWorkspace
 from ._complex_added_removed import _ComplexAddedRemoved

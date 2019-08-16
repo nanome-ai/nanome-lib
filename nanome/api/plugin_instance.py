@@ -247,7 +247,7 @@ class PluginInstance(_PluginInstance):
         dssp = _Dssp(complex_list, callback)
         dssp._start()
 
-    def upload_cyro_em(self, path, callback = None):
+    def upload_cryo_em(self, path, callback = None):
         """
         | Renders a Cryo EM map in nanome.
 
@@ -256,6 +256,18 @@ class PluginInstance(_PluginInstance):
         """
         id = self._network._send(_Messages.upload_cryo_em, path)
         self._save_callback(id, callback)
+
+    def open_url(self, url):
+        """
+        | Opens a URL in Nanome's computer browser
+
+        :param url: url to open
+        :type url: str
+        """
+        url = url.strip()
+        if '://' not in url:
+            url = 'http://' + url
+        self._network._send(_Messages.open_url, url)
 
     class PluginListButtonType(IntEnum):
         run = 0
