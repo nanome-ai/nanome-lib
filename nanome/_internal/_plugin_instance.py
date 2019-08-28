@@ -27,6 +27,12 @@ class _PluginInstance(object):
         callbacks[id](*args)
         del callbacks[id]
 
+    def _on_stop(self):
+        try:
+            self.on_stop()
+        except:
+            Logs.error("Error in on_stop function:", traceback.format_exc())
+
     def _run(self):
         try:
             self.start()
@@ -40,9 +46,11 @@ class _PluginInstance(object):
                 last_update = timer()
 
         except KeyboardInterrupt:
+            self._on_stop()
             return
         except:
             Logs.error(traceback.format_exc())
+            self._on_stop()
             self._network._close()
             return
 
