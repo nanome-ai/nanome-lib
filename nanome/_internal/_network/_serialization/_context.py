@@ -90,6 +90,9 @@ class _ContextSerialization(object):
         self._data.write_uint(0xCAFEB006)
         self._data.write_uint(value)
 
+    def write_byte_array(self, value):
+        self._data.write_byte_array(value)
+
     def write_float_array(self, value):
         self._data.write_float_array(value)
 

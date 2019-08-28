@@ -85,6 +85,16 @@ class _Data(object):
         self.expand_data(size)
         self._received_bytes[pre:pre+size] = data
 
+    def write_byte_array(self, data):
+        size = len(data)
+        byte_size = size * 1
+        self.write_uint(size)
+
+        pre = self._buffered_bytes + self._buffered_computed
+        pack_into = struct.Struct(str(size) + "B").pack_into
+        self.expand_data(byte_size)
+        pack_into(self._received_bytes, pre, *data)
+
     def write_float_array(self, data):
         size = len(data)
         byte_size = size * 4
