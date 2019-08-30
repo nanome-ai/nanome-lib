@@ -17,6 +17,9 @@ class _Session(object):
             return False
         if has_net_data:
             packet = self.__net_plugin_pipe.recv()
+            if packet == stop_bytes:
+                Logs.error("Plugin encountered an error")
+                return False
             self._net_plugin.send(packet)
         if has_proc_data:
             request = self.__proc_plugin_pipe.recv()
@@ -40,9 +43,12 @@ class _Session(object):
         packet.set(self._session_id, _Packet.packet_type_plugin_disconnection, plugin_id)
         self._net_plugin.send(packet)
 
-    def close_pipes(self):
+    def signal_and_close_pipes(self):
         self._on_packet_received(stop_bytes)
         self._closed = True
+        self.close_pipes()
+
+    def close_pipes(self):
         self.__net_plugin_pipe.close()
         self.__proc_plugin_pipe.close()
 
