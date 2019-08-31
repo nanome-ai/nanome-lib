@@ -103,6 +103,8 @@ class Complex(_Complex, Base):
         return self._name
     @name.setter
     def name(self, value):
+        if type(value) is not str:
+            value = str(value)
         self._name = value
 
     @property

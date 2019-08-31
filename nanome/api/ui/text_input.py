@@ -23,6 +23,8 @@ class TextInput(_TextInput, UIBase):
     @placeholder_text.setter
     def placeholder_text(self, value):
         # type: (str)
+        if type(value) is not str:
+            value = str(value)
         self._placeholder_text = value
 
     @property
@@ -32,6 +34,8 @@ class TextInput(_TextInput, UIBase):
     @input_text.setter
     def input_text(self, value):
         # type: (str)
+        if type(value) is not str:
+            value = str(value)
         self._input_text = value
 
     def register_changed_callback(self, func):
