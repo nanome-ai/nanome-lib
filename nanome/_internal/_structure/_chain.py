@@ -19,3 +19,16 @@ class _Chain(_Base):
     @_parent.setter
     def _parent(self, value):
         self._molecule = value
+
+    def _add_residue(self, residue):
+        self._residues.append(residue)
+        residue._chain = self
+
+    def _remove_residue(self, residue):
+        self._residues.remove(residue)
+        residue._chain = None
+    
+    def _set_residues(self, residues):
+        self._residues = residues
+        for residue in residues:
+            residue._chain = self

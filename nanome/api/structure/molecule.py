@@ -9,13 +9,11 @@ class Molecule(_Molecule, Base):
         
     def add_chain(self, chain):
         chain.index = -1
-        self._chains.append(chain)
-        chain._molecule = self
+        self._add_chain(chain)
 
     def remove_chain(self, chain):
         chain.index = -1
-        self._chains.remove(chain)
-        chain._molecule = None
+        self._remove_chain(chain)
 
     #region Generators:
     @property

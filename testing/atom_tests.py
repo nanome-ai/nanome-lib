@@ -29,6 +29,7 @@ def run(counter):
     run_test(test_matrices, counter)
     prep_timer_test()
     run_timed_test(time_test_serializer, counter, 1, 10)#normally 2.9 
+    run_test(test_parent_pointers, counter)
 
 def test_equality():
     assert_equal(create_atom(), create_atom(), options)
@@ -321,4 +322,60 @@ def test_matrices():
     atom_global_pos = m * atom.position
 
     assert_equal(atom_global_pos, res_atom_global_pos)
-    assert_equal(m_inv * atom_global_pos, atom.position)
+    assert_equal(m_inv * atom_global_pos, atom.position)\
+
+def assert_parents(atom, bond, residue, chain, molecule, complex):
+    assert(atom.residue == residue)
+    assert(atom.chain == chain)
+    assert(atom.molecule == molecule)
+    assert(atom.complex == complex)
+
+    assert(residue.chain == chain)
+    assert(residue.molecule == molecule)
+    assert(residue.complex == complex)
+
+    assert(chain.molecule == molecule)
+    assert(chain.complex == complex)
+
+    assert(molecule.complex == complex)
+
+def assert_no_parents(atom, bond, residue, chain, molecule, complex):
+    assert(atom.residue == None)
+    assert(atom.chain == None)
+    assert(atom.molecule == None)
+    assert(atom.complex == None)
+
+    assert(residue.chain == None)
+    assert(residue.molecule == None)
+    assert(residue.complex == None)
+
+    assert(chain.molecule == None)
+    assert(chain.complex == None)
+
+    assert(molecule.complex == None)
+
+def test_parent_pointers():
+    atom = struct.Atom()
+    bond = struct.Bond()
+    residue = struct.Residue()
+    chain = struct.Chain()
+    molecule = struct.Molecule()
+    complex = struct.Complex()
+
+    assert_no_parents(atom, bond, residue, chain, molecule, complex)
+
+    complex.add_molecule(molecule)
+    molecule.add_chain(chain)
+    chain.add_residue(residue)
+    residue.add_atom(atom)
+    residue.add_bond(bond)
+
+    assert_parents(atom, bond, residue, chain, molecule, complex)
+
+    complex.remove_molecule(molecule)
+    molecule.remove_chain(chain)
+    chain.remove_residue(residue)
+    residue.remove_atom(atom)
+    residue.remove_bond(bond)
+
+    assert_no_parents(atom, bond, residue, chain, molecule, complex)

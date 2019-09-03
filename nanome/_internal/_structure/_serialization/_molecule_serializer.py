@@ -34,7 +34,7 @@ class _MoleculeSerializer(_TypeSerializer):
         molecule = _Molecule._create()
         molecule._index = context.read_long()
 
-        molecule._chains = context.read_using_serializer(self.array)
+        molecule._set_chains(context.read_using_serializer(self.array))
         molecule._name = context.read_using_serializer(self.string)
 
         molecule._associated = context.read_using_serializer(self.dictionary)

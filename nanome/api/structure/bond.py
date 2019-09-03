@@ -49,7 +49,7 @@ class Bond(_Bond, Base):
     def chain(self):
         parent = self._parent
         if parent:
-            return parent._chain
+            return parent.chain
         else:
             return None
 
@@ -57,7 +57,7 @@ class Bond(_Bond, Base):
     def molecule(self):
         parent = self._parent
         if parent:
-            return parent._molecule
+            return parent.molecule
         else:
             return None
 
@@ -65,7 +65,7 @@ class Bond(_Bond, Base):
     def complex(self):
         parent = self._parent
         if parent:
-            return parent._complex
+            return parent.complex
         else:
             return None
     #endregion

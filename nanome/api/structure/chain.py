@@ -9,13 +9,11 @@ class Chain(_Chain, Base):
 
     def add_residue(self, residue):
         residue.index = -1
-        self._residues.append(residue)
-        residue._chain = self
+        self._add_residue(residue)
 
     def remove_residue(self, residue):
         residue.index = -1
-        self._residues.remove(residue)
-        residue._chain = None
+        self._remove_residue(residue)
 
     #region Generators:
     @property
@@ -43,9 +41,8 @@ class Chain(_Chain, Base):
 
     @property
     def complex(self):
-        parent = self._parent
-        if parent:
-            return parent._complex
+        if self._parent:
+            return self._parent.complex
         else:
             return None
     #endregion

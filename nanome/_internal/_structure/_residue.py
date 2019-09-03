@@ -37,3 +37,32 @@ class _Residue(_Base):
     @_parent.setter
     def _parent(self, value):
         self._chain = value
+
+    def _add_atom(self, atom):
+        self._atoms.append(atom)
+        atom._residue = self
+
+    def _remove_atom(self, atom):
+        atom.index = -1
+        self._atoms.remove(atom)
+        atom._residue = None
+    
+    def _add_bond(self, bond):
+        bond.index = -1
+        self._bonds.append(bond)
+        bond._residue = self
+
+    def _remove_bond(self, bond):
+        bond.index = -1
+        self._bonds.remove(bond)
+        bond._residue = None
+    
+    def _set_atoms(self, atoms):
+        self._atoms = atoms
+        for atom in atoms:
+            atom._residue = self
+
+    def _set_bonds(self, bonds):
+        self._bonds = bonds
+        for bond in bonds:
+            bond._residue = self

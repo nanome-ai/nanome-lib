@@ -15,23 +15,20 @@ class Residue(_Residue, Base):
 
     def add_atom(self, atom):
         atom.index = -1
-        self._atoms.append(atom)
-        atom._residue = self
+        self._add_atom(atom)
 
     def remove_atom(self, atom):
         atom.index = -1
-        self._atoms.remove(atom)
-        atom._residue = None
+        self._remove_atom(atom)
     
     def add_bond(self, bond):
         bond.index = -1
-        self._bonds.append(bond)
-        bond._residue = self
+        self._add_bond(bond)
+
 
     def remove_bond(self, bond):
         bond.index = -1
-        self._bonds.remove(bond)
-        bond._residue = None
+        self._remove_bond(bond)
 
     #region Generators
     @property
@@ -54,7 +51,7 @@ class Residue(_Residue, Base):
     def molecule(self):
         parent = self._parent
         if parent:
-            return parent._molecule
+            return parent.molecule
         else:
             return None
 
@@ -62,7 +59,7 @@ class Residue(_Residue, Base):
     def complex(self):
         parent = self._parent
         if parent:
-            return parent._complex
+            return parent.complex
         else:
             return None
     #endregion
