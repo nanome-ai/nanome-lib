@@ -27,3 +27,13 @@ class _Residue(_Base):
         #children
         self._atoms = []
         self._bonds = []
+        #Parent pointers
+        self._chain = None
+
+    @property
+    def _parent(self):
+        return self._chain
+
+    @_parent.setter
+    def _parent(self, value):
+        self._chain = value

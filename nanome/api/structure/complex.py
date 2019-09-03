@@ -17,10 +17,12 @@ class Complex(_Complex, Base):
     def add_molecule(self, molecule):
         molecule.index = -1
         self._molecules.append(molecule)
+        molecule._complex = self
 
     def remove_molecule(self, molecule):
         molecule.index = -1
         self._molecules.remove(molecule)
+        molecule._complex = None
 
     #region Generators
     @property

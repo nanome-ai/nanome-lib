@@ -10,3 +10,13 @@ class _Molecule(_Base):
         self._name = "molecule"
         self._associated = {}
         self._chains = []
+        #Parent pointers
+        self._complex = None
+
+    @property
+    def _parent(self):
+        return self._complex
+
+    @_parent.setter
+    def _parent(self, value):
+        self._complex = value

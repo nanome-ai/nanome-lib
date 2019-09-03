@@ -44,3 +44,13 @@ class _Atom(_Base):
         self._unique_identifier = _Atom._atom_count
         self._bonds = []
         _Atom._atom_count += 1
+        #Parent pointer
+        self._residue = None
+
+    @property
+    def _parent(self):
+        return self._residue
+
+    @_parent.setter
+    def _parent(self, value):
+        self._residue = value

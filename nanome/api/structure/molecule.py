@@ -10,12 +10,14 @@ class Molecule(_Molecule, Base):
     def add_chain(self, chain):
         chain.index = -1
         self._chains.append(chain)
+        chain._molecule = self
 
     def remove_chain(self, chain):
         chain.index = -1
         self._chains.remove(chain)
+        chain._molecule = None
 
-    #Generators:
+    #region Generators:
     @property
     def chains(self):
         for chain in self._chains:
@@ -38,6 +40,13 @@ class Molecule(_Molecule, Base):
         for residue in self.residues:
             for bond in residue.bonds:
                 yield bond
+    #endregion
+
+    #region connections
+    @property
+    def complex(self):
+        return self._parent
+    #endregion
 
     #region all fields
     @property
