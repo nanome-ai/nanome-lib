@@ -24,8 +24,11 @@ class _PluginInstance(object):
 
     def _call(self, id, *args):
         callbacks = _PluginInstance.__callbacks
-        callbacks[id](*args)
-        del callbacks[id]
+        try:
+            callbacks[id](*args)
+            del callbacks[id]
+        except KeyError:
+            Logs.warning('Received an unknown callback id:', id)
 
     def _on_stop(self):
         try:
@@ -51,6 +54,7 @@ class _PluginInstance(object):
         except:
             Logs.error(traceback.format_exc())
             self._on_stop()
+            self._process_manager._close()
             self._network._close()
             return
 

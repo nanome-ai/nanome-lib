@@ -29,6 +29,6 @@ class _ChainSerializer(_TypeSerializer):
         chain = _Chain._create()
         chain._index = context.read_long()
 
-        chain._residues = context.read_using_serializer(self.array_serializer)
+        chain._set_residues(context.read_using_serializer(self.array_serializer))
         chain._name = context.read_using_serializer(self.string)
         return chain

@@ -14,6 +14,7 @@ class Bond(_Bond, Base):
         super(Bond, self).__init__()
         self._molecular = Bond.Molecular(self)
 
+    #region connections
     @property
     def atom1(self):
         """
@@ -39,6 +40,23 @@ class Bond(_Bond, Base):
     @atom2.setter
     def atom2(self, value):
         self._atom2 = value
+
+    @property
+    def residue(self):
+        return self._residue
+
+    @property
+    def chain(self):
+        return self._chain
+
+    @property
+    def molecule(self):
+        return self._molecule
+
+    @property
+    def complex(self):
+        return self._complex
+    #endregion
 
     #region all fields
     @property

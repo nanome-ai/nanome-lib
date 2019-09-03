@@ -26,6 +26,19 @@ class _Complex(_Base):
         self._rotation = Quaternion(0,0,0,0)
         self._molecules = []
 
+    def _add_molecule(self, molecule):
+        self._molecules.append(molecule)
+        molecule._parent = self
+
+    def _remove_molecule(self, molecule):
+        self._molecules.remove(molecule)
+        molecule._parent = None
+    
+    def _set_molecules(self, molecules):
+        self._molecules = molecules
+        for molecule in molecules:
+            molecule._parent = self
+
     @Logs.deprecated()
     def get_atom_iterator(self):
         iterator = _Complex.AtomIterator(self)

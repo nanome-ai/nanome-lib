@@ -44,3 +44,30 @@ class _Atom(_Base):
         self._unique_identifier = _Atom._atom_count
         self._bonds = []
         _Atom._atom_count += 1
+    
+    #region connections
+    @property
+    def _residue(self):
+        return self._parent
+
+    @property
+    def _chain(self):
+        if self._parent:
+            return self._parent._chain
+        else:
+            return None
+
+    @property
+    def _molecule(self):
+        if self._parent:
+            return self._parent._molecule
+        else:
+            return None
+
+    @property
+    def _complex(self):
+        if self._parent:
+            return self._parent._complex
+        else:
+            return None
+    #endregion

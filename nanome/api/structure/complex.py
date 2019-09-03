@@ -16,11 +16,11 @@ class Complex(_Complex, Base):
 
     def add_molecule(self, molecule):
         molecule.index = -1
-        self._molecules.append(molecule)
+        self._add_molecule(molecule)
 
     def remove_molecule(self, molecule):
         molecule.index = -1
-        self._molecules.remove(molecule)
+        self._remove_molecule(molecule)
 
     #region Generators
     @property
@@ -103,6 +103,8 @@ class Complex(_Complex, Base):
         return self._name
     @name.setter
     def name(self, value):
+        if type(value) is not str:
+            value = str(value)
         self._name = value
 
     @property

@@ -51,7 +51,7 @@ class _ComplexSerializer(_TypeSerializer):
         complex = _Complex._create()
         complex._index = context.read_long()
 
-        complex._molecules = context.read_using_serializer(self.array)
+        complex._set_molecules(context.read_using_serializer(self.array))
 
         complex._boxed = context.read_bool()
         complex._locked = context.read_bool()

@@ -15,20 +15,22 @@ class Residue(_Residue, Base):
 
     def add_atom(self, atom):
         atom.index = -1
-        self._atoms.append(atom)
+        self._add_atom(atom)
 
     def remove_atom(self, atom):
         atom.index = -1
-        self._atoms.remove(atom)
+        self._remove_atom(atom)
     
     def add_bond(self, bond):
         bond.index = -1
-        self._bonds.append(bond)
+        self._add_bond(bond)
+
 
     def remove_bond(self, bond):
         bond.index = -1
-        self._bonds.remove(bond)
+        self._remove_bond(bond)
 
+    #region Generators
     @property
     def atoms(self):
         for atom in self._atoms:
@@ -38,6 +40,21 @@ class Residue(_Residue, Base):
     def bonds(self):
         for bond in self._bonds:
             yield bond
+    #endregion
+
+    #region connections
+    @property
+    def chain(self):
+        return self._chain
+
+    @property
+    def molecule(self):
+        return  self._molecule
+
+    @property
+    def complex(self):
+        return self._complex
+    #endregion
 
     #region all fields
     @property
@@ -80,6 +97,8 @@ class Residue(_Residue, Base):
         return self._label_text
     @label_text.setter
     def label_text(self, value):
+        if type(value) is not str:
+            value = str(value)
         self._label_text = value
 
     @property
@@ -101,6 +120,8 @@ class Residue(_Residue, Base):
         return self._name
     @name.setter
     def name(self, value):
+        if type(value) is not str:
+            value = str(value)
         self._name = value
 
     @property

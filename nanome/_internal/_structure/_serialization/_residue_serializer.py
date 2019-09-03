@@ -57,9 +57,9 @@ class _ResidueSerializer(_TypeSerializer):
         residue._index = context.read_long()
 
         self.array.set_type(self.atom)
-        residue._atoms = context.read_using_serializer(self.array)
+        residue._set_atoms(context.read_using_serializer(self.array))
         self.array.set_type(self.bond)
-        residue._bonds = context.read_using_serializer(self.array)
+        residue._set_bonds(context.read_using_serializer(self.array))
         
         residue._ribboned = context.read_bool()
         residue._ribbon_size = context.read_float()

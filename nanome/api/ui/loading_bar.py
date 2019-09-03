@@ -21,6 +21,8 @@ class LoadingBar(_LoadingBar, UIBase):
     
     @title.setter
     def title(self, value):
+        if type(value) is not str:
+            value = str(value)
         self._title = value
 
     @property
@@ -29,6 +31,8 @@ class LoadingBar(_LoadingBar, UIBase):
     
     @description.setter
     def description(self, value):
+        if type(value) is not str:
+            value = str(value)
         self._description = value
 
     @property
