@@ -20,6 +20,8 @@ class Label(_Label, UIBase):
     @text_value.setter
     def text_value(self, value):
         # type: (str)
+        if type(value) is not str:
+            value = str(value)
         self._text_value = value
 
     @property
