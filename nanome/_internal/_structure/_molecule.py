@@ -11,25 +11,17 @@ class _Molecule(_Base):
         self._associated = {}
         self._chains = []
         #Parent pointers
-        self._complex = None
-
-    @property
-    def _parent(self):
-        return self._complex
-
-    @_parent.setter
-    def _parent(self, value):
-        self._complex = value
+        self._parent = None
 
     def _add_chain(self, chain):
         self._chains.append(chain)
-        chain._molecule = self
+        chain._parent = self
 
     def _remove_chain(self, chain):
         self._chains.remove(chain)
-        chain._molecule = None
+        chain._parent = None
     
     def _set_chains(self, chains):
         self._chains = chains
         for chain in chains:
-            chain._molecule = self
+            chain._parent = self

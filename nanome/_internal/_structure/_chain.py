@@ -10,25 +10,17 @@ class _Chain(_Base):
         self._name = "chain"
         self._residues = []
         #Parent pointers
-        self._molecule = None
-
-    @property
-    def _parent(self):
-        return self._molecule
-
-    @_parent.setter
-    def _parent(self, value):
-        self._molecule = value
+        self._parent = None
 
     def _add_residue(self, residue):
         self._residues.append(residue)
-        residue._chain = self
+        residue._parent = self
 
     def _remove_residue(self, residue):
         self._residues.remove(residue)
-        residue._chain = None
+        residue._parent = None
     
     def _set_residues(self, residues):
         self._residues = residues
         for residue in residues:
-            residue._chain = self
+            residue._parent = self

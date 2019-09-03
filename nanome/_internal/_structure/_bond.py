@@ -14,7 +14,7 @@ class _Bond(_Base):
         self.__atom1 = None
         self.__atom2 = None
         #Parent pointers
-        self._residue = None
+        self._parent = None
 
     @property
     def _atom1(self):
@@ -37,11 +37,3 @@ class _Bond(_Base):
             self.__atom2._bonds.remove(self)
         value._bonds.append(self)
         self.__atom2 = value
-
-    @property
-    def _parent(self):
-        return self._residue
-
-    @_parent.setter
-    def _parent(self, value):
-        self._residue = value
