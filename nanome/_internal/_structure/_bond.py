@@ -35,3 +35,33 @@ class _Bond(_Base):
             self.__atom2._bonds.remove(self)
         value._bonds.append(self)
         self.__atom2 = value
+
+    #region connections
+    @property
+    def _residue(self):
+        return self._parent
+
+    @property
+    def _chain(self):
+        parent = self._parent
+        if parent:
+            return parent._chain
+        else:
+            return None
+
+    @property
+    def _molecule(self):
+        parent = self._parent
+        if parent:
+            return parent._molecule
+        else:
+            return None
+
+    @property
+    def _complex(self):
+        parent = self._parent
+        if parent:
+            return parent._complex
+        else:
+            return None
+    #endregion

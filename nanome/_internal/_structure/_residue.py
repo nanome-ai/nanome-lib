@@ -27,3 +27,54 @@ class _Residue(_Base):
         #children
         self._atoms = []
         self._bonds = []
+
+    def _add_atom(self, atom):
+        self._atoms.append(atom)
+        atom._parent = self
+
+    def _remove_atom(self, atom):
+        atom.index = -1
+        self._atoms.remove(atom)
+        atom._parent = None
+    
+    def _add_bond(self, bond):
+        bond.index = -1
+        self._bonds.append(bond)
+        bond._parent = self
+
+    def _remove_bond(self, bond):
+        bond.index = -1
+        self._bonds.remove(bond)
+        bond._parent = None
+    
+    def _set_atoms(self, atoms):
+        self._atoms = atoms
+        for atom in atoms:
+            atom._parent = self
+
+    def _set_bonds(self, bonds):
+        self._bonds = bonds
+        for bond in bonds:
+            bond._parent = self
+
+    #region connections
+    @property
+    def _chain(self):
+        return self._parent
+
+    @property
+    def _molecule(self):
+        parent = self._parent
+        if parent:
+            return parent._molecule
+        else:
+            return None
+
+    @property
+    def _complex(self):
+        parent = self._parent
+        if parent:
+            return parent._complex
+        else:
+            return None
+    #endregion

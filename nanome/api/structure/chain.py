@@ -9,13 +9,13 @@ class Chain(_Chain, Base):
 
     def add_residue(self, residue):
         residue.index = -1
-        self._residues.append(residue)
+        self._add_residue(residue)
 
     def remove_residue(self, residue):
         residue.index = -1
-        self._residues.remove(residue)
+        self._remove_residue(residue)
 
-    #Generators:
+    #region Generators:
     @property
     def residues(self):
         for residue in self._residues:
@@ -32,6 +32,17 @@ class Chain(_Chain, Base):
         for residue in self.residues:
             for bond in residue.bonds:
                 yield bond
+    #endregion
+
+    #region connections
+    @property
+    def molecule(self):
+        return self._molecule
+
+    @property
+    def complex(self):
+        return self._complex
+    #endregion
 
     #region all fields
     @property

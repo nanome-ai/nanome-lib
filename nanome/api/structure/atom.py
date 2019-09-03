@@ -15,10 +15,28 @@ class Atom(_Atom, Base):
         self._rendering = Atom.Rendering(self)
         self._molecular = Atom.Molecular(self)
 
+    #region connections
     @property
     def bonds(self):
         for bond in self._bonds:
             yield bond
+
+    @property
+    def residue(self):
+        return self._residue
+
+    @property
+    def chain(self):
+        return self._chain
+
+    @property
+    def molecule(self):
+        return self._molecule
+
+    @property
+    def complex(self):
+        return self._complex
+    #endregion
 
     #region all fields
     def set_visible(self, value):
