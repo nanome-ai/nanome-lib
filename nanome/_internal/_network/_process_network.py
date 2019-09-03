@@ -54,11 +54,13 @@ class _ProcessNetwork(object):
                 payload = self._process_conn.recv()
         except BrokenPipeError:
             Logs.debug("Pipe has been closed, exiting process")
+            self._plugin._on_stop()
             return False
 
         if payload:
             if payload == stop_bytes:
                 Logs.debug("Pipe has been closed, exiting process")
+                self._plugin._on_stop()
                 return False
 
             received_object, command_hash, request_id = self._serializer.deserialize_command(payload, self.__version_table)
