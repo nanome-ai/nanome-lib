@@ -11,6 +11,9 @@ class _ProcessManagerInstance():
         self.__pending_start = deque()
         self.__processes = dict()
 
+    def _close(self):
+        self.__pipe.close()
+
     def update(self):
         has_data = None
         try:
