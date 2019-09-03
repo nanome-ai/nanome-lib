@@ -13,8 +13,6 @@ class _Bond(_Base):
         self._kind = _Bond.Kind.CovalentSingle
         self.__atom1 = None
         self.__atom2 = None
-        #Parent pointers
-        self._parent = None
 
     @property
     def _atom1(self):

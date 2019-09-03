@@ -10,8 +10,6 @@ class _Molecule(_Base):
         self._name = "molecule"
         self._associated = {}
         self._chains = []
-        #Parent pointers
-        self._parent = None
 
     def _add_chain(self, chain):
         self._chains.append(chain)

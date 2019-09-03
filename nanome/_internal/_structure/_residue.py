@@ -27,8 +27,6 @@ class _Residue(_Base):
         #children
         self._atoms = []
         self._bonds = []
-        #Parent pointers
-        self._parent = None
 
     def _add_atom(self, atom):
         self._atoms.append(atom)

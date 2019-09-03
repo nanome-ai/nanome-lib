@@ -9,8 +9,6 @@ class _Chain(_Base):
         super(_Chain, self).__init__()
         self._name = "chain"
         self._residues = []
-        #Parent pointers
-        self._parent = None
 
     def _add_residue(self, residue):
         self._residues.append(residue)

@@ -44,5 +44,3 @@ class _Atom(_Base):
         self._unique_identifier = _Atom._atom_count
         self._bonds = []
         _Atom._atom_count += 1
-        #Parent pointer
-        self._parent = None
