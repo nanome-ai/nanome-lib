@@ -18,7 +18,7 @@ class _ComplexSerializer(_TypeSerializer):
         self.dictionary.set_types(self.string, self.string)
 
     def version(self):
-        return 1 
+        return 2
 
     def name(self):
         return "Complex"
@@ -36,6 +36,9 @@ class _ComplexSerializer(_TypeSerializer):
         context.write_int(value._current_frame)
 
         context.write_using_serializer(self.string, value._name)
+        if version >= 2:
+            context.write_int(value._index_tag)
+            context.write_using_serializer(self.string, value._split_tag)
         position = Vector3._get_inversed_handedness(value._position)
         context.write_using_serializer(self.vector, position)
         rotation = Quaternion._get_inversed_handedness(value._rotation)
@@ -48,7 +51,7 @@ class _ComplexSerializer(_TypeSerializer):
         context.write_float(value._surface_refresh_rate)
 
         if version >= 1:
-            context.write_using_serializer(self.string, value._rendering._box_label)
+            context.write_using_serializer(self.string, value._box_label)
 
 
     def deserialize(self, version, context):
@@ -64,6 +67,9 @@ class _ComplexSerializer(_TypeSerializer):
         complex._current_frame = context.read_int()
 
         complex._name = context.read_using_serializer(self.string)
+        if version >= 2:
+            complex._index_tag = context.read_int()
+            complex._split_tag = context.read_using_serializer(self.string)
         position = context.read_using_serializer(self.vector)
         complex._position = position._inverse_handedness()
         rotation = context.read_using_serializer(self.quaternion)

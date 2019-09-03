@@ -11,6 +11,8 @@ class _Complex(_Base):
         super(_Complex, self).__init__()
         #Molecular
         self._name = "complex"
+        self._index_tag = 0
+        self._split_tag = ""
         self._remarks = {}
         #Rendering
         self._boxed = False

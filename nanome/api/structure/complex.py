@@ -113,6 +113,41 @@ class Complex(_Complex, Base):
         self._name = value
 
     @property
+    def index_tag(self):
+        return self._index_tag
+    @index_tag.setter
+    def index_tag(self, value):
+        self._index_tag = value
+
+    @property
+    def split_tag(self):
+        return self._split_tag
+    @split_tag.setter
+    def split_tag(self, value):
+        self._split_tag = value
+
+    @property
+    def full_name(self):
+        fullname = self._name
+        has_tag = False
+
+        if self._index_tag > 0:
+            fullname = fullname + " {" + str(self._index_tag)
+            has_tag = True
+
+        if self._split_tag != None and len(self._split_tag) > 0:
+            if has_tag:
+                fullname = fullname + "-" + self._split_tag
+            else:
+                fullname = fullname + " {" + self._split_tag
+            has_tag = True
+
+        if has_tag:
+            fullname = fullname + "}"
+
+        return fullname
+
+    @property
     def position(self):
         return self._position
     @position.setter
@@ -225,6 +260,20 @@ class Complex(_Complex, Base):
         @name.setter
         def name(self, value):
             self.parent.name = value
+
+        @property
+        def index_tag(self):
+            return self.parent.index_tag
+        @index_tag.setter
+        def index_tag(self, value):
+            self.parent.index_tag = value
+
+        @property
+        def split_tag(self):
+            return self.parent.split_tag
+        @split_tag.setter
+        def split_tag(self, value):
+            self.parent.split_tag = value
 
     class Transform(object):
         def __init__(self, parent):
