@@ -43,7 +43,7 @@ class Molecule(_Molecule, Base):
     #region connections
     @property
     def complex(self):
-        return self._parent
+        return self._complex
     #endregion
 
     #region all fields

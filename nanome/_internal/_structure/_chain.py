@@ -22,3 +22,16 @@ class _Chain(_Base):
         self._residues = residues
         for residue in residues:
             residue._parent = self
+
+    #region connections
+    @property
+    def _molecule(self):
+        return self._parent
+
+    @property
+    def _complex(self):
+        if self._parent:
+            return self._parent._complex
+        else:
+            return None
+    #endregion

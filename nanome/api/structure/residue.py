@@ -45,23 +45,15 @@ class Residue(_Residue, Base):
     #region connections
     @property
     def chain(self):
-        return self._parent
+        return self._chain
 
     @property
     def molecule(self):
-        parent = self._parent
-        if parent:
-            return parent.molecule
-        else:
-            return None
+        return  self._molecule
 
     @property
     def complex(self):
-        parent = self._parent
-        if parent:
-            return parent.complex
-        else:
-            return None
+        return self._complex
     #endregion
 
     #region all fields

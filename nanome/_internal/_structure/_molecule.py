@@ -23,3 +23,9 @@ class _Molecule(_Base):
         self._chains = chains
         for chain in chains:
             chain._parent = self
+
+    #region connections
+    @property
+    def _complex(self):
+        return self._parent
+    #endregion

@@ -23,31 +23,19 @@ class Atom(_Atom, Base):
 
     @property
     def residue(self):
-        return self._parent
+        return self._residue
 
     @property
     def chain(self):
-        parent = self._parent
-        if parent:
-            return parent.chain
-        else:
-            return None
+        return self._chain
 
     @property
     def molecule(self):
-        parent = self._parent
-        if parent:
-            return parent.molecule
-        else:
-            return None
+        return self._molecule
 
     @property
     def complex(self):
-        parent = self._parent
-        if parent:
-            return parent.complex
-        else:
-            return None
+        return self._complex
     #endregion
 
     #region all fields

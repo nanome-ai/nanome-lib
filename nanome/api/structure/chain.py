@@ -37,14 +37,11 @@ class Chain(_Chain, Base):
     #region connections
     @property
     def molecule(self):
-        return self._parent
+        return self._molecule
 
     @property
     def complex(self):
-        if self._parent:
-            return self._parent.complex
-        else:
-            return None
+        return self._complex
     #endregion
 
     #region all fields

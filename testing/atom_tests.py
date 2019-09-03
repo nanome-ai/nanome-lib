@@ -325,6 +325,11 @@ def test_matrices():
     assert_equal(m_inv * atom_global_pos, atom.position)\
 
 def assert_parents(atom, bond, residue, chain, molecule, complex):
+    assert(bond.residue == residue)
+    assert(bond.chain == chain)
+    assert(bond.molecule == molecule)
+    assert(bond.complex == complex)
+
     assert(atom.residue == residue)
     assert(atom.chain == chain)
     assert(atom.molecule == molecule)
@@ -340,6 +345,11 @@ def assert_parents(atom, bond, residue, chain, molecule, complex):
     assert(molecule.complex == complex)
 
 def assert_no_parents(atom, bond, residue, chain, molecule, complex):
+    assert(bond.residue == None)
+    assert(bond.chain == None)
+    assert(bond.molecule == None)
+    assert(bond.complex == None)
+
     assert(atom.residue == None)
     assert(atom.chain == None)
     assert(atom.molecule == None)
