@@ -146,6 +146,11 @@ class Complex(_Complex, Base):
             fullname = fullname + "}"
 
         return fullname
+    @full_name.setter
+    def full_name(self, value):
+        self._name = value
+        self._index_tag = 0
+        self._split_tag = ''
 
     @property
     def position(self):
