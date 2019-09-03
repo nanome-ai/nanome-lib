@@ -2,6 +2,7 @@ from nanome.util import Logs
 import time
 import traceback
 import os
+import random
 
 class TestOptions():
     def __init__(self, ignore_vars = [], accurate_floats = False, print_float_warnings = False):
@@ -76,7 +77,7 @@ def compare_values(first, second, seen_cache, options = TestOptions()):
         except:
             diff = False
             if isinstance(first, float) and not options.accurate_floats:
-                if (abs(first - second) >.00001):
+                if (abs(first - second) > .00001):
                     diff = True
                 elif first != second and options.print_float_warnings:
                     Logs.debug("floating point variables slightly different")
@@ -90,8 +91,11 @@ def compare_values(first, second, seen_cache, options = TestOptions()):
             else:
                 return True, []
         else:
-            if previously_evaluated(first, second, seen_cache):
-                return True, []
+            try:
+                if previously_evaluated(first, second, seen_cache):
+                    return True, []
+            except TypeError: # If type is unhashable
+                pass
             result, output = compare_values(first_dict, second_dict, seen_cache, options)
             output.insert(0, curr_type)
             return result, output
@@ -106,10 +110,9 @@ def compare_lists(first, second, seen_cache, options = TestOptions()):
         return False, output
     else:
         for i in range(first_len):
-            if not compare_values(first[i], second[i], seen_cache, options):
-                output = [("type: " + str(first[i].__class__))]
-                output[0] += ("\nindex: " + i)
-                return False, []
+            result, output = compare_values(first[i], second[i], seen_cache, options)
+            if result == False:
+                return False, output
     return True, []
 
 def compare_dicts(first, second, seen_cache, options = TestOptions()):
@@ -237,10 +240,10 @@ def run_timed_test(test, counter, loop_count = 1, maximum_time = -1.0):
 
 def test_serializer(serializer, obj_to_test, options=None):
     from nanome._internal._network._serialization._context import _ContextDeserialization, _ContextSerialization
-    context_s = _ContextSerialization()
-    serializer.serialize(serializer.version, obj_to_test, context_s)
+    context_s = _ContextSerialization(plugin_id=random.randint(0, 0xFFFFFFFF))
+    serializer.serialize(serializer.version(), obj_to_test, context_s)
     context_d = _ContextDeserialization(context_s.to_array())
-    result = serializer.deserialize(serializer.version, context_d)
+    result = serializer.deserialize(serializer.version(), context_d)
     assert_equal(obj_to_test, result, options)
 
 def create_test(name, func, args):

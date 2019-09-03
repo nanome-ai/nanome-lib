@@ -1,7 +1,9 @@
 from nanome.util import Logs, DirectoryRequestOptions, IntEnum
 from nanome._internal import _PluginInstance
+from nanome._internal._process import _Bonding, _Dssp
 from nanome._internal._network import _ProcessNetwork
 from nanome._internal._network._commands._callbacks import _Messages
+from nanome.api.ui import Menu
 
 import inspect
 import sys
@@ -14,7 +16,16 @@ class PluginInstance(_PluginInstance):
     | Start, update, and all methods starting by "on" can be overridden by user, in order to get requests results
     """
     def __init__(self):
-        super(_PluginInstance, self).__init__()
+        #!important: do not delete and leave empty to prevent double init.
+        pass
+
+    def __pseudo_init__(self):
+        self.menu = Menu()
+
+    def __new__(cls):
+        n = super(PluginInstance, cls).__new__(cls)
+        n.__pseudo_init__()
+        return n
 
     def start(self):
         """
@@ -205,6 +216,7 @@ class PluginInstance(_PluginInstance):
         id = self._network._send(_Messages.file_save, file_list)
         self._save_callback(id, callback)
 
+    @Logs.deprecated("create_atom_stream")
     def create_stream(self, atom_indices_list, callback):
         """
         | Create a stream allowing to continuously update many atoms positions
@@ -212,30 +224,43 @@ class PluginInstance(_PluginInstance):
         :param atom_indices_list: List of indices of all atoms that should be in the stream
         :type atom_indices_list: list of :class:`int`
         """
-        id = self._network._send(_Messages.stream_create, atom_indices_list)
+        id = self._network._send(_Messages.stream_create, (Stream.Type.Position, atom_indices_list))
         self._save_callback(id, callback)
 
-    def add_bonds(self, complex_list, callback):
+    def create_atom_stream(self, atom_indices_list, stream_type, callback):
         """
-        | Request Nanome to add bonds to a list of complexes
+        | Create a stream allowing to continuously update a properties of many atoms
+
+        :param atom_indices_list: List of indices of all atoms that should be in the stream
+        :type atom_indices_list: list of :class:`int`
+        :param stream_type: Type of stream to create
+        :type stream_type: list of :class:`~nanome.api.stream.Stream.Type`
+        """
+        id = self._network._send(_Messages.stream_create, (stream_type, atom_indices_list))
+        self._save_callback(id, callback)
+
+    def add_bonds(self, complex_list, callback, fast_mode=None):
+        """
+        | Calculate bonds
+        | Needs openbabel to be installed
 
         :param complex_list: List of complexes to add bonds to
         :type complex_list: list of :class:`~nanome.api.structure.complex.Complex`
         """
-        id = self._network._send(_Messages.bonds_add, complex_list)
-        self._save_callback(id, callback)
+        bonding = _Bonding(complex_list, callback, fast_mode)
+        bonding._start()
 
     def add_dssp(self, complex_list, callback):
         """
-        | Request Nanome to use DSSP in order to display ribbons
+        | Use DSSP to calculate secondary structures
 
         :param complex_list: List of complexes to add ribbons to
         :type complex_list: list of :class:`~nanome.api.structure.complex.Complex`
         """
-        id = self._network._send(_Messages.dssp_add, complex_list)
-        self._save_callback(id, callback)
+        dssp = _Dssp(complex_list, callback)
+        dssp._start()
 
-    def upload_cyro_em(self, path, callback = None):
+    def upload_cryo_em(self, path, callback = None):
         """
         | Renders a Cryo EM map in nanome.
 
@@ -245,12 +270,17 @@ class PluginInstance(_PluginInstance):
         id = self._network._send(_Messages.upload_cryo_em, path)
         self._save_callback(id, callback)
 
-    @classmethod
-    def _save_callback(cls, id, callback):
-        if callback == None:
-            cls.__callbacks[id] = lambda _=None: None
-        else:
-            cls.__callbacks[id] = callback
+    def open_url(self, url):
+        """
+        | Opens a URL in Nanome's computer browser
+
+        :param url: url to open
+        :type url: str
+        """
+        url = url.strip()
+        if '://' not in url:
+            url = 'http://' + url
+        self._network._send(_Messages.open_url, url)
 
     class PluginListButtonType(IntEnum):
         run = 0

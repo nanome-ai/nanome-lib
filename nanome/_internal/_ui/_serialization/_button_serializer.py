@@ -10,13 +10,18 @@ class _ButtonSerializer(_TypeSerializer):
         self.string = _StringSerializer()
 
     def version(self):
-        return 0
+        return 1
 
     def name(self):
         return "Button"
 
     def serialize(self, version, value, context):
-        context.write_int(value._content_id)
+        if (version == 0 ):
+            safe_id = (context._plugin_id << 24) & 0x7FFFFFFF
+            safe_id |= value._content_id
+        else:
+            safe_id = value._content_id
+        context.write_int(safe_id)
 
         context.write_bool(value._selected)
         context.write_bool(value._unusable)
@@ -38,6 +43,9 @@ class _ButtonSerializer(_TypeSerializer):
     def deserialize(self, version, context):
         value = _Button._create()
         value._content_id = context.read_int()
+        if (version == 0):
+            id_mask = 0x00FFFFFF
+            value._content_id &= id_mask
 
         value._selected = context.read_bool()
         value._unusable = context.read_bool()

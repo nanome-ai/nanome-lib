@@ -10,12 +10,30 @@ from nanome.util import Logs
 
 test_assets = os.getcwd() + ("/testing/test_assets")
 test_output_dir = os.getcwd() + ("/testing/test_outputs")
-options = TestOptions(ignore_vars=["_serial", "_remarks", "_associated"])
+options = TestOptions(ignore_vars=["_unique_identifier", "_remarks", "_associated"])
 
 
 def run(counter):
+    run_test(read_all_ways, counter)
     run_test(test_thrombin, counter)
 
+
+def read_all_ways():
+    input_dir = test_assets + ("/sdf/small_thrombin.sdf")
+    #read path
+    complex1 = struct.Complex.io.from_sdf(path=input_dir)
+    with open(input_dir) as f:
+        complex2 = struct.Complex.io.from_sdf(file=f)
+    with open(input_dir) as f:
+        as_string = f.read()
+    with open(input_dir) as f:
+        as_lines = f.readlines()
+    complex3 = struct.Complex.io.from_sdf(string=as_string)
+    complex4 = struct.Complex.io.from_sdf(lines=as_lines)
+    assert(complex1 != None)
+    assert(complex2 != None)
+    assert(complex3 != None)
+    assert(complex4 != None)
 
 # Testing save load
 # MMCIF
@@ -23,7 +41,7 @@ def test_thrombin():
     input_dir = test_assets + ("/sdf/small_thrombin.sdf")
     output_dir = test_output_dir + ("/testOutput.sdf")
 
-    complex1 = struct.Complex.io.from_sdf(input_dir)
+    complex1 = struct.Complex.io.from_sdf(path=input_dir)
     complex1.io.to_sdf(output_dir)
 
     #fact checks
@@ -36,7 +54,7 @@ def test_thrombin():
     assert(atom_count == 228)
     #
 
-    complex2 = struct.Complex.io.from_sdf(output_dir)
+    complex2 = struct.Complex.io.from_sdf(path=output_dir)
     counters = count_structures(complex2)
     (molecule_count, chain_count, residue_count, bond_count, atom_count) = counters
     assert(molecule_count == 3)
@@ -78,8 +96,8 @@ def compare_atom_positions(complex1, complex2):
     for a,_ in enumerate(complex1.atoms):
         atom1 = next(a1)
         atom2 = next(a2)
-        difference = atom1.molecular.position.x - atom2.molecular.position.x
+        difference = atom1.position.x - atom2.position.x
         assert(difference <.001)
         assert(difference > -.001)
-        options2 = TestOptions(ignore_vars=["_serial", "_remarks", "_associated", "_position"])
+        options2 = TestOptions(ignore_vars=["_unique_identifier", "_remarks", "_associated", "_position"])
         assert_equal(atom1, atom2, options2)

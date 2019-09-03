@@ -17,7 +17,7 @@ class _AddDSSP(_TypeSerializer):
         return "AddDSSP"
 
     def serialize(self, version, value, context):
-        subcontext = _ContextSerialization()
+        subcontext = context.create_sub_context()
         subcontext.payload["Atom"] = {}
 
         subcontext.write_using_serializer(self.__array, value)

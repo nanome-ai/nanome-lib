@@ -14,6 +14,7 @@ from ._feed_stream_done import _FeedStreamDone
 from ._file_request import _FileRequest
 from ._file_save import _FileSave
 from ._interrupt_stream import _InterruptStream
+from ._open_url import _OpenURL
 from ._run import _Run
 from ._receive_workspace import _ReceiveWorkspace
 from ._complex_added_removed import _ComplexAddedRemoved
@@ -37,3 +38,5 @@ from ._update_workspace import _UpdateWorkspace
 from ._position_structures import _PositionStructures
 from ._position_structures_done import _PositionStructuresDone
 from ._send_notification import _SendNotification
+
+from ._macro_commands import _RunMacro, _SaveMacro, _DeleteMacro, _GetMacros, _GetMacrosResponse, _StopMacro

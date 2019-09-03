@@ -1,12 +1,11 @@
 from nanome._internal._util._serializers import _TypeSerializer
-from nanome.util import Logs
 
 class _CreateStreamResult(_TypeSerializer):
     def __init__(self):
         pass
 
     def version(self):
-        return 0
+        return 1
 
     def name(self):
         return "StreamCreationResult"
@@ -17,4 +16,8 @@ class _CreateStreamResult(_TypeSerializer):
     def deserialize(self, version, context):
         err = context.read_byte()
         id = context.read_uint()
-        return (err, id)
+        if version > 0:
+            data_type = context.read_byte()
+        else:
+            data_type = Stream.DataType.float
+        return (err, id, data_type)

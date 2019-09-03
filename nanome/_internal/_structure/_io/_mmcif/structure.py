@@ -9,7 +9,7 @@ MaxCategorySize = 40
 def structure(content):
     remarks = StructureRemarks(content.remarks)
     complex = _Complex._create()
-    complex._molecular._remarks = remarks
+    complex._remarks = remarks
     # All structured infos
     all_atoms = {}
     all_residues = {}
@@ -35,17 +35,17 @@ def structure(content):
                 if not chain_id in all_chains:
                     if not molecule_id in all_molecules:
                         molecule = _Molecule._create()
-                        molecule._molecular._name = str(c_atom.model)
+                        molecule._name = str(c_atom.model)
                         all_molecules[molecule_id] = molecule
                         complex._molecules.append(molecule)
                     chain = _Chain._create()
-                    chain._molecular._name = chain_name
+                    chain._name = chain_name
                     all_chains[chain_id] = chain
                     all_molecules[molecule_id]._chains.append(chain)
                 residue = _Residue._create()
-                residue._molecular._name = c_atom.residue_name
-                residue._molecular._type = residue._molecular._name
-                residue._molecular.serial = c_atom.residue_serial
+                residue._name = c_atom.residue_name
+                residue._type = residue._name
+                residue.serial = c_atom.residue_serial
                 all_residues[residue_id] = residue
                 all_chains[chain_id]._residues.append(residue)
             atom = StructureAtom(c_atom, helper)
@@ -56,17 +56,17 @@ def structure(content):
 
 def StructureAtom(c_atom, helper):
     atom = _Atom._create()
-    atom._molecular._serial = c_atom.atom_serial
-    atom._molecular._occupancy = c_atom.occupancy
-    atom._molecular._bfactor = c_atom.bfactor
-    atom._molecular._position = Vector3(c_atom.x, c_atom.y, c_atom.z)
-    atom._molecular._symbol = c_atom.symbol
-    atom._molecular._name = c_atom.atom_name
-    atom._molecular._is_het = c_atom.is_het
-    if (atom._molecular._symbol == ""):
-        atom._molecular._symbol = atom._molecular._name[0]
+    atom._serial = c_atom.atom_serial
+    atom._occupancy = c_atom.occupancy
+    atom._bfactor = c_atom.bfactor
+    atom._position = Vector3(c_atom.x, c_atom.y, c_atom.z)
+    atom._symbol = c_atom.symbol
+    atom._name = c_atom.atom_name
+    atom._is_het = c_atom.is_het
+    if (atom._symbol == ""):
+        atom._symbol = atom._name[0]
     if (c_atom.fract and helper != None):
-        helper.Orthogonalize(c_atom.x, c_atom.y, c_atom.z, atom._molecular._position)
+        helper.Orthogonalize(c_atom.x, c_atom.y, c_atom.z, atom._position)
     return atom
 
 def StructureRemarks(remarks):

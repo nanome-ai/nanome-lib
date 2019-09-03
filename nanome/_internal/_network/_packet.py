@@ -14,13 +14,14 @@ class _Packet(object):
     packet_type_plugin_disconnection = 5
     packet_type_client_disconnection = 6
     packet_type_master_change = 7
+    packet_type_keep_alive = 8
     header_pack = struct.Struct('<HIBIi').pack
     header_unpack = struct.Struct('<HIBIi').unpack
     __compress_obj = zlib.compressobj(4, zlib.DEFLATED, -zlib.MAX_WBITS)
 
     @staticmethod
     def _compression_type():
-        return 2
+        return 0
 
     def write_string(self, str):
         self.payload_length += len(str)
@@ -77,4 +78,4 @@ class _Packet(object):
         self.plugin_id = 0
         self.payload_length = 0
         self.payload = bytearray()
-        pass
+    

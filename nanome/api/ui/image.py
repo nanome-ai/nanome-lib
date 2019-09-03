@@ -6,7 +6,7 @@ from nanome._internal._ui import _Image
 class Image(_Image, UIBase):
     ScalingOptions = nanome.util.enums.ScalingOptions
     
-    def __init__(self, file_path):
+    def __init__(self, file_path = ""):
         _Image.__init__(self)
         UIBase.__init__(self)
         self._file_path = file_path

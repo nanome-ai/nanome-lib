@@ -1,128 +1,259 @@
 import nanome
 from nanome._internal._structure._atom import _Atom
-from nanome.util import Vector3, Color
+from nanome.util import Vector3, Color, Logs
 from . import Base
 
 class Atom(_Atom, Base):
     """    
     Represents an Atom
 
-    :ivar rendering: Describes how the Atom should be rendered
-    :vartype rendering: :class:`~nanome.api.structure.atom.Atom.Rendering`
-    :ivar molecular: Contains molecular informations about the Atom
-    :vartype molecular: :class:`~nanome.api.structure.atom.Atom.Molecular`
     """
     AtomRenderingMode = nanome.util.enums.AtomRenderingMode
 
     def __init__(self):
         super(Atom, self).__init__()
-        self.rendering = self._rendering
-        self.molecular = self._molecular
+        self._rendering = Atom.Rendering(self)
+        self._molecular = Atom.Molecular(self)
 
     @property
     def bonds(self):
         for bond in self._bonds:
             yield bond
 
-    class Rendering(_Atom.Rendering):
+    #region all fields
+    def set_visible(self, value):
+        self._atom_rendering = value
+        self._hydrogened = value
+        self._watered = value
+        self._hetatomed = value
+
+    @property
+    def selected(self):
+        return self._selected
+    @selected.setter
+    def selected(self, value):
+        self._selected = value
+    
+    @property
+    def atom_mode(self):
+        return self._atom_mode
+    @atom_mode.setter
+    def atom_mode(self, value):
+        self._atom_mode = value
+    
+    @property
+    def labeled(self):
+        return self._labeled
+    @labeled.setter
+    def labeled(self, value):
+        self._labeled = value
+    
+    @property
+    def label_text(self):
+        return self._label_text
+    @label_text.setter
+    def label_text(self, value):
+        self._label_text = value
+
+    @property
+    def atom_rendering(self):
+        return self._atom_rendering
+    @atom_rendering.setter
+    def atom_rendering(self, value):
+        self._atom_rendering = value
+    
+    @property
+    def atom_color(self):
+        return self._atom_color
+    @atom_color.setter
+    def atom_color(self, value):
+        self._atom_color = value
+
+    @property
+    def atom_scale(self):
+        return self._atom_scale
+    @atom_scale.setter
+    def atom_scale(self, value):
+        self._atom_scale = value
+    
+    @property
+    def surface_rendering(self):
+        return self._surface_rendering
+    @surface_rendering.setter
+    def surface_rendering(self, value):
+        self._surface_rendering = value
+    
+    @property
+    def surface_color(self):
+        return self._surface_color
+    @surface_color.setter
+    def surface_color(self, value):
+        self._surface_color = value
+    
+    @property
+    def surface_opacity(self):
+        return self._surface_opacity
+    @surface_opacity.setter
+    def surface_opacity(self, value):
+        self._surface_opacity = value
+
+    @property
+    def symbol(self):
+        return self._symbol
+    @symbol.setter
+    def symbol(self, value):
+        self._symbol = value
+
+    @property
+    def serial(self):
+        return self._serial
+    @serial.setter
+    def serial(self, value):
+        self._serial = value
+
+    @property
+    def name(self):
+        return self._name
+    @name.setter
+    def name(self, value):
+        self._name = value
+
+    @property
+    def position(self):
+        return self._position
+    @position.setter
+    def position(self, value):
+        self._position = value
+
+    @property
+    def is_het(self):
+        return self._is_het
+    @is_het.setter
+    def is_het(self, value):
+        self._is_het = value
+    #endregion
+
+    #region deprecated
+    @property
+    @Logs.deprecated()
+    def rendering(self):
+        return self._rendering
+
+    @property
+    @Logs.deprecated()
+    def molecular(self):
+        return self._molecular
+
+    class Rendering(object):
+        def __init__(self, parent):
+            self.parent = parent
+
         def set_visible(self, value):
-            self._atom_rendering = value
-            self._hydrogened = value
-            self._watered = value
-            self._hetatomed = value
+            self.parent.atom_rendering = value
+            self.parent.hydrogened = value
+            self.parent.watered = value
+            self.parent.hetatomed = value
 
         @property
         def selected(self):
-            return self._selected
+            return self.parent.selected
         @selected.setter
         def selected(self, value):
-            self._selected = value
+            self.parent.selected = value
         
         @property
         def atom_mode(self):
-            return self._atom_mode
+            return self.parent.atom_mode
         @atom_mode.setter
         def atom_mode(self, value):
-            self._atom_mode = value
+            self.parent.atom_mode = value
         
         @property
         def labeled(self):
-            return self._labeled
+            return self.parent.labeled
         @labeled.setter
         def labeled(self, value):
-            self._labeled = value
+            self.parent.labeled = value
         
         @property
+        def label_text(self):
+            return self.parent.label_text
+        @label_text.setter
+        def label_text(self, value):
+            self.parent.label_text = value
+
+        @property
         def atom_rendering(self):
-            return self._atom_rendering
+            return self.parent.atom_rendering
         @atom_rendering.setter
         def atom_rendering(self, value):
-            self._atom_rendering = value
+            self.parent.atom_rendering = value
         
         @property
         def atom_color(self):
-            return self._atom_color
+            return self.parent.atom_color
         @atom_color.setter
         def atom_color(self, value):
-            self._atom_color = value
+            self.parent.atom_color = value
         
         @property
         def surface_rendering(self):
-            return self._surface_rendering
+            return self.parent.surface_rendering
         @surface_rendering.setter
         def surface_rendering(self, value):
-            self._surface_rendering = value
+            self.parent.surface_rendering = value
         
         @property
         def surface_color(self):
-            return self._surface_color
+            return self.parent.surface_color
         @surface_color.setter
         def surface_color(self, value):
-            self._surface_color = value
+            self.parent.surface_color = value
         
         @property
         def surface_opacity(self):
-            return self._surface_opacity
+            return self.parent.surface_opacity
         @surface_opacity.setter
         def surface_opacity(self, value):
-            self._surface_opacity = value
-    _Atom.Rendering._create = Rendering
+            self.parent.surface_opacity = value
 
-    class Molecular(_Atom.Molecular):
+    class Molecular(object):
+        def __init__(self, parent):
+            self.parent = parent
+
         @property
         def symbol(self):
-            return self._symbol
+            return self.parent.symbol
         @symbol.setter
         def symbol(self, value):
-            self._symbol = value
+            self.parent.symbol = value
 
         @property
         def serial(self):
-            return self._serial
+            return self.parent.serial
         @serial.setter
         def serial(self, value):
-            self._serial = value
+            self.parent.serial = value
 
         @property
         def name(self):
-            return self._name
+            return self.parent.name
         @name.setter
         def name(self, value):
-            self._name = value
+            self.parent.name = value
 
         @property
         def position(self):
-            return self._position
+            return self.parent.position
         @position.setter
         def position(self, value):
-            self._position = value
+            self.parent.position = value
 
         @property
         def is_het(self):
-            return self._is_het
+            return self.parent.is_het
         @is_het.setter
         def is_het(self, value):
-            self._is_het = value
-    _Atom.Molecular._create = Molecular
-
+            self.parent.is_het = value
+    #endregion
 _Atom._create = Atom

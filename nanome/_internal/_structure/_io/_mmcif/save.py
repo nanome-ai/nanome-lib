@@ -1,3 +1,4 @@
+import nanome
 from nanome._internal._structure import _Complex, _Molecule, _Chain, _Residue, _Atom, _Bond
 
 class Results(object):
@@ -12,14 +13,7 @@ class Results(object):
             self.position = None
             self.model_number = 0
 
-
-class Options(object):
-    def __init__(self):
-        self.write_hydrogens = True
-        self.ignore_far_from_selected = False
-        self.ignore_far_from_selected_distance = 0
-        self.only_save_these_atoms = None
-
+Options = nanome.util.complex_save_options.MMCIFSaveOptions
 
 class ColumnWidths(object):
     def __init__(self):
@@ -71,7 +65,7 @@ def to_file(path, complex, options=None):
             for residue in chain._residues:
                 for atom in residue._atoms:
                     if saved_atom_constraint is None or atom in saved_atom_constraint:
-                        if options.write_hydrogens or atom.molecular.symbol != "H":
+                        if options.write_hydrogens or atom.symbol != "H":
                             saved_atom = atom_to_saved_atom(
                                 atom, atom_num, model_num)
                             result.saved_atoms.append(saved_atom)
@@ -136,26 +130,26 @@ def text_atom_to_line(text_atom, column_widths):
 
 def atom_to_text(atom, residue, chain, id, model):
     # type: (_Atom, _Residue, _Chain, int, int) -> AtomText
-    chain_name = chain.molecular._name
-    if atom.molecular.is_het and chain_name[0] == "H":
+    chain_name = chain._name
+    if atom.is_het and chain_name[0] == "H":
         chain_name = chain_name[1:]
-    if atom.molecular.is_het:
+    if atom.is_het:
         type_key = "HETATM"
     else:
         type_key = "ATOM"
     text = AtomText()
     text.group_PDB = type_key
     text.id = str(id)
-    text.type_symbol = atom._molecular._symbol
-    text.cartn_x = float_to_string(atom._molecular._position.x, 3)
-    text.cartn_y = float_to_string(atom._molecular._position.y, 3)
-    text.cartn_z = float_to_string(atom._molecular._position.z, 3)
-    text.occupancy = float_to_string(atom._molecular._occupancy, 2)
-    text.b_iso_or_equiv = float_to_string(atom._molecular._bfactor, 2)
-    text.auth_seq_id = str(residue._molecular._serial)
-    text.auth_comp_id = residue._molecular._name
+    text.type_symbol = atom._symbol
+    text.cartn_x = float_to_string(atom._position.x, 3)
+    text.cartn_y = float_to_string(atom._position.y, 3)
+    text.cartn_z = float_to_string(atom._position.z, 3)
+    text.occupancy = float_to_string(atom._occupancy, 2)
+    text.b_iso_or_equiv = float_to_string(atom._bfactor, 2)
+    text.auth_seq_id = str(residue._serial)
+    text.auth_comp_id = residue._name
     text.auth_asym_id = chain_name
-    text.auth_atom_id = atom.molecular._name
+    text.auth_atom_id = atom._name
     text.pdbx_PDB_model_num = str(model)
     return text
 
@@ -165,7 +159,7 @@ def atom_to_saved_atom(atom, id, model):
     saved_atom = Results.SavedAtom()
     saved_atom.serial = id
     saved_atom.atom = atom
-    saved_atom.position = atom.molecular._position
+    saved_atom.position = atom._position
     saved_atom.model_number = model
     return saved_atom
 

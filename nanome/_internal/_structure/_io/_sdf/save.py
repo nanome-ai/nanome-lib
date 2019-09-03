@@ -1,10 +1,8 @@
+import nanome
 from nanome._internal._structure import _Complex, _Molecule, _Chain, _Residue, _Atom, _Bond
 from nanome.util import Logs
-class Options(object):
-    def __init__(self):
-        self.write_bonds = True
-        self.write_het_bonds = True
 
+Options = nanome.util.complex_save_options.SDFSaveOptions
 
 class Results(object):
     def __init__(self):
@@ -57,7 +55,7 @@ def to_file(path, complex, options=None):
                     atom_serial += 1
                     number_atoms += 1
         for chain in chains:
-            if (options.write_bonds) or (options.write_het_bonds and chain.molecular._name[0] == 'H'):
+            if (options.write_all_bonds) or (options.write_het_bonds and chain._name[0] == 'H'):
                 for residue in chain._residues:
                     for bond in residue._bonds:
                         if bond.atom1._serial in serial_by_atom_serial and bond.atom2._serial in serial_by_atom_serial:
@@ -67,7 +65,7 @@ def to_file(path, complex, options=None):
                             saved_bond.bond = bond
                             result.saved_bonds.append(saved_bond)
                             number_bonds += 1
-        add_header(lines, molecule.molecular._name, number_atoms, number_bonds)
+        add_header(lines, molecule._name, number_atoms, number_bonds)
         add_atoms(lines, result.saved_atoms)
         add_bonds(lines, result.saved_bonds)
         add_footer(lines)
@@ -97,13 +95,13 @@ def add_atoms(lines, saved_atoms):
         new_line += " "
         new_line += str(serial)
         new_line += " "
-        new_line += atom.molecular.symbol
+        new_line += atom.symbol
         new_line += " "
-        new_line += float_to_string(atom.molecular._position.x, 4)
+        new_line += float_to_string(atom._position.x, 4)
         new_line += " "
-        new_line += float_to_string(atom.molecular._position.y, 4)
+        new_line += float_to_string(atom._position.y, 4)
         new_line += " "
-        new_line += float_to_string(atom.molecular._position.z, 4)
+        new_line += float_to_string(atom._position.z, 4)
         new_line += " "
         new_line += "0"
         lines.append(new_line)
@@ -127,7 +125,7 @@ def add_bonds(lines, saved_bonds):
             new_line += " "
             new_line += str(idx)
             new_line += " "
-            new_line += str(int(bond.molecular.kind))
+            new_line += str(int(bond.kind))
             new_line += " "
             new_line += str(serial1)
             new_line += " "

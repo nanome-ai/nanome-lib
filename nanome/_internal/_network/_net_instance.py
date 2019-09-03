@@ -29,13 +29,14 @@ class _NetInstance(object):
         try:
             self._connection.connect((host, port))
             self._connection.setblocking(False)
-            Logs.debug("Connected to server", host, port)
+            Logs.message("Connected to server", host, port)
         except (ssl.SSLError, socket.error) as e:
             self._socket = None
             self._context = None
             self._connection = None
             Logs.error("Cannot connect to plugin server at", host, port, e)
-            sys.exit(1)
+            return False
+        return True
 
     def send(self, packet):
         pack = packet.pack()
@@ -48,6 +49,9 @@ class _NetInstance(object):
                     return
                 total_sent += sent
                 pack = pack[sent:]
+            except ConnectionResetError:
+                Logs.error("Connection has been forcibly closed by the server")
+                raise
             except ssl.SSLError:
                 pass
             except socket.error as e:
@@ -65,6 +69,8 @@ class _NetInstance(object):
         except ssl.SSLEOFError:
             Logs.error("Connection closed by plugin server")
             return False
+        except KeyboardInterrupt:
+            raise
         except:
             Logs.error(traceback.format_exc())
             return False

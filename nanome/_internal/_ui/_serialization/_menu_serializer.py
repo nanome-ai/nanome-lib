@@ -15,20 +15,20 @@ class _MenuSerializer(_TypeSerializer):
         return "Menu"
 
     def serialize(self, version, value, context):
-        context.write_bool(value.enabled)
+        context.write_bool(value._enabled)
         context.write_int(value._id)
-        context.write_using_serializer(self.string, value.title)
-        context.write_bool(value.locked)
+        context.write_using_serializer(self.string, value._title)
+        context.write_bool(value._locked)
         context.write_float(value._width)
         context.write_float(value._height)
         context.write_int(value.root._id)
 
     def deserialize(self, version, context):
         menu = _Menu._create()
-        menu.enabled = context.read_bool()
+        menu._enabled = context.read_bool()
         menu._id = context.read_int()
-        menu.title = context.read_using_serializer(self.string)
-        menu.locked= context.read_bool()
+        menu._title = context.read_using_serializer(self.string)
+        menu._locked= context.read_bool()
         menu._width = context.read_float()
         menu._height = context.read_float()
         menu._root_id = context.read_int()

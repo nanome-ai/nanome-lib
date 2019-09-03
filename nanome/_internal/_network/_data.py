@@ -1,5 +1,7 @@
 import struct
 
+expand_size = 1048576  # 1 MB
+expand_buffer = bytearray(expand_size)
 
 class _Data(object):
     bool_pack = struct.Struct('<?').pack_into
@@ -28,20 +30,18 @@ class _Data(object):
 
     def expand_data(self, size):
         self._buffered_bytes += size
-        if (self._buffered_computed + self._buffered_bytes > self._end):
-            self._expand_data(size)
+        while (self._buffered_computed + self._buffered_bytes > self._end):
+            self._expand_data()
 
-    def _expand_data(self, size):
-        expand_size = 1048576 + size
-        expand = bytearray(expand_size)
-        self._received_bytes.extend(expand)
+    def _expand_data(self):
+        self._received_bytes.extend(expand_buffer)
         self._end += expand_size
 
     def has_enough(self, size):
         return self._buffered_bytes >= size
 
     def to_array(self):
-        return self._received_bytes[self._buffered_computed:self._buffered_computed+self._buffered_bytes]
+        return memoryview(self._received_bytes)[self._buffered_computed:self._buffered_computed+self._buffered_bytes]
         
 #region write Data
     def write_bool(self, value):
@@ -84,6 +84,47 @@ class _Data(object):
         size = len(data)
         self.expand_data(size)
         self._received_bytes[pre:pre+size] = data
+
+    def write_byte_array(self, data):
+        size = len(data)
+        byte_size = size * 1
+        self.write_uint(size)
+
+        pre = self._buffered_bytes + self._buffered_computed
+        pack_into = struct.Struct(str(size) + "B").pack_into
+        self.expand_data(byte_size)
+        pack_into(self._received_bytes, pre, *data)
+
+    def write_float_array(self, data):
+        size = len(data)
+        byte_size = size * 4
+        self.write_uint(size)
+
+        pre = self._buffered_bytes + self._buffered_computed
+        pack_into = struct.Struct(str(size) + "f").pack_into
+        self.expand_data(byte_size)
+        pack_into(self._received_bytes, pre, *data)
+
+    def write_int_array(self, data):
+        size = len(data)
+        byte_size = size * 4
+        self.write_uint(size)
+
+        pre = self._buffered_bytes + self._buffered_computed
+        pack_into = struct.Struct(str(size) + "i").pack_into
+        self.expand_data(byte_size)
+        pack_into(self._received_bytes, pre, *data)
+
+    def write_long_array(self, data):
+        size = len(data)
+        byte_size = size * 8
+        self.write_uint(size)
+
+        pre = self._buffered_bytes + self._buffered_computed
+        pack_into = struct.Struct(str(size) + "q").pack_into
+        self.expand_data(byte_size)
+        pack_into(self._received_bytes, pre, *data)
+
 #endregion
 #region read Data
     def consume_data(self, size):
@@ -104,18 +145,6 @@ class _Data(object):
                 'Trying to read more data than available, check API compatibility')
         result = self._received_bytes[self._buffered_computed]
         self.consume_data(1)
-        return result
-
-    def read_bytes(self, size):
-        # If trying to read an empty payload, return an empty bytearray
-        if size == 0:
-            return bytearray()
-
-        if self._buffered_bytes == 0 or size > self._buffered_bytes:
-            raise BufferError(
-                'Trying to read more data than available, check API compatibility')
-        result = self._received_bytes[self._buffered_computed:self._buffered_computed + size]
-        self.consume_data(size)
         return result
 
     def read_bool(self):
@@ -146,5 +175,58 @@ class _Data(object):
         pre = self._buffered_computed
         result = _Data.uint_unpack(self._received_bytes, pre)[0]
         self.consume_data(4)
+        return result
+
+    def read_bytes(self, size):
+        # If trying to read an empty payload, return an empty bytearray
+        if size == 0:
+            return bytearray()
+
+        if size > self._buffered_bytes:
+            raise BufferError(
+                'Trying to read more data than available, check API compatibility')
+        result = self._received_bytes[self._buffered_computed:self._buffered_computed + size]
+        self.consume_data(size)
+        return result
+
+    def read_float_array(self):
+        size = self.read_uint()
+        if size == 0:
+            return []
+
+        byte_size = size * 4
+        if byte_size > self._buffered_bytes:
+            raise BufferError(
+                'Trying to read more data than available, check API compatibility')
+
+        result = struct.unpack(str(size) + "f", self._received_bytes[self._buffered_computed:self._buffered_computed + byte_size])
+        self.consume_data(byte_size)
+        return result
+
+    def read_int_array(self):
+        size = self.read_uint()
+        if size == 0:
+            return []
+
+        byte_size = size * 4
+        if byte_size > self._buffered_bytes:
+            raise BufferError(
+                'Trying to read more data than available, check API compatibility')
+        result = struct.unpack(str(size) + "i", self._received_bytes[self._buffered_computed:self._buffered_computed + byte_size])
+        self.consume_data(byte_size)
+        return result
+
+    def read_long_array(self):
+        size = self.read_uint()
+        if size == 0:
+            return []
+
+        byte_size = size * 8
+        if byte_size > self._buffered_bytes:
+            raise BufferError(
+                'Trying to read more data than available, check API compatibility')
+    
+        result = struct.unpack(str(size) + "q", self._received_bytes[self._buffered_computed:self._buffered_computed + byte_size])
+        self.consume_data(byte_size)
         return result
 #end region

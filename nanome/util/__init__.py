@@ -8,6 +8,7 @@ except:
     pass
 
 from . import enums
+from . import complex_save_options
 
 from .import_utils import ImportUtils
 from .logs import Logs
@@ -16,3 +17,4 @@ from .quaternion import Quaternion
 from .vector3 import Vector3
 from .matrix import Matrix
 from .file import DirectoryErrorCode, DirectoryRequestResult, DirectoryRequestOptions, FileErrorCode, FileData, FileSaveData, DirectoryEntry
+from .process import Process

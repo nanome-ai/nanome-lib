@@ -6,7 +6,7 @@ def _receive_menu(network, arg, request_id):
         temp_nodes = arg[1]
         temp_contents = arg[2]
 
-        plugin_menu = _Menu._get_plugin_menu()
+        plugin_menu = network._plugin.menu
         plugin_menu._copy_data(temp_menu)
         root_id = temp_menu._root_id
         
@@ -39,14 +39,14 @@ def _receive_menu(network, arg, request_id):
         #reconnects all the nodes and contents using ids.
         for node in temp_nodes:
             l_node = node_dict[node._id]
-            l_node.clear_children()
+            l_node._clear_children()
             for child_id in node._child_ids:
-                l_node.add_child(node_dict[child_id])
+                l_node._add_child(node_dict[child_id])
             del node._child_ids
             if (node._content_id == None):
-                l_node.set_content(None)
+                l_node._set_content(None)
             else:
-                l_node.set_content(content_dict[node._content_id])
+                l_node._set_content(content_dict[node._content_id])
             del node._content_id
         #corrects the root.
         plugin_menu.root = node_dict[root_id]

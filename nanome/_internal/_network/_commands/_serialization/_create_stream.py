@@ -3,17 +3,18 @@ from nanome._internal._util._serializers import _TypeSerializer
 
 class _CreateStream(_TypeSerializer):
     def __init__(self):
-        self.__array = _ArraySerializer()
-        self.__array.set_type(_LongSerializer())
+        pass
 
     def version(self):
-        return 0
+        return 1
 
     def name(self):
         return "StreamCreation"
 
     def serialize(self, version, value, context):
-        context.write_using_serializer(self.__array, value)
+        if version > 0:
+            context.write_byte(value[0])
+        context.write_long_array(value[1])
 
     def deserialize(self, version, context):
         raise NotImplementedError

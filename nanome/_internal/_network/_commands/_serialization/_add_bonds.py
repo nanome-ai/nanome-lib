@@ -16,7 +16,7 @@ class _AddBonds(_TypeSerializer):
         return "AddBonds"
 
     def serialize(self, version, value, context):
-        subcontext = _ContextSerialization()
+        subcontext = context.create_sub_context()
         subcontext.payload["Atom"] = {}
 
         subcontext.write_using_serializer(self.__array, value)

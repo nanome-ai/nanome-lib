@@ -24,7 +24,7 @@ class Content(object):
             self.is_het = False
             self.fract = False
             # model indicate structure that need to put into complex
-            self.model = 0
+            self.model = 1
     
     class UnitCell(object):
         def __init__(self):

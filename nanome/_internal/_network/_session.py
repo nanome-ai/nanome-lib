@@ -1,32 +1,56 @@
 from nanome.util import Logs
 from . import _Packet
+import traceback
+
+
+stop_bytes = bytearray("CLOSEPIPE", "utf-8")
+
 
 # Plugin networking representation, used from the main process
 class _Session(object):
     def _read_from_plugin(self):
         try:
-            has_data = self.plugin_pipe.poll()
+            has_net_data = self.__net_plugin_pipe.poll()
+            has_proc_data = self.__proc_plugin_pipe.poll()
         except:
-            Logs.error("Plugin encountered an error, please check the logs")
+            Logs.error("Plugin encountered an error, please check the logs", traceback.format_exc())
             return False
-        if has_data:
-            packet = self.plugin_pipe.recv()
+        if has_net_data:
+            packet = self.__net_plugin_pipe.recv()
             self._net_plugin.send(packet)
+        if has_proc_data:
+            request = self.__proc_plugin_pipe.recv()
+            self._process_manager._received_request(request, self)
         return True
 
     def _on_packet_received(self, payload):
         try:
-            self.plugin_pipe.send(payload)
+            self.__net_plugin_pipe.send(payload)
         except:
             Logs.error("Cannot deliver packet to plugin", self._session_id, "Did it crash?")
+
+    def send_process_data(self, data):
+        try:
+            self.__proc_plugin_pipe.send(data)
+        except:
+            Logs.error("Cannot deliver process info to plugin", self._session_id, "Did it crash?")
 
     def _send_disconnection_message(self, plugin_id):
         packet = _Packet()
         packet.set(self._session_id, _Packet.packet_type_plugin_disconnection, plugin_id)
         self._net_plugin.send(packet)
 
-    def __init__(self, session_id, net_plugin):
+    def close_pipes(self):
+        self._on_packet_received(stop_bytes)
+        self._closed = True
+        self.__net_plugin_pipe.close()
+        self.__proc_plugin_pipe.close()
+
+    def __init__(self, session_id, net_plugin, process_manager, net_pipe, proc_pipe):
         self._session_id = session_id
         self._net_plugin = net_plugin
-        self.plugin_pipe = None
+        self._process_manager = process_manager
+        self.__net_plugin_pipe = net_pipe
+        self.__proc_plugin_pipe = proc_pipe
         self.plugin_process = None
+        self._closed = False

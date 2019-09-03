@@ -1,7 +1,9 @@
 from . import _DefaultPlugin
 from nanome._internal import _network as Network, _Plugin, _PluginInstance
+from nanome._internal._process import _ProcessManager
 from nanome._internal._network._serialization._serializer import Serializer
 from nanome.util.logs import Logs
+from nanome.util import config
 from multiprocessing import Process, Pipe
 import sys
 import json
@@ -21,7 +23,18 @@ class Plugin(_Plugin):
     :type category: str
     :type has_advanced: bool
     """
-    def run(self, host = '127.0.0.1', port = 8888, key_file = "nts_key"):
+    @classmethod
+    def setup(cls, name, description, category, has_advanced, plugin_class, host = "config", port = "config", key_file = "config"):
+        if not _Plugin._is_process():
+            plugin = cls(name, description, category, has_advanced)
+            plugin.set_plugin_class(plugin_class)
+            plugin.run(host, port, key_file)
+
+    @staticmethod
+    def set_maximum_processes_count(max_process_nb):
+        _ProcessManager._max_process_count = max_process_nb
+
+    def run(self, host = "config", port = "config", key_file = "config"):
         """
         | Starts the plugin by connecting to the server specified.
         | If arguments (-a, -p) are given when starting plugin, host/port will be ignored.
@@ -32,9 +45,18 @@ class Plugin(_Plugin):
         :type host: str
         :type port: int
         """
-        self.__host = host
-        self.__port = port
-        self.__key_file = key_file
+        if (host == "config"):
+            self.__host = config.fetch("host")
+        else:
+            self.__host = host
+        if (port == "config"):
+            self.__port = config.fetch("port")
+        else:
+            self.__port = port
+        if (key_file == "config"):
+            self.__key_file = config.fetch("key_file")
+        else:
+            self.__key_file = key_file
         self.__parse_args()
         Logs.debug("Start plugin")
         self.__run()
@@ -42,7 +64,7 @@ class Plugin(_Plugin):
     def set_plugin_class(self, plugin_class):
         """
         | Set plugin class to instantiate when a new session is connected
-        | If using a custom class, functions in :func:~nanome.api.plugin_instance._PluginInstance can be overriden
+        | The plugin class should interact with or override functions in :class:`~nanome.api.plugin_instance.PluginInstance` to interact with Nanome
 
         :param plugin_class: Plugin class to instantiate
         :type plugin_class: :class:`~nanome.api.plugin_instance.PluginInstance`

@@ -20,15 +20,15 @@ class _WorkspaceSerializer(_TypeSerializer):
     def serialize(self, version, value, context):
         context.write_using_serializer(self.array, value._complexes)
 
-        context.write_using_serializer(self.vector, value.transform._position)
-        context.write_using_serializer(self.quaternion, value.transform._rotation)
-        context.write_using_serializer(self.vector, value.transform._scale)
+        context.write_using_serializer(self.vector, value._position)
+        context.write_using_serializer(self.quaternion, value._rotation)
+        context.write_using_serializer(self.vector, value._scale)
 
     def deserialize(self, version, context):
         workspace = _Workspace._create()
         workspace._complexes = context.read_using_serializer(self.array)
-        workspace.transform._position = context.read_using_serializer(self.vector)
-        workspace.transform._rotation = context.read_using_serializer(self.quaternion)
-        workspace.transform._scale = context.read_using_serializer(self.vector)
+        workspace._position = context.read_using_serializer(self.vector)
+        workspace._rotation = context.read_using_serializer(self.quaternion)
+        workspace._scale = context.read_using_serializer(self.vector)
 
         return workspace

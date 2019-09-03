@@ -17,10 +17,10 @@ class UpdateWorkspace(nanome.PluginInstance):
     def stream_created(self, stream, error):
         a_pos = []
         for atom in self.all_atoms:
-            atom.molecular.position.y += 1
-            a_pos.append(atom.molecular.position.x)
-            a_pos.append((atom.molecular.position.y)%100)
-            a_pos.append(atom.molecular.position.z)
+            atom.position.y += 1
+            a_pos.append(atom.position.x)
+            a_pos.append((atom.position.y)%100)
+            a_pos.append(atom.position.z)
         def repeat():
             self.stream_created(stream, None)
         stream.update(a_pos, repeat)

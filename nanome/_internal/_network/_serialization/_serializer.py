@@ -13,7 +13,7 @@ class Serializer(object):
     _command_callbacks = dict()
 
     def serialize_message(self, request_id, message_type, arg, version_table):
-        context = _ContextSerialization(version_table, packet_debugging)
+        context = _ContextSerialization(self._plugin_id, version_table, packet_debugging)
         context.write_uint(request_id)
         command_hash = CommandCallbacks._Hashes.MessageHashes[message_type]
         context.write_uint(command_hash)
@@ -64,7 +64,8 @@ class Serializer(object):
         return command_hash == CommandCallbacks._Hashes.CommandHashes[CommandCallbacks._Commands.connect]
 
     def __init__(self):
-        pass
+        self._plugin_id = 0
+
 #-------------Commands-----------#
 # Commands are incoming (nanome -> plugin)
 
@@ -114,6 +115,9 @@ add_command(CommandCallbacks._Commands.stream_create_done,CommandSerializers._Cr
 add_command(CommandCallbacks._Commands.stream_interrupt, CommandSerializers._InterruptStream())
 add_command(CommandCallbacks._Commands.stream_feed_done, CommandSerializers._FeedStreamDone())
 
+#macros
+add_command(CommandCallbacks._Commands.get_macros_response, CommandSerializers._GetMacrosResponse())
+
 #-------------Messages-----------#
 # Messages are outgoing (plugin -> nanome)
 
@@ -152,10 +156,20 @@ add_message(CommandCallbacks._Messages.file_request, CommandSerializers._FileReq
 add_message(CommandCallbacks._Messages.file_save, CommandSerializers._FileSave())
 add_message(CommandCallbacks._Messages.plugin_list_button_set, CommandSerializers._SetPluginListButton())
 
+#macros
+add_message(CommandCallbacks._Messages.run_macro, CommandSerializers._RunMacro())
+add_message(CommandCallbacks._Messages.save_macro, CommandSerializers._SaveMacro())
+add_message(CommandCallbacks._Messages.delete_macro, CommandSerializers._DeleteMacro())
+add_message(CommandCallbacks._Messages.get_macros, CommandSerializers._GetMacros())
+add_message(CommandCallbacks._Messages.stop_macro, CommandSerializers._StopMacro())
+
 #streams
 add_message(CommandCallbacks._Messages.stream_create, CommandSerializers._CreateStream())
 add_message(CommandCallbacks._Messages.stream_feed, CommandSerializers._FeedStream())
 add_message(CommandCallbacks._Messages.stream_destroy, CommandSerializers._DestroyStream())
+
+#others
+add_message(CommandCallbacks._Messages.open_url, CommandSerializers._OpenURL())
 
 #-------------Callbacks-----------#
 # Callbacks are things to do after the command is decoded (plugin -> plugin)
@@ -203,3 +217,6 @@ add_callback(CommandCallbacks._Commands.file_save_done, CommandCallbacks._receiv
 add_callback(CommandCallbacks._Commands.stream_create_done, CommandCallbacks._receive_create_stream_result)
 add_callback(CommandCallbacks._Commands.stream_interrupt, CommandCallbacks._receive_interrupt_stream)
 add_callback(CommandCallbacks._Commands.stream_feed_done, CommandCallbacks._feed_stream_done)
+
+#macros
+add_callback(CommandCallbacks._Commands.get_macros_response, CommandCallbacks._receive_macros)

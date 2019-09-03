@@ -23,9 +23,17 @@ class Vector3(object):
 
     def __add__(self, other):
         return Vector3(self._positions[0] + other.x, self._positions[1] + other.y, self._positions[2] + other.z)
-    
+
+    def __sub__(self, other):
+        return Vector3(self._positions[0] - other.x, self._positions[1] - other.y, self._positions[2] - other.z)
+
     def unpack(self):
         return self._positions[0], self._positions[1], self._positions[2]
+
+    def set(self, x, y, z):
+        self._positions[0] = x
+        self._positions[1] = y
+        self._positions[2] = z
 
     @property
     def x(self):
@@ -47,3 +55,11 @@ class Vector3(object):
     @z.setter
     def z(self, value):
         self._positions[2] = float(value)
+
+    def _inverse_handedness(self):
+        self._positions[0] *= -1.0
+        return self
+
+    @classmethod
+    def _get_inversed_handedness(cls, value):
+        return Vector3(-value.x, value.y, value.z)

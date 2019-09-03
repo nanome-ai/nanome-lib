@@ -22,7 +22,7 @@ class _PacketDebuggingException(Exception):
 
 class _ContextSerialization(object):
     # pylint: disable=method-hidden
-    def __init__(self, version_table = None, packet_debugging = False):
+    def __init__(self, plugin_id, version_table = None, packet_debugging = False):
         self._data = _Data()
         self.payload = {}
         self.__version_table = version_table
@@ -36,6 +36,7 @@ class _ContextSerialization(object):
             self.write_uint = self.write_uint_debug
             self.write_using_serializer = self.write_using_serializer_debug
         self.__packet_debugging = packet_debugging
+        self._plugin_id = plugin_id
 
     def has_packet_debugging(self):
         return self.__packet_debugging
@@ -89,6 +90,18 @@ class _ContextSerialization(object):
         self._data.write_uint(0xCAFEB006)
         self._data.write_uint(value)
 
+    def write_byte_array(self, value):
+        self._data.write_byte_array(value)
+
+    def write_float_array(self, value):
+        self._data.write_float_array(value)
+
+    def write_int_array(self, value):
+        self._data.write_int_array(value)
+
+    def write_long_array(self, value):
+        self._data.write_long_array(value)
+
     def write_using_serializer(self, serializer, value):
         try:
             version = self.__version_table[serializer.name()]
@@ -112,6 +125,10 @@ class _ContextSerialization(object):
 
     def get_packet_debugging(self):
         return self.__packet_debugging
+
+    def create_sub_context(self):
+        sub_context = _ContextSerialization(self._plugin_id, self.__version_table, self.__packet_debugging)
+        return sub_context
 
 class _ContextDeserialization(object):
     # pylint: disable=method-hidden
@@ -198,6 +215,15 @@ class _ContextDeserialization(object):
             self.__packet_debugging_exception._raise("uint")
         return self._data.read_uint()
 
+    def read_int_array(self):
+        return self._data.read_int_array()
+
+    def read_float_array(self):
+        return self._data.read_float_array()
+
+    def read_long_array(self):
+        return self._data.read_long_array()
+
     def read_using_serializer(self, serializer):
         try:
             version = self.__version_table[serializer.name()]
@@ -223,3 +249,6 @@ class _ContextDeserialization(object):
 
     def get_packet_debugging(self):
         return self.__packet_debugging
+
+    def create_sub_context(self):
+        return _ContextDeserialization(self.__version_table, self.__packet_debugging)
