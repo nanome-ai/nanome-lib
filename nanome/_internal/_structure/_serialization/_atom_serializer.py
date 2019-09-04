@@ -1,9 +1,7 @@
-from nanome._internal._util._serializers import _StringSerializer, _ColorSerializer, _Vector3Serializer, _ArraySerializer, _BoolSerializer
+from nanome._internal._util._serializers import _StringSerializer, _ColorSerializer, _Vector3Serializer, _ArraySerializer, _BoolSerializer, _EnumSerializer
 from .. import _Atom
 from nanome._internal._util._serializers import _TypeSerializer
 from nanome.util import Logs
-
-cast_failed_warning = False
 
 class _AtomSerializer(_TypeSerializer):
     def __init__(self):
@@ -12,6 +10,8 @@ class _AtomSerializer(_TypeSerializer):
         self.vector = _Vector3Serializer()
         self.array = _ArraySerializer()
         self.bool = _BoolSerializer()
+        self.enum = _EnumSerializer()
+        self.enum.set_type(_Atom.AtomRenderingMode)
 
     def version(self):
         #Version 0 corresponds to Nanome release 1.10
@@ -25,7 +25,7 @@ class _AtomSerializer(_TypeSerializer):
     def serialize(self, version, value, context):
         context.write_long(value._index)
         context.write_bool(value._selected)
-        context.write_int(value._atom_mode)
+        context.write_using_serializer(self.enum, value._atom_mode)
         context.write_bool(value._labeled)
         if version >= 1:
             context.write_using_serializer(self.string, value._label_text)
@@ -44,7 +44,8 @@ class _AtomSerializer(_TypeSerializer):
         context.write_using_serializer(self.string, value._symbol)
         context.write_int(value._serial)
         context.write_using_serializer(self.string, value._name)
-        context.write_using_serializer(self.vector, value._position)
+        if version < 3:
+            context.write_using_serializer(self.vector, value._position)
         context.write_bool(value._is_het)
 
         context.write_float(value._occupancy)
@@ -64,15 +65,7 @@ class _AtomSerializer(_TypeSerializer):
         if index >= 0:
             atom._index = index
         atom._selected = context.read_bool()
-        atom_mode = context.read_int()
-        try:
-            atom._atom_mode = _Atom.AtomRenderingMode(atom_mode)
-        except ValueError:
-            global cast_failed_warning
-            if cast_failed_warning == False:
-                cast_failed_warning = True
-                Logs.warning("Received an unknown atom rendering mode. Library might outdated")
-            atom._atom_mode = _Atom.AtomRenderingMode.BallStick
+        atom._atom_mode = context.read_using_serializer(self.enum)
         atom._labeled = context.read_bool()
         if version >= 1:
             atom._label_text = context.read_using_serializer(self.string)
@@ -92,7 +85,8 @@ class _AtomSerializer(_TypeSerializer):
         atom._symbol = context.read_using_serializer(self.string)
         atom._serial = context.read_int()
         atom._name = context.read_using_serializer(self.string)
-        atom._position = context.read_using_serializer(self.vector)
+        if version < 3:
+            atom._position = context.read_using_serializer(self.vector)
         atom._is_het = context.read_bool()
 
         atom._occupancy = context.read_float()

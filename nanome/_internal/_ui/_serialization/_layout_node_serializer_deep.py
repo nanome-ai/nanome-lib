@@ -1,4 +1,4 @@
-from nanome._internal._util._serializers import _ArraySerializer
+from nanome._internal._util._serializers import _ArraySerializer, _EnumSerializer
 from .. import _LayoutNode
 from . import _UIBaseSerializer
 
@@ -10,6 +10,12 @@ class _LayoutNodeSerializerDeep(_TypeSerializer):
         self._layout_array.set_type(self)
         self._content_serializer = _UIBaseSerializer()
         self._inited = False
+        self.padding = _EnumSerializer()
+        self.padding.set_type(_LayoutNode.PaddingTypes)
+        self.sizing = _EnumSerializer()
+        self.sizing.set_type(_LayoutNode.SizingTypes)
+        self.layout = _EnumSerializer()
+        self.layout.set_type(_LayoutNode.LayoutTypes)
 
     def version(self):
         return 0
@@ -21,11 +27,11 @@ class _LayoutNodeSerializerDeep(_TypeSerializer):
         context.write_int(value._id)
         context.write_bool(value._enabled)
         context.write_int(value._layer)
-        context.write_int(value._layout_orientation)
-        context.write_int(value._sizing_type)
+        context.write_using_serializer(self.layout, value._layout_orientation)
+        context.write_using_serializer(self.sizing, value._sizing_type)
         context.write_float(value._sizing_value)
         context.write_float(value._forward_dist)
-        context.write_int(value._padding_type)
+        context.write_using_serializer(self.padding, value._padding_type)
         context.write_float(value._padding[0])
         context.write_float(value._padding[1])
         context.write_float(value._padding[2])
@@ -41,11 +47,11 @@ class _LayoutNodeSerializerDeep(_TypeSerializer):
         result._id = context.read_int()
         result._enabled = context.read_bool()
         result._layer = context.read_int()
-        result._layout_orientation = _LayoutNode.LayoutTypes(context.read_int())
-        result._sizing_type = _LayoutNode.SizingTypes(context.read_int())
+        result._layout_orientation = context.read_using_serializer(self.layout)
+        result._padding_type = context.read_using_serializer(self.sizing)
         result._sizing_value = context.read_float()
         result._forward_dist = context.read_float()
-        result._padding_type = _LayoutNode.PaddingTypes(context.read_int())
+        result._padding_type = context.read_using_serializer(self.padding)
         result._padding = (context.read_float(),
                            context.read_float(),
                            context.read_float(),

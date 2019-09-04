@@ -16,7 +16,6 @@ class _Atom(_Base):
         self._symbol = "Carbon"
         self._serial = 1
         self._name = "default"
-        self._position = Vector3()
         self._is_het = False
         #No API
         self._occupancy = 0.0
@@ -41,8 +40,8 @@ class _Atom(_Base):
         self._het_atomed = True
         self._het_surfaced = True
         #conformer
-        self._positions = []
-        self._exists = []
+        self._positions = [Vector3()]
+        self._exists = [True]
         #internal
         self._unique_identifier = _Atom._atom_count
         self._bonds = []
@@ -73,4 +72,32 @@ class _Atom(_Base):
             return self._parent._complex
         else:
             return None
+
+    @property
+    def _current_conformer(self):
+        if self._molecule != None:
+            return self._molecule._current_conformer
+        else:
+            return 0
+
+    @property
+    def _max_conformers(self):
+        if self._molecule == None:
+            return self._molecule._max_conformers
+        else:
+            return 1
+
+    def _set_positions(self, positions):
+        if self._molecule != None:
+            if len(positions) != self._max_conformers:
+                nanome.util.Logs.error("Molecule contains", self._max_conformers, "but atom contains", len(positions), "conformers.")
+        self._positions = positions
+    
+    @property
+    def _position(self):
+        return self._positions[self._current_conformer]
+    
+    @_position.setter
+    def _position(self, value):
+        self._positions[self._current_conformer] = value
     #endregion

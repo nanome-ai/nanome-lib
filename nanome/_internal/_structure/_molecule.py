@@ -7,15 +7,13 @@ class _Molecule(_Base):
 
     def __init__(self):
         super(_Molecule, self).__init__()
-        self._name = "molecule"
-        self._associated = {}
         self._chains = []
 
         #conformers
         self._current_conformer = 0
-        self._max_conformers = 0
-        self._names = []
-        self._associateds = []
+        self.__conformer_count = 0
+        self._names = [""]
+        self._associateds = [""]
 
     def _add_chain(self, chain):
         self._chains.append(chain)
@@ -34,4 +32,37 @@ class _Molecule(_Base):
     @property
     def _complex(self):
         return self._parent
+    #endregion
+
+    @property
+    def _name(self):
+        return self._names[self._current_conformer]
+    
+    @_name.setter
+    def _name(self, value):
+        self._names[self._current_conformer] = value
+
+    @property
+    def _associated(self):
+        return self._associateds[self._current_conformer]
+    
+    @_associated.setter
+    def _associated(self, value):
+        self._associateds[self._current_conformer] = value
+
+    #region conformers
+    @property
+    def _conformer_count(self):
+        return self.__conformer_count
+    
+    @_conformer_count.setter
+    def _conformer_count(self, value):
+        if value > len(self._names):
+            self._names.append(self._names[-1])
+            self._associateds.append(self._associateds[-1])
+        else:
+            self._names = self._names[:value]
+            self._associateds = self._associateds[:value]
+            self._current_conformer = value - 1
+        self.__conformer_count = value
     #endregion

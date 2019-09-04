@@ -16,3 +16,4 @@ from ._int_serializer import _IntSerializer
 from ._long_serializer import _LongSerializer
 from ._quaternion_serializer import _QuaternionSerializer
 from ._vector3_serializer import _Vector3Serializer
+from ._enum_serializer import _EnumSerializer
