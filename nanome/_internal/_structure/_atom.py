@@ -40,6 +40,9 @@ class _Atom(_Base):
         self._watered = True
         self._het_atomed = True
         self._het_surfaced = True
+        #conformer
+        self._positions = []
+        self._exists = []
         #internal
         self._unique_identifier = _Atom._atom_count
         self._bonds = []

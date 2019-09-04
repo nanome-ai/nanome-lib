@@ -11,6 +11,12 @@ class _Molecule(_Base):
         self._associated = {}
         self._chains = []
 
+        #conformers
+        self._current_conformer = 0
+        self._max_conformers = 0
+        self._names = []
+        self._associateds = []
+
     def _add_chain(self, chain):
         self._chains.append(chain)
         chain._parent = self

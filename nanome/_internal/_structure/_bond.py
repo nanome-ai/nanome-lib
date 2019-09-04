@@ -14,6 +14,9 @@ class _Bond(_Base):
         self.__atom1 = None
         self.__atom2 = None
 
+        self.exists = []
+        self.orders = []
+
     @property
     def _atom1(self):
         return self.__atom1
