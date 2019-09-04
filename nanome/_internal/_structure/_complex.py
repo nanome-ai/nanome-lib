@@ -11,6 +11,8 @@ class _Complex(_Base):
         super(_Complex, self).__init__()
         #Molecular
         self._name = "complex"
+        self._index_tag = 0
+        self._split_tag = ""
         self._remarks = {}
         #Rendering
         self._boxed = False
@@ -21,6 +23,7 @@ class _Complex(_Base):
         self._selected = False #selected on live
         self._surface_dirty = False
         self._surface_refresh_rate = -1.0  # Not used yet, future auto surface refresh
+        self._box_label = ""
         #Transform
         self._position = Vector3(0,0,0)
         self._rotation = Quaternion(0,0,0,0)

@@ -99,6 +99,13 @@ class Complex(_Complex, Base):
         self._surface_dirty = True
 
     @property
+    def box_label(self):
+        return self._box_label
+    @box_label.setter
+    def box_label(self, value):
+        self._box_label = value
+
+    @property
     def name(self):
         return self._name
     @name.setter
@@ -106,6 +113,46 @@ class Complex(_Complex, Base):
         if type(value) is not str:
             value = str(value)
         self._name = value
+
+    @property
+    def index_tag(self):
+        return self._index_tag
+    @index_tag.setter
+    def index_tag(self, value):
+        self._index_tag = value
+
+    @property
+    def split_tag(self):
+        return self._split_tag
+    @split_tag.setter
+    def split_tag(self, value):
+        self._split_tag = value
+
+    @property
+    def full_name(self):
+        fullname = self._name
+        has_tag = False
+
+        if self._index_tag > 0:
+            fullname = fullname + " {" + str(self._index_tag)
+            has_tag = True
+
+        if self._split_tag != None and len(self._split_tag) > 0:
+            if has_tag:
+                fullname = fullname + "-" + self._split_tag
+            else:
+                fullname = fullname + " {" + self._split_tag
+            has_tag = True
+
+        if has_tag:
+            fullname = fullname + "}"
+
+        return fullname
+    @full_name.setter
+    def full_name(self, value):
+        self._name = value
+        self._index_tag = 0
+        self._split_tag = ''
 
     @property
     def position(self):
@@ -203,6 +250,13 @@ class Complex(_Complex, Base):
         def set_surface_needs_redraw(self):
             self.parent.surface_dirty = True
 
+        @property
+        def box_label(self):
+            return self._box_label
+        @box_label.setter
+        def box_label(self, value):
+            self._box_label = value
+
     class Molecular(object):
         def __init__(self, parent):
             self.parent = parent
@@ -213,6 +267,20 @@ class Complex(_Complex, Base):
         @name.setter
         def name(self, value):
             self.parent.name = value
+
+        @property
+        def index_tag(self):
+            return self.parent.index_tag
+        @index_tag.setter
+        def index_tag(self, value):
+            self.parent.index_tag = value
+
+        @property
+        def split_tag(self):
+            return self.parent.split_tag
+        @split_tag.setter
+        def split_tag(self, value):
+            self.parent.split_tag = value
 
     class Transform(object):
         def __init__(self, parent):
