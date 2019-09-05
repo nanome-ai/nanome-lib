@@ -1,10 +1,12 @@
-from nanome._internal._util._serializers import _StringSerializer, _ArraySerializer, _DirectoryEntrySerializer
+from nanome._internal._util._serializers import _StringSerializer, _ArraySerializer, _DirectoryEntrySerializer, _EnumSerializer
 from nanome.util import DirectoryRequestResult, DirectoryErrorCode
 
 from nanome._internal._util._serializers import _TypeSerializer
 
 class _DirectoryRequest(_TypeSerializer):
     def __init__(self):
+        self.__enum = _EnumSerializer()
+        self.__enum.set_type(DirectoryErrorCode)
         self.__string = _StringSerializer()
         self.__directory_entry_array = _ArraySerializer()
         self.__directory_entry_array.set_type(_DirectoryEntrySerializer())
@@ -22,5 +24,5 @@ class _DirectoryRequest(_TypeSerializer):
     def deserialize(self, version, context):
         result = DirectoryRequestResult()
         result.entry_array = context.read_using_serializer(self.__directory_entry_array)
-        result.error_code = DirectoryErrorCode(context.read_int())
+        result.error_code = context.read_using_serializer(self.__enum)
         return result
