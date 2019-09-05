@@ -12,13 +12,13 @@ class _EnumSerializer(_TypeSerializer):
         return "Enum"
 
     def serialize(self, version, value, context):
-        if version >=1:
+        if version >= 1:
             context.write_byte(value)
         else:
             context.write_int(value)
 
     def deserialize(self, version, context):
-        if version >=1:
+        if version >= 1:
             return self._enum.safe_cast(context.read_byte())
         else:
             return self._enum.safe_cast(context.read_int())
