@@ -42,6 +42,11 @@ class _ButtonSerializer(_TypeSerializer):
         context.write_uint((value._text._vertical_align))
         context.write_uint((value._text._horizontal_align))
         context.write_bool(value._icon._active)
+        context.write_using_serializer(self.string, value._icon._value_idle)
+        context.write_using_serializer(self.string, value._icon._value_selected)
+        context.write_using_serializer(self.string, value._icon._value_highlighted)
+        context.write_using_serializer(self.string, value._icon._value_selected_highlighted)
+        context.write_using_serializer(self.string, value._icon._value_unusable)
         data = []
         if (value._icon._value_idle != ""):
             with open(value._icon._value_idle, "rb") as f:

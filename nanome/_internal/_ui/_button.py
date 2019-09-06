@@ -1,5 +1,5 @@
 from . import _UIBase
-from nanome.util import Vector3
+from nanome.util import Vector3, Color
 import nanome
 
 class _Button(_UIBase):
@@ -60,11 +60,11 @@ class _Button(_UIBase):
             self._value_highlighted = ""
             self._value_selected_highlighted = ""
             self._value_unusable = ""
-            self._color_idle = ""
-            self._color_selected = ""
-            self._color_highlighted = ""
-            self._color_selected_highlighted = ""
-            self._color_unusable = ""
+            self._color_idle = Color.White()
+            self._color_selected = Color.White()
+            self._color_highlighted = Color.White()
+            self._color_selected_highlighted = Color.White()
+            self._color_unusable = Color.White()
             self._sharpness = 0.5
             self._size = 1.0
             self._ratio = 0.5
