@@ -6,13 +6,16 @@ class Button(_Button, UIBase):
     HorizAlignOptions = nanome.util.enums.HorizAlignOptions
     VertAlignOptions = nanome.util.enums.VertAlignOptions
 
-    def __init__(self, text = None):
+    def __init__(self, text = None, icon = None):
         # type: (str, str)
         _Button.__init__(self)
         UIBase.__init__(self)
         self.text = self._text
+        self.icon = self._icon
         if (text != None):
             self.set_all_text(text)
+        if (icon != None):
+            self.set_all_icon(icon)
 
     def register_pressed_callback(self, func):
         _Button._register_pressed_callback(self, func)
@@ -30,6 +33,22 @@ class Button(_Button, UIBase):
         self.text.value_highlighted = text
         self.text.value_selected_highlighted = text
         self.text.value_unusable = text
+
+    def set_all_icon(self, icon):
+        # type: (str)
+        """
+        | Sets the path to the icon for every state.
+        | Enables the button icon
+
+        :param icon: The path to the icon file
+        :type icon: str
+        """
+        self.icon.active = True
+        self.icon.value_idle = icon
+        self.icon.value_selected = icon
+        self.icon.value_highlighted = icon
+        self.icon.value_selected_highlighted = icon
+        self.icon.value_unusable = icon
 
     @property
     def selected(self):
@@ -186,4 +205,138 @@ class Button(_Button, UIBase):
             # type: (HorizAlignOptions)
             self._horizontal_align = value
     _Button.ButtonText._create = ButtonText
+
+    class ButtonIcon(_Button.ButtonIcon):
+        @property
+        def active(self):
+            return self._active
+        @active.setter
+        def active(self, value):
+            self._active = value
+
+        @property
+        def value_idle(self):
+            return self._value_idle
+        @value_idle.setter
+        def value_idle(self, value):
+            if type(value) is not str:
+                value = str(value)
+            self._value_idle = value
+
+        @property
+        def value_selected(self):
+            return self._value_selected
+        @value_selected.setter
+        def value_selected(self, value):
+            if type(value) is not str:
+                value = str(value)
+            self._value_selected = value
+
+        @property
+        def value_highlighted(self):
+            return self._value_highlighted
+        @value_highlighted.setter
+        def value_highlighted(self, value):
+            if type(value) is not str:
+                value = str(value)
+            self._value_highlighted = value
+
+        @property
+        def value_selected_highlighted(self):
+            return self._value_selected_highlighted
+        @value_selected_highlighted.setter
+        def value_selected_highlighted(self, value):
+            if type(value) is not str:
+                value = str(value)
+            self._value_selected_highlighted = value
+
+        @property
+        def value_unusable(self):
+            return self._value_unusable
+        @value_unusable.setter
+        def value_unusable(self, value):
+            if type(value) is not str:
+                value = str(value)
+            self._value_unusable = value
+
+        @property
+        def color_idle(self):
+            return self._color_idle
+        @color_idle.setter
+        def color_idle(self, value):
+            if type(value) is not str:
+                value = str(value)
+            self._color_idle = value
+
+        @property
+        def color_selected(self):
+            return self._color_selected
+        @color_selected.setter
+        def color_selected(self, value):
+            if type(value) is not str:
+                value = str(value)
+            self._color_selected = value
+
+        @property
+        def color_highlighted(self):
+            return self._color_highlighted
+        @color_highlighted.setter
+        def color_highlighted(self, value):
+            if type(value) is not str:
+                value = str(value)
+            self._color_highlighted = value
+
+        @property
+        def color_selected_highlighted(self):
+            return self._color_selected_highlighted
+        @color_selected_highlighted.setter
+        def color_selected_highlighted(self, value):
+            if type(value) is not str:
+                value = str(value)
+            self._color_selected_highlighted = value
+
+        @property
+        def color_unusable(self):
+            return self._color_unusable
+        @color_unusable.setter
+        def color_unusable(self, value):
+            if type(value) is not str:
+                value = str(value)
+            self._color_unusable = value
+
+        @property
+        def sharpness(self):
+            return self._sharpness
+        @sharpness.setter
+        def sharpness(self, value):
+            self._sharpness = value
+
+        @property
+        def size(self):
+            return self._size
+        @size.setter
+        def size(self, value):
+            self._size = value
+
+        @property
+        def ratio(self):
+            return self._ratio
+        @ratio.setter
+        def ratio(self, value):
+            self._ratio = value
+
+        @property
+        def position(self):
+            return self._position
+        @position.setter
+        def position(self, value):
+            self._position = value
+
+        @property
+        def rotation(self):
+            return self._rotation
+        @rotation.setter
+        def rotation(self, value):
+            self._rotation = value
+    _Button.ButtonIcon._create = ButtonIcon
 _Button._create = Button
