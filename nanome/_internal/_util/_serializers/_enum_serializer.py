@@ -9,7 +9,7 @@ class _EnumSerializer(_TypeSerializer):
         return 0
 
     def name(self):
-        return "Enum"
+        return "enum"
 
     def serialize(self, version, value, context):
         if version >= 1:
