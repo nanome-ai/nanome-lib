@@ -1,11 +1,11 @@
-from nanome._internal._util._serializers import _ArraySerializer, _IntSerializer, _EnumSerializer
+from nanome._internal._util._serializers import _ArraySerializer, _IntSerializer
 from .. import _LayoutNode
 
 from nanome._internal._util._serializers import _TypeSerializer
 
 class _LayoutNodeSerializer(_TypeSerializer):
     def __init__(self):
-        self.enum = _EnumSerializer()
+        pass
 
     def version(self):
         return 1
@@ -17,14 +17,11 @@ class _LayoutNodeSerializer(_TypeSerializer):
         context.write_int(value._id)
         context.write_bool(value._enabled)
         context.write_int(value._layer)
-        self.enum.set_type(_LayoutNode.LayoutTypes)
-        context.write_using_serializer(self.enum, value._layout_orientation)
-        self.enum.set_type(_LayoutNode.SizingTypes)
-        context.write_using_serializer(self.enum, value._sizing_type)
+        context.write_uint(value._layout_orientation)
+        context.write_uint(value._sizing_type)
         context.write_float(value._sizing_value)
         context.write_float(value._forward_dist)
-        self.enum.set_type(_LayoutNode.PaddingTypes)
-        context.write_using_serializer(self.enum, value._padding_type)
+        context.write_uint(value._padding_type)
         context.write_float(value._padding[0])
         context.write_float(value._padding[1])
         context.write_float(value._padding[2])
@@ -47,14 +44,11 @@ class _LayoutNodeSerializer(_TypeSerializer):
         layout_node._id = context.read_int()
         layout_node._enabled = context.read_bool()
         layout_node._layer = context.read_int()
-        self.enum.set_type(_LayoutNode.LayoutTypes)
-        layout_node._layout_orientation = context.read_using_serializer(self.enum)
-        self.enum.set_type(_LayoutNode.SizingTypes)
-        layout_node._sizing_type = context.read_using_serializer(self.enum)
+        layout_node._layout_orientation = _LayoutNode.LayoutTypes(context.read_uint())
+        layout_node._sizing_type = _LayoutNode.SizingTypes(context.read_uint())
         layout_node._sizing_value = context.read_float()
         layout_node._forward_dist = context.read_float()
-        self.enum.set_type(_LayoutNode.PaddingTypes)
-        layout_node._padding_type = context.read_using_serializer(self.enum)
+        layout_node._padding_type = _LayoutNode.PaddingTypes(context.read_uint())
         layout_node._padding = (context.read_float(), 
                                 context.read_float(), 
                                 context.read_float(), 

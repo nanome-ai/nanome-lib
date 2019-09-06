@@ -1,4 +1,4 @@
-from . import _StringSerializer, _ArraySerializer, _ByteSerializer, _EnumSerializer
+from . import _StringSerializer, _ArraySerializer, _ByteSerializer
 from nanome.util import FileErrorCode, FileSaveData, IntEnum
 
 from nanome._internal._util._serializers import _TypeSerializer
@@ -6,8 +6,6 @@ from nanome._internal._util._serializers import _TypeSerializer
 class _FileSaveDataSerializer(_TypeSerializer):
     def __init__(self):
         self.__string = _StringSerializer()
-        self.__enum = _EnumSerializer()
-        self.__enum.set_type(FileErrorCode)
 
     def version(self):
         return 0
@@ -23,5 +21,5 @@ class _FileSaveDataSerializer(_TypeSerializer):
     def deserialize(self, version, context):
         result = FileSaveData()
         result.path = context.read_using_serializer(self.__string)
-        result.error_code = context.read_using_serializer(self.__enum)
+        result.error_code = FileErrorCode(context.read_int())
         return result
