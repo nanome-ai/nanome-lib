@@ -48,7 +48,7 @@ class _LayoutNodeSerializerDeep(_TypeSerializer):
         result._enabled = context.read_bool()
         result._layer = context.read_int()
         result._layout_orientation = context.read_using_serializer(self.layout)
-        result._sizing_type = context.read_using_serializer(self.sizing)
+        result._padding_type = context.read_using_serializer(self.sizing)
         result._sizing_value = context.read_float()
         result._forward_dist = context.read_float()
         result._padding_type = context.read_using_serializer(self.padding)
