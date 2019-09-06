@@ -1,4 +1,4 @@
-from nanome._internal._util._serializers import _StringSerializer, _ColorSerializer, _Vector3Serializer, _ArraySerializer, _BoolSerializer, _EnumSerializer
+from nanome._internal._util._serializers import _StringSerializer, _ColorSerializer, _Vector3Serializer, _ArraySerializer, _BoolSerializer
 from .. import _Atom
 from nanome._internal._util._serializers import _TypeSerializer
 from nanome.util import Logs
@@ -10,8 +10,6 @@ class _AtomSerializer(_TypeSerializer):
         self.vector = _Vector3Serializer()
         self.array = _ArraySerializer()
         self.bool = _BoolSerializer()
-        self.enum = _EnumSerializer()
-        self.enum.set_type(_Atom.AtomRenderingMode)
 
     def version(self):
         #Version 0 corresponds to Nanome release 1.10
@@ -25,7 +23,7 @@ class _AtomSerializer(_TypeSerializer):
     def serialize(self, version, value, context):
         context.write_long(value._index)
         context.write_bool(value._selected)
-        context.write_using_serializer(self.enum, value._atom_mode)
+        context.write_int(value._atom_mode)
         context.write_bool(value._labeled)
         if version >= 1:
             context.write_using_serializer(self.string, value._label_text)
@@ -65,7 +63,7 @@ class _AtomSerializer(_TypeSerializer):
         if index >= 0:
             atom._index = index
         atom._selected = context.read_bool()
-        atom._atom_mode = context.read_using_serializer(self.enum)
+        atom._atom_mode = _Atom.AtomRenderingMode.safe_cast(context.read_int())
         atom._labeled = context.read_bool()
         if version >= 1:
             atom._label_text = context.read_using_serializer(self.string)

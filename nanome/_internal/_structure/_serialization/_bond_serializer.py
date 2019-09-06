@@ -1,7 +1,7 @@
 from . import _AtomSerializerID
 from .. import _Bond
 
-from nanome._internal._util._serializers import _TypeSerializer, _ArraySerializer, _BoolSerializer, _EnumSerializer
+from nanome._internal._util._serializers import _TypeSerializer, _ArraySerializer, _BoolSerializer, _ByteSerializer
 from nanome.util import Logs
 
 class _BondSerializer(_TypeSerializer):
@@ -10,8 +10,7 @@ class _BondSerializer(_TypeSerializer):
         self.atom_serializer = _AtomSerializerID()
         self.array = _ArraySerializer()
         self.bool = _BoolSerializer()
-        self.enum = _EnumSerializer()
-        self.enum.set_type(_Bond.Kind)
+        self.byte = _ByteSerializer()
 
     def version(self):
         #Version 0 corresponds to Nanome release 1.13
@@ -23,7 +22,7 @@ class _BondSerializer(_TypeSerializer):
     def serialize(self, version, value, context):
         context.write_long(value._index)
         if version < 1:
-            context.write_using_serializer(self.enum, value._kind)
+            context.write_int(value._kind)
         #nothing to do with shallow yet 
         context.write_using_serializer(self.atom_serializer, value._atom1)
         context.write_using_serializer(self.atom_serializer, value._atom2)
@@ -31,8 +30,8 @@ class _BondSerializer(_TypeSerializer):
         if version >= 1:
             self.array.set_type(self.bool)
             context.write_using_serializer(self.array, value._exists)
-            self.array.set_type(self.enum)
-            context.write_using_serializer(self.array, value._orders)
+            self.array.set_type(self.byte)
+            context.write_using_serializer(self.array, value._order)
 
     def deserialize(self, version, context):
         # type: (_Atom, _ContextDeserialization) -> _Bond
@@ -40,7 +39,7 @@ class _BondSerializer(_TypeSerializer):
         bond._index = context.read_long()
 
         if version < 1:
-            bond._kind = context.read_using_serializer(self.enum)
+            bond._kind = _Bond.Kind.safe_cast(context.read_int())
 
         bond._atom1 = context.read_using_serializer(self.atom_serializer)
         bond._atom2 = context.read_using_serializer(self.atom_serializer)
@@ -48,6 +47,6 @@ class _BondSerializer(_TypeSerializer):
         if version >= 1:
             self.array.set_type(self.bool)
             bond._exists = context.read_using_serializer(self.array)
-            self.array.set_type(self.enum)
-            bond._orders = context.read_using_serializer(self.array)
+            self.array.set_type(self.byte)
+            bond._order = context.read_using_serializer(self.array)
         return bond

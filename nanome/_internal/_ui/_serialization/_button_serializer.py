@@ -1,4 +1,4 @@
-from nanome._internal._util._serializers import _StringSerializer, _EnumSerializer
+from nanome._internal._util._serializers import _StringSerializer
 from nanome.util.enums import VertAlignOptions, HorizAlignOptions
 from . import _UIBaseSerializer
 from .. import _Button
@@ -8,10 +8,6 @@ from nanome._internal._util._serializers import _TypeSerializer
 class _ButtonSerializer(_TypeSerializer):
     def __init__(self):
         self.string = _StringSerializer()
-        self.horiz = _EnumSerializer()
-        self.horiz.set_type(HorizAlignOptions)
-        self.vert = _EnumSerializer()
-        self.vert.set_type(VertAlignOptions)
 
     def version(self):
         return 1
@@ -41,8 +37,8 @@ class _ButtonSerializer(_TypeSerializer):
         context.write_float(value._text._size)
         context.write_bool(value._text._underlined)
         context.write_bool(value._text._bolded)
-        context.write_using_serializer(self.vert, value._text._vertical_align)
-        context.write_using_serializer(self.horiz, value._text._horizontal_align)
+        context.write_uint((value._text._vertical_align))
+        context.write_uint((value._text._horizontal_align))
 
     def deserialize(self, version, context):
         value = _Button._create()
@@ -65,8 +61,10 @@ class _ButtonSerializer(_TypeSerializer):
         value._text._size = context.read_float()
         value._text._underlined = context.read_bool()
         value._text._bolded = context.read_bool()
-        value._text._vertical_align = context.read_using_serializer(self.vert)
-        value._text._horizontal_align = context.read_using_serializer(self.horiz)
+        vert = context.read_uint()
+        horiz = context.read_uint()
+        value._text._vertical_align = VertAlignOptions(vert)
+        value._text._horizontal_align = HorizAlignOptions(horiz)
         return value
 
 _UIBaseSerializer.register_type("Button", _UIBaseSerializer.ContentType.ebutton, _ButtonSerializer())

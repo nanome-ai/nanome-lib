@@ -1,5 +1,5 @@
 from .. import _Label
-from nanome._internal._util._serializers import _StringSerializer, _ColorSerializer, _EnumSerializer
+from nanome._internal._util._serializers import _StringSerializer, _ColorSerializer
 from nanome.util.enums import VertAlignOptions, HorizAlignOptions
 from . import _UIBaseSerializer
 from nanome._internal._util._serializers import _TypeSerializer
@@ -8,10 +8,6 @@ class _LabelSerializer(_TypeSerializer):
     def __init__(self):
         self.string = _StringSerializer()
         self.color = _ColorSerializer()
-        self.horiz = _EnumSerializer()
-        self.horiz.set_type(HorizAlignOptions)
-        self.vert = _EnumSerializer()
-        self.vert.set_type(VertAlignOptions)
 
     def version(self):
         return 1
@@ -27,8 +23,8 @@ class _LabelSerializer(_TypeSerializer):
             safe_id = value._content_id
         context.write_int(safe_id)
         context.write_using_serializer(self.string, value._text_value)
-        context.write_using_serializer(self.vert, value._text_vertical_align)
-        context.write_using_serializer(self.horiz, value._text_horizontal_align)
+        context.write_uint(value._text_vertical_align)
+        context.write_uint(value._text_horizontal_align)
         context.write_bool(value._text_auto_size)
         context.write_float(value._text_max_size)
         context.write_float(value._text_min_size)
@@ -46,8 +42,8 @@ class _LabelSerializer(_TypeSerializer):
             id_mask = 0x00FFFFFF
             value._content_id &= id_mask
         value._text_value = context.read_using_serializer(self.string)
-        value._text_vertical_align = context.read_using_serializer(self.vert)
-        value._text_horizontal_align = context.read_using_serializer(self.horiz)
+        value._text_vertical_align = VertAlignOptions(context.read_uint())
+        value._text_horizontal_align = HorizAlignOptions(context.read_uint())
         value._text_auto_size = context.read_bool()
         value._text_max_size = context.read_float()
         value._text_min_size = context.read_float()
