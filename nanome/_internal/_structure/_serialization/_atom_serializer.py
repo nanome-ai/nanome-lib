@@ -96,5 +96,5 @@ class _AtomSerializer(_TypeSerializer):
             self.array.set_type(self.vector)
             atom._positions = context.read_using_serializer(self.array)
             self.array.set_type(self.bool)
-            atom.exists = context.read_using_serializer(self.array)
+            atom._exists = context.read_using_serializer(self.array)
         return atom
