@@ -14,7 +14,7 @@ class _Bond(_Base):
         self.__atom2 = None
 
         self._exists = [True]
-        self._orders = [_Bond.Kind.CovalentSingle]
+        self._kinds = [_Bond.Kind.CovalentSingle]
 
     @property
     def _atom1(self):
@@ -84,8 +84,8 @@ class _Bond(_Base):
 
     @property
     def _kind(self):
-        return self._orders[self._current_conformer]
+        return self._kinds[self._current_conformer]
 
     @_kind.setter
     def _kind(self, value):
-        self._orders[self._current_conformer] = value
+        self._kinds[self._current_conformer] = value

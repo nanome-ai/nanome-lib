@@ -31,7 +31,7 @@ class _BondSerializer(_TypeSerializer):
             self.array.set_type(self.bool)
             context.write_using_serializer(self.array, value._exists)
             self.array.set_type(self.byte)
-            context.write_using_serializer(self.array, value._order)
+            context.write_using_serializer(self.array, value._kinds)
 
     def deserialize(self, version, context):
         # type: (_Atom, _ContextDeserialization) -> _Bond
@@ -48,5 +48,7 @@ class _BondSerializer(_TypeSerializer):
             self.array.set_type(self.bool)
             bond._exists = context.read_using_serializer(self.array)
             self.array.set_type(self.byte)
-            bond._order = context.read_using_serializer(self.array)
+            bond._kinds = context.read_using_serializer(self.array)
+            for i in range(len(bond._kinds)):
+                bond._kinds[i] = _Bond.Kind.safe_cast(bond._kinds[i])
         return bond
