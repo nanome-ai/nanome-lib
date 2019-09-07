@@ -32,6 +32,7 @@ class _MoleculeSerializer(_TypeSerializer):
             context.write_int(value._conformer_count)
             self.array.set_type(self.string)
             context.write_using_serializer(self.array, value._names)
+            self.array.set_type(self.dictionary)
             context.write_using_serializer(self.array, value._associateds)
         else:
             context.write_using_serializer(self.string, value._name)
@@ -48,6 +49,7 @@ class _MoleculeSerializer(_TypeSerializer):
             molecule._conformer_count = context.read_int()
             self.array.set_type(self.string)
             molecule._names = context.read_using_serializer(self.array)
+            self.array.set_type(self.dictionary)
             molecule._associateds = context.read_using_serializer(self.array)
         else:
             molecule._name = context.read_using_serializer(self.string)

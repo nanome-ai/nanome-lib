@@ -24,13 +24,13 @@ class NotificationPlugin(nanome.PluginInstance):
     count = 0
     def on_run(self):
         if (NotificationPlugin.count == 0):
-            self.send_notification(nanome.util.NotificationTypes.warning, "Warning")
+            self.send_notification(nanome.util.enums.NotificationTypes.warning, "Warning")
         elif (NotificationPlugin.count == 1):
-            self.send_notification(nanome.util.NotificationTypes.error, "Error")
+            self.send_notification(nanome.util.enums.NotificationTypes.error, "Error")
         elif (NotificationPlugin.count == 2):
-            self.send_notification(nanome.util.NotificationTypes.message, "Message")
+            self.send_notification(nanome.util.enums.NotificationTypes.message, "Message")
         elif (NotificationPlugin.count == 3):
-            self.send_notification(nanome.util.NotificationTypes.success, "success")
+            self.send_notification(nanome.util.enums.NotificationTypes.success, "success")
         
         NotificationPlugin.count += 1
         if (NotificationPlugin.count > 3):

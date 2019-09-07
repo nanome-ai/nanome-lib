@@ -3,7 +3,7 @@ from .._commands import _callbacks as CommandCallbacks
 from .._commands import _serialization as CommandSerializers
 from nanome._internal._util import _serializers as Serializers
 from nanome.util import Logs
-import struct
+import struct, traceback
 
 packet_debugging = False
 
@@ -42,18 +42,22 @@ class Serializer(object):
             return (None, None, None)
         except BufferError as err:
             Logs.error(err)
+            traceback.print_exc()
             return (None, None, None)
         except struct.error as err:
             Logs.error(err)
+            traceback.print_exc()
             return (None, None, None)
 
         try:
             received_object = context.read_using_serializer(command)
         except BufferError as err:
             Logs.error(err)
+            traceback.print_exc()
             return (None, None, None)
         except struct.error as err:
             Logs.error(err)
+            traceback.print_exc()
             return (None, None, None)
         return received_object, command_hash, request_id
 
