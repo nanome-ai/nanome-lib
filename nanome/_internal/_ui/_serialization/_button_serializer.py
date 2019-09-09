@@ -1,4 +1,4 @@
-from nanome._internal._util._serializers import _StringSerializer
+from nanome._internal._util._serializers import _StringSerializer, _ColorSerializer, _Vector3Serializer
 from nanome.util.enums import VertAlignOptions, HorizAlignOptions
 from . import _UIBaseSerializer
 from .. import _Button

@@ -264,8 +264,6 @@ class Button(_Button, UIBase):
             return self._color_idle
         @color_idle.setter
         def color_idle(self, value):
-            if type(value) is not str:
-                value = str(value)
             self._color_idle = value
 
         @property
@@ -273,8 +271,6 @@ class Button(_Button, UIBase):
             return self._color_selected
         @color_selected.setter
         def color_selected(self, value):
-            if type(value) is not str:
-                value = str(value)
             self._color_selected = value
 
         @property
@@ -282,8 +278,6 @@ class Button(_Button, UIBase):
             return self._color_highlighted
         @color_highlighted.setter
         def color_highlighted(self, value):
-            if type(value) is not str:
-                value = str(value)
             self._color_highlighted = value
 
         @property
@@ -291,8 +285,6 @@ class Button(_Button, UIBase):
             return self._color_selected_highlighted
         @color_selected_highlighted.setter
         def color_selected_highlighted(self, value):
-            if type(value) is not str:
-                value = str(value)
             self._color_selected_highlighted = value
 
         @property
@@ -300,8 +292,6 @@ class Button(_Button, UIBase):
             return self._color_unusable
         @color_unusable.setter
         def color_unusable(self, value):
-            if type(value) is not str:
-                value = str(value)
             self._color_unusable = value
 
         @property
