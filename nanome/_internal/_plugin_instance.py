@@ -24,8 +24,17 @@ class _PluginInstance(object):
 
     def _call(self, id, *args):
         callbacks = _PluginInstance.__callbacks
-        callbacks[id](*args)
-        del callbacks[id]
+        try:
+            callbacks[id](*args)
+            del callbacks[id]
+        except KeyError:
+            Logs.warning('Received an unknown callback id:', id)
+
+    def _on_stop(self):
+        try:
+            self.on_stop()
+        except:
+            Logs.error("Error in on_stop function:", traceback.format_exc())
 
     def _run(self):
         try:
@@ -40,9 +49,12 @@ class _PluginInstance(object):
                 last_update = timer()
 
         except KeyboardInterrupt:
+            self._on_stop()
             return
         except:
             Logs.error(traceback.format_exc())
+            self._on_stop()
+            self._process_manager._close()
             self._network._close()
             return
 

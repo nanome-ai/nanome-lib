@@ -66,6 +66,8 @@ class Button(_Button, UIBase):
         @value_idle.setter
         def value_idle(self, value):
             # type: (str)
+            if type(value) is not str:
+                value = str(value)
             self._value_idle = value
 
         @property
@@ -75,6 +77,8 @@ class Button(_Button, UIBase):
         @value_selected.setter
         def value_selected(self, value):
             # type: (str)
+            if type(value) is not str:
+                value = str(value)
             self._value_selected = value
 
         @property
@@ -84,6 +88,8 @@ class Button(_Button, UIBase):
         @value_highlighted.setter
         def value_highlighted(self, value):
             # type: (str)
+            if type(value) is not str:
+                value = str(value)
             self._value_highlighted = value
 
         @property
@@ -93,6 +99,8 @@ class Button(_Button, UIBase):
         @value_selected_highlighted.setter
         def value_selected_highlighted(self, value):
             # type: (str)
+            if type(value) is not str:
+                value = str(value)
             self._value_selected_highlighted = value
 
         @property
@@ -102,6 +110,8 @@ class Button(_Button, UIBase):
         @value_unusable.setter
         def value_unusable(self, value):
             # type: (str)
+            if type(value) is not str:
+                value = str(value)
             self._value_unusable = value
 
         @property

@@ -45,6 +45,12 @@ class PluginInstance(_PluginInstance):
         """
         Logs.warning('Callback on_run not defined. Ignoring')
 
+    def on_stop(self):
+        """
+        | Called when user disconnects or plugin crashes
+        """
+        pass
+
     def on_advanced_settings(self):
         """
         | Called when user presses "Advanced Settings"

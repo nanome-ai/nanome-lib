@@ -71,6 +71,8 @@ class Atom(_Atom, Base):
         return self._label_text
     @label_text.setter
     def label_text(self, value):
+        if type(value) is not str:
+            value = str(value)
         self._label_text = value
 
     @property
@@ -120,6 +122,8 @@ class Atom(_Atom, Base):
         return self._symbol
     @symbol.setter
     def symbol(self, value):
+        if type(value) is not str:
+            value = str(value)
         self._symbol = value
 
     @property
@@ -134,6 +138,8 @@ class Atom(_Atom, Base):
         return self._name
     @name.setter
     def name(self, value):
+        if type(value) is not str:
+            value = str(value)
         self._name = value
 
     @property

@@ -169,6 +169,7 @@ class _Plugin(object):
                 to_remove.clear()
                 for id, session in self._sessions.items():
                     if session._read_from_plugin() == False:
+                        session.close_pipes()
                         to_remove.append(id)
                 for id in to_remove:
                     self._sessions[id]._send_disconnection_message(_Plugin._plugin_id)
