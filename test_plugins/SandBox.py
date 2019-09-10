@@ -16,7 +16,13 @@ NTS_PORT = 8888
 
 class SandBox(nanome.PluginInstance):
     def start(self):
-        print("Started")
+        self.request_presenter_info(self.received)
+
+    def on_presenter_change(self):
+        self.request_presenter_info(self.received)
+
+    def received(self, presenter_info):
+        Logs.message("Presenter:", presenter_info.account_id, presenter_info.account_name, presenter_info.account_email)
 
     def on_run(self):
         pass

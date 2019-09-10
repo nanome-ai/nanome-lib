@@ -118,6 +118,10 @@ add_command(CommandCallbacks._Commands.stream_feed_done, CommandSerializers._Fee
 #macros
 add_command(CommandCallbacks._Commands.get_macros_response, CommandSerializers._GetMacrosResponse())
 
+# Presenter
+add_command(CommandCallbacks._Commands.presenter_info_response, CommandSerializers._GetPresenterInfoResponse())
+add_command(CommandCallbacks._Commands.presenter_change, CommandSerializers._PresenterChange())
+
 #-------------Messages-----------#
 # Messages are outgoing (plugin -> nanome)
 
@@ -167,6 +171,9 @@ add_message(CommandCallbacks._Messages.stop_macro, CommandSerializers._StopMacro
 add_message(CommandCallbacks._Messages.stream_create, CommandSerializers._CreateStream())
 add_message(CommandCallbacks._Messages.stream_feed, CommandSerializers._FeedStream())
 add_message(CommandCallbacks._Messages.stream_destroy, CommandSerializers._DestroyStream())
+
+# Presenter
+add_message(CommandCallbacks._Messages.presenter_info_request, CommandSerializers._GetPresenterInfo())
 
 #others
 add_message(CommandCallbacks._Messages.open_url, CommandSerializers._OpenURL())
@@ -220,3 +227,7 @@ add_callback(CommandCallbacks._Commands.stream_feed_done, CommandCallbacks._feed
 
 #macros
 add_callback(CommandCallbacks._Commands.get_macros_response, CommandCallbacks._receive_macros)
+
+# Presenter
+add_callback(CommandCallbacks._Commands.presenter_info_response, CommandCallbacks._receive_presenter_info)
+add_callback(CommandCallbacks._Commands.presenter_change, CommandCallbacks._presenter_change)

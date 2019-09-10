@@ -69,6 +69,12 @@ class PluginInstance(_PluginInstance):
         """
         pass
 
+    def on_presenter_change(self):
+        """
+        | Called when room's presenter changes.
+        """
+        pass
+
     def request_workspace(self, callback = None):
         """
         | Request the entire workspace, in deep mode
@@ -287,6 +293,13 @@ class PluginInstance(_PluginInstance):
         if '://' not in url:
             url = 'http://' + url
         self._network._send(_Messages.open_url, url)
+
+    def request_presenter_info(self, callback):
+        """
+        | Requests presenter account info (unique ID, name, email)
+        """
+        id = self._network._send(_Messages.presenter_info_request)
+        self._save_callback(id, callback)
 
     class PluginListButtonType(IntEnum):
         run = 0
