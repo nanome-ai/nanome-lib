@@ -13,7 +13,7 @@ class _MoleculeSerializer(_TypeSerializer):
         self.dictionary.set_types(self.string, self.string)
 
     def version(self):
-        #Version 0 corresponds to Nanome release 1.13
+        #Version 0 corresponds to Nanome release 1.12
         return 1
 
     def name(self):
@@ -28,12 +28,18 @@ class _MoleculeSerializer(_TypeSerializer):
             context.write_using_serializer(self.array, value._chains)
 
         if version >= 1:
-            context.write_int(value._current_conformer)
-            context.write_int(value._conformer_count)
-            self.array.set_type(self.string)
-            context.write_using_serializer(self.array, value._names)
-            self.array.set_type(self.dictionary)
-            context.write_using_serializer(self.array, value._associateds)
+            has_conformer = value._conformer_count > 1
+            context.write_bool(has_conformer)
+            if has_conformer:
+                context.write_int(value._current_conformer)
+                context.write_int(value._conformer_count)
+                self.array.set_type(self.string)
+                context.write_using_serializer(self.array, value._names)
+                self.array.set_type(self.dictionary)
+                context.write_using_serializer(self.array, value._associateds)
+            else:
+                context.write_using_serializer(self.string, value._name)
+                context.write_using_serializer(self.dictionary, value._associated)
         else:
             context.write_using_serializer(self.string, value._name)
             context.write_using_serializer(self.dictionary, value._associated)
@@ -45,12 +51,17 @@ class _MoleculeSerializer(_TypeSerializer):
         molecule._set_chains(context.read_using_serializer(self.array))
 
         if version >= 1:
-            molecule._current_conformer = context.read_int()
-            molecule._conformer_count = context.read_int()
-            self.array.set_type(self.string)
-            molecule._names = context.read_using_serializer(self.array)
-            self.array.set_type(self.dictionary)
-            molecule._associateds = context.read_using_serializer(self.array)
+            has_conformer = context.read_bool()
+            if has_conformer:
+                molecule._current_conformer = context.read_int()
+                molecule._conformer_count = context.read_int()
+                self.array.set_type(self.string)
+                molecule._names = context.read_using_serializer(self.array)
+                self.array.set_type(self.dictionary)
+                molecule._associateds = context.read_using_serializer(self.array)
+            else:
+                molecule._name = context.read_using_serializer(self.string)
+                molecule._associated = context.read_using_serializer(self.dictionary)
         else:
             molecule._name = context.read_using_serializer(self.string)
             molecule._associated = context.read_using_serializer(self.dictionary)

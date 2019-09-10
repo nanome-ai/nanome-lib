@@ -14,7 +14,7 @@ class _AtomSerializer(_TypeSerializer):
     def version(self):
         #Version 0 corresponds to Nanome release 1.10
         #Version 1 corresponds to Nanome release 1.11
-        #Version 2 corresponds to Nanome release 1.13
+        #Version 2 corresponds to Nanome release 1.12
         return 3
 
     def name(self):
@@ -42,7 +42,17 @@ class _AtomSerializer(_TypeSerializer):
         context.write_using_serializer(self.string, value._symbol)
         context.write_int(value._serial)
         context.write_using_serializer(self.string, value._name)
-        if version < 3:
+        if version >= 3:
+            has_conformer = len(value._positions) > 1
+            context.write_bool(has_conformer)
+            if (has_conformer):
+                self.array.set_type(self.vector)
+                context.write_using_serializer(self.array, value._positions)
+                self.array.set_type(self.bool)
+                context.write_using_serializer(self.array, value._exists)
+            else:
+                context.write_using_serializer(self.vector, value._position)
+        else:
             context.write_using_serializer(self.vector, value._position)
         context.write_bool(value._is_het)
 
@@ -50,11 +60,6 @@ class _AtomSerializer(_TypeSerializer):
         context.write_float(value._bfactor)
         context.write_bool(value._acceptor)
         context.write_bool(value._donor)
-        if version >= 3:
-            self.array.set_type(self.vector)
-            context.write_using_serializer(self.array, value._positions)
-            self.array.set_type(self.bool)
-            context.write_using_serializer(self.array, value._exists)
 
     def deserialize(self, version, context):
         # type: (_Atom, _ContextDeserialization) -> _Atom
@@ -83,7 +88,16 @@ class _AtomSerializer(_TypeSerializer):
         atom._symbol = context.read_using_serializer(self.string)
         atom._serial = context.read_int()
         atom._name = context.read_using_serializer(self.string)
-        if version < 3:
+        if version >=3:
+            has_conformer = context.read_bool()
+            if has_conformer:
+                self.array.set_type(self.vector)
+                atom._positions = context.read_using_serializer(self.array)
+                self.array.set_type(self.bool)
+                atom._exists = context.read_using_serializer(self.array)
+            else:
+                atom._position = context.read_using_serializer(self.vector)
+        else:
             atom._position = context.read_using_serializer(self.vector)
         atom._is_het = context.read_bool()
 
@@ -92,9 +106,5 @@ class _AtomSerializer(_TypeSerializer):
         atom._acceptor = context.read_bool()
         atom._donor = context.read_bool()
 
-        if version >=3:
-            self.array.set_type(self.vector)
-            atom._positions = context.read_using_serializer(self.array)
-            self.array.set_type(self.bool)
-            atom._exists = context.read_using_serializer(self.array)
+
         return atom

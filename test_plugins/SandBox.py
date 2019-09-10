@@ -19,47 +19,33 @@ class SandBox(nanome.PluginInstance):
         print("Started")
 
     def on_run(self):
-        pass
-
-    def combine_frames(self, workspace):
-        frames = []
-        for complex in workspace.complexes:
-            for molecule in complex.molecules:
-                molecule.index = -1
-                frames.append(molecule)
-            for chain in complex.chains:
-                chain.index = -1
-            for residue in complex.residues:
-                residue.index = -1
-            for atom in complex.atoms:
-                atom.index = -1
-            for bond in complex.bonds:
-                bond.index = -1
-
-        workspace.complexes[0]._molecules = frames
-        workspace.complexes = [workspace.complexes[0]]
-        self.update_workspace(workspace)
+        self.request_workspace(self.y)
 
     def x(self, workspace):
-        super_complex = None
-        super_residue = None
         for complex in workspace.complexes:
-            super_complex = complex
-            for residue in complex.residues:
-                super_residue = residue
-                break
-            break
-        for complex in workspace.complexes:
-            for residue in complex.residues:
-                for atom in residue.atoms:
-                    if not super_residue is residue:
-                        atom.position = atom.position + complex.position - super_complex.position
-                        super_residue.add_atom(atom)
-                for bond in residue.bonds:
-                    if not super_residue is residue:
-                        super_residue.add_bond(bond)
+            for bond in complex.bonds:
+                for i in range(len(bond._kinds)):
+                    bond._kinds[i] = nanome.util.enums.Kind.safe_cast((i % 3) + 1)
+            for atom in complex.atoms:
+                for i in range(len(atom._positions)):
+                    atom._positions[i].x = i
+            for molecule in complex.molecules:
+                for i in range(len(molecule._names)):
+                    molecule._names[i] = str(i) + str(i)
+        self.update_workspace(workspace)
 
-        workspace.complexes = [super_complex]
+    def y(self, workspace):
+        for complex in workspace.complexes:
+            for bond in complex.bonds:
+                bond.kind = nanome.util.enums.Kind.safe_cast(3)
+            for atom in complex.atoms:
+                pos = atom.position
+                temp = pos.x
+                pos.x = pos.y
+                pos.y = pos.z
+                pos.z = temp
+            for molecule in complex.molecules:
+                molecule.name = "it works jeremie"
         self.update_workspace(workspace)
 
     def on_complex_list_received(self, complexes):
