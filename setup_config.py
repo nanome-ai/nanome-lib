@@ -22,6 +22,13 @@ config_items = [
         'description': 'Plugin authentication key file',
         'parse_method': None,
         'key': 'key_file',
+    },
+    {
+        'arg_key': '-f',
+        'name': 'Files Path',
+        'description': 'Path that can be used by all plugins to write files (e.g: Uploaded files for Web Loader). "~" will expand to User Folder',
+        'parse_method': None,
+        'key': 'plugin_files_path',
     }
 ]
 
