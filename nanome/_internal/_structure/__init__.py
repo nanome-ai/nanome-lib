@@ -1,4 +1,7 @@
 from . import *
+
+from . import _helpers
+
 from ._base import _Base
 from ._atom import _Atom
 from ._bond import _Bond
