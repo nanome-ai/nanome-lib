@@ -8,7 +8,7 @@ class _Molecule(_Base):
     def __init__(self):
         super(_Molecule, self).__init__()
         self._chains = []
-
+        self._parent = None
         #conformers
         self._current_conformer = 0
         self.__conformer_count = 0
@@ -66,3 +66,18 @@ class _Molecule(_Base):
             self._current_conformer = value - 1
         self.__conformer_count = value
     #endregion
+
+    def _shallow_copy(self):
+        molecule = _Molecule._create()
+        self._current_conformer = 0
+        self.__conformer_count = 0
+        self._names = [""]
+        self._associateds = [""]
+        return molecule
+
+    def _deep_copy(self):
+        molecule = self._shallow_copy()
+        for chain in self._chains:
+            chain._deep_copy()
+            molecule._add_chain(chain)
+        return molecule

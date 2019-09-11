@@ -5,6 +5,7 @@ from testing import ui_tests
 from testing import json_tests
 from testing import api_tests
 from testing import context_tests
+from testing import copy_tests
 from testing import utilities as util
 
 import os
@@ -39,4 +40,5 @@ all_tests_passed = all_tests_passed and util.run_test_group(mmcif_tests)
 all_tests_passed = all_tests_passed and util.run_test_group(sdf_tests)
 all_tests_passed = all_tests_passed and util.run_test_group(ui_tests)
 all_tests_passed = all_tests_passed and util.run_test_group(json_tests)
+all_tests_passed = all_tests_passed and util.run_test_group(copy_tests)
 assert(all_tests_passed)

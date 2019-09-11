@@ -35,3 +35,15 @@ class _Chain(_Base):
         else:
             return None
     #endregion
+
+    def _shallow_copy(self):
+        chain = _Chain._create()
+        self._name = "chain"
+        return chain
+
+    def _deep_copy(self):
+        chain = self._shallow_copy()
+        for residue in self._residues:
+            residue._deep_copy()
+            chain._add_residue(residue)
+        return chain

@@ -24,9 +24,10 @@ class _Residue(_Base):
         self._ribbon_color = Color.Clear()
         self._labeled = False
         self._label_text = ""
-        #children
+        #connections
         self._atoms = []
         self._bonds = []
+        self._parent = None
 
     def _add_atom(self, atom):
         self._atoms.append(atom)
@@ -78,3 +79,28 @@ class _Residue(_Base):
         else:
             return None
     #endregion
+
+    def _shallow_copy(self):
+        residue = _Residue._create()
+        #molecular
+        self._type = "ARG" #RESIDUEDATA
+        self._serial = 1
+        self._name = "res"
+        self._secondary_structure = _Residue.SecondaryStructure.Unknown
+        #rendering
+        self._ribboned = True
+        self._ribbon_size = 1.0
+        self._ribbon_mode = _Residue.RibbonMode.SecondaryStructure
+        self._ribbon_color = Color.Clear()
+        self._labeled = False
+        self._label_text = ""
+        return residue
+
+    def _deep_copy(self):
+        residue = self._shallow_copy()
+        for bond in self._bonds:
+            bond._deep_copy()
+            residue._add_atom(bond._atom1)
+            residue._add_atom(bond._atom2)
+            residue._add_bond(bond)
+        return residue

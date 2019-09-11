@@ -28,6 +28,7 @@ class _Complex(_Base):
         self._position = Vector3(0,0,0)
         self._rotation = Quaternion(0,0,0,0)
         self._molecules = []
+        self._parent = None
 
     def _add_molecule(self, molecule):
         self._molecules.append(molecule)
@@ -71,3 +72,32 @@ class _Complex(_Base):
                     break
                 except StopIteration:
                     pass
+
+    def _shallow_copy(self):
+        complex = _Complex._create()
+        #Molecular
+        self._name = "complex"
+        self._index_tag = 0
+        self._split_tag = ""
+        self._remarks = {}
+        #Rendering
+        self._boxed = False
+        self._locked = False
+        self._visible = True
+        self._computing = False
+        self._current_frame = 0
+        self._selected = False #selected on live
+        self._surface_dirty = False
+        self._surface_refresh_rate = -1.0  # Not used yet, future auto surface refresh
+        self._box_label = ""
+        #Transform
+        self._position = Vector3(0,0,0)
+        self._rotation = Quaternion(0,0,0,0)
+        return complex
+
+    def _deep_copy(self):
+        complex = self._shallow_copy()
+        for molecule in self._molecules:
+            molecule._deep_copy()
+            complex._add_molecule(molecule)
+        return complex

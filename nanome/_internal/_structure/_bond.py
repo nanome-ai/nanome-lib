@@ -12,6 +12,7 @@ class _Bond(_Base):
         super(_Bond, self).__init__()
         self.__atom1 = None
         self.__atom2 = None
+        self._parent = None
 
         self._exists = [True]
         self._kinds = [_Bond.Kind.CovalentSingle]
@@ -89,3 +90,15 @@ class _Bond(_Base):
     @_kind.setter
     def _kind(self, value):
         self._kinds[self._current_conformer] = value
+
+    def _shallow_copy(self):
+        bond = _Bond._create()
+        self._exists = [True]
+        self._kinds = [_Bond.Kind.CovalentSingle]
+        return bond
+
+    def _deep_copy(self):
+        bond = self._shallow_copy()
+        bond._atom1 = self._atom1._shallow_copy()
+        bond._atom2 = self._atom2._shallow_copy()
+        return bond

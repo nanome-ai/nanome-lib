@@ -45,6 +45,7 @@ class _Atom(_Base):
         #internal
         self._unique_identifier = _Atom._atom_count
         self._bonds = []
+        self._parent = None
         _Atom._atom_count += 1
     
     #region connections
@@ -101,3 +102,36 @@ class _Atom(_Base):
     def _position(self, value):
         self._positions[self._current_conformer] = value
     #endregion
+
+    def _shallow_copy(self):
+        atom = _Atom._create()
+        atom._symbol = self._symbol
+        atom._serial = self._serial
+        atom._name = self._name
+        atom._is_het = self._is_het
+        #No API
+        atom._occupancy = self._occupancy
+        atom._bfactor = self._bfactor
+        atom._acceptor = self._acceptor
+        atom._donor = self._donor
+        #Rendering
+        #API
+        atom._selected = self._selected
+        atom._atom_mode = self._atom_mode
+        atom._labeled = self._labeled
+        atom._label_text = self._label_text
+        atom._atom_rendering = self._atom_rendering
+        atom._atom_color = self._atom_color
+        atom._atom_scale = self._atom_scale
+        atom._surface_rendering = self._surface_rendering
+        atom._surface_color = self._surface_color
+        atom._surface_opacity = self._surface_opacity
+        #No API
+        atom._hydrogened = self._hydrogened
+        atom._watered = self._watered
+        atom._het_atomed = self._het_atomed
+        atom._het_surfaced = self._het_surfaced
+        #conformer
+        atom._positions = self._positions
+        atom._exists = self._exists
+        return atom
