@@ -40,7 +40,7 @@ def count_structures(complex):
 
 class ShallowUpdatePlugin(nanome.PluginInstance):
     def start(self):
-        print("Start UpdateWorkspace Plugin")
+        print("Start ShallowUpdate Plugin")
 
 #complex: name
 #molecule: name

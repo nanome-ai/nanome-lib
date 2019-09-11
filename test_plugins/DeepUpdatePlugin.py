@@ -15,7 +15,7 @@ NTS_PORT = 8888
 
 class DeepUpdatePlugin(nanome.PluginInstance):
     def start(self):
-        print("Start UpdateWorkspace Plugin")
+        print("Start DeepUpdateWorkspace Plugin")
 
     def on_workspace_received(self, workspace):
         nanome.util.Logs.debug("RUNNINNGANSDGNASDNFASDFA")
