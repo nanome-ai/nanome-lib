@@ -19,6 +19,6 @@ def run(counter):
 def test_wholistic():
     original = create_full_tree(5)
     alter_object(original)
-    copy = conformer.ConvertToConformers(original)
-    copy = conformer.ConvertToFrames(copy)
+    copy = conformer.convert_to_conformers(original)
+    copy = conformer.convert_to_frames(copy)
     assert_equal(original, copy, options)

@@ -28,7 +28,7 @@ def delete_bond(bond):
 def get_hash_code(str):
     return hashlib.sha256(str.encode('utf-8'))
 
-def ConvertToFrames(complex): #Data.Complex -> Data.Complex
+def convert_to_frames(complex): #Data.Complex -> Data.Complex
     deletedAtoms = [] #new List<Data.Atom>()
     deletedBonds = [] #new List<Data.Bond>()
     new_complex = complex._shallow_copy() # Data.Complex
@@ -61,13 +61,13 @@ def ConvertToFrames(complex): #Data.Complex -> Data.Complex
             new_complex._add_molecule(molecule._deep_copy())
     return new_complex
 
-def ConvertAllToConformers(complexes): #List<Data.Complex -> List<Data.Complex>
+def convert_all_to_conformers(complexes): #List<Data.Complex -> List<Data.Complex>
     results = [] #List<Data.Complex> 
     for complex in complexes:
-        results.append(ConvertToConformers(complex))
+        results.append(convert_to_conformers(complex))
     return results
 
-def ConvertToConformers(complex): #Data.Complex -> Data.Complex
+def convert_to_conformers(complex): #Data.Complex -> Data.Complex
     # Maybe conformers are disabled
     if s_ConformersDisabled:
         return complex
@@ -99,10 +99,6 @@ def ConvertToConformers(complex): #Data.Complex -> Data.Complex
     new_molecule._conformer_count = len(complex._molecules)
     # Loop over all frames
     for molecule in complex._molecules:
-        print(molecule_index)
-        print(len(new_molecule._names))
-        print(len(complex._molecules))
-        print("___")
         # Meta informations
         new_molecule._names[molecule_index] = molecule._name
         new_molecule._associateds[molecule_index] = molecule._associated
