@@ -14,13 +14,7 @@ class _Molecule(_Base):
         self._current_conformer = 0
         self.__conformer_count = 0
         self._names = [""]
-        self._associateds = [""]
-
-        #conformers
-        self._current_conformer = 0
-        self.__conformer_count = 0
-        self._names = [""]
-        self._associateds = [""]
+        self._associateds = [{}]
 
     def _add_chain(self, chain):
         self._chains.append(chain)
@@ -77,10 +71,10 @@ class _Molecule(_Base):
 
     def _shallow_copy(self):
         molecule = _Molecule._create()
-        self._current_conformer = 0
-        self.__conformer_count = 0
-        self._names = [""]
-        self._associateds = [""]
+        self._current_conformer = self._current_conformer
+        self.__conformer_count = self.__conformer_count
+        self._names = self._names
+        self._associateds = self._associateds
         return molecule
 
     def _deep_copy(self):

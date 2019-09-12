@@ -8,9 +8,7 @@ from nanome.util import Logs
 
 test_assets = os.getcwd() + ("/testing/test_assets")
 test_output_dir = os.getcwd() + ("/testing/test_outputs")
-options = TestOptions(ignore_vars=["_unique_identifier"])
-
-alter_object = lambda x: x
+options = TestOptions(ignore_vars=["_unique_identifier", "_index"])
 
 def run(counter):
     run_test(test_shallow, counter)

@@ -31,10 +31,10 @@ def get_hash_code(str):
 def ConvertToFrames(complex): #Data.Complex -> Data.Complex
     deletedAtoms = [] #new List<Data.Atom>()
     deletedBonds = [] #new List<Data.Bond>()
-    new_complex = complex._shallow_copy(True) # Data.Complex
+    new_complex = complex._shallow_copy() # Data.Complex
     for molecule in complex._molecules:
-        if molecule.__conformer_count > 1:
-            count = molecule.__conformer_count
+        if molecule._conformer_count > 1:
+            count = molecule._conformer_count
             for i in range(count):
                 new_molecule = molecule._deep_copy(True, True)
                 new_molecule._names = [molecule._names[i]]
@@ -58,7 +58,7 @@ def ConvertToFrames(complex): #Data.Complex -> Data.Complex
                             delete_atom(deletedAtom)
                 new_complex._add_molecule(new_molecule)
         else:
-            new_complex._add_molecule(molecule._deep_copy(True, False))
+            new_complex._add_molecule(molecule._deep_copy())
     return new_complex
 
 def ConvertAllToConformers(complexes): #List<Data.Complex -> List<Data.Complex>

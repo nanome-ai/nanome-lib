@@ -39,7 +39,7 @@ class _Chain(_Base):
 
     def _shallow_copy(self):
         chain = _Chain._create()
-        self._name = "chain"
+        chain._name = self._name
         return chain
 
     def _deep_copy(self):

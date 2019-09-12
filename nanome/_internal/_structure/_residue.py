@@ -84,17 +84,17 @@ class _Residue(_Base):
     def _shallow_copy(self):
         residue = _Residue._create()
         #molecular
-        self._type = "ARG" #RESIDUEDATA
-        self._serial = 1
-        self._name = "res"
-        self._secondary_structure = _Residue.SecondaryStructure.Unknown
+        residue._type = self._type 
+        residue._serial = self._serial 
+        residue._name = self._name 
+        residue._secondary_structure = self._secondary_structure 
         #rendering
-        self._ribboned = True
-        self._ribbon_size = 1.0
-        self._ribbon_mode = _Residue.RibbonMode.SecondaryStructure
-        self._ribbon_color = Color.Clear()
-        self._labeled = False
-        self._label_text = ""
+        residue._ribboned = self._ribboned 
+        residue._ribbon_size = self._ribbon_size 
+        residue._ribbon_mode = self._ribbon_mode 
+        residue._ribbon_color = self._ribbon_color 
+        residue._labeled = self._labeled 
+        residue._label_text = self._label_text 
         return residue
 
     def _deep_copy(self):

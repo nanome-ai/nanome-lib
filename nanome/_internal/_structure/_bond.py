@@ -96,6 +96,6 @@ class _Bond(_Base):
 
     def _shallow_copy(self):
         bond = _Bond._create()
-        self._exists = [True]
-        self._kinds = [_Bond.Kind.CovalentSingle]
+        bond._exists = self._exists
+        bond._kinds = self._kinds
         return bond
