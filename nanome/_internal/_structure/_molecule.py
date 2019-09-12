@@ -13,7 +13,7 @@ class _Molecule(_Base):
         self._current_conformer = 0
         self.__conformer_count = 0
         self._names = [""]
-        self._associateds = [""]
+        self._associateds = [dict()]
 
     def _add_chain(self, chain):
         self._chains.append(chain)
