@@ -1,5 +1,6 @@
 import nanome
 from nanome.util import Color, Logs
+from . import _helpers
 from . import _Base
 
 class _Residue(_Base):
@@ -97,10 +98,4 @@ class _Residue(_Base):
         return residue
 
     def _deep_copy(self):
-        residue = self._shallow_copy()
-        for bond in self._bonds:
-            bond._deep_copy()
-            residue._add_atom(bond._atom1)
-            residue._add_atom(bond._atom2)
-            residue._add_bond(bond)
-        return residue
+        return _helpers._copy._deep_copy_residue(self)

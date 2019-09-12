@@ -1,5 +1,6 @@
 from nanome.util import Vector3, Quaternion, Logs
 from . import _Base
+from . import _helpers
 
 class _Complex(_Base):
 
@@ -96,8 +97,4 @@ class _Complex(_Base):
         return complex
 
     def _deep_copy(self):
-        complex = self._shallow_copy()
-        for molecule in self._molecules:
-            molecule._deep_copy()
-            complex._add_molecule(molecule)
-        return complex
+        return _helpers._copy._deep_copy_complex(self)

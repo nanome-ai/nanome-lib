@@ -33,6 +33,7 @@ import nanome
 from nanome.util import Logs
 Logs._set_verbose(True)
 all_tests_passed = True
+all_tests_passed = all_tests_passed and util.run_test_group(copy_tests)
 all_tests_passed = all_tests_passed and util.run_test_group(context_tests)
 all_tests_passed = all_tests_passed and util.run_test_group(api_tests)
 all_tests_passed = all_tests_passed and util.run_test_group(atom_tests)
@@ -40,5 +41,4 @@ all_tests_passed = all_tests_passed and util.run_test_group(mmcif_tests)
 all_tests_passed = all_tests_passed and util.run_test_group(sdf_tests)
 all_tests_passed = all_tests_passed and util.run_test_group(ui_tests)
 all_tests_passed = all_tests_passed and util.run_test_group(json_tests)
-all_tests_passed = all_tests_passed and util.run_test_group(copy_tests)
 assert(all_tests_passed)

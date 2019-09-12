@@ -1,105 +1,47 @@
-    public static class Convert
-    {
+def _deep_copy_complex(complex):
+    return __deep_copy_complex(complex, {})
 
-        def _ToDataDeep(this Live.Complex complex, bool includeMeta, bool includeConformer:
-            return complex.ToDataDeep(new Dictionary<long, Data.Atom>(), includeMeta, includeConformer)
-        def _ToDataDeep(this Live.Molecule molecule, bool includeMeta, bool includeConformer:
-            return molecule.ToDataDeep(new Dictionary<long, Data.Atom>(), includeMeta, includeConformer)
-        def _ToDataDeep(this Live.Chain chain, bool includeMeta, bool includeConformer:
-            return chain.ToDataDeep(new Dictionary<long, Data.Atom>(), includeMeta, includeConformer)
-        def _ToDataDeep(this Live.Residue residue, bool includeMeta, bool includeConformer:
-            return residue.ToDataDeep(new Dictionary<long, Data.Atom>(), includeMeta, includeConformer)
+def _deep_copy_molecule(molecule):
+    return __deep_copy_molecule(molecule, {})
 
-        def __ToDataDeep(this Live.Complex complex, Dictionary<long, Data.Atom> atomsbyIndex, bool includeMeta, bool includeConformer:
-            Data.Complex newComplex = complex.ToDataShallow(includeMeta)
-            foreach (Live.Molecule molecule in complex.GetMolecules():
-                newComplex.Add(molecule.ToDataDeep(atomsbyIndex, includeMeta, includeConformer))
-            return newComplex
-        def __ToDataDeep(this Live.Molecule molecule, Dictionary<long, Data.Atom> atomsbyIndex, bool includeMeta, bool includeConformer:
-            Data.Molecule newMolecule = molecule.ToDataShallow(includeMeta, includeConformer)
-            foreach (Live.Chain chain in molecule.GetChains():
-                newMolecule.Add(chain.ToDataDeep(atomsbyIndex, includeMeta, includeConformer))
-            return newMolecule
-        def __ToDataDeep(this Live.Chain chain, Dictionary<long, Data.Atom> atomsbyIndex, bool includeMeta, bool includeConformer:
-            Data.Chain newChain = chain.ToDataShallow(includeMeta)
-            foreach (Live.Residue residue in chain.GetResidues():
-                newChain.Add(residue.ToDataDeep(atomsbyIndex, includeMeta, includeConformer))
-            return newChain
-        def __ToDataDeep(this Live.Residue residue, Dictionary<long, Data.Atom> atomsbyIndex, bool includeMeta, bool includeConformer:
-            Data.Residue newResidue = residue.ToDataShallow(includeMeta)
-            foreach (Live.Atom atom in residue.GetAtoms():
-                Data.Atom newAtom = atom.ToDataShallow(includeMeta, includeConformer)
-                atomsbyIndex[atom.index] = newAtom
-                newResidue.Add(newAtom)
-                foreach (Live.Bond bond in atom.GetBonds():
-                    Data.Atom newAtom1 = null
-                    Data.Atom newAtom2 = null
-                    if (atomsbyIndex.TryGetValue(bond.atom1.index, out newAtom1)
-                        && atomsbyIndex.TryGetValue(bond.atom2.index, out newAtom2):
-                        newResidue.Add(bond.ToDataShallow(newAtom1, newAtom2, includeMeta, includeConformer))
-            return newResidue
+def _deep_copy_chain(chain):
+    return __deep_copy_chain(chain, {})
 
-        def _ToDataShallow(this Live.Complex complex, bool includeMeta:
-            Data.Complex newComplex = new Data.Complex()
-            newComplex.name = complex.GetBaseName()
-            newComplex.indexTag = complex.GetIndexTag()
-            newComplex.splitTag = complex.GetSplitTag()
-            foreach (string key in complex.GetRemarkKeys():
-                newComplex.remarks.Add(key, complex.GetRemark(key))
-            if (includeMeta:
-                newComplex.meta.Copy(complex)
-            return newComplex
+def _deep_copy_residue(residue):
+    return __deep_copy_residue(residue, {})
 
-        def _ToDataShallow(this Live.Molecule molecule, bool includeMeta, bool includeConformer:
-            Data.Molecule newMolecule = new Data.Molecule()
-            newMolecule.name = molecule.GetName()
-            foreach (string key in molecule.GetAssociatedKeys():
-                newMolecule.associated.Add(key, molecule.GetAssociatedData(key))
-            if (includeMeta:
-                newMolecule.meta.Copy(molecule)
-            if (includeConformer && molecule.GetConformerEnabled():
-                newMolecule.conformer = new Conformer.Molecule(molecule)
-            return newMolecule
+def __deep_copy_complex(complex, atoms_by_index):
+    new_complex = complex._shallow_copy()
+    for molecule in complex._molecules:
+        new_complex._add_molecule(__deep_copy_molecule(molecule, atoms_by_index))
+    return new_complex
 
-        def _ToDataShallow(this Live.Chain chain, bool includeMeta:
-            Data.Chain newChain = new Data.Chain()
-            newChain.name = chain.GetName()
-            if (includeMeta:
-                newChain.meta.Copy(chain)
-            return newChain
+def __deep_copy_molecule(molecule, atoms_by_index):
+    new_molecule = molecule._shallow_copy()
+    for chain in molecule._chains:
+        new_molecule._add_chain(__deep_copy_chain(chain, atoms_by_index))
+    return new_molecule
 
-        def _ToDataShallow(this Live.Residue residue, bool includeMeta:
-            Data.Residue newResidue = new Data.Residue()
-            newResidue.SetData(residue.GetData())
-            newResidue.serial = residue.GetSerial()
-            newResidue.name = residue.GetName()
-            newResidue.ss = residue.GetSecondaryStructure()
-            if (includeMeta:
-                newResidue.meta.Copy(residue)
-            return newResidue
+def __deep_copy_chain(chain, atoms_by_index):
+    new_chain = chain._shallow_copy()
+    for residue in chain._residues:
+        new_chain._add_residue(__deep_copy_residue(residue, atoms_by_index))
+    return new_chain
 
-        def _ToDataShallow(this Live.Atom atom, bool includeMeta, bool includeConformer:
-            Data.Atom newAtom = new Data.Atom()
-            newAtom.SetElement(atom.GetElement())
-            newAtom.serial = atom.GetSerial()
-            newAtom.name = atom.GetName()
-            newAtom.SetSciencePosition(atom.GetSciencePosition())
-            newAtom.isHet = atom.GetIsHet()
-            newAtom.occupancy = atom.GetOccupancy()
-            newAtom.bfactor = atom.GetBFactor()
-            newAtom.acceptor = atom.GetAcceptor()
-            newAtom.donor = atom.GetDonor()
-            if (includeMeta:
-                newAtom.meta.Copy(atom)
-            if (includeConformer && atom.molecule.GetConformerEnabled():
-                newAtom.conformer = new Conformer.Atom(atom)
-            return newAtom
+def __deep_copy_residue(residue, atoms_by_index):
+    new_residue = residue._shallow_copy()
+    for atom in residue._atoms:
+        new_atom = __no_dup_copy_atom(atom, atoms_by_index)
+        new_residue._add_atom(new_atom)
+    for bond in residue._bonds:
+        new_bond = bond._shallow_copy()
+        new_bond._atom1 = __no_dup_copy_atom(bond._atom1, atoms_by_index)
+        new_bond._atom2 = __no_dup_copy_atom(bond._atom2, atoms_by_index)
+        new_residue.add_bond(new_bond)
+    return new_residue
 
-        def _ToDataShallow(this Live.Bond bond, Data.Atom a1, Data.Atom a2, bool includeMeta, bool includeConformer:
-            Data.Bond newBond = new Data.Bond(a1, a2)
-            newBond.kind = bond.GetKind()
-            if (includeMeta:
-                newBond.meta.Copy(bond)
-            if (includeConformer && bond.molecule.GetConformerEnabled():
-                newBond.conformer = new Conformer.Bond(bond)
-            return newBond
+def __no_dup_copy_atom(atom, atoms_by_index):
+    id = atom._unique_identifier
+    if id not in atoms_by_index:
+        atoms_by_index[id] = atom._shallow_copy()
+    return atoms_by_index[id]

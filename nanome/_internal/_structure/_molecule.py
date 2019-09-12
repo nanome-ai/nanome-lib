@@ -1,4 +1,5 @@
 from . import _Base
+from . import _helpers
 
 class _Molecule(_Base):
     @classmethod
@@ -76,8 +77,4 @@ class _Molecule(_Base):
         return molecule
 
     def _deep_copy(self):
-        molecule = self._shallow_copy()
-        for chain in self._chains:
-            chain._deep_copy()
-            molecule._add_chain(chain)
-        return molecule
+        return _helpers._copy._deep_copy_molecule(self)

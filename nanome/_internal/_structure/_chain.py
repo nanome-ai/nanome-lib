@@ -1,4 +1,5 @@
 from . import _Base
+from . import _helpers
 
 class _Chain(_Base):
     @classmethod
@@ -42,8 +43,4 @@ class _Chain(_Base):
         return chain
 
     def _deep_copy(self):
-        chain = self._shallow_copy()
-        for residue in self._residues:
-            residue._deep_copy()
-            chain._add_residue(residue)
-        return chain
+        return _helpers._copy._deep_copy_chain(self)

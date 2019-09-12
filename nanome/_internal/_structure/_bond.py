@@ -96,9 +96,3 @@ class _Bond(_Base):
         self._exists = [True]
         self._kinds = [_Bond.Kind.CovalentSingle]
         return bond
-
-    def _deep_copy(self):
-        bond = self._shallow_copy()
-        bond._atom1 = self._atom1._shallow_copy()
-        bond._atom2 = self._atom2._shallow_copy()
-        return bond
