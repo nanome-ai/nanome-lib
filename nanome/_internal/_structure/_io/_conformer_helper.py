@@ -4,13 +4,16 @@ s_ConformersDisabled = False #Nanome.Core.Config.getBool("mol-conformers-disable
 s_ConformersAlways = False #Nanome.Core.Config.getBool("mol-conformers-always", "false")
 
 class StringBuilder:
-    los = []
-    def append(self, str):
-        StringBuilder.los.append(str)
-    def ToString(self):
+    def __init__(self):
+        self.los =[]
+    def append(self, s):
+        self.los.append(str(s))
+    def to_string(self):
         return self.get()
     def get(self):
-        return "".join(StringBuilder.los)
+        return "".join(self.los)
+    def clear(self):
+        self.los.clear()
 
 def delete_atom(atom):
     for bond in atom._bonds:
@@ -23,40 +26,40 @@ def delete_bond(bond):
     bond._residue._bonds.remove(bond)
 
 def get_hash_code(str):
-    return hashlib.sha1(str)
+    return hashlib.sha256(str.encode('utf-8'))
 
 def ConvertToFrames(complex): #Data.Complex -> Data.Complex
     deletedAtoms = [] #new List<Data.Atom>()
     deletedBonds = [] #new List<Data.Bond>()
-    newComplex = complex._shallow_copy(True) # Data.Complex
+    new_complex = complex._shallow_copy(True) # Data.Complex
     for molecule in complex._molecules:
         if molecule.__conformer_count > 1:
             count = molecule.__conformer_count
             for i in range(count):
-                newMolecule = molecule._deep_copy(True, True)
-                newMolecule._names = [molecule._names[i]]
-                newMolecule._associateds = [molecule._associateds[i]]
-                for newChain in newMolecule._chains:
-                    for newResidue in newChain._residues:
+                new_molecule = molecule._deep_copy(True, True)
+                new_molecule._names = [molecule._names[i]]
+                new_molecule._associateds = [molecule._associateds[i]]
+                for new_chain in new_molecule._chains:
+                    for new_residue in new_chain._residues:
                         deletedAtoms.clear()
                         deletedBonds.clear()
-                        for newAtom in newResidue._atoms:
-                            if not newAtom._exists[i]:
-                                deletedAtoms.append(newAtom)
-                            newAtom._positions = [newAtom.positions[i]]
-                            newAtom._exists = [True]
-                        for newBond in newResidue._bonds:
-                            if not newBond._exists[i]:
-                                deletedBonds.append(newBond)
-                            newBond.kinds = [newBond.kinds[i]]
+                        for new_atom in new_residue._atoms:
+                            if not new_atom._exists[i]:
+                                deletedAtoms.append(new_atom)
+                            new_atom._positions = [new_atom.positions[i]]
+                            new_atom._exists = [True]
+                        for new_bond in new_residue._bonds:
+                            if not new_bond._exists[i]:
+                                deletedBonds.append(new_bond)
+                            new_bond.kinds = [new_bond.kinds[i]]
                         for deletedBond in deletedBonds:
                             delete_bond(deletedBond)
                         for deletedAtom in deletedAtoms:
                             delete_atom(deletedAtom)
-                newComplex._add_molecule(newMolecule)
+                new_complex._add_molecule(new_molecule)
         else:
-            newComplex._add_molecule(molecule._deep_copy(True, False))
-    return newComplex
+            new_complex._add_molecule(molecule._deep_copy(True, False))
+    return new_complex
 
 def ConvertAllToConformers(complexes): #List<Data.Complex -> List<Data.Complex>
     results = [] #List<Data.Complex> 
@@ -69,199 +72,210 @@ def ConvertToConformers(complex): #Data.Complex -> Data.Complex
     if s_ConformersDisabled:
         return complex
     # How much are we talking about here
-    count = len(complex._molecules.count) #int
+    count = len(complex._molecules) #int
     # No mutliple frames, nothing to do
     if count <= 1:
         return complex
     # Collect count of first molecule
-    moleculeIndex = 0
-    chainTotalCount = 0
-    residueTotalCount = 0
-    atomTotalCount = 0
+    molecule_index = 0
+    chain_total_count = 0
+    residue_total_count = 0
+    atom_total_count = 0
     bondTotalCount = 0
     # Create molecular container
-    newComplex = complex.ShallowCopy(True) #Data.Complex
-    newMolecule = complex._molecules[0].ShallowCopy(True) # Data.Molecule
+    new_complex = complex._shallow_copy() #Data.Complex
+    new_molecule = complex._molecules[0]._shallow_copy() # Data.Molecule
     # Group structures by their hash
-    newChains = {} #Dictionary<int, Data.Chain> 
-    newResidues = {} #Dictionary<int, Data.Residue> 
-    newAtoms = {} #Dictionary<int, Data.Atom> 
-    newBonds = {} #Dictionary<int, Data.Bond> 
+    new_chains = {} #Dictionary<int, Data.Chain> 
+    new_residues = {} #Dictionary<int, Data.Residue> 
+    new_atoms = {} #Dictionary<int, Data.Atom> 
+    new_bonds = {} #Dictionary<int, Data.Bond> 
     # Computation stores
     sb = StringBuilder() #StringBuilder
-    names = {} #Dictionary<int, int> 
-    atoms = {} #Dictionary<int, Tuple<int, Data.Atom>> 
+    names_dictionary = {} #Dictionary<int, int> 
+    atoms_dictionary = {} #Dictionary<int, Tuple<int, Data.Atom>> 
     # Get ready
-    newComplex._add_molecule(newMolecule)
+    new_complex._add_molecule(new_molecule)
+    new_molecule._conformer_count = len(complex._molecules)
     # Loop over all frames
     for molecule in complex._molecules:
+        print(molecule_index)
+        print(len(new_molecule._names))
+        print(len(complex._molecules))
+        print("___")
         # Meta informations
-        newMolecule._names[moleculeIndex] = molecule.name
-        newMolecule._associateds[moleculeIndex] = molecule.associated
+        new_molecule._names[molecule_index] = molecule._name
+        new_molecule._associateds[molecule_index] = molecule._associated
         # Loop over all chains
         for chain in molecule._chains:
             # Lookup or create chain with hash
-            hashChain = GetChainHash(sb, chain) #int
-            newChain = None #Data.Chain
-            if hashChain in newChains:
-                newChain = newChains[hashChain]
+            hash_chain = get_chain_hash(sb, chain) #int
+            new_chain = None #Data.Chain
+            if hash_chain in new_chains:
+                new_chain = new_chains[hash_chain]
             else:
-                newChain = chain.ShallowCopy(True)
-                newMolecule._add_chain(newChain)
-                newChains[hashChain] = newChain
+                new_chain = chain._shallow_copy()
+                new_molecule._add_chain(new_chain)
+                new_chains[hash_chain] = new_chain
             # Loop over all residues
             for residue in chain._residues:
                 # Lookup or create chain with hash
-                hashResidue = GetResidueHash(sb, residue) #int
-                newResidue = None #Data.Residue
-                if hashResidue in newResidues:
-                    newResidue = newResidues[hashResidue]
+                hash_residue = get_residue_hash(sb, residue) #int
+                new_residue = None #Data.Residue
+                if hash_residue in new_residues:
+                    new_residue = new_residues[hash_residue]
                 else:
-                    newResidue = residue.ShallowCopy(True)
-                    newChain._add_residue(newResidue)
-                    newResidues[hashResidue] = newResidue
+                    new_residue = residue._shallow_copy()
+                    new_chain._add_residue(new_residue)
+                    new_residues[hash_residue] = new_residue
                 # Cleanup
-                names.clear()
+                names_dictionary.clear()
                 # Loop over all atoms
                 for atom in residue._atoms:
-                    name = get_hash_code(atom.name) #int
+                    name_hash = get_hash_code(atom.name) #int
                     off = 0 #int
-                    if name in names:
-                        off = names[name]
+                    if name_hash in names_dictionary:
+                        off = names_dictionary[name_hash]
                     off+=1
-                    names[name] = off
+                    names_dictionary[name_hash] = off
                     # Lookup or create chain with hash
-                    hashAtom = GetAtomHash(sb, atom, off) #int
-                    newAtom = None #Data.Atom
-                    if hashAtom in newAtoms:
-                        newAtom = newAtoms[hashAtom]
+                    hashAtom = get_atom_hash(sb, atom, off) #int
+                    new_atom = None #Data.Atom
+                    if hashAtom in new_atoms:
+                        new_atom = new_atoms[hashAtom]
                     else:
-                        newAtom = atom.ShallowCopy(True, False)
-                        newResidue._add_atom(newAtom)
+                        new_atom = atom._shallow_copy()
+                        new_atom._exists = [None]*new_molecule._conformer_count # replace with append algorithm at the end
+                        new_atom._positions = [None]*new_molecule._conformer_count
+                        new_residue._add_atom(new_atom)
                         if off > 1:
-                            newAtom.name = newAtom.name + off
-                        newAtom.serial = len(newResidue._atoms)
-                        newAtoms[hashAtom] = newAtom
+                            new_atom.name = new_atom.name + off
+                        new_atom.serial = len(new_residue._atoms)
+                        new_atoms[hashAtom] = new_atom
                     # Update current conformer
-                    newAtom._exists[moleculeIndex] = True
-                    newAtom._positions[moleculeIndex] = atom.position()
+                    new_atom._exists[molecule_index] = True
+                    new_atom._positions[molecule_index] = atom.position
                     # Save
-                    atoms[atom.index] = (hashAtom, newAtom)
+                    atoms_dictionary[atom._unique_identifier] = (hashAtom, new_atom)
                     # Loop over all bonds
                     for bond in atom._bonds:
-                        atomInfo1 = None#Tuple<int, Data.Atom>
-                        atomInfo2 = None#Tuple<int, Data.Atom>
-                        found1 = bond.atom1.index in atoms
+                        atom_info_1 = None#Tuple<int, Data.Atom>
+                        atom_info_2 = None#Tuple<int, Data.Atom>
+                        found1 = bond._atom1._unique_identifier in atoms_dictionary
                         if found1:
-                            atomInfo1 = atoms[bond.atom1.index]
-                        found2 = bond.atom1.index in atoms
+                            atom_info_1 = atoms_dictionary[bond._atom1._unique_identifier]
+                        found2 = bond._atom2._unique_identifier in atoms_dictionary
                         if found2:
-                            atomInfo2 = atoms[bond.atom2.index]
+                            atom_info_2 = atoms_dictionary[bond._atom2._unique_identifier]
                         if found1 and found2:
-                            hashBond = GetBondHash(sb, bond, atomInfo1.Item1, atomInfo2.Item1) #int
-                            newBond = None #Data.Bond
-                            if hashBond in newBonds:
-                                newBond = hashBond
+                            hash_bond = get_bond_hash(sb, bond, atom_info_1[0], atom_info_2[1]) #int
+                            new_bond = None #Data.Bond
+                            if hash_bond in new_bonds:
+                                new_bond = hash_bond
                             else:
-                                newBond = bond.ShallowCopy(atomInfo1.Item2, atomInfo2.Item2, True, False)
-                                newResidue._add_bond(newBond)
-                                newBonds[hashBond] = newBond
+                                new_bond = bond._shallow_copy()
+                                new_bond._exists = [None]*new_molecule._conformer_count # replace with append algorithm at the end
+                                new_bond._kinds = [None]*new_molecule._conformer_count                                
+                                new_bond._atom1 = atom_info_1[1]
+                                new_bond._atom2 = atom_info_2[1]
+                                new_residue._add_bond(new_bond)
+                                new_bonds[hash_bond] = new_bond
                             # Update current conformer
-                            newBond._exists[moleculeIndex] = True
-                            newBond._orders[moleculeIndex] = bond.kind
+                            new_bond._exists[molecule_index] = True
+                            new_bond._kinds[molecule_index] = bond.kind
                             # Count bonds
                             bondTotalCount+=1
                     # Count atoms
-                    atomTotalCount+=1
+                    atom_total_count+=1
                 # Count residues
-                residueTotalCount+=1
+                residue_total_count+=1
             # Count chains
-            chainTotalCount+=1
+            chain_total_count+=1
         # Molecule idx
-        moleculeIndex+=1
+        molecule_index+=1
     # Important decision to make, is everything suited for a trajectories?
     if not s_ConformersAlways:
         # Gather important information of the conversion
-        isVeryBigChains = chainTotalCount > 1 #bool
-        isVeryBigResidues = residueTotalCount > 10 #bool
-        isVeryBigAtoms = atomTotalCount > 10000 # So basically im not very smol #bool
-        isVeryBigBonds = bondTotalCount > 20000 #bool
-        chainSimilarityRatio = float(chainTotalCount) / float(count) / float(len(newChains)) #float
-        residueSimilarityRatio = float(residueTotalCount) / float(count) / float(len(newResidues)) #float
-        atomSimilarityRatio = float(atomTotalCount) / float(count) / float(len(newAtoms)) #float
-        bondSimilarityRatio = float(bondTotalCount) / float(count) / float(len(newBonds)) #float
-        isChainSimilarEnough = chainSimilarityRatio > 0.85 #bool
-        isResidueSimilarEnough = residueSimilarityRatio > 0.85 #bool
-        isAtomSimilarEnough = atomSimilarityRatio > 0.85 #bool
-        isBondSimilarEnough = bondSimilarityRatio > 0.85 #bool
+        is_very_big_chains = chain_total_count > 1 #bool
+        is_very_big_residues = residue_total_count > 10 #bool
+        is_very_big_atoms = atom_total_count > 10000 # So basically im not very smol #bool
+        is_very_big_bonds = bondTotalCount > 20000 #bool
+        chain_similarity_ratio = float(chain_total_count) / float(count) / float(len(new_chains)) #float
+        residue_similarity_ratio = float(residue_total_count) / float(count) / float(len(new_residues)) #float
+        atom_similarity_ratio = float(atom_total_count) / float(count) / float(len(new_atoms)) #float
+        bond_similarity_ratio = float(bondTotalCount) / float(count) / float(len(new_bonds)) #float
+        is_chain_similar_enough = chain_similarity_ratio > 0.85 #bool
+        is_residue_similar_enough = residue_similarity_ratio > 0.85 #bool
+        is_atom_similar_enough = atom_similarity_ratio > 0.85 #bool
+        is_bond_similar_enough = bond_similarity_ratio > 0.85 #bool
         # Debug # Keeping for short term debug
         #Logs.debugOnChannel("Conformers", "RESULTS")
         #Logs.debugOnChannel("Conformers", "count", count)
-        #Logs.debugOnChannel("Conformers", "isVeryBigChains", isVeryBigChains)
-        #Logs.debugOnChannel("Conformers", "isVeryBigResidues", isVeryBigResidues)
-        #Logs.debugOnChannel("Conformers", "isVeryBigAtoms", isVeryBigAtoms)
-        #Logs.debugOnChannel("Conformers", "isVeryBigBonds", isVeryBigBonds)
-        #Logs.debugOnChannel("Conformers", "chainSimilarityRatio", chainSimilarityRatio)
-        #Logs.debugOnChannel("Conformers", "residueSimilarityRatio", residueSimilarityRatio)
-        #Logs.debugOnChannel("Conformers", "atomSimilarityRatio", atomSimilarityRatio)
-        #Logs.debugOnChannel("Conformers", "bondSimilarityRatio", bondSimilarityRatio)
-        #Logs.debugOnChannel("Conformers", "isChainSimilarEnough", isChainSimilarEnough)
-        #Logs.debugOnChannel("Conformers", "isResidueSimilarEnough", isResidueSimilarEnough)
-        #Logs.debugOnChannel("Conformers", "isAtomSimilarEnough", isAtomSimilarEnough)
-        #Logs.debugOnChannel("Conformers", "isBondSimilarEnough", isBondSimilarEnough)
-        #Logs.debugOnChannel("Conformers", "chainTotalCount", chainTotalCount)
-        #Logs.debugOnChannel("Conformers", "residueTotalCount", residueTotalCount)
-        #Logs.debugOnChannel("Conformers", "atomTotalCount", atomTotalCount)
+        #Logs.debugOnChannel("Conformers", "is_very_big_chains", is_very_big_chains)
+        #Logs.debugOnChannel("Conformers", "is_very_big_residues", is_very_big_residues)
+        #Logs.debugOnChannel("Conformers", "is_very_big_atoms", is_very_big_atoms)
+        #Logs.debugOnChannel("Conformers", "is_very_big_bonds", is_very_big_bonds)
+        #Logs.debugOnChannel("Conformers", "chain_similarity_ratio", chain_similarity_ratio)
+        #Logs.debugOnChannel("Conformers", "residue_similarity_ratio", residue_similarity_ratio)
+        #Logs.debugOnChannel("Conformers", "atom_similarity_ratio", atom_similarity_ratio)
+        #Logs.debugOnChannel("Conformers", "bond_similarity_ratio", bond_similarity_ratio)
+        #Logs.debugOnChannel("Conformers", "is_chain_similar_enough", is_chain_similar_enough)
+        #Logs.debugOnChannel("Conformers", "is_residue_similar_enough", is_residue_similar_enough)
+        #Logs.debugOnChannel("Conformers", "is_atom_similar_enough", is_atom_similar_enough)
+        #Logs.debugOnChannel("Conformers", "is_bond_similar_enough", is_bond_similar_enough)
+        #Logs.debugOnChannel("Conformers", "chain_total_count", chain_total_count)
+        #Logs.debugOnChannel("Conformers", "residue_total_count", residue_total_count)
+        #Logs.debugOnChannel("Conformers", "atom_total_count", atom_total_count)
         #Logs.debugOnChannel("Conformers", "bondTotalCount", bondTotalCount)
-        #Logs.debugOnChannel("Conformers", "newChains.Count", newChains.Count)
-        #Logs.debugOnChannel("Conformers", "newResidues.Count", newResidues.Count)
-        #Logs.debugOnChannel("Conformers", "newAtoms.Count", newAtoms.Count)
-        #Logs.debugOnChannel("Conformers", "newBonds.Count", newBonds.Count)
+        #Logs.debugOnChannel("Conformers", "new_chains.Count", new_chains.Count)
+        #Logs.debugOnChannel("Conformers", "new_residues.Count", new_residues.Count)
+        #Logs.debugOnChannel("Conformers", "new_atoms.Count", new_atoms.Count)
+        #Logs.debugOnChannel("Conformers", "new_bonds.Count", new_bonds.Count)
         
         # Cancel conversion if not suited
-        if isVeryBigChains and not isChainSimilarEnough:
+        if is_very_big_chains and not is_chain_similar_enough:
             return complex
-        if isVeryBigResidues and not isResidueSimilarEnough:
+        if is_very_big_residues and not is_residue_similar_enough:
             return complex
-        if isVeryBigAtoms and not isAtomSimilarEnough:
+        if is_very_big_atoms and not is_atom_similar_enough:
             return complex
-        if isVeryBigBonds and not isBondSimilarEnough:
+        if is_very_big_bonds and not is_bond_similar_enough:
             return complex
     # Otherwise let's start grabbing the data
-    return newComplex
+    return new_complex
 
-def GetChainHash(sb, chain): #StringBuilder, Data.Chain -> int
+def get_chain_hash(sb, chain): #StringBuilder, Data.Chain -> int
     return get_hash_code(chain.name)
 
-def GetResidueHash(sb, residue): #StringBuilder, Data.Residue -> int
-    sb.Length = 0
-    sb.Append(residue.serial)
-    sb.Append(":")
-    sb.Append(residue.name)
-    sb.Append(":")
-    sb.Append(residue.chain.name)
-    return get_hash_code(sb.ToString())
+def get_residue_hash(sb, residue): #StringBuilder, Data.Residue -> int
+    sb.clear()
+    sb.append(residue.serial)
+    sb.append(":")
+    sb.append(residue.name)
+    sb.append(":")
+    sb.append(residue.chain.name)
+    return get_hash_code(sb.to_string())
 
-def GetAtomHash(sb, atom, off): #StringBuilder, Data.Atom, int -> int
-    sb.Length = 0
-    sb.Append(atom._symbol)
-    sb.Append(":")
-    sb.Append(atom.name)
-    sb.Append(":")
-    sb.Append(atom.isHet)
-    sb.Append(":")
-    sb.Append(off)
-    sb.Append(":")
-    sb.Append(atom.residue.serial)
-    sb.Append(":")
-    sb.Append(atom.residue.name)
-    sb.Append(":")
-    sb.Append(atom.residue.chain.name)
-    return get_hash_code(sb.ToString())
+def get_atom_hash(sb, atom, off): #StringBuilder, Data.Atom, int -> int
+    sb.clear()
+    sb.append(atom._symbol)
+    sb.append(":")
+    sb.append(atom._name)
+    sb.append(":")
+    sb.append(atom._is_het)
+    sb.append(":")
+    sb.append(off)
+    sb.append(":")
+    sb.append(atom._residue._serial)
+    sb.append(":")
+    sb.append(atom._residue._name)
+    sb.append(":")
+    sb.append(atom._residue._chain._name)
+    return get_hash_code(sb.to_string())
 
-def GetBondHash(sb, bond, atom1, atom2): #StringBuilder, Data.Bond, int, int -> int
-    sb.Length = 0
-    sb.Append(atom1)
-    sb.Append(":")
-    sb.Append(atom2)
-    return get_hash_code(sb.ToString())
+def get_bond_hash(sb, bond, atom1, atom2): #StringBuilder, Data.Bond, int, int -> int
+    sb.clear()
+    sb.append(atom1)
+    sb.append(":")
+    sb.append(atom2)
+    return get_hash_code(sb.to_string())
