@@ -16,6 +16,12 @@ class _Molecule(_Base):
         self._names = [""]
         self._associateds = [""]
 
+        #conformers
+        self._current_conformer = 0
+        self.__conformer_count = 0
+        self._names = [""]
+        self._associateds = [""]
+
     def _add_chain(self, chain):
         self._chains.append(chain)
         chain._parent = self
@@ -58,13 +64,14 @@ class _Molecule(_Base):
     
     @_conformer_count.setter
     def _conformer_count(self, value):
-        if value > len(self._names):
-            self._names.append(self._names[-1])
-            self._associateds.append(self._associateds[-1])
+        curr_size = len(self._names)
+        if value > curr_size:
+            self._names.extend([self._names[-1]]*(value - curr_size))
+            self._associateds.extend([self._associateds[-1]]*(value - curr_size))
         else:
             self._names = self._names[:value]
             self._associateds = self._associateds[:value]
-            self._current_conformer = value - 1
+        self._current_conformer = min(self._current_conformer, value - 1)
         self.__conformer_count = value
     #endregion
 

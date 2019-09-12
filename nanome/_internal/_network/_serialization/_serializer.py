@@ -42,22 +42,22 @@ class Serializer(object):
             return (None, None, None)
         except BufferError as err:
             Logs.error(err)
-            traceback.print_exc()
+            Logs.error(traceback.format_exc())
             return (None, None, None)
         except struct.error as err:
             Logs.error(err)
-            traceback.print_exc()
+            Logs.error(traceback.format_exc())
             return (None, None, None)
 
         try:
             received_object = context.read_using_serializer(command)
         except BufferError as err:
             Logs.error(err)
-            traceback.print_exc()
+            Logs.error(traceback.format_exc())
             return (None, None, None)
         except struct.error as err:
             Logs.error(err)
-            traceback.print_exc()
+            Logs.error(traceback.format_exc())
             return (None, None, None)
         return received_object, command_hash, request_id
 

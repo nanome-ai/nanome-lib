@@ -17,6 +17,9 @@ class _Bond(_Base):
         self._exists = [True]
         self._kinds = [_Bond.Kind.CovalentSingle]
 
+        self._exists = [True]
+        self._kinds = [_Bond.Kind.CovalentSingle]
+
     @property
     def _atom1(self):
         return self.__atom1
@@ -77,9 +80,9 @@ class _Bond(_Base):
             return 0
 
     @property
-    def _max_conformers(self):
+    def _conformer_count(self):
         if self._molecule != None:
-            return self._molecule._max_conformers
+            return self._molecule._conformer_count
         else:
             return 1
 

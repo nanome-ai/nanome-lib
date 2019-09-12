@@ -82,16 +82,16 @@ class _Atom(_Base):
             return 0
 
     @property
-    def _max_conformers(self):
-        if self._molecule == None:
-            return self._molecule._max_conformers
+    def _conformer_count(self):
+        if self._molecule != None:
+            return self._molecule._conformer_count
         else:
             return 1
 
     def _set_positions(self, positions):
         if self._molecule != None:
-            if len(positions) != self._max_conformers:
-                nanome.util.Logs.error("Molecule contains", self._max_conformers, "but atom contains", len(positions), "conformers.")
+            if len(positions) != self._conformer_count:
+                nanome.util.Logs.error("Molecule contains", self._conformer_count, "but atom contains", len(positions), "conformers.")
         self._positions = positions
     
     @property

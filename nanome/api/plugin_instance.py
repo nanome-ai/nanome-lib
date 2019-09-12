@@ -1,4 +1,4 @@
-from nanome.util import Logs, DirectoryRequestOptions, IntEnum
+from nanome.util import Logs, DirectoryRequestOptions, IntEnum, config
 from nanome._internal import _PluginInstance
 from nanome._internal._process import _Bonding, _Dssp
 from nanome._internal._network import _ProcessNetwork
@@ -7,6 +7,7 @@ from nanome.api.ui import Menu
 
 import inspect
 import sys
+import os
 
 class PluginInstance(_PluginInstance):
 
@@ -320,6 +321,13 @@ class PluginInstance(_PluginInstance):
             current_usable[0] = usable
 
         self._network._send(_Messages.plugin_list_button_set, (button, text, usable))
+
+    @property
+    def plugin_files_path(self):
+        path = os.path.expanduser(config.fetch('plugin_files_path'))
+        if not os.path.exists(path):
+            os.makedirs(path)
+        return path
         
 class _DefaultPlugin(PluginInstance):
     def __init__(self):
