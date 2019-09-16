@@ -225,25 +225,35 @@ class PluginInstance(_PluginInstance):
 
     @Logs.deprecated("create_atom_stream")
     def create_stream(self, atom_indices_list, callback):
-        """
-        | Create a stream allowing to continuously update many atoms positions
-
-        :param atom_indices_list: List of indices of all atoms that should be in the stream
-        :type atom_indices_list: list of :class:`int`
-        """
         id = self._network._send(_Messages.stream_create, (Stream.Type.Position, atom_indices_list))
         self._save_callback(id, callback)
 
+    @Logs.deprecated("create_writing_stream")
     def create_atom_stream(self, atom_indices_list, stream_type, callback):
+        self.create_writing_stream(atom_indices_list, stream_type, callback)
+
+    def create_writing_stream(self, atom_indices_list, stream_type, callback):
         """
-        | Create a stream allowing to continuously update a properties of many atoms
+        | Create a stream allowing to continuously update properties of many structures
 
         :param atom_indices_list: List of indices of all atoms that should be in the stream
         :type atom_indices_list: list of :class:`int`
         :param stream_type: Type of stream to create
         :type stream_type: list of :class:`~nanome.api.stream.Stream.Type`
         """
-        id = self._network._send(_Messages.stream_create, (stream_type, atom_indices_list))
+        id = self._network._send(_Messages.stream_create, (stream_type, atom_indices_list, nanome.util.enums.StreamDirection.writing))
+        self._save_callback(id, callback)
+
+    def create_reading_stream(self, atom_indices_list, stream_type, callback):
+        """
+        | Create a stream allowing to continuously receive properties of many structures
+
+        :param atom_indices_list: List of indices of all atoms that should be in the stream
+        :type atom_indices_list: list of :class:`int`
+        :param stream_type: Type of stream to create
+        :type stream_type: list of :class:`~nanome.api.stream.Stream.Type`
+        """
+        id = self._network._send(_Messages.stream_create, (stream_type, atom_indices_list, nanome.util.enums.StreamDirection.reading))
         self._save_callback(id, callback)
 
     def add_bonds(self, complex_list, callback, fast_mode=None):

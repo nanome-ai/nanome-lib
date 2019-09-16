@@ -1,12 +1,13 @@
-from nanome._internal._util._serializers import _TypeSerializer
+from nanome._internal._util._serializers import _TypeSerializer, _ArraySerializer, _StringSerializer
+from nanome.util.enums import StreamDataType
 import nanome
 
 class _FeedStream(_TypeSerializer):
     def __init__(self):
-        pass
+        self._array = _ArraySerializer(_StringSerializer)
 
     def version(self):
-        return 1
+        return 2
 
     def name(self):
         return "StreamFeed"
@@ -16,10 +17,24 @@ class _FeedStream(_TypeSerializer):
         data_type = value[2]
         if version > 0:
             context.write_byte(data_type)
-        if data_type == nanome.api.streams.Stream.DataType.byte:
+        if data_type == StreamDataType.byte:
             context.write_byte_array(value[1])
+        elif data_type == StreamDataType.string:
+            context.write_using_serializer(value[1])
         else:
             context.write_float_array(value[1])
 
     def deserialize(self, version, context):
-        raise NotImplementedError
+        id = context.read_uint()
+        type = StreamDataType.float
+        if version > 0:
+            type = StreamDataType.float(context.read_byte())
+
+        if type == StreamDataType.byte:
+            data = context.read_byte_array()
+        elif type == StreamDataType.string:
+            data = context.read_using_serializer(self._array)
+        else:
+            data = context.read_float_array()
+
+        return (id, data, type)

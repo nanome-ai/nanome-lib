@@ -6,7 +6,7 @@ class _CreateStream(_TypeSerializer):
         pass
 
     def version(self):
-        return 1
+        return 2
 
     def name(self):
         return "StreamCreation"
@@ -14,6 +14,8 @@ class _CreateStream(_TypeSerializer):
     def serialize(self, version, value, context):
         if version > 0:
             context.write_byte(value[0])
+        if version >= 2:
+            context.write_byte(value[2])
         context.write_long_array(value[1])
 
     def deserialize(self, version, context):

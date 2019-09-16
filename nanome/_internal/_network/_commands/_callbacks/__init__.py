@@ -8,6 +8,7 @@ from ._advanced_settings import _advanced_settings
 from ._complex_list import _receive_complex_list, _receive_complexes
 from ._create_stream_result import _receive_create_stream_result
 from ._connect import _connect
+from ._feed_stream import _feed_stream
 from ._feed_stream_done import _feed_stream_done
 from ._file import _receive_directory, _receive_file, _receive_file_save_result
 from ._interrupt_stream import _receive_interrupt_stream
