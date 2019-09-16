@@ -116,6 +116,7 @@ add_command(CommandCallbacks._Commands.file_save_done, CommandSerializers._FileS
 
 #streams
 add_command(CommandCallbacks._Commands.stream_create_done,CommandSerializers._CreateStreamResult())
+add_command(CommandCallbacks._Commands.stream_feed, CommandSerializers._FeedStream())
 add_command(CommandCallbacks._Commands.stream_interrupt, CommandSerializers._InterruptStream())
 add_command(CommandCallbacks._Commands.stream_feed_done, CommandSerializers._FeedStreamDone())
 
@@ -220,6 +221,7 @@ add_callback(CommandCallbacks._Commands.file_save_done, CommandCallbacks._receiv
 #streams
 add_callback(CommandCallbacks._Commands.stream_create_done, CommandCallbacks._receive_create_stream_result)
 add_callback(CommandCallbacks._Commands.stream_interrupt, CommandCallbacks._receive_interrupt_stream)
+add_callback(CommandCallbacks._Commands.stream_feed, CommandCallbacks._feed_stream)
 add_callback(CommandCallbacks._Commands.stream_feed_done, CommandCallbacks._feed_stream_done)
 
 #macros
