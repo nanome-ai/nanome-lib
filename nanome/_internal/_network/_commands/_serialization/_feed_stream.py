@@ -4,7 +4,8 @@ import nanome
 
 class _FeedStream(_TypeSerializer):
     def __init__(self):
-        self._array = _ArraySerializer(_StringSerializer)
+        self.__array = _ArraySerializer()
+        self.__array.set_type(_StringSerializer())
 
     def version(self):
         return 2
@@ -20,7 +21,7 @@ class _FeedStream(_TypeSerializer):
         if data_type == StreamDataType.byte:
             context.write_byte_array(value[1])
         elif data_type == StreamDataType.string:
-            context.write_using_serializer(value[1])
+            context.write_using_serializer(self.__array, value[1])
         else:
             context.write_float_array(value[1])
 

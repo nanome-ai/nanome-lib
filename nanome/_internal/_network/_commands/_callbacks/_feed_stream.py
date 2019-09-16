@@ -1,4 +1,2 @@
-from nanome.util import Stream
-
 def _feed_stream(network, result, request_id):
-    Stream._streams[result[0]]._update_received(result[1])
+    nanome.util.Stream._streams[result[0]]._update_received(result[1])

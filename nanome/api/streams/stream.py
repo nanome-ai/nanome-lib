@@ -12,6 +12,7 @@ class Stream(object):
 
     Type = nanome.util.enums.StreamType
     DataType = nanome.util.enums.StreamDataType
+    Direction = nanome.util.enums.StreamDirection
 
     def __init__(self, network, id, data_type, direction):
         self.__network = network

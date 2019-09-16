@@ -1,5 +1,5 @@
 from nanome._internal._util._serializers import _TypeSerializer
-from nanome.util.enums import StreamDataType
+from nanome.util.enums import StreamDataType, StreamDirection
 
 class _CreateStreamResult(_TypeSerializer):
     def __init__(self):
@@ -22,7 +22,7 @@ class _CreateStreamResult(_TypeSerializer):
         else:
             data_type = StreamDataType.float
         if version >= 2:
-            direction = nanome.util.enums.StreamDirection(context.read_byte())
+            direction = StreamDirection(context.read_byte())
         else:
-            direction = nanome.util.enums.StreamDirection.writing
+            direction = StreamDirection.writing
         return (err, id, data_type, direction)

@@ -1,4 +1,5 @@
 from nanome.util import Logs, DirectoryRequestOptions, IntEnum, config
+from nanome.util.enums import StreamDirection
 from nanome._internal import _PluginInstance
 from nanome._internal._process import _Bonding, _Dssp
 from nanome._internal._network import _ProcessNetwork
@@ -241,7 +242,7 @@ class PluginInstance(_PluginInstance):
         :param stream_type: Type of stream to create
         :type stream_type: list of :class:`~nanome.api.stream.Stream.Type`
         """
-        id = self._network._send(_Messages.stream_create, (stream_type, atom_indices_list, nanome.util.enums.StreamDirection.writing))
+        id = self._network._send(_Messages.stream_create, (stream_type, atom_indices_list, StreamDirection.writing))
         self._save_callback(id, callback)
 
     def create_reading_stream(self, atom_indices_list, stream_type, callback):
@@ -253,7 +254,7 @@ class PluginInstance(_PluginInstance):
         :param stream_type: Type of stream to create
         :type stream_type: list of :class:`~nanome.api.stream.Stream.Type`
         """
-        id = self._network._send(_Messages.stream_create, (stream_type, atom_indices_list, nanome.util.enums.StreamDirection.reading))
+        id = self._network._send(_Messages.stream_create, (stream_type, atom_indices_list, StreamDirection.reading))
         self._save_callback(id, callback)
 
     def add_bonds(self, complex_list, callback, fast_mode=None):
