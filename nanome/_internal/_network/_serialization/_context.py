@@ -218,6 +218,9 @@ class _ContextDeserialization(object):
     def read_int_array(self):
         return self._data.read_int_array()
 
+    def read_byte_array(self):
+        return self._data.read_byte_array()
+
     def read_float_array(self):
         return self._data.read_float_array()
 

@@ -31,6 +31,7 @@ def CreateMenu():
 def CreateButton():
     value = UI.Button()
     value = alter_object(value)
+    value.set_all_icon('')
     return value
 def CreateMesh():
     value = UI.Mesh()

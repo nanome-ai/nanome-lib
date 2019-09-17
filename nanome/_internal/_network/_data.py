@@ -189,6 +189,19 @@ class _Data(object):
         self.consume_data(size)
         return result
 
+    def read_byte_array(self):
+        byte_size = self.read_uint()
+        if byte_size == 0:
+            return []
+
+        if byte_size > self._buffered_bytes:
+            raise BufferError(
+                'Trying to read more data than available, check API compatibility')
+
+        result = struct.unpack(str(byte_size) + "B", self._received_bytes[self._buffered_computed:self._buffered_computed + byte_size])
+        self.consume_data(byte_size)
+        return result
+
     def read_float_array(self):
         size = self.read_uint()
         if size == 0:
