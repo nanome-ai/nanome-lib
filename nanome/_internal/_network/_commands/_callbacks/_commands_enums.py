@@ -63,6 +63,10 @@ class _Commands(__CommandEnum):
     #Macro
     get_macros_response = auto()
 
+    # Presenter
+    presenter_info_response = auto()
+    presenter_change = auto()
+
     #Other
     upload_cryo_em_done = auto()
 
@@ -111,6 +115,9 @@ class _Messages(__CommandEnum):
     run_macro = auto()
     stop_macro = auto()
     get_macros = auto()
+
+    # Presenter
+    presenter_info_request = auto()
 
     #Other
     upload_cryo_em = auto()

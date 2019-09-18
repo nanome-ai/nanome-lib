@@ -17,5 +17,7 @@ from ._ui_callbacks import _button_pressed, _menu_toggled, _slider_changed, _sli
 from ._update_structures_deep_done import _update_structures_deep_done
 from ._upload_cryo_em_done import _upload_cryo_em_done
 from ._position_structures_done import _position_structures_done
+from ._presenter_change import _presenter_change
+from ._receive_presenter_info import _receive_presenter_info
 from ._workspace_callbacks import _receive_workspace, _complex_added, _complex_removed
 from ._macro_callbacks import _receive_macros
