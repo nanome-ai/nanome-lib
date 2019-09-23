@@ -101,6 +101,7 @@ add_command(CommandCallbacks._Commands.upload_cryo_em_done, CommandSerializers._
 #ui
 add_command(CommandCallbacks._Commands.menu_toggle, CommandSerializers._MenuCallback())
 add_command(CommandCallbacks._Commands.button_press, CommandSerializers._ButtonCallback())
+add_command(CommandCallbacks._Commands.button_hover, CommandSerializers._ButtonCallback())
 add_command(CommandCallbacks._Commands.slider_release, CommandSerializers._SliderCallback())
 add_command(CommandCallbacks._Commands.slider_change, CommandSerializers._SliderCallback())
 add_command(CommandCallbacks._Commands.text_submit, CommandSerializers._TextInputCallback())
@@ -215,6 +216,7 @@ add_callback(CommandCallbacks._Commands.slider_change, CommandCallbacks._slider_
 add_callback(CommandCallbacks._Commands.text_submit, CommandCallbacks._text_submit)
 add_callback(CommandCallbacks._Commands.text_change, CommandCallbacks._text_changed)
 add_callback(CommandCallbacks._Commands.button_press, CommandCallbacks._button_pressed)
+add_callback(CommandCallbacks._Commands.button_hover, CommandCallbacks._button_hover)
 add_callback(CommandCallbacks._Commands.image_press, CommandCallbacks._image_pressed)
 add_callback(CommandCallbacks._Commands.image_hold, CommandCallbacks._image_held)
 add_callback(CommandCallbacks._Commands.image_release, CommandCallbacks._image_released)

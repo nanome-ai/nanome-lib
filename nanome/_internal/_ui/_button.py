@@ -18,12 +18,19 @@ class _Button(_UIBase):
         self._text = _Button.ButtonText._create()
         #API
         self._pressed_callback = lambda _: None
+        self._hover_callback = lambda _: None
 
     def _on_button_pressed (self):
         self._pressed_callback(self)
 
+    def _on_button_hover (self):
+        self._hover_callback(self)
+
     def _register_pressed_callback(self, func):
         self._pressed_callback = func
+
+    def _register_hover_callback(self, func):
+        self._hover_callback = func
 
     class ButtonText(object):
         @classmethod
@@ -65,3 +72,4 @@ class _Button(_UIBase):
         self._text._vertical_align = other._text._vertical_align
         self._text._horizontal_align = other._text._horizontal_align
         self._pressed_callback = other._pressed_callback
+        self._hover_callback = other._hover_callback

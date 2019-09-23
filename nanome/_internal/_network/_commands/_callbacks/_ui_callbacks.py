@@ -64,6 +64,14 @@ def _button_pressed(network, arg, request_id):
         btn._on_button_pressed()
     else:
         Logs.error("Can't find UI content for callback")
+
+def _button_hover(network, arg, request_id):
+    button_id = arg
+    btn = network._plugin.menu._find_content(button_id)
+    if btn != None:
+        btn._on_button_hover()
+    else:
+        Logs.error("Can't find UI content for callback")
         
 def _image_pressed(network, arg, request_id):
     image_id = arg[0]

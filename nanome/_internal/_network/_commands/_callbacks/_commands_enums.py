@@ -31,6 +31,7 @@ class _Commands(__CommandEnum):
     menu_response = auto()
     menu_toggle = auto()
     button_press = auto()
+    button_hover = auto()
     slider_release = auto()
     text_submit = auto()
     text_change = auto()
