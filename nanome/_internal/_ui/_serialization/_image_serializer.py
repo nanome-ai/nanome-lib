@@ -38,7 +38,7 @@ class _ImageSerializer(_TypeSerializer):
         if (version == 0):
             id_mask = 0x00FFFFFF
             value._content_id &= id_mask
-        value._file_path = context.read_using_serializrt(self.string)
+        value._file_path = context.read_using_serializer(self.string)
         value._color = context.read_using_serializer(self.color)
         value._scaling_option = context.read_uint()
         context.read_using_serializer(self.data) #skipping data.
