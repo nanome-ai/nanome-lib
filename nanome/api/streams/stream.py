@@ -21,6 +21,7 @@ class Stream(object):
         self.__direction = direction
         self.__interrupt_callback = lambda _: None
         self.__update_received = lambda _: None
+        self.__warning_displayed = False
         Stream._streams[id] = self
 
     def update(self, data, done_callback = None):
@@ -60,5 +61,8 @@ class Stream(object):
 
     def _update_received(self, data):
         if self.__update_received == None:
+            if not self.__warning_displayed:
+                Logs.warning("Received an update for a stream without received callback. Please call set_update_received_callback on stream creation")
+                self.__warning_displayed = True
             return
         self.__update_received(data)

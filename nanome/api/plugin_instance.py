@@ -5,6 +5,7 @@ from nanome._internal._process import _Bonding, _Dssp
 from nanome._internal._network import _ProcessNetwork
 from nanome._internal._network._commands._callbacks import _Messages
 from nanome.api.ui import Menu
+from nanome.api.streams import Stream
 
 import inspect
 import sys
@@ -226,7 +227,7 @@ class PluginInstance(_PluginInstance):
 
     @Logs.deprecated("create_atom_stream")
     def create_stream(self, atom_indices_list, callback):
-        id = self._network._send(_Messages.stream_create, (Stream.Type.Position, atom_indices_list))
+        id = self._network._send(_Messages.stream_create, (Stream.Type.position, atom_indices_list, StreamDirection.writing))
         self._save_callback(id, callback)
 
     @Logs.deprecated("create_writing_stream")
