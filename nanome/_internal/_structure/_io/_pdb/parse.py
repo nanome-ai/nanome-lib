@@ -1,6 +1,7 @@
 from nanome.util import Logs
 from .content import Content
 import re
+import traceback
 
 def parse_lines(lines):
     try:
@@ -53,9 +54,12 @@ def _parse_lines(lines):
                         content.records.append(rec)
                         content.atoms.append(rec)
             if (record_type == "COMPND"):
-                rec = record_compnd(line, line_counter)
-                content.records.append(rec)
-                content.compnds.append(rec)
+                try:
+                    rec = record_compnd(line, line_counter)
+                    content.records.append(rec)
+                    content.compnds.append(rec)
+                except:
+                    Logs.warning("Error parsing COMPND:", traceback.format_exc())
             if (record_type == "REMARK"):
                 rec = record_remark(line, line_counter)
                 content.records.append(rec)

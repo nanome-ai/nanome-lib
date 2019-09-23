@@ -5,7 +5,8 @@ from nanome.util import Logs
 default_json_string = """{ 
     "host":"127.0.0.1",
     "port":8888,
-    "key_file":"nts_key"
+    "key_file":"nts_key",
+    "plugin_files_path":"~/Documents/nanome-plugins"
 }"""
 
 default_json = json.loads(default_json_string)
@@ -38,9 +39,14 @@ def _setup_clean_config(config_path):
 
 def fetch(key):
     if (config_path):
-        with open(config_path, "r") as file:
-            config_json = json.load(file)
-            return config_json[key]
+        try:
+            with open(config_path, "r") as file:
+                config_json = json.load(file)
+                return config_json[key]
+        except KeyError:
+            value = default_json[key]
+            set(key, value)
+            return value
     else:
         return default_json[key]
 

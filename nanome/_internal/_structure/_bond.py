@@ -10,9 +10,11 @@ class _Bond(_Base):
 
     def __init__(self):
         super(_Bond, self).__init__()
-        self._kind = _Bond.Kind.CovalentSingle
         self.__atom1 = None
         self.__atom2 = None
+
+        self._exists = [True]
+        self._kinds = [_Bond.Kind.CovalentSingle]
 
     @property
     def _atom1(self):
@@ -65,3 +67,25 @@ class _Bond(_Base):
         else:
             return None
     #endregion
+
+    @property
+    def _current_conformer(self):
+        if self._molecule != None:
+            return self._molecule._current_conformer
+        else:
+            return 0
+
+    @property
+    def _conformer_count(self):
+        if self._molecule != None:
+            return self._molecule._conformer_count
+        else:
+            return 1
+
+    @property
+    def _kind(self):
+        return self._kinds[self._current_conformer]
+
+    @_kind.setter
+    def _kind(self, value):
+        self._kinds[self._current_conformer] = value

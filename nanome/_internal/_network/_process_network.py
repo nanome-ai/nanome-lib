@@ -22,6 +22,9 @@ class _ProcessNetwork(object):
     def on_complex_removed(self):
         self._plugin.on_complex_removed()
 
+    def _on_presenter_change(self):
+        self._plugin.on_presenter_change()
+
     def _call(self, request_id, *args):
         self._plugin._call(request_id, *args)
 

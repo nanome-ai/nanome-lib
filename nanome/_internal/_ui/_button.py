@@ -20,12 +20,19 @@ class _Button(_UIBase):
         self._icon = _Button.ButtonIcon._create()
         #API
         self._pressed_callback = lambda _: None
+        self._hover_callback = lambda _, __: None
 
-    def _on_button_pressed (self):
+    def _on_button_pressed(self):
         self._pressed_callback(self)
+
+    def _on_button_hover(self, state):
+        self._hover_callback(self, state)
 
     def _register_pressed_callback(self, func):
         self._pressed_callback = func
+
+    def _register_hover_callback(self, func):
+        self._hover_callback = func
 
     class ButtonText(object):
         @classmethod
@@ -110,3 +117,4 @@ class _Button(_UIBase):
         self._icon._rotation = other._icon._rotation
         # Callbacks
         self._pressed_callback = other._pressed_callback
+        self._hover_callback = other._hover_callback

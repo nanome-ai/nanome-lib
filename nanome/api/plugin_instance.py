@@ -1,4 +1,4 @@
-from nanome.util import Logs, DirectoryRequestOptions, IntEnum
+from nanome.util import Logs, DirectoryRequestOptions, IntEnum, config
 from nanome._internal import _PluginInstance
 from nanome._internal._process import _Bonding, _Dssp
 from nanome._internal._network import _ProcessNetwork
@@ -7,6 +7,7 @@ from nanome.api.ui import Menu
 
 import inspect
 import sys
+import os
 
 class PluginInstance(_PluginInstance):
 
@@ -66,6 +67,12 @@ class PluginInstance(_PluginInstance):
     def on_complex_removed(self):
         """
         | Called whenever a complex is removed from the workspace.
+        """
+        pass
+
+    def on_presenter_change(self):
+        """
+        | Called when room's presenter changes.
         """
         pass
 
@@ -288,6 +295,13 @@ class PluginInstance(_PluginInstance):
             url = 'http://' + url
         self._network._send(_Messages.open_url, url)
 
+    def request_presenter_info(self, callback):
+        """
+        | Requests presenter account info (unique ID, name, email)
+        """
+        id = self._network._send(_Messages.presenter_info_request)
+        self._save_callback(id, callback)
+
     class PluginListButtonType(IntEnum):
         run = 0
         advanced_settings = 1
@@ -320,6 +334,13 @@ class PluginInstance(_PluginInstance):
             current_usable[0] = usable
 
         self._network._send(_Messages.plugin_list_button_set, (button, text, usable))
+
+    @property
+    def plugin_files_path(self):
+        path = os.path.expanduser(config.fetch('plugin_files_path'))
+        if not os.path.exists(path):
+            os.makedirs(path)
+        return path
         
 class _DefaultPlugin(PluginInstance):
     def __init__(self):

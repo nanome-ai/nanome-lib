@@ -31,6 +31,7 @@ class _Commands(__CommandEnum):
     menu_response = auto()
     menu_toggle = auto()
     button_press = auto()
+    button_hover = auto()
     slider_release = auto()
     text_submit = auto()
     text_change = auto()
@@ -62,6 +63,10 @@ class _Commands(__CommandEnum):
 
     #Macro
     get_macros_response = auto()
+
+    # Presenter
+    presenter_info_response = auto()
+    presenter_change = auto()
 
     #Other
     upload_cryo_em_done = auto()
@@ -111,6 +116,9 @@ class _Messages(__CommandEnum):
     run_macro = auto()
     stop_macro = auto()
     get_macros = auto()
+
+    # Presenter
+    presenter_info_request = auto()
 
     #Other
     upload_cryo_em = auto()

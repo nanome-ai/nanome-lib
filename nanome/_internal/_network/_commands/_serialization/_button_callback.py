@@ -5,20 +5,27 @@ class _ButtonCallback(_TypeSerializer):
         pass
 
     def version(self):
-        return 1
+        return 2
 
     def name(self):
         return "ButtonCallback"
         
     def serialize(self, version, value, context):
+        id = value[0]
+        state = value[1]
         if (version == 0):
             plugin_mask = (context._plugin_id << 24) & 0x7FFFFFFF
-            value |= plugin_mask
-        context.write_int(value)
+            id |= plugin_mask
+        context.write_int(id)
+        if version >= 2:
+            context.write_bool(state)
 
     def deserialize(self, version, context):
         content_id = context.read_int()
         if (version == 0):
             id_mask = 0x00FFFFFF
             content_id &= id_mask
-        return content_id
+        state = False
+        if version >= 2:
+            state = context.read_bool()
+        return (content_id, state)

@@ -1,4 +1,5 @@
 from nanome._internal._util._serializers import _TypeSerializer
+from nanome.util.enums import StreamDataType
 
 class _CreateStreamResult(_TypeSerializer):
     def __init__(self):
@@ -19,5 +20,5 @@ class _CreateStreamResult(_TypeSerializer):
         if version > 0:
             data_type = context.read_byte()
         else:
-            data_type = Stream.DataType.float
+            data_type = StreamDataType.float
         return (err, id, data_type)

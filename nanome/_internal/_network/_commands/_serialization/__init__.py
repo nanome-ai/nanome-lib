@@ -13,11 +13,14 @@ from ._feed_stream import _FeedStream
 from ._feed_stream_done import _FeedStreamDone
 from ._file_request import _FileRequest
 from ._file_save import _FileSave
+from ._get_presenter_info_response import _GetPresenterInfoResponse
+from ._get_presenter_info import _GetPresenterInfo
 from ._interrupt_stream import _InterruptStream
 from ._open_url import _OpenURL
 from ._run import _Run
 from ._receive_workspace import _ReceiveWorkspace
 from ._complex_added_removed import _ComplexAddedRemoved
+from ._presenter_change import _PresenterChange
 from ._receive_complex_list import _ReceiveComplexList, _ReceiveComplexes
 from ._receive_menu import _ReceiveMenu
 from ._request_complex_list import _RequestComplexList, _RequestComplexes
