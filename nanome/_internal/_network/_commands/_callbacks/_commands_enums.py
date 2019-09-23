@@ -53,6 +53,7 @@ class _Commands(__CommandEnum):
 
     #Stream
     stream_create_done = auto()
+    stream_feed = auto()
     stream_feed_done = auto()
     stream_interrupt = auto()
 
