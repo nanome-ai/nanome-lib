@@ -58,7 +58,7 @@ def _text_changed(network, arg, request_id):
         Logs.error("Can't find UI content for callback")
 
 def _button_pressed(network, arg, request_id):
-    button_id = arg
+    button_id = arg[0]
     btn = network._plugin.menu._find_content(button_id)
     if btn != None:
         btn._on_button_pressed()
@@ -66,10 +66,11 @@ def _button_pressed(network, arg, request_id):
         Logs.error("Can't find UI content for callback")
 
 def _button_hover(network, arg, request_id):
-    button_id = arg
+    button_id = arg[0]
+    state = arg[1]
     btn = network._plugin.menu._find_content(button_id)
     if btn != None:
-        btn._on_button_hover()
+        btn._on_button_hover(state)
     else:
         Logs.error("Can't find UI content for callback")
         
