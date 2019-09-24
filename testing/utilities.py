@@ -257,29 +257,37 @@ def create_full_tree(height):
         return alter_object(struct.Atom())
     if height == 2:
         residue = struct.Residue()
-        for _ in range(3):
-            residue.add_atom(create_full_tree(height-1))
+        for i in range(3):
+            atom = create_full_tree(height-1)
+            atom.name = "atom" + str(i)
+            residue.add_atom(atom)
         bond_atoms(residue._atoms[0], residue._atoms[1])
         bond_atoms(residue._atoms[1], residue._atoms[2])
         return alter_object(residue)
     if height == 3:
         chain = struct.Chain()
-        for _ in range(3):
-            chain.add_residue(create_full_tree(height-1))
+        for i in range(3):
+            residue = create_full_tree(height-1)
+            residue.name = "residue" + str(i)
+            chain.add_residue(residue)
         bond_atoms(chain._residues[0]._atoms[0], chain._residues[1]._atoms[1])
         bond_atoms(chain._residues[0]._atoms[1], chain._residues[1]._atoms[2])
         return alter_object(chain)
     if height == 4:
         molecule = struct.Molecule()
-        for _ in range(3):
-            molecule.add_chain(create_full_tree(height-1))
+        for i in range(3):
+            chain = create_full_tree(height-1)
+            chain.name = "chain" + str(i)
+            molecule.add_chain(chain)
         bond_atoms(molecule._chains[0]._residues[0]._atoms[0], molecule._chains[1]._residues[1]._atoms[1])
         bond_atoms(molecule._chains[0]._residues[0]._atoms[1], molecule._chains[1]._residues[1]._atoms[2])
         return alter_object(molecule)
     if height == 5:
         complex = struct.Complex()
-        for _ in range(3):
-            complex.add_molecule(create_full_tree(height-1))
+        for i in range(3):
+            molecule = create_full_tree(height-1)
+            molecule.name = "molecule" + str(i)
+            complex.add_molecule(molecule)
         return alter_object(complex)
 
 def bond_atoms(atom1, atom2):
