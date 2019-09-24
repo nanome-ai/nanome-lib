@@ -71,10 +71,10 @@ class _Molecule(_Base):
 
     def _shallow_copy(self):
         molecule = _Molecule._create()
-        self._current_conformer = self._current_conformer
-        self.__conformer_count = self.__conformer_count
-        self._names = self._names
-        self._associateds = self._associateds
+        molecule._current_conformer = self._current_conformer
+        molecule.__conformer_count = self.__conformer_count
+        molecule._names = self._names
+        molecule._associateds = self._associateds
         return molecule
 
     def _deep_copy(self):

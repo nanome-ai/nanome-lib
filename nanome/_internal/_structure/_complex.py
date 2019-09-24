@@ -77,23 +77,23 @@ class _Complex(_Base):
     def _shallow_copy(self):
         complex = _Complex._create()
         #Molecular
-        self._name = "complex"
-        self._index_tag = 0
-        self._split_tag = ""
-        self._remarks = {}
+        complex._name = self._name
+        complex._index_tag = self._index_tag
+        complex._split_tag = self._split_tag
+        complex._remarks = self._remarks
         #Rendering
-        self._boxed = False
-        self._locked = False
-        self._visible = True
-        self._computing = False
-        self._current_frame = 0
-        self._selected = False #selected on live
-        self._surface_dirty = False
-        self._surface_refresh_rate = -1.0  # Not used yet, future auto surface refresh
-        self._box_label = ""
+        complex._boxed = self._boxed
+        complex._locked = self._locked
+        complex._visible = self._visible
+        complex._computing = self._computing
+        complex._current_frame = self._current_frame
+        complex._selected = self._selected
+        complex._surface_dirty = self._surface_dirty
+        complex._surface_refresh_rate = self._surface_refresh_rate
+        complex._box_label = self._box_label
         #Transform
-        self._position = Vector3(0,0,0)
-        self._rotation = Quaternion(0,0,0,0)
+        complex._position = self._position
+        complex._rotation = self._rotation
         return complex
 
     def _deep_copy(self):
