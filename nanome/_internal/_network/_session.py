@@ -13,17 +13,21 @@ class _Session(object):
             has_net_data = self.__net_plugin_pipe.poll()
             has_proc_data = self.__proc_plugin_pipe.poll()
         except:
-            Logs.error("Plugin encountered an error, please check the logs", traceback.format_exc())
+            Logs.error("Plugin encountered an error, please check the logs.", traceback.format_exc())
             return False
-        if has_net_data:
-            packet = self.__net_plugin_pipe.recv()
-            if packet == stop_bytes:
-                Logs.error("Plugin encountered an error")
-                return False
-            self._net_plugin.send(packet)
-        if has_proc_data:
-            request = self.__proc_plugin_pipe.recv()
-            self._process_manager._received_request(request, self)
+        try:
+            if has_net_data:
+                packet = self.__net_plugin_pipe.recv()
+                if packet == stop_bytes:
+                    Logs.error("Plugin encountered an error")
+                    return False
+                self._net_plugin.send(packet)
+            if has_proc_data:
+                request = self.__proc_plugin_pipe.recv()
+                self._process_manager._received_request(request, self)
+        except EOFError:
+            Logs.error("Plugin encountered an error, please check the logs.", traceback.format_exc())
+            return False
         return True
 
     def _on_packet_received(self, payload):

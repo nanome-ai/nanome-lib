@@ -65,7 +65,14 @@ class StreamType(IntEnum):
     position = 0
     color = 1
     scale = 2
+    label = 3
+    complex_position_rotation = 4
 
 class StreamDataType(IntEnum):
     float = 0
     byte = 1
+    string = 2
+
+class StreamDirection(IntEnum):
+    writing = 0
+    reading = 1

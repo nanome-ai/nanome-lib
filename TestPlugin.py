@@ -15,7 +15,7 @@ def get_class_names():
         return plugin_modules
     else:
         class_names = []
-        while sys.argv[1] in plugin_modules:
+        while len(sys.argv) > 1 and sys.argv[1] in plugin_modules:
             class_names.append(sys.argv[1])
             del sys.argv[1]
         return class_names
@@ -41,7 +41,7 @@ if __name__ == "__main__":
     class_names = get_class_names()
     if len(class_names) == 1:
         importlib.import_module("test_plugins." + class_names[0])
-    else:
+    elif len(class_names) > 1:
         import glob
         modules = glob.glob(join(dirname(__file__), join("test_plugins", "*.py")))
         class_names = [ basename(f)[:-3] for f in modules if isfile(f) and not f.endswith('__init__.py')]
@@ -50,3 +50,6 @@ if __name__ == "__main__":
             x.start()
         while(True):
             time.sleep(1)
+    else:
+        import nanome
+        nanome.util.Logs.error("No plugin found")

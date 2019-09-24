@@ -5,3 +5,4 @@ from . import streams
 from . import ui
 from . import structure
 from . import macro
+from . import user

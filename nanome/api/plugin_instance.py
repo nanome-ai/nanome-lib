@@ -1,9 +1,11 @@
 from nanome.util import Logs, DirectoryRequestOptions, IntEnum, config
+from nanome.util.enums import StreamDirection
 from nanome._internal import _PluginInstance
 from nanome._internal._process import _Bonding, _Dssp
 from nanome._internal._network import _ProcessNetwork
 from nanome._internal._network._commands._callbacks import _Messages
 from nanome.api.ui import Menu
+from nanome.api.streams import Stream
 
 import inspect
 import sys
@@ -67,6 +69,12 @@ class PluginInstance(_PluginInstance):
     def on_complex_removed(self):
         """
         | Called whenever a complex is removed from the workspace.
+        """
+        pass
+
+    def on_presenter_change(self):
+        """
+        | Called when room's presenter changes.
         """
         pass
 
@@ -225,25 +233,35 @@ class PluginInstance(_PluginInstance):
 
     @Logs.deprecated("create_atom_stream")
     def create_stream(self, atom_indices_list, callback):
-        """
-        | Create a stream allowing to continuously update many atoms positions
-
-        :param atom_indices_list: List of indices of all atoms that should be in the stream
-        :type atom_indices_list: list of :class:`int`
-        """
-        id = self._network._send(_Messages.stream_create, (Stream.Type.Position, atom_indices_list))
+        id = self._network._send(_Messages.stream_create, (Stream.Type.position, atom_indices_list, StreamDirection.writing))
         self._save_callback(id, callback)
 
+    @Logs.deprecated("create_writing_stream")
     def create_atom_stream(self, atom_indices_list, stream_type, callback):
+        self.create_writing_stream(atom_indices_list, stream_type, callback)
+
+    def create_writing_stream(self, atom_indices_list, stream_type, callback):
         """
-        | Create a stream allowing to continuously update a properties of many atoms
+        | Create a stream allowing to continuously update properties of many structures
 
         :param atom_indices_list: List of indices of all atoms that should be in the stream
         :type atom_indices_list: list of :class:`int`
         :param stream_type: Type of stream to create
         :type stream_type: list of :class:`~nanome.api.stream.Stream.Type`
         """
-        id = self._network._send(_Messages.stream_create, (stream_type, atom_indices_list))
+        id = self._network._send(_Messages.stream_create, (stream_type, atom_indices_list, StreamDirection.writing))
+        self._save_callback(id, callback)
+
+    def create_reading_stream(self, atom_indices_list, stream_type, callback):
+        """
+        | Create a stream allowing to continuously receive properties of many structures
+
+        :param atom_indices_list: List of indices of all atoms that should be in the stream
+        :type atom_indices_list: list of :class:`int`
+        :param stream_type: Type of stream to create
+        :type stream_type: list of :class:`~nanome.api.stream.Stream.Type`
+        """
+        id = self._network._send(_Messages.stream_create, (stream_type, atom_indices_list, StreamDirection.reading))
         self._save_callback(id, callback)
 
     def add_bonds(self, complex_list, callback, fast_mode=None):
@@ -288,6 +306,13 @@ class PluginInstance(_PluginInstance):
         if '://' not in url:
             url = 'http://' + url
         self._network._send(_Messages.open_url, url)
+
+    def request_presenter_info(self, callback):
+        """
+        | Requests presenter account info (unique ID, name, email)
+        """
+        id = self._network._send(_Messages.presenter_info_request)
+        self._save_callback(id, callback)
 
     class PluginListButtonType(IntEnum):
         run = 0

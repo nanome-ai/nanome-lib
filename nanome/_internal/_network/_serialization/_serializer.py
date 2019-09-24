@@ -101,6 +101,7 @@ add_command(CommandCallbacks._Commands.upload_cryo_em_done, CommandSerializers._
 #ui
 add_command(CommandCallbacks._Commands.menu_toggle, CommandSerializers._MenuCallback())
 add_command(CommandCallbacks._Commands.button_press, CommandSerializers._ButtonCallback())
+add_command(CommandCallbacks._Commands.button_hover, CommandSerializers._ButtonCallback())
 add_command(CommandCallbacks._Commands.slider_release, CommandSerializers._SliderCallback())
 add_command(CommandCallbacks._Commands.slider_change, CommandSerializers._SliderCallback())
 add_command(CommandCallbacks._Commands.text_submit, CommandSerializers._TextInputCallback())
@@ -116,11 +117,16 @@ add_command(CommandCallbacks._Commands.file_save_done, CommandSerializers._FileS
 
 #streams
 add_command(CommandCallbacks._Commands.stream_create_done,CommandSerializers._CreateStreamResult())
+add_command(CommandCallbacks._Commands.stream_feed, CommandSerializers._FeedStream())
 add_command(CommandCallbacks._Commands.stream_interrupt, CommandSerializers._InterruptStream())
 add_command(CommandCallbacks._Commands.stream_feed_done, CommandSerializers._FeedStreamDone())
 
 #macros
 add_command(CommandCallbacks._Commands.get_macros_response, CommandSerializers._GetMacrosResponse())
+
+# Presenter
+add_command(CommandCallbacks._Commands.presenter_info_response, CommandSerializers._GetPresenterInfoResponse())
+add_command(CommandCallbacks._Commands.presenter_change, CommandSerializers._PresenterChange())
 
 #-------------Messages-----------#
 # Messages are outgoing (plugin -> nanome)
@@ -172,6 +178,9 @@ add_message(CommandCallbacks._Messages.stream_create, CommandSerializers._Create
 add_message(CommandCallbacks._Messages.stream_feed, CommandSerializers._FeedStream())
 add_message(CommandCallbacks._Messages.stream_destroy, CommandSerializers._DestroyStream())
 
+# Presenter
+add_message(CommandCallbacks._Messages.presenter_info_request, CommandSerializers._GetPresenterInfo())
+
 #others
 add_message(CommandCallbacks._Messages.open_url, CommandSerializers._OpenURL())
 
@@ -208,6 +217,7 @@ add_callback(CommandCallbacks._Commands.slider_change, CommandCallbacks._slider_
 add_callback(CommandCallbacks._Commands.text_submit, CommandCallbacks._text_submit)
 add_callback(CommandCallbacks._Commands.text_change, CommandCallbacks._text_changed)
 add_callback(CommandCallbacks._Commands.button_press, CommandCallbacks._button_pressed)
+add_callback(CommandCallbacks._Commands.button_hover, CommandCallbacks._button_hover)
 add_callback(CommandCallbacks._Commands.image_press, CommandCallbacks._image_pressed)
 add_callback(CommandCallbacks._Commands.image_hold, CommandCallbacks._image_held)
 add_callback(CommandCallbacks._Commands.image_release, CommandCallbacks._image_released)
@@ -220,7 +230,12 @@ add_callback(CommandCallbacks._Commands.file_save_done, CommandCallbacks._receiv
 #streams
 add_callback(CommandCallbacks._Commands.stream_create_done, CommandCallbacks._receive_create_stream_result)
 add_callback(CommandCallbacks._Commands.stream_interrupt, CommandCallbacks._receive_interrupt_stream)
+add_callback(CommandCallbacks._Commands.stream_feed, CommandCallbacks._feed_stream)
 add_callback(CommandCallbacks._Commands.stream_feed_done, CommandCallbacks._feed_stream_done)
 
 #macros
 add_callback(CommandCallbacks._Commands.get_macros_response, CommandCallbacks._receive_macros)
+
+# Presenter
+add_callback(CommandCallbacks._Commands.presenter_info_response, CommandCallbacks._receive_presenter_info)
+add_callback(CommandCallbacks._Commands.presenter_change, CommandCallbacks._presenter_change)
