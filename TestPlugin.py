@@ -15,7 +15,7 @@ def get_class_names():
         return plugin_modules
     else:
         class_names = []
-        while sys.argv[1] in plugin_modules:
+        while len(sys.argv) > 1 and sys.argv[1] in plugin_modules:
             class_names.append(sys.argv[1])
             del sys.argv[1]
         return class_names
