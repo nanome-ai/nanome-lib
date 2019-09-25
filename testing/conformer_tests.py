@@ -9,7 +9,9 @@ from nanome.util import Logs
 
 test_assets = os.getcwd() + ("/testing/test_assets")
 test_output_dir = os.getcwd() + ("/testing/test_outputs")
-options = TestOptions(ignore_vars=["_unique_identifier"])
+#can't deep assert with bonds.atom1/2 or atom.bonds because the algorithm does not preserve these list orders.
+options = TestOptions(ignore_vars=["_unique_identifier", "_serial", "_Bond__atom1", "_Bond__atom2"])
+conformer_blind = TestOptions(ignore_vars = ["_positions", "_kinds", "_exists", "_names", "_bonds", "_associateds", "_unique_identifier", "_serial", "_parent"])
 
 alter_object = lambda x: x
 
@@ -21,26 +23,49 @@ def run(counter):
 def test_wholistic():
     original = create_full_tree(5)
     alter_object(original)
-    copy = conformer.convert_to_conformers(original)
-    copy = conformer.convert_to_frames(copy)
+    conf = conformer.convert_to_conformers(original)
+    copy = conformer.convert_to_frames(conf)
+    print_tree(copy)
     assert_equal(original, copy, options)
+    total_bonds1 = 0
+    total_bonds2 = 0
+
+    # copy = original._deep_copy()
+    for mol1, mol2 in zip(original.molecules, copy.molecules):
+        print((mol1.name), (mol2.name))
+        for chain1, chain2 in zip(mol1.chains, mol2.chains):
+            print((chain1.name), (chain2.name))
+            for res1, res2 in zip(chain1.residues, chain2.residues):
+                print(len(res1._bonds), len(res2._bonds))
+
+    # for bond2 in conf.bonds:
+    #     if False in bond2._exists:
+    #         print("CONTAINS FALSE")
+    # for atom2 in conf.atoms:
+    #     if False in atom2._exists:
+    #         print("CONTAINS FALSE")
+
+    for res1, res2 in zip(original.residues, copy.residues):
+        assert_equal(res1, res2, options)
+        total_bonds1+=len(res1._bonds)
+        total_bonds2+=len(res2._bonds)
+        # print(len(res1._bonds), len(res2._bonds))
+        # assert_equal(res1._bonds, res2._bonds, options)
+        for bond1, bond2 in zip(res1.bonds, res2.bonds):
+            assert_equal(bond1, bond2, options)
+            assert_equal(bond1._parent, res1)
+            assert_equal(bond2._parent, res2)
+    print("total1:", total_bonds1)
+    print("total2:", total_bonds2)
+    # for bond1, bond2 in zip(original.bonds, copy.bonds):
+    #     assert_equal(bond1, bond2, options)
+    #     assert_equal(bond1._parent, bond2._parent, options)
 
 def test_to_conformer():
     molecule_count = 5
     original = alter_object(struct.Complex())
     for molecule in create_frames(molecule_count):
         original.add_molecule(molecule)
-
-    # for i in original.molecules:
-    #     print(i.name)
-    # for i in original.chains:
-    #     print(i.name)
-    # for i in original.residues:
-    #     print(i.name)
-    # # for i in original.bonds:
-    # #     print(i.name)
-    # for i in original.atoms:
-    #     print(i.name)
     mc1,cc1,rc1,bc1,ac1 = count_structures(original)
     conformer_copy = conformer.convert_to_conformers(original)
     mc2,cc2,rc2,bc2,ac2 = count_structures(conformer_copy)
@@ -71,6 +96,7 @@ def test_to_conformer():
         k += 1
         molecule._name = first_molecule._names[conf]
         for atom1, atom2 in zip(molecule.atoms, first_molecule.atoms):
+            assert_equal(atom1, atom2, conformer_blind)
             assert(atom1._position == atom2._positions[conf])
             assert(atom1._exists[0] == atom2._exists[conf])
         for bond1, bond2 in zip(molecule.bonds, first_molecule.bonds):

@@ -254,41 +254,75 @@ def create_test(name, func, args):
 def create_full_tree(height):
     from nanome import structure as struct
     if height == 1:
-        return alter_object(struct.Atom())
+        atom = alter_object(struct.Atom())
+        return atom
     if height == 2:
-        residue = struct.Residue()
+        residue = alter_object(struct.Residue())
         for i in range(3):
             atom = create_full_tree(height-1)
             atom.name = "atom" + str(i)
             residue.add_atom(atom)
         bond_atoms(residue._atoms[0], residue._atoms[1])
         bond_atoms(residue._atoms[1], residue._atoms[2])
-        return alter_object(residue)
+        return residue
     if height == 3:
-        chain = struct.Chain()
+        chain = alter_object(struct.Chain())
         for i in range(3):
             residue = create_full_tree(height-1)
             residue.name = "residue" + str(i)
+            residue.serial = i+1
             chain.add_residue(residue)
         bond_atoms(chain._residues[0]._atoms[0], chain._residues[1]._atoms[1])
         bond_atoms(chain._residues[0]._atoms[1], chain._residues[1]._atoms[2])
-        return alter_object(chain)
+        return chain
     if height == 4:
-        molecule = struct.Molecule()
+        molecule = alter_object(struct.Molecule())
         for i in range(3):
             chain = create_full_tree(height-1)
             chain.name = "chain" + str(i)
             molecule.add_chain(chain)
         bond_atoms(molecule._chains[0]._residues[0]._atoms[0], molecule._chains[1]._residues[1]._atoms[1])
         bond_atoms(molecule._chains[0]._residues[0]._atoms[1], molecule._chains[1]._residues[1]._atoms[2])
-        return alter_object(molecule)
+        return molecule
     if height == 5:
-        complex = struct.Complex()
+        complex = alter_object(struct.Complex())
         for i in range(3):
             molecule = create_full_tree(height-1)
             molecule.name = "molecule" + str(i)
             complex.add_molecule(molecule)
-        return alter_object(complex)
+        return complex
+
+def print_tree(structure):
+    print(print_tree_helper(structure, 0))
+
+def print_tree_helper(structure, tabs):
+    from nanome import structure as struct
+    line = "| "*tabs
+    children = None
+    if isinstance(structure, struct.Complex):
+        line += "Complex: "
+        children = structure.molecules
+    elif isinstance(structure, struct.Molecule):
+        line += "Molecule: "
+        children = structure.chains
+    elif isinstance(structure, struct.Chain):
+        line += "Chain: "
+        children = structure.residues
+    elif isinstance(structure, struct.Residue):
+        line += "Residue: " + structure.name
+        line += "\n" + "| "*(tabs+1) + "Atoms: "
+        for atom in structure.atoms:
+            line += atom.name + ", "
+        line += "\n" + "| "*(tabs+1) + "Bonds: "        
+        for bond in structure.bonds:
+            # line += bond.atom1.name + "->" + bond.atom2.name + ", "
+            line += str(bond._parent._name) + ", "
+            # line += str(bond._parent._serial-1) + ", "
+        return line + "\n"
+    line += structure.name + "\n"
+    for i in children:
+        line += print_tree_helper(i, tabs+1)
+    return line + "\n"
 
 def bond_atoms(atom1, atom2):
     from nanome import structure as struct
