@@ -115,5 +115,8 @@ class Color(object):
         self._color = 0xFFFFFF00 & self._color | value
 
     #functions
+    def copy(self):
+        return Color(whole_num = self._color)
+
     def to_string_hex(self):
         return hex(self._color)

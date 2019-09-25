@@ -28,7 +28,8 @@ class _Bond(_Base):
     def _atom1(self, value):
         if self.__atom1 is not None:
             self.__atom1._bonds.remove(self)
-        value._bonds.append(self)
+        if value is not None:
+            value._bonds.append(self)
         self.__atom1 = value
 
     @property
@@ -39,7 +40,8 @@ class _Bond(_Base):
     def _atom2(self, value):
         if self.__atom2 is not None:
             self.__atom2._bonds.remove(self)
-        value._bonds.append(self)
+        if value is not None:
+            value._bonds.append(self)
         self.__atom2 = value
 
     #region connections

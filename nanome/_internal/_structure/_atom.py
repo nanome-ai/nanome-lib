@@ -121,10 +121,10 @@ class _Atom(_Base):
         atom._labeled = self._labeled
         atom._label_text = self._label_text
         atom._atom_rendering = self._atom_rendering
-        atom._atom_color = self._atom_color
+        atom._atom_color = self._atom_color.copy()
         atom._atom_scale = self._atom_scale
         atom._surface_rendering = self._surface_rendering
-        atom._surface_color = self._surface_color
+        atom._surface_color = self._surface_color.copy()
         atom._surface_opacity = self._surface_opacity
         #No API
         atom._hydrogened = self._hydrogened
@@ -132,6 +132,6 @@ class _Atom(_Base):
         atom._het_atomed = self._het_atomed
         atom._het_surfaced = self._het_surfaced
         #conformer
-        atom._positions = self._positions
-        atom._exists = self._exists
+        atom._positions = list(self._positions)
+        atom._exists = list(self._exists)
         return atom

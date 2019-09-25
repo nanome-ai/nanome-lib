@@ -12,7 +12,7 @@ class _Molecule(_Base):
         self._parent = None
         #conformers
         self._current_conformer = 0
-        self.__conformer_count = 0
+        self.__conformer_count = 1
         self._names = [""]
         self._associateds = [dict()]
 
@@ -73,8 +73,8 @@ class _Molecule(_Base):
         molecule = _Molecule._create()
         molecule._current_conformer = self._current_conformer
         molecule.__conformer_count = self.__conformer_count
-        molecule._names = self._names
-        molecule._associateds = self._associateds
+        molecule._names = list(self._names)
+        molecule._associateds = list(self._associateds)
         return molecule
 
     def _deep_copy(self):
