@@ -15,22 +15,37 @@ class StringBuilder:
     def clear(self):
         self.los.clear()
 
-def delete_atom(atom):
-    for bond in atom._bonds:
-        delete_bond(bond)
-    atom._residue._atoms.remove(atom)
+def delete_atoms(atoms):
+    for atom in atoms:
+        atom.name == "DELETED"
+        atom._residue._atoms.remove(atom)
+    atoms.clear()
 
-def delete_bond(bond):
-    bond._atom1 = None
-    bond._atom2 = None
-    bond._residue.remove_bond(bond)
+def delete_bonds(bonds):
+    for bond in bonds:
+        bond._atom1 = None
+        bond._atom2 = None
+        bond._residue.remove_bond(bond)
+    bonds.clear()
+
+def delete_residues(residues):
+    for residue in residues:
+        residue._chain._remove_residue(residue)
+    residues.clear()
+
+def delete_chains(chains):
+    for chain in chains:
+        chain._molecule._remove_chain(chain)
+    chains.clear()
 
 def get_hash_code(str):
     return str # int(hashlib.sha256(str.encode('utf-8')).hexdigest(), 16)
 
 def convert_to_frames(complex): #Data.Complex -> Data.Complex
-    deleted_atoms = [] #new List<Data.Atom>()
-    deleted_bonds = [] #new List<Data.Bond>()
+    deleted_atoms = []
+    deleted_bonds = []
+    deleted_residues = []
+    deleted_chains = []
     new_complex = complex._shallow_copy() # Data.Complex
     for molecule in complex._molecules:
         if molecule._conformer_count > 1:
@@ -41,26 +56,31 @@ def convert_to_frames(complex): #Data.Complex -> Data.Complex
                 new_molecule._associateds = [molecule._associateds[i]]
                 for new_chain in new_molecule._chains:
                     for new_residue in new_chain._residues:
-                        deleted_atoms.clear()
-                        deleted_bonds.clear()
                         for new_atom in new_residue._atoms:
                             if not new_atom._exists[i]:
                                 deleted_atoms.append(new_atom)
                             new_atom._positions = [new_atom._positions[i]]
                             new_atom._exists = [True]
+                        delete_atoms(deleted_atoms)                        
                         for new_bond in new_residue._bonds:
                             if not new_bond._exists[i]:
                                 deleted_bonds.append(new_bond)
                             new_bond._kinds = [new_bond._kinds[i]]
                             new_bond._exists = [True]
-                        for deleted_bond in deleted_bonds:
-                            delete_bond(deleted_bond)
-                        for deleted_atom in deleted_atoms:
-                            delete_atom(deleted_atom)
+                        delete_bonds(deleted_bonds)
+                        if len(new_residue._atoms) == 0:
+                            deleted_residues.append(new_residue)
+                    delete_residues(deleted_residues)
+                    if len(new_chain._residues) == 0:
+                        deleted_chains.append(new_chain)
+                delete_chains(deleted_chains)
                 new_molecule._conformer_count = 1
                 new_complex._add_molecule(new_molecule)
         else:
             new_complex._add_molecule(molecule._deep_copy())
+    for atom in new_complex.atoms:
+        if (atom._bonds == None):
+            print("WTF2")
     return new_complex
 
 def convert_all_to_conformers(complexes): #List<Data.Complex -> List<Data.Complex>
@@ -180,9 +200,7 @@ def convert_to_conformers(complex): #Data.Complex -> Data.Complex
             else:
                 new_bond = bond._shallow_copy()
                 new_bond._exists = [None]*new_molecule._conformer_count # replace with append algorithm at the end
-                new_bond._kinds = [None]*new_molecule._conformer_count                                
-                new_bond._atom1 = atom_info_1[1]
-                new_bond._atom2 = atom_info_2[1]
+                new_bond._kinds = [None]*new_molecule._conformer_count
                 new_residue._add_bond(new_bond)
                 new_bonds[hash_bond] = new_bond
             # Update current conformer
@@ -190,6 +208,23 @@ def convert_to_conformers(complex): #Data.Complex -> Data.Complex
             new_bond._kinds[molecule_index] = bond.kind
             # Count bonds
             bond_total_count+=1
+
+        for atom in molecule.atoms:
+            for bond in molecule.bonds:
+                atom_info_1 = atoms_dictionary[bond._atom1._unique_identifier]#Tuple<int, Data.Atom>
+                atom_info_2 = atoms_dictionary[bond._atom2._unique_identifier]#Tuple<int, Data.Atom>
+
+                # Lookup the parent residue
+                residue = bond._parent
+                hash_residue = get_residue_hash(sb, residue) #int
+                new_residue = new_residues[hash_residue]
+
+                hash_bond = get_bond_hash(sb, bond, atom_info_1[0], atom_info_2[0]) #int
+                new_bond = new_bonds[hash_bond]
+                if atom == bond._atom1:
+                    new_bond._atom1 = atom_info_1[1]
+                else:
+                    new_bond._atom2 = atom_info_2[1]
 
         # Molecule idx
         molecule_index+=1
