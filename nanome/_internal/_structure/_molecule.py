@@ -81,7 +81,8 @@ class _Molecule(_Base):
         if value > curr_size:
             extension = value - curr_size
             self._names.extend([self._names[-1]]*(extension))
-            self._associateds.extend([self._associateds[-1].copy() for i in range(extension)])
+            copy_val = self._associateds[-1]
+            self._associateds.extend([copy_val.copy() for i in range(extension)])
         else:
             self._names = self._names[:value]
             self._associateds = self._associateds[:value]

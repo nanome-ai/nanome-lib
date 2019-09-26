@@ -109,7 +109,8 @@ class _Atom(_Base):
         if new_size > curr_size:
             extension = new_size - curr_size
             self._exists.extend([self._exists[-1]]*(extension))
-            self._positions.extend([self._positions[-1] for i in range(extension)])
+            copy_val = self._positions[-1]
+            self._positions.extend([copy_val.get_copy() for i in range(extension)])
         else:
             self._exists = self._exists[:new_size]
             self._positions = self._positions[:new_size]
