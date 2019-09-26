@@ -57,6 +57,32 @@ class Molecule(_Molecule, Base):
         self._name = value
     #endregion
 
+    #region conformer stuff
+    @property
+    def names(self):
+        return self._names
+    
+    @names.setter
+    def names(self, value):
+        self._names = value
+
+    @property
+    def associateds(self):
+        return self._associateds
+    
+    @associateds.setter
+    def associateds(self, value):
+        self._associateds = value
+
+    @property
+    def conformer_count(self):
+        return self._conformer_count
+    
+    @conformer_count.setter
+    def conformer_count(self, value):
+        self._conformer_count = value
+    #endregion
+
     #region deprecated
     @property
     @Logs.deprecated()
