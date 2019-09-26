@@ -67,9 +67,6 @@ def convert_to_frames(complex): #Data.Complex -> Data.Complex
                 new_complex._add_molecule(new_molecule)
         else:
             new_complex._add_molecule(molecule._deep_copy())
-    for atom in new_complex.atoms:
-        if (atom._bonds == None):
-            print("WTF2")
     return new_complex
 
 def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Data.Complex
