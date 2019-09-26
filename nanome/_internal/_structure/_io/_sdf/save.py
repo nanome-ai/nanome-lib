@@ -24,6 +24,7 @@ class Results(object):
 
 def to_file(path, complex, options=None):
     # type: (str, _Complex, Options) -> Results
+    complex = complex._convert_to_frames()
     if options is None:
         options = Options()
     lines = []

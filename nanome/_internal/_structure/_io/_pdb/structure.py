@@ -17,7 +17,7 @@ def structure(content):
         molecule._name = str(i)
         complex._molecules.append(molecule)
     # Done
-    return complex
+    return complex._convert_to_frames()
         
          
 def structure_molecule(atoms, compnds):

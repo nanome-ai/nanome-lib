@@ -1,19 +1,7 @@
 import hashlib, copy
-from ... import _structure as struct
+from nanome.util import StringBuilder
 s_ConformersDisabled = False #Nanome.Core.Config.getBool("mol-conformers-disabled", "false")
 s_ConformersAlways = False #Nanome.Core.Config.getBool("mol-conformers-always", "false")
-
-class StringBuilder:
-    def __init__(self):
-        self.los =[]
-    def append(self, s):
-        self.los.append(str(s))
-    def to_string(self):
-        return self.get()
-    def get(self):
-        return "".join(self.los)
-    def clear(self):
-        self.los.clear()
 
 def _delete_atoms(atoms):
     for atom in atoms:
@@ -38,15 +26,16 @@ def _delete_chains(chains):
         chain._molecule._remove_chain(chain)
     chains.clear()
 
+#disabled hashing until I can find a fast algorithm
 def _get_hash_code(str):
-    return int(hashlib.sha256(str.encode('utf-8')).hexdigest(), 16)
+    return str #int(hashlib.sha256(str.encode('utf-8')).hexdigest(), 16)
 
 def convert_to_frames(complex): #Data.Complex -> Data.Complex
     deleted_atoms = []
     deleted_bonds = []
     deleted_residues = []
     deleted_chains = []
-    new_complex = complex._shallow_copy() # Data.Complex
+    new_complex = complex._shallow_copy()
     for molecule in complex._molecules:
         if molecule._conformer_count > 1:
             count = molecule._conformer_count
@@ -83,18 +72,14 @@ def convert_to_frames(complex): #Data.Complex -> Data.Complex
             print("WTF2")
     return new_complex
 
-def convert_all_to_conformers(complexes): #List<Data.Complex -> List<Data.Complex>
-    results = [] #List<Data.Complex> 
-    for complex in complexes:
-        results.append(convert_to_conformers(complex))
-    return results
-
-def convert_to_conformers(complex): #Data.Complex -> Data.Complex
+def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Data.Complex
+    if force_conformer == None:
+        force_conformer = s_ConformersAlways
     # Maybe conformers are disabled
     if s_ConformersDisabled:
         return complex
     # How much are we talking about here
-    count = len(complex._molecules) #int
+    count = len(complex._molecules)
     # No mutliple frames, nothing to do
     if count <= 1:
         return complex
@@ -108,14 +93,14 @@ def convert_to_conformers(complex): #Data.Complex -> Data.Complex
     new_complex = complex._shallow_copy() #Data.Complex
     new_molecule = complex._molecules[0]._shallow_copy() # Data.Molecule
     # Group structures by their hash
-    new_chains = {} #Dictionary<int, Data.Chain> 
-    new_residues = {} #Dictionary<int, Data.Residue> 
-    new_atoms = {} #Dictionary<int, Data.Atom> 
-    new_bonds = {} #Dictionary<int, Data.Bond> 
+    new_chains = {}
+    new_residues = {}
+    new_atoms = {}
+    new_bonds = {}
     # Computation stores
-    sb = StringBuilder() #StringBuilder
-    names_dictionary = {} #Dictionary<int, int> 
-    atoms_dictionary = {} #Dictionary<int, Tuple<int, Data.Atom>> 
+    sb = StringBuilder()
+    names_dictionary = {}
+    atoms_dictionary = {}
     # Get ready
     new_complex._add_molecule(new_molecule)
     new_molecule._conformer_count = len(complex._molecules)
@@ -128,8 +113,8 @@ def convert_to_conformers(complex): #Data.Complex -> Data.Complex
         # Loop over all chains
         for chain in molecule._chains:
             # Lookup or create chain with hash
-            hash_chain = get_chain_hash(sb, chain) #int
-            new_chain = None #Data.Chain
+            hash_chain = _get_chain_hash(sb, chain)
+            new_chain = None
             if hash_chain in new_chains:
                 new_chain = new_chains[hash_chain]
             else:
@@ -139,8 +124,8 @@ def convert_to_conformers(complex): #Data.Complex -> Data.Complex
             # Loop over all residues
             for residue in chain._residues:
                 # Lookup or create chain with hash
-                hash_residue = get_residue_hash(sb, residue) #int
-                new_residue = None #Data.Residue
+                hash_residue = _get_residue_hash(sb, residue)
+                new_residue = None
                 if hash_residue in new_residues:
                     new_residue = new_residues[hash_residue]
                 else:
@@ -151,14 +136,14 @@ def convert_to_conformers(complex): #Data.Complex -> Data.Complex
                 names_dictionary.clear()
 
                 for atom in residue._atoms:
-                    name_hash = _get_hash_code(atom.name) #int
-                    off = 0 #int
+                    name_hash = _get_hash_code(atom.name)
+                    off = 0
                     if name_hash in names_dictionary:
                         off = names_dictionary[name_hash]
                     names_dictionary[name_hash] = off
                     # Lookup or create atom with hash
-                    hash_atom = get_atom_hash(sb, atom, off) #int
-                    new_atom = None #Data.Atom
+                    hash_atom = _get_atom_hash(sb, atom, off)
+                    new_atom = None
                     if hash_atom in new_atoms:
                         new_atom = new_atoms[hash_atom]
                     else:
@@ -175,28 +160,24 @@ def convert_to_conformers(complex): #Data.Complex -> Data.Complex
                     new_atom._positions[molecule_index] = atom.position
                     # Save
                     atoms_dictionary[atom._unique_identifier] = (hash_atom, new_atom)
-
-                    # Count atoms
                     atom_total_count+=1
-                # Count residues
                 residue_total_count+=1
-            # Count chains
             chain_total_count+=1
 
         for bond in molecule.bonds:
-            atom_info_1 = atoms_dictionary[bond._atom1._unique_identifier]#Tuple<int, Data.Atom>
-            atom_info_2 = atoms_dictionary[bond._atom2._unique_identifier]#Tuple<int, Data.Atom>
+            atom_info_1 = atoms_dictionary[bond._atom1._unique_identifier]
+            atom_info_2 = atoms_dictionary[bond._atom2._unique_identifier]
 
             # Lookup the parent residue
             residue = bond._parent
-            hash_residue = get_residue_hash(sb, residue) #int
+            hash_residue = _get_residue_hash(sb, residue)
             new_residue = new_residues[hash_residue]
 
-            hash_bond = get_bond_hash(sb, bond, atom_info_1[0], atom_info_2[0]) #int
-            new_bond = None #Data.Bond
+            hash_bond = _get_bond_hash(sb, bond, atom_info_1[0], atom_info_2[0])
+            new_bond = None
             if hash_bond in new_bonds:
                 new_bond = new_bonds[hash_bond]
-                # print(get_residue_hash(sb, new_bond._parent) == get_residue_hash(sb, bond._parent))
+                # print(_get_residue_hash(sb, new_bond._parent) == _get_residue_hash(sb, bond._parent))
             else:
                 new_bond = bond._shallow_copy()
                 new_bond._exists = [None]*new_molecule._conformer_count # replace with append algorithm at the end
@@ -216,10 +197,10 @@ def convert_to_conformers(complex): #Data.Complex -> Data.Complex
 
                 # Lookup the parent residue
                 residue = bond._parent
-                hash_residue = get_residue_hash(sb, residue) #int
+                hash_residue = _get_residue_hash(sb, residue)
                 new_residue = new_residues[hash_residue]
 
-                hash_bond = get_bond_hash(sb, bond, atom_info_1[0], atom_info_2[0]) #int
+                hash_bond = _get_bond_hash(sb, bond, atom_info_1[0], atom_info_2[0])
                 new_bond = new_bonds[hash_bond]
                 if atom == bond._atom1:
                     new_bond._atom1 = atom_info_1[1]
@@ -229,7 +210,7 @@ def convert_to_conformers(complex): #Data.Complex -> Data.Complex
         # Molecule idx
         molecule_index+=1
     # Important decision to make, is everything suited for a trajectories?
-    if not s_ConformersAlways:
+    if not force_conformer:
         # Gather important information of the conversion
         is_very_big_chains = chain_total_count > 1 #bool
         is_very_big_residues = residue_total_count > 10 #bool
@@ -280,10 +261,10 @@ def convert_to_conformers(complex): #Data.Complex -> Data.Complex
     # Otherwise let's start grabbing the data
     return new_complex
 
-def get_chain_hash(sb, chain): #StringBuilder, Data.Chain -> int
+def _get_chain_hash(sb, chain): #StringBuilder, Data.Chain -> int
     return _get_hash_code(chain.name)
 
-def get_residue_hash(sb, residue): #StringBuilder, Data.Residue -> int
+def _get_residue_hash(sb, residue): #StringBuilder, Data.Residue -> int
     sb.clear()
     sb.append(residue._serial)
     sb.append(":")
@@ -292,7 +273,7 @@ def get_residue_hash(sb, residue): #StringBuilder, Data.Residue -> int
     sb.append(residue._chain._name)
     return _get_hash_code(sb.to_string())
 
-def get_atom_hash(sb, atom, off): #StringBuilder, Data.Atom, int -> int
+def _get_atom_hash(sb, atom, off): #StringBuilder, Data.Atom, int -> int
     sb.clear()
     sb.append(atom._symbol)
     sb.append(":")
@@ -309,7 +290,7 @@ def get_atom_hash(sb, atom, off): #StringBuilder, Data.Atom, int -> int
     sb.append(atom._residue._chain._name)
     return _get_hash_code(sb.to_string())
 
-def get_bond_hash(sb, bond, atom1, atom2): #StringBuilder, Data.Bond, int, int -> int
+def _get_bond_hash(sb, bond, atom1, atom2): #StringBuilder, Data.Bond, int, int -> int
     sb.clear()
     sb.append(atom1)
     sb.append(":")
@@ -320,5 +301,4 @@ def get_bond_hash(sb, bond, atom1, atom2): #StringBuilder, Data.Bond, int, int -
     sb.append(bond._residue._name)
     sb.append(":")
     sb.append(bond._chain._name)
-
     return _get_hash_code(sb.to_string())

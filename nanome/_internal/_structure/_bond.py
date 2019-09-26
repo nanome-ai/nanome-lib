@@ -74,6 +74,7 @@ class _Bond(_Base):
             return None
     #endregion
 
+    #region conformer stuff
     @property
     def _current_conformer(self):
         if self._molecule != None:
@@ -88,6 +89,16 @@ class _Bond(_Base):
         else:
             return 1
 
+    def _resize_conformer(self, new_size):
+        curr_size = len(self._kinds)
+        if new_size > curr_size:
+            extension = new_size - curr_size
+            self._kinds.extend([self._kinds[-1]]*(extension))
+            self._exists.extend([self._exists[-1]]*(extension))
+        else:
+            self._kinds = self._kinds[:new_size]
+            self._exists = self._exists[:new_size]
+
     @property
     def _kind(self):
         return self._kinds[self._current_conformer]
@@ -95,6 +106,7 @@ class _Bond(_Base):
     @_kind.setter
     def _kind(self, value):
         self._kinds[self._current_conformer] = value
+    #endregion
 
     def _shallow_copy(self):
         bond = _Bond._create()

@@ -30,6 +30,25 @@ class _Molecule(_Base):
             chain._parent = self
 
     #region connections
+
+    @property
+    def _residues(self):
+        for chain in self._chains:
+            for residue in chain._residues:
+                yield residue
+
+    @property
+    def _atoms(self):
+        for residue in self._residues:
+            for atom in residue._atoms:
+                yield atom
+                
+    @property
+    def _bonds(self):
+        for residue in self._residues:
+            for bond in residue._bonds:
+                yield bond
+
     @property
     def _complex(self):
         return self._parent
@@ -60,13 +79,32 @@ class _Molecule(_Base):
     def _conformer_count(self, value):
         curr_size = len(self._names)
         if value > curr_size:
-            self._names.extend([self._names[-1]]*(value - curr_size))
-            self._associateds.extend([self._associateds[-1]]*(value - curr_size))
+            extension = value - curr_size
+            self._names.extend([self._names[-1]]*(extension))
+            self._associateds.extend([self._associateds[-1].copy() for i in range(extension)])
         else:
             self._names = self._names[:value]
             self._associateds = self._associateds[:value]
         self._current_conformer = min(self._current_conformer, value - 1)
         self.__conformer_count = value
+
+        for atom in self._atoms:
+            atom._resize_conformer(value)
+        for bond in self._bonds:
+            bond._resize_conformer(value)
+
+    # def _create_conformer(self, index):
+    #     if index < 0 or index > self._conformer_count:
+    #         raise IndexError("Index cannot be greater than number of conformers.")
+    #     elif index == self._conformer_count:
+    #         self._conformer_count += 1
+    #     else:
+    #         pass
+
+    # def _move_conformer(self, src, dest):
+    #     temp = self._names[dest]
+    #     self._names[dest] = self.[src]
+    #     self.
     #endregion
 
     def _shallow_copy(self):

@@ -8,7 +8,7 @@ def structure(content):
     for model in content.models:
         complex._molecules.append(structure_molecule(model))
     complex._remarks = {}
-    return complex
+    return complex._convert_to_frames()
 
 
 def structure_molecule(model):

@@ -73,7 +73,9 @@ class _Atom(_Base):
             return self._parent._complex
         else:
             return None
+    #endregion
 
+    #region conformer stuff
     @property
     def _current_conformer(self):
         if self._molecule != None:
@@ -101,6 +103,16 @@ class _Atom(_Base):
     @_position.setter
     def _position(self, value):
         self._positions[self._current_conformer] = value
+
+    def _resize_conformer(self, new_size):
+        curr_size = len(self._exists)
+        if new_size > curr_size:
+            extension = new_size - curr_size
+            self._exists.extend([self._exists[-1]]*(extension))
+            self._positions.extend([self._positions[-1] for i in range(extension)])
+        else:
+            self._exists = self._exists[:new_size]
+            self._positions = self._positions[:new_size]
     #endregion
 
     def _shallow_copy(self):

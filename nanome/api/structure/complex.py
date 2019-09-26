@@ -186,6 +186,12 @@ class Complex(_Complex, Base):
         return result
     #endregion
 
+    def convert_to_conformers(self, force_conformers = None):
+        return self._convert_to_conformers(force_conformers)
+
+    def convert_to_frames(self):
+        return self._convert_to_frames()
+
     #region depricated
     @property
     @Logs.deprecated()

@@ -2,7 +2,7 @@ import nanome
 import os
 
 from nanome.api import structure as struct
-from nanome._internal._structure._io import _conformer_helper as conformer
+from nanome._internal._structure._helpers import _conformer_helper as conformer
 from testing.utilities import *
 
 from nanome.util import Logs
