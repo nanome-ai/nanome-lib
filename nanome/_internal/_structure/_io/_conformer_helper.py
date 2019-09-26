@@ -15,31 +15,31 @@ class StringBuilder:
     def clear(self):
         self.los.clear()
 
-def delete_atoms(atoms):
+def _delete_atoms(atoms):
     for atom in atoms:
         atom.name == "DELETED"
         atom._residue._atoms.remove(atom)
     atoms.clear()
 
-def delete_bonds(bonds):
+def _delete_bonds(bonds):
     for bond in bonds:
         bond._atom1 = None
         bond._atom2 = None
         bond._residue.remove_bond(bond)
     bonds.clear()
 
-def delete_residues(residues):
+def _delete_residues(residues):
     for residue in residues:
         residue._chain._remove_residue(residue)
     residues.clear()
 
-def delete_chains(chains):
+def _delete_chains(chains):
     for chain in chains:
         chain._molecule._remove_chain(chain)
     chains.clear()
 
-def get_hash_code(str):
-    return str # int(hashlib.sha256(str.encode('utf-8')).hexdigest(), 16)
+def _get_hash_code(str):
+    return int(hashlib.sha256(str.encode('utf-8')).hexdigest(), 16)
 
 def convert_to_frames(complex): #Data.Complex -> Data.Complex
     deleted_atoms = []
@@ -61,19 +61,19 @@ def convert_to_frames(complex): #Data.Complex -> Data.Complex
                                 deleted_atoms.append(new_atom)
                             new_atom._positions = [new_atom._positions[i]]
                             new_atom._exists = [True]
-                        delete_atoms(deleted_atoms)                        
+                        _delete_atoms(deleted_atoms)                        
                         for new_bond in new_residue._bonds:
                             if not new_bond._exists[i]:
                                 deleted_bonds.append(new_bond)
                             new_bond._kinds = [new_bond._kinds[i]]
                             new_bond._exists = [True]
-                        delete_bonds(deleted_bonds)
+                        _delete_bonds(deleted_bonds)
                         if len(new_residue._atoms) == 0:
                             deleted_residues.append(new_residue)
-                    delete_residues(deleted_residues)
+                    _delete_residues(deleted_residues)
                     if len(new_chain._residues) == 0:
                         deleted_chains.append(new_chain)
-                delete_chains(deleted_chains)
+                _delete_chains(deleted_chains)
                 new_molecule._conformer_count = 1
                 new_complex._add_molecule(new_molecule)
         else:
@@ -151,7 +151,7 @@ def convert_to_conformers(complex): #Data.Complex -> Data.Complex
                 names_dictionary.clear()
 
                 for atom in residue._atoms:
-                    name_hash = get_hash_code(atom.name) #int
+                    name_hash = _get_hash_code(atom.name) #int
                     off = 0 #int
                     if name_hash in names_dictionary:
                         off = names_dictionary[name_hash]
@@ -281,7 +281,7 @@ def convert_to_conformers(complex): #Data.Complex -> Data.Complex
     return new_complex
 
 def get_chain_hash(sb, chain): #StringBuilder, Data.Chain -> int
-    return get_hash_code(chain.name)
+    return _get_hash_code(chain.name)
 
 def get_residue_hash(sb, residue): #StringBuilder, Data.Residue -> int
     sb.clear()
@@ -290,7 +290,7 @@ def get_residue_hash(sb, residue): #StringBuilder, Data.Residue -> int
     sb.append(residue._name)
     sb.append(":")
     sb.append(residue._chain._name)
-    return get_hash_code(sb.to_string())
+    return _get_hash_code(sb.to_string())
 
 def get_atom_hash(sb, atom, off): #StringBuilder, Data.Atom, int -> int
     sb.clear()
@@ -307,7 +307,7 @@ def get_atom_hash(sb, atom, off): #StringBuilder, Data.Atom, int -> int
     sb.append(atom._residue._name)
     sb.append(":")
     sb.append(atom._residue._chain._name)
-    return get_hash_code(sb.to_string())
+    return _get_hash_code(sb.to_string())
 
 def get_bond_hash(sb, bond, atom1, atom2): #StringBuilder, Data.Bond, int, int -> int
     sb.clear()
@@ -321,4 +321,4 @@ def get_bond_hash(sb, bond, atom1, atom2): #StringBuilder, Data.Bond, int, int -
     sb.append(":")
     sb.append(bond._chain._name)
 
-    return get_hash_code(sb.to_string())
+    return _get_hash_code(sb.to_string())
