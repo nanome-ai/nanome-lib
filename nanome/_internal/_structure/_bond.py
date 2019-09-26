@@ -17,9 +17,6 @@ class _Bond(_Base):
         self._exists = [True]
         self._kinds = [_Bond.Kind.CovalentSingle]
 
-        self._exists = [True]
-        self._kinds = [_Bond.Kind.CovalentSingle]
-
     @property
     def _atom1(self):
         return self.__atom1
