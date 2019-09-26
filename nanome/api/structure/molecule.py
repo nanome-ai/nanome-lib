@@ -55,6 +55,14 @@ class Molecule(_Molecule, Base):
         if type(value) is not str:
             value = str(value)
         self._name = value
+
+    @property
+    def associated(self):
+        return self._associated
+    
+    @associated.setter
+    def associated(self, value):
+        self._associated = value
     #endregion
 
     #region conformer stuff
