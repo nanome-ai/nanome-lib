@@ -1,5 +1,5 @@
 import hashlib, copy
-from nanome.util import StringBuilder
+from nanome.util import StringBuilder, Vector3, enums
 s_ConformersDisabled = False #Nanome.Core.Config.getBool("mol-conformers-disabled", "false")
 s_ConformersAlways = False #Nanome.Core.Config.getBool("mol-conformers-always", "false")
 
@@ -145,8 +145,8 @@ def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Dat
                         new_atom = new_atoms[hash_atom]
                     else:
                         new_atom = atom._shallow_copy()
-                        new_atom._exists = [None]*new_molecule._conformer_count # replace with append algorithm at the end
-                        new_atom._positions = [None]*new_molecule._conformer_count
+                        new_atom._exists = [False]*new_molecule._conformer_count # replace with append algorithm at the end
+                        new_atom._positions = [Vector3()]*new_molecule._conformer_count
                         new_residue._add_atom(new_atom)
                         if off > 1:
                             new_atom.name = new_atom.name + str(off)
@@ -154,7 +154,7 @@ def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Dat
                         new_atoms[hash_atom] = new_atom
                     # Update current conformer
                     new_atom._exists[molecule_index] = True
-                    new_atom._positions[molecule_index] = atom.position
+                    new_atom._positions[molecule_index] = atom.position.get_copy()
                     # Save
                     atoms_dictionary[atom._unique_identifier] = (hash_atom, new_atom)
                     atom_total_count+=1
@@ -177,8 +177,8 @@ def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Dat
                 # print(_get_residue_hash(sb, new_bond._parent) == _get_residue_hash(sb, bond._parent))
             else:
                 new_bond = bond._shallow_copy()
-                new_bond._exists = [None]*new_molecule._conformer_count # replace with append algorithm at the end
-                new_bond._kinds = [None]*new_molecule._conformer_count
+                new_bond._exists = [False]*new_molecule._conformer_count # replace with append algorithm at the end
+                new_bond._kinds = [enums.Kind.CovalentSingle]*new_molecule._conformer_count
                 new_residue._add_bond(new_bond)
                 new_bonds[hash_bond] = new_bond
             # Update current conformer

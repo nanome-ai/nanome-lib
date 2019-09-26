@@ -134,7 +134,7 @@ def test_to_conformer():
         molecule._name = first_molecule._names[conf]
         for atom1, atom2 in zip(molecule.atoms, first_molecule.atoms):
             assert_equal(atom1, atom2, conformer_blind)
-            assert(atom1._position == atom2._positions[conf])
+            assert(atom1._position.equals(atom2._positions[conf]))
             assert(atom1._exists[0] == atom2._exists[conf])
         for bond1, bond2 in zip(molecule.bonds, first_molecule.bonds):
             assert(bond1._kind == bond2._kinds[conf])

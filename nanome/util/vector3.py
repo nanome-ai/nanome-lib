@@ -27,6 +27,9 @@ class Vector3(object):
     def __sub__(self, other):
         return Vector3(self._positions[0] - other.x, self._positions[1] - other.y, self._positions[2] - other.z)
 
+    def equals(self, other):
+        return self.x == other.x and self.y == other.y and self.z == other.z
+
     def unpack(self):
         return self._positions[0], self._positions[1], self._positions[2]
 
