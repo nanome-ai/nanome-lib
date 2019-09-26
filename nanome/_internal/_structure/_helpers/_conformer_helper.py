@@ -7,24 +7,24 @@ def _delete_atoms(atoms):
     for atom in atoms:
         atom.name == "DELETED"
         atom._residue._atoms.remove(atom)
-    atoms.clear()
+    del atoms[:]
 
 def _delete_bonds(bonds):
     for bond in bonds:
         bond._atom1 = None
         bond._atom2 = None
         bond._residue.remove_bond(bond)
-    bonds.clear()
+    del bonds[:]
 
 def _delete_residues(residues):
     for residue in residues:
         residue._chain._remove_residue(residue)
-    residues.clear()
+    del residues[:]
 
 def _delete_chains(chains):
     for chain in chains:
         chain._molecule._remove_chain(chain)
-    chains.clear()
+    del chains[:]
 
 #disabled hashing until I can find a fast algorithm
 def _get_hash_code(str):

@@ -11,4 +11,4 @@ class StringBuilder:
         return joined
 
     def clear(self):
-        self.los.clear()
+        del self.los[:]
