@@ -145,6 +145,6 @@ class _Atom(_Base):
         atom._het_atomed = self._het_atomed
         atom._het_surfaced = self._het_surfaced
         #conformer
-        atom._positions = list(self._positions)
+        atom._positions = [position.get_copy() for position in self._positions]
         atom._exists = list(self._exists)
         return atom

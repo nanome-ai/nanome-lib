@@ -107,6 +107,6 @@ class _Bond(_Base):
 
     def _shallow_copy(self):
         bond = _Bond._create()
-        bond._exists = self._exists.copy()
-        bond._kinds = self._kinds.copy()
+        bond._exists = list(self._exists)
+        bond._kinds = list(self._kinds)
         return bond

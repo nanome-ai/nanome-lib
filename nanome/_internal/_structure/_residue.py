@@ -92,7 +92,7 @@ class _Residue(_Base):
         residue._ribboned = self._ribboned 
         residue._ribbon_size = self._ribbon_size 
         residue._ribbon_mode = self._ribbon_mode 
-        residue._ribbon_color = self._ribbon_color 
+        residue._ribbon_color = self._ribbon_color.copy()
         residue._labeled = self._labeled 
         residue._label_text = self._label_text 
         return residue

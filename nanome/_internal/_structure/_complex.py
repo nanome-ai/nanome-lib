@@ -92,8 +92,8 @@ class _Complex(_Base):
         complex._surface_refresh_rate = self._surface_refresh_rate
         complex._box_label = self._box_label
         #Transform
-        complex._position = self._position
-        complex._rotation = self._rotation
+        complex._position = self._position.get_copy()
+        complex._rotation = self._rotation.get_copy()
         return complex
 
     def _deep_copy(self):
