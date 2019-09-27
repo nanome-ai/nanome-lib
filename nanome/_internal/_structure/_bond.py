@@ -39,7 +39,10 @@ class _Bond(_Base):
     @_atom2.setter
     def _atom2(self, value):
         if self.__atom2 is not None:
-            self.__atom2._bonds.remove(self)
+            try:
+                self.__atom2._bonds.remove(self)
+            except ValueError:
+                pass
         if value is not None:
             value._bonds.append(self)
         self.__atom2 = value
