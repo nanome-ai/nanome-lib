@@ -25,7 +25,6 @@ class Residue(_Residue, Base):
         bond.index = -1
         self._add_bond(bond)
 
-
     def remove_bond(self, bond):
         bond.index = -1
         self._remove_bond(bond)

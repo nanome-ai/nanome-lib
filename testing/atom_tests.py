@@ -19,7 +19,7 @@ from nanome.util import Logs
 
 test_assets = os.getcwd() + ("/testing/test_assets")
 test_output_dir = os.getcwd() + ("/testing/test_outputs")
-options = TestOptions(ignore_vars=["_unique_identifier", "_remarks", "_associated"])
+options = TestOptions(ignore_vars=["_unique_identifier", "_remarks", "_associateds"])
 
 def run(counter):
     run_test(test_structures, counter)
@@ -104,28 +104,17 @@ def prep_timer_test():
     test_workspace.complexes = [complex1, complex2, complex3, complex4]
 
 def count_structures(complex):
-    molecule_counter = 0
-    chain_counter = 0
-    residue_counter = 0
-    residue_counter = 0
-    bond_counter = 0
-    atom_counter = 0
-    for molecule in complex.molecules:
-        molecule_counter += 1
-        for chain in molecule.chains:
-            chain_counter += 1
-            for residue in chain.residues:
-                residue_counter += 1
-                for atom in residue.atoms:
-                    atom_counter += 1
-                for bond in residue.bonds:
-                    bond_counter +=1
+    molecule_counter = sum(1 for i in complex.molecules)
+    chain_counter = sum(1 for i in complex.chains)
+    residue_counter = sum(1 for i in complex.residues)
+    bond_counter = sum(1 for i in complex.bonds)
+    atom_counter = sum(1 for i in complex.atoms)
     print("molecule_counter:",molecule_counter)
     print("chain_counter:",chain_counter)
     print("residue_counter:",residue_counter)
-    print("residue_counter:",residue_counter)
     print("bond_counter:",bond_counter)
     print("atom_counter:",atom_counter)
+    return molecule_counter, chain_counter, residue_counter, bond_counter, atom_counter
 
 def time_test_serializer():
     #create test data

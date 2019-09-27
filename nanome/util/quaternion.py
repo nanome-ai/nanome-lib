@@ -18,6 +18,9 @@ class Quaternion(object):
         self._z = float(z)
         self._w = float(w)
 
+    def get_copy(self):
+        return Quaternion(self.x,self.y,self.z,self.w)
+
     @property
     def x(self):
         return self._x

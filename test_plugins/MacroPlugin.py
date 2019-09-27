@@ -5,7 +5,7 @@ import time
 
 # Config
 
-NAME = "Sand Box"
+NAME = "Macro Plugin"
 DESCRIPTION = "A plugin that can be edited freely for testing."
 CATEGORY = "Simple Actions"
 HAS_ADVANCED_OPTIONS = False
@@ -111,7 +111,6 @@ class MacroPlugin(nanome.PluginInstance):
 
     def on_run(self):
         nanome.api.macro.Macro.get_live(self.on_get_macros)
-        print(nanome.api.macro.Macro.get_plugin_identifier)
 
     def on_get_macros(self, macros):
         print(list(macro.title for macro in macros))

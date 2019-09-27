@@ -5,6 +5,8 @@ from testing import ui_tests
 from testing import json_tests
 from testing import api_tests
 from testing import context_tests
+from testing import copy_tests
+from testing import conformer_tests
 from testing import utilities as util
 
 import os
@@ -32,9 +34,11 @@ import nanome
 from nanome.util import Logs
 Logs._set_verbose(True)
 all_tests_passed = True
+all_tests_passed = all_tests_passed and util.run_test_group(copy_tests)
+all_tests_passed = all_tests_passed and util.run_test_group(conformer_tests)
+all_tests_passed = all_tests_passed and util.run_test_group(atom_tests)
 all_tests_passed = all_tests_passed and util.run_test_group(context_tests)
 all_tests_passed = all_tests_passed and util.run_test_group(api_tests)
-all_tests_passed = all_tests_passed and util.run_test_group(atom_tests)
 all_tests_passed = all_tests_passed and util.run_test_group(mmcif_tests)
 all_tests_passed = all_tests_passed and util.run_test_group(sdf_tests)
 all_tests_passed = all_tests_passed and util.run_test_group(ui_tests)

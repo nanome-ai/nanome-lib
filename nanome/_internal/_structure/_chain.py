@@ -1,4 +1,5 @@
 from . import _Base
+from . import _helpers
 
 class _Chain(_Base):
     @classmethod
@@ -35,3 +36,11 @@ class _Chain(_Base):
         else:
             return None
     #endregion
+
+    def _shallow_copy(self):
+        chain = _Chain._create()
+        chain._name = self._name
+        return chain
+
+    def _deep_copy(self):
+        return _helpers._copy._deep_copy_chain(self)

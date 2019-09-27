@@ -66,6 +66,46 @@ class Bond(_Bond, Base):
     @kind.setter
     def kind(self, value):
         self._kind = value
+
+    @property
+    def exists(self):
+        return self._exists
+    
+    @exists.setter
+    def exists(self, value):
+        self._exists = value
+    #endregion
+
+    #region conformer stuff
+    @property
+    def current_conformer(self):
+        return self._current_conformer
+
+    @property
+    def conformer_count(self):
+        return self._conformer_count
+
+    @property
+    def kinds(self):
+        return self._kinds
+    
+    @kinds.setter
+    def kinds(self, value):
+        if self.molecule != None:
+            if len(value) != self.conformer_count:
+                raise Exception("Length of kinds must match the conformer count of the parent molecule.")
+        self._kinds = value
+
+    @property
+    def in_conformer(self):
+        return self._in_conformer
+    
+    @in_conformer.setter
+    def in_conformer(self, value):
+        if self.molecule != None:
+            if len(value) != self.conformer_count:
+                raise Exception("Length of in_conformer must match the conformer count of the parent molecule.")
+        self._in_conformer = value
     #endregion
 
     #region deprecated

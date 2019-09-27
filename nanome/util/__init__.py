@@ -1,5 +1,6 @@
 from . import *
 #classes
+from .string_builder import StringBuilder
 from .color import Color
 from .enum import Enum, IntEnum, auto
 try:

@@ -68,21 +68,11 @@ def test_thrombin():
     assert_not_equal(complex2, struct.Complex(), options)
 
 def count_structures(complex):
-    molecule_counter = 0
-    chain_counter = 0
-    residue_counter = 0
-    bond_counter = 0
-    atom_counter = 0
-    for molecule in complex.molecules:
-        molecule_counter += 1
-        for chain in molecule.chains:
-            chain_counter += 1
-            for residue in chain.residues:
-                residue_counter += 1
-                for atom in residue.atoms:
-                    atom_counter += 1
-                for bond in residue.bonds:
-                    bond_counter += 1
+    molecule_counter = sum(1 for i in complex.molecules)
+    chain_counter = sum(1 for i in complex.chains)
+    residue_counter = sum(1 for i in complex.residues)
+    bond_counter = sum(1 for i in complex.bonds)
+    atom_counter = sum(1 for i in complex.atoms)
     return molecule_counter, chain_counter, residue_counter, bond_counter, atom_counter
     Logs.debug("molecule_counter:", molecule_counter)
     Logs.debug("chain_counter:", chain_counter)
@@ -99,5 +89,5 @@ def compare_atom_positions(complex1, complex2):
         difference = atom1.position.x - atom2.position.x
         assert(difference <.001)
         assert(difference > -.001)
-        options2 = TestOptions(ignore_vars=["_unique_identifier", "_remarks", "_associated", "_position"])
+        options2 = TestOptions(ignore_vars=["_unique_identifier", "_remarks", "_associateds", "_positions"])
         assert_equal(atom1, atom2, options2)

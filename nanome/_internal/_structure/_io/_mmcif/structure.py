@@ -4,8 +4,6 @@ from nanome._internal._structure import _Complex, _Molecule, _Chain, _Residue, _
 from .content import Content
 MaxCategorySize = 40
 
-
-
 def structure(content):
     remarks = StructureRemarks(content.remarks)
     complex = _Complex._create()
@@ -52,7 +50,7 @@ def structure(content):
             all_atoms[atom_id] = None
             all_residues[residue_id]._atoms.append(atom)
     # Done
-    return complex
+    return complex._convert_to_frames()
 
 def StructureAtom(c_atom, helper):
     atom = _Atom._create()

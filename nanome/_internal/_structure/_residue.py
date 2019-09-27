@@ -1,5 +1,6 @@
 import nanome
 from nanome.util import Color, Logs
+from . import _helpers
 from . import _Base
 
 class _Residue(_Base):
@@ -24,9 +25,10 @@ class _Residue(_Base):
         self._ribbon_color = Color.Clear()
         self._labeled = False
         self._label_text = ""
-        #children
+        #connections
         self._atoms = []
         self._bonds = []
+        self._parent = None
 
     def _add_atom(self, atom):
         self._atoms.append(atom)
@@ -78,3 +80,22 @@ class _Residue(_Base):
         else:
             return None
     #endregion
+
+    def _shallow_copy(self):
+        residue = _Residue._create()
+        #molecular
+        residue._type = self._type 
+        residue._serial = self._serial 
+        residue._name = self._name 
+        residue._secondary_structure = self._secondary_structure 
+        #rendering
+        residue._ribboned = self._ribboned 
+        residue._ribbon_size = self._ribbon_size 
+        residue._ribbon_mode = self._ribbon_mode 
+        residue._ribbon_color = self._ribbon_color.copy()
+        residue._labeled = self._labeled 
+        residue._label_text = self._label_text 
+        return residue
+
+    def _deep_copy(self):
+        return _helpers._copy._deep_copy_residue(self)

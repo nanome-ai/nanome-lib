@@ -1,5 +1,6 @@
 from nanome.util import Vector3, Quaternion, Logs
 from . import _Base
+from . import _helpers
 
 class _Complex(_Base):
 
@@ -28,6 +29,7 @@ class _Complex(_Base):
         self._position = Vector3(0,0,0)
         self._rotation = Quaternion(0,0,0,0)
         self._molecules = []
+        self._parent = None
 
     def _add_molecule(self, molecule):
         self._molecules.append(molecule)
@@ -71,3 +73,34 @@ class _Complex(_Base):
                     break
                 except StopIteration:
                     pass
+
+    def _shallow_copy(self):
+        complex = _Complex._create()
+        #Molecular
+        complex._name = self._name
+        complex._index_tag = self._index_tag
+        complex._split_tag = self._split_tag
+        complex._remarks = self._remarks
+        #Rendering
+        complex._boxed = self._boxed
+        complex._locked = self._locked
+        complex._visible = self._visible
+        complex._computing = self._computing
+        complex._current_frame = self._current_frame
+        complex._selected = self._selected
+        complex._surface_dirty = self._surface_dirty
+        complex._surface_refresh_rate = self._surface_refresh_rate
+        complex._box_label = self._box_label
+        #Transform
+        complex._position = self._position.get_copy()
+        complex._rotation = self._rotation.get_copy()
+        return complex
+
+    def _deep_copy(self):
+        return _helpers._copy._deep_copy_complex(self)
+    
+    def _convert_to_conformers(self, force_conformers = None):
+        return _helpers._conformer_helper.convert_to_conformers(self, None)
+
+    def _convert_to_frames(self):
+        return _helpers._conformer_helper.convert_to_frames(self)

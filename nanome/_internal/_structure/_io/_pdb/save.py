@@ -21,6 +21,7 @@ Options = nanome.util.complex_save_options.PDBSaveOptions
 
 def to_file(path, complex, options = None):
     # type: (str, _Complex, Options) -> Results
+    complex = complex._convert_to_frames()
     result = Results()
     if options is None:
         options = Options()

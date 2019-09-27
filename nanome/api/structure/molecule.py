@@ -55,6 +55,44 @@ class Molecule(_Molecule, Base):
         if type(value) is not str:
             value = str(value)
         self._name = value
+
+    @property
+    def associated(self):
+        return self._associated
+    
+    @associated.setter
+    def associated(self, value):
+        self._associated = value
+    #endregion
+
+    #region conformer stuff
+    @property
+    def names(self):
+        return self._names
+    
+    @names.setter
+    def names(self, value):
+        if len(value) != self.conformer_count:
+            raise Exception("Length of associateds must match the conformer count of the molecule.")
+        self._names = value
+
+    @property
+    def associateds(self):
+        return self._associateds
+    
+    @associateds.setter
+    def associateds(self, value):
+        if len(value) != self.conformer_count:
+            raise Exception("Length of associateds must match the conformer count of the molecule.")
+        self._associateds = value
+
+    @property
+    def conformer_count(self):
+        return self._conformer_count
+    
+    @conformer_count.setter
+    def conformer_count(self, value):
+        self._conformer_count = value
     #endregion
 
     #region deprecated
