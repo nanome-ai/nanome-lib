@@ -7,6 +7,7 @@ def _delete_atoms(atoms):
     for atom in atoms:
         atom.name == "DELETED"
         atom._residue._atoms.remove(atom)
+        _delete_bonds(atom._bonds)
     del atoms[:]
 
 def _delete_bonds(bonds):
