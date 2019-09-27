@@ -46,16 +46,16 @@ def convert_to_frames(complex): #Data.Complex -> Data.Complex
                 for new_chain in new_molecule._chains:
                     for new_residue in new_chain._residues:
                         for new_atom in new_residue._atoms:
-                            if not new_atom._exists[i]:
+                            if not new_atom._in_conformer[i]:
                                 deleted_atoms.append(new_atom)
                             new_atom._positions = [new_atom._positions[i]]
-                            new_atom._exists = [True]
+                            new_atom._in_conformer = [True]
                         _delete_atoms(deleted_atoms)                        
                         for new_bond in new_residue._bonds:
-                            if not new_bond._exists[i]:
+                            if not new_bond._in_conformer[i]:
                                 deleted_bonds.append(new_bond)
                             new_bond._kinds = [new_bond._kinds[i]]
-                            new_bond._exists = [True]
+                            new_bond._in_conformer = [True]
                         _delete_bonds(deleted_bonds)
                         if len(new_residue._atoms) == 0:
                             deleted_residues.append(new_residue)
@@ -145,7 +145,7 @@ def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Dat
                         new_atom = new_atoms[hash_atom]
                     else:
                         new_atom = atom._shallow_copy()
-                        new_atom._exists = [False]*new_molecule._conformer_count # replace with append algorithm at the end
+                        new_atom._in_conformer = [False]*new_molecule._conformer_count # replace with append algorithm at the end
                         new_atom._positions = [Vector3()]*new_molecule._conformer_count
                         new_residue._add_atom(new_atom)
                         if off > 1:
@@ -153,7 +153,7 @@ def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Dat
                         new_atom.serial = len(new_residue._atoms)
                         new_atoms[hash_atom] = new_atom
                     # Update current conformer
-                    new_atom._exists[molecule_index] = True
+                    new_atom._in_conformer[molecule_index] = True
                     new_atom._positions[molecule_index] = atom.position.get_copy()
                     # Save
                     atoms_dictionary[atom._unique_identifier] = (hash_atom, new_atom)
@@ -177,12 +177,12 @@ def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Dat
                 # print(_get_residue_hash(sb, new_bond._parent) == _get_residue_hash(sb, bond._parent))
             else:
                 new_bond = bond._shallow_copy()
-                new_bond._exists = [False]*new_molecule._conformer_count # replace with append algorithm at the end
+                new_bond._in_conformer = [False]*new_molecule._conformer_count # replace with append algorithm at the end
                 new_bond._kinds = [enums.Kind.CovalentSingle]*new_molecule._conformer_count
                 new_residue._add_bond(new_bond)
                 new_bonds[hash_bond] = new_bond
             # Update current conformer
-            new_bond._exists[molecule_index] = True
+            new_bond._in_conformer[molecule_index] = True
             new_bond._kinds[molecule_index] = bond.kind
             # Count bonds
             bond_total_count+=1

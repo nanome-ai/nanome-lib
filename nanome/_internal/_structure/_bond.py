@@ -14,7 +14,7 @@ class _Bond(_Base):
         self.__atom2 = None
         self._parent = None
 
-        self._exists = [True]
+        self._in_conformer = [True]
         self._kinds = [_Bond.Kind.CovalentSingle]
 
     @property
@@ -91,10 +91,10 @@ class _Bond(_Base):
         if new_size > curr_size:
             extension = new_size - curr_size
             self._kinds.extend([self._kinds[-1]]*(extension))
-            self._exists.extend([self._exists[-1]]*(extension))
+            self._in_conformer.extend([self._in_conformer[-1]]*(extension))
         else:
             self._kinds = self._kinds[:new_size]
-            self._exists = self._exists[:new_size]
+            self._in_conformer = self._in_conformer[:new_size]
 
     @property
     def _kind(self):
@@ -103,10 +103,18 @@ class _Bond(_Base):
     @_kind.setter
     def _kind(self, value):
         self._kinds[self._current_conformer] = value
+
+    @property
+    def _exists(self):
+        return self._in_conformer[self._current_conformer]
+    
+    @_exists.setter
+    def _exists(self, value):
+        self._in_conformer[self._current_conformer] = value
     #endregion
 
     def _shallow_copy(self):
         bond = _Bond._create()
-        bond._exists = list(self._exists)
+        bond._in_conformer = list(self._in_conformer)
         bond._kinds = list(self._kinds)
         return bond

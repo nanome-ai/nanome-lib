@@ -49,7 +49,7 @@ class _AtomSerializer(_TypeSerializer):
                 self.array.set_type(self.vector)
                 context.write_using_serializer(self.array, value._positions)
                 self.array.set_type(self.bool)
-                context.write_using_serializer(self.array, value._exists)
+                context.write_using_serializer(self.array, value._in_conformer)
             else:
                 context.write_using_serializer(self.vector, value._position)
         else:
@@ -94,7 +94,7 @@ class _AtomSerializer(_TypeSerializer):
                 self.array.set_type(self.vector)
                 atom._positions = context.read_using_serializer(self.array)
                 self.array.set_type(self.bool)
-                atom._exists = context.read_using_serializer(self.array)
+                atom._in_conformer = context.read_using_serializer(self.array)
             else:
                 atom._position = context.read_using_serializer(self.vector)
         else:

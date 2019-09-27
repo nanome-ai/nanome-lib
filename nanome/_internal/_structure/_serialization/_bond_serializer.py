@@ -23,13 +23,13 @@ class _BondSerializer(_TypeSerializer):
         #nothing to do with shallow yet 
         context.write_long(value._index)
         if version >= 1:
-            has_conformer = len(value._exists) > 1
+            has_conformer = len(value._in_conformer) > 1
             context.write_bool(has_conformer)
             if has_conformer:
                 self.array.set_type(self.byte)
                 context.write_using_serializer(self.array, value._kinds)
                 self.array.set_type(self.bool)
-                context.write_using_serializer(self.array, value._exists)
+                context.write_using_serializer(self.array, value._in_conformer)
             else:
                 context.write_byte(value._kind)
         else:
@@ -47,7 +47,7 @@ class _BondSerializer(_TypeSerializer):
                 self.array.set_type(self.byte)
                 bond._kinds = context.read_using_serializer(self.array)
                 self.array.set_type(self.bool)
-                bond._exists = context.read_using_serializer(self.array)
+                bond._in_conformer = context.read_using_serializer(self.array)
                 for i in range(len(bond._kinds)):
                     bond._kinds[i] = _Bond.Kind.safe_cast(bond._kinds[i])
             else:

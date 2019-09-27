@@ -41,7 +41,7 @@ class _Atom(_Base):
         self._het_surfaced = True
         #conformer
         self._positions = [Vector3()]
-        self._exists = [True]
+        self._in_conformer = [True]
         #internal
         self._unique_identifier = _Atom._atom_count
         self._bonds = []
@@ -90,12 +90,6 @@ class _Atom(_Base):
         else:
             return 1
 
-    def _set_positions(self, positions):
-        if self._molecule != None:
-            if len(positions) != self._conformer_count:
-                nanome.util.Logs.error("Molecule contains", self._conformer_count, "but atom contains", len(positions), "conformers.")
-        self._positions = positions
-    
     @property
     def _position(self):
         return self._positions[self._current_conformer]
@@ -104,15 +98,23 @@ class _Atom(_Base):
     def _position(self, value):
         self._positions[self._current_conformer] = value
 
+    @property
+    def _exists(self):
+        return self._in_conformer[self._current_conformer]
+    
+    @_exists.setter
+    def _exists(self, value):
+        self._in_conformer[self._current_conformer] = value
+
     def _resize_conformer(self, new_size):
-        curr_size = len(self._exists)
+        curr_size = len(self._in_conformer)
         if new_size > curr_size:
             extension = new_size - curr_size
-            self._exists.extend([self._exists[-1]]*(extension))
+            self._in_conformer.extend([self._in_conformer[-1]]*(extension))
             copy_val = self._positions[-1]
             self._positions.extend([copy_val.get_copy() for i in range(extension)])
         else:
-            self._exists = self._exists[:new_size]
+            self._in_conformer = self._in_conformer[:new_size]
             self._positions = self._positions[:new_size]
     #endregion
 
@@ -146,5 +148,5 @@ class _Atom(_Base):
         atom._het_surfaced = self._het_surfaced
         #conformer
         atom._positions = [position.get_copy() for position in self._positions]
-        atom._exists = list(self._exists)
+        atom._in_conformer = list(self._in_conformer)
         return atom

@@ -10,7 +10,7 @@ from nanome.util import Logs
 test_assets = os.getcwd() + ("/testing/test_assets")
 test_output_dir = os.getcwd() + ("/testing/test_outputs")
 options = TestOptions(ignore_vars=["_unique_identifier", "_serial", "_index"])
-conformer_blind = TestOptions(ignore_vars = ["_Molecule__conformer_count", "_positions", "_molecules", "_kinds", "_exists", "_names", "_associateds", "_unique_identifier", "_serial", "_index"])
+conformer_blind = TestOptions(ignore_vars = ["_Molecule__conformer_count", "_positions", "_molecules", "_kinds", "_in_conformer", "_names", "_associateds", "_unique_identifier", "_serial", "_index"])
 
 alter_object = lambda x: x
 
@@ -118,13 +118,13 @@ def test_to_conformer():
     for bond in conformer_copy.bonds:
         assert(bond._conformer_count == mc1)
         assert(len(bond._kinds) == mc1)
-        assert(len(bond._exists) == mc1)
+        assert(len(bond._in_conformer) == mc1)
 
     assert (ac2 == ac1/mc1)
     for atom in conformer_copy.atoms:
         assert(atom._conformer_count == mc1)
         assert(len(atom._positions) == mc1)
-        assert(len(atom._exists) == mc1)
+        assert(len(atom._in_conformer) == mc1)
 
     #check the values
     k = 0
@@ -135,10 +135,10 @@ def test_to_conformer():
         for atom1, atom2 in zip(molecule.atoms, first_molecule.atoms):
             assert_equal(atom1, atom2, conformer_blind)
             assert(atom1._position.equals(atom2._positions[conf]))
-            assert(atom1._exists[0] == atom2._exists[conf])
+            assert(atom1._in_conformer[0] == atom2._in_conformer[conf])
         for bond1, bond2 in zip(molecule.bonds, first_molecule.bonds):
             assert(bond1._kind == bond2._kinds[conf])
-            assert(bond1._exists[0] == bond2._exists[conf])
+            assert(bond1._in_conformer[0] == bond2._in_conformer[conf])
     assert (k==molecule_count)
 
 def create_frames(num):
