@@ -15,7 +15,6 @@ conformer_blind = TestOptions(ignore_vars = ["_Molecule__conformer_count", "_pos
 alter_object = lambda x: x
 
 def run(counter):
-    conformer.s_ConformersAlways = True
     run_test(test_to_conformer, counter)
     run_test(test_wholistic, counter)
 
@@ -74,7 +73,7 @@ def create_mixed_tree():
 def test_wholistic():
     original = create_mixed_tree()
     unique_names(original)
-    conf = conformer.convert_to_conformers(original)
+    conf = conformer.convert_to_conformers(original, True)
     copy = conformer.convert_to_frames(conf)
     sort_bonds(original)
     sort_bonds(copy)
@@ -101,7 +100,7 @@ def test_to_conformer():
     original = create_conformer_tree(molecule_count)
     unique_names(original)
     mc1,cc1,rc1,bc1,ac1 = count_structures(original)
-    conformer_copy = conformer.convert_to_conformers(original)
+    conformer_copy = conformer.convert_to_conformers(original, True)
     mc2,cc2,rc2,bc2,ac2 = count_structures(conformer_copy)
     sort_bonds(original)
     sort_bonds(conformer_copy)

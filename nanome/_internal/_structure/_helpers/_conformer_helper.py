@@ -57,7 +57,7 @@ def convert_to_frames(complex): #Data.Complex -> Data.Complex
                                 deleted_atoms.append(new_atom)
                             new_atom._positions = [new_atom._positions[i]]
                             new_atom._in_conformer = [True]
-                        _delete_atoms(deleted_atoms)                        
+                        _delete_atoms(deleted_atoms)
                         for new_bond in new_residue._bonds:
                             if not new_bond._in_conformer[i]:
                                 deleted_bonds.append(new_bond)
@@ -77,15 +77,9 @@ def convert_to_frames(complex): #Data.Complex -> Data.Complex
     return new_complex
 
 def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Data.Complex
-    if force_conformer == None:
-        force_conformer = s_ConformersAlways
+    frame_count = len(complex._molecules)
     # Maybe conformers are disabled
-    if s_ConformersDisabled:
-        return complex._deep_copy()
-    # How much are we talking about here
-    count = len(complex._molecules)
-    # No mutliple frames, nothing to do
-    if count <= 1:
+    if frame_count <= 1 or s_ConformersDisabled:
         return complex._deep_copy()
     # Collect count of first molecule
     molecule_index = 0
@@ -152,7 +146,7 @@ def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Dat
                         new_atom = new_atoms[hash_atom]
                     else:
                         new_atom = atom._shallow_copy()
-                        new_atom._in_conformer = [False]*new_molecule._conformer_count # replace with append algorithm at the end
+                        new_atom._in_conformer = [False]*new_molecule._conformer_count
                         new_atom._positions = [Vector3()]*new_molecule._conformer_count
                         new_residue._add_atom(new_atom)
                         if off > 1:
@@ -181,10 +175,9 @@ def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Dat
             new_bond = None
             if hash_bond in new_bonds:
                 new_bond = new_bonds[hash_bond]
-                # print(_get_residue_hash(sb, new_bond._parent) == _get_residue_hash(sb, bond._parent))
             else:
                 new_bond = bond._shallow_copy()
-                new_bond._in_conformer = [False]*new_molecule._conformer_count # replace with append algorithm at the end
+                new_bond._in_conformer = [False]*new_molecule._conformer_count
                 new_bond._kinds = [enums.Kind.CovalentSingle]*new_molecule._conformer_count
                 new_residue._add_bond(new_bond)
                 new_bonds[hash_bond] = new_bond
@@ -196,8 +189,8 @@ def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Dat
 
         for atom in molecule.atoms:
             for bond in molecule.bonds:
-                atom_info_1 = atoms_dictionary[bond._atom1._unique_identifier]#Tuple<int, Data.Atom>
-                atom_info_2 = atoms_dictionary[bond._atom2._unique_identifier]#Tuple<int, Data.Atom>
+                atom_info_1 = atoms_dictionary[bond._atom1._unique_identifier]
+                atom_info_2 = atoms_dictionary[bond._atom2._unique_identifier]
 
                 # Lookup the parent residue
                 residue = bond._parent
@@ -213,46 +206,23 @@ def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Dat
 
         # Molecule idx
         molecule_index+=1
+    if force_conformer == None:
+        force_conformer = s_ConformersAlways
     # Important decision to make, is everything suited for a trajectories?
     if not force_conformer:
         # Gather important information of the conversion
-        is_very_big_chains = chain_total_count > 1 #bool
-        is_very_big_residues = residue_total_count > 10 #bool
-        is_very_big_atoms = atom_total_count > 10000 # So basically im not very smol #bool
-        is_very_big_bonds = bond_total_count > 20000 #bool
-        chain_similarity_ratio = float(chain_total_count) / float(count) / float(len(new_chains)) #float
-        residue_similarity_ratio = float(residue_total_count) / float(count) / float(len(new_residues)) #float
-        atom_similarity_ratio = float(atom_total_count) / float(count) / float(len(new_atoms)) #float
-        bond_similarity_ratio = float(bond_total_count) / float(count) / float(len(new_bonds)) #float
-        is_chain_similar_enough = chain_similarity_ratio > 0.85 #bool
-        is_residue_similar_enough = residue_similarity_ratio > 0.85 #bool
-        is_atom_similar_enough = atom_similarity_ratio > 0.85 #bool
-        is_bond_similar_enough = bond_similarity_ratio > 0.85 #bool
-        # Debug # Keeping for short term debug
-        # from nanome.util import Logs
-        # Logs.debug("Conformers", "RESULTS")
-        # Logs.debug("Conformers", "count", count)
-        # Logs.debug("Conformers", "is_very_big_chains", is_very_big_chains)
-        # Logs.debug("Conformers", "is_very_big_residues", is_very_big_residues)
-        # Logs.debug("Conformers", "is_very_big_atoms", is_very_big_atoms)
-        # Logs.debug("Conformers", "is_very_big_bonds", is_very_big_bonds)
-        # Logs.debug("Conformers", "chain_similarity_ratio", chain_similarity_ratio)
-        # Logs.debug("Conformers", "residue_similarity_ratio", residue_similarity_ratio)
-        # Logs.debug("Conformers", "atom_similarity_ratio", atom_similarity_ratio)
-        # Logs.debug("Conformers", "bond_similarity_ratio", bond_similarity_ratio)
-        # Logs.debug("Conformers", "is_chain_similar_enough", is_chain_similar_enough)
-        # Logs.debug("Conformers", "is_residue_similar_enough", is_residue_similar_enough)
-        # Logs.debug("Conformers", "is_atom_similar_enough", is_atom_similar_enough)
-        # Logs.debug("Conformers", "is_bond_similar_enough", is_bond_similar_enough)
-        # Logs.debug("Conformers", "chain_total_count", chain_total_count)
-        # Logs.debug("Conformers", "residue_total_count", residue_total_count)
-        # Logs.debug("Conformers", "atom_total_count", atom_total_count)
-        # Logs.debug("Conformers", "bond_total_count", bond_total_count)
-        # Logs.debug("Conformers", "new_chains.Count", len(new_chains))
-        # Logs.debug("Conformers", "new_residues.Count", len(new_residues))
-        # Logs.debug("Conformers", "new_atoms.Count", len(new_atoms))
-        # Logs.debug("Conformers", "new_bonds.Count", len(new_bonds))
-        
+        is_very_big_chains = chain_total_count > 1
+        is_very_big_residues = residue_total_count > 10
+        is_very_big_atoms = atom_total_count > 10000
+        is_very_big_bonds = bond_total_count > 20000
+        chain_similarity_ratio = float(chain_total_count) / float(frame_count) / float(len(new_chains))
+        residue_similarity_ratio = float(residue_total_count) / float(frame_count) / float(len(new_residues))
+        atom_similarity_ratio = float(atom_total_count) / float(frame_count) / float(len(new_atoms))
+        bond_similarity_ratio = float(bond_total_count) / float(frame_count) / float(len(new_bonds))
+        is_chain_similar_enough = chain_similarity_ratio > 0.85
+        is_residue_similar_enough = residue_similarity_ratio > 0.85
+        is_atom_similar_enough = atom_similarity_ratio > 0.85
+        is_bond_similar_enough = bond_similarity_ratio > 0.85
         # Cancel conversion if not suited
         if is_very_big_chains and not is_chain_similar_enough:
             return complex._deep_copy()
