@@ -116,6 +116,27 @@ class _Atom(_Base):
         else:
             self._in_conformer = self._in_conformer[:new_size]
             self._positions = self._positions[:new_size]
+
+    def _move_conformer(self, src, dest):
+        temp = self._exists[dest]
+        del self._exists[src]
+        self._exists.insert(dest, temp)
+
+        temp = self._positions[dest]
+        del self._positions[src]
+        self._positions.insert(dest, temp)
+
+    def _delete_conformer(self, index):
+        del self._positions[index]
+        del self._exists[index]
+
+    def _copy_conformer(self, src, index= None):
+        if index is None:
+            index = src
+        value = self._exists[src]
+        self._exists.insert(index, value)
+        value = self._positions[src]
+        self._positions.insert(index, value)
     #endregion
 
     def _shallow_copy(self):

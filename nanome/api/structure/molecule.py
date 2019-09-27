@@ -72,7 +72,7 @@ class Molecule(_Molecule, Base):
     
     @names.setter
     def names(self, value):
-        if len(value) != self.conformer_count:
+        if len(value) != self._conformer_count:
             raise Exception("Length of associateds must match the conformer count of the molecule.")
         self._names = value
 
@@ -82,17 +82,35 @@ class Molecule(_Molecule, Base):
     
     @associateds.setter
     def associateds(self, value):
-        if len(value) != self.conformer_count:
+        if len(value) != self._conformer_count:
             raise Exception("Length of associateds must match the conformer count of the molecule.")
         self._associateds = value
+
+    def set_conformer_count(self, count):
+        self._conformer_count = count
 
     @property
     def conformer_count(self):
         return self._conformer_count
-    
-    @conformer_count.setter
-    def conformer_count(self, value):
-        self._conformer_count = value
+
+    def set_current_conformer(self, index):
+        self._current_conformer = index
+
+    @property
+    def current_conformer(self):
+        return self._current_conformer
+
+    def create_conformer(self, index):
+        self._create_conformer(index)
+
+    def move_conformer(self, src, dest):
+        self._move_conformer(src, dest)
+
+    def delete_conformer(self, index):
+        self._delete_conformer(index)
+
+    def copy_conformer(self, src, index= None):
+        self._copy_conformer(src, index)
     #endregion
 
     #region deprecated

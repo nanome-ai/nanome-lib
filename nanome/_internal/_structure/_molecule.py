@@ -94,18 +94,51 @@ class _Molecule(_Base):
         for bond in self._bonds:
             bond._resize_conformer(value)
 
-    # def _create_conformer(self, index):
-    #     if index < 0 or index > self._conformer_count:
-    #         raise IndexError("Index cannot be greater than number of conformers.")
-    #     elif index == self._conformer_count:
-    #         self._conformer_count += 1
-    #     else:
-    #         pass
+    def _create_conformer(self, index):
+        if index < 0 or index > self._conformer_count:
+            raise IndexError("Index cannot be greater than number of conformers.")
+        elif index == self._conformer_count:
+            self._conformer_count += 1
+        else:
+            self._conformer_count += 1
+            self._move_conformer(self._conformer_count-1, index)
 
-    # def _move_conformer(self, src, dest):
-    #     temp = self._names[dest]
-    #     self._names[dest] = self.[src]
-    #     self.
+    def _move_conformer(self, src, dest):
+        temp = self._names[dest]
+        del self._names[src]
+        self._names.insert(dest, temp)
+
+        temp = self._associateds[dest]
+        del self._associateds[src]
+        self._associateds.insert(dest, temp)
+
+        for atom in self._atoms:
+            atom._move_conformer(src, dest)
+        for bond in self._bonds:
+            bond._move_conformer(src, dest)
+
+    def _delete_conformer(self, index):
+        del self._names[index]
+        del self._associateds[index]
+        for atom in self._atoms:
+            atom._delete_conformer(index)
+        for bond in self._bonds:
+            bond._delete_conformer(index)
+        self.__conformer_count -= 1
+
+    def _copy_conformer(self, src, index= None):
+        if index is None:
+            index = src
+        value = self._names[src]
+        self._names.insert(index, value)
+        value = self._associateds[src]
+        self._associateds.insert(index, value)
+        for atom in self._atoms:
+            atom._copy_conformer(index)
+        for bond in self._bonds:
+            bond._copy_conformer(index)
+        self.__conformer_count += 1
+
     #endregion
 
     def _shallow_copy(self):
