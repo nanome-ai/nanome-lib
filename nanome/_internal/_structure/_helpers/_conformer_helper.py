@@ -6,7 +6,10 @@ s_ConformersAlways = False #Nanome.Core.Config.getBool("mol-conformers-always", 
 def _delete_atoms(atoms):
     for atom in atoms:
         atom.name == "DELETED"
-        atom._residue._atoms.remove(atom)
+        try:
+            atom._residue._remove_atom(atom)
+        except ValueError:
+            pass
         _delete_bonds(atom._bonds)
     del atoms[:]
 
@@ -14,7 +17,10 @@ def _delete_bonds(bonds):
     for bond in bonds:
         bond._atom1 = None
         bond._atom2 = None
-        bond._residue.remove_bond(bond)
+        try:
+            bond._residue.remove_bond(bond)
+        except ValueError:
+            pass
     del bonds[:]
 
 def _delete_residues(residues):
@@ -75,12 +81,12 @@ def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Dat
         force_conformer = s_ConformersAlways
     # Maybe conformers are disabled
     if s_ConformersDisabled:
-        return complex
+        return complex._deep_copy()
     # How much are we talking about here
     count = len(complex._molecules)
     # No mutliple frames, nothing to do
     if count <= 1:
-        return complex
+        return complex._deep_copy()
     # Collect count of first molecule
     molecule_index = 0
     chain_total_count = 0
@@ -249,13 +255,13 @@ def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Dat
         
         # Cancel conversion if not suited
         if is_very_big_chains and not is_chain_similar_enough:
-            return complex
+            return complex._deep_copy()
         if is_very_big_residues and not is_residue_similar_enough:
-            return complex
+            return complex._deep_copy()
         if is_very_big_atoms and not is_atom_similar_enough:
-            return complex
+            return complex._deep_copy()
         if is_very_big_bonds and not is_bond_similar_enough:
-            return complex
+            return complex._deep_copy()
     # Otherwise let's start grabbing the data
     return new_complex
 
