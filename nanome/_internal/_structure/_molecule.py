@@ -95,22 +95,17 @@ class _Molecule(_Base):
             bond._resize_conformer(value)
 
     def _create_conformer(self, index):
-        if index < 0 or index > self._conformer_count:
-            raise IndexError("Index cannot be greater than number of conformers.")
-        elif index == self._conformer_count:
-            self._conformer_count += 1
-        else:
-            self._conformer_count += 1
-            self._move_conformer(self._conformer_count-1, index)
+        src = max(0, index-1)
+        self._copy_conformer(src, index)
 
     def _move_conformer(self, src, dest):
-        temp = self._names[dest]
-        del self._names[src]
+        temp = self._names[src]
         self._names.insert(dest, temp)
+        del self._names[src]
 
-        temp = self._associateds[dest]
-        del self._associateds[src]
+        temp = self._associateds[src]
         self._associateds.insert(dest, temp)
+        del self._associateds[src]
 
         for atom in self._atoms:
             atom._move_conformer(src, dest)
@@ -125,18 +120,19 @@ class _Molecule(_Base):
         for bond in self._bonds:
             bond._delete_conformer(index)
         self.__conformer_count -= 1
+        self._current_conformer = min(self._current_conformer, self.__conformer_count-1)
 
     def _copy_conformer(self, src, index= None):
         if index is None:
-            index = src
+            index = src+1
         value = self._names[src]
         self._names.insert(index, value)
-        value = self._associateds[src]
+        value = self._associateds[src].copy()
         self._associateds.insert(index, value)
         for atom in self._atoms:
-            atom._copy_conformer(index)
+            atom._copy_conformer(src, index)
         for bond in self._bonds:
-            bond._copy_conformer(index)
+            bond._copy_conformer(src, index)
         self.__conformer_count += 1
 
     #endregion

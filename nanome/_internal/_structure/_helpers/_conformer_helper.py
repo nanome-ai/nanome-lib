@@ -89,6 +89,7 @@ def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Dat
     bond_total_count = 0
     # Create molecular container
     new_complex = complex._shallow_copy() #Data.Complex
+    new_complex._current_frame = 0
     new_molecule = complex._molecules[0]._shallow_copy() # Data.Molecule
     # Group structures by their hash
     new_chains = {}

@@ -20,6 +20,32 @@ def get_class_names():
             del sys.argv[1]
         return class_names
 
+    def create_topology_and_positions(self, complex_list, topology, positions):
+        for complex in complex_list:
+            conformers_enabled = self.is_new_system(complex)
+            molecule = complex.molecules[complex.current_frame]
+            for chain in molecule.chains:
+                if conformers_enabled and not self.structure_exists(chain):
+                    continue
+                sim_chain = topology.addChain()
+                for residue in chain.residues:
+                    if conformers_enabled and not self.structure_exists(residue):
+                        continue
+                    sim_residue = topology.addResidue(residue.name, sim_chain)
+                    atomReplacements = PDBFile._atomNameReplacements.get(residue.name, {})
+                    for atom in residue.atoms:
+                        if conformers_enabled and not atom.exists:
+                            continue
+                        symbol = MDSimulationProcess.get_atom_symbol(atom.name, len(residue._atoms))
+                        atom_name = atom.name
+                        if atom_name in atomReplacements:
+                            atom_name = atomReplacements[atom_name]
+                        sim_atom = topology.addAtom(atom_name, symbol, sim_residue)
+                        position = atom.position
+                        positions.append(Vec3(position.x * 0.1 * nanometer,  position.y * 0.1 * nanometer, position.z * 0.1 * nanometer))
+        return (topology, positions)
+
+
 def launch_plugin(class_name, args):
     module_name = "test_plugins." + class_name
     import nanome

@@ -93,7 +93,7 @@ class Bond(_Bond, Base):
     def kinds(self, value):
         if self.molecule != None:
             if len(value) != self.conformer_count:
-                raise Exception("Length of kinds must match the conformer count of the parent molecule.")
+                raise ValueError("Length of kinds must match the conformer count of the parent molecule.")
         self._kinds = value
 
     @property
@@ -104,7 +104,7 @@ class Bond(_Bond, Base):
     def in_conformer(self, value):
         if self.molecule != None:
             if len(value) != self.conformer_count:
-                raise Exception("Length of in_conformer must match the conformer count of the parent molecule.")
+                raise ValueError("Length of in_conformer must match the conformer count of the parent molecule.")
         self._in_conformer = value
     #endregion
 

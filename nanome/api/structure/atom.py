@@ -182,7 +182,7 @@ class Atom(_Atom, Base):
     def positions(self, value):
         if self.molecule != None:
             if len(value) != self.conformer_count:
-                raise Exception("Length of positions must match the conformer count of the parent molecule.")
+                raise ValueError("Length of positions must match the conformer count of the parent molecule.")
         self._positions = value
 
     @property
@@ -193,7 +193,7 @@ class Atom(_Atom, Base):
     def in_conformer(self, value):
         if self.molecule != None:
             if len(value) != self.conformer_count:
-                raise Exception("Length of in_conformer must match the conformer count of the parent molecule.")
+                raise ValueError("Length of in_conformer must match the conformer count of the parent molecule.")
         self._in_conformer = value
 
     #endregion

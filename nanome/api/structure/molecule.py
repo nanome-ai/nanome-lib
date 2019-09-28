@@ -73,7 +73,7 @@ class Molecule(_Molecule, Base):
     @names.setter
     def names(self, value):
         if len(value) != self._conformer_count:
-            raise Exception("Length of associateds must match the conformer count of the molecule.")
+            raise ValueError("Length of associateds must match the conformer count of the molecule.")
         self._names = value
 
     @property
@@ -83,7 +83,7 @@ class Molecule(_Molecule, Base):
     @associateds.setter
     def associateds(self, value):
         if len(value) != self._conformer_count:
-            raise Exception("Length of associateds must match the conformer count of the molecule.")
+            raise ValueError("Length of associateds must match the conformer count of the molecule.")
         self._associateds = value
 
     def set_conformer_count(self, count):
