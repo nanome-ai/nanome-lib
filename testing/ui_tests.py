@@ -31,7 +31,6 @@ def CreateMenu():
 def CreateButton():
     value = UI.Button()
     value = alter_object(value)
-    value.set_all_icon('')
     return value
 def CreateMesh():
     value = UI.Mesh()
@@ -112,7 +111,7 @@ class FakeNetwork():
 #     nanome.api.menu.receive_menu(FakeNetwork(obj_to_test), result)
 
 def run(counter):
-    options = TestOptions(ignore_vars=["_name"])
+    options = TestOptions(ignore_vars=["_name", "icon", "_icon"])
     run_test(test_ui, counter)
     run_test(create_test("button_test", test_serializer, (_UIBaseSerializer(), CreateButton(), options)), counter)
     run_test(create_test("mesh_test", test_serializer, (_UIBaseSerializer(), CreateMesh(), options)), counter)

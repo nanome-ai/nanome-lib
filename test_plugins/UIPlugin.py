@@ -70,6 +70,9 @@ class UIPlugin(nanome.PluginInstance):
             self.update_content(button)
             self.update_content(self.loadingBar)
 
+        def hover_callback(button, hovered): 
+            Logs.debug("button hover: " + button.text.value_idle, hovered)
+
         def prefab_button_pressed_callback(button):
             button.selected = not button.selected
             Logs.debug("Prefab button pressed: " + button.text.value_idle + " " + str(button._content_id))
@@ -105,6 +108,7 @@ class UIPlugin(nanome.PluginInstance):
         button.text.vertical_align = nanome.util.enums.VertAlignOptions.Middle
         button.text.horizontal_align = nanome.util.enums.HorizAlignOptions.Middle
         button.register_pressed_callback(button_pressed_callback)
+        button.register_hover_callback(hover_callback)
 
         Logs.debug("Added button")
 
