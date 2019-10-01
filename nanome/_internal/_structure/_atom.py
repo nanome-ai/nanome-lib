@@ -120,10 +120,10 @@ class _Atom(_Base):
     def _move_conformer(self, src, dest):
         temp = self._in_conformer[src]
         self._in_conformer.insert(dest, temp)
-        del self._in_conformer[src]
-
         temp = self._positions[src]
         self._positions.insert(dest, temp)
+        src = src + 1 if src>dest else src
+        del self._in_conformer[src]
         del self._positions[src]
 
     def _delete_conformer(self, index):

@@ -105,10 +105,10 @@ class _Bond(_Base):
     def _move_conformer(self, src, dest):
         temp = self._in_conformer[src]
         self._in_conformer.insert(dest, temp)
-        del self._in_conformer[src]
-
         temp = self._kinds[src]
         self._kinds.insert(dest, temp)
+        src = src + 1 if src > dest else src
+        del self._in_conformer[src]
         del self._kinds[src]
 
     def _delete_conformer(self, index):

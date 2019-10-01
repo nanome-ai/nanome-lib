@@ -101,11 +101,12 @@ class _Molecule(_Base):
     def _move_conformer(self, src, dest):
         temp = self._names[src]
         self._names.insert(dest, temp)
-        del self._names[src]
 
         temp = self._associateds[src]
         self._associateds.insert(dest, temp)
-        del self._associateds[src]
+        crcted = src + 1 if src > dest else src
+        del self._names[crcted]
+        del self._associateds[crcted]
 
         for atom in self._atoms:
             atom._move_conformer(src, dest)
