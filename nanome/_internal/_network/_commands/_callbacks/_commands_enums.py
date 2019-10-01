@@ -86,6 +86,7 @@ class _Messages(__CommandEnum):
     #UI
     menu_update = auto()
     content_update = auto()
+    node_update = auto()
     notification_send = auto()
 
     #Structure

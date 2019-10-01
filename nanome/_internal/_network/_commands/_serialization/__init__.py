@@ -36,6 +36,7 @@ from ._slider_callback import _SliderCallback
 from ._text_input_callback import _TextInputCallback
 from ._image_callback import _ImageCallback
 from ._update_content import _UpdateContent
+from ._update_node import _UpdateNode
 from ._update_menu import _UpdateMenu
 from ._update_workspace import _UpdateWorkspace
 from ._position_structures import _PositionStructures

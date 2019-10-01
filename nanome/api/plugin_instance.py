@@ -196,6 +196,15 @@ class PluginInstance(_PluginInstance):
         """
         self._network._send(_Messages.content_update, content)
 
+    def update_node(self, node):
+        """
+        | Update a layout node and its children
+
+        :param node: Layout node to update
+        :type node: :class:`~nanome.api.ui.layout_node`
+        """
+        self._network._send(_Messages.node_update, node)
+
     def request_directory(self, path, callback = None, pattern = "*"):
         """
         | Requests the content of a directory on the machine running Nanome
