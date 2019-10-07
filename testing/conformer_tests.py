@@ -5,7 +5,7 @@ from nanome.api import structure as struct
 from nanome._internal._structure._helpers import _conformer_helper as conformer
 from testing.utilities import *
 
-from nanome.util import Logs
+from nanome.util import Logs, Vector3
 
 test_assets = os.getcwd() + ("/testing/test_assets")
 test_output_dir = os.getcwd() + ("/testing/test_outputs")
@@ -15,8 +15,10 @@ conformer_blind = TestOptions(ignore_vars = ["_Molecule__conformer_count", "_pos
 alter_object = lambda x: x
 
 def run(counter):
+    run_test(test_conformer_API, counter)
     run_test(test_to_conformer, counter)
     run_test(test_wholistic, counter)
+    run_test(test_error_conditions, counter)
 
 
 def get_bond_hash(bond): #StringBuilder, Data.Bond, int, int -> int
@@ -158,3 +160,204 @@ def count_structures(complex):
     Logs.debug("residue_counter:",residue_counter)
     Logs.debug("bond_counter:",bond_counter)
     Logs.debug("atom_counter:",atom_counter)
+
+
+def test_conformer_API():
+    #test molecule
+    test = create_frames(1)[0]
+    #conformer_count
+    molecule = test._deep_copy()
+    atom = next(molecule.atoms)
+    bond = next(molecule.bonds)
+    molecule.set_current_conformer(1)
+    assert(molecule.current_conformer == 1)
+    assert(atom.current_conformer == 1)
+    assert(bond.current_conformer == 1)
+    assert(molecule.conformer_count == 1)
+    assert(atom.conformer_count == 1)
+    assert(bond.conformer_count == 1)
+    molecule.set_conformer_count(2)
+    assert(molecule.current_conformer == 1)
+    assert(atom.current_conformer == 1)
+    assert(bond.current_conformer == 1)
+    assert(molecule.conformer_count == 2)
+    assert(atom.conformer_count == 2)
+    assert(bond.conformer_count == 2)
+    molecule.set_conformer_count(1)
+    assert(molecule.current_conformer == 0)
+    assert(atom.current_conformer == 0)
+    assert(bond.current_conformer == 0)
+    assert(molecule.conformer_count == 1)
+    assert(atom.conformer_count == 1)
+    assert(bond.conformer_count == 1)
+
+    #list_resizing
+    molecule = test._deep_copy()
+    atom = next(molecule.atoms)
+    bond = next(molecule.bonds)
+    molecule.set_conformer_count(2)
+    assert(len(molecule.names) == 2)
+    assert(len(molecule.associateds) == 2)
+    assert(molecule.names[1] == molecule.names[0])
+    assert(molecule.associateds[1] == molecule.associateds[0])
+    assert(len(atom.positions) == 2)
+    assert(len(atom.in_conformer) == 2)
+    assert(atom.positions[1].equals(atom.positions[0]))
+    assert(atom.in_conformer[1] == atom.in_conformer[0])
+    assert(len(bond.kinds) == 2)
+    assert(len(bond.in_conformer) == 2)
+    assert(bond.kinds[1] == bond.kinds[0])
+    assert(bond.in_conformer[1] == bond.in_conformer[0])
+
+    #convenience functions
+    reference = test._deep_copy()
+    atom = next(reference.atoms)
+    bond = next(reference.bonds)
+    reference.set_conformer_count(3)
+    atom.positions = [Vector3(0,0,0), Vector3(1,1,1), Vector3(2,2,2)]
+    bond.kinds = [nanome.util.enums.Kind.CovalentSingle, nanome.util.enums.Kind.CovalentDouble, nanome.util.enums.Kind.CovalentTriple]
+
+    molecule = reference._deep_copy()
+    atom = next(molecule.atoms)
+    molecule.create_conformer(1)
+    assert(molecule.conformer_count == 4)
+    assert(len(molecule.names) == 4)
+    assert(len(atom.positions) == 4)
+    assert(atom.positions[0].equals(atom.positions[1]))
+    assert(atom.positions[0] != atom.positions[1])
+    molecule.create_conformer(4)
+    molecule.create_conformer(0)
+
+    molecule = reference._deep_copy()
+    bond = next(molecule.bonds)
+    molecule.copy_conformer(2, 0)
+    assert(molecule.conformer_count == 4)
+    assert(len(molecule.names) == 4)
+    assert(len(bond.kinds) == 4)
+    assert(bond.kinds[0] == bond.kinds[3])
+    molecule.copy_conformer(3)
+    molecule.copy_conformer(0)
+
+    molecule = reference._deep_copy()
+    bond = next(molecule.bonds)
+    atom = next(molecule.atoms)
+    position = atom.positions[2]
+    molecule.move_conformer(2, 0)
+    assert(molecule.conformer_count == 3)
+    assert(len(molecule.names) == 3)
+    assert(len(atom.positions) == 3)
+    assert(atom.position[2] != position)
+    assert(position == atom.positions[0])
+    molecule.move_conformer(2,2)
+    molecule.move_conformer(0,0)
+    molecule.move_conformer(0,3)
+
+    molecule = reference._deep_copy()
+    bond = next(molecule.bonds)
+    atom = next(molecule.atoms)
+    molecule.set_current_conformer(2)
+    position = atom.positions[2]
+    deleted = atom.positions[0]
+    molecule.delete_conformer(0)
+    assert(molecule.current_conformer == 1)
+    assert(molecule.conformer_count == 2)
+    assert(len(molecule.names) == 2)
+    assert(len(atom.positions) == 2)
+    assert(atom.positions[1] == position)
+    assert(atom.positions[0] != deleted)
+    molecule.delete_conformer(1)
+    molecule.delete_conformer(0)
+
+def test_error_conditions():
+    sample_kinds = [nanome.util.enums.Kind.CovalentSingle, nanome.util.enums.Kind.CovalentDouble, nanome.util.enums.Kind.CovalentTriple]
+    sample_positions = [Vector3(0,0,0), Vector3(1,1,1), Vector3(2,2,2)]
+    sample_exists = [True, False, True]
+    molecule = create_frames(1)[0]
+    atom = next(molecule.atoms)
+    bond = next(molecule.bonds)
+    failed = False
+    try:
+        atom.positions = sample_positions
+    except ValueError:
+        failed = True
+    assert(failed)
+
+    failed = False
+    try:
+        atom.in_conformer = sample_exists
+    except ValueError:
+        failed = True
+    assert(failed)
+
+    failed = False
+    try:
+        bond.in_conformer = sample_exists
+    except ValueError:
+        failed = True
+    assert(failed)
+
+    failed = False
+    try:
+        bond.kinds = sample_kinds
+    except ValueError:
+        failed = True
+    assert(failed)
+
+    failed = False
+    try:
+        molecule.associateds = [{}, {}, {}]
+    except ValueError:
+        failed = True
+    assert(failed)
+
+    failed = False
+    try:
+        molecule.names = ["", "", ""]
+    except ValueError:
+        failed = True
+    assert(failed)
+
+    new_atom = struct.Atom()
+    new_atom.in_conformer = sample_exists
+    failed = False
+    try:
+        next(molecule.residues).add_atom(new_atom)
+    except ValueError:
+        failed = True
+    assert(failed)
+
+    new_atom = struct.Atom()
+    new_atom.positions = sample_positions
+    failed = False
+    try:
+        next(molecule.residues).add_atom(new_atom)
+    except ValueError:
+        failed = True
+    assert(failed)
+
+    new_atom = struct.Atom()
+    new_atom.in_conformer = sample_exists
+    failed = False
+    try:
+        next(molecule.residues).add_atom(new_atom)
+    except ValueError:
+        failed = True
+    assert(failed)
+
+    new_bond = struct.Bond()
+    new_bond.kinds = sample_kinds
+    failed = False
+    try:
+        next(molecule.residues).add_bond(new_bond)
+    except ValueError:
+        failed = True
+    assert(failed)
+
+    new_bond = struct.Bond()
+    new_bond.in_conformer = sample_exists
+    failed = False
+    try:
+        next(molecule.residues).add_bond(new_bond)
+    except ValueError:
+        failed = True
+    assert(failed)

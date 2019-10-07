@@ -87,8 +87,9 @@ class Complex(_Complex, Base):
     @property
     def current_frame(self):
         return self._current_frame
-    @current_frame.setter
-    def current_frame(self, value):
+
+    def set_current_frame(self, value):
+        value = max(0, min(value, len(self._molecules)-1))
         self._current_frame = value
 
     # returns true if the complex is selected on nanome.
@@ -193,6 +194,11 @@ class Complex(_Complex, Base):
         return self._convert_to_frames()
 
     #region depricated
+    @current_frame.setter
+    @Logs.deprecated()
+    def current_frame(self, value):
+        self._current_frame = value
+
     @property
     @Logs.deprecated()
     def rendering(self):

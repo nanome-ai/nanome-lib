@@ -262,7 +262,7 @@ def create_complex():
     val.boxed = True
     val.visible = False
     val.computing = False
-    val.current_frame = 0
+    val.set_current_frame(0)
     val.name = "COMPLEX_NAME"
     val._remarks = dict([("key1", "val1"), ("key2","val2"),("key3", "val3"), ("key4","val4")])
     val.position = Vector3(1,2,3)
