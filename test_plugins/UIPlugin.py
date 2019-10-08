@@ -53,11 +53,15 @@ class UIPlugin(nanome.PluginInstance):
         menu.height =  1.0
         menu.register_closed_callback(menu_closed_callback)
         menu.register_opened_callback(menu_opened_callback)
-        menu.root = self.create_content()
+        self.tab1 = self.create_tab1()
+        self.tab2 = self.create_tab2()
+        self.tab_buttons = self.create_tab_buttons()
+        menu.root.add_child(self.tab_buttons)
+        menu.root.add_child(self.tab1)
+        menu.root.add_child(self.tab2)
         return menu
 
-    def create_content(self):
-
+    def create_tab1(self):
         def button_pressed_callback(button): 
             Logs.debug("button pressed: " + button.text.value_idle)
             button.text.value_selected = "Button Pressed!"
@@ -190,6 +194,18 @@ class UIPlugin(nanome.PluginInstance):
         ln_textInput.set_content(textInput)
         ln_list.set_content(list)
         return content
+
+    def create_tab2(self):
+        pass
+
+    def create_tab_buttons(self):
+        LN = nanome.ui.LayoutNode
+        ln = LN()
+        tab_button_node1 = ln.create_child_node("tab1")
+        tab_button_node1.add_new_button("tab1")
+        tab_button_node2 = ln.create_child_node("tab2")
+        tab_button_node2.add_new_button("tab2")
+
 
     def __init__(self):
         pass
