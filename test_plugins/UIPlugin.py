@@ -80,7 +80,7 @@ class UIPlugin(nanome.PluginInstance):
         def prefab_button_pressed_callback(button):
             button.selected = not button.selected
             Logs.debug("Prefab button pressed: " + button.text.value_idle + " " + str(button._content_id))
-            self.update_content(button)
+            self.update_node(button.parent)
         
         content = nanome.ui.LayoutNode()
         ln_contentBase = nanome.ui.LayoutNode()
@@ -167,6 +167,8 @@ class UIPlugin(nanome.PluginInstance):
         list_content = []
         for i in range(0, 10):
             clone = prefab.clone()
+            button_node = clone.find_node("button", True)
+            button_node.get_content().parent = clone
             list_content.append(clone)
 
         list = nanome.ui.UIList()
