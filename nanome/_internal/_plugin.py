@@ -108,7 +108,7 @@ class _Plugin(object):
         elif packet.packet_type == Network._Packet.packet_type_client_disconnection:
             try:
                 id = packet.session_id
-                self._sessions[id].close_pipes()
+                self._sessions[id].signal_and_close_pipes()
                 del self._sessions[id]
                 Logs.debug("Session", id, "disconnected")
             except:
@@ -189,7 +189,7 @@ class _Plugin(object):
     def __exit(self):
         Logs.debug('Exiting')
         for session in _Plugin.instance._sessions.values():
-            session.close_pipes()
+            session.signal_and_close_pipes()
             session.plugin_process.join()
         sys.exit(0)
 
