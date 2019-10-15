@@ -55,10 +55,12 @@ class UIPlugin(nanome.PluginInstance):
         menu.register_opened_callback(menu_opened_callback)
         self.tab1 = self.create_tab1()
         self.tab2 = self.create_tab2()
+        self.tab2.enabled = False
         self.tab_buttons = self.create_tab_buttons()
         menu.root.add_child(self.tab_buttons)
-        menu.root.add_child(self.tab1)
-        menu.root.add_child(self.tab2)
+        self.tabs = menu.root.create_child_node()
+        self.tabs.add_child(self.tab1)
+        self.tabs.add_child(self.tab2)
         return menu
 
     def create_tab1(self):
@@ -80,7 +82,7 @@ class UIPlugin(nanome.PluginInstance):
         def prefab_button_pressed_callback(button):
             button.selected = not button.selected
             Logs.debug("Prefab button pressed: " + button.text.value_idle + " " + str(button._content_id))
-            self.update_node(button.parent)
+            self.update_content(button)
         
         content = nanome.ui.LayoutNode()
         ln_contentBase = nanome.ui.LayoutNode()
@@ -167,8 +169,6 @@ class UIPlugin(nanome.PluginInstance):
         list_content = []
         for i in range(0, 10):
             clone = prefab.clone()
-            button_node = clone.find_node("button", True)
-            button_node.get_content().parent = clone
             list_content.append(clone)
 
         list = nanome.ui.UIList()
@@ -198,16 +198,151 @@ class UIPlugin(nanome.PluginInstance):
         return content
 
     def create_tab2(self):
-        pass
+        def button_pressed_callback(button): 
+            Logs.debug("button pressed: " + button.text.value_idle)
+            button.text.value_selected = "Button Pressed!"
+            button.selected = not button.selected
+
+            self.loadingBar.percentage += .1
+            self.loadingBar.title = "TITLE"
+            self.loadingBar.description = "DESCRIPTION " + str(self.loadingBar.percentage)
+
+            self.update_content(button)
+            self.update_content(self.loadingBar)
+
+        def hover_callback(button, hovered): 
+            Logs.debug("button hover: " + button.text.value_idle, hovered)
+
+        def prefab_button_pressed_callback(button):
+            button.selected = not button.selected
+            Logs.debug("Prefab button pressed: " + button.text.value_idle + " " + str(button._content_id))
+            self.update_content(button)
+        
+        content = nanome.ui.LayoutNode()
+        ln_contentBase = nanome.ui.LayoutNode()
+        ln_label = nanome.ui.LayoutNode()
+        ln_button = nanome.ui.LayoutNode()
+        ln_slider = nanome.ui.LayoutNode()
+        ln_textInput = nanome.ui.LayoutNode()
+
+        content.forward_dist = .02
+        content.layer = 1
+
+        ln_label.padding_type = nanome.ui.LayoutNode.PaddingTypes.ratio
+        ln_label.padding = (0.01, 0.01, 0.01, 0.01)
+        ln_label.forward_dist = .001
+
+        label = nanome.ui.Label()
+        label.text_value = "Press the button..."
+        label.text_color = nanome.util.Color.White()
+
+        Logs.debug("Added Label")
+
+        ln_button.padding_type = nanome.ui.LayoutNode.PaddingTypes.ratio
+        ln_button.padding = (0.01, 0.01, 0.01, 0.01)
+        ln_button.forward_dist = .001
+
+        button = nanome.ui.Button()
+        button.text.active = True
+        button.text.vertical_align = nanome.util.enums.VertAlignOptions.Middle
+        button.text.horizontal_align = nanome.util.enums.HorizAlignOptions.Middle
+        button.register_pressed_callback(button_pressed_callback)
+        button.register_hover_callback(hover_callback)
+
+        Logs.debug("Added button")
+
+        ln_slider.padding_type = nanome.ui.LayoutNode.PaddingTypes.ratio
+        ln_slider.padding = (0.01, 0.01, 0.01, 0.01)
+        ln_slider.forward_dist = .001
+
+        slider = nanome.ui.Slider()
+        slider.register_changed_callback(slider_changed_callback)
+        slider.register_released_callback(slider_released_callback)
+
+        Logs.debug("Added slider")
+
+        ln_textInput.padding_type = nanome.ui.LayoutNode.PaddingTypes.ratio
+        ln_textInput.padding = (0.01, 0.01, 0.01, 0.01)
+        ln_textInput.forward_dist = .001
+
+        textInput = nanome.ui.TextInput()
+        textInput.max_length = 30
+        textInput.register_changed_callback(text_changed_callback)
+        textInput.register_submitted_callback(text_submitted_callback)
+
+        Logs.debug("Added text input")
+
+        prefab = nanome.ui.LayoutNode()
+        prefab.layout_orientation = nanome.ui.LayoutNode.LayoutTypes.vertical
+        child1 = nanome.ui.LayoutNode()
+        child1.sizing_type = nanome.ui.LayoutNode.SizingTypes.ratio
+        child1.sizing_value = .3
+        child1.name = "label"
+        child1.forward_dist = .01
+        child2 = nanome.ui.LayoutNode()
+        child2.name = "button"
+        child2.forward_dist =.01
+        prefab.add_child(child1)
+        prefab.add_child(child2)
+        prefabLabel = nanome.ui.Label()
+        prefabLabel.text_value = "Molecule Label"
+        prefabButton = nanome.ui.Button()
+        prefabButton.text.active = True
+        prefabButton.set_all_text("Molecule Button")
+        prefabButton.register_pressed_callback(prefab_button_pressed_callback)
+        child1.set_content(prefabLabel)
+        child2.set_content(prefabButton)
+
+        ln_loading_bar = nanome.ui.LayoutNode(name="LoadingBar")
+        ln_loading_bar.forward_dist = .03
+        self.loadingBar = ln_loading_bar.add_new_loading_bar()
+
+        content.add_child(ln_contentBase)
+        ln_contentBase.add_child(ln_label)
+        ln_contentBase.add_child(ln_button)
+        ln_contentBase.add_child(ln_slider)
+        ln_contentBase.add_child(ln_textInput)
+        ln_contentBase.add_child(ln_loading_bar)
+        ln_label.set_content(label)
+        ln_button.set_content(button)
+        ln_slider.set_content(slider)
+        ln_textInput.set_content(textInput)
+        return content
 
     def create_tab_buttons(self):
         LN = nanome.ui.LayoutNode
         ln = LN()
-        tab_button_node1 = ln.create_child_node("tab1")
-        tab_button_node1.add_new_button("tab1")
-        tab_button_node2 = ln.create_child_node("tab2")
-        tab_button_node2.add_new_button("tab2")
+        ln.layout_orientation = nanome.util.enums.LayoutTypes.horizontal
+        ln._sizing_type = nanome.util.enums.SizingTypes.fixed
+        ln._sizing_value = .1
 
+        def tab1_callback(button):
+            self.tab_button1.selected  = True
+            self.tab_button2.selected  = False
+            self.tab1.enabled = True
+            self.tab2.enabled = False
+
+            self.update_node(self.tabs)
+            self.update_content(self.tab_button1)
+            self.update_content(self.tab_button2)
+
+        def tab2_callback(button):
+            self.tab_button2.selected  = True
+            self.tab_button1.selected  = False
+            self.tab2.enabled = True
+            self.tab1.enabled = False
+
+            self.update_node(self.tabs)
+            self.update_content(self.tab_button2)
+            self.update_content(self.tab_button1)
+
+        tab_button_node1 = ln.create_child_node("tab1")
+        self.tab_button1 = tab_button_node1.add_new_button("tab1")
+        self.tab_button1.register_pressed_callback(tab1_callback)
+        tab_button_node2 = ln.create_child_node("tab2")
+        self.tab_button2 = tab_button_node2.add_new_button("tab2")
+        self.tab_button2.register_pressed_callback(tab2_callback)
+        return ln
 
     def __init__(self):
         pass

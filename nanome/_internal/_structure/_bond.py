@@ -102,6 +102,27 @@ class _Bond(_Base):
             self._kinds = self._kinds[:new_size]
             self._in_conformer = self._in_conformer[:new_size]
 
+    def _move_conformer(self, src, dest):
+        temp = self._in_conformer[src]
+        self._in_conformer.insert(dest, temp)
+        temp = self._kinds[src]
+        self._kinds.insert(dest, temp)
+        src = src + 1 if src > dest else src
+        del self._in_conformer[src]
+        del self._kinds[src]
+
+    def _delete_conformer(self, index):
+        del self._kinds[index]
+        del self._in_conformer[index]
+
+    def _copy_conformer(self, src, index= None):
+        if index is None:
+            index = src
+        value = self._in_conformer[src]
+        self._in_conformer.insert(index, value)
+        value = self._kinds[src]
+        self._kinds.insert(index, value)
+
     @property
     def _kind(self):
         return self._kinds[self._current_conformer]

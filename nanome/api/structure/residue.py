@@ -14,6 +14,10 @@ class Residue(_Residue, Base):
         self._molecular = Residue.Molecular(self)
 
     def add_atom(self, atom):
+        if (self.molecule != None and len(atom.in_conformer) > self.molecule.conformer_count):
+            raise ValueError("Length of in_conformer must match the conformer count of the parent molecule.")
+        if (self.molecule != None and len(atom.positions) > self.molecule.conformer_count):
+            raise ValueError("Length of positions must match the conformer count of the parent molecule.")
         atom.index = -1
         self._add_atom(atom)
 
@@ -22,6 +26,10 @@ class Residue(_Residue, Base):
         self._remove_atom(atom)
     
     def add_bond(self, bond):
+        if (self.molecule != None and len(bond.in_conformer) > self.molecule.conformer_count):
+            raise ValueError("Length of in_conformer must match the conformer count of the parent molecule.")
+        if (self.molecule != None and len(bond.kinds) > self.molecule.conformer_count):
+            raise ValueError("Length of kinds must match the conformer count of the parent molecule.")
         bond.index = -1
         self._add_bond(bond)
 
