@@ -56,8 +56,9 @@ class _LayoutNode(object):
         self._save_changes()
 
     def _remove_child(self, child_node):
-        self._children.remove(child_node)
-        child_node._parent = None
+        if child_node in self._children:
+            self._children.remove(child_node)
+            child_node._parent = None
         self._save_changes()
 
     def _clear_children(self):
