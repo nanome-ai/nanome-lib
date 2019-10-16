@@ -30,7 +30,7 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
     ],
-    entry_points={"console_scripts": ["nanome-setup-plugins = setup_config:main"]},
+    entry_points={"console_scripts": ["nanome-setup-plugins = nanome.setup_config:main"]},
     package_data={
         "nanome": [
             "_internal/_process/_external/_dssp/*",
