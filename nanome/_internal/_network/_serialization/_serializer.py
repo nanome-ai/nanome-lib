@@ -158,6 +158,7 @@ add_message(CommandCallbacks._Messages.upload_cryo_em, CommandSerializers._Uploa
 #ui
 add_message(CommandCallbacks._Messages.menu_update, CommandSerializers._UpdateMenu())
 add_message(CommandCallbacks._Messages.content_update, CommandSerializers._UpdateContent())
+add_message(CommandCallbacks._Messages.node_update, CommandSerializers._UpdateNode())
 add_message(CommandCallbacks._Messages.notification_send, CommandSerializers._SendNotification())
 
 #file
