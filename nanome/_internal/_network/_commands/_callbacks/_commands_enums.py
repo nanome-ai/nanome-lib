@@ -39,6 +39,7 @@ class _Commands(__CommandEnum):
     image_press = auto()
     image_hold = auto()
     image_release = auto()
+    menu_transform_response = auto()
 
     #Structure
     workspace_response = auto()
@@ -88,6 +89,8 @@ class _Messages(__CommandEnum):
     menu_update = auto()
     content_update = auto()
     node_update = auto()
+    menu_transform_set = auto()
+    menu_transform_request = auto()
     notification_send = auto()
 
     #Structure

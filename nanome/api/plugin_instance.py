@@ -205,6 +205,17 @@ class PluginInstance(_PluginInstance):
         """
         self._network._send(_Messages.node_update, node)
 
+    def set_menu_transform(self, position, rotation):
+        """
+        | Update a layout node and its children
+
+        :param position: New position of the menu
+        :type position: :class:`~nanome.util.vector3`
+        :param rotation: New rotation of the menu
+        :type rotation: :class:`~nanome.util.quaternion`
+        """
+        self._network._send(_Messages.menu_transform_set, (position, rotation))
+
     def request_directory(self, path, callback = None, pattern = "*"):
         """
         | Requests the content of a directory on the machine running Nanome
