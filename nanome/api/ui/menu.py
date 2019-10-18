@@ -3,8 +3,8 @@ from .io import MenuIO
 
 class Menu(_Menu):
     io = MenuIO()
-    def __init__(self):
-        _Menu.__init__(self)
+    def __init__(self, index = 0, title = "title"):
+        _Menu.__init__(self, index, title)
         self.io = MenuIO(self)
     
     def register_closed_callback(self, func):
@@ -63,6 +63,14 @@ class Menu(_Menu):
     @height.setter
     def height(self, value):
         self._height = value
+
+    @property
+    def index(self):
+        return self._index
+    
+    @index.setter
+    def index(self, value):
+        self._index = value
     #endregion
 
     def find_content(self, content_id):
