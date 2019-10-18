@@ -323,6 +323,13 @@ class PluginInstance(_PluginInstance):
         id = self._network._send(_Messages.presenter_info_request)
         self._save_callback(id, callback)
 
+    def request_controller_transforms(self, callback):
+        """
+        | Requests presenter account info (head position, head rotation, left controller position, left controller rotation, right controller position, right controller rotation)
+        """
+        id = self._network._send(_Messages.controller_transforms_request)
+        self._save_callback(id, callback)
+
     class PluginListButtonType(IntEnum):
         run = 0
         advanced_settings = 1

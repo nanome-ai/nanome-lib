@@ -68,6 +68,7 @@ class _Commands(__CommandEnum):
     # Presenter
     presenter_info_response = auto()
     presenter_change = auto()
+    controller_transforms_response = auto()
 
     #Other
     upload_cryo_em_done = auto()
@@ -121,6 +122,7 @@ class _Messages(__CommandEnum):
 
     # Presenter
     presenter_info_request = auto()
+    controller_transforms_request = auto()
 
     #Other
     upload_cryo_em = auto()

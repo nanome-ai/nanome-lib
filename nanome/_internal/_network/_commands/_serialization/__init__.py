@@ -15,6 +15,8 @@ from ._file_request import _FileRequest
 from ._file_save import _FileSave
 from ._get_presenter_info_response import _GetPresenterInfoResponse
 from ._get_presenter_info import _GetPresenterInfo
+from ._get_controller_transforms_response import _GetControllerTransformsResponse
+from ._get_controller_transforms import _GetControllerTransforms
 from ._interrupt_stream import _InterruptStream
 from ._open_url import _OpenURL
 from ._run import _Run
