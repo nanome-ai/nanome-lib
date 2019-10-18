@@ -7,8 +7,6 @@ NAME = "Stream Test"
 DESCRIPTION = "Simple test for streams"
 CATEGORY = "Test"
 HAS_ADVANCED_OPTIONS = False
-NTS_ADDRESS = '127.0.0.1'
-NTS_PORT = 8888
 
 # Plugin
 

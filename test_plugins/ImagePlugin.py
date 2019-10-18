@@ -8,8 +8,6 @@ NAME = "Image Plugin"
 DESCRIPTION = "Image Plugin."
 CATEGORY = "Test"
 HAS_ADVANCED_OPTIONS = False
-NTS_ADDRESS = '127.0.0.1'
-NTS_PORT = 8888
 
 # Plugin
 
@@ -102,4 +100,4 @@ class ImagePlugin(nanome.PluginInstance):
         self.image.register_held_callback(image_held)
 
 
-nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, ImagePlugin, NTS_ADDRESS, NTS_PORT)
+nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, ImagePlugin)
