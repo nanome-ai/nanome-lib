@@ -245,4 +245,4 @@ add_callback(CommandCallbacks._Commands.get_macros_response, CommandCallbacks._r
 # Presenter
 add_callback(CommandCallbacks._Commands.presenter_info_response, CommandCallbacks._receive_presenter_info)
 add_callback(CommandCallbacks._Commands.presenter_change, CommandCallbacks._presenter_change)
-add_callback(CommandCallbacks._Commands.presenter_info_response, CommandCallbacks._receive_controller_transforms)
+add_callback(CommandCallbacks._Commands.controller_transforms_response, CommandCallbacks._receive_controller_transforms)

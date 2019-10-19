@@ -13,7 +13,7 @@ class _Atom(_Base):
     def __init__(self):
         super(_Atom, self).__init__()
         #Molecular
-        self._symbol = "Carbon"
+        self._symbol = "C"
         self._serial = 1
         self._name = "default"
         self._is_het = False
