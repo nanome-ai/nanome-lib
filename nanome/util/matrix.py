@@ -169,9 +169,9 @@ class Matrix(object):
     @classmethod
     def compose_transformation_matrix(cls, position, rotation, scale = None):
         if (scale is None):
-            cls._compose_transformation_matrix(position, rotation)
+            return cls._compose_transformation_matrix(position, rotation)
         if not isinstance(position, Vector3) or not isinstance(rotation, Quaternion) or not isinstance(scale, Vector3):
-            raise ValueError("compose_translation_matrix expects a Vector3, a Quaternion, and a Vector3")
+            raise ValueError("compose_translation_matrix expects a Vector3, a Quaternion, and a Vector3.\n Received (" + str(type(position)) + ", " + str(type(rotation)) + ", " + str(type(scale)) + ")")
         S = cls(4,4)
         S[0][0] = scale.x
         S[1][1] = scale.y
