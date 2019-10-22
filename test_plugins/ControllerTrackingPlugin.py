@@ -22,7 +22,7 @@ def rand_float(lower, upper):
     return flt
 
 def rand_pos():
-    return Vector3(rand_float(-5,5), rand_float(-5,5), rand_float(-5,5))
+    return Vector3(rand_float(-5,5), rand_float(0,2), rand_float(-5,5))
 
 def random_quaternion():
   #double x,y,z, u,v,w, s
@@ -44,7 +44,7 @@ def random_quaternion():
   return Quaternion(x, y, s*u, s*v)
 
 def rand_scale():
-    scale = rand_float(.0008,.003)
+    scale = rand_float(.5,1)
     return Vector3(scale, scale, scale)
 
 class ControllerTrackingPlugin(nanome.PluginInstance):
@@ -69,9 +69,13 @@ class ControllerTrackingPlugin(nanome.PluginInstance):
 
     def check_menu_stats(self, pos, rot, scale):
         self.outstanding = False
-        if ((self.menu_position != pos) or (self.menu_rotation != rot) or (self.menu_scale != scale)):
+        if not self.menu_position.equals(pos) or not self.menu_rotation.equals(rot) or not self.menu_scale.equals(scale):
             Logs.error("Menu not where it should be!")
-        Logs.debug("passed menu check")
+            Logs.error(self.menu_position, pos)
+            Logs.error(self.menu_rotation, rot)
+            Logs.error(self.menu_scale, scale)
+        else:
+            Logs.debug("passed menu check")
 
     def update(self):
         if self.outstanding == False:
