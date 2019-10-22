@@ -1,10 +1,11 @@
-from nanome._internal._util._serializers import _TypeSerializer, _Vector3Serializer, _QuaternionSerializer
+from nanome._internal._util._serializers import _TypeSerializer, _UnityPositionSerializer, _UnityRotationSerializer, _Vector3Serializer
 
 
 class _GetMenuTransformResponse(_TypeSerializer):
     def __init__(self):
-        self.vector = _Vector3Serializer()
-        self.quat = _QuaternionSerializer()
+        self.pos = _UnityPositionSerializer()
+        self.rot = _UnityRotationSerializer()
+        self.vec3 = _Vector3Serializer()
 
     def version(self):
         return 0
@@ -16,8 +17,9 @@ class _GetMenuTransformResponse(_TypeSerializer):
         pass
 
     def deserialize(self, version, context):
-        menu_position = context.read_using_serializer(self.vector)
-        menu_rotation = context.read_using_serializer(self.quat)
+        menu_position = context.read_using_serializer(self.pos)
+        menu_rotation = context.read_using_serializer(self.rot)
+        menu_scale = context.read_using_serializer(self.vec3)
 
-        result = (menu_position, menu_rotation)
+        result = (menu_position, menu_rotation, menu_scale)
         return result

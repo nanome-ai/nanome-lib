@@ -1,10 +1,10 @@
 import nanome
 from nanome.util import Logs
 import sys
-import time
-from nanome.api import structure as struct
-from nanome.util import Vector3
-from nanome.util import Quaternion
+import time, random, struct
+import math
+from nanome.api.structure import *
+from nanome.util import Vector3, Quaternion, Matrix
 # Config
 
 NAME = "ControllerTracking"
@@ -14,18 +14,93 @@ HAS_ADVANCED_OPTIONS = False
 
 # Plugin
 
+def rand_float(lower, upper):
+    lower = max(-340282346638528859811704183484516925440, lower)
+    upper = min(340282346638528859811704183484516925440, upper)
+    dbl = random.uniform(lower, upper)
+    flt = struct.unpack('f', struct.pack('f', dbl))[0]
+    return flt
+
+def rand_pos():
+    return Vector3(rand_float(-5,5), rand_float(-5,5), rand_float(-5,5))
+
+def random_quaternion():
+  #double x,y,z, u,v,w, s
+  x = rand_float(-1,1)
+  y = rand_float(-1,1)
+  z = x*x + y*y
+  while(z>1):
+        x = rand_float(-1,1)
+        y = rand_float(-1,1)
+        z = x*x + y*y
+  u = rand_float(-1,1)
+  v = rand_float(-1,1)
+  w = u*u + v*v
+  while(w>1):
+        u = rand_float(-1,1)
+        v = rand_float(-1,1)
+        w = u*u + v*v
+  s = math.sqrt((1-z) / w)
+  return Quaternion(x, y, s*u, s*v)
+
+def rand_scale():
+    scale = rand_float(.0008,.003)
+    return Vector3(scale, scale, scale)
+
 class ControllerTrackingPlugin(nanome.PluginInstance):
     def start(self):
         self.make_tracking_atoms()
+        self.make_menu()
+        import time
+        time.sleep(5)
+        Logs.debug("requesting complexes")
         self.request_complex_list(self.connect_complexes)
 
+    def make_menu(self):
+        self.menu = nanome.ui.Menu()
+        self.update_menu(self.menu)
+        self.menu_position = Vector3()
+        self.menu_rotation = Quaternion()
+        self.menu_scale = Vector3()
+        self.last = time.time()
+        self.outstanding = True
+        self.set_menu_transform(self.menu_position, self.menu_rotation, self.menu_scale)
+        self.request_menu_transform(self.check_menu_stats)
+
+    def check_menu_stats(self, pos, rot, scale):
+        self.outstanding = False
+        if ((self.menu_position != pos) or (self.menu_rotation != rot) or (self.menu_scale != scale)):
+            Logs.error("Menu not where it should be!")
+        Logs.debug("passed menu check")
+
+    def update(self):
+        if self.outstanding == False:
+            curr = time.time()
+            if curr - self.last > 3:
+                self.outstanding = True
+                self.last = curr
+                self.menu_position = rand_pos()
+                self.menu_rotation = random_quaternion()
+                self.menu_scale = rand_scale()
+                self.set_menu_transform(self.menu_position, self.menu_rotation, self.menu_scale)
+                self.request_menu_transform(self.check_menu_stats)
+        return super().update()
+
     def make_tracking_atoms(self):
+        workspace = Workspace()
+        self.world_matrix = workspace.get_workspace_to_world_matrix()
+        self.workspace_matrix = workspace.get_world_to_workspace_matrix()
         self.head_complex = self.build_simple_complex("head", nanome.util.Color.Red())
         self.left_complex = self.build_simple_complex("left", nanome.util.Color.Blue())
         self.right_complex = self.build_simple_complex("right", nanome.util.Color.Green())
-        self.add_to_workspace([self.head_complex, self.left_complex, self.right_complex,])
+        workspace.add_complex(self.head_complex)
+        workspace.add_complex(self.left_complex)
+        workspace.add_complex(self.right_complex)
+        Logs.debug("sending a workspace")
+        self.update_workspace(workspace)
 
     def connect_complexes(self, complexes):
+        Logs.debug("received some complexes", len(complexes))
         for complex in complexes:
             if complex.name == "head":
                 self.head_complex = complex
@@ -36,14 +111,14 @@ class ControllerTrackingPlugin(nanome.PluginInstance):
         self.request_controller_transforms(self.received)
 
     def build_simple_complex(self, name, color):
-        new_complex = struct.Complex()
+        new_complex = Complex()
         new_complex.name = name
-        new_molecule = struct.Molecule()
-        new_chain = struct.Chain()
-        new_residue = struct.Residue()
-        new_atom1 = struct.Atom()
-        new_atom2 = struct.Atom()
-        new_bond = struct.Bond()
+        new_molecule = Molecule()
+        new_chain = Chain()
+        new_residue = Residue()
+        new_atom1 = Atom()
+        new_atom2 = Atom()
+        new_bond = Bond()
         new_complex.add_molecule(new_molecule)
         new_molecule.add_chain(new_chain)
         new_chain.add_residue(new_residue)
@@ -58,12 +133,12 @@ class ControllerTrackingPlugin(nanome.PluginInstance):
         return new_complex
 
     def received(self, head_position, head_rotation, left_controller_position, left_controller_rotation, right_controller_position, right_controller_rotation):
-        self.head_complex.position = head_position
-        self.head_complex.rotation = head_rotation
-        self.left_complex.position = left_controller_position
-        self.left_complex.rotation = left_controller_rotation
-        self.right_complex.position = right_controller_position
-        self.right_complex.rotation = right_controller_rotation
+        self.head_complex.position = self.workspace_matrix * head_position
+        self.head_complex.rotation = Quaternion.from_matrix(Matrix.from_quaternion(head_rotation))
+        self.left_complex.position = self.workspace_matrix * left_controller_position
+        self.left_complex.rotation = Quaternion.from_matrix(Matrix.from_quaternion(left_controller_rotation))
+        self.right_complex.position = self.workspace_matrix * right_controller_position
+        self.right_complex.rotation = Quaternion.from_matrix(Matrix.from_quaternion(right_controller_rotation))
         self.update_structures_shallow([self.head_complex, self.left_complex, self.right_complex])
         self.request_controller_transforms(self.received)
 

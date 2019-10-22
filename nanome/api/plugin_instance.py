@@ -198,23 +198,32 @@ class PluginInstance(_PluginInstance):
 
     def update_node(self, node):
         """
-        | Update a layout node and its children
+        | Update the position, scale, and rotation of the menu
 
         :param node: Layout node to update
         :type node: :class:`~nanome.api.ui.layout_node`
         """
         self._network._send(_Messages.node_update, node)
 
-    def set_menu_transform(self, position, rotation):
+    def set_menu_transform(self, position, rotation, scale):
         """
-        | Update a layout node and its children
+        | Update the position, scale, and rotation of the menu
 
         :param position: New position of the menu
         :type position: :class:`~nanome.util.vector3`
         :param rotation: New rotation of the menu
         :type rotation: :class:`~nanome.util.quaternion`
+        :param scale: New scale of the menu
+        :type scale: :class:`~nanome.util.vector3`
         """
-        self._network._send(_Messages.menu_transform_set, (position, rotation))
+        self._network._send(_Messages.menu_transform_set, (position, rotation, scale))
+
+    def request_menu_transform(self, callback):
+        """
+        | Requests spacial information of the plugin menu (position, rotation, scale)
+        """
+        id = self._network._send(_Messages.menu_transform_request)
+        self._save_callback(id, callback)
 
     def request_directory(self, path, callback = None, pattern = "*"):
         """

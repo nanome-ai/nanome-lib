@@ -1,4 +1,4 @@
-from . import Vector3
+from . import Vector3, Quaternion
 
 import random
 import operator
@@ -164,4 +164,35 @@ class Matrix(object):
         result[2][1] = 2 * quaternion.y * quaternion.z + 2 * quaternion.x * quaternion.w
         result[2][2] = 1 - 2 * quaternion.x * quaternion.x - 2 * quaternion.y * quaternion.y
         result[3][3] = 1
+        return result
+    
+    @classmethod
+    def compose_transformation_matrix(cls, position, rotation, scale = None):
+        if (scale is None):
+            cls._compose_transformation_matrix(position, rotation)
+        if not isinstance(position, Vector3) or not isinstance(rotation, Quaternion) or not isinstance(scale, Vector3):
+            raise ValueError("compose_translation_matrix expects a Vector3, a Quaternion, and a Vector3")
+        S = cls(4,4)
+        S[0][0] = scale.x
+        S[1][1] = scale.y
+        S[2][2] = scale.z
+        S[3][3] = 1
+        R = cls.from_quaternion(rotation)
+        T = cls.identity(4)
+        T[0][3] = position.x
+        T[1][3] = position.y
+        T[2][3] = position.z
+        result = T*(R*S)
+        return result
+
+    @classmethod
+    def _compose_transformation_matrix(cls, position, rotation):
+        if not isinstance(position, Vector3) or not isinstance(rotation, Quaternion):
+            raise ValueError("compose_translation_matrix expects a Vector3, a Quaternion")
+        R = cls.from_quaternion(rotation)
+        T = cls.identity(4)
+        T[0][3] = position.x
+        T[1][3] = position.y
+        T[2][3] = position.z
+        result = T*R
         return result

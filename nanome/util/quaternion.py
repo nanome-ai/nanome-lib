@@ -2,7 +2,7 @@ import math
 #placeholder quaternion
 
 class Quaternion(object):
-    def __init__(self, x=0, y=0, z=0, w=0):
+    def __init__(self, x=0, y=0, z=0, w=1):
         self._x = float(x)
         self._y = float(y)
         self._z = float(z)
