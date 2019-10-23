@@ -349,9 +349,12 @@ class UIPlugin(nanome.PluginInstance):
             self.tab2.enabled = True
             self.tab1.enabled = False
 
+<<<<<<< HEAD
             n_node = self.tabs.create_child_node("AA")
             n_node.add_new_button("AA")
 
+=======
+>>>>>>> master
             self.update_node(self.tabs)
             self.update_content(self.tab_button2)
             self.update_content(self.tab_button1)

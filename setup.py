@@ -6,7 +6,7 @@ README = (pathlib.Path(__file__).parent / "README.md").read_text()
 setup(
     name = 'nanome',
     packages=find_packages(exclude=["testing","doc","test_plugins"]),
-    version = '0.8.2',
+    version = '0.8.3',
     license='MIT',
     description = 'Python API for Nanome Plugins',
     long_description = README,
@@ -30,7 +30,7 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
     ],
-    entry_points={"console_scripts": ["nanome-setup-plugins = setup_config:main"]},
+    entry_points={"console_scripts": ["nanome-setup-plugins = nanome.setup_config:main"]},
     package_data={
         "nanome": [
             "_internal/_process/_external/_dssp/*",
