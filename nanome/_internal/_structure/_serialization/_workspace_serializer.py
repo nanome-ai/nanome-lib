@@ -23,7 +23,7 @@ class _WorkspaceSerializer(_TypeSerializer):
 
         context.write_using_serializer(self.pos, value._position)
         context.write_using_serializer(self.rot, value._rotation)
-        context.write_using_serializer(self.pos, value._scale)
+        context.write_using_serializer(self.vec, value._scale)
 
     def deserialize(self, version, context):
         workspace = _Workspace._create()
