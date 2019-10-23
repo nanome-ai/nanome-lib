@@ -58,12 +58,13 @@ class ControllerTrackingPlugin(nanome.PluginInstance):
 
     def make_menu(self):
         self.menu = nanome.ui.Menu()
-        self.update_menu(self.menu)
         self.menu_position = Vector3()
         self.menu_rotation = Quaternion()
         self.menu_scale = Vector3()
         self.last = time.time()
         self.outstanding = True
+        self.update_menu(self.menu)
+        self.request_menu_transform(lambda _1,_2,_3:None)
         self.set_menu_transform(self.menu_position, self.menu_rotation, self.menu_scale)
         self.request_menu_transform(self.check_menu_stats)
 
