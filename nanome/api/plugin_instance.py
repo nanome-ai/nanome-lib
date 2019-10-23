@@ -198,7 +198,7 @@ class PluginInstance(_PluginInstance):
 
     def update_node(self, node):
         """
-        | Update the position, scale, and rotation of the menu
+        | Update a layout node and its children
 
         :param node: Layout node to update
         :type node: :class:`~nanome.api.ui.layout_node`
@@ -345,7 +345,7 @@ class PluginInstance(_PluginInstance):
 
     def request_controller_transforms(self, callback):
         """
-        | Requests presenter account info (head position, head rotation, left controller position, left controller rotation, right controller position, right controller rotation)
+        | Requests presenter controller info (head position, head rotation, left controller position, left controller rotation, right controller position, right controller rotation)
         """
         id = self._network._send(_Messages.controller_transforms_request)
         self._save_callback(id, callback)

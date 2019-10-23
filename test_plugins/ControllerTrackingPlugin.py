@@ -139,11 +139,14 @@ class ControllerTrackingPlugin(nanome.PluginInstance):
 
     def received(self, head_position, head_rotation, left_controller_position, left_controller_rotation, right_controller_position, right_controller_rotation):
         self.head_complex.position = self.workspace_matrix * head_position
-        self.head_complex.rotation = Quaternion.from_matrix(Matrix.from_quaternion(head_rotation))
+        new_rotation = self.workspace_matrix * Matrix.from_quaternion(head_rotation)
+        self.head_complex.rotation = Quaternion.from_matrix(new_rotation)
         self.left_complex.position = self.workspace_matrix * left_controller_position
-        self.left_complex.rotation = Quaternion.from_matrix(Matrix.from_quaternion(left_controller_rotation))
+        new_rotation = self.workspace_matrix * Matrix.from_quaternion(left_controller_rotation)
+        self.left_complex.rotation = Quaternion.from_matrix(new_rotation)
         self.right_complex.position = self.workspace_matrix * right_controller_position
-        self.right_complex.rotation = Quaternion.from_matrix(Matrix.from_quaternion(right_controller_rotation))
+        new_rotation = self.workspace_matrix * Matrix.from_quaternion(right_controller_rotation)
+        self.right_complex.rotation = Quaternion.from_matrix(new_rotation)
         self.update_structures_shallow([self.head_complex, self.left_complex, self.right_complex])
         self.request_controller_transforms(self.received)
 
