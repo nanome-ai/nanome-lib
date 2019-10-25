@@ -64,6 +64,21 @@ class UIPlugin(nanome.PluginInstance):
         return menu
 
     def create_tab1(self):
+        self.menu_index = 1
+        self.previous_menu = None
+
+        def create_menu():
+            menu = nanome.api.ui.Menu(self.menu_index, "Menu " + str(self.menu_index))
+            menu.width = 0.5
+            menu.height = 0.5
+            if self.previous_menu != None:
+                ln = self.previous_menu.root.create_child_node()
+                ln.add_new_label(str(self.menu_index - 1))
+                self.update_menu(self.previous_menu)
+            self.update_menu(menu)
+            self.menu_index += 1
+            self.previous_menu = menu
+
         def button_pressed_callback(button): 
             Logs.debug("button pressed: " + button.text.value_idle)
             button.text.value_selected = "Button Pressed!"
@@ -75,6 +90,8 @@ class UIPlugin(nanome.PluginInstance):
 
             self.update_content(button)
             self.update_content(self.loadingBar)
+
+            create_menu()
 
         def hover_callback(button, hovered): 
             Logs.debug("button hover: " + button.text.value_idle, hovered)

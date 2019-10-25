@@ -11,12 +11,14 @@ class _UpdateMenu(_TypeSerializer):
         self.content = _UIBaseSerializer()
 
     def version(self):
-        return 0
+        return 1
 
     def name(self):
         return "UpdateMenu"
 
     def serialize(self, version, value, context):
+        if version >= 1:
+            context.write_byte(value.index)
         context.write_using_serializer(self.menu, value)
         self.array.set_type(self.layout)
         context.write_using_serializer(self.array, value._get_all_nodes())

@@ -7,7 +7,7 @@ class _Menu(object):
     def _create(cls):
         return cls()
 
-    def __init__(self, title = "title"):
+    def __init__(self, index = 0, title = "title"):
         #Protocol
         self._enabled = True
         self._id = 0
@@ -15,6 +15,7 @@ class _Menu(object):
         self._locked = False
         self._width = 0.7
         self._height = 0.6
+        self._index = index
         #self.all_layout_nodes[]
         #self.all_contents[]
 
@@ -51,4 +52,5 @@ class _Menu(object):
         self._locked = other._locked
         self._width = other._width
         self._height = other._height
+        self._index = other._index
 
