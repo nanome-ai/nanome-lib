@@ -205,10 +205,12 @@ class PluginInstance(_PluginInstance):
         """
         self._network._send(_Messages.node_update, node)
 
-    def set_menu_transform(self, position, rotation, scale):
+    def set_menu_transform(self, index, position, rotation, scale):
         """
         | Update the position, scale, and rotation of the menu
 
+        :param index: Index of the menu you wish to update
+        :type index: int
         :param position: New position of the menu
         :type position: :class:`~nanome.util.vector3`
         :param rotation: New rotation of the menu
@@ -216,13 +218,17 @@ class PluginInstance(_PluginInstance):
         :param scale: New scale of the menu
         :type scale: :class:`~nanome.util.vector3`
         """
-        self._network._send(_Messages.menu_transform_set, (position, rotation, scale))
+        self._network._send(_Messages.menu_transform_set,
+                            (index, position, rotation, scale))
 
-    def request_menu_transform(self, callback):
+    def request_menu_transform(self, index, callback):
         """
         | Requests spacial information of the plugin menu (position, rotation, scale)
+
+        :param index: Index of the menu you wish to read
+        :type index: int
         """
-        id = self._network._send(_Messages.menu_transform_request)
+        id = self._network._send(_Messages.menu_transform_request, index)
         self._save_callback(id, callback)
 
     def request_directory(self, path, callback = None, pattern = "*"):

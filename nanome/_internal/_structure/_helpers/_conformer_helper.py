@@ -34,8 +34,8 @@ def _delete_chains(chains):
     del chains[:]
 
 #disabled hashing until I can find a fast algorithm
-def _get_hash_code(str):
-    return str #int(hashlib.sha256(str.encode('utf-8')).hexdigest(), 16)
+def _get_hash_code(_str):
+    return _str #int(hashlib.sha256(_str.encode('utf-8')).hexdigest(), 16)
 
 def convert_to_frames(complex): #Data.Complex -> Data.Complex
     deleted_atoms = []

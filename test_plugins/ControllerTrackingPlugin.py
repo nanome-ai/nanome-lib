@@ -64,9 +64,9 @@ class ControllerTrackingPlugin(nanome.PluginInstance):
         self.last = time.time()
         self.outstanding = True
         self.update_menu(self.menu)
-        self.request_menu_transform(lambda _1,_2,_3:None)
-        self.set_menu_transform(self.menu_position, self.menu_rotation, self.menu_scale)
-        self.request_menu_transform(self.check_menu_stats)
+        self.request_menu_transform(0, lambda _1,_2,_3:None)
+        self.set_menu_transform(0, self.menu_position, self.menu_rotation, self.menu_scale)
+        self.request_menu_transform(0, self.check_menu_stats)
 
     def check_menu_stats(self, pos, rot, scale):
         self.outstanding = False
@@ -87,8 +87,8 @@ class ControllerTrackingPlugin(nanome.PluginInstance):
                 self.menu_position = rand_pos()
                 self.menu_rotation = random_quaternion()
                 self.menu_scale = rand_scale()
-                self.set_menu_transform(self.menu_position, self.menu_rotation, self.menu_scale)
-                self.request_menu_transform(self.check_menu_stats)
+                self.set_menu_transform(0, self.menu_position, self.menu_rotation, self.menu_scale)
+                self.request_menu_transform(0, self.check_menu_stats)
         return super().update()
 
     def make_tracking_atoms(self):

@@ -10,8 +10,8 @@ class _GetMenuTransform(_TypeSerializer):
     def name(self):
         return "GetMenuTransform"
 
-    def serialize(self, version, value, data):
-        pass
+    def serialize(self, version, value, context):
+        context.write_byte(value)
 
-    def deserialize(self, version, data):
+    def deserialize(self, version, context):
         return None
