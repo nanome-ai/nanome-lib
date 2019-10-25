@@ -138,6 +138,7 @@ def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Dat
                     off = 0
                     if name_hash in names_dictionary:
                         off = names_dictionary[name_hash]
+                    off +=1
                     names_dictionary[name_hash] = off
                     # Lookup or create atom with hash
                     hash_atom = _get_atom_hash(sb, atom, off)
@@ -246,6 +247,8 @@ def _get_residue_hash(sb, residue): #StringBuilder, Data.Residue -> int
     sb.append(":")
     sb.append(residue._chain._name)
     return _get_hash_code(sb.to_string())
+
+
 
 def _get_atom_hash(sb, atom, off): #StringBuilder, Data.Atom, int -> int
     sb.clear()

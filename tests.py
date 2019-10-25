@@ -33,18 +33,18 @@ def get_download_path():
 import nanome
 from nanome.util import Logs
 Logs._set_verbose(True)
-all_tests_passed = True
 
 counter = util.TestCounter()
-util.run_test(atom_tests.test_pdb, counter)
+util.run_test(atom_tests.test_iterators, counter)
 
-# all_tests_passed = all_tests_passed and util.run_test_group(copy_tests)
-# all_tests_passed = all_tests_passed and util.run_test_group(conformer_tests)
-# all_tests_passed = all_tests_passed and util.run_test_group(atom_tests)
-# all_tests_passed = all_tests_passed and util.run_test_group(context_tests)
-# all_tests_passed = all_tests_passed and util.run_test_group(api_tests)
-# all_tests_passed = all_tests_passed and util.run_test_group(mmcif_tests)
-# all_tests_passed = all_tests_passed and util.run_test_group(sdf_tests)
-# all_tests_passed = all_tests_passed and util.run_test_group(ui_tests)
-# all_tests_passed = all_tests_passed and util.run_test_group(json_tests)
+all_tests_passed = True
+all_tests_passed = all_tests_passed and util.run_test_group(copy_tests)
+all_tests_passed = all_tests_passed and util.run_test_group(conformer_tests)
+all_tests_passed = all_tests_passed and util.run_test_group(atom_tests)
+all_tests_passed = all_tests_passed and util.run_test_group(context_tests)
+all_tests_passed = all_tests_passed and util.run_test_group(api_tests)
+all_tests_passed = all_tests_passed and util.run_test_group(mmcif_tests)
+all_tests_passed = all_tests_passed and util.run_test_group(sdf_tests)
+all_tests_passed = all_tests_passed and util.run_test_group(ui_tests)
+all_tests_passed = all_tests_passed and util.run_test_group(json_tests)
 assert(all_tests_passed)

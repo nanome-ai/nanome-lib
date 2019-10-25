@@ -35,20 +35,20 @@ def structure(content):
                         molecule = _Molecule._create()
                         molecule._name = str(c_atom.model)
                         all_molecules[molecule_id] = molecule
-                        complex._molecules.append(molecule)
+                        complex._add_molecule(molecule)
                     chain = _Chain._create()
                     chain._name = chain_name
                     all_chains[chain_id] = chain
-                    all_molecules[molecule_id]._chains.append(chain)
+                    all_molecules[molecule_id]._add_chain(chain)
                 residue = _Residue._create()
                 residue._name = c_atom.residue_name
                 residue._type = residue._name
                 residue.serial = c_atom.residue_serial
                 all_residues[residue_id] = residue
-                all_chains[chain_id]._residues.append(residue)
+                all_chains[chain_id]._add_residue(residue)
             atom = StructureAtom(c_atom, helper)
             all_atoms[atom_id] = None
-            all_residues[residue_id]._atoms.append(atom)
+            all_residues[residue_id]._add_atom(atom)
     # Done
     return complex._convert_to_conformers()
 

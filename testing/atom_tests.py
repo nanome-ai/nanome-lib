@@ -149,6 +149,7 @@ def test_iterators():
 
     #complex level
     complex = struct.Complex.io.from_sdf(path=input_dir)
+    complex = complex.convert_to_frames()
     a = 0
     for atom in complex.atoms:
         a += 1
