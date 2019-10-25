@@ -6,6 +6,7 @@ class _Button(_UIBase):
 
     HorizAlignOptions = nanome.util.enums.HorizAlignOptions
     VertAlignOptions = nanome.util.enums.VertAlignOptions
+    ToolTipPositioning = nanome.util.enums.ToolTipPositioning
 
     @classmethod
     def _create(cls):

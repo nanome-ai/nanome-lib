@@ -61,6 +61,17 @@ class VertAlignOptions(IntEnum):
     Middle = 1
     Bottom = 2
 
+class ToolTipPositioning(IntEnum):
+    TopRight = 0
+    Top = 1
+    TopLeft = 2
+    Left = 3
+    BottomLeft = 4
+    Bottom = 5
+    BottomRight = 6
+    Right = 7
+    Center = 8
+
 class StreamType(IntEnum):
     position = 0
     color = 1
