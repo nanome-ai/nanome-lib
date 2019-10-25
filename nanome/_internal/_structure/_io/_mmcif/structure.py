@@ -50,7 +50,7 @@ def structure(content):
             all_atoms[atom_id] = None
             all_residues[residue_id]._atoms.append(atom)
     # Done
-    return complex._convert_to_frames()
+    return complex._convert_to_conformers()
 
 def StructureAtom(c_atom, helper):
     atom = _Atom._create()
