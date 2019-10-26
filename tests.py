@@ -34,9 +34,6 @@ import nanome
 from nanome.util import Logs
 Logs._set_verbose(True)
 
-counter = util.TestCounter()
-util.run_test(atom_tests.test_iterators, counter)
-
 all_tests_passed = True
 all_tests_passed = all_tests_passed and util.run_test_group(copy_tests)
 all_tests_passed = all_tests_passed and util.run_test_group(conformer_tests)
