@@ -31,6 +31,16 @@ class Plugin(_Plugin):
             plugin.run(host, port, key_file)
 
     @staticmethod
+    def set_custom_data(*args):
+        """
+        | Store arbitrary data to send to plugin instances
+
+        :param args: Variable length argument list
+        :type args: Anything serializable
+        """
+        _Plugin._custom_data = args
+
+    @staticmethod
     def set_maximum_processes_count(max_process_nb):
         _ProcessManager._max_process_count = max_process_nb
 
