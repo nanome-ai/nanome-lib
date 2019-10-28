@@ -93,9 +93,9 @@ def prep_timer_test():
     #input_dir = test_assets + ("/pdb/1fsv.pdb") #smallboy
     #input_dir = test_assets + ("/pdb/1a9l.pdb") #bigboy
     complex1 = struct.Complex.io.from_sdf(path=input_dir)
-    complex2 = struct.Complex.io.from_sdf(path=input_dir)
-    complex3 = struct.Complex.io.from_sdf(path=input_dir)
-    complex4 = struct.Complex.io.from_sdf(path=input_dir)
+    complex2 = complex1._deep_copy()
+    complex3 = complex1._deep_copy()
+    complex4 = complex1._deep_copy()
     global test_workspace
     test_workspace = create_workspace()
     test_workspace.complexes = [complex1, complex2, complex3, complex4]
@@ -307,9 +307,8 @@ def test_matrices():
     m = complex.get_complex_to_workspace_matrix()
     m_inv = complex.get_workspace_to_complex_matrix()
     atom_global_pos = m * atom.position
-
     assert_equal(atom_global_pos, res_atom_global_pos)
-    assert_equal(m_inv * atom_global_pos, atom.position)\
+    assert_equal(m_inv * atom_global_pos, atom.position)
 
 def assert_parents(atom, bond, residue, chain, molecule, complex):
     assert(bond.residue == residue)
