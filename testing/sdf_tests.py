@@ -42,7 +42,7 @@ def test_thrombin():
     output_dir = test_output_dir + ("/testOutput.sdf")
 
     complex1 = struct.Complex.io.from_sdf(path=input_dir)
-    complex1.io.to_sdf(output_dir)
+    complex1 = complex1.convert_to_frames()
 
     #fact checks
     counters = count_structures(complex1)
@@ -53,8 +53,11 @@ def test_thrombin():
     assert(bond_count == 237)
     assert(atom_count == 228)
     #
-
+    complex1.io.to_sdf(output_dir)
     complex2 = struct.Complex.io.from_sdf(path=output_dir)
+    complex2 = complex2.convert_to_frames()
+
+    #fact checks
     counters = count_structures(complex2)
     (molecule_count, chain_count, residue_count, bond_count, atom_count) = counters
     assert(molecule_count == 3)

@@ -355,3 +355,86 @@ def bond_atoms(atom1, atom2):
     bond.atom2 = atom2
     atom1.residue._add_bond(bond)
     return alter_object(bond)
+
+class DebugTimer():
+    def __init__(self):
+        self.nano = 10**9
+        self._open_process = {}
+        self._closed_process = {}
+
+    def _get_time(self):
+        return time.clock()
+        return int(time.clock() * self.nano) 
+
+    def start_process(self, name):
+        orig_name = name
+        i = 1
+        while name in self._open_process:
+            name = orig_name + str(i)
+            i+=1
+        self._open_process[name] = self._get_time()
+
+    def end_process(self, name):
+        orig_name = name
+        i = 1
+        while name in self._closed_process:
+            name = orig_name + str(i)
+            i+=1
+        self._closed_process[name] = self._get_time()
+
+    def summary(self):
+        #            percent = round(since_last/total_time * 100, 4)
+        starts = list(self._open_process.items())
+        starts.sort(key = lambda x: x[1])
+        ends = list(self._closed_process.items())
+        ends.sort(key = lambda x: x[1])
+        assert(len(starts) == len(ends))
+        num_process = len(starts)
+        total_time = ends[-1][1] - starts[0][1]
+        ended = 0
+        start_iter = 0
+        end_iter = 0
+        depth = 0
+        output = ""
+        while(ended < num_process):
+            if start_iter < num_process and starts[start_iter][1] < ends[end_iter][1]:
+                #start a process
+                name = starts[start_iter][0]
+                start_time = starts[start_iter][1]
+                end_time = self._closed_process[name]
+                elapsed = end_time - start_time
+                percent = elapsed/total_time * 100
+                output += self.get_start_line (name, elapsed, percent, depth)
+                start_iter += 1
+                depth += 1
+            else:
+                #end a process
+                depth -= 1
+                end_iter += 1
+                ended +=1
+        return output
+
+    @staticmethod
+    def get_start_line (name, elapsed, percent, depth):
+        line = "--"*depth + "|"
+        line = DebugTimer._left_buffer(line+name, 30) + "|"
+        line += DebugTimer._left_buffer(round(elapsed, 5), 14) + "|"
+        line += DebugTimer._right_buffer(round(percent, 5), 10) + "|"
+        line += "\n"
+        return line
+
+    @staticmethod
+    def _right_buffer(text, length = 8):
+        text = str(text)
+        diff = length - len(text)
+        if diff > 0:
+            text = " " * diff + text
+        return text
+
+    @staticmethod
+    def _left_buffer(text, length = 8):
+        text = str(text)
+        diff = length - len(text)
+        if diff > 0:
+            text = text + " " * diff
+        return text

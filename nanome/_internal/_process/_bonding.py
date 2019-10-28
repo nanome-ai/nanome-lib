@@ -51,7 +51,7 @@ class _Bonding():
         molecule = complex._molecules[self.__molecule_idx]
 
         self.__saved_complex._molecules.clear()
-        self.__saved_complex._molecules.append(molecule)
+        self.__saved_complex._add_molecule(molecule)
         _pdb.to_file(self.__input.name, complex)
 
         self.__proc.start()
@@ -91,7 +91,7 @@ class _Bonding():
                     new_bond._kind = bond._kind
                     new_bond._atom1 = atom1
                     new_bond._atom2 = atom2
-                    residue1._bonds.append(new_bond)
+                    residue1._add_bond(new_bond)
 
     def __done(self):
         self.__input.close()

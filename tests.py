@@ -33,6 +33,7 @@ def get_download_path():
 import nanome
 from nanome.util import Logs
 Logs._set_verbose(True)
+
 all_tests_passed = True
 all_tests_passed = all_tests_passed and util.run_test_group(copy_tests)
 all_tests_passed = all_tests_passed and util.run_test_group(conformer_tests)
