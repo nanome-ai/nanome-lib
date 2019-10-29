@@ -358,36 +358,69 @@ def bond_atoms(atom1, atom2):
 
 class DebugTimer():
 
+    @classmethod
+    def start_process(cls, name):
+        new_process = cls.Process(name)
+        if cls.curr_process is not None:
+            cls.curr_process._add_child(new_process)
+        cls.curr_process = new_process
+        cls.curr_process = new_process
+        return new_process
+
+    @classmethod
+    def close_proces(cls):
+        cls.curr_process.close()
+
+    @classmethod
+    def _close_process(cls, process):
+        if process != cls.curr_process:
+            Logs.error("Timer process closed out of order.")
+        cls.curr_process = process._parent
+
+    @classmethod
+    def summary(cls):
+        return cls.curr_process.summary()
+
     class Process():
         def __init__(self, name):
             self.name = name
-            self.start_time = DebugTimer._get_time()
-            self.close_time = None
-            self.children = []
+            self._start_time = DebugTimer._get_time()
+            self._close_time = None
+            self._children = []
+            self._parent = None
 
         def _add_child(self, other):
-            other.parent = self
-            self.children.append(other)
+            other._parent = self
+            self._children.append(other)
 
         def close(self):
-            self.close_time = DebugTimer._get_time()
+            self._close_time = DebugTimer._get_time()
+            DebugTimer._close_process(self)
 
         def summary(self):
-            total_time = self.close_time - self.start_time
+            if self._close_time == None:
+                _close_time = DebugTimer._get_time()
+            else:
+                _close_time = self._close_time
+            total_time = _close_time - self._start_time
             lines = []
             self._summary(0, total_time, lines)
-            return lines
+            return "".join(lines)
 
         def _summary(self, depth, total_time, lines):
-            elapsed = self.close_time - self.start_time
+            if self._close_time == None:
+                _close_time = DebugTimer._get_time()
+            else:
+                _close_time = self._close_time
+            elapsed = _close_time - self._start_time
             percent = elapsed/total_time * 100
-            line = self.get_line(self.name, elapsed, percent, depth)
+            line = self._get_line(self.name, elapsed, percent, depth)
             lines.append(line)
-            for child in self.children:
-                child._summary(0, total_time, lines)
+            for child in self._children:
+                child._summary(depth+1, total_time, lines)
 
         @classmethod
-        def get_line (cls, name, elapsed, percent, depth):
+        def _get_line (cls, name, elapsed, percent, depth):
             line = "--"*depth + "|"
             line = cls._left_buffer(line+name, 30) + "|"
             line += cls._left_buffer(round(elapsed, 5), 14) + "|"
@@ -417,7 +450,7 @@ class DebugTimer():
         cls.milli = 10**3
         cls._open_process = {}
         cls._closed_process = {}
-        cls.main_process = DebugTimer.Process("main")
+        cls.curr_process = None
 
     @classmethod
     def _get_time(cls):
