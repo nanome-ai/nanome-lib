@@ -356,85 +356,127 @@ def bond_atoms(atom1, atom2):
     atom1.residue._add_bond(bond)
     return alter_object(bond)
 
+def rand_int(min = -0x7FFFFFFF, max = 0x7FFFFFFF):
+    return random.randint(min, max)
+
+def rand_float(min = -340282346638528859811704183484516925440, max = 340282346638528859811704183484516925440):
+    import struct
+    dbl = random.uniform(min, max)
+    flt = struct.unpack('f', struct.pack('f', dbl))[0]
+    return flt
+
+def rand_positive_long(min = 0x7FFFFFFF, max = 0x7FFFFFFFFFFFFFFF):
+    return random.randint(min, max)
+
+def rand_negative_long(min = -0x7FFFFFFFFFFFFFFF, max = -0x7FFFFFFF):
+    return random.randint(min, max)
+
+def rand_uint(min = 0x00000000, max = 0xFFFFFFFF):
+    return random.randint(min, max)
+
+def rand_byte(min = 0x00, max = 0xFF):
+    return random.randint(min, max)
+
 class DebugTimer():
-    def __init__(self):
-        self.nano = 10**9
-        self._open_process = {}
-        self._closed_process = {}
 
-    def _get_time(self):
-        return time.clock()
-        return int(time.clock() * self.nano) 
+    @classmethod
+    def start_process(cls, name):
+        new_process = cls.Process(name)
+        if cls.curr_process is not None:
+            cls.curr_process._add_child(new_process)
+        cls.curr_process = new_process
+        cls.curr_process = new_process
+        return new_process
 
-    def start_process(self, name):
-        orig_name = name
-        i = 1
-        while name in self._open_process:
-            name = orig_name + str(i)
-            i+=1
-        self._open_process[name] = self._get_time()
+    @classmethod
+    def close_proces(cls):
+        cls.curr_process.close()
 
-    def end_process(self, name):
-        orig_name = name
-        i = 1
-        while name in self._closed_process:
-            name = orig_name + str(i)
-            i+=1
-        self._closed_process[name] = self._get_time()
+    @classmethod
+    def _close_process(cls, process):
+        if process != cls.curr_process:
+            Logs.error("Timer process closed out of order.")
+        cls.curr_process = process._parent
 
-    def summary(self):
-        #            percent = round(since_last/total_time * 100, 4)
-        starts = list(self._open_process.items())
-        starts.sort(key = lambda x: x[1])
-        ends = list(self._closed_process.items())
-        ends.sort(key = lambda x: x[1])
-        assert(len(starts) == len(ends))
-        num_process = len(starts)
-        total_time = ends[-1][1] - starts[0][1]
-        ended = 0
-        start_iter = 0
-        end_iter = 0
-        depth = 0
-        output = ""
-        while(ended < num_process):
-            if start_iter < num_process and starts[start_iter][1] < ends[end_iter][1]:
-                #start a process
-                name = starts[start_iter][0]
-                start_time = starts[start_iter][1]
-                end_time = self._closed_process[name]
-                elapsed = end_time - start_time
-                percent = elapsed/total_time * 100
-                output += self.get_start_line (name, elapsed, percent, depth)
-                start_iter += 1
-                depth += 1
+    @classmethod
+    def summary(cls):
+        return cls.curr_process.summary()
+
+    class Process():
+        def __init__(self, name):
+            self.name = name
+            self._start_time = DebugTimer._get_time()
+            self._close_time = None
+            self._children = []
+            self._parent = None
+
+        def _add_child(self, other):
+            other._parent = self
+            self._children.append(other)
+
+        def close(self):
+            self._close_time = DebugTimer._get_time()
+            DebugTimer._close_process(self)
+
+        def summary(self):
+            if self._close_time == None:
+                _close_time = DebugTimer._get_time()
             else:
-                #end a process
-                depth -= 1
-                end_iter += 1
-                ended +=1
-        return output
+                _close_time = self._close_time
+            total_time = _close_time - self._start_time
+            lines = []
+            self._summary(0, total_time, lines)
+            return "".join(lines)
 
-    @staticmethod
-    def get_start_line (name, elapsed, percent, depth):
-        line = "--"*depth + "|"
-        line = DebugTimer._left_buffer(line+name, 30) + "|"
-        line += DebugTimer._left_buffer(round(elapsed, 5), 14) + "|"
-        line += DebugTimer._right_buffer(round(percent, 5), 10) + "|"
-        line += "\n"
-        return line
+        def _summary(self, depth, total_time, lines):
+            if self._close_time == None:
+                _close_time = DebugTimer._get_time()
+            else:
+                _close_time = self._close_time
+            elapsed = _close_time - self._start_time
+            percent = elapsed/total_time * 100
+            line = self._get_line(self.name, elapsed, percent, depth)
+            lines.append(line)
+            for child in self._children:
+                child._summary(depth+1, total_time, lines)
 
-    @staticmethod
-    def _right_buffer(text, length = 8):
-        text = str(text)
-        diff = length - len(text)
-        if diff > 0:
-            text = " " * diff + text
-        return text
+        @classmethod
+        def _get_line (cls, name, elapsed, percent, depth):
+            line = "--"*depth + "|"
+            line = cls._left_buffer(line+name, 30) + "|"
+            line += cls._left_buffer(round(elapsed, 5), 14) + "|"
+            line += cls._right_buffer(round(percent, 5), 10) + "|"
+            line += "\n"
+            return line
 
-    @staticmethod
-    def _left_buffer(text, length = 8):
-        text = str(text)
-        diff = length - len(text)
-        if diff > 0:
-            text = text + " " * diff
-        return text
+        @staticmethod
+        def _right_buffer(text, length = 8):
+            text = str(text)
+            diff = length - len(text)
+            if diff > 0:
+                text = " " * diff + text
+            return text
+
+        @staticmethod
+        def _left_buffer(text, length = 8):
+            text = str(text)
+            diff = length - len(text)
+            if diff > 0:
+                text = text + " " * diff
+            return text
+
+    @classmethod
+    def _start(cls):
+        cls.nano = 10**9
+        cls.milli = 10**3
+        cls._open_process = {}
+        cls._closed_process = {}
+        cls.curr_process = None
+
+    @classmethod
+    def _get_time(cls):
+        # return time.clock()
+        # return int(time.clock() * cls.nano) 
+        return time.clock() * cls.milli
+
+DebugTimer._start()
