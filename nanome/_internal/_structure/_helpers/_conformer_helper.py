@@ -33,9 +33,8 @@ def _delete_chains(chains):
         chain._molecule._remove_chain(chain)
     del chains[:]
 
-#disabled hashing until I can find a fast algorithm
-def _get_hash_code(str):
-    return str #int(hashlib.sha256(str.encode('utf-8')).hexdigest(), 16)
+def _get_hash_code(string):
+    return hash(string)
 
 def convert_to_frames(complex): #Data.Complex -> Data.Complex
     if (complex._molecules[0]._conformer_count <=1):
@@ -189,7 +188,7 @@ def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Dat
             bond_total_count+=1
 
         for atom in molecule.atoms:
-            for bond in molecule.bonds:
+            for bond in atom.bonds:
                 atom_info_1 = atoms_dictionary[bond._atom1._unique_identifier]
                 atom_info_2 = atoms_dictionary[bond._atom2._unique_identifier]
 
@@ -242,40 +241,26 @@ def _get_chain_hash(sb, chain): #StringBuilder, Data.Chain -> int
 def _get_residue_hash(sb, residue): #StringBuilder, Data.Residue -> int
     sb.clear()
     sb.append(residue._serial)
-    sb.append(":")
-    sb.append(residue._name)
-    sb.append(":")
-    sb.append(residue._chain._name)
-    return _get_hash_code(sb.to_string())
-
-
+    sb.append_string(residue._name)
+    sb.append_string(residue._chain._name)
+    return _get_hash_code(sb.to_string(":"))
 
 def _get_atom_hash(sb, atom, off): #StringBuilder, Data.Atom, int -> int
     sb.clear()
     sb.append(atom._symbol)
-    sb.append(":")
-    sb.append(atom._name)
-    sb.append(":")
+    sb.append_string(atom._name)
     sb.append(atom._is_het)
-    sb.append(":")
     sb.append(off)
-    sb.append(":")
     sb.append(atom._residue._serial)
-    sb.append(":")
-    sb.append(atom._residue._name)
-    sb.append(":")
-    sb.append(atom._residue._chain._name)
-    return _get_hash_code(sb.to_string())
+    sb.append_string(atom._residue._name)
+    sb.append_string(atom._residue._chain._name)
+    return _get_hash_code(sb.to_string(":"))
 
 def _get_bond_hash(sb, bond, atom1, atom2): #StringBuilder, Data.Bond, int, int -> int
     sb.clear()
     sb.append(atom1)
-    sb.append(":")
     sb.append(atom2)
-    sb.append(":")
     sb.append(bond._residue._serial)
-    sb.append(":")
-    sb.append(bond._residue._name)
-    sb.append(":")
-    sb.append(bond._chain._name)
-    return _get_hash_code(sb.to_string())
+    sb.append_string(bond._residue._name)
+    sb.append_string(bond._chain._name)
+    return _get_hash_code(sb.to_string(":"))

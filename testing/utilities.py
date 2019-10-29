@@ -356,6 +356,27 @@ def bond_atoms(atom1, atom2):
     atom1.residue._add_bond(bond)
     return alter_object(bond)
 
+def rand_int(min = -0x7FFFFFFF, max = 0x7FFFFFFF):
+    return random.randint(min, max)
+
+def rand_float(min = -340282346638528859811704183484516925440, max = 340282346638528859811704183484516925440):
+    import struct
+    dbl = random.uniform(min, max)
+    flt = struct.unpack('f', struct.pack('f', dbl))[0]
+    return flt
+
+def rand_positive_long(min = 0x7FFFFFFF, max = 0x7FFFFFFFFFFFFFFF):
+    return random.randint(min, max)
+
+def rand_negative_long(min = -0x7FFFFFFFFFFFFFFF, max = -0x7FFFFFFF):
+    return random.randint(min, max)
+
+def rand_uint(min = 0x00000000, max = 0xFFFFFFFF):
+    return random.randint(min, max)
+
+def rand_byte(min = 0x00, max = 0xFF):
+    return random.randint(min, max)
+
 class DebugTimer():
 
     @classmethod
