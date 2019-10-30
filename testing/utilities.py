@@ -3,6 +3,7 @@ import time
 import traceback
 import os
 import random
+import shutil
 
 class TestOptions():
     def __init__(self, ignore_vars = [], accurate_floats = False, print_float_warnings = False):
@@ -377,7 +378,31 @@ def rand_uint(min = 0x00000000, max = 0xFFFFFFFF):
 def rand_byte(min = 0x00, max = 0xFF):
     return random.randint(min, max)
 
+class Counter():
+    def __init__(self):
+        self.count = 0
+
+    def increment(self):
+        self.count+=1
+
+    def decrement(self):
+        self.count-=1
+
+    def read(self):
+        return self.count
+
+    def reset(self):
+        self.count = 0
+
+    def to_string(self):
+        return "counter(" + self.count + ")"
+
 class DebugTimer():
+
+    _name_space = 30
+    _elapsed_space = 14
+    _percent_space = 10
+    _process_total_space = 14
 
     @classmethod
     def start_process(cls, name):
@@ -393,7 +418,11 @@ class DebugTimer():
         cls.curr_process.close()
 
     @classmethod
-    def _close_process(cls, process):
+    def clear(cls):
+        cls._start()
+
+    @classmethod
+    def _process_closed(cls, process):
         if process != cls.curr_process:
             Logs.error("Timer process closed out of order.")
         cls.curr_process = process._parent
@@ -405,49 +434,77 @@ class DebugTimer():
     class Process():
         def __init__(self, name):
             self.name = name
-            self._start_time = DebugTimer._get_time()
-            self._close_time = None
+            self.start_time = DebugTimer._get_time()
+            self.close_time = None
             self._children = []
             self._parent = None
+            self.note = ""
+            self.show_once = False
+            self.hide = {}
+
+        @property
+        def elapsed_time(self):
+            if self.close_time is not None:
+                return self.close_time - self.start_time
+            return DebugTimer._get_time() - self.start_time
 
         def _add_child(self, other):
             other._parent = self
             self._children.append(other)
 
         def close(self):
-            self._close_time = DebugTimer._get_time()
-            DebugTimer._close_process(self)
+            self.close_time = DebugTimer._get_time()
+            DebugTimer._process_closed(self)
+            if self.name not in DebugTimer.process_totals:
+                DebugTimer.process_totals[self.name] = 0
+            DebugTimer.process_totals[self.name] += self.elapsed_time
 
         def summary(self):
-            if self._close_time == None:
-                _close_time = DebugTimer._get_time()
-            else:
-                _close_time = self._close_time
-            total_time = _close_time - self._start_time
-            lines = []
-            self._summary(0, total_time, lines)
+            line_counter = Counter()
+            header = self._get_line("#", "Name", "Elapsed", "Percent", "Cumulative", "Note", 0)
+            total_time = self.elapsed_time
+            lines = [header]
+            self._summary(0, total_time, lines, line_counter)
             return "".join(lines)
 
-        def _summary(self, depth, total_time, lines):
-            if self._close_time == None:
-                _close_time = DebugTimer._get_time()
-            else:
-                _close_time = self._close_time
-            elapsed = _close_time - self._start_time
+        def _summary(self, depth, total_time, lines, line_counter):
+            if self._parent and self.name in self._parent.hide:
+                return lines
+            if self._parent and self.show_once:
+                self._parent.hide[self.name] = True
+            elapsed = self.elapsed_time
             percent = elapsed/total_time * 100
-            line = self._get_line(self.name, elapsed, percent, depth)
+            process_total = DebugTimer.process_totals[self.name]
+            line = self._get_line(line_counter.read(), self.name, elapsed, percent, process_total, self.note, depth)
+            line_counter.increment()
             lines.append(line)
             for child in self._children:
-                child._summary(depth+1, total_time, lines)
+                child._summary(depth+1, total_time, lines, line_counter)
 
         @classmethod
-        def _get_line (cls, name, elapsed, percent, depth):
-            line = "--"*depth + "|"
-            line = cls._left_buffer(line+name, 30) + "|"
-            line += cls._left_buffer(round(elapsed, 5), 14) + "|"
-            line += cls._right_buffer(round(percent, 5), 10) + "|"
-            line += "\n"
+        def _get_line (cls, line_number, name, elapsed, percent, process_total, note, depth):
+            _line_number = cls._format_block(line_number, 4, False)
+            _tab = "--"*depth
+            _name = name
+            _elapsed = cls._format_block(elapsed, DebugTimer._elapsed_space)
+            _percent = cls._format_block(percent, DebugTimer._percent_space)
+            _process_total = cls._format_block(process_total, DebugTimer._process_total_space)
+            _note = cls._format_block(note, 40)
+            left = "%s|%s|%s" % (_line_number, _tab, _name)
+            right = "%s|%s|%s|%s\n" % (_elapsed, _percent, _process_total, _note)
+            width = shutil.get_terminal_size().columns
+            space = width-len(left)-len(right)
+            line = left + ("-"*space) + right
             return line
+
+        @classmethod
+        def _format_block(cls, text, size, adjust_left = True):
+            buff = cls._left_buffer if adjust_left else cls._right_buffer
+            if isinstance(text, float):
+                text = str(round(text, 5))
+            elif isinstance(text, int):
+                text = str(text)
+            return buff(str(text), size)[:size]
 
         @staticmethod
         def _right_buffer(text, length = 8):
@@ -469,9 +526,8 @@ class DebugTimer():
     def _start(cls):
         cls.nano = 10**9
         cls.milli = 10**3
-        cls._open_process = {}
-        cls._closed_process = {}
         cls.curr_process = None
+        cls.process_totals = {}
 
     @classmethod
     def _get_time(cls):

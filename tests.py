@@ -1,3 +1,5 @@
+import testing
+from testing import utilities as util
 from testing import atom_tests
 from testing import mmcif_tests
 from testing import sdf_tests
@@ -7,7 +9,6 @@ from testing import api_tests
 from testing import context_tests
 from testing import copy_tests
 from testing import conformer_tests
-from testing import utilities as util
 
 import os
 
