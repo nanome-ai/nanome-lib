@@ -139,7 +139,7 @@ class _Atom(_Base):
         self._positions.insert(index, value)
     #endregion
 
-        #copies the structure. If conformer_number is not None it will only copy that conformer's data..
+    #copies the structure. If conformer_number is not None it will only copy that conformer's data..
     def _shallow_copy(self, conformer_number = None):
         atom = _Atom._create()
         atom._symbol = self._symbol
