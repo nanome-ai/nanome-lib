@@ -141,9 +141,6 @@ class _Atom(_Base):
 
         #copies the structure. If conformer_number is not None it will only copy that conformer's data..
     def _shallow_copy(self, conformer_number = None):
-        import testing
-        if _Atom.COUNTER is None:
-            _Atom.COUNTER = testing.utilities.Counter()
         atom = _Atom._create()
         atom._symbol = self._symbol
         atom._serial = self._serial

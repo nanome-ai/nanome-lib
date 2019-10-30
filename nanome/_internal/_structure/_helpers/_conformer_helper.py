@@ -1,6 +1,5 @@
 import hashlib, copy
 from nanome.util import StringBuilder, Vector3, enums
-import testing
 s_ConformersDisabled = False #Nanome.Core.Config.getBool("mol-conformers-disabled", "false")
 s_ConformersAlways = False #Nanome.Core.Config.getBool("mol-conformers-always", "false")
 
