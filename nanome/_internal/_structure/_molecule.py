@@ -1,5 +1,6 @@
 from . import _Base
 from . import _helpers
+import copy
 
 class _Molecule(_Base):
     @classmethod
@@ -138,13 +139,20 @@ class _Molecule(_Base):
 
     #endregion
 
-    def _shallow_copy(self):
+        #copies the structure. If conformer_number is not None it will only copy that conformer's data
+    def _shallow_copy(self, conformer_number = None):
         molecule = _Molecule._create()
-        molecule._current_conformer = self._current_conformer
-        molecule.__conformer_count = self.__conformer_count
-        molecule._names = list(self._names)
-        molecule._associateds = list(self._associateds)
+        if conformer_number == None:
+            molecule._names = list(self._names)
+            molecule._associateds = copy.deepcopy(self._associateds)
+            molecule.__conformer_count = self.__conformer_count
+            molecule._current_conformer = self._current_conformer
+        else:
+            molecule._name = self._names[conformer_number]
+            molecule._associated = self._associateds[conformer_number]
+            molecule.__conformer_count = 1
+            molecule._current_conformer = 0
         return molecule
 
-    def _deep_copy(self):
-        return _helpers._copy._deep_copy_molecule(self)
+    def _deep_copy(self, conformer_number = None):
+        return _helpers._copy._deep_copy_molecule(self, conformer_number)

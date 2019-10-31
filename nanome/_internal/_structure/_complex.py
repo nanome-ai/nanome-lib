@@ -104,4 +104,5 @@ class _Complex(_Base):
         return result
 
     def _convert_to_frames(self):
-        return _helpers._conformer_helper.convert_to_frames(self)
+        result = _helpers._conformer_helper.convert_to_frames(self)
+        return result

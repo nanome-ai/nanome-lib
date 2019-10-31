@@ -92,5 +92,3 @@ def compare_atom_positions(complex1, complex2):
         difference = atom1.position.x - atom2.position.x
         assert(difference <.001)
         assert(difference > -.001)
-        options2 = TestOptions(ignore_vars=["_unique_identifier", "_remarks", "_associateds", "_positions"])
-        assert_equal(atom1, atom2, options2)

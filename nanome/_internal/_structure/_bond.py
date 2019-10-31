@@ -140,8 +140,13 @@ class _Bond(_Base):
         self._in_conformer[self._current_conformer] = value
     #endregion
 
-    def _shallow_copy(self):
+    #copies the structure. If conformer_number is not None it will only copy that conformer's data.
+    def _shallow_copy(self, conformer_number = None):
         bond = _Bond._create()
-        bond._in_conformer = list(self._in_conformer)
-        bond._kinds = list(self._kinds)
+        if conformer_number == None:
+            bond._in_conformer = list(self._in_conformer)
+            bond._kinds = list(self._kinds)
+        else:
+            bond._kind = self._kinds[conformer_number]
+            # bond._exists = self._in_conformer[conformer_number]
         return bond

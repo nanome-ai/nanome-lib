@@ -3,75 +3,17 @@ from nanome.util import StringBuilder, Vector3, enums
 s_ConformersDisabled = False #Nanome.Core.Config.getBool("mol-conformers-disabled", "false")
 s_ConformersAlways = False #Nanome.Core.Config.getBool("mol-conformers-always", "false")
 
-def _delete_atoms(atoms):
-    for atom in atoms:
-        atom.name == "DELETED"
-        try:
-            atom._residue._remove_atom(atom)
-        except ValueError:
-            pass
-        _delete_bonds(atom._bonds)
-    del atoms[:]
-
-def _delete_bonds(bonds):
-    for bond in bonds:
-        bond._atom1 = None
-        bond._atom2 = None
-        try:
-            bond._residue.remove_bond(bond)
-        except ValueError:
-            pass
-    del bonds[:]
-
-def _delete_residues(residues):
-    for residue in residues:
-        residue._chain._remove_residue(residue)
-    del residues[:]
-
-def _delete_chains(chains):
-    for chain in chains:
-        chain._molecule._remove_chain(chain)
-    del chains[:]
-
 def _get_hash_code(string):
     return hash(string)
 
 def convert_to_frames(complex): #Data.Complex -> Data.Complex
     if (complex._molecules[0]._conformer_count <=1):
         return complex._deep_copy()
-    deleted_atoms = []
-    deleted_bonds = []
-    deleted_residues = []
-    deleted_chains = []
     new_complex = complex._shallow_copy()
     for molecule in complex._molecules:
         count = molecule._conformer_count
         for i in range(count):
-            new_molecule = molecule._deep_copy()
-            new_molecule._names = [molecule._names[i]]
-            new_molecule._associateds = [molecule._associateds[i]]
-            for new_chain in new_molecule._chains:
-                for new_residue in new_chain._residues:
-                    for new_atom in new_residue._atoms:
-                        if not new_atom._in_conformer[i]:
-                            deleted_atoms.append(new_atom)
-                        new_atom._positions = [new_atom._positions[i]]
-                        new_atom._in_conformer = [True]
-                    _delete_atoms(deleted_atoms)
-                    for new_bond in new_residue._bonds:
-                        if not new_bond._in_conformer[i]:
-                            deleted_bonds.append(new_bond)
-                        new_bond._kinds = [new_bond._kinds[i]]
-                        new_bond._in_conformer = [True]
-                    _delete_bonds(deleted_bonds)
-                    if len(new_residue._atoms) == 0:
-                        deleted_residues.append(new_residue)
-                _delete_residues(deleted_residues)
-                if len(new_chain._residues) == 0:
-                    deleted_chains.append(new_chain)
-            _delete_chains(deleted_chains)
-            new_molecule._conformer_count = 1
-            new_complex._add_molecule(new_molecule)
+            new_complex.add_molecule(molecule._deep_copy(i))
     return new_complex
 
 def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Data.Complex
