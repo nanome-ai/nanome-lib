@@ -1,12 +1,12 @@
 from . import _UIBase
 from nanome.util import Vector3, Color
 import nanome
+import copy
 
 class _Button(_UIBase):
 
     HorizAlignOptions = nanome.util.enums.HorizAlignOptions
     VertAlignOptions = nanome.util.enums.VertAlignOptions
-    ToolTipPositioning = nanome.util.enums.ToolTipPositioning
 
     @classmethod
     def _create(cls):
@@ -42,17 +42,21 @@ class _Button(_UIBase):
 
         def __init__(self):
             self._active = True
-            self._value_idle = "idle"
-            self._value_selected = "selected"
-            self._value_highlighted = "highlighted"
-            self._value_selected_highlighted = "selected and highlighted"
-            self._value_unusable = "unusable"
+            self._value = _MultiStateVariable("text")
             self._auto_size = True
             self._min_size = 0.0
             self._max_size = 1.0
             self._size = 1.0
             self._underlined = False
-            self._bolded = False
+            self._ellipsis = True
+            self._bold = _MultiStateVariable(False)
+            self._color = _MultiStateVariable(Color.Black())
+            DEFAULT_VALUE = "TODO"
+            self.padding_top = DEFAULT_VALUE
+            self.padding_bottom = DEFAULT_VALUE
+            self.padding_left = DEFAULT_VALUE
+            self.padding_right = DEFAULT_VALUE
+            self.line_spacing = DEFAULT_VALUE
             self._vertical_align =  _Button.VertAlignOptions.Middle
             self._horizontal_align = _Button.HorizAlignOptions.Middle
 
@@ -63,16 +67,8 @@ class _Button(_UIBase):
 
         def __init__(self):
             self._active = False
-            self._value_idle = ""
-            self._value_selected = ""
-            self._value_highlighted = ""
-            self._value_selected_highlighted = ""
-            self._value_unusable = ""
-            self._color_idle = Color.White()
-            self._color_selected = Color.White()
-            self._color_highlighted = Color.White()
-            self._color_selected_highlighted = Color.White()
-            self._color_unusable = Color.White()
+            self._value = _MultiStateVariable("")
+            self._color = _MultiStateVariable(Color.White())
             self._sharpness = 0.5
             self._size = 1.0
             self._ratio = 0.5
@@ -119,3 +115,61 @@ class _Button(_UIBase):
         # Callbacks
         self._pressed_callback = other._pressed_callback
         self._hover_callback = other._hover_callback
+
+class _MultiStateVariable(object):
+    def __init__(self, default = None):
+        self._set_all(default)
+
+    def _set_all(self, value):
+        self._idle = copy.deepcopy(value)
+        self._highlighted = copy.deepcopy(value)
+        self._selected = copy.deepcopy(value)
+        self._selected_highlighted = copy.deepcopy(value)
+        self._unusable = copy.deepcopy(value)
+
+    def set_all(self, value):
+        self.idle = copy.deepcopy(value)
+        self.highlighted = copy.deepcopy(value)
+        self.selected = copy.deepcopy(value)
+        self.selected_highlighted = copy.deepcopy(value)
+        self.unusable = copy.deepcopy(value)
+
+    @property
+    def idle(self):
+        return self._idle
+    
+    @idle.setter
+    def idle(self, value):
+        self._idle = value
+
+    @property
+    def higlighted(self):
+        return self._higlighted
+    
+    @higlighted.setter
+    def higlighted(self, value):
+        self._higlighted = value
+
+    @property
+    def selected(self):
+        return self._selected
+    
+    @selected.setter
+    def selected(self, value):
+        self._selected = value
+
+    @property
+    def selected_highlighted(self):
+        return self._selected_highlighted
+    
+    @selected_highlighted.setter
+    def selected_highlighted(self, value):
+        self._selected_highlighted = value
+
+    @property
+    def unusable(self):
+        return self._unusable
+    
+    @unusable.setter
+    def unusable(self, value):
+        self._unusable = value
