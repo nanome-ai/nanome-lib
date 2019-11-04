@@ -18,11 +18,11 @@ class _Button(_UIBase):
         #PROTOCOL
         self._selected = False
         self._unusable = False
-        self._text = _Button.ButtonText._create()
-        self._icon = _Button.ButtonIcon._create()
-        self._mesh = _Button.ButtonMesh._create()
-        self._outline = _Button.ButtonOutline._create()
-        self._tooltip = _Button.ButtonTooltip._create()
+        self._text = _Button._ButtonText._create()
+        self._icon = _Button._ButtonIcon._create()
+        self._mesh = _Button._ButtonMesh._create()
+        self._outline = _Button._ButtonOutline._create()
+        self._tooltip = _Button._ButtonTooltip._create()
         #API
         self._pressed_callback = lambda _: None
         self._hover_callback = lambda _, __: None
@@ -39,74 +39,74 @@ class _Button(_UIBase):
     def _register_hover_callback(self, func):
         self._hover_callback = func
 
-    class ButtonText(object):
+    class _ButtonText(object):
         @classmethod
         def _create(cls):
             return cls()
 
         def __init__(self):
             self._active = True
-            self._value = _MultiStateVariable("text")
+            self._value = _Button._MultiStateVariable._create("text")
             self._auto_size = True
             self._min_size = 0.0
             self._max_size = 1.0
             self._size = 1.0
             self._underlined = False
             self._ellipsis = True
-            self._bolded = _MultiStateVariable(False)
-            self._color = _MultiStateVariable(Color.Black())
-            DEFAULT_VALUE = "TODO"
-            self.padding_top = DEFAULT_VALUE
-            self.padding_bottom = DEFAULT_VALUE
-            self.padding_left = DEFAULT_VALUE
-            self.padding_right = DEFAULT_VALUE
-            self.line_spacing = DEFAULT_VALUE
+            self._bold = _Button._MultiStateVariable._create(False)
+            self._color = _Button._MultiStateVariable._create(Color.Black())
+            DEFAULT_VALUE = .5 #TODO
+            self._padding_top = DEFAULT_VALUE
+            self._padding_bottom = DEFAULT_VALUE
+            self._padding_left = DEFAULT_VALUE
+            self._padding_right = DEFAULT_VALUE
+            self._line_spacing = DEFAULT_VALUE
             self._vertical_align =  _Button.VertAlignOptions.Middle
             self._horizontal_align = _Button.HorizAlignOptions.Middle
 
-    class ButtonIcon(object):
+    class _ButtonIcon(object):
         @classmethod
         def _create(cls):
             return cls()
 
         def __init__(self):
             self._active = False
-            self._value = _MultiStateVariable("")
-            self._color = _MultiStateVariable(Color.White())
+            self._value = _Button._MultiStateVariable._create("")
+            self._color = _Button._MultiStateVariable._create(Color.White())
             self._sharpness = 0.5
             self._size = 1.0
             self._ratio = 0.5
             self._position = Vector3()
             self._rotation = Vector3()
 
-    class ButtonMesh(object):
+    class _ButtonMesh(object):
         @classmethod
         def _create(cls):
             return cls()
 
         def __init__(self):
             self._active = False
-            self._enabled = _MultiStateVariable(True)
-            self._color = _MultiStateVariable(Color.White())
+            self._enabled = _Button._MultiStateVariable._create(True)
+            self._color = _Button._MultiStateVariable._create(Color.White())
 
-    class ButtonOutline(object):
+    class _ButtonOutline(object):
         @classmethod
         def _create(cls):
             return cls()
 
         def __init__(self):
-            DEFAULT_VALUE = "TODO"
+            DEFAULT_VALUE = .5#TODO
             self._active = False
-            self._size = _MultiStateVariable(DEFAULT_VALUE)
-            self._color = _MultiStateVariable(Color.White())
+            self._size = _Button._MultiStateVariable._create(DEFAULT_VALUE)
+            self._color = _Button._MultiStateVariable._create(Color.White())
 
-    class ButtonTooltip(object):
+    class _ButtonTooltip(object):
         @classmethod
         def _create(cls):
             return cls()
 
         def __init__(self):
-            DEFAULT_VALUE = "TODO"
+            DEFAULT_VALUE = Vector3()#TODO
             self._title = ""
             self._content = ""
             self._bounds = DEFAULT_VALUE
@@ -126,14 +126,14 @@ class _Button(_UIBase):
         self._text._max_size = other._text._max_size
         self._text._size = other._text._size
         self._text._underlined = other._text._underlined
-        self._text._ellipsis = other._text._ellipses
-        self._text._bolded._copy(other._text._bolded)
+        self._text._ellipsis = other._text._ellipsis
+        self._text._bold._copy(other._text._bold)
         self._text._color._copy(other._text._color)
-        self.padding_top = other.padding_top
-        self.padding_bottom = other.padding_bottom
-        self.padding_left = other.padding_left
-        self.padding_right = other.padding_right
-        self.line_spacing = other.line_spacing
+        self._text._padding_top = other._text._padding_top
+        self._text._padding_bottom = other._text._padding_bottom
+        self._text._padding_left = other._text._padding_left
+        self._text._padding_right = other._text._padding_right
+        self._text._line_spacing = other._text._line_spacing
         self._text._vertical_align = other._text._vertical_align
         self._text._horizontal_align = other._text._horizontal_align
         # Icon
@@ -147,8 +147,8 @@ class _Button(_UIBase):
         self._icon._rotation = other._icon._rotation
         #Mesh
         self._mesh._active = other._mesh._active
-        self._mesh._enabled._copy(self._mesh._enabled)
-        self._mesh._color._copy(self._mesh._color)
+        self._mesh._enabled._copy(other._mesh._enabled)
+        self._mesh._color._copy(other._mesh._color)
         #Outline
         self._outline._active = other._outline._active
         self._outline._size._copy(other._outline._size)
@@ -163,67 +163,24 @@ class _Button(_UIBase):
         self._pressed_callback = other._pressed_callback
         self._hover_callback = other._hover_callback
 
-class _MultiStateVariable(object):
-    def __init__(self, default = None):
-        self._set_all(default)
+    class _MultiStateVariable(object):
+        @classmethod
+        def _create(cls, default, cast_type = None):
+            return cls()
 
-    def _set_all(self, value):
-        self._idle = copy.deepcopy(value)
-        self._highlighted = copy.deepcopy(value)
-        self._selected = copy.deepcopy(value)
-        self._selected_highlighted = copy.deepcopy(value)
-        self._unusable = copy.deepcopy(value)
+        def __init__(self, default = None):
+            self._set_all(default)
 
-    def set_all(self, value):
-        self.idle = copy.deepcopy(value)
-        self.highlighted = copy.deepcopy(value)
-        self.selected = copy.deepcopy(value)
-        self.selected_highlighted = copy.deepcopy(value)
-        self.unusable = copy.deepcopy(value)
+        def _set_all(self, value):
+            self._idle = copy.deepcopy(value)
+            self._highlighted = copy.deepcopy(value)
+            self._selected = copy.deepcopy(value)
+            self._selected_highlighted = copy.deepcopy(value)
+            self._unusable = copy.deepcopy(value)
 
-    def _copy(self, other):
-        self._idle = other._idle
-        self._highlighted = other._highlighted
-        self._selected = other._selected
-        self._selected_highlighted = other._selected_highlighted
-        self._unusable = other._unusable
-
-    @property
-    def idle(self):
-        return self._idle
-    
-    @idle.setter
-    def idle(self, value):
-        self._idle = value
-
-    @property
-    def higlighted(self):
-        return self._higlighted
-    
-    @higlighted.setter
-    def higlighted(self, value):
-        self._higlighted = value
-
-    @property
-    def selected(self):
-        return self._selected
-    
-    @selected.setter
-    def selected(self, value):
-        self._selected = value
-
-    @property
-    def selected_highlighted(self):
-        return self._selected_highlighted
-    
-    @selected_highlighted.setter
-    def selected_highlighted(self, value):
-        self._selected_highlighted = value
-
-    @property
-    def unusable(self):
-        return self._unusable
-    
-    @unusable.setter
-    def unusable(self, value):
-        self._unusable = value
+        def _copy(self, other):
+            self._idle = other._idle
+            self._highlighted = other._highlighted
+            self._selected = other._selected
+            self._selected_highlighted = other._selected_highlighted
+            self._unusable = other._unusable

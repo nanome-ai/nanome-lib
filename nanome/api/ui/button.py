@@ -1,3 +1,4 @@
+import copy
 import nanome
 from nanome._internal._ui import _Button
 from . import UIBase
@@ -13,45 +14,15 @@ class Button(_Button, UIBase):
         self.text = self._text
         self.icon = self._icon
         if (text != None):
-            self.set_all_text(text)
+            self.text.set_all(text)
         if (icon != None):
-            self.set_all_icon(icon)
+            self.icon.set_all(icon)
 
     def register_pressed_callback(self, func):
         _Button._register_pressed_callback(self, func)
 
     def register_hover_callback(self, func):
         _Button._register_hover_callback(self, func)
-
-    def set_all_text(self, text):
-        # type: (str)
-        """
-        | Sets the text value of every state to the given text.
-
-        :param text: The text to display on the button
-        :type text: str
-        """
-        self.text.value_idle = text
-        self.text.value_selected = text
-        self.text.value_highlighted = text
-        self.text.value_selected_highlighted = text
-        self.text.value_unusable = text
-
-    def set_all_icon(self, icon):
-        # type: (str)
-        """
-        | Sets the path to the icon for every state.
-        | Enables the button icon
-
-        :param icon: The path to the icon file
-        :type icon: str
-        """
-        self.icon.active = True
-        self.icon.value_idle = icon
-        self.icon.value_selected = icon
-        self.icon.value_highlighted = icon
-        self.icon.value_selected_highlighted = icon
-        self.icon.value_unusable = icon
 
     @property
     def selected(self):
@@ -71,7 +42,31 @@ class Button(_Button, UIBase):
         # type: (bool)
         self._unusable = value
 
-    class ButtonText(_Button.ButtonText):
+    class ButtonText(_Button._ButtonText):
+        @property
+        def value(self):
+            return self._value
+        
+        @value.setter
+        def value(self, value):
+            raise ValueError("Cannot set multi-variable value directly. Specify the state or use set_all")
+
+        @property
+        def bold(self):
+            return self._bold
+        
+        @bold.setter
+        def bold(self, value):
+            raise ValueError("Cannot set multi-variable value directly. Specify the state or use set_all")
+
+        @property
+        def color(self):
+            return self._color
+        
+        @color.setter
+        def color(self, value):
+            raise ValueError("Cannot set multi-variable value directly. Specify the state or use set_all")
+
         @property
         def active(self):
             # type: () -> bool
@@ -80,61 +75,6 @@ class Button(_Button, UIBase):
         def active(self, value):
             # type: (bool)
             self._active = value
-
-        @property
-        def value_idle(self):
-            # type: () -> str
-            return self._value_idle
-        @value_idle.setter
-        def value_idle(self, value):
-            # type: (str)
-            if type(value) is not str:
-                value = str(value)
-            self._value_idle = value
-
-        @property
-        def value_selected(self):
-            # type: () -> str
-            return self._value_selected
-        @value_selected.setter
-        def value_selected(self, value):
-            # type: (str)
-            if type(value) is not str:
-                value = str(value)
-            self._value_selected = value
-
-        @property
-        def value_highlighted(self):
-            # type: () -> str
-            return self._value_highlighted
-        @value_highlighted.setter
-        def value_highlighted(self, value):
-            # type: (str)
-            if type(value) is not str:
-                value = str(value)
-            self._value_highlighted = value
-
-        @property
-        def value_selected_highlighted(self):
-            # type: () -> str
-            return self._value_selected_highlighted
-        @value_selected_highlighted.setter
-        def value_selected_highlighted(self, value):
-            # type: (str)
-            if type(value) is not str:
-                value = str(value)
-            self._value_selected_highlighted = value
-
-        @property
-        def value_unusable(self):
-            # type: () -> str
-            return self._value_unusable
-        @value_unusable.setter
-        def value_unusable(self, value):
-            # type: (str)
-            if type(value) is not str:
-                value = str(value)
-            self._value_unusable = value
 
         @property
         def auto_size(self):
@@ -182,13 +122,48 @@ class Button(_Button, UIBase):
             self._underlined = value
 
         @property
-        def bolded(self):
+        def ellipsis(self):
             # type: () -> bool
-            return self._bolded
-        @bolded.setter
-        def bolded(self, value):
+            return self._ellipsis
+        @ellipsis.setter
+        def ellipsis(self, value):
             # type: (bool)
-            self._bolded = value
+            self._ellipsis = value
+
+        @property
+        def padding_top(self):
+            return self._padding_top
+        @padding_top.setter
+        def padding_top(self, value):
+            self._padding_top = value
+
+        @property
+        def padding_bottom(self):
+            return self._padding_bottom
+        @padding_bottom.setter
+        def padding_bottom(self, value):
+            self._padding_bottom = value
+
+        @property
+        def padding_left(self):
+            return self._padding_left
+        @padding_left.setter
+        def padding_left(self, value):
+            self._padding_left = value
+
+        @property
+        def padding_right(self):
+            return self._padding_right
+        @padding_right.setter
+        def padding_right(self, value):
+            self._padding_right = value
+
+        @property
+        def line_spacing(self):
+            return self._line_spacing
+        @line_spacing.setter
+        def line_spacing(self, value):
+            self._line_spacing = value
 
         @property
         def vertical_align(self):
@@ -207,95 +182,31 @@ class Button(_Button, UIBase):
         def horizontal_align(self, value):
             # type: (HorizAlignOptions)
             self._horizontal_align = value
-    _Button.ButtonText._create = ButtonText
+    _Button._ButtonText._create = ButtonText
 
-    class ButtonIcon(_Button.ButtonIcon):
+    class ButtonIcon(_Button._ButtonIcon):
+        @property
+        def value(self):
+            return self._value
+
+        @value.setter
+        def value(self, value):
+            raise ValueError("Cannot set multi-variable value directly. Specify the state or use set_all")
+
+        @property
+        def color(self):
+            return self._color
+
+        @color.setter
+        def color(self, value):
+            raise ValueError("Cannot set multi-variable value directly. Specify the state or use set_all")
+
         @property
         def active(self):
             return self._active
         @active.setter
         def active(self, value):
             self._active = value
-
-        @property
-        def value_idle(self):
-            return self._value_idle
-        @value_idle.setter
-        def value_idle(self, value):
-            if type(value) is not str:
-                value = str(value)
-            self._value_idle = value
-
-        @property
-        def value_selected(self):
-            return self._value_selected
-        @value_selected.setter
-        def value_selected(self, value):
-            if type(value) is not str:
-                value = str(value)
-            self._value_selected = value
-
-        @property
-        def value_highlighted(self):
-            return self._value_highlighted
-        @value_highlighted.setter
-        def value_highlighted(self, value):
-            if type(value) is not str:
-                value = str(value)
-            self._value_highlighted = value
-
-        @property
-        def value_selected_highlighted(self):
-            return self._value_selected_highlighted
-        @value_selected_highlighted.setter
-        def value_selected_highlighted(self, value):
-            if type(value) is not str:
-                value = str(value)
-            self._value_selected_highlighted = value
-
-        @property
-        def value_unusable(self):
-            return self._value_unusable
-        @value_unusable.setter
-        def value_unusable(self, value):
-            if type(value) is not str:
-                value = str(value)
-            self._value_unusable = value
-
-        @property
-        def color_idle(self):
-            return self._color_idle
-        @color_idle.setter
-        def color_idle(self, value):
-            self._color_idle = value
-
-        @property
-        def color_selected(self):
-            return self._color_selected
-        @color_selected.setter
-        def color_selected(self, value):
-            self._color_selected = value
-
-        @property
-        def color_highlighted(self):
-            return self._color_highlighted
-        @color_highlighted.setter
-        def color_highlighted(self, value):
-            self._color_highlighted = value
-
-        @property
-        def color_selected_highlighted(self):
-            return self._color_selected_highlighted
-        @color_selected_highlighted.setter
-        def color_selected_highlighted(self, value):
-            self._color_selected_highlighted = value
-
-        @property
-        def color_unusable(self):
-            return self._color_unusable
-        @color_unusable.setter
-        def color_unusable(self, value):
-            self._color_unusable = value
 
         @property
         def sharpness(self):
@@ -331,5 +242,161 @@ class Button(_Button, UIBase):
         @rotation.setter
         def rotation(self, value):
             self._rotation = value
-    _Button.ButtonIcon._create = ButtonIcon
+    _Button._ButtonIcon._create = ButtonIcon
+
+    class ButtonMesh(_Button._ButtonMesh):
+        @property
+        def color(self):
+            return self._color
+        
+        @color.setter
+        def color(self, value):
+            raise ValueError("Cannot set multi-variable value directly. Specify the state or use set_all")
+
+        @property
+        def enabled(self):
+            return self._enabled
+        
+        @enabled.setter
+        def enabled(self, value):
+            raise ValueError("Cannot set multi-variable value directly. Specify the state or use set_all")
+
+        @property
+        def active(self):
+            # type: () -> bool
+            return self._active
+        @active.setter
+        def active(self, value):
+            # type: (bool)
+            self._active = value
+    _Button._ButtonMesh._create = ButtonMesh
+
+    class ButtonOutline(_Button._ButtonOutline):
+        @property
+        def size(self):
+            return self._size
+        
+        @size.setter
+        def size(self, value):
+            raise ValueError("Cannot set multi-variable value directly. Specify the state or use set_all")
+
+        @property
+        def color(self):
+            return self._color
+        
+        @color.setter
+        def color(self, value):
+            raise ValueError("Cannot set multi-variable value directly. Specify the state or use set_all")
+
+        @property
+        def active(self):
+            # type: () -> bool
+            return self._active
+        @active.setter
+        def active(self, value):
+            # type: (bool)
+            self._active = value
+    _Button._ButtonOutline._create = ButtonOutline
+
+    class ButtonTooltip(_Button._ButtonTooltip):
+        @property
+        def title(self):
+            # type: () -> bool
+            return self._title
+        @title.setter
+        def title(self, value):
+            # type: (bool)
+            self._title = value
+
+        @property
+        def content(self):
+            # type: () -> bool
+            return self._content
+        @content.setter
+        def content(self, value):
+            # type: (bool)
+            self._content = value
+
+        @property
+        def bounds(self):
+            # type: () -> bool
+            return self._bounds
+        @bounds.setter
+        def bounds(self, value):
+            # type: (bool)
+            self._bounds = value
+
+        @property
+        def positioning_target(self):
+            # type: () -> bool
+            return self._positioning_target
+        @positioning_target.setter
+        def positioning_target(self, value):
+            # type: (bool)
+            self._positioning_target = value
+
+        @property
+        def positioning_origin(self):
+            # type: () -> bool
+            return self._positioning_origin
+        @positioning_origin.setter
+        def positioning_origin(self, value):
+            # type: (bool)
+            self._positioning_origin = value
+    _Button._ButtonTooltip._create = ButtonTooltip
+
+    class MultiStateVariable(_Button._MultiStateVariable):
+        def __init__(self, default):
+            _Button._MultiStateVariable.__init__(self, default)
+
+        def set_all(self, value):
+            """
+            | Sets the value for every state
+            """
+            self.idle = copy.deepcopy(value)
+            self.highlighted = copy.deepcopy(value)
+            self.selected = copy.deepcopy(value)
+            self.selected_highlighted = copy.deepcopy(value)
+            self.unusable = copy.deepcopy(value)
+
+        @property
+        def idle(self):
+            return self._idle
+        
+        @idle.setter
+        def idle(self, value):
+            self._idle = value
+
+        @property
+        def higlighted(self):
+            return self._higlighted
+        
+        @higlighted.setter
+        def higlighted(self, value):
+            self._higlighted = value
+
+        @property
+        def selected(self):
+            return self._selected
+        
+        @selected.setter
+        def selected(self, value):
+            self._selected = value
+
+        @property
+        def selected_highlighted(self):
+            return self._selected_highlighted
+        
+        @selected_highlighted.setter
+        def selected_highlighted(self, value):
+            self._selected_highlighted = value
+
+        @property
+        def unusable(self):
+            return self._unusable
+        
+        @unusable.setter
+        def unusable(self, value):
+            self._unusable = value
+    _Button._MultiStateVariable._create = MultiStateVariable
 _Button._create = Button
