@@ -19,8 +19,7 @@ from nanome.util import Logs
 
 test_assets = os.getcwd() + ("/testing/test_assets")
 test_output_dir = os.getcwd() + ("/testing/test_outputs")
-options = TestOptions(ignore_vars=["_unique_identifier", "_remarks", "_associateds"])
-
+options = TestOptions(ignore_vars=["_unique_identifier", "_remarks", "_associateds", "_parent"])
 def run(counter):
     run_test(test_structures, counter)
     run_test(test_equality, counter)
@@ -67,10 +66,8 @@ def flip_x_positions(complex):
 def compare_atom_positions(complex1, complex2):
     a1 = complex1.atoms
     a2 = complex2.atoms
-    for a,_ in enumerate(complex1.atoms):
-        atom1 = next(a1)
-        atom2 = next(a2)
-        assert_equal(atom1.position.x, atom2.position.x, options)
+    for atom1, atom2 in zip(a1, a2):
+        assert(atom1.position.equals(atom2.position))
         assert_equal(atom1, atom2, options)
 
 #Testing save load
@@ -96,9 +93,9 @@ def prep_timer_test():
     #input_dir = test_assets + ("/pdb/1fsv.pdb") #smallboy
     #input_dir = test_assets + ("/pdb/1a9l.pdb") #bigboy
     complex1 = struct.Complex.io.from_sdf(path=input_dir)
-    complex2 = struct.Complex.io.from_sdf(path=input_dir)
-    complex3 = struct.Complex.io.from_sdf(path=input_dir)
-    complex4 = struct.Complex.io.from_sdf(path=input_dir)
+    complex2 = complex1._deep_copy()
+    complex3 = complex1._deep_copy()
+    complex4 = complex1._deep_copy()
     global test_workspace
     test_workspace = create_workspace()
     test_workspace.complexes = [complex1, complex2, complex3, complex4]
@@ -152,6 +149,7 @@ def test_iterators():
 
     #complex level
     complex = struct.Complex.io.from_sdf(path=input_dir)
+    complex = complex.convert_to_frames()
     a = 0
     for atom in complex.atoms:
         a += 1
@@ -309,9 +307,8 @@ def test_matrices():
     m = complex.get_complex_to_workspace_matrix()
     m_inv = complex.get_workspace_to_complex_matrix()
     atom_global_pos = m * atom.position
-
     assert_equal(atom_global_pos, res_atom_global_pos)
-    assert_equal(m_inv * atom_global_pos, atom.position)\
+    assert_equal(m_inv * atom_global_pos, atom.position)
 
 def assert_parents(atom, bond, residue, chain, molecule, complex):
     assert(bond.residue == residue)

@@ -6,9 +6,9 @@ def structure(content):
     # type: (Content) -> Complex
     complex = _Complex._create()
     for model in content.models:
-        complex._molecules.append(structure_molecule(model))
+        complex._add_molecule(structure_molecule(model))
     complex._remarks = {}
-    return complex._convert_to_frames()
+    return complex._convert_to_conformers()
 
 
 def structure_molecule(model):
@@ -18,12 +18,12 @@ def structure_molecule(model):
 
     chain = _Chain._create()
     chain._name = "S"
-    molecule._chains.append(chain)
+    molecule._add_chain(chain)
     residue = _Residue._create()
     residue._name = "SDF"
     residue._type = residue._name
     residue.serial = 1
-    chain._residues.append(residue)
+    chain._add_residue(residue)
     atoms_by_serial = {}
 
     for catom in model.atoms:
@@ -33,7 +33,7 @@ def structure_molecule(model):
         atom._position = Vector3(catom.x, catom.y, catom.z)
         atom._name = catom.symbol
         atom._is_het = True
-        residue._atoms.append(atom)
+        residue._add_atom(atom)
         atoms_by_serial[atom._serial] = atom
     for cbond in model.bonds:
         if cbond.serial_atom1 in atoms_by_serial and cbond.serial_atom2 in atoms_by_serial:
@@ -41,6 +41,6 @@ def structure_molecule(model):
             bond._atom1 = atoms_by_serial[cbond.serial_atom1]
             bond._atom2 = atoms_by_serial[cbond.serial_atom2]
             bond._kind = cbond.bond_order
-            residue._bonds.append(bond)
+            residue._add_bond(bond)
     molecule._associated = model._associated
     return molecule

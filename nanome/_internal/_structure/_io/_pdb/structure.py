@@ -15,9 +15,9 @@ def structure(content):
     for i in range(num_molecules):
         molecule = structure_molecule(atoms_by_molecule[i], content.compnds)
         molecule._name = str(i)
-        complex._molecules.append(molecule)
+        complex._add_molecule(molecule)
     # Done
-    return complex._convert_to_frames()
+    return complex._convert_to_conformers()
         
          
 def structure_molecule(atoms, compnds):
@@ -54,14 +54,14 @@ def structure_molecule(atoms, compnds):
                     chain = _Chain._create()
                     chain._name = chain_id
                     all_chains[chain_id] = chain
-                all_chains[chain_id]._residues.append(residue)
-            all_residues[residue_id]._atoms.append(atom)
+                all_chains[chain_id]._add_residue(residue)
+            all_residues[residue_id]._add_atom(atom)
             all_atoms[atom_id] = atom
     # Final molecule
     molecule = _Molecule._create()
     # Assemble molecule contents
     for chain in all_chains:
-        molecule._chains.append(all_chains[chain])
+        molecule._add_chain(all_chains[chain])
     # Done
     return molecule
         

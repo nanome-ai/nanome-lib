@@ -139,7 +139,8 @@ class _Atom(_Base):
         self._positions.insert(index, value)
     #endregion
 
-    def _shallow_copy(self):
+    #copies the structure. If conformer_number is not None it will only copy that conformer's data..
+    def _shallow_copy(self, conformer_number = None):
         atom = _Atom._create()
         atom._symbol = self._symbol
         atom._serial = self._serial
@@ -168,6 +169,10 @@ class _Atom(_Base):
         atom._het_atomed = self._het_atomed
         atom._het_surfaced = self._het_surfaced
         #conformer
-        atom._positions = [position.get_copy() for position in self._positions]
-        atom._in_conformer = list(self._in_conformer)
+        if conformer_number == None:
+            atom._positions = [position.get_copy() for position in self._positions]
+            atom._in_conformer = list(self._in_conformer)
+        else:
+            atom._position = self._positions[conformer_number]
+            #atom._exists = self._in_conformer[conformer_number]
         return atom

@@ -3,77 +3,17 @@ from nanome.util import StringBuilder, Vector3, enums
 s_ConformersDisabled = False #Nanome.Core.Config.getBool("mol-conformers-disabled", "false")
 s_ConformersAlways = False #Nanome.Core.Config.getBool("mol-conformers-always", "false")
 
-def _delete_atoms(atoms):
-    for atom in atoms:
-        atom.name == "DELETED"
-        try:
-            atom._residue._remove_atom(atom)
-        except ValueError:
-            pass
-        _delete_bonds(atom._bonds)
-    del atoms[:]
-
-def _delete_bonds(bonds):
-    for bond in bonds:
-        bond._atom1 = None
-        bond._atom2 = None
-        try:
-            bond._residue.remove_bond(bond)
-        except ValueError:
-            pass
-    del bonds[:]
-
-def _delete_residues(residues):
-    for residue in residues:
-        residue._chain._remove_residue(residue)
-    del residues[:]
-
-def _delete_chains(chains):
-    for chain in chains:
-        chain._molecule._remove_chain(chain)
-    del chains[:]
-
-#disabled hashing until I can find a fast algorithm
-def _get_hash_code(str):
-    return str #int(hashlib.sha256(str.encode('utf-8')).hexdigest(), 16)
+def _get_hash_code(string):
+    return hash(string)
 
 def convert_to_frames(complex): #Data.Complex -> Data.Complex
-    deleted_atoms = []
-    deleted_bonds = []
-    deleted_residues = []
-    deleted_chains = []
+    if (complex._molecules[0]._conformer_count <=1):
+        return complex._deep_copy()
     new_complex = complex._shallow_copy()
     for molecule in complex._molecules:
-        if molecule._conformer_count > 1:
-            count = molecule._conformer_count
-            for i in range(count):
-                new_molecule = molecule._deep_copy()
-                new_molecule._names = [molecule._names[i]]
-                new_molecule._associateds = [molecule._associateds[i]]
-                for new_chain in new_molecule._chains:
-                    for new_residue in new_chain._residues:
-                        for new_atom in new_residue._atoms:
-                            if not new_atom._in_conformer[i]:
-                                deleted_atoms.append(new_atom)
-                            new_atom._positions = [new_atom._positions[i]]
-                            new_atom._in_conformer = [True]
-                        _delete_atoms(deleted_atoms)
-                        for new_bond in new_residue._bonds:
-                            if not new_bond._in_conformer[i]:
-                                deleted_bonds.append(new_bond)
-                            new_bond._kinds = [new_bond._kinds[i]]
-                            new_bond._in_conformer = [True]
-                        _delete_bonds(deleted_bonds)
-                        if len(new_residue._atoms) == 0:
-                            deleted_residues.append(new_residue)
-                    _delete_residues(deleted_residues)
-                    if len(new_chain._residues) == 0:
-                        deleted_chains.append(new_chain)
-                _delete_chains(deleted_chains)
-                new_molecule._conformer_count = 1
-                new_complex._add_molecule(new_molecule)
-        else:
-            new_complex._add_molecule(molecule._deep_copy())
+        count = molecule._conformer_count
+        for i in range(count):
+            new_complex.add_molecule(molecule._deep_copy(i))
     return new_complex
 
 def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Data.Complex
@@ -139,6 +79,7 @@ def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Dat
                     off = 0
                     if name_hash in names_dictionary:
                         off = names_dictionary[name_hash]
+                    off +=1
                     names_dictionary[name_hash] = off
                     # Lookup or create atom with hash
                     hash_atom = _get_atom_hash(sb, atom, off)
@@ -189,7 +130,7 @@ def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Dat
             bond_total_count+=1
 
         for atom in molecule.atoms:
-            for bond in molecule.bonds:
+            for bond in atom.bonds:
                 atom_info_1 = atoms_dictionary[bond._atom1._unique_identifier]
                 atom_info_2 = atoms_dictionary[bond._atom2._unique_identifier]
 
@@ -242,38 +183,26 @@ def _get_chain_hash(sb, chain): #StringBuilder, Data.Chain -> int
 def _get_residue_hash(sb, residue): #StringBuilder, Data.Residue -> int
     sb.clear()
     sb.append(residue._serial)
-    sb.append(":")
-    sb.append(residue._name)
-    sb.append(":")
-    sb.append(residue._chain._name)
-    return _get_hash_code(sb.to_string())
+    sb.append_string(residue._name)
+    sb.append_string(residue._chain._name)
+    return _get_hash_code(sb.to_string(":"))
 
 def _get_atom_hash(sb, atom, off): #StringBuilder, Data.Atom, int -> int
     sb.clear()
     sb.append(atom._symbol)
-    sb.append(":")
-    sb.append(atom._name)
-    sb.append(":")
+    sb.append_string(atom._name)
     sb.append(atom._is_het)
-    sb.append(":")
     sb.append(off)
-    sb.append(":")
     sb.append(atom._residue._serial)
-    sb.append(":")
-    sb.append(atom._residue._name)
-    sb.append(":")
-    sb.append(atom._residue._chain._name)
-    return _get_hash_code(sb.to_string())
+    sb.append_string(atom._residue._name)
+    sb.append_string(atom._residue._chain._name)
+    return _get_hash_code(sb.to_string(":"))
 
 def _get_bond_hash(sb, bond, atom1, atom2): #StringBuilder, Data.Bond, int, int -> int
     sb.clear()
     sb.append(atom1)
-    sb.append(":")
     sb.append(atom2)
-    sb.append(":")
     sb.append(bond._residue._serial)
-    sb.append(":")
-    sb.append(bond._residue._name)
-    sb.append(":")
-    sb.append(bond._chain._name)
-    return _get_hash_code(sb.to_string())
+    sb.append_string(bond._residue._name)
+    sb.append_string(bond._chain._name)
+    return _get_hash_code(sb.to_string(":"))
