@@ -1,4 +1,4 @@
-from nanome.util import Logs
+from nanome.util import Logs, Color
 import time
 import traceback
 import os
@@ -377,6 +377,12 @@ def rand_uint(min = 0x00000000, max = 0xFFFFFFFF):
 
 def rand_byte(min = 0x00, max = 0xFF):
     return random.randint(min, max)
+
+def rand_string():
+    return str(rand_int())
+
+def rand_color():
+    return Color(whole_num = rand_int())
 
 class Counter():
     def __init__(self):

@@ -13,10 +13,13 @@ class Button(_Button, UIBase):
         UIBase.__init__(self)
         self.text = self._text
         self.icon = self._icon
+        self.mesh = self._mesh
+        self.outline = self._outline
+        self.tooltip = self._tooltip
         if (text != None):
-            self.text.set_all(text)
+            self.text.value.set_all(text)
         if (icon != None):
-            self.icon.set_all(icon)
+            self.icon.value.set_all(icon)
 
     def register_pressed_callback(self, func):
         _Button._register_pressed_callback(self, func)

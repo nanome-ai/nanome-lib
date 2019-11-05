@@ -1,3 +1,4 @@
+import nanome
 import sys
 
 @classmethod
@@ -7,7 +8,7 @@ def safe_cast(cls, value):
     except ValueError:
         if cls.cast_failed_warning == False:
             cls.cast_failed_warning = True
-            Logs.warning("Invalid value", value, "for enum", cls.__name__, ". Library might outdated.")
+            nanome.util.Logs.warning("Invalid value", value, "for enum", cls.__name__, ". Library might outdated.")
         return cls(0)
 
 if sys.version_info >= (3, 4):
