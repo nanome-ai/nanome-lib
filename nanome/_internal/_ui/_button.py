@@ -49,18 +49,17 @@ class _Button(_UIBase):
             self._value = _Button._MultiStateVariable._create("text")
             self._auto_size = True
             self._min_size = 0.0
-            self._max_size = 1.0
-            self._size = 1.0
+            self._max_size = .3
+            self._size = 0.2
             self._underlined = False
             self._ellipsis = True
             self._bold = _Button._MultiStateVariable._create(False)
             self._color = _Button._MultiStateVariable._create(Color.Black())
-            DEFAULT_VALUE = .5 #TODO
-            self._padding_top = DEFAULT_VALUE
-            self._padding_bottom = DEFAULT_VALUE
-            self._padding_left = DEFAULT_VALUE
-            self._padding_right = DEFAULT_VALUE
-            self._line_spacing = DEFAULT_VALUE
+            self._padding_top = 0
+            self._padding_bottom = 0
+            self._padding_left = 0
+            self._padding_right = 0
+            self._line_spacing = 0
             self._vertical_align =  _Button.VertAlignOptions.Middle
             self._horizontal_align = _Button.HorizAlignOptions.Middle
 
@@ -95,10 +94,13 @@ class _Button(_UIBase):
             return cls()
 
         def __init__(self):
-            DEFAULT_VALUE = .5#TODO
             self._active = False
-            self._size = _Button._MultiStateVariable._create(DEFAULT_VALUE)
-            self._color = _Button._MultiStateVariable._create(Color.White())
+            self._size = _Button._MultiStateVariable._create(.3)
+            self._color = _Button._MultiStateVariable._create()
+            self._color._highlighted = Color(whole_num = 0x2fdbbf)
+            self._color._selected = Color(whole_num = 0x00e5bf)
+            self._color._selected_highlighted = Color(whole_num = 0x00f9d0)
+            self._color._unusable = Color.Grey()
 
     class _ButtonTooltip(object):
         @classmethod
@@ -106,10 +108,9 @@ class _Button(_UIBase):
             return cls()
 
         def __init__(self):
-            DEFAULT_VALUE = Vector3()#TODO
             self._title = ""
             self._content = ""
-            self._bounds = DEFAULT_VALUE
+            self._bounds = Vector3(1.73, .6, .05)
             self._positioning_target = _Button.ToolTipPositioning.right
             self._positioning_origin = _Button.ToolTipPositioning.top_left
 
@@ -165,7 +166,7 @@ class _Button(_UIBase):
 
     class _MultiStateVariable(object):
         @classmethod
-        def _create(cls, default, cast_type = None):
+        def _create(cls, default = None):
             return cls()
 
         def __init__(self, default = None):
