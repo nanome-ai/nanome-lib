@@ -349,7 +349,7 @@ class Button(_Button, UIBase):
     _Button._ButtonTooltip._create = ButtonTooltip
 
     class MultiStateVariable(_Button._MultiStateVariable):
-        def __init__(self, default):
+        def __init__(self, default = None):
             _Button._MultiStateVariable.__init__(self, default)
 
         def set_all(self, value):

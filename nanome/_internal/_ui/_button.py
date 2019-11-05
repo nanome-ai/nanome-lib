@@ -53,8 +53,8 @@ class _Button(_UIBase):
             self._size = 0.2
             self._underlined = False
             self._ellipsis = True
-            self._bold = _Button._MultiStateVariable._create(False)
-            self._color = _Button._MultiStateVariable._create(Color.Black())
+            self._bold = _Button._MultiStateVariable._create(True)
+            self._color = _Button._MultiStateVariable._create(Color.White())
             self._padding_top = 0
             self._padding_bottom = 0
             self._padding_left = 0
@@ -86,7 +86,7 @@ class _Button(_UIBase):
         def __init__(self):
             self._active = False
             self._enabled = _Button._MultiStateVariable._create(True)
-            self._color = _Button._MultiStateVariable._create(Color.White())
+            self._color = _Button._MultiStateVariable._create(Color.Black())
 
     class _ButtonOutline(object):
         @classmethod
@@ -97,6 +97,7 @@ class _Button(_UIBase):
             self._active = False
             self._size = _Button._MultiStateVariable._create(.3)
             self._color = _Button._MultiStateVariable._create()
+            self._color._idle = Color.White()
             self._color._highlighted = Color(whole_num = 0x2fdbbf)
             self._color._selected = Color(whole_num = 0x00e5bf)
             self._color._selected_highlighted = Color(whole_num = 0x00f9d0)
