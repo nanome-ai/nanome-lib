@@ -1,3 +1,4 @@
+from . import Logs
 import sys
 
 @classmethod
@@ -8,7 +9,7 @@ def safe_cast(cls, value):
         if cls.cast_failed_warning == False:
             cls.cast_failed_warning = True
             Logs.warning("Invalid value", value, "for enum", cls.__name__, ". Library might outdated.")
-        return cls(0)
+        return list(cls)[0]
 
 if sys.version_info >= (3, 4):
     from enum import Enum, IntEnum
@@ -898,3 +899,14 @@ else:
 
 Enum.safe_cast = safe_cast
 Enum.cast_failed_warning = False
+
+class Kind(IntEnum):
+    Unknown = 0
+    CovalentSingle = 1
+    CovalentDouble = 2
+    CovalentTriple = 3
+    Hydrogen = 4
+    HydrogenWater = 5
+
+x = Kind.safe_cast(100)
+print(x)

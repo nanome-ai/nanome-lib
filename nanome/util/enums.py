@@ -10,6 +10,7 @@ class AtomRenderingMode(IntEnum):
     Adaptive = 6
 
 class Kind(IntEnum):
+    Unknown = 0
     CovalentSingle = 1
     CovalentDouble = 2
     CovalentTriple = 3
