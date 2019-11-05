@@ -899,14 +899,3 @@ else:
 
 Enum.safe_cast = safe_cast
 Enum.cast_failed_warning = False
-
-class Kind(IntEnum):
-    Unknown = 0
-    CovalentSingle = 1
-    CovalentDouble = 2
-    CovalentTriple = 3
-    Hydrogen = 4
-    HydrogenWater = 5
-
-x = Kind.safe_cast(100)
-print(x)
