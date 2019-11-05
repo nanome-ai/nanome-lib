@@ -368,12 +368,12 @@ class Button(_Button, UIBase):
             self._idle = value
 
         @property
-        def higlighted(self):
-            return self._higlighted
+        def highlighted(self):
+            return self._highlighted
         
-        @higlighted.setter
-        def higlighted(self, value):
-            self._higlighted = value
+        @highlighted.setter
+        def highlighted(self, value):
+            self._highlighted = value
 
         @property
         def selected(self):

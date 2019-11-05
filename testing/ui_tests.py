@@ -20,6 +20,62 @@ def test_ui():
     # ui_base = UI.UIBase()
     menu = UI.Menu()
 
+def test_deprecated_button():
+    from functools import partial
+    import copy
+    import collections
+    button = UI.Button()
+    FP = collections.namedtuple("FP", ["fset","fget"])
+    def get_property(obj, attr):
+        for obj in [obj] + obj.__class__.mro():
+            if attr in obj.__dict__:
+                prop = obj.__dict__[attr]
+                fset = partial(prop.fset, obj)
+                fget = partial(prop.fget, obj)
+                fp = FP(fset, fget)
+                return fp
+        raise AttributeError
+    test_multi_var(button.text.value, 
+                   get_property(button.text, "value_idle"),
+                   get_property(button.text, "value_selected"),
+                   get_property(button.text, "value_highlighted"),
+                   get_property(button.text, "value_selected_highlighted"),
+                   get_property(button.text, "value_unusable"),
+                   button.set_all_text)
+
+def test_multi_var(multi, idle, selected, highlighted, selected_highlighted, unusable, set_all):
+    temp_warning = nanome.util.Logs.warning
+    warned = False
+    def confirm_warning(txt):
+        nonlocal warned
+        warned = True
+    nanome.util.Logs.warning = confirm_warning
+    def assert_warning():
+        nonlocal warned
+        assert(warned)
+        warned = False
+    def test_var(single, deprecated):
+        deprecated.fset("val1")
+        assert_warning()
+        assert(single == deprecated.fget())
+        assert_warning()
+
+    test_var(multi.idle, idle)
+    test_var(multi.selected, selected)
+    test_var(multi.highlighted, highlighted)
+    test_var(multi.selected_highlighted, selected_highlighted)
+    test_var(multi.unusable, unusable)
+
+    value = "value1234"
+    set_all(value)
+    assert(multi.idle == value)
+    assert(multi.selected == value)
+    assert(multi.highlighted == value)
+    assert(multi.selected_highlighted == value)
+    assert(multi.unusable == value)
+
+    nanome.util.Logs.warning = temp_warning
+
 def prefab_button_pressed_callback(btn):
     pass
 
@@ -113,6 +169,7 @@ class FakeNetwork():
 def run(counter):
     options = TestOptions(ignore_vars=["_name", "icon", "_icon"])
     run_test(test_ui, counter)
+    run_test(test_deprecated_button, counter)
     run_test(create_test("button_test", test_serializer, (_UIBaseSerializer(), CreateButton(), options)), counter)
     run_test(create_test("mesh_test", test_serializer, (_UIBaseSerializer(), CreateMesh(), options)), counter)
     run_test(create_test("slider_test", test_serializer, (_UIBaseSerializer(), CreateSlider(), options)), counter)

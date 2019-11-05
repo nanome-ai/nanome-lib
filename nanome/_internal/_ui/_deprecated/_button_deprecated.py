@@ -90,11 +90,7 @@ _Button._ButtonText.bolded = _bolded
 
 @nanome.util.Logs.deprecated("text.set_all")
 def set_all_text(self, text):
-    self.text.value.idle = text
-    self.text.value.selected = text
-    self.text.value.highlighted = text
-    self.text.value.selected_highlighted = text
-    self.text.value.unusable = text
+    self.text.value.set_all(text)
 
 _Button.set_all_text = set_all_text
 
@@ -102,11 +98,7 @@ _Button.set_all_text = set_all_text
 def set_all_icon(self, icon):
     # type: (str)
     self.icon.active = True
-    self.icon.value.idle = icon
-    self.icon.value.selected = icon
-    self.icon.value.highlighted = icon
-    self.icon.value.selected_highlighted = icon
-    self.icon.value.unusable = icon
+    self.icon.value.set_all(icon)
 
 _Button.set_all_icon = set_all_icon
 
