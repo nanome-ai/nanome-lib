@@ -7,8 +7,6 @@ def _get_hash_code(string):
     return hash(string)
 
 def convert_to_frames(complex): #Data.Complex -> Data.Complex
-    if (complex._molecules[0]._conformer_count <=1):
-        return complex._deep_copy()
     new_complex = complex._shallow_copy()
     for molecule in complex._molecules:
         count = molecule._conformer_count
