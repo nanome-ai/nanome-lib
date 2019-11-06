@@ -12,7 +12,7 @@ class _ButtonSerializer(_TypeSerializer):
         self.vector = _Vector3Serializer()
 
     def version(self):
-        return 2
+        return 3
 
     def name(self):
         return "Button"
@@ -170,10 +170,7 @@ class _ButtonSerializer(_TypeSerializer):
             value._text._line_spacing = context.read_float()
         else:
             bolded = context.read_bool()
-            value._text._bold._idle = bolded
-            value._text._bold._selected = bolded
-            value._text._bold._highlighted = bolded
-            value._text._bold._selected_highlighted = bolded
+            value._text._bold._set_all(bolded)
         vert = context.read_uint()
         horiz = context.read_uint()
         value._text._vertical_align = VertAlignOptions.safe_cast(vert)
@@ -186,11 +183,6 @@ class _ButtonSerializer(_TypeSerializer):
             value._icon._value._highlighted = context.read_using_serializer(self.string)
             value._icon._value._selected_highlighted = context.read_using_serializer(self.string)
             value._icon._value._unusable = context.read_using_serializer(self.string)
-            context.read_byte_array()
-            context.read_byte_array()
-            context.read_byte_array()
-            context.read_byte_array()
-            context.read_byte_array()
             value._icon._color._idle = context.read_using_serializer(self.color)
             value._icon._color._selected = context.read_using_serializer(self.color)
             value._icon._color._highlighted = context.read_using_serializer(self.color)
