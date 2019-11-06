@@ -25,7 +25,7 @@ def parse_json(content_json):
     button._text._max_size = float(content_json["text_max_size"])
     button._text._size = float(content_json["text_size"])
     button._text._underlined = bool(content_json["text_underlined"])
-    button._text._bolded = bool(content_json["text_bolded"])
+    button._text._bold.set_all(bool(content_json["text_bolded"])) #outdate API needs the rest
     button._text._vertical_align = VertAlignOptions(int(float(content_json["text_vertical_align"])))
     button._text._horizontal_align = HorizAlignOptions(int(float(content_json["text_horizontal_align"])))
     button._icon._active = bool(read_attribute_safe(content_json, "icon_active", 'False'))
@@ -66,7 +66,7 @@ def write_json(button):
     content_json["text_max_size"] = button._text._max_size
     content_json["text_size"] = button._text._size
     content_json["text_underlined"] = button._text._underlined
-    content_json["text_bolded"] = button._text._bolded
+    content_json["text_bolded"] = button._text._bold._idle
     content_json["text_vertical_align"] = int(button._text._vertical_align)
     content_json["text_horizontal_align"] = int(button._text._horizontal_align)
     content_json["icon_active"] = button._icon._active
