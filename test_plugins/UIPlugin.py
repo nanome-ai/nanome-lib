@@ -314,7 +314,7 @@ class UIPlugin(nanome.PluginInstance):
         prefabLabel.text_value = "Molecule Label"
         prefabButton = nanome.ui.Button()
         prefabButton.text.active = True
-        prefabButton.text.set_all("Molecule Button")
+        prefabButton.text.value.set_all("Molecule Button")
         prefabButton.register_pressed_callback(prefab_button_pressed_callback)
         child1.set_content(prefabLabel)
         child2.set_content(prefabButton)

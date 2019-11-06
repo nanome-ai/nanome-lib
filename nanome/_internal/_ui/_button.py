@@ -16,6 +16,7 @@ class _Button(_UIBase):
     def __init__(self):
         super(_Button, self).__init__()
         #PROTOCOL
+        self._name = "" #no api yet but we have plans
         self._selected = False
         self._unusable = False
         self._text = _Button._ButtonText._create()
@@ -98,9 +99,9 @@ class _Button(_UIBase):
             self._size = _Button._MultiStateVariable._create(.3)
             self._color = _Button._MultiStateVariable._create()
             self._color._idle = Color.White()
-            self._color._highlighted = Color(whole_num = 0x2fdbbf)
-            self._color._selected = Color(whole_num = 0x00e5bf)
-            self._color._selected_highlighted = Color(whole_num = 0x00f9d0)
+            self._color._highlighted = Color(whole_num = 0x2fdbbfff)
+            self._color._selected = Color(whole_num = 0x00e5bfff)
+            self._color._selected_highlighted = Color(whole_num = 0x00f9d0ff)
             self._color._unusable = Color.Grey()
 
     class _ButtonTooltip(object):
