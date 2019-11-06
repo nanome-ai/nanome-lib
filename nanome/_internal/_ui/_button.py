@@ -94,7 +94,7 @@ class _Button(_UIBase):
             return cls()
 
         def __init__(self):
-            self._active = False
+            self._active = True
             self._size = _Button._MultiStateVariable._create(.3)
             self._color = _Button._MultiStateVariable._create()
             self._color._idle = Color.White()
