@@ -175,7 +175,7 @@ def suspend_warning():
     global warned
 
     if nanome.util.Logs.warning != confirm_warning:
-        nanome.util.Logs.warning("suspending")
+        print("suspending")
         nanome.util.Logs.s_warning = nanome.util.Logs.warning
         nanome.util.Logs.warning = confirm_warning
         suspensions = 0
@@ -188,7 +188,7 @@ def restore_warning():
     suspensions -= 1
     if suspensions == 0:
         nanome.util.Logs.warning = nanome.util.Logs.s_warning
-    nanome.util.Logs.warning("restoring")
+    print("restoring")
 
 def confirm_warning(txt):
     global warned
