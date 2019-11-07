@@ -170,13 +170,15 @@ def test_deprecated_button():
     assert_multi(button.icon.value, value)
     restore_warning()
 
+suspensions = 0
 def suspend_warning():
     global suspensions
     global warned
+    from functools import partial
 
-    if nanome.util.Logs.warning != confirm_warning:
+    if suspensions < 1:
         nanome.util.Logs.s_warning = nanome.util.Logs.warning
-        nanome.util.Logs.warning = confirm_warning
+        nanome.util.Logs.warning = partial(confirm_warning, nanome.util.Logs)
         suspensions = 0
     warned = False
     suspensions += 1
