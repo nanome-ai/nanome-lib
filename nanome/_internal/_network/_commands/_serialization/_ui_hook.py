@@ -1,8 +1,8 @@
 from nanome._internal._util._serializers import _TypeSerializer
-from nanome.util import Enum
+from nanome.util import IntEnum
 
 class _UIHook(_TypeSerializer):
-    class Type(Enum):
+    class Type(IntEnum):
         button_hover = 0
 
     def __init__(self):

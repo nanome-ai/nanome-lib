@@ -1,8 +1,5 @@
 from . import _UIBase
 from nanome.util import Vector3, Color
-from nanome._internal._network import _ProcessNetwork
-from nanome._internal._network._commands._callbacks import _Messages
-from nanome._internal._network._commands import _serialization
 import nanome
 
 class _Button(_UIBase):
@@ -35,7 +32,9 @@ class _Button(_UIBase):
         self._pressed_callback = func
 
     def _register_hover_callback(self, func):
-        _ProcessNetwork._instance._send(_Messages.hook_ui_callback, (_serialization._UIHook.Type.button_hover, self._content_id))
+        nanome._internal._network._ProcessNetwork._instance._send(
+            nanome._internal._network._commands._callbacks._Messages.hook_ui_callback,
+            (nanome._internal._network._commands._serialization._UIHook.Type.button_hover, self._content_id))
         self._hover_callback = func
 
     class ButtonText(object):
