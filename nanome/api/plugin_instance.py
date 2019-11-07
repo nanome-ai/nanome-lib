@@ -395,6 +395,15 @@ class PluginInstance(_PluginInstance):
         if not os.path.exists(path):
             os.makedirs(path)
         return path
+
+    @property
+    def custom_data(self):
+        """
+        Get custom data set with Plugin.set_custom_data
+
+        :type: tuple of objects or None if no data has been set
+        """
+        return self._custom_data
         
 class _DefaultPlugin(PluginInstance):
     def __init__(self):

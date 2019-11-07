@@ -58,7 +58,7 @@ class _PluginInstance(object):
             self._network._close()
             return
 
-    def __init__(self, session_id, net_pipe, proc_pipe, serializer, plugin_id, version_table, original_version_table, verbose):
+    def __init__(self, session_id, net_pipe, proc_pipe, serializer, plugin_id, version_table, original_version_table, verbose, custom_data):
         Logs._set_verbose(verbose)
 
         self._network = _ProcessNetwork(self, session_id, net_pipe, serializer, plugin_id, version_table)
@@ -69,3 +69,4 @@ class _PluginInstance(object):
         self._run_usable = True
         self._advanced_settings_text = "Advanced Settings"
         self._advanced_settings_usable = True
+        self._custom_data = custom_data

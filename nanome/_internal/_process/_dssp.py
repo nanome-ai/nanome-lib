@@ -67,7 +67,7 @@ class _Dssp():
         molecule = complex._molecules[self.__molecule_idx]
 
         self.__saved_complex._molecules.clear()
-        self.__saved_complex._molecules.append(molecule)
+        self.__saved_complex._add_molecule(molecule)
         _pdb.to_file(self.__input.name, complex)
 
         self.__proc.start()

@@ -100,7 +100,9 @@ class _Complex(_Base):
         return _helpers._copy._deep_copy_complex(self)
     
     def _convert_to_conformers(self, force_conformers = None):
-        return _helpers._conformer_helper.convert_to_conformers(self, None)
+        result = _helpers._conformer_helper.convert_to_conformers(self, None)
+        return result
 
     def _convert_to_frames(self):
-        return _helpers._conformer_helper.convert_to_frames(self)
+        result = _helpers._conformer_helper.convert_to_frames(self)
+        return result

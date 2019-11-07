@@ -2,6 +2,7 @@ from . import *
 #classes
 from .string_builder import StringBuilder
 from .color import Color
+from .logs import Logs
 from .enum import Enum, IntEnum, auto
 try:
     from .enum import reset_auto
@@ -12,7 +13,6 @@ from . import enums
 from . import complex_save_options
 
 from .import_utils import ImportUtils
-from .logs import Logs
 from .octree import Octree
 from .quaternion import Quaternion
 from .vector3 import Vector3

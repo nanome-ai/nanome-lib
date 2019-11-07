@@ -81,7 +81,8 @@ class _Residue(_Base):
             return None
     #endregion
 
-    def _shallow_copy(self):
+    #copies the structure. If conformer_number is not None it will only copy that conformer's data
+    def _shallow_copy(self, conformer_number = None):
         residue = _Residue._create()
         #molecular
         residue._type = self._type 
@@ -97,5 +98,5 @@ class _Residue(_Base):
         residue._label_text = self._label_text 
         return residue
 
-    def _deep_copy(self):
-        return _helpers._copy._deep_copy_residue(self)
+    def _deep_copy(self, conformer_number = None):
+        return _helpers._copy._deep_copy_residue(self, conformer_number)
