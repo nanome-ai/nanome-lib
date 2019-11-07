@@ -88,6 +88,7 @@ class _Messages(__CommandEnum):
     content_update = auto()
     node_update = auto()
     notification_send = auto()
+    hook_ui_callback = auto()
 
     #Structure
     structures_deep_update = auto()

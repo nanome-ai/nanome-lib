@@ -160,6 +160,7 @@ add_message(CommandCallbacks._Messages.menu_update, CommandSerializers._UpdateMe
 add_message(CommandCallbacks._Messages.content_update, CommandSerializers._UpdateContent())
 add_message(CommandCallbacks._Messages.node_update, CommandSerializers._UpdateNode())
 add_message(CommandCallbacks._Messages.notification_send, CommandSerializers._SendNotification())
+add_message(CommandCallbacks._Messages.hook_ui_callback, CommandSerializers._UIHook())
 
 #file
 add_message(CommandCallbacks._Messages.directory_request, CommandSerializers._DirectoryRequest())

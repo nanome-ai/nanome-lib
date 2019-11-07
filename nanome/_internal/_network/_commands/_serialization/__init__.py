@@ -35,6 +35,7 @@ from ._button_callback import _ButtonCallback
 from ._slider_callback import _SliderCallback
 from ._text_input_callback import _TextInputCallback
 from ._image_callback import _ImageCallback
+from ._ui_hook import _UIHook
 from ._update_content import _UpdateContent
 from ._update_node import _UpdateNode
 from ._update_menu import _UpdateMenu
