@@ -109,6 +109,7 @@ add_command(CommandCallbacks._Commands.text_change, CommandSerializers._TextInpu
 add_command(CommandCallbacks._Commands.image_press, CommandSerializers._ImageCallback())
 add_command(CommandCallbacks._Commands.image_hold, CommandSerializers._ImageCallback())
 add_command(CommandCallbacks._Commands.image_release, CommandSerializers._ImageCallback())
+add_command(CommandCallbacks._Commands.menu_transform_response, CommandSerializers._GetMenuTransformResponse())
 
 #file
 add_command(CommandCallbacks._Commands.directory_response, CommandSerializers._DirectoryRequest())
@@ -127,7 +128,7 @@ add_command(CommandCallbacks._Commands.get_macros_response, CommandSerializers._
 # Presenter
 add_command(CommandCallbacks._Commands.presenter_info_response, CommandSerializers._GetPresenterInfoResponse())
 add_command(CommandCallbacks._Commands.presenter_change, CommandSerializers._PresenterChange())
-
+add_command(CommandCallbacks._Commands.controller_transforms_response, CommandSerializers._GetControllerTransformsResponse())
 #-------------Messages-----------#
 # Messages are outgoing (plugin -> nanome)
 
@@ -159,6 +160,8 @@ add_message(CommandCallbacks._Messages.upload_cryo_em, CommandSerializers._Uploa
 add_message(CommandCallbacks._Messages.menu_update, CommandSerializers._UpdateMenu())
 add_message(CommandCallbacks._Messages.content_update, CommandSerializers._UpdateContent())
 add_message(CommandCallbacks._Messages.node_update, CommandSerializers._UpdateNode())
+add_message(CommandCallbacks._Messages.menu_transform_set, CommandSerializers._SetMenuTransform())
+add_message(CommandCallbacks._Messages.menu_transform_request, CommandSerializers._GetMenuTransform())
 add_message(CommandCallbacks._Messages.notification_send, CommandSerializers._SendNotification())
 
 #file
@@ -181,6 +184,7 @@ add_message(CommandCallbacks._Messages.stream_destroy, CommandSerializers._Destr
 
 # Presenter
 add_message(CommandCallbacks._Messages.presenter_info_request, CommandSerializers._GetPresenterInfo())
+add_message(CommandCallbacks._Messages.controller_transforms_request, CommandSerializers._GetControllerTransforms())
 
 #others
 add_message(CommandCallbacks._Messages.open_url, CommandSerializers._OpenURL())
@@ -222,6 +226,7 @@ add_callback(CommandCallbacks._Commands.button_hover, CommandCallbacks._button_h
 add_callback(CommandCallbacks._Commands.image_press, CommandCallbacks._image_pressed)
 add_callback(CommandCallbacks._Commands.image_hold, CommandCallbacks._image_held)
 add_callback(CommandCallbacks._Commands.image_release, CommandCallbacks._image_released)
+add_callback(CommandCallbacks._Commands.menu_transform_response, CommandCallbacks._receive_menu_transform)
 
 #file
 add_callback(CommandCallbacks._Commands.directory_response, CommandCallbacks._receive_directory)
@@ -240,3 +245,4 @@ add_callback(CommandCallbacks._Commands.get_macros_response, CommandCallbacks._r
 # Presenter
 add_callback(CommandCallbacks._Commands.presenter_info_response, CommandCallbacks._receive_presenter_info)
 add_callback(CommandCallbacks._Commands.presenter_change, CommandCallbacks._presenter_change)
+add_callback(CommandCallbacks._Commands.controller_transforms_response, CommandCallbacks._receive_controller_transforms)

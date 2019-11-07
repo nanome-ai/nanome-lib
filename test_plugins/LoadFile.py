@@ -11,8 +11,6 @@ NAME = "Load File"
 DESCRIPTION = "A simple plugin demonstrating how plugin system can be used to extend Nanome capabilities"
 CATEGORY = "Test"
 HAS_ADVANCED_OPTIONS = False
-NTS_ADDRESS = '127.0.0.1'
-NTS_PORT = 8888
 
 # Plugin
 
@@ -67,4 +65,4 @@ class LoadFile(nanome.PluginInstance):
         self.zoom = True
         pass
 
-nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, LoadFile, NTS_ADDRESS, NTS_PORT)
+nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, LoadFile)

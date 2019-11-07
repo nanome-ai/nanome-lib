@@ -2,7 +2,7 @@ import math
 #placeholder quaternion
 
 class Quaternion(object):
-    def __init__(self, x=0, y=0, z=0, w=0):
+    def __init__(self, x=0, y=0, z=0, w=1):
         self._x = float(x)
         self._y = float(y)
         self._z = float(z)
@@ -63,6 +63,13 @@ class Quaternion(object):
             return Quaternion(q.x * n, q.y * n, q.z * n, q.w * n)
         else:
             raise NotImplementedError
+
+    def dot(self, other):
+        return self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
+
+    EPS = 1*(10**-6)
+    def equals(self, other):
+        return abs(self.dot(other)) > 1-Quaternion.EPS
 
     def rotate_vector(self, point):
         r = Quaternion(point.x, point.y, point.z, 0)

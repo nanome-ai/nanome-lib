@@ -22,3 +22,19 @@ class _Vector3Serializer(_TypeSerializer):
         y = context.read_float()
         z = context.read_float()
         return Vector3(x,y,z)
+
+class _UnityPositionSerializer(_TypeSerializer):
+    def __init__(self):
+        self._Vec3 = _Vector3Serializer()
+
+    def version(self):
+        return 0
+
+    def name(self):
+        return "UnityPosition"
+
+    def serialize(self, version, value, context):
+        context.write_using_serializer(self._Vec3, value)
+
+    def deserialize(self, version, context):
+        return context.read_using_serializer(self._Vec3)

@@ -8,8 +8,6 @@ NAME = "Deep Update Plugin"
 DESCRIPTION = "A simple plugin demonstrating how plugin system can be used to extend Nanome capabilities"
 CATEGORY = "Test"
 HAS_ADVANCED_OPTIONS = False
-NTS_ADDRESS = '127.0.0.1'
-NTS_PORT = 8888
 
 # Plugin
 
@@ -108,4 +106,4 @@ class DeepUpdatePlugin(nanome.PluginInstance):
     def __init__(self):
         pass
 
-nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, DeepUpdatePlugin, NTS_ADDRESS, NTS_PORT)
+nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, DeepUpdatePlugin)

@@ -170,21 +170,10 @@ class Complex(_Complex, Base):
         self._rotation = value
 
     def get_workspace_to_complex_matrix(self):
-        rotation = Matrix.from_quaternion(self._rotation)
-        rotation.transpose()
-
-        translation = Matrix.identity(4)
-        translation[0][3] = -self._position.x
-        translation[1][3] = -self._position.y
-        translation[2][3] = -self._position.z
-
-        transformation = rotation * translation
-        return transformation
+        return self.get_complex_to_workspace_matrix().get_inverse()
 
     def get_complex_to_workspace_matrix(self):
-        result = self.get_workspace_to_complex_matrix()
-        result = result.get_inverse()
-        return result
+        return Matrix.compose_transformation_matrix(self._position, self._rotation)
     #endregion
 
     def convert_to_conformers(self, force_conformers = None):

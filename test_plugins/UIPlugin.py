@@ -9,8 +9,6 @@ NAME = "UI Plugin"
 DESCRIPTION = "A simple plugin demonstrating how plugin system can be used to extend Nanome capabilities"
 CATEGORY = "Simple Actions"
 HAS_ADVANCED_OPTIONS = False
-NTS_ADDRESS = '127.0.0.1'
-NTS_PORT = 8888
 
 # Plugin
 

@@ -11,8 +11,6 @@ NAME = "Notification Plugin"
 DESCRIPTION = "Sends a notification"
 CATEGORY = "Test"
 HAS_ADVANCED_OPTIONS = False
-NTS_ADDRESS = '127.0.0.1'
-NTS_PORT = 8888
 
 # Plugin
 
@@ -36,4 +34,4 @@ class NotificationPlugin(nanome.PluginInstance):
         if (NotificationPlugin.count > 3):
             NotificationPlugin.count = 0
 
-nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, NotificationPlugin, NTS_ADDRESS, NTS_PORT)
+nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, NotificationPlugin)
