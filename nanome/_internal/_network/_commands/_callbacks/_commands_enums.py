@@ -130,6 +130,7 @@ class _Messages(__CommandEnum):
     #Other
     upload_cryo_em = auto()
     open_url = auto()
+    load_file = auto()
 
 class _Hashes():
     CommandHashes = [None] * len(_Commands)

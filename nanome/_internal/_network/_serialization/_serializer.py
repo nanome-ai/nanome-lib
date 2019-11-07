@@ -188,6 +188,7 @@ add_message(CommandCallbacks._Messages.controller_transforms_request, CommandSer
 
 #others
 add_message(CommandCallbacks._Messages.open_url, CommandSerializers._OpenURL())
+add_message(CommandCallbacks._Messages.load_file, CommandSerializers._LoadFile())
 
 #-------------Callbacks-----------#
 # Callbacks are things to do after the command is decoded (plugin -> plugin)

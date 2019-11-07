@@ -389,6 +389,17 @@ class PluginInstance(_PluginInstance):
 
         self._network._send(_Messages.plugin_list_button_set, (button, text, usable))
 
+    def send_files_to_load(self, files_list):
+        files = []
+        for file in files_list:
+            full_path = file.replace('\\', '/')
+            file_name = full_path.split('/')[-1]
+            with open(full_path, 'b') as content_file:
+                data = content_file.read()
+            files.append((file_name, data))
+
+        self._network._send(_Messages.load_file, (files, True, True))
+
     @property
     def plugin_files_path(self):
         path = os.path.expanduser(config.fetch('plugin_files_path'))

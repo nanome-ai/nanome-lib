@@ -47,5 +47,6 @@ from ._send_notification import _SendNotification
 from ._get_menu_transform import _GetMenuTransform
 from ._get_menu_transform_response import _GetMenuTransformResponse
 from ._set_menu_transform import _SetMenuTransform
+from ._load_file import _LoadFile
 
 from ._macro_commands import _RunMacro, _SaveMacro, _DeleteMacro, _GetMacros, _GetMacrosResponse, _StopMacro
