@@ -180,6 +180,7 @@ def suspend_warning():
         suspensions = 0
     warned = False
     suspensions += 1
+    nanome.util.Logs.warning("suspended")
 
 def restore_warning():
     global suspensions
