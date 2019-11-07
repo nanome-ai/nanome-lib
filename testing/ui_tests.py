@@ -137,16 +137,20 @@ def assert_multi(multi, value):
     assert(multi.selected_highlighted == value)
     assert(multi.unusable == value)
 
+class FakeProperty(object):
+    def __init__(self, fset, fget):
+        self.fset = fset
+        self.fget = fget
+
 def get_property(obj, attr):
     from functools import partial
     import collections
-    FP = collections.namedtuple("FP", ["fset","fget"])
     for it in [obj] + obj.__class__.mro():
         if attr in it.__dict__:
             prop = it.__dict__[attr]
             fset = partial(prop.fset, obj)
             fget = partial(prop.fget, obj)
-            fp = FP(fset, fget)
+            fp = FakeProperty(fset, fget)
             return fp
     raise AttributeError
 
