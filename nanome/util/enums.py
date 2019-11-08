@@ -1,4 +1,5 @@
 from . import IntEnum
+#TODO normalize styling
 
 class AtomRenderingMode(IntEnum):
     BallStick = 0
@@ -61,6 +62,17 @@ class VertAlignOptions(IntEnum):
     Top = 0
     Middle = 1
     Bottom = 2
+
+class ToolTipPositioning(IntEnum):
+    top_right = 0
+    top = 1
+    top_left = 2
+    left = 3
+    bottom_left = 4
+    bottom = 5
+    bottom_right = 6
+    right = 7
+    center = 8
 
 class StreamType(IntEnum):
     position = 0
