@@ -123,6 +123,7 @@ def check_multi(multi):
 def check_property(obj, property_name):
     v = rand_string()
     prop = get_property(obj, property_name)
+    x = prop.fget()
     prop.fset(v)
     assert(prop.fget() == v)
 
@@ -238,6 +239,7 @@ def button_api_test():
     button = UI.Button(val1, val2)
     assert_multi(button.text.value, val1)
     assert_multi(button.icon.value, val2)
+    check_property(button, "name")
     text = button.text
     #text
     check_property(text, "active")

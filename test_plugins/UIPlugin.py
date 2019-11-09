@@ -117,6 +117,7 @@ class UIPlugin(nanome.PluginInstance):
 
         #super styled button
         button = nanome.ui.Button()
+        button.name = "OpenSubMenu"
         b_t = button.text
         b_t.active = True
         b_t.value.set_all("Spawn menu")
