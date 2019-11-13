@@ -38,3 +38,7 @@ class DirectoryRequestOptions(object):
     def __init__(self):
         self._directory_name = "."
         self._pattern = "*"
+
+class LoadInfoDone():
+    def __init__(self):
+        self.success = False

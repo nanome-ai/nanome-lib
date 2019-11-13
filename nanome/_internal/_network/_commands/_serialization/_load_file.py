@@ -2,7 +2,7 @@ from nanome._internal._util._serializers import _ArraySerializer, _StringSeriali
 from nanome._internal._util._serializers import _TypeSerializer
 
 
-class _LoadFileinfo(_TypeSerializer):
+class _LoadFileInfo(_TypeSerializer):
     def __init__(self):
         self.string = _StringSerializer()
 
@@ -23,7 +23,7 @@ class _LoadFileinfo(_TypeSerializer):
 class _LoadFile(_TypeSerializer):
     def __init__(self):
         self.array = _ArraySerializer()
-        self.array.set_type(_LoadFileinfo())
+        self.array.set_type(_LoadFileInfo())
 
     def version(self):
         return 0
