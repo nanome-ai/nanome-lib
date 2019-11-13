@@ -22,26 +22,31 @@ class LoadFile(nanome.PluginInstance):
         print("Start Load File")
 
     def on_run(self):
-        filename = LoadFile.filename
-        test_assets = LoadFile.test_assets
-        ext = filename.split(".")[-1]
-        if (ext == "pdb"):
-            input_dir = (test_assets + filename)
-            Logs.debug("reading " + input_dir)
-            complex1 = Complex.io.from_pdb(file=input_dir)
-        elif (ext == "cif"):
-            input_dir = (test_assets + filename)
-            Logs.debug("reading " + input_dir)
-            complex1 = Complex.io.from_mmcif(file=input_dir)
-        elif (ext == "sdf"):
-            input_dir = (test_assets + filename)
-            Logs.debug("reading " + input_dir)
-            complex1 = Complex.io.from_sdf(file=input_dir)
-        else:
-            raise Exception("invalid file: " + filename)
-        workspace = Workspace()
-        workspace.complexes = [complex1]
-        self.update_workspace(workspace)
+        def done(res):
+            for r in res:
+                Logs.debug("Success", r.success)
+
+        self.send_files_to_load([LoadFile.test_assets + LoadFile.filename], done)
+        # filename = LoadFile.filename
+        # test_assets = LoadFile.test_assets
+        # ext = filename.split(".")[-1]
+        # if (ext == "pdb"):
+        #     input_dir = (test_assets + filename)
+        #     Logs.debug("reading " + input_dir)
+        #     complex1 = Complex.io.from_pdb(file=input_dir)
+        # elif (ext == "cif"):
+        #     input_dir = (test_assets + filename)
+        #     Logs.debug("reading " + input_dir)
+        #     complex1 = Complex.io.from_mmcif(file=input_dir)
+        # elif (ext == "sdf"):
+        #     input_dir = (test_assets + filename)
+        #     Logs.debug("reading " + input_dir)
+        #     complex1 = Complex.io.from_sdf(file=input_dir)
+        # else:
+        #     raise Exception("invalid file: " + filename)
+        # workspace = Workspace()
+        # workspace.complexes = [complex1]
+        # self.update_workspace(workspace)
     
     def on_advanced_settings(self):
         Logs.debug("adv pressed")
