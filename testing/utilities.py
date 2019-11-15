@@ -361,6 +361,9 @@ def bond_atoms(atom1, atom2):
     atom1.residue._add_bond(bond)
     return alter_object(bond)
 
+def rand_index(list):
+    return random.randint(0, len(list)-1)
+
 def rand_int(min = -0x7FFFFFFF, max = 0x7FFFFFFF):
     return random.randint(min, max)
 

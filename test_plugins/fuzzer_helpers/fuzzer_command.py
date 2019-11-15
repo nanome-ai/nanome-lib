@@ -1,9 +1,10 @@
 #defines a single leg
 from nanome.util import Logs
 class FuzzerCommand(object):
-    def __init__(self, fuzzer_info):
+    def __init__(self, fuzzer_info, plugin):
         self.done = False
         self.fuzzer_info = fuzzer_info
+        self.plugin = plugin
         Logs.message("Selected Command:", self.get_name())
         Logs.inc_tab()
 
@@ -30,19 +31,14 @@ class FuzzerCommand(object):
         result = self._run()
         return result
 
-    def finish(self):
+    def finish(self, *args):
         self.done = True
         Logs.dec_tab()
         Logs.message("Finished Command:", self.get_name())
-        Logs.dec_tab()
-
 
     def _get_name(self):
         raise NotImplementedError()
 
-    def _get_done(self):
-        raise NotImplementedError()
-    
     def _rules(self, FuzzerInfo):
         raise NotImplementedError()
 

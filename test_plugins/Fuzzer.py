@@ -18,15 +18,21 @@ class FuzzerInfo(object):
 
 class Fuzzer(nanome.PluginInstance):
     def __init__(self):
+        nanome._internal._plugin_instance.UPDATE_RATE = 1
         self.fuzzer_info = FuzzerInfo()
         self.running_command = None
 
     valid_commands = [
-        helper.AddComplex
+        helper.AddSDF,
+        helper.AddPDB,
+        helper.AddCIF,
+        helper.RemoveComplex,
+        helper.PrintWorkspace
     ]
     def update(self):
         if self.running_command != None and not self.running_command.get_done():
             return
+        Logs.reset_tab()
         self.launch_new_command()
 
     def launch_new_command(self):
@@ -34,11 +40,12 @@ class Fuzzer(nanome.PluginInstance):
         passed = self.check_command(command)
         if not passed:
             self.running_command = None
+            return
         self.run_command(command)
 
     def get_new_command(self):
         num = random.randint(0, len(Fuzzer.valid_commands)-1)
-        return Fuzzer.valid_commands[num](self.fuzzer_info)
+        return Fuzzer.valid_commands[num](self.fuzzer_info, self)
         
     def check_command(self, command):
         return command.rules()
@@ -48,7 +55,7 @@ class Fuzzer(nanome.PluginInstance):
         self.running_command = command
 
 def tabbed_message(*args):
-    if (Logs._tab_count > 1):
+    if (Logs._tab_count > 0):
         tabs = "| " * Logs._tab_count
         Logs._message(tabs, *args)
     else:
@@ -57,11 +64,13 @@ def inc_tab():
     Logs._tab_count += 1
 def dec_tab():
     Logs._tab_count -= 1
-
+def reset_tab():
+    Logs._tab_count = 0
 Logs._tab_count = 0
 Logs._message = Logs.message
 Logs.message = tabbed_message
 Logs.inc_tab = inc_tab
 Logs.dec_tab = dec_tab
+Logs.reset_tab = reset_tab
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, Fuzzer)
