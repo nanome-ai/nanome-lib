@@ -16,7 +16,7 @@ class _Button(_UIBase):
     def __init__(self):
         super(_Button, self).__init__()
         #PROTOCOL
-        self._name = "" #no api yet but we have plans
+        self._name = ""
         self._selected = False
         self._unusable = False
         self._text = _Button._ButtonText._create()
