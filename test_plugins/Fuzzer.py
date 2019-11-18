@@ -28,6 +28,7 @@ class Fuzzer(nanome.PluginInstance):
         helper.AddCIF,
         helper.RemoveComplex,
         helper.PrintWorkspace
+        helper.ToggleBonds
     ]
     def update(self):
         if self.running_command != None and not self.running_command.get_done():
