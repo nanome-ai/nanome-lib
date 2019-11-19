@@ -15,7 +15,7 @@ class _Bonding():
         atom_count = 0
         if fast_mode == None:
             for complex in complex_list:
-                atom_count += sum(1 for _ in complex.atoms)
+                atom_count += sum(atom._conformer_count for atom in complex.atoms)
             self.__fast_mode = atom_count > 20000
         else:
             self.__fast_mode = fast_mode
