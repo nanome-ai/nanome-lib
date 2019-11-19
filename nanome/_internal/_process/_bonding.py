@@ -79,6 +79,8 @@ class _Bonding():
         self.__next()
 
     def __get_bond(self, atom1, atom2):
+        if atom1.serial > atom2.serial:
+            atom1, atom2 = atom2, atom1
         for bond in atom1._bonds:
             if bond._atom1 == atom1 or bond._atom2 == atom2:
                 return bond
