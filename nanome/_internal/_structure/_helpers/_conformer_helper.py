@@ -91,8 +91,8 @@ def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Dat
                         new_residue._add_atom(new_atom)
                         if off > 1:
                             new_atom.name = new_atom.name + str(off)
-                        new_atom.serial = len(new_residue._atoms)
                         new_atoms[hash_atom] = new_atom
+                        new_atom.serial = len(new_atoms)
                     # Update current conformer
                     new_atom._in_conformer[molecule_index] = True
                     new_atom._positions[molecule_index] = atom.position.get_copy()
