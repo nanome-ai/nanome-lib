@@ -15,8 +15,6 @@ class Kind(IntEnum):
     CovalentSingle = 1
     CovalentDouble = 2
     CovalentTriple = 3
-    Hydrogen = 4
-    HydrogenWater = 5
 
 class RibbonMode(IntEnum):
     SecondaryStructure = 0
