@@ -20,12 +20,8 @@ else:
 class _Dssp():
     def __init__(self, complex_list, callback):
         self.__complexes = complex_list
+        self.__framed_complexes = [complex.convert_to_frames() for complex in complex_list]
         self.__callback = callback
-
-        atom_count = 0
-        for complex in complex_list:
-            atom_count += sum(1 for _ in complex.atoms)
-        self.__fast_mode = atom_count > 20000
 
     def _start(self):
         if DSSP_PATH == None:
@@ -37,7 +33,6 @@ class _Dssp():
         self.__molecule_idx = -1
         self.__input = tempfile.NamedTemporaryFile(delete=False, suffix='.pdb')
         self.__output = tempfile.NamedTemporaryFile(delete=False, suffix='.dssp')
-        self.__saved_complex = _Complex._create()
         self.__current_complex_result = []
 
         self.__proc = Process()
@@ -46,29 +41,30 @@ class _Dssp():
         self.__proc.output_text = True
         self.__proc.on_error = self.__on_error
         self.__proc.on_done = self.__dssp_done
-        if self.__fast_mode:
-            self.__proc.args.append('-f')
 
         self.__next()
 
     def __next(self):
         # Go to next molecule
         complex = self.__complexes[self.__complex_idx]
+        framed_complex = self.__framed_complexes[self.__complex_idx]
+
         self.__molecule_idx += 1
-        if self.__molecule_idx >= len(complex._molecules):
+        # currently calculating only for first frame, may change
+        if self.__molecule_idx >= 1: # len(framed_complex._molecules):
             self.__update_secondary_structure(complex)
             self.__current_complex_result.clear()
             self.__complex_idx += 1
             if self.__complex_idx >= len(self.__complexes):
                 self.__done()
                 return
-            complex = self.__complexes[self.__complex_idx]
+            framed_complex = self.__framed_complexes[self.__complex_idx]
             self.__molecule_idx = 0
-        molecule = complex._molecules[self.__molecule_idx]
-
-        self.__saved_complex._molecules.clear()
-        self.__saved_complex._add_molecule(molecule)
-        _pdb.to_file(self.__input.name, complex)
+        
+        molecule = framed_complex._molecules[self.__molecule_idx]
+        single_frame = _Complex._create()
+        single_frame._add_molecule(molecule)
+        _pdb.to_file(self.__input.name, single_frame)
 
         self.__proc.start()
 
