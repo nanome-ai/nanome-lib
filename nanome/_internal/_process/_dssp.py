@@ -50,14 +50,15 @@ class _Dssp():
         framed_complex = self.__framed_complexes[self.__complex_idx]
 
         self.__molecule_idx += 1
-        # currently calculating only for first frame, may change
-        if self.__molecule_idx >= 1: # len(framed_complex._molecules):
+        # first frame if conformer, all frames if in frames (may change)
+        if self.__molecule_idx >= len(complex._molecules):
             self.__update_secondary_structure(complex)
             self.__current_complex_result.clear()
             self.__complex_idx += 1
             if self.__complex_idx >= len(self.__complexes):
                 self.__done()
                 return
+            complex = self.__complexes[self.__complex_idx]
             framed_complex = self.__framed_complexes[self.__complex_idx]
             self.__molecule_idx = 0
         
