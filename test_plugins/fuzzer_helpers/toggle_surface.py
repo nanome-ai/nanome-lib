@@ -15,12 +15,9 @@ class ToggleSurface(FuzzerCommand):
         return self.fuzzer_info.complex_count > 0
 
     def _run(self):
-        self.plugin.request_workspace(self.receive_workspace)
+        self.get_random_complex(self.receive_complex)
 
-    def receive_workspace(self, workspace):
-        complexes = workspace.complexes
-        r_c = testing.rand_index(complexes)
-        complex = workspace.complexes[r_c]
+    def receive_complex(self, complex):
         Logs.message("toggling surface on complex: " + complex.name)
         for atom in complex.atoms:
             atom.surface_rendering = not atom.surface_rendering

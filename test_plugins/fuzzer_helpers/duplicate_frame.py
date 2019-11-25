@@ -15,23 +15,26 @@ class DuplicateFrame(FuzzerCommand):
         return self.fuzzer_info.complex_count > 0
 
     def _run(self):
-        self.plugin.request_workspace(self.receive_workspace)
+        self.get_random_complex(self.receive_complex)
 
-    def receive_workspace(self, workspace):
-        complexes = workspace.complexes
-        r_c = testing.rand_index(complexes)
-        complex = workspace.complexes[r_c]
-        has_conformer = self.has_conformer(complex)
-        if  has_conformer:
-            Logs.message("complex " + complex.name + " uses conformer")
-            molecule = next(complex.molecules)
-            r_i = testing.rand_int(0, molecule.conformer_count-1)
-            Logs.message("duplicating conformer " + str(r_i) + "/" + str(molecule.conformer_count))
-            molecule.copy_conformer(r_i)
-        else:
-            Logs.message("complex " + complex.name + " uses frames")
-            mols = list(complex.molecules)
-            r_i = testing.rand_index(mols)
-            Logs.message("duplicating frame " + str(r_i) + "/" + str(len(mols)))
-            complex.add_molecule(mols[r_i]._deep_copy())
-        self.plugin.update_structures_deep([complex], self.finish)
+    def receive_complex(self, complex):
+        self.if_has_conformer(complex,
+                              lambda complex : self.get_random_conformer(complex, self.change_conformer),
+                              lambda complex : self.get_random_molecule(complex, self.change_frame))
+
+    def change_conformer(self, molecule, index):
+        Logs.message("complex " + molecule.complex.name + " uses conformer")
+        Logs.message("duplicating conformer " + str(index) + "/" + str(molecule.conformer_count))
+        molecule.copy_conformer(index)
+        self.re_upload(molecule.complex)
+
+    def change_frame(self, complex, index):
+        mols = list(complex.molecules)
+        Logs.message("complex " + complex.name + " uses frames")
+        Logs.message("duplicating frame " + str(index) + "/" + str(len(mols)))
+        complex.add_molecule(mols[index]._deep_copy())
+        self.re_upload(complex)
+
+    def re_upload(self, complex):
+        complex.set_surface_needs_redraw()
+        self.update_structures(complex, self.finish)

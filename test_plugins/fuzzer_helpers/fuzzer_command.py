@@ -1,6 +1,7 @@
 #defines a single leg
 from nanome.util import Logs
 import testing
+import nanome
 class FuzzerCommand(object):
     def __init__(self, fuzzer_info, plugin):
         self.done = False
@@ -59,16 +60,31 @@ class FuzzerCommand(object):
         self.plugin.request_workspace(self.__get_random_complex)
         self._on_complex_received = callback
 
-    def get_random_conformer(self, callback):
+    def get_random_conformer(self, structure, callback = None):
+        if isinstance(structure, nanome.structure.Complex):
+            molecule = next(structure.molecules)
+        elif isinstance(structure, nanome.structure.Molecule):
+            molecule = structure
+        else:
+            raise ValueError()
+        r_i = testing.rand_int(0, molecule.conformer_count-1)
+        if callback is not None:
+            callback(molecule, r_i)
+        return r_i
 
-    def get_random_molecule(self, callback):
+    def get_random_molecule(self, complex, callback = None):
+        mols = list(complex.molecules)
+        r_i = testing.rand_index(mols)
+        if callback is not None:
+            callback(complex, r_i)
+        return r_i
 
     def get_workspace(self, callback):
         self.plugin.request_workspace(callback)
 
     def update_structures(self, structures, callback):
         if not isinstance(structures, list):
-            structures = list(structures)
+            structures = [structures]
         self.plugin.update_structures_deep(structures, callback)
 
     def has_conformer (self, complex, default = False):
@@ -81,10 +97,17 @@ class FuzzerCommand(object):
         #default
         return default
 
+    def if_has_conformer(self, complex, conformer_callback, frames_callback):
+        if self.has_conformer(complex, False):
+            conformer_callback(complex)
+        else:
+            frames_callback(complex)
+
     #endregion helpers
 
     def __get_random_complex(self, workspace):
         complexes = workspace.complexes
+        self.fuzzer_info.complex_count = len(workspace.complexes)
         r_c = testing.rand_index(complexes)
         complex = workspace.complexes[r_c]
         self._on_complex_received(complex)
