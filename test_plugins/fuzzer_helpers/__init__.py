@@ -4,5 +4,7 @@ from .add_pdb import *
 from .remove_complex import *
 from .print_workspace import *
 from .toggle_bonds import *
+from .toggle_surface import *
 from .duplicate_frame import *
 from .remove_frame import *
+from .change_frame import *
