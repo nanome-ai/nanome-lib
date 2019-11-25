@@ -54,6 +54,7 @@ class _Bonding():
             self.__molecule_idx = 0
 
         self.__saved_complex = complex
+        self.__saved_is_conformer = len(complex._molecules) == 1
 
         molecule = framed_complex._molecules[self.__molecule_idx]
         single_frame = _Complex._create()
@@ -82,19 +83,22 @@ class _Bonding():
         if atom1.serial > atom2.serial:
             atom1, atom2 = atom2, atom1
         for bond in atom1._bonds:
-            if bond._atom1 == atom1 or bond._atom2 == atom2:
+            if bond._atom1 == atom1 and bond._atom2 == atom2:
                 return bond
         return None
 
     def __match_and_bond(self, bonding_result):
         if self.__molecule_idx == 0:
-            self.__atom_by_serial = dict()
             for atom in self.__saved_complex.atoms:
-                self.__atom_by_serial[atom._serial] = atom
                 atom._bonds.clear()
-
             for residue in self.__saved_complex.residues:
                 residue._bonds.clear()
+        
+        if self.__molecule_idx == 0 or not self.__saved_is_conformer:
+            self.__atom_by_serial = dict()
+            molecule = self.__saved_complex._molecules[self.__molecule_idx]
+            for atom in molecule.atoms:
+                self.__atom_by_serial[atom._serial] = atom
 
         for bond in bonding_result.bonds:
             serial1 = bond._atom1._serial
@@ -102,23 +106,23 @@ class _Bonding():
             if serial1 in self.__atom_by_serial and serial2 in self.__atom_by_serial:
                 atom1 = self.__atom_by_serial[serial1]
                 atom2 = self.__atom_by_serial[serial2]
-                residue1 = atom1._residue
-                residue2 = atom2._residue
+                residue = atom1._residue
 
                 new_bond = self.__get_bond(atom1, atom2)
                 if new_bond is None:
                     new_bond = _Bond._create()
-
-                    conformer_count = atom1.conformer_count
-                    new_bond._kinds = [new_bond._kind] * conformer_count
-                    new_bond._in_conformer = [False] * conformer_count
+                    if self.__saved_is_conformer:
+                        conformer_count = atom1.conformer_count
+                        new_bond._kinds = [new_bond._kind] * conformer_count
+                        new_bond._in_conformer = [False] * conformer_count
 
                     new_bond._atom1 = atom1
                     new_bond._atom2 = atom2
-                    residue1._add_bond(new_bond)
+                    residue._add_bond(new_bond)
 
-                current_conformer = self.__molecule_idx
-                new_bond._in_conformer[current_conformer] = True
+                if self.__saved_is_conformer:
+                    current_conformer = self.__molecule_idx
+                    new_bond._in_conformer[current_conformer] = True
 
     def __done(self):
         self.__input.close()
