@@ -9,8 +9,6 @@ NAME = "Sand Box"
 DESCRIPTION = "A plugin that can be edited freely for testing."
 CATEGORY = "Simple Actions"
 HAS_ADVANCED_OPTIONS = False
-NTS_ADDRESS = '127.0.0.1'
-NTS_PORT = 8888
 
 # Plugin
 
@@ -42,17 +40,7 @@ class SandBox(nanome.PluginInstance):
 
     def y(self, workspace):
         for complex in workspace.complexes:
-            for bond in complex.bonds:
-                bond.kind = nanome.util.enums.Kind.safe_cast(3)
-            for atom in complex.atoms:
-                pos = atom.position
-                temp = pos.x
-                pos.x = pos.y
-                pos.y = pos.z
-                pos.z = temp
-            for molecule in complex.molecules:
-                molecule.name = "it works jeremie"
-        self.update_workspace(workspace)
+            complex.register_complex_updated_callback(lambda : Logs.message(complex.index, sum(1 for i in complex.atoms)))
 
     def on_complex_list_received(self, complexes):
         Logs.debug("complex received: ", complexes)
@@ -94,4 +82,4 @@ class SandBox(nanome.PluginInstance):
     def __init__(self):
         pass
 
-nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, SandBox, NTS_ADDRESS, NTS_PORT)
+nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, SandBox)

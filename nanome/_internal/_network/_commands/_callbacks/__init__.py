@@ -7,6 +7,7 @@ from ._add_dssp_done import _add_dssp_done
 from ._advanced_settings import _advanced_settings
 from ._complex_list import _receive_complex_list, _receive_complexes
 from ._create_stream_result import _receive_create_stream_result
+from ._complex_updated import _complex_updated
 from ._connect import _connect
 from ._feed_stream import _feed_stream
 from ._feed_stream_done import _feed_stream_done

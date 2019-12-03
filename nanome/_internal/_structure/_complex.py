@@ -10,6 +10,7 @@ class _Complex(_Base):
 
     def __init__(self):
         super(_Complex, self).__init__()
+        self._complex_updated_callback = lambda : None # DO NOT include this in shallow copy
         #Molecular
         self._name = "complex"
         self._index_tag = 0
@@ -74,8 +75,11 @@ class _Complex(_Base):
                 except StopIteration:
                     pass
 
-    def _shallow_copy(self):
-        complex = _Complex._create()
+    def _shallow_copy(self, target = None):
+        if target == None:
+            complex = _Complex._create()
+        else:
+            complex = target
         #Molecular
         complex._name = self._name
         complex._index_tag = self._index_tag
@@ -106,3 +110,8 @@ class _Complex(_Base):
     def _convert_to_frames(self):
         result = _helpers._conformer_helper.convert_to_frames(self)
         return result
+
+    def _on_complex_updated(self, new_complex):
+        new_complex._shallow_copy(self)
+        self._molecules = new_complex._molecules
+        self._complex_updated_callback()

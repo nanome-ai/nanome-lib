@@ -4,6 +4,8 @@ from ._add_bonds import _AddBonds
 from ._add_dssp import _AddDSSP
 from ._add_to_workspace import _AddToWorkspace
 from ._advanced_settings import _AdvancedSettings
+from ._complex_updated import _ComplexUpdated
+from ._complex_updated_hook import _ComplexUpdatedHook
 from ._connect import _Connect
 from ._create_stream import _CreateStream
 from ._create_stream_result import _CreateStreamResult

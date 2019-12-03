@@ -1,4 +1,7 @@
 from nanome._internal._structure._complex import _Complex
+from nanome._internal import _PluginInstance
+from nanome._internal._network import _ProcessNetwork
+from nanome._internal._network._commands._callbacks import _Messages
 from nanome.util import Matrix, Logs
 from .io import ComplexIO
 from . import Base
@@ -192,6 +195,11 @@ class Complex(_Complex, Base):
 
     def convert_to_frames(self):
         return self._convert_to_frames()
+
+    def register_complex_updated_callback(self, callback):
+        self._complex_updated_callback = callback
+        _PluginInstance._hook_complex_updated(self.index, self)
+        _ProcessNetwork._send(_Messages.hook_complex_updated, self.index)
 
     #region depricated
     @current_frame.setter
