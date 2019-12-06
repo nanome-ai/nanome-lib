@@ -71,6 +71,9 @@ class _Commands(__CommandEnum):
     presenter_change = auto()
     controller_transforms_response = auto()
 
+    # Arbitrary volumes
+    set_arbitrary_volume_result = auto()
+
     #Other
     upload_cryo_em_done = auto()
 
@@ -126,6 +129,10 @@ class _Messages(__CommandEnum):
     # Presenter
     presenter_info_request = auto()
     controller_transforms_request = auto()
+
+    # Arbitrary volumes
+    set_arbitrary_sphere = auto()
+    delete_arbitrary_volume = auto()
 
     #Other
     upload_cryo_em = auto()

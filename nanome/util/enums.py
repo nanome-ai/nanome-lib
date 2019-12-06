@@ -87,3 +87,10 @@ class StreamDataType(IntEnum):
 class StreamDirection(IntEnum):
     writing = 0
     reading = 1
+
+class ShapeType(IntEnum):
+    Sphere = 0
+
+class SetShapeResult(IntEnum):
+    Success = 0
+    Failure = 1

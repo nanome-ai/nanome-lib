@@ -389,6 +389,12 @@ class PluginInstance(_PluginInstance):
 
         self._network._send(_Messages.plugin_list_button_set, (button, text, usable))
 
+    def create_shape(self, shape_type):
+        if shapeType == nanome.util.enums.ShapeType.Sphere:
+            return nanome.util.shape.Sphere()
+
+        raise ValueError('Parameter shape_type must be a value of nanome.util.enums.ShapeType')
+
     @property
     def plugin_files_path(self):
         path = os.path.expanduser(config.fetch('plugin_files_path'))

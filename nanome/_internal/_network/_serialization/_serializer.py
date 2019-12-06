@@ -129,6 +129,10 @@ add_command(CommandCallbacks._Commands.get_macros_response, CommandSerializers._
 add_command(CommandCallbacks._Commands.presenter_info_response, CommandSerializers._GetPresenterInfoResponse())
 add_command(CommandCallbacks._Commands.presenter_change, CommandSerializers._PresenterChange())
 add_command(CommandCallbacks._Commands.controller_transforms_response, CommandSerializers._GetControllerTransformsResponse())
+
+# Shape
+add_command(CommandCallbacks._Commands.set_arbitrary_volume_result, CommandSerializers._SetArbitraryVolumeResult())
+
 #-------------Messages-----------#
 # Messages are outgoing (plugin -> nanome)
 
@@ -185,6 +189,10 @@ add_message(CommandCallbacks._Messages.stream_destroy, CommandSerializers._Destr
 # Presenter
 add_message(CommandCallbacks._Messages.presenter_info_request, CommandSerializers._GetPresenterInfo())
 add_message(CommandCallbacks._Messages.controller_transforms_request, CommandSerializers._GetControllerTransforms())
+
+# Shape
+add_message(CommandCallbacks._Messages.set_arbitrary_sphere, CommandSerializers._SetArbitrarySphere())
+add_message(CommandCallbacks._Messages.delete_arbitrary_volume, CommandSerializers._DeleteArbitraryVolume())
 
 #others
 add_message(CommandCallbacks._Messages.open_url, CommandSerializers._OpenURL())

@@ -7,6 +7,7 @@ from ._advanced_settings import _AdvancedSettings
 from ._connect import _Connect
 from ._create_stream import _CreateStream
 from ._create_stream_result import _CreateStreamResult
+from ._delete_arbitrary_volume import _DeleteArbitraryVolume
 from ._destroy_stream import _DestroyStream
 from ._directory_request import _DirectoryRequest
 from ._feed_stream import _FeedStream
@@ -21,6 +22,8 @@ from ._interrupt_stream import _InterruptStream
 from ._open_url import _OpenURL
 from ._run import _Run
 from ._receive_workspace import _ReceiveWorkspace
+from ._set_arbitrary_sphere import _SetArbitrarySphere
+from ._set_arbitrary_volume_result import _SetArbitraryVolumeResult
 from ._complex_added_removed import _ComplexAddedRemoved
 from ._presenter_change import _PresenterChange
 from ._receive_complex_list import _ReceiveComplexList, _ReceiveComplexes
