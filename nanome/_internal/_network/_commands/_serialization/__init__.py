@@ -21,6 +21,8 @@ from ._interrupt_stream import _InterruptStream
 from ._open_url import _OpenURL
 from ._run import _Run
 from ._receive_workspace import _ReceiveWorkspace
+from ._selection_changed import _SelectionChanged
+from ._selection_changed_hook import _SelectionChangedHook
 from ._complex_added_removed import _ComplexAddedRemoved
 from ._presenter_change import _PresenterChange
 from ._receive_complex_list import _ReceiveComplexList, _ReceiveComplexes

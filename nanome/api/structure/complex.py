@@ -201,6 +201,11 @@ class Complex(_Complex, Base):
         _PluginInstance._hook_complex_updated(self.index, self)
         _ProcessNetwork._send(_Messages.hook_complex_updated, self.index)
 
+    def register_selection_changed_callback(self, callback):
+        self._selection_changed_callback = callback
+        _PluginInstance._hook_selection_changed(self.index, self)
+        _ProcessNetwork._send(_Messages.hook_selection_changed, self.index)
+
     #region depricated
     @current_frame.setter
     @Logs.deprecated()

@@ -95,6 +95,7 @@ add_command(CommandCallbacks._Commands.position_structures_done, CommandSerializ
 add_command(CommandCallbacks._Commands.dssp_add_done, CommandSerializers._AddDSSP())
 add_command(CommandCallbacks._Commands.bonds_add_done, CommandSerializers._AddBonds())
 add_command(CommandCallbacks._Commands.complex_updated, CommandSerializers._ComplexUpdated())
+add_command(CommandCallbacks._Commands.selection_changed, CommandSerializers._SelectionChanged())
 
 #Volume
 add_command(CommandCallbacks._Commands.upload_cryo_em_done, CommandSerializers._UploadCryoEMDone())
@@ -153,6 +154,7 @@ add_message(CommandCallbacks._Messages.dssp_add, CommandSerializers._AddDSSP())
 add_message(CommandCallbacks._Messages.structures_zoom, CommandSerializers._PositionStructures())
 add_message(CommandCallbacks._Messages.structures_center, CommandSerializers._PositionStructures())
 add_message(CommandCallbacks._Messages.hook_complex_updated, CommandSerializers._ComplexUpdatedHook())
+add_message(CommandCallbacks._Messages.hook_selection_changed, CommandSerializers._SelectionChangedHook())
 
 #volume
 add_message(CommandCallbacks._Messages.upload_cryo_em, CommandSerializers._UploadCryoEM())
@@ -213,6 +215,7 @@ add_callback(CommandCallbacks._Commands.dssp_add_done, CommandCallbacks._add_dss
 add_callback(CommandCallbacks._Commands.bonds_add_done, CommandCallbacks._add_bonds_result)
 add_callback(CommandCallbacks._Commands.complexes_response, CommandCallbacks._receive_complexes)
 add_callback(CommandCallbacks._Commands.complex_updated, CommandCallbacks._complex_updated)
+add_callback(CommandCallbacks._Commands.selection_changed, CommandCallbacks._selection_changed)
 
 #ui
 add_callback(CommandCallbacks._Commands.menu_response, CommandCallbacks._receive_menu)

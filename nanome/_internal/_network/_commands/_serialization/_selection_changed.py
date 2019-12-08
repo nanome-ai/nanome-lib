@@ -1,7 +1,7 @@
 from nanome._internal._util._serializers import _TypeSerializer, _ArraySerializer, _DictionarySerializer, _LongSerializer
 from nanome._internal._structure._serialization import _ComplexSerializer, _AtomSerializer
 
-class _ComplexUpdated(_TypeSerializer):
+class _SelectionChanged(_TypeSerializer):
     def __init__(self):
         self.complex_serializer = _ComplexSerializer()
         atom_serializer = _AtomSerializer()
@@ -13,7 +13,7 @@ class _ComplexUpdated(_TypeSerializer):
         return 0
 
     def name(self):
-        return "ComplexUpdated"
+        return "SelectionChanged"
 
     def serialize(self, version, value, context):
         raise NotImplementedError

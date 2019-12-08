@@ -51,6 +51,7 @@ class _Commands(__CommandEnum):
     bonds_add_done = auto()
     dssp_add_done = auto()
     complex_updated = auto()
+    selection_changed = auto()
 
     #Stream
     stream_create_done = auto()
@@ -104,6 +105,7 @@ class _Messages(__CommandEnum):
     bonds_add = auto()
     dssp_add = auto()
     hook_complex_updated = auto()
+    hook_selection_changed = auto()
 
     #Streams
     stream_create = auto()

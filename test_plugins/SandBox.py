@@ -38,9 +38,19 @@ class SandBox(nanome.PluginInstance):
                     molecule._names[i] = str(i) + str(i)
         self.update_workspace(workspace)
 
+    def display_complex(self, complex, msg):
+        atom_count = 0
+        selected_atoms = 0
+        for atom in complex.atoms:
+            atom_count += 1
+            if atom.selected:
+                selected_atoms += 1
+        Logs.message(msg, complex.index, "Nb atoms:", atom_count, "Selected:", selected_atoms)
+
     def y(self, workspace):
         for complex in workspace.complexes:
-            complex.register_complex_updated_callback(lambda : Logs.message(complex.index, sum(1 for i in complex.atoms)))
+            complex.register_complex_updated_callback(lambda : self.display_complex(complex, "Structure:"))
+            complex.register_selection_changed_callback(lambda : self.display_complex(complex, "Selection:"))
 
     def on_complex_list_received(self, complexes):
         Logs.debug("complex received: ", complexes)

@@ -11,6 +11,7 @@ class _Complex(_Base):
     def __init__(self):
         super(_Complex, self).__init__()
         self._complex_updated_callback = lambda : None # DO NOT include this in shallow copy
+        self._selection_changed_callback = lambda : None # DO NOT include this in shallow copy
         #Molecular
         self._name = "complex"
         self._index_tag = 0
@@ -112,6 +113,14 @@ class _Complex(_Base):
         return result
 
     def _on_complex_updated(self, new_complex):
-        new_complex._shallow_copy(self)
-        self._molecules = new_complex._molecules
+        self.__copy_received_complex(new_complex)
         self._complex_updated_callback()
+
+    def _on_selection_changed(self, new_complex):
+        self.__copy_received_complex(new_complex)
+        self._selection_changed_callback()
+
+    def __copy_received_complex(self, new_complex):
+        if new_complex != None:
+            new_complex._shallow_copy(self)
+            self._molecules = new_complex._molecules

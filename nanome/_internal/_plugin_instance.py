@@ -17,6 +17,7 @@ __metaclass__ = type
 class _PluginInstance(object):
     __callbacks = dict()
     __complex_updated_callbacks = dict()
+    __selection_changed_callbacks = dict()
 
     @classmethod
     def _save_callback(cls, id, callback):
@@ -38,6 +39,10 @@ class _PluginInstance(object):
         cls.__complex_updated_callbacks[index] = complex
 
     @classmethod
+    def _hook_selection_changed(cls, index, complex):
+        cls.__selection_changed_callbacks[index] = complex
+
+    @classmethod
     def _on_complex_updated(cls, index, new_complex):
         callbacks = _PluginInstance.__complex_updated_callbacks
         try:
@@ -45,7 +50,15 @@ class _PluginInstance(object):
         except KeyError:
             Logs.warning('Received an unknown updated complex index:', index)
 
-    def __check_complex_hook_unref(self):
+    @classmethod
+    def _on_selection_changed(cls, index, new_complex):
+        callbacks = _PluginInstance.__selection_changed_callbacks
+        try:
+            callbacks[index]._on_selection_changed(new_complex)
+        except KeyError:
+            Logs.warning('Received an unknown updated complex index:', index)
+
+    def __check_complex_hook_unref(self, callbacks):
         callbacks = _PluginInstance.__complex_updated_callbacks
         to_remove = []
         for key, value in callbacks.items():
@@ -75,7 +88,8 @@ class _PluginInstance(object):
 
                 dt = last_hook_unref_check - timer()
                 if dt >= HOOK_UNREF_CHECK_TIME:
-                    self.__check_complex_hook_unref()
+                    self.__check_complex_hook_unref(_PluginInstance.__complex_updated_callbacks)
+                    self.__check_complex_hook_unref(_PluginInstance.__selection_changed_callbacks)
                     last_hook_unref_check = timer()
 
         except KeyboardInterrupt:
