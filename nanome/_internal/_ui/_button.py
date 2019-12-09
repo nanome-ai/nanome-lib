@@ -32,9 +32,12 @@ class _Button(_UIBase):
         self._pressed_callback = func
 
     def _register_hover_callback(self, func):
-        nanome._internal._network._ProcessNetwork._instance._send(
-            nanome._internal._network._commands._callbacks._Messages.hook_ui_callback,
-            (nanome._internal._network._commands._serialization._UIHook.Type.button_hover, self._content_id))
+        try:
+            nanome._internal._network._ProcessNetwork._instance._send(
+                nanome._internal._network._commands._callbacks._Messages.hook_ui_callback,
+                (nanome._internal._network._commands._serialization._UIHook.Type.button_hover, self._content_id))
+        except:
+            nanome.util.Logs.error("Could not register hook")
         self._hover_callback = func
 
     class ButtonText(object):
@@ -120,5 +123,4 @@ class _Button(_UIBase):
         self._icon._rotation = other._icon._rotation
         # Callbacks
         self._pressed_callback = other._pressed_callback
-        self._hover_callback = other._hover_callback
-        self._register_hover_callback(self._hover_callback)
+        self._register_hover_callback(other._hover_callback)
