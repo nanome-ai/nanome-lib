@@ -25,26 +25,26 @@ class Sphere(object):
         :type done_callback: fct with a bool parameter
         """
         if position != None:
-            self._position = position
+            self.__position = position
         if color != None:
-            self._color = color
+            self.__color = color
         if scale != None:
-            self._scale = scale
+            self.__scale = scale
 
         if done_callback == None:
             done_callback = lambda _ : None
 
-        def set_callback(index, result):
-            if self.__index != -1 and index != self.__index:
+        def set_callback(result):
+            if self.__index != -1 and result[0] != self.__index:
                 Logs.error("SetShapeCallback received for the wrong shape")
-            self.__index = index
-            done_callback(result == SetShapeResult.Success)
+            self.__index = result[0]
+            done_callback(result[1] == SetShapeResult.Success)
 
-        id = self.__network._send(_Messages.set_arbitrary_sphere, (self.__index, self.__position, self.__color, self.__scale))
+        id = self.__network._send(_Messages.set_arbitrary_sphere, (self.__index, self.__position, self.__scale, self.__color))
         nanome.PluginInstance._save_callback(id, set_callback)
 
     def destroy(self):
-        callback = lambda _, _ : None
+        callback = lambda _, _1 : None
 
         id = self.__network._send(_Messages.delete_arbitrary_volume, (self.__index))
         nanome.PluginInstance._save_callback(id, callback)

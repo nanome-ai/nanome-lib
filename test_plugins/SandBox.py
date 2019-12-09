@@ -39,18 +39,12 @@ class SandBox(nanome.PluginInstance):
         self.update_workspace(workspace)
 
     def y(self, workspace):
+        sphere = self.create_shape(nanome.util.enums.ShapeType.Sphere)
+        sphere.set(nanome.util.Vector3(), nanome.util.Color.Red())
         for complex in workspace.complexes:
-            for bond in complex.bonds:
-                bond.kind = nanome.util.enums.Kind.safe_cast(3)
             for atom in complex.atoms:
-                pos = atom.position
-                temp = pos.x
-                pos.x = pos.y
-                pos.y = pos.z
-                pos.z = temp
-            for molecule in complex.molecules:
-                molecule.name = "it works jeremie"
-        self.update_workspace(workspace)
+                sphere = self.create_shape(nanome.util.enums.ShapeType.Sphere)
+                sphere.set(complex.get_complex_to_workspace_matrix() * atom.position, nanome.util.Color.Green())
 
     def on_complex_list_received(self, complexes):
         Logs.debug("complex received: ", complexes)

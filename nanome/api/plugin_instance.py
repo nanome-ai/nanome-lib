@@ -1,11 +1,12 @@
 from nanome.util import Logs, DirectoryRequestOptions, IntEnum, config
-from nanome.util.enums import StreamDirection
+from nanome.util.enums import StreamDirection, ShapeType
 from nanome._internal import _PluginInstance
 from nanome._internal._process import _Bonding, _Dssp
 from nanome._internal._network import _ProcessNetwork
 from nanome._internal._network._commands._callbacks import _Messages
 from nanome.api.ui import Menu
 from nanome.api.streams import Stream
+from nanome.api.shapes import Sphere
 
 import inspect
 import sys
@@ -390,8 +391,8 @@ class PluginInstance(_PluginInstance):
         self._network._send(_Messages.plugin_list_button_set, (button, text, usable))
 
     def create_shape(self, shape_type):
-        if shapeType == nanome.util.enums.ShapeType.Sphere:
-            return nanome.util.shape.Sphere()
+        if shape_type == ShapeType.Sphere:
+            return Sphere(self._network)
 
         raise ValueError('Parameter shape_type must be a value of nanome.util.enums.ShapeType')
 
