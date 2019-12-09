@@ -19,16 +19,16 @@ class DuplicateFrame(FuzzerCommand):
 
     def receive_complex(self, complex):
         self.if_has_conformer(complex,
-                              lambda complex : self.get_random_conformer(complex, self.change_conformer),
-                              lambda complex : self.get_random_molecule(complex, self.change_frame))
+                              lambda complex : self.get_random_conformer(complex, self.duplicate_conformer),
+                              lambda complex : self.get_random_molecule(complex, self.duplicate_frame))
 
-    def change_conformer(self, molecule, index):
+    def duplicate_conformer(self, molecule, index):
         Logs.message("complex " + molecule.complex.name + " uses conformer")
         Logs.message("duplicating conformer " + str(index) + "/" + str(molecule.conformer_count))
         molecule.copy_conformer(index)
         self.re_upload(molecule.complex)
 
-    def change_frame(self, complex, index):
+    def duplicate_frame(self, complex, index):
         mols = list(complex.molecules)
         Logs.message("complex " + complex.name + " uses frames")
         Logs.message("duplicating frame " + str(index) + "/" + str(len(mols)))

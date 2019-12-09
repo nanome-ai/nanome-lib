@@ -8,7 +8,7 @@ import time
 # Config
 
 NAME = "Fuzzer"
-DESCRIPTION = "A plugin for testing random legal operations"
+DESCRIPTION = "A plugin for testing by performing random operations."
 CATEGORY = "Simple Actions"
 HAS_ADVANCED_OPTIONS = False
 
@@ -18,7 +18,7 @@ class FuzzerInfo(object):
 
 class Fuzzer(nanome.PluginInstance):
     def __init__(self):
-        nanome._internal._plugin_instance.UPDATE_RATE = .25
+        nanome._internal._plugin_instance.UPDATE_RATE = .01
         self.fuzzer_info = FuzzerInfo()
         self.running_command = None
 
@@ -29,6 +29,10 @@ class Fuzzer(nanome.PluginInstance):
         helper.RemoveComplex,
         helper.PrintWorkspace,
         helper.ToggleBonds,
+        helper.ToggleSurface,
+        helper.ToggleSurface,
+        helper.ToggleSurface,
+        helper.ToggleSurface,
         helper.ToggleSurface,
         helper.DuplicateFrame,
         helper.RemoveFrame,
