@@ -121,3 +121,4 @@ class _Button(_UIBase):
         # Callbacks
         self._pressed_callback = other._pressed_callback
         self._hover_callback = other._hover_callback
+        self._register_hover_callback(self._hover_callback)
