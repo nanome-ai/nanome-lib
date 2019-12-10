@@ -69,7 +69,10 @@ class Plugin(_Plugin):
             self.__key_file = key_file
         self.__parse_args()
         Logs.debug("Start plugin")
-        self.__run()
+        if self.__has_autoreload:
+            self.__autoreload()
+        else:
+            self.__run()
 
     def set_plugin_class(self, plugin_class):
         """

@@ -12,6 +12,7 @@ import sys
 import json
 import cProfile
 import time
+import os
 
 try_reconnection_time = 20.0
 keep_alive_time_interval = 3600.0
@@ -27,12 +28,13 @@ class _Plugin(object):
         for i in range(1, len(sys.argv)):
             if sys.argv[i] == "-h":
                 Logs.message("Usage:", sys.argv[1],"[-h] [-a ADDRESS] [-p PORT]")
-                Logs.message(" -h  display this help")
-                Logs.message(" -a  connects to a NTS at the specified IP address")
-                Logs.message(" -p  connects to a NTS at the specified port")
-                Logs.message(" -k  specifies a key file to use to connect to NTS")
-                Logs.message(" -n  name to display for this plugin in Nanome")
-                Logs.message(" -v  enable verbose mode, to display Logs.debug")
+                Logs.message(" -h                   display this help")
+                Logs.message(" -a                   connects to a NTS at the specified IP address")
+                Logs.message(" -p                   connects to a NTS at the specified port")
+                Logs.message(" -k                   specifies a key file to use to connect to NTS")
+                Logs.message(" -n                   name to display for this plugin in Nanome")
+                Logs.message(" -v                   enable verbose mode, to display Logs.debug")
+                Logs.message(" -r, --auto-reload    restart plugin automatically if a python file in current directory changes")
                 sys.exit(0)
             elif sys.argv[i] == "-a":
                 if i >= len(sys.argv):
@@ -64,6 +66,8 @@ class _Plugin(object):
                 i += 1
             elif sys.argv[i] == "-v":
                 Logs._set_verbose(True)
+            elif sys.argv[i] == "-r" or sys.argv[i] == "--auto-reload":
+                self.__has_autoreload = True
 
     def __read_key_file(self):
         try:
@@ -118,6 +122,45 @@ class _Plugin(object):
             pass
         else:
             Logs.warning("Received a packet of unknown type", packet.packet_type, ". Ignoring")
+
+    def __file_filter(self, name):
+        return name.endswith(".py")
+
+    def __file_times(self, path):
+        for top_level in filter(self.__file_filter, os.listdir(".")):
+            for root, dirs, files in os.walk(top_level):
+                for file in filter(self.__file_filter, files):
+                    yield os.stat(os.path.join(root, file)).st_mtime
+
+    def __autoreload(self):
+        # def print_stdout(process):
+        #     stdout = process.stdout
+        #     if stdout != None:
+        #         print stdout
+
+        # How often we check the filesystem for changes (in seconds)
+        wait = 1
+
+        # The process to autoreload
+        process = Process(target=_Plugin._run_autoreload, args=(self,))
+        process.start()
+
+        # The current maximum file modified time under the watched directory
+        last_mtime = max(self.__file_times("."))
+        while True:
+            max_mtime = max(self.__file_times("."))
+            # print_stdout(process)
+            if max_mtime > last_mtime:
+                last_mtime = max_mtime
+                Logs.debug("Restarting plugin")
+                process.kill()
+                process = Process(target=_Plugin._run_autoreload, args=(self,))
+                process.start()
+            time.sleep(wait)
+
+    @classmethod
+    def _run_autoreload(cls, self):
+        self.__run()
 
     def __run(self):
         _Plugin.instance = self
@@ -230,3 +273,4 @@ class _Plugin(object):
         }
         self._plugin_class = None
         self.__connected = False
+        self.__has_autoreload = False
