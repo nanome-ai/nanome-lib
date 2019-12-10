@@ -65,6 +65,7 @@ class _Plugin(object):
                 self._description['name'] = sys.argv[i + 1]
                 i += 1
             elif sys.argv[i] == "-v":
+                self.__has_verbose = True
                 Logs._set_verbose(True)
             elif sys.argv[i] == "-r" or sys.argv[i] == "--auto-reload":
                 self.__has_autoreload = True
@@ -127,39 +128,36 @@ class _Plugin(object):
         return name.endswith(".py")
 
     def __file_times(self, path):
-        for top_level in filter(self.__file_filter, os.listdir(".")):
-            for root, dirs, files in os.walk(top_level):
-                for file in filter(self.__file_filter, files):
-                    yield os.stat(os.path.join(root, file)).st_mtime
+        found_file = False
+        for file in filter(self.__file_filter, os.listdir(".")):
+            found_file = True
+            yield os.stat(file).st_mtime
+        if found_file == False:
+            yield 0.0
 
     def __autoreload(self):
-        # def print_stdout(process):
-        #     stdout = process.stdout
-        #     if stdout != None:
-        #         print stdout
-
-        # How often we check the filesystem for changes (in seconds)
         wait = 1
 
-        # The process to autoreload
         process = Process(target=_Plugin._run_autoreload, args=(self,))
         process.start()
 
-        # The current maximum file modified time under the watched directory
         last_mtime = max(self.__file_times("."))
         while True:
-            max_mtime = max(self.__file_times("."))
-            # print_stdout(process)
-            if max_mtime > last_mtime:
-                last_mtime = max_mtime
-                Logs.debug("Restarting plugin")
-                process.kill()
-                process = Process(target=_Plugin._run_autoreload, args=(self,))
-                process.start()
-            time.sleep(wait)
+            try:
+                max_mtime = max(self.__file_times("."))
+                if max_mtime > last_mtime:
+                    last_mtime = max_mtime
+                    Logs.message("Restarting plugin")
+                    process.kill()
+                    process = Process(target=_Plugin._run_autoreload, args=(self,))
+                    process.start()
+                time.sleep(wait)
+            except KeyboardInterrupt:
+                break
 
     @classmethod
     def _run_autoreload(cls, self):
+        Logs._set_verbose(self.__has_verbose)
         self.__run()
 
     def __run(self):
@@ -274,3 +272,4 @@ class _Plugin(object):
         self._plugin_class = None
         self.__connected = False
         self.__has_autoreload = False
+        self.__has_verbose = False
