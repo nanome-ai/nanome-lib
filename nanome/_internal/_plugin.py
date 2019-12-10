@@ -13,6 +13,7 @@ import json
 import cProfile
 import time
 import os
+import fnmatch
 
 try_reconnection_time = 20.0
 keep_alive_time_interval = 3600.0
@@ -34,7 +35,9 @@ class _Plugin(object):
                 Logs.message(" -k                   specifies a key file to use to connect to NTS")
                 Logs.message(" -n                   name to display for this plugin in Nanome")
                 Logs.message(" -v                   enable verbose mode, to display Logs.debug")
-                Logs.message(" -r, --auto-reload    restart plugin automatically if a python file in current directory changes")
+                Logs.message(" -r, --auto-reload    restart plugin automatically if a .py or .json file in current directory changes")
+                Logs.message(" --ignore             to use with auto-reload. All paths matching this pattern will be ignored, " \
+                    "use commas to specify several. Supports */?/[seq]/[!seq]")
                 sys.exit(0)
             elif sys.argv[i] == "-a":
                 if i >= len(sys.argv):
@@ -69,6 +72,12 @@ class _Plugin(object):
                 Logs._set_verbose(True)
             elif sys.argv[i] == "-r" or sys.argv[i] == "--auto-reload":
                 self.__has_autoreload = True
+            elif sys.argv[i] == "--ignore":
+                if i >= len(sys.argv):
+                    Logs.error("Error: --ignore requires an argument")
+                    sys.exit(1)
+                split = sys.argv[i + 1].split(",")
+                self.__to_ignore.extend(split)
 
     def __read_key_file(self):
         try:
@@ -125,18 +134,25 @@ class _Plugin(object):
             Logs.warning("Received a packet of unknown type", packet.packet_type, ". Ignoring")
 
     def __file_filter(self, name):
-        return name.endswith(".py")
+        return name.endswith(".py") or name.endswith(".json")
 
     def __file_times(self, path):
         found_file = False
-        for file in filter(self.__file_filter, os.listdir(".")):
-            found_file = True
-            yield os.stat(file).st_mtime
+        for root, dirs, files in os.walk(path):
+            for file in filter(self.__file_filter, files):
+                file_path = os.path.join(root, file)
+                matched = False
+                for pattern in self.__to_ignore:
+                    if fnmatch.fnmatch(file_path, pattern):
+                        matched = True
+                if matched == False:
+                    found_file = True
+                    yield os.stat(file_path).st_mtime
         if found_file == False:
             yield 0.0
 
     def __autoreload(self):
-        wait = 1
+        wait = 3
 
         process = Process(target=_Plugin._run_autoreload, args=(self,))
         process.start()
@@ -273,3 +289,4 @@ class _Plugin(object):
         self.__connected = False
         self.__has_autoreload = False
         self.__has_verbose = False
+        self.__to_ignore = []
