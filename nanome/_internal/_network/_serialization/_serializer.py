@@ -129,6 +129,9 @@ add_command(CommandCallbacks._Commands.get_macros_response, CommandSerializers._
 add_command(CommandCallbacks._Commands.presenter_info_response, CommandSerializers._GetPresenterInfoResponse())
 add_command(CommandCallbacks._Commands.presenter_change, CommandSerializers._PresenterChange())
 add_command(CommandCallbacks._Commands.controller_transforms_response, CommandSerializers._GetControllerTransformsResponse())
+
+#others
+add_command(CommandCallbacks._Commands.load_file_done, CommandSerializers._LoadFileDone())
 #-------------Messages-----------#
 # Messages are outgoing (plugin -> nanome)
 
@@ -247,3 +250,6 @@ add_callback(CommandCallbacks._Commands.get_macros_response, CommandCallbacks._r
 add_callback(CommandCallbacks._Commands.presenter_info_response, CommandCallbacks._receive_presenter_info)
 add_callback(CommandCallbacks._Commands.presenter_change, CommandCallbacks._presenter_change)
 add_callback(CommandCallbacks._Commands.controller_transforms_response, CommandCallbacks._receive_controller_transforms)
+
+#others
+add_callback(CommandCallbacks._Commands.load_file_done, CommandCallbacks._load_file_done)

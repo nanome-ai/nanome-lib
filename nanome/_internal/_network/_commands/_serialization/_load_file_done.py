@@ -1,6 +1,7 @@
 from nanome._internal._util._serializers import _ArraySerializer
 from nanome._internal._util._serializers import _TypeSerializer
 from nanome.util.file import LoadInfoDone
+from nanome.util.enums import LoadFileErrorCode
 
 
 class _LoadFileDoneInfo(_TypeSerializer):
@@ -18,7 +19,7 @@ class _LoadFileDoneInfo(_TypeSerializer):
 
     def deserialize(self, version, context):
         result = LoadInfoDone()
-        result.success = context.read_bool()
+        result.success = LoadFileErrorCode(context.read_byte())
         return result
 
 

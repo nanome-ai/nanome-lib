@@ -1,4 +1,5 @@
 from . import IntEnum
+from .enums import LoadFileErrorCode
 
 class DirectoryErrorCode(IntEnum):
     no_error = 0
@@ -40,5 +41,7 @@ class DirectoryRequestOptions(object):
         self._pattern = "*"
 
 class LoadInfoDone():
+    ErrorCode = LoadFileErrorCode
+
     def __init__(self):
-        self.success = False
+        self.success = LoadFileErrorCode.no_error
