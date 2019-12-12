@@ -5,6 +5,7 @@ from nanome._internal._network._serialization._serializer import Serializer
 from nanome._internal._util._serializers import _TypeSerializer
 from nanome.util.logs import Logs
 from nanome.util import config
+from nanome._internal._util import _kill
 
 from multiprocessing import Process, Pipe, current_process
 from timeit import default_timer as timer
@@ -14,6 +15,7 @@ import cProfile
 import time
 import os
 import fnmatch
+import signal
 
 try_reconnection_time = 20.0
 keep_alive_time_interval = 3600.0
@@ -164,7 +166,7 @@ class _Plugin(object):
                 if max_mtime > last_mtime:
                     last_mtime = max_mtime
                     Logs.message("Restarting plugin")
-                    process.kill()
+                    _kill(process.pid, signal.SIGINT)
                     process = Process(target=_Plugin._run_autoreload, args=(self,))
                     process.start()
                 time.sleep(wait)
@@ -177,11 +179,18 @@ class _Plugin(object):
         self.__run()
 
     def __run(self):
+        if self._pre_run != None:
+            self._pre_run()
+        signal.signal(signal.SIGINT, self.__on_exit_signal)
         _Plugin.instance = self
         self._description['auth'] = self.__read_key_file()
         self._process_manager = _ProcessManager()
         self.__connect()
         self.__loop()
+
+    def __on_exit_signal(self, signum, frame):
+        Logs.message("EXIT SIGNAL")
+        self.__exit()
 
     def __connect(self):
         self._network = Network._NetInstance(self, _Plugin._on_packet_received)
@@ -249,6 +258,8 @@ class _Plugin(object):
         for session in _Plugin.instance._sessions.values():
             session.signal_and_close_pipes()
             session.plugin_process.join()
+        if self._post_run != None:
+            self._post_run()
         sys.exit(0)
 
     def __on_client_connection(self, session_id, version_table):
@@ -290,3 +301,5 @@ class _Plugin(object):
         self.__has_autoreload = False
         self.__has_verbose = False
         self.__to_ignore = []
+        self._pre_run = None
+        self._post_run = None

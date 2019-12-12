@@ -84,6 +84,28 @@ class Plugin(_Plugin):
         """
         self._plugin_class = plugin_class
 
+    @property
+    def pre_run(self):
+        """
+        | Function to call before the plugin runs and tries to connect to NTS
+        | Useful when using autoreload
+        """
+        return self._pre_run
+    @pre_run.setter
+    def pre_run(self, value):
+        self._pre_run = value
+
+    @property
+    def post_run(self):
+        """
+        | Function to call when the plugin is about to exit
+        | Useful when using autoreload
+        """
+        return self._post_run
+    @post_run.setter
+    def post_run(self, value):
+        self._post_run = value
+
     def __init__(self, name, description, category = "", has_advanced = False):
         super(Plugin, self).__init__(name, description, category, has_advanced)
         self._plugin_class = _DefaultPlugin
