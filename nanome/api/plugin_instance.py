@@ -391,7 +391,7 @@ class PluginInstance(_PluginInstance):
 
     def send_files_to_load(self, files_list, callback = None):
         files = []
-        if not files_list is list:
+        if not isinstance(files_list, list):
             files_list = [files_list]
         for file in files_list:
             full_path = file.replace('\\', '/')
