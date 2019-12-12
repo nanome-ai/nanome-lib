@@ -189,7 +189,6 @@ class _Plugin(object):
         self.__loop()
 
     def __on_exit_signal(self, signum, frame):
-        Logs.message("EXIT SIGNAL")
         self.__exit()
 
     def __connect(self):
