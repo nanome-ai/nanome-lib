@@ -73,7 +73,7 @@ class _Commands(__CommandEnum):
 
     #Other
     upload_cryo_em_done = auto()
-
+    load_file_done = auto()
 
 # /!\ /!\ /!\
 # Values names are really important here, as they are hashed, and need to match Nanome
@@ -130,6 +130,7 @@ class _Messages(__CommandEnum):
     #Other
     upload_cryo_em = auto()
     open_url = auto()
+    load_file = auto()
 
 class _Hashes():
     CommandHashes = [None] * len(_Commands)

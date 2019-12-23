@@ -87,3 +87,7 @@ class StreamDataType(IntEnum):
 class StreamDirection(IntEnum):
     writing = 0
     reading = 1
+
+class LoadFileErrorCode(IntEnum):
+    no_error = 0
+    loading_failed = 1
