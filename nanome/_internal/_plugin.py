@@ -15,7 +15,6 @@ import cProfile
 import time
 import os
 import fnmatch
-import signal
 import subprocess
 
 try_reconnection_time = 20.0
@@ -184,7 +183,7 @@ class _Plugin(object):
                 if max_mtime > last_mtime:
                     last_mtime = max_mtime
                     Logs.message("Restarting plugin")
-                    _kill(process.pid, signal.SIGINT)
+                    process.kill()
                     process = subprocess.Popen(sub_args)
                 time.sleep(wait)
             except KeyboardInterrupt:
@@ -193,15 +192,11 @@ class _Plugin(object):
     def __run(self):
         if self._pre_run != None:
             self._pre_run()
-        signal.signal(signal.SIGINT, self.__on_exit_signal)
         _Plugin.instance = self
         self._description['auth'] = self.__read_key_file()
         self._process_manager = _ProcessManager()
         self.__connect()
         self.__loop()
-
-    def __on_exit_signal(self, signum, frame):
-        self.__exit()
 
     def __connect(self):
         self._network = Network._NetInstance(self, _Plugin._on_packet_received)
