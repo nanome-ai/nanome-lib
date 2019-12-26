@@ -16,6 +16,7 @@ import time
 import os
 import fnmatch
 import signal
+import subprocess
 
 try_reconnection_time = 20.0
 keep_alive_time_interval = 3600.0
@@ -156,8 +157,25 @@ class _Plugin(object):
     def __autoreload(self):
         wait = 3
 
-        process = Process(target=_Plugin._run_autoreload, args=(self,))
-        process.start()
+        sub_args = [x for x in sys.argv if x != '-r' and x != "--auto-reload"]
+
+        try:
+            process = subprocess.Popen(sub_args)
+        except:
+            try:
+                process = subprocess.Popen(["python"] + sub_args)
+                sub_args = ["python"] + sub_args
+            except:
+                try:
+                    process = subprocess.Popen(["python3"] + sub_args)
+                    sub_args = ["python3"] + sub_args
+                except:
+                    try:
+                        process = subprocess.Popen(["python2"] + sub_args)
+                        sub_args = ["python2"] + sub_args
+                    except:
+                        Logs.error("Couldn't find a suitable python executable")
+                        self.__exit()
 
         last_mtime = max(self.__file_times("."))
         while True:
@@ -167,16 +185,10 @@ class _Plugin(object):
                     last_mtime = max_mtime
                     Logs.message("Restarting plugin")
                     _kill(process.pid, signal.SIGINT)
-                    process = Process(target=_Plugin._run_autoreload, args=(self,))
-                    process.start()
+                    process = subprocess.Popen(sub_args)
                 time.sleep(wait)
             except KeyboardInterrupt:
                 break
-
-    @classmethod
-    def _run_autoreload(cls, self):
-        Logs._set_verbose(self.__has_verbose)
-        self.__run()
 
     def __run(self):
         if self._pre_run != None:
