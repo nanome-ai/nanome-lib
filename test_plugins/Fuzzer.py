@@ -4,6 +4,7 @@ import test_plugins.fuzzer_helpers as helper
 import sys
 import random
 import time
+import testing
 
 # Config
 
@@ -54,7 +55,7 @@ class Fuzzer(nanome.PluginInstance):
         self.run_command(command)
 
     def get_new_command(self):
-        num = random.randint(0, len(Fuzzer.valid_commands)-1)
+        num = testing.rand_index(Fuzzer.valid_commands)
         return Fuzzer.valid_commands[num](self.fuzzer_info, self)
         
     def check_command(self, command):
