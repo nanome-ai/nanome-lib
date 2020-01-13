@@ -23,7 +23,7 @@ class PluginInstance(_PluginInstance):
         pass
 
     def __pseudo_init__(self):
-        self.menu = Menu()
+        pass
 
     def __new__(cls):
         n = super(PluginInstance, cls).__new__(cls)
@@ -185,6 +185,7 @@ class PluginInstance(_PluginInstance):
         :param menu: Menu to update
         :type menu: :class:`~nanome.api.ui.menu.Menu`
         """
+        self._menus[menu.index] = menu
         self._network._send(_Messages.menu_update, menu)
         
     def update_content(self, content):
