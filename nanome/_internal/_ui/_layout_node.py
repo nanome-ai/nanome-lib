@@ -74,6 +74,7 @@ class _LayoutNode(object):
         self._sizing_type = other._sizing_type
         self._sizing_value = other._sizing_value
         self._forward_dist = other._forward_dist
+        self._padding_type = other._padding_type
         self._padding = other._padding
         self._name = other._name
         self._save_changes()
