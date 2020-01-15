@@ -18,7 +18,7 @@ def write_json(helper, menu):
     helper.write("title", menu.title)
     helper.write("width", menu.width)
     helper.write("height", menu.height)
-    helper.write("version", 0)
+    helper.write("version", 1)
     child = helper.make_child()
     _layout_node_json.write_json(child, menu.root)
     helper.write("effective_root", child)

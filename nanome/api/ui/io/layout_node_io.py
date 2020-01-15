@@ -14,7 +14,7 @@ class LayoutNodeIO(_Addon):
         helper.write("title", "node")
         helper.write("width", 1)
         helper.write("height", 1)
-        helper.write("version", 0)
+        helper.write("version", 1)
         child = helper.make_child()
         _layout_node_json.write_json(child, self.base_object)
         helper.write("effective_root", child)

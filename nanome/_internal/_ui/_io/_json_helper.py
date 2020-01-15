@@ -21,8 +21,17 @@ class _JsonHelper(object):
             return str(value)
         elif (isinstance(default, float)):
             return float(value)
+        elif (isinstance(default, Vector3)):
+            return self.read_vector3(name)
         elif (isinstance(default, Color)):
             return Color.from_int(int(float((value))))
+
+    def read_vector3(self, name):
+        value = self.read_child(name)
+        if value == None:
+            return None
+        else:
+            return Vector3(value.read("x", 0.0), value.read("y", 0.0), value.read("z", 0.0))
 
     def write(self, name, value):
         if (isinstance(value, Color)):
