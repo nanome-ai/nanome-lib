@@ -12,81 +12,79 @@ def read_attribute_safe(content_json, name, default):
 def parse_json(content_json):
     # type: () -> Button
     button = _Button._create()
-    button._selected = bool(content_json["selected"])
-    button._unusable = bool(content_json["unusable"])
-    button._text._active = bool(content_json["text_active"])
-    button._text._value._idle = str(content_json["text_value_idle"])
-    button._text._value._selected = str(content_json["text_value_selected"])
-    button._text._value._highlighted = str(content_json["text_value_highlighted"])
-    button._text._value._selected_highlighted = str(content_json["text_value_selected_highlighted"])
-    button._text._value._unusable = str(content_json["text_value_unusable"])
-    button._text._auto_size = bool(content_json["text_auto_size"])
-    button._text._min_size = float(content_json["text_min_size"])
-    button._text._max_size = float(content_json["text_max_size"])
-    button._text._size = float(content_json["text_size"])
-    button._text._underlined = bool(content_json["text_underlined"])
-    button._text._bold.set_all(bool(content_json["text_bolded"])) #outdate API needs the rest
-    button._text._vertical_align = VertAlignOptions(int(float(content_json["text_vertical_align"])))
-    button._text._horizontal_align = HorizAlignOptions(int(float(content_json["text_horizontal_align"])))
-    button._icon._active = bool(read_attribute_safe(content_json, "icon_active", 'False'))
-    button._icon._value._idle = str(read_attribute_safe(content_json, "icon_value_idle", ''))
-    button._icon._value._selected = str(read_attribute_safe(content_json, "icon_value_selected", ''))
-    button._icon._value._highlighted = str(read_attribute_safe(content_json, "icon_value_highlighted", ''))
-    button._icon._value._selected_highlighted = str(read_attribute_safe(content_json, "icon_value_selected_highlighted", ''))
-    button._icon._value._unusable = str(read_attribute_safe(content_json, "icon_value_unusable", ''))
-    button._icon._color._idle = Color.from_int(int(float(read_attribute_safe(content_json, "icon_color_idle", '4294967295'))))
-    button._icon._color._selected = Color.from_int(int(float(read_attribute_safe(content_json, "icon_color_selected", '4294967295'))))
-    button._icon._color._highlighted = Color.from_int(int(float(read_attribute_safe(content_json, "icon_color_highlighted", '4294967295'))))
-    button._icon._color._selected_highlighted = Color.from_int(int(float(read_attribute_safe(content_json, "icon_color_selected_highlighted", '4294967295'))))
-    button._icon._color._unusable = Color.from_int(int(float(read_attribute_safe(content_json, "icon_color_unusable", '4294967295'))))
-    button._icon._sharpness = float(read_attribute_safe(content_json, "icon_sharpness", 0.5))
-    button._icon._size = float(read_attribute_safe(content_json, "icon_size", 1.0))
-    button._icon._ratio = float(read_attribute_safe(content_json, "icon_ratio", 0.5))
-    button._icon._position = Vector3(float(read_attribute_safe(content_json, "icon_position_x", 0.0)),
-        float(read_attribute_safe(content_json, "icon_position_y", 0.0)),
-        float(read_attribute_safe(content_json, "icon_position_z", 0.0)))
-    button._icon._rotation = Vector3(float(read_attribute_safe(content_json, "icon_rotation_x", 0.0)),
-        float(read_attribute_safe(content_json, "icon_rotation_y", 0.0)),
-        float(read_attribute_safe(content_json, "icon_rotation_z", 0.0)))
+    button._selected = content_json.read("selected", False)
+    button._unusable = content_json.read("unusable", False)
+    button._text._active = content_json.read("text_active", False)
+    button._text._value._idle = content_json.read("text_value_idle", "idle")
+    button._text._value._selected = content_json.read("text_value_selected", "selected")
+    button._text._value._highlighted = content_json.read("text_value_highlighted", "highlighted")
+    button._text._value._selected_highlighted = content_json.read("text_value_selected_highlighted", "both")
+    button._text._value._unusable = content_json.read("text_value_unusable", "unusable")
+    button._text._auto_size = content_json.read("text_auto_size", True)
+    button._text._min_size = content_json.read("text_min_size", 0.0)
+    button._text._max_size = content_json.read("text_max_size", 0.0)
+    button._text._size = content_json.read("text_size", 0.0)
+    button._text._underlined = content_json.read("text_underlined", False)
+    button._text._bold._set_all(content_json.read("text_bolded", False)) #outdate API needs the rest
+    button._text._vertical_align = VertAlignOptions(content_json.read("text_vertical_align", 0))
+    button._text._horizontal_align = HorizAlignOptions(content_json.read("text_horizontal_align", 0))
+    button._icon._active = content_json.read( "icon_active", False)
+    button._icon._value._idle = content_json.read( "icon_value_idle", '')
+    button._icon._value._selected = content_json.read( "icon_value_selected", '')
+    button._icon._value._highlighted = content_json.read( "icon_value_highlighted", '')
+    button._icon._value._selected_highlighted = content_json.read( "icon_value_selected_highlighted", '')
+    button._icon._value._unusable = content_json.read( "icon_value_unusable", '')
+    button._icon._color._idle = content_json.read( "icon_color_idle", Color.from_int(4294967295))
+    button._icon._color._selected = content_json.read( "icon_color_selected", Color.from_int(4294967295))
+    button._icon._color._highlighted = content_json.read( "icon_color_highlighted", Color.from_int(4294967295))
+    button._icon._color._selected_highlighted = content_json.read( "icon_color_selected_highlighted", Color.from_int(4294967295))
+    button._icon._color._unusable = content_json.read( "icon_color_unusable", Color.from_int(4294967295))
+    button._icon._sharpness = content_json.read( "icon_sharpness", 0.5)
+    button._icon._size = content_json.read( "icon_size", 1.0)
+    button._icon._ratio = content_json.read( "icon_ratio", 0.5)
+    button._icon._position = Vector3(content_json.read( "icon_position_x", 0.0),
+        content_json.read( "icon_position_y", 0.0),
+        content_json.read( "icon_position_z", 0.0))
+    button._icon._rotation = Vector3(content_json.read( "icon_rotation_x", 0.0),
+        content_json.read( "icon_rotation_y", 0.0),
+        content_json.read( "icon_rotation_z", 0.0))
     return button
 
-def write_json(button):
+def write_json(helper, button):
     # type: (_Button) -> dict
-    content_json = {}
-    content_json["selected"] = button._selected
-    content_json["unusable"] = button._unusable
-    content_json["text_active"] = button._text._active
-    content_json["text_value_idle"] = button._text._value._idle
-    content_json["text_value_selected"] = button._text._value._selected
-    content_json["text_value_highlighted"] = button._text._value._highlighted
-    content_json["text_value_selected_highlighted"] = button._text._value._selected_highlighted
-    content_json["text_value_unusable"] = button._text._value._unusable
-    content_json["text_auto_size"] = button._text._auto_size
-    content_json["text_min_size"] = button._text._min_size
-    content_json["text_max_size"] = button._text._max_size
-    content_json["text_size"] = button._text._size
-    content_json["text_underlined"] = button._text._underlined
-    content_json["text_bolded"] = button._text._bold._idle
-    content_json["text_vertical_align"] = int(button._text._vertical_align)
-    content_json["text_horizontal_align"] = int(button._text._horizontal_align)
-    content_json["icon_active"] = button._icon._active
-    content_json["icon_value_idle"] = button._icon._value._idle
-    content_json["icon_value_selected"] = button._icon._value._selected
-    content_json["icon_value_highlighted"] = button._icon._value._highlighted
-    content_json["icon_value_selected_highlighted"] = button._icon._value._selected_highlighted
-    content_json["icon_value_unusable"] = button._icon._value._unusable
-    content_json["icon_color_idle"] = button._icon._color._idle._color
-    content_json["icon_color_selected"] = button._icon._color._selected._color
-    content_json["icon_color_highlighted"] = button._icon._color._highlighted._color
-    content_json["icon_color_selected_highlighted"] = button._icon._color._selected_highlighted._color
-    content_json["icon_color_unusable"] = button._icon._color._unusable._color
-    content_json["icon_sharpness"] = button._icon._sharpness
-    content_json["icon_size"] = button._icon._size
-    content_json["icon_ratio"] = button._icon._ratio
-    content_json["icon_position_x"] = button._icon._position.x
-    content_json["icon_position_y"] = button._icon._position.y
-    content_json["icon_position_z"] = button._icon._position.z
-    content_json["icon_rotation_x"] = button._icon._rotation.x
-    content_json["icon_rotation_y"] = button._icon._rotation.y
-    content_json["icon_rotation_z"] = button._icon._rotation.z
-    return content_json
+    helper.write("selected", button._selected)
+    helper.write("unusable", button._unusable)
+    helper.write("text_active", button._text._active)
+    helper.write("text_value_idle", button._text._value._idle)
+    helper.write("text_value_selected", button._text._value._selected)
+    helper.write("text_value_highlighted", button._text._value._highlighted)
+    helper.write("text_value_selected_highlighted", button._text._value._selected_highlighted)
+    helper.write("text_value_unusable", button._text._value._unusable)
+    helper.write("text_auto_size", button._text._auto_size)
+    helper.write("text_min_size", button._text._min_size)
+    helper.write("text_max_size", button._text._max_size)
+    helper.write("text_size", button._text._size)
+    helper.write("text_underlined", button._text._underlined)
+    helper.write("text_bolded", button._text._bold._idle)
+    helper.write("text_vertical_align", int(button._text._vertical_align))
+    helper.write("text_horizontal_align", int(button._text._horizontal_align))
+    helper.write("icon_active", button._icon._active)
+    helper.write("icon_value_idle", button._icon._value._idle)
+    helper.write("icon_value_selected", button._icon._value._selected)
+    helper.write("icon_value_highlighted", button._icon._value._highlighted)
+    helper.write("icon_value_selected_highlighted", button._icon._value._selected_highlighted)
+    helper.write("icon_value_unusable", button._icon._value._unusable)
+    helper.write("icon_color_idle", button._icon._color._idle._color)
+    helper.write("icon_color_selected", button._icon._color._selected._color)
+    helper.write("icon_color_highlighted", button._icon._color._highlighted._color)
+    helper.write("icon_color_selected_highlighted", button._icon._color._selected_highlighted._color)
+    helper.write("icon_color_unusable", button._icon._color._unusable._color)
+    helper.write("icon_sharpness", button._icon._sharpness)
+    helper.write("icon_size", button._icon._size)
+    helper.write("icon_ratio", button._icon._ratio)
+    helper.write("icon_position_x", button._icon._position.x)
+    helper.write("icon_position_y", button._icon._position.y)
+    helper.write("icon_position_z", button._icon._position.z)
+    helper.write("icon_rotation_x", button._icon._rotation.x)
+    helper.write("icon_rotation_y", button._icon._rotation.y)
+    helper.write("icon_rotation_z", button._icon._rotation.z)
