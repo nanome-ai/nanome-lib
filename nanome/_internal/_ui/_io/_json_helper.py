@@ -13,14 +13,14 @@ class _JsonHelper(object):
         if name not in self.json:
             return default
         value = self.json[name]
-        if (isinstance(default, int)):
+        if (isinstance(default, bool)): #needs to come before int
+            return bool(value)
+        elif (isinstance(default, int)):
             return int(float(value))
         elif (isinstance(default, str)):
             return str(value)
         elif (isinstance(default, float)):
             return float(value)
-        elif (isinstance(default, bool)):
-            return bool(value)
         elif (isinstance(default, Color)):
             return Color.from_int(int(float((value))))
 
