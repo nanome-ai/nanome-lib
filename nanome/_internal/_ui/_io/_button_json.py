@@ -25,7 +25,7 @@ def parse_json(content_json):
     button._text._max_size = content_json.read("text_max_size", 0.0)
     button._text._size = content_json.read("text_size", 0.0)
     button._text._underlined = content_json.read("text_underlined", False)
-    button._text._bold._set_all(content_json.read("text_bolded", False)) #outdate API needs the rest
+    button._text._bold._set_all(content_json.read("text_bolded", False)) #deprecated
     button._text._vertical_align = VertAlignOptions(content_json.read("text_vertical_align", 0))
     button._text._horizontal_align = HorizAlignOptions(content_json.read("text_horizontal_align", 0))
     button._icon._active = content_json.read( "icon_active", False)
@@ -54,6 +54,7 @@ def write_json(helper, button):
     # type: (_Button) -> dict
     helper.write("selected", button._selected)
     helper.write("unusable", button._unusable)
+    #region text
     helper.write("text_active", button._text._active)
     helper.write("text_value_idle", button._text._value._idle)
     helper.write("text_value_selected", button._text._value._selected)
@@ -65,9 +66,25 @@ def write_json(helper, button):
     helper.write("text_max_size", button._text._max_size)
     helper.write("text_size", button._text._size)
     helper.write("text_underlined", button._text._underlined)
-    helper.write("text_bolded", button._text._bold._idle)
+    helper.write("text_bold_idle", button.text._bold._idle)
+    helper.write("text_bold_selected", button.text._bold._selected)
+    helper.write("text_bold_highlighted", button.text._bold._highlighted)
+    helper.write("text_bold_selected_highlighted", button.text._bold._selected_highlighted)
+    helper.write("text_bold_unusable", button.text._bold._unusable)
+    helper.write("text_color_idle", button.text._color._idle)
+    helper.write("text_color_selected", button.text._color._selected)
+    helper.write("text_color_highlighted", button.text._color._highlighted)
+    helper.write("text_color_selected_highlighted", button.text._color._selected_highlighted)
+    helper.write("text_color_unusable", button.text._color._unusable)
+    helper.write("text_padding_top", button.text._padding_top)
+    helper.write("text_padding_bottom", button.text._padding_bottom)
+    helper.write("text_padding_left", button.text._padding_left)
+    helper.write("text_padding_right", button.text._padding_right)
+    helper.write("text_line_spacing", button.text._line_spacing)
     helper.write("text_vertical_align", int(button._text._vertical_align))
     helper.write("text_horizontal_align", int(button._text._horizontal_align))
+    #endregion
+    #region icon
     helper.write("icon_active", button._icon._active)
     helper.write("icon_value_idle", button._icon._value._idle)
     helper.write("icon_value_selected", button._icon._value._selected)
@@ -82,9 +99,22 @@ def write_json(helper, button):
     helper.write("icon_sharpness", button._icon._sharpness)
     helper.write("icon_size", button._icon._size)
     helper.write("icon_ratio", button._icon._ratio)
-    helper.write("icon_position_x", button._icon._position.x)
-    helper.write("icon_position_y", button._icon._position.y)
-    helper.write("icon_position_z", button._icon._position.z)
-    helper.write("icon_rotation_x", button._icon._rotation.x)
-    helper.write("icon_rotation_y", button._icon._rotation.y)
-    helper.write("icon_rotation_z", button._icon._rotation.z)
+    helper.write("icon_position", button._icon._position)
+    helper.write("icon_rotation", button._icon._rotation)
+    #endregion
+    #region mesh
+    helper.write("mesh_active", button.mesh._active)
+    helper.write("mesh_enabled_idle", button.mesh._enabled._idle)
+    helper.write("mesh_enabled_selected", button.mesh._enabled._selected)
+    helper.write("mesh_enabled_highlighted", button.mesh._enabled._highlighted)
+    helper.write("mesh_enabled_selected_highlighted", button.mesh._enabled._selected_highlighted)
+    helper.write("mesh_enabled_unusable", button.mesh._enabled._unusable)
+    helper.write("mesh_color_idle", button.mesh._color._idle)
+    helper.write("mesh_color_selected", button.mesh._color._selected)
+    helper.write("mesh_color_highlighted", button.mesh._color._highlighted)
+    helper.write("mesh_color_selected_highlighted", button.mesh._color._selected_highlighted)
+    helper.write("mesh_color_unusable", button.mesh._color._unusable)
+    #endregion
+    #region outline
+
+    #endregion
