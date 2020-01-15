@@ -11,6 +11,7 @@ def read_attribute_safe(content_json, name, default):
 
 def parse_json(content_json):
     # type: () -> Button
+    #region text
     button = _Button._create()
     button._selected = content_json.read("selected", False)
     button._unusable = content_json.read("unusable", False)
@@ -43,6 +44,8 @@ def parse_json(content_json):
     button._text._line_spacing = content_json.read("text_line_spacing", button._text._line_spacing)
     button._text._vertical_align = VertAlignOptions(content_json.read("text_vertical_align", 0))
     button._text._horizontal_align = HorizAlignOptions(content_json.read("text_horizontal_align", 0))
+    #endregion
+    #region icon
     button._icon._active = content_json.read( "icon_active", False)
     button._icon._value._idle = content_json.read( "icon_value_idle", '')
     button._icon._value._selected = content_json.read( "icon_value_selected", '')
@@ -63,7 +66,7 @@ def parse_json(content_json):
     button._icon._rotation = Vector3(content_json.read( "icon_rotation_x", 0.0),
         content_json.read( "icon_rotation_y", 0.0),
         content_json.read( "icon_rotation_z", 0.0))
-
+    #endregion
     #region mesh
     button._mesh._active = content_json.read("mesh_active", button._mesh._active)
     button._mesh._enabled._idle = content_json.read("mesh_enabled_idle", button._mesh._enabled._idle)
