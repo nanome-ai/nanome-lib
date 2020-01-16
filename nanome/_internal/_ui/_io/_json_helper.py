@@ -3,8 +3,9 @@ from nanome.util import IntEnum
 from nanome.util.color import Color
 from nanome.util.vector3 import Vector3
 
+
 class _JsonHelper(object):
-    def __init__(self, json = None):
+    def __init__(self, json=None):
         if json == None:
             json = {}
         assert(isinstance(json, dict))
@@ -14,21 +15,20 @@ class _JsonHelper(object):
         if name not in self.json:
             return default
         value = self.json[name]
-        if (isinstance(default, bool)): #needs to come before int
-            return bool(value)
-        elif (isinstance(default, int)):
+        def_type = type(default)
+        #using == to miss inheritance (bool, intenum)
+        if def_type == int:
             return int(float(value))
-        elif (isinstance(default, str)):
-            return str(value)
-        elif (isinstance(default, float)):
-            return float(value)
-        elif (isinstance(default, Vector3)):
+        #using isinstance to catch inheritance
+        elif isinstance(default, Vector3):
             return self.read_vector3(name)
-        elif (isinstance(default, Color)):
+        elif isinstance(default, Color):
             return Color.from_int(int(float((value))))
+        else:
+            return def_type(value)
 
     def read_vector3(self, name):
-        value = self.read_object(name)
+        value=self.read_object(name)
         if value == None:
             return None
         else:
@@ -47,7 +47,7 @@ class _JsonHelper(object):
             self.json[name] = value
 
     def write_vector(self, name, value):
-        builder = _JsonHelper()
+        builder=_JsonHelper()
         builder.write("x", value.x)
         builder.write("y", value.y)
         builder.write("z", value.z)
@@ -59,7 +59,7 @@ class _JsonHelper(object):
     def read_object(self, name):
         if name not in self.json:
             return None
-        child = self.json[name]
+        child=self.json[name]
         if child is None:
             return None
         return _JsonHelper(child)
@@ -67,9 +67,9 @@ class _JsonHelper(object):
     def read_objects(self, name):
         if name not in self.json:
             return None
-        children = self.json[name]
+        children=self.json[name]
         for (i, child) in enumerate(children):
-            children[i] = _JsonHelper(child)
+            children[i]=_JsonHelper(child)
         return children
 
     def get_dict(self):

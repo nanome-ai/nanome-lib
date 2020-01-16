@@ -97,8 +97,8 @@ def parse_json(content_json):
     button._tooltip._title = content_json.read("tooltip_title", button._tooltip._title)
     button._tooltip._content = content_json.read("tooltip_content", button._tooltip._content)
     button._tooltip._bounds = content_json.read("tooltip_bounds", button._tooltip._bounds)
-    button._tooltip._positioning_target = button.ToolTipPositioning(content_json.read("tooltip_positioning_target", button._tooltip._positioning_target))
-    button._tooltip._positioning_origin = button.ToolTipPositioning(content_json.read("tooltip_positioning_origin", button._tooltip._positioning_origin))
+    button._tooltip._positioning_target = content_json.read("tooltip_positioning_target", button._tooltip._positioning_target)
+    button._tooltip._positioning_origin = content_json.read("tooltip_positioning_origin", button._tooltip._positioning_origin)
     #endregion
     return button
 
