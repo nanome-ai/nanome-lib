@@ -24,7 +24,6 @@ class MenuIO(_Addon):
         try:
             with open(path, "r") as f:
                 menu_string = f.read()
-                Logs.debug(menu_string)
                 menu_json = json.loads(menu_string)
         except:
             Logs.error("Could not read json file: " + path)
