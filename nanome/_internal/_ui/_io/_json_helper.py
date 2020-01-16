@@ -1,4 +1,5 @@
 from nanome.util import Logs
+from nanome.util import IntEnum
 from nanome.util.color import Color
 from nanome.util.vector3 import Vector3
 
@@ -36,6 +37,8 @@ class _JsonHelper(object):
     def write(self, name, value):
         if (isinstance(value, Color)):
             self.json[name] = value._color
+        elif(isinstance(value, IntEnum)):
+            self.write(name, int(value))
         elif (isinstance(value, Vector3)):
             self.write_vector(name, value)
         elif (isinstance(value, _JsonHelper)):
