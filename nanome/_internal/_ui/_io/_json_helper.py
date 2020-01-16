@@ -28,7 +28,7 @@ class _JsonHelper(object):
             return def_type(value)
 
     def read_vector3(self, name):
-        value=self.read_object(name)
+        value = self.read_object(name)
         if value == None:
             return None
         else:
@@ -59,7 +59,7 @@ class _JsonHelper(object):
     def read_object(self, name):
         if name not in self.json:
             return None
-        child=self.json[name]
+        child = self.json[name]
         if child is None:
             return None
         return _JsonHelper(child)
@@ -67,9 +67,9 @@ class _JsonHelper(object):
     def read_objects(self, name):
         if name not in self.json:
             return None
-        children=self.json[name]
+        children = self.json[name]
         for (i, child) in enumerate(children):
-            children[i]=_JsonHelper(child)
+            children[i] = _JsonHelper(child)
         return children
 
     def get_dict(self):
