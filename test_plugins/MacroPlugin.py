@@ -9,8 +9,6 @@ NAME = "Macro Plugin"
 DESCRIPTION = "A plugin that can be edited freely for testing."
 CATEGORY = "Simple Actions"
 HAS_ADVANCED_OPTIONS = False
-NTS_ADDRESS = '127.0.0.1'
-NTS_PORT = 8888
 
 
 TESTMACRO1 = """
@@ -122,4 +120,4 @@ class MacroPlugin(nanome.PluginInstance):
     def __init__(self):
         pass
 
-nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, MacroPlugin, NTS_ADDRESS, NTS_PORT)
+nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, MacroPlugin)

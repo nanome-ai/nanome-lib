@@ -17,6 +17,8 @@ from ._file_request import _FileRequest
 from ._file_save import _FileSave
 from ._get_presenter_info_response import _GetPresenterInfoResponse
 from ._get_presenter_info import _GetPresenterInfo
+from ._get_controller_transforms_response import _GetControllerTransformsResponse
+from ._get_controller_transforms import _GetControllerTransforms
 from ._interrupt_stream import _InterruptStream
 from ._open_url import _OpenURL
 from ._run import _Run
@@ -47,5 +49,10 @@ from ._update_workspace import _UpdateWorkspace
 from ._position_structures import _PositionStructures
 from ._position_structures_done import _PositionStructuresDone
 from ._send_notification import _SendNotification
+from ._get_menu_transform import _GetMenuTransform
+from ._get_menu_transform_response import _GetMenuTransformResponse
+from ._set_menu_transform import _SetMenuTransform
+from ._load_file import _LoadFile
+from ._load_file_done import _LoadFileDone
 
 from ._macro_commands import _RunMacro, _SaveMacro, _DeleteMacro, _GetMacros, _GetMacrosResponse, _StopMacro

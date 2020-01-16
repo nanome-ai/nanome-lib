@@ -16,3 +16,4 @@ from ._menu import _Menu
 from . import *
 from . import _io
 from . import _serialization
+from . import _deprecated

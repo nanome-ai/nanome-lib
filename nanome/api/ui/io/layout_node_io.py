@@ -1,5 +1,6 @@
 import json
 from nanome.util import Logs
+from nanome._internal._ui._io._json_helper import _JsonHelper
 from nanome._internal._ui._io import _layout_node_json
 from nanome._internal import _Addon
 
@@ -8,15 +9,13 @@ class LayoutNodeIO(_Addon):
         _Addon.__init__(self, base_object)
 
     def to_json(self, path):
-        node_json = {}
-        node_json["is_menu"] == False
-        node_json["title"] == "node"
-        node_json["width"] = 1
-        node_json["height"] = 1
-        node_json["version"] = 0
-
-        node_json["effective_root"] = _layout_node_json.write_json(self.base_object)
-        node_string = json.dumps(node_json)
+        helper = _JsonHelper()
+        helper.write("is_menu", False)
+        helper.write("title", "node")
+        child = helper.make_instance()
+        _layout_node_json.write_json(child, self.base_object)
+        helper.write("effective_root", child)
+        node_string = json.dumps(helper.get_dict())
 
         try:
             with open(path, "w") as f:
@@ -35,8 +34,9 @@ class LayoutNodeIO(_Addon):
             Logs.error("Could not read json file: " + path)
             raise
         try:
-            assert(node_json["is_menu"] == False)
-            return _layout_node_json.parse_json(node_json["effective_root"])
+            json_helper = _JsonHelper(node_json)
+            assert(json_helper.read("is_menu", False) == False)
+            return _layout_node_json.parse_json(json_helper.read_object("effective_root"))
         except:
             Logs.error("Json does not correctly represent a layout node.")
             raise

@@ -8,10 +8,18 @@ class _Workspace(_Base):
         return cls()
 
     def __init__(self):
-        self._position = Vector3(0,0,0)
-        self._rotation = Quaternion(0,0,0,0)
-        self._scale = Vector3(1,1,1)
+        self._position = Vector3()
+        self._rotation = Quaternion()
+        self._scale = Vector3(0.02,0.02,0.02)
         self._complexes = []
+
+    def _add_complex(self, complex):
+        self._complexes.append(complex)
+        complex._parent = self
+
+    def _remove_complex(self, complex):
+        self._complexes.remove(complex)
+        complex._parent = None
 
     @Logs.deprecated()
     def get_atom_iterator(self):

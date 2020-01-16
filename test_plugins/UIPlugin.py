@@ -9,8 +9,6 @@ NAME = "UI Plugin"
 DESCRIPTION = "A simple plugin demonstrating how plugin system can be used to extend Nanome capabilities"
 CATEGORY = "Simple Actions"
 HAS_ADVANCED_OPTIONS = False
-NTS_ADDRESS = '127.0.0.1'
-NTS_PORT = 8888
 
 # Plugin
 
@@ -80,25 +78,16 @@ class UIPlugin(nanome.PluginInstance):
             self.previous_menu = menu
 
         def button_pressed_callback(button): 
-            Logs.debug("button pressed: " + button.text.value_idle)
-            button.text.value_selected = "Button Pressed!"
-            button.selected = not button.selected
-
-            self.loadingBar.percentage += .1
-            self.loadingBar.title = "TITLE"
-            self.loadingBar.description = "DESCRIPTION " + str(self.loadingBar.percentage)
-
+            Logs.debug("button pressed: " + button.text.value.idle)
             self.update_content(button)
-            self.update_content(self.loadingBar)
-
             create_menu()
 
         def hover_callback(button, hovered): 
-            Logs.debug("button hover: " + button.text.value_idle, hovered)
+            Logs.debug("button hover: " + button.text.value.idle, hovered)
 
         def prefab_button_pressed_callback(button):
             button.selected = not button.selected
-            Logs.debug("Prefab button pressed: " + button.text.value_idle + " " + str(button._content_id))
+            Logs.debug("Prefab button pressed: " + button.text.value.idle + " " + str(button._content_id))
             self.update_content(button)
         
         content = nanome.ui.LayoutNode()
@@ -126,10 +115,34 @@ class UIPlugin(nanome.PluginInstance):
         ln_button.padding = (0.01, 0.01, 0.01, 0.01)
         ln_button.forward_dist = .001
 
+        #super styled button
         button = nanome.ui.Button()
-        button.text.active = True
-        button.text.vertical_align = nanome.util.enums.VertAlignOptions.Middle
-        button.text.horizontal_align = nanome.util.enums.HorizAlignOptions.Middle
+        button.name = "OpenSubMenu"
+        b_t = button.text
+        b_t.active = True
+        b_t.value.set_all("Spawn menu")
+        b_t.auto_size = False
+        b_t.size = .6
+        b_t.underlined = True
+        b_t.ellipsis = True
+        b_t.color.idle = nanome.util.Color.Red()
+        b_t.color.highlighted = nanome.util.Color.Blue()
+        b_t.bold.set_all(False)
+        b_t.padding_left = .5
+        b_t.vertical_align = nanome.util.enums.VertAlignOptions.Middle
+        b_t.horizontal_align = nanome.util.enums.HorizAlignOptions.Left
+        b_m = button.mesh
+        b_m.active = True
+        b_m.color.idle = nanome.util.Color.Blue()
+        b_m.color.highlighted = nanome.util.Color.Red()
+        b_o = button.outline
+        b_o.active = True
+        b_o.color.idle = nanome.util.Color.Red()
+        b_o.color.highlighted = nanome.util.Color.Blue()
+        b_t = button.tooltip
+        b_t.title = "spawn a submenu"
+        b_t.content = "it is useless"
+        b_t.positioning_target = nanome.util.enums.ToolTipPositioning.center
         button.register_pressed_callback(button_pressed_callback)
         button.register_hover_callback(hover_callback)
 
@@ -178,7 +191,7 @@ class UIPlugin(nanome.PluginInstance):
         prefabLabel.text_value = "Molecule Label"
         prefabButton = nanome.ui.Button()
         prefabButton.text.active = True
-        prefabButton.set_all_text("Molecule Button")
+        prefabButton.text.value.set_all("Molecule Button")
         prefabButton.register_pressed_callback(prefab_button_pressed_callback)
         child1.set_content(prefabLabel)
         child2.set_content(prefabButton)
@@ -196,17 +209,12 @@ class UIPlugin(nanome.PluginInstance):
 
         Logs.debug("Added list")
 
-        ln_loading_bar = nanome.ui.LayoutNode(name="LoadingBar")
-        ln_loading_bar.forward_dist = .03
-        self.loadingBar = ln_loading_bar.add_new_loading_bar()
-
         content.add_child(ln_contentBase)
         ln_contentBase.add_child(ln_label)
         ln_contentBase.add_child(ln_button)
         ln_contentBase.add_child(ln_slider)
         ln_contentBase.add_child(ln_textInput)
         ln_contentBase.add_child(ln_list) 
-        ln_contentBase.add_child(ln_loading_bar)
         ln_label.set_content(label)
         ln_button.set_content(button)
         ln_slider.set_content(slider)
@@ -216,8 +224,8 @@ class UIPlugin(nanome.PluginInstance):
 
     def create_tab2(self):
         def button_pressed_callback(button): 
-            Logs.debug("button pressed: " + button.text.value_idle)
-            button.text.value_selected = "Button Pressed!"
+            Logs.debug("button pressed: " + button.text.value.idle)
+            button.text.value.selected = "Button Pressed!"
             button.selected = not button.selected
 
             self.loadingBar.percentage += .1
@@ -228,11 +236,11 @@ class UIPlugin(nanome.PluginInstance):
             self.update_content(self.loadingBar)
 
         def hover_callback(button, hovered): 
-            Logs.debug("button hover: " + button.text.value_idle, hovered)
+            Logs.debug("button hover: " + button.text.value.idle, hovered)
 
         def prefab_button_pressed_callback(button):
             button.selected = not button.selected
-            Logs.debug("Prefab button pressed: " + button.text.value_idle + " " + str(button._content_id))
+            Logs.debug("Prefab button pressed: " + button.text.value.idle + " " + str(button._content_id))
             self.update_content(button)
         
         content = nanome.ui.LayoutNode()
@@ -305,7 +313,7 @@ class UIPlugin(nanome.PluginInstance):
         prefabLabel.text_value = "Molecule Label"
         prefabButton = nanome.ui.Button()
         prefabButton.text.active = True
-        prefabButton.set_all_text("Molecule Button")
+        prefabButton.text.value.set_all("Molecule Button")
         prefabButton.register_pressed_callback(prefab_button_pressed_callback)
         child1.set_content(prefabLabel)
         child2.set_content(prefabButton)

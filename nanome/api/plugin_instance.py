@@ -205,6 +205,32 @@ class PluginInstance(_PluginInstance):
         """
         self._network._send(_Messages.node_update, node)
 
+    def set_menu_transform(self, index, position, rotation, scale):
+        """
+        | Update the position, scale, and rotation of the menu
+
+        :param index: Index of the menu you wish to update
+        :type index: int
+        :param position: New position of the menu
+        :type position: :class:`~nanome.util.vector3`
+        :param rotation: New rotation of the menu
+        :type rotation: :class:`~nanome.util.quaternion`
+        :param scale: New scale of the menu
+        :type scale: :class:`~nanome.util.vector3`
+        """
+        self._network._send(_Messages.menu_transform_set,
+                            (index, position, rotation, scale))
+
+    def request_menu_transform(self, index, callback):
+        """
+        | Requests spacial information of the plugin menu (position, rotation, scale)
+
+        :param index: Index of the menu you wish to read
+        :type index: int
+        """
+        id = self._network._send(_Messages.menu_transform_request, index)
+        self._save_callback(id, callback)
+
     def request_directory(self, path, callback = None, pattern = "*"):
         """
         | Requests the content of a directory on the machine running Nanome
@@ -323,6 +349,13 @@ class PluginInstance(_PluginInstance):
         id = self._network._send(_Messages.presenter_info_request)
         self._save_callback(id, callback)
 
+    def request_controller_transforms(self, callback):
+        """
+        | Requests presenter controller info (head position, head rotation, left controller position, left controller rotation, right controller position, right controller rotation)
+        """
+        id = self._network._send(_Messages.controller_transforms_request)
+        self._save_callback(id, callback)
+
     class PluginListButtonType(IntEnum):
         run = 0
         advanced_settings = 1
@@ -355,6 +388,20 @@ class PluginInstance(_PluginInstance):
             current_usable[0] = usable
 
         self._network._send(_Messages.plugin_list_button_set, (button, text, usable))
+
+    def send_files_to_load(self, files_list, callback = None):
+        files = []
+        if not isinstance(files_list, list):
+            files_list = [files_list]
+        for file in files_list:
+            full_path = file.replace('\\', '/')
+            file_name = full_path.split('/')[-1]
+            with open(full_path, 'rb') as content_file:
+                data = content_file.read()
+            files.append((file_name, data))
+
+        id = self._network._send(_Messages.load_file, (files, True, True))
+        self._save_callback(id, callback)
 
     @property
     def plugin_files_path(self):

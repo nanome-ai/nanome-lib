@@ -1,15 +1,18 @@
 import json
 from nanome.util import Logs
+from nanome._internal._ui._io._json_helper import _JsonHelper
 from nanome._internal._ui._io import _menu_json
 from nanome._internal import _Addon
+
 
 class MenuIO(_Addon):
     def __init__(self, base_object=None):
         _Addon.__init__(self, base_object)
 
     def to_json(self, path):
-        menu_json = _menu_json.write_json(self.base_object)
-        menu_string = json.dumps(menu_json)
+        helper = _JsonHelper()
+        _menu_json.write_json(helper, self.base_object)
+        menu_string = json.dumps(helper.get_dict())
         try:
             with open(path, "w") as f:
                 f.write(menu_string)
@@ -26,11 +29,11 @@ class MenuIO(_Addon):
             Logs.error("Could not read json file: " + path)
             raise
         try:
-            return _menu_json.parse_json(menu_json)
+            json_helper = _JsonHelper(menu_json)
+            return _menu_json.parse_json(json_helper)
         except:
             Logs.error("Json does not correctly represent a menu.")
             raise
-            
 
     def update_json(self, path):
         """

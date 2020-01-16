@@ -9,12 +9,13 @@ import os
 class _Bonding():
     def __init__(self, complex_list, callback, fast_mode=None):
         self.__complexes = complex_list
+        self.__framed_complexes = [complex.convert_to_frames() for complex in complex_list]
         self.__callback = callback
 
         atom_count = 0
         if fast_mode == None:
             for complex in complex_list:
-                atom_count += sum(1 for _ in complex.atoms)
+                atom_count += sum(atom._conformer_count for atom in complex.atoms)
             self.__fast_mode = atom_count > 20000
         else:
             self.__fast_mode = fast_mode
@@ -24,7 +25,6 @@ class _Bonding():
         self.__molecule_idx = -1
         self.__input = tempfile.NamedTemporaryFile(delete=False, suffix='.pdb')
         self.__output = tempfile.NamedTemporaryFile(delete=False, suffix='.mol')
-        self.__saved_complex = _Complex._create()
 
         self.__proc = Process()
         self.__proc.executable_path = 'obabel'
@@ -40,19 +40,26 @@ class _Bonding():
     def __next(self):
         # Go to next molecule
         complex = self.__complexes[self.__complex_idx]
+        framed_complex = self.__framed_complexes[self.__complex_idx]
+
         self.__molecule_idx += 1
-        if self.__molecule_idx >= len(complex._molecules):
+        if self.__molecule_idx >= len(framed_complex._molecules):
             self.__complex_idx += 1
             if self.__complex_idx >= len(self.__complexes):
                 self.__done()
                 return
-            complex = self.__complexes[self.__complex_idx]
-            self.__molecule_idx = 0
-        molecule = complex._molecules[self.__molecule_idx]
 
-        self.__saved_complex._molecules.clear()
-        self.__saved_complex._add_molecule(molecule)
-        _pdb.to_file(self.__input.name, complex)
+            complex = self.__complexes[self.__complex_idx]
+            framed_complex = self.__framed_complexes[self.__complex_idx]
+            self.__molecule_idx = 0
+
+        self.__saved_complex = complex
+        self.__saved_is_conformer = len(complex._molecules) == 1
+
+        molecule = framed_complex._molecules[self.__molecule_idx]
+        single_frame = _Complex._create()
+        single_frame._add_molecule(molecule)
+        _pdb.to_file(self.__input.name, single_frame)
 
         self.__proc.start()
 
@@ -72,26 +79,50 @@ class _Bonding():
         self.__match_and_bond(result)
         self.__next()
 
-    def __match_and_bond(self, bonding_result):
-        atom_by_serial = dict()
-        for residue in self.__saved_complex.residues:
-            residue._bonds.clear()
-            for atom in residue.atoms:
-                atom._bonds.clear()
-                atom_by_serial[atom._serial] = (atom, residue)
+    def __get_bond(self, atom1, atom2):
+        if atom1.serial > atom2.serial:
+            atom1, atom2 = atom2, atom1
+        for bond in atom1._bonds:
+            if bond._atom1 == atom1 and bond._atom2 == atom2:
+                return bond
+        return None
 
-        for residue in bonding_result.residues:
-            for bond in residue.bonds:
-                serial1 = bond._atom1._serial
-                serial2 = bond._atom2._serial
-                if serial1 in atom_by_serial and serial2 in atom_by_serial:
-                    atom1, residue1 = atom_by_serial[serial1]
-                    atom2, residue2 = atom_by_serial[serial2]
+    def __match_and_bond(self, bonding_result):
+        if self.__molecule_idx == 0:
+            for atom in self.__saved_complex.atoms:
+                atom._bonds.clear()
+            for residue in self.__saved_complex.residues:
+                residue._bonds.clear()
+        
+        if self.__molecule_idx == 0 or not self.__saved_is_conformer:
+            self.__atom_by_serial = dict()
+            molecule = self.__saved_complex._molecules[self.__molecule_idx]
+            for atom in molecule.atoms:
+                self.__atom_by_serial[atom._serial] = atom
+
+        for bond in bonding_result.bonds:
+            serial1 = bond._atom1._serial
+            serial2 = bond._atom2._serial
+            if serial1 in self.__atom_by_serial and serial2 in self.__atom_by_serial:
+                atom1 = self.__atom_by_serial[serial1]
+                atom2 = self.__atom_by_serial[serial2]
+                residue = atom1._residue
+
+                new_bond = self.__get_bond(atom1, atom2)
+                if new_bond is None:
                     new_bond = _Bond._create()
-                    new_bond._kind = bond._kind
+                    if self.__saved_is_conformer:
+                        conformer_count = atom1.conformer_count
+                        new_bond._kinds = [new_bond._kind] * conformer_count
+                        new_bond._in_conformer = [False] * conformer_count
+
                     new_bond._atom1 = atom1
                     new_bond._atom2 = atom2
-                    residue1._add_bond(new_bond)
+                    residue._add_bond(new_bond)
+
+                if self.__saved_is_conformer:
+                    current_conformer = self.__molecule_idx
+                    new_bond._in_conformer[current_conformer] = True
 
     def __done(self):
         self.__input.close()
