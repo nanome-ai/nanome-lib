@@ -17,11 +17,11 @@ def parse_json(node_json):
                      node_json.read("padding_y", 0.0),
                      node_json.read("padding_z", 0.0),
                      node_json.read("padding_w", 0.0))
-    content_json = node_json.read_child("content")
+    content_json = node_json.read_object("content")
     if content_json is not None:
         content_obj = _ui_base_json.parse_json(content_json)
         node._set_content(content_obj)
-    child_list = node_json.read_children("children")
+    child_list = node_json.read_objects("children")
     for child_obj in child_list:
         node._add_child(parse_json(child_obj))
     return node
@@ -43,11 +43,11 @@ def write_json(helper, node):
     #convert all children
     children = []
     for child in node._get_children():
-        c_helper = helper.make_child()
+        c_helper = helper.make_instance()
         write_json(c_helper, child)
         children.append(c_helper.get_dict())
     helper.write("children", children)
     #convert all contents
-    content = helper.make_child()
+    content = helper.make_instance()
     _ui_base_json.write_json(content, node._get_content())
     helper.write("content", content)

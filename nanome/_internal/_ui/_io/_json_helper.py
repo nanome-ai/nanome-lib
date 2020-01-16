@@ -28,7 +28,7 @@ class _JsonHelper(object):
             return Color.from_int(int(float((value))))
 
     def read_vector3(self, name):
-        value = self.read_child(name)
+        value = self.read_object(name)
         if value == None:
             return None
         else:
@@ -53,10 +53,10 @@ class _JsonHelper(object):
         builder.write("z", value.z)
         self.write(name, builder)
 
-    def make_child(self):
+    def make_instance(self):
         return _JsonHelper()
 
-    def read_child(self, name):
+    def read_object(self, name):
         if name not in self.json:
             return None
         child = self.json[name]
@@ -64,7 +64,7 @@ class _JsonHelper(object):
             return None
         return _JsonHelper(child)
 
-    def read_children(self, name):
+    def read_objects(self, name):
         if name not in self.json:
             return None
         children = self.json[name]

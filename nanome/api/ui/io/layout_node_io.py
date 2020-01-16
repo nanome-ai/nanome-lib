@@ -15,7 +15,7 @@ class LayoutNodeIO(_Addon):
         helper.write("width", 1)
         helper.write("height", 1)
         helper.write("version", 1)
-        child = helper.make_child()
+        child = helper.make_instance()
         _layout_node_json.write_json(child, self.base_object)
         helper.write("effective_root", child)
         node_string = json.dumps(helper.get_dict())
@@ -39,7 +39,7 @@ class LayoutNodeIO(_Addon):
         try:
             json_helper = _JsonHelper(node_json)
             assert(json_helper.read("is_menu", False) == False)
-            return _layout_node_json.parse_json(json_helper.read_child("effective_root"))
+            return _layout_node_json.parse_json(json_helper.read_object("effective_root"))
         except:
             Logs.error("Json does not correctly represent a layout node.")
             raise
