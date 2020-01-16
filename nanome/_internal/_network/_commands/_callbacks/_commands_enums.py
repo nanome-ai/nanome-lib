@@ -39,6 +39,7 @@ class _Commands(__CommandEnum):
     image_press = auto()
     image_hold = auto()
     image_release = auto()
+    menu_transform_response = auto()
 
     #Structure
     workspace_response = auto()
@@ -68,10 +69,11 @@ class _Commands(__CommandEnum):
     # Presenter
     presenter_info_response = auto()
     presenter_change = auto()
+    controller_transforms_response = auto()
 
     #Other
     upload_cryo_em_done = auto()
-
+    load_file_done = auto()
 
 # /!\ /!\ /!\
 # Values names are really important here, as they are hashed, and need to match Nanome
@@ -87,6 +89,8 @@ class _Messages(__CommandEnum):
     menu_update = auto()
     content_update = auto()
     node_update = auto()
+    menu_transform_set = auto()
+    menu_transform_request = auto()
     notification_send = auto()
     hook_ui_callback = auto()
 
@@ -122,10 +126,12 @@ class _Messages(__CommandEnum):
 
     # Presenter
     presenter_info_request = auto()
+    controller_transforms_request = auto()
 
     #Other
     upload_cryo_em = auto()
     open_url = auto()
+    load_file = auto()
 
 class _Hashes():
     CommandHashes = [None] * len(_Commands)

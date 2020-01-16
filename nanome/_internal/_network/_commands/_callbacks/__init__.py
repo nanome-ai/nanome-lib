@@ -20,5 +20,8 @@ from ._upload_cryo_em_done import _upload_cryo_em_done
 from ._position_structures_done import _position_structures_done
 from ._presenter_change import _presenter_change
 from ._receive_presenter_info import _receive_presenter_info
+from ._receive_controller_transforms import _receive_controller_transforms
+from ._receive_menu_transform import _receive_menu_transform
 from ._workspace_callbacks import _receive_workspace, _complex_added, _complex_removed
 from ._macro_callbacks import _receive_macros
+from ._load_file_done import _load_file_done

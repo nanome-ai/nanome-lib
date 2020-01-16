@@ -91,8 +91,8 @@ def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Dat
                         new_residue._add_atom(new_atom)
                         if off > 1:
                             new_atom.name = new_atom.name + str(off)
-                        new_atom.serial = len(new_residue._atoms)
                         new_atoms[hash_atom] = new_atom
+                        new_atom.serial = len(new_atoms)
                     # Update current conformer
                     new_atom._in_conformer[molecule_index] = True
                     new_atom._positions[molecule_index] = atom.position.get_copy()
@@ -155,10 +155,22 @@ def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Dat
         is_very_big_residues = residue_total_count > 10
         is_very_big_atoms = atom_total_count > 10000
         is_very_big_bonds = bond_total_count > 20000
-        chain_similarity_ratio = float(chain_total_count) / float(frame_count) / float(len(new_chains))
-        residue_similarity_ratio = float(residue_total_count) / float(frame_count) / float(len(new_residues))
-        atom_similarity_ratio = float(atom_total_count) / float(frame_count) / float(len(new_atoms))
-        bond_similarity_ratio = float(bond_total_count) / float(frame_count) / float(len(new_bonds))
+        if len(new_chains) == 0:
+            chain_similarity_ratio = 1
+        else:
+            chain_similarity_ratio = float(chain_total_count) / float(frame_count) / float(len(new_chains))
+        if len(new_residues) == 0:
+            residue_similarity_ratio = 1
+        else:
+            residue_similarity_ratio = float(residue_total_count) / float(frame_count) / float(len(new_residues))
+        if len(new_atoms) == 0:
+            atom_similarity_ratio = 1
+        else:
+            atom_similarity_ratio = float(atom_total_count) / float(frame_count) / float(len(new_atoms))
+        if len(new_bonds) == 0:
+            bond_similarity_ratio = 1
+        else:
+            bond_similarity_ratio = float(bond_total_count) / float(frame_count) / float(len(new_bonds))
         is_chain_similar_enough = chain_similarity_ratio > 0.85
         is_residue_similar_enough = residue_similarity_ratio > 0.85
         is_atom_similar_enough = atom_similarity_ratio > 0.85

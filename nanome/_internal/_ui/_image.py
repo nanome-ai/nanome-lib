@@ -16,7 +16,7 @@ class _Image(_UIBase):
         self._pressed_callback = lambda self, x, y: None
         self._held_callback = lambda self, x, y: None
         self._released_callback = lambda self, x, y: None
-        
+
     def _on_image_pressed (self, x, y):
         self._pressed_callback(self, x, y)
 
@@ -38,6 +38,7 @@ class _Image(_UIBase):
     def _copy_values_deep(self, other):
         super()._copy_values_deep(other)
         self._color = other._color
+        self._scaling_option = other._scaling_option
         self._file_path = other._file_path
         self._pressed_callback = other._pressed_callback
         self._held_callback = other._held_callback

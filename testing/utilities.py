@@ -1,4 +1,4 @@
-from nanome.util import Logs
+from nanome.util import Logs, Color
 import time
 import traceback
 import os
@@ -239,11 +239,15 @@ def run_timed_test(test, counter, loop_count = 1, maximum_time = -1.0):
         else:
             counter.passed += 1
 
+class FakeVersionTable(object):
+    def __getitem__(self, key):
+        return 2^32
+
 def test_serializer(serializer, obj_to_test, options=None):
     from nanome._internal._network._serialization._context import _ContextDeserialization, _ContextSerialization
-    context_s = _ContextSerialization(plugin_id=random.randint(0, 0xFFFFFFFF))
+    context_s = _ContextSerialization(plugin_id=random.randint(0, 0xFFFFFFFF), version_table=FakeVersionTable())
     serializer.serialize(serializer.version(), obj_to_test, context_s)
-    context_d = _ContextDeserialization(context_s.to_array())
+    context_d = _ContextDeserialization(context_s.to_array(), FakeVersionTable())
     result = serializer.deserialize(serializer.version(), context_d)
     assert_equal(obj_to_test, result, options)
 
@@ -377,6 +381,12 @@ def rand_uint(min = 0x00000000, max = 0xFFFFFFFF):
 
 def rand_byte(min = 0x00, max = 0xFF):
     return random.randint(min, max)
+
+def rand_string():
+    return str(rand_int())
+
+def rand_color():
+    return Color(whole_num = rand_int())
 
 class Counter():
     def __init__(self):

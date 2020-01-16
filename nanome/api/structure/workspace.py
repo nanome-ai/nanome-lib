@@ -1,5 +1,5 @@
 from nanome._internal._structure._workspace import _Workspace
-from nanome.util import Logs
+from nanome.util import Matrix, Logs
 
 class Workspace(_Workspace):
     def __init__(self):
@@ -12,6 +12,14 @@ class Workspace(_Workspace):
     @complexes.setter
     def complexes(self, value):
         self._complexes = value
+
+    def add_complex(self, complex):
+        complex.index = -1
+        self._add_complex(complex)
+
+    def remove_complex(self, complex):
+        complex.index = -1
+        self._remove_complex(complex)
 
     #region fields
     @property
@@ -35,6 +43,12 @@ class Workspace(_Workspace):
     def scale(self, value):
         self._scale = value
     #endregion
+
+    def get_workspace_to_world_matrix(self):
+        return Matrix.compose_transformation_matrix(self._position, self._rotation, self._scale)
+
+    def get_world_to_workspace_matrix(self):
+        return self.get_workspace_to_world_matrix().get_inverse()
 
     #region deprecated
     @property
