@@ -4,17 +4,17 @@ from nanome.util.color import Color
 
 def parse_json(content_json):
     label = _Label._create()
-    label._text_value = content_json.read("text", "label")
-    label._text_vertical_align = VertAlignOptions(content_json.read("text_vertical_align", 0))
-    label._text_horizontal_align = HorizAlignOptions(content_json.read("text_horizontal_align", 0))
-    label._text_auto_size = content_json.read("text_auto_size", True)
-    label._text_min_size = content_json.read("text_min_size", 0.0)
-    label._text_max_size = content_json.read("text_max_size", 0.0)
-    label._text_size = content_json.read("text_size", 0.0)
-    label._text_color = Color.from_int(content_json.read("text_color", 0))
-    label._text_bold = content_json.read("text_bold", False)
-    label._text_italic = content_json.read("text_italics", False)
-    label._text_underlined = content_json.read("text_underlined", False)
+    label._text_value = content_json.read("text", label._text_value)
+    label._text_vertical_align = VertAlignOptions(content_json.read("text_vertical_align", label._text_vertical_align))
+    label._text_horizontal_align = HorizAlignOptions(content_json.read("text_horizontal_align", label._text_horizontal_align))
+    label._text_auto_size = content_json.read("text_auto_size", label._text_auto_size)
+    label._text_min_size = content_json.read("text_min_size", label._text_min_size)
+    label._text_max_size = content_json.read("text_max_size", label._text_max_size)
+    label._text_size = content_json.read("text_size", label._text_size)
+    label._text_color = content_json.read("text_color", label._text_color)
+    label._text_bold = content_json.read("text_bold", label._text_bold)
+    label._text_italic = content_json.read("text_italics", label._text_italic)
+    label._text_underlined = content_json.read("text_underlined", label._text_underlined)
     return label
 
 def write_json(helper, label):

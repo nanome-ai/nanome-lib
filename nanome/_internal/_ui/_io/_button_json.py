@@ -13,19 +13,19 @@ def parse_json(content_json):
     # type: () -> Button
     #region text
     button = _Button._create()
-    button._selected = content_json.read("selected", False)
-    button._unusable = content_json.read("unusable", False)
-    button._text._active = content_json.read("text_active", False)
-    button._text._value._idle = content_json.read("text_value_idle", "idle")
-    button._text._value._selected = content_json.read("text_value_selected", "selected")
-    button._text._value._highlighted = content_json.read("text_value_highlighted", "highlighted")
-    button._text._value._selected_highlighted = content_json.read("text_value_selected_highlighted", "both")
-    button._text._value._unusable = content_json.read("text_value_unusable", "unusable")
-    button._text._auto_size = content_json.read("text_auto_size", True)
-    button._text._min_size = content_json.read("text_min_size", 0.0)
-    button._text._max_size = content_json.read("text_max_size", 0.0)
-    button._text._size = content_json.read("text_size", 0.0)
-    button._text._underlined = content_json.read("text_underlined", False)
+    button._selected = content_json.read("selected", button._selected)
+    button._unusable = content_json.read("unusable", button._unusable)
+    button._text._active = content_json.read("text_active", button._text._active)
+    button._text._value._idle = content_json.read("text_value_idle", button._text._value._idle)
+    button._text._value._selected = content_json.read("text_value_selected", button._text._value._selected)
+    button._text._value._highlighted = content_json.read("text_value_highlighted", button._text._value._highlighted)
+    button._text._value._selected_highlighted = content_json.read("text_value_selected_highlighted", button._text._value._selected_highlighted)
+    button._text._value._unusable = content_json.read("text_value_unusable", button._text._value._unusable)
+    button._text._auto_size = content_json.read("text_auto_size", button._text._auto_size)
+    button._text._min_size = content_json.read("text_min_size", button._text._min_size)
+    button._text._max_size = content_json.read("text_max_size", button._text._max_size)
+    button._text._size = content_json.read("text_size", button._text._size)
+    button._text._underlined = content_json.read("text_underlined", button._text._underlined)
     button._text._bold._set_all(content_json.read("text_bolded", False)) #deprecated
     button._text._bold._idle = content_json.read("text_bold_idle", button._text._bold._idle)
     button._text._bold._selected = content_json.read("text_bold_selected", button._text._bold._selected)
@@ -42,30 +42,30 @@ def parse_json(content_json):
     button._text._padding_left = content_json.read("text_padding_left", button._text._padding_left)
     button._text._padding_right = content_json.read("text_padding_right", button._text._padding_right)
     button._text._line_spacing = content_json.read("text_line_spacing", button._text._line_spacing)
-    button._text._vertical_align = VertAlignOptions(content_json.read("text_vertical_align", 0))
-    button._text._horizontal_align = HorizAlignOptions(content_json.read("text_horizontal_align", 0))
+    button._text._vertical_align = VertAlignOptions(content_json.read("text_vertical_align", button._text._vertical_align))
+    button._text._horizontal_align = HorizAlignOptions(content_json.read("text_horizontal_align", button._text._horizontal_align))
     #endregion
     #region icon
-    button._icon._active = content_json.read( "icon_active", False)
-    button._icon._value._idle = content_json.read( "icon_value_idle", '')
-    button._icon._value._selected = content_json.read( "icon_value_selected", '')
-    button._icon._value._highlighted = content_json.read( "icon_value_highlighted", '')
-    button._icon._value._selected_highlighted = content_json.read( "icon_value_selected_highlighted", '')
-    button._icon._value._unusable = content_json.read( "icon_value_unusable", '')
-    button._icon._color._idle = content_json.read( "icon_color_idle", Color.from_int(4294967295))
-    button._icon._color._selected = content_json.read( "icon_color_selected", Color.from_int(4294967295))
-    button._icon._color._highlighted = content_json.read( "icon_color_highlighted", Color.from_int(4294967295))
-    button._icon._color._selected_highlighted = content_json.read( "icon_color_selected_highlighted", Color.from_int(4294967295))
-    button._icon._color._unusable = content_json.read( "icon_color_unusable", Color.from_int(4294967295))
-    button._icon._sharpness = content_json.read( "icon_sharpness", 0.5)
-    button._icon._size = content_json.read( "icon_size", 1.0)
-    button._icon._ratio = content_json.read( "icon_ratio", 0.5)
-    button._icon._position = Vector3(content_json.read( "icon_position_x", 0.0),
-        content_json.read( "icon_position_y", 0.0),
-        content_json.read( "icon_position_z", 0.0))
-    button._icon._rotation = Vector3(content_json.read( "icon_rotation_x", 0.0),
-        content_json.read( "icon_rotation_y", 0.0),
-        content_json.read( "icon_rotation_z", 0.0))
+    button._icon._active = content_json.read( "icon_active", button._icon._active)
+    button._icon._value._idle = content_json.read( "icon_value_idle", button._icon._value._idle)
+    button._icon._value._selected = content_json.read( "icon_value_selected", button._icon._value._selected)
+    button._icon._value._highlighted = content_json.read( "icon_value_highlighted", button._icon._value._highlighted)
+    button._icon._value._selected_highlighted = content_json.read( "icon_value_selected_highlighted", button._icon._value._selected_highlighted)
+    button._icon._value._unusable = content_json.read( "icon_value_unusable", button._icon._value._unusable)
+    button._icon._color._idle = content_json.read( "icon_color_idle", button._icon._color._idle)
+    button._icon._color._selected = content_json.read( "icon_color_selected", button._icon._color._selected)
+    button._icon._color._highlighted = content_json.read( "icon_color_highlighted", button._icon._color._highlighted)
+    button._icon._color._selected_highlighted = content_json.read( "icon_color_selected_highlighted", button._icon._color._selected_highlighted)
+    button._icon._color._unusable = content_json.read( "icon_color_unusable", button._icon._color._unusable)
+    button._icon._sharpness = content_json.read( "icon_sharpness", button._icon._sharpness)
+    button._icon._size = content_json.read( "icon_size", button._icon._size)
+    button._icon._ratio = content_json.read( "icon_ratio", button._icon._ratio)
+    button._icon._position = Vector3(content_json.read( "icon_position_x", button._icon._position.x),
+        content_json.read( "icon_position_y", button._icon._position.y),
+        content_json.read( "icon_position_z", button._icon._position.z))
+    button._icon._rotation = Vector3(content_json.read( "icon_rotation_x", button._icon._rotation.x),
+        content_json.read( "icon_rotation_y", button._icon._rotation.y),
+        content_json.read( "icon_rotation_z", button._icon._rotation.z))
     #endregion
     #region mesh
     button._mesh._active = content_json.read("mesh_active", button._mesh._active)
@@ -100,8 +100,6 @@ def parse_json(content_json):
     button._tooltip._positioning_target = button.ToolTipPositioning(content_json.read("tooltip_positioning_target", button._tooltip._positioning_target))
     button._tooltip._positioning_origin = button.ToolTipPositioning(content_json.read("tooltip_positioning_origin", button._tooltip._positioning_origin))
     #endregion
-
-
     return button
 
 def write_json(helper, button):

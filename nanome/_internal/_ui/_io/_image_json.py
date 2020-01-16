@@ -3,10 +3,10 @@ from nanome.util.color import Color
 
 def parse_json(content_json):
     image = _Image._create()
-    image._color = content_json.read("color", Color.White())
-    image._file_path = content_json.read("file_path", "")
+    image._color = content_json.read("color", image._color)
+    image._file_path = content_json.read("file_path", image._file_path)
     if ("scaling_option" in content_json):
-        image._scaling_option = _Image.ScalingOptions(content_json.read("scaling_option", 0))
+        image._scaling_option = _Image.ScalingOptions(content_json.read("scaling_option", image._scaling_option))
     return image
 
 def write_json(helper, image):

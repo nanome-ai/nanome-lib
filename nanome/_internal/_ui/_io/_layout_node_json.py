@@ -5,18 +5,18 @@ import json
 
 def parse_json(node_json):
     node = _LayoutNode._create()
-    node._name = node_json.read("name", "node")
-    node._enabled = node_json.read("enabled", True)
-    node._layer = node_json.read("layer", 0)
-    node._layout_orientation = _LayoutNode.LayoutTypes(node_json.read("layout_orientation", 0))
-    node._sizing_type = _LayoutNode.SizingTypes(node_json.read("sizing_type", 0))
-    node._sizing_value = node_json.read("sizing_value", 0.0)
-    node._forward_dist = node_json.read("forward_dist", 0.0)
-    node._padding_type = _LayoutNode.PaddingTypes(node_json.read("padding_type", 0))
-    node._padding = (node_json.read("padding_x", 0.0),
-                     node_json.read("padding_y", 0.0),
-                     node_json.read("padding_z", 0.0),
-                     node_json.read("padding_w", 0.0))
+    node._name = node_json.read("name", node._name)
+    node._enabled = node_json.read("enabled", node._enabled)
+    node._layer = node_json.read("layer", node._layer)
+    node._layout_orientation = _LayoutNode.LayoutTypes(node_json.read("layout_orientation", node._layout_orientation))
+    node._sizing_type = _LayoutNode.SizingTypes(node_json.read("sizing_type", node._sizing_type))
+    node._sizing_value = node_json.read("sizing_value", node._sizing_value)
+    node._forward_dist = node_json.read("forward_dist", node._forward_dist)
+    node._padding_type = _LayoutNode.PaddingTypes(node_json.read("padding_type", node._padding_type))
+    node._padding = (node_json.read("padding_x", node._padding[0]),
+                     node_json.read("padding_y", node._padding[1]),
+                     node_json.read("padding_z", node._padding[2]),
+                     node_json.read("padding_w", node._padding[3]))
     content_json = node_json.read_object("content")
     if content_json is not None:
         content_obj = _ui_base_json.parse_json(content_json)
