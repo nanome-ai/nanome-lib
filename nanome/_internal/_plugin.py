@@ -5,7 +5,6 @@ from nanome._internal._network._serialization._serializer import Serializer
 from nanome._internal._util._serializers import _TypeSerializer
 from nanome.util.logs import Logs
 from nanome.util import config
-from nanome._internal._util import _kill
 
 from multiprocessing import Process, Pipe, current_process
 from timeit import default_timer as timer
@@ -16,6 +15,7 @@ import time
 import os
 import fnmatch
 import subprocess
+import signal
 
 try_reconnection_time = 20.0
 keep_alive_time_interval = 3600.0
@@ -159,22 +159,16 @@ class _Plugin(object):
         sub_args = [x for x in sys.argv if x != '-r' and x != "--auto-reload"]
 
         try:
-            process = subprocess.Popen(sub_args)
+            sub_args = [sys.executable] + sub_args
+            process = subprocess.Popen(sub_args, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)
         except:
-            try:
-                process = subprocess.Popen(["python"] + sub_args)
-                sub_args = ["python"] + sub_args
-            except:
-                try:
-                    process = subprocess.Popen(["python3"] + sub_args)
-                    sub_args = ["python3"] + sub_args
-                except:
-                    try:
-                        process = subprocess.Popen(["python2"] + sub_args)
-                        sub_args = ["python2"] + sub_args
-                    except:
-                        Logs.error("Couldn't find a suitable python executable")
-                        self.__exit()
+            Logs.error("Couldn't find a suitable python executable")
+            sys.exit(1)
+
+        if os.name == "nt":
+            break_signal = signal.CTRL_BREAK_EVENT
+        else:
+            break_signal = signal.SIGBREAK
 
         last_mtime = max(self.__file_times("."))
         while True:
@@ -183,13 +177,15 @@ class _Plugin(object):
                 if max_mtime > last_mtime:
                     last_mtime = max_mtime
                     Logs.message("Restarting plugin")
-                    process.kill()
-                    process = subprocess.Popen(sub_args)
+                    process.send_signal(break_signal)
+                    process = subprocess.Popen(sub_args, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)
                 time.sleep(wait)
             except KeyboardInterrupt:
+                process.send_signal(break_signal)
                 break
 
     def __run(self):
+        signal.signal(signal.SIGBREAK, self.__on_termination_signal)
         if self._pre_run != None:
             self._pre_run()
         _Plugin.instance = self
@@ -258,6 +254,9 @@ class _Plugin(object):
         for id in to_remove:
             del self._sessions[id]
         self.__disconnection_time = timer()
+
+    def __on_termination_signal(self, signum, frame):
+        self.__exit()
 
     def __exit(self):
         Logs.debug('Exiting')
