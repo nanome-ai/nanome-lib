@@ -28,7 +28,6 @@ class _Commands(__CommandEnum):
     advanced_settings = auto()
 
     #UI
-    menu_response = auto()
     menu_toggle = auto()
     button_press = auto()
     button_hover = auto()
