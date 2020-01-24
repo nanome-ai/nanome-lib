@@ -187,7 +187,10 @@ class _Plugin(object):
                 break
 
     def __run(self):
-        signal.signal(signal.SIGTERM, self.__on_termination_signal)
+        if os.name == "nt":
+            signal.signal(signal.SIGBREAK, self.__on_termination_signal)
+        else:
+            signal.signal(signal.SIGTERM, self.__on_termination_signal)
         if self._pre_run != None:
             self._pre_run()
         _Plugin.instance = self
