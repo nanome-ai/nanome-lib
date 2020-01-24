@@ -156,19 +156,21 @@ class _Plugin(object):
     def __autoreload(self):
         wait = 3
 
+        if os.name == "nt":
+            sub_kwargs = { 'creationflags': subprocess.CREATE_NEW_PROCESS_GROUP }
+            break_signal = signal.CTRL_BREAK_EVENT
+        else:
+            sub_kwargs = {}
+            break_signal = signal.SIGTERM
+
         sub_args = [x for x in sys.argv if x != '-r' and x != "--auto-reload"]
 
         try:
             sub_args = [sys.executable] + sub_args
-            process = subprocess.Popen(sub_args, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)
+            process = subprocess.Popen(sub_args, **sub_kwargs)
         except:
             Logs.error("Couldn't find a suitable python executable")
             sys.exit(1)
-
-        if os.name == "nt":
-            break_signal = signal.CTRL_BREAK_EVENT
-        else:
-            break_signal = signal.SIGBREAK
 
         last_mtime = max(self.__file_times("."))
         while True:
@@ -178,14 +180,14 @@ class _Plugin(object):
                     last_mtime = max_mtime
                     Logs.message("Restarting plugin")
                     process.send_signal(break_signal)
-                    process = subprocess.Popen(sub_args, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)
+                    process = subprocess.Popen(sub_args, **sub_kwargs)
                 time.sleep(wait)
             except KeyboardInterrupt:
                 process.send_signal(break_signal)
                 break
 
     def __run(self):
-        signal.signal(signal.SIGBREAK, self.__on_termination_signal)
+        signal.signal(signal.SIGTERM, self.__on_termination_signal)
         if self._pre_run != None:
             self._pre_run()
         _Plugin.instance = self
