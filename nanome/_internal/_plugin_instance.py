@@ -7,7 +7,6 @@ from nanome._internal._network._commands._callbacks import _Messages
 import traceback
 import time
 from timeit import default_timer as timer
-import sys
 
 UPDATE_RATE = 1.0 / 60.0
 MINIMUM_SLEEP = 0.001
@@ -35,18 +34,18 @@ class _PluginInstance(object):
             Logs.warning('Received an unknown callback id:', id)
 
     @classmethod
-    def _hook_complex_updated(cls, index, complex):
-        cls.__complex_updated_callbacks[index] = complex
+    def _hook_complex_updated(cls, index, callback):
+        cls.__complex_updated_callbacks[index] = callback
 
     @classmethod
-    def _hook_selection_changed(cls, index, complex):
-        cls.__selection_changed_callbacks[index] = complex
+    def _hook_selection_changed(cls, index, callback):
+        cls.__selection_changed_callbacks[index] = callback
 
     @classmethod
     def _on_complex_updated(cls, index, new_complex):
         callbacks = _PluginInstance.__complex_updated_callbacks
         try:
-            callbacks[index]._on_complex_updated(new_complex)
+            callbacks[index](new_complex)
         except KeyError:
             Logs.warning('Received an unknown updated complex index:', index)
 
@@ -54,18 +53,9 @@ class _PluginInstance(object):
     def _on_selection_changed(cls, index, new_complex):
         callbacks = _PluginInstance.__selection_changed_callbacks
         try:
-            callbacks[index]._on_selection_changed(new_complex)
+            callbacks[index](new_complex)
         except KeyError:
             Logs.warning('Received an unknown updated complex index:', index)
-
-    def __check_complex_hook_unref(self, callbacks):
-        callbacks = _PluginInstance.__complex_updated_callbacks
-        to_remove = []
-        for key, value in callbacks.items():
-            if sys.getrefcount(value) <= 2: #2 refs: getrefcount arg and callbacks dict
-                to_remove.append(key)
-        for key in to_remove:
-            del callbacks[key]
 
     def _on_stop(self):
         try:
@@ -77,7 +67,6 @@ class _PluginInstance(object):
         try:
             self.start()
             last_update = timer()
-            last_hook_unref_check = timer()
             while self._network._receive() and self._process_manager.update():
                 self.update()
 
@@ -85,12 +74,6 @@ class _PluginInstance(object):
                 sleep_time = max(UPDATE_RATE - dt, MINIMUM_SLEEP)
                 time.sleep(sleep_time)
                 last_update = timer()
-
-                dt = last_hook_unref_check - timer()
-                if dt >= HOOK_UNREF_CHECK_TIME:
-                    self.__check_complex_hook_unref(_PluginInstance.__complex_updated_callbacks)
-                    self.__check_complex_hook_unref(_PluginInstance.__selection_changed_callbacks)
-                    last_hook_unref_check = timer()
 
         except KeyboardInterrupt:
             self._on_stop()

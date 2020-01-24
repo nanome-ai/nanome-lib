@@ -50,8 +50,8 @@ class SandBox(nanome.PluginInstance):
 
     def y(self, workspace):
         for complex in workspace.complexes:
-            complex.register_complex_updated_callback(lambda : self.display_complex(complex, "Structure:"))
-            complex.register_selection_changed_callback(lambda : self.display_complex(complex, "Selection:"))
+            complex.register_complex_updated_callback(lambda c : self.display_complex(c, "Structure:"))
+            complex.register_selection_changed_callback(lambda c : self.display_complex(c, "Selection:"))
 
     def on_complex_list_received(self, complexes):
         Logs.debug("complex received: ", complexes)
