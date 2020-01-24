@@ -24,3 +24,4 @@ from ._receive_controller_transforms import _receive_controller_transforms
 from ._receive_menu_transform import _receive_menu_transform
 from ._workspace_callbacks import _receive_workspace, _complex_added, _complex_removed
 from ._macro_callbacks import _receive_macros
+from ._load_file_done import _load_file_done
