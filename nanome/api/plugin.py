@@ -69,7 +69,10 @@ class Plugin(_Plugin):
             self.__key_file = key_file
         self.__parse_args()
         Logs.debug("Start plugin")
-        self.__run()
+        if self.__has_autoreload:
+            self.__autoreload()
+        else:
+            self.__run()
 
     def set_plugin_class(self, plugin_class):
         """
@@ -80,6 +83,28 @@ class Plugin(_Plugin):
         :type plugin_class: :class:`~nanome.api.plugin_instance.PluginInstance`
         """
         self._plugin_class = plugin_class
+
+    @property
+    def pre_run(self):
+        """
+        | Function to call before the plugin runs and tries to connect to NTS
+        | Useful when using autoreload
+        """
+        return self._pre_run
+    @pre_run.setter
+    def pre_run(self, value):
+        self._pre_run = value
+
+    @property
+    def post_run(self):
+        """
+        | Function to call when the plugin is about to exit
+        | Useful when using autoreload
+        """
+        return self._post_run
+    @post_run.setter
+    def post_run(self, value):
+        self._post_run = value
 
     def __init__(self, name, description, category = "", has_advanced = False):
         super(Plugin, self).__init__(name, description, category, has_advanced)

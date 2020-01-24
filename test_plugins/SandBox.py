@@ -15,6 +15,7 @@ HAS_ADVANCED_OPTIONS = False
 class SandBox(nanome.PluginInstance):
     def start(self):
         self.request_presenter_info(self.received)
+        self.send_notification(nanome.util.enums.NotificationTypes.message, "A" + "\u0394" + "A")
 
     def on_presenter_change(self):
         self.request_presenter_info(self.received)

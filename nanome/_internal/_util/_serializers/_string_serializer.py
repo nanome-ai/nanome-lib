@@ -21,8 +21,8 @@ class _StringSerializer(_TypeSerializer):
         return "string"
 
     def serialize(self, version, value, context):
-        context.write_uint(len(value))
         to_write = to_bytes(value, 'utf-8')
+        context.write_uint(len(to_write))
         context.write_bytes(to_write)
 
     def deserialize(self, version, context):
