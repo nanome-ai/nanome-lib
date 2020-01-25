@@ -79,38 +79,46 @@ class _Bonding():
         self.__match_and_bond(result)
         self.__next()
 
-    def __get_bond(self, atom1, atom2):
-        if atom1.serial > atom2.serial:
-            atom1, atom2 = atom2, atom1
-        for bond in atom1._bonds:
-            if bond._atom1 == atom1 and bond._atom2 == atom2:
-                return bond
-        return None
-
     def __match_and_bond(self, bonding_result):
         if self.__molecule_idx == 0:
             for atom in self.__saved_complex.atoms:
                 atom._bonds.clear()
             for residue in self.__saved_complex.residues:
                 residue._bonds.clear()
-        
+
         if self.__molecule_idx == 0 or not self.__saved_is_conformer:
             self.__atom_by_serial = dict()
             molecule = self.__saved_complex._molecules[self.__molecule_idx]
+
+            # obabel removes gaps in atom serials going from pdb to sdf
+            # we need to remove the gaps before matching output to saved complex
+            atom_serial = 1
             for atom in molecule.atoms:
-                self.__atom_by_serial[atom._serial] = atom
+                self.__atom_by_serial[atom_serial] = atom
+                atom_serial += 1
 
         for bond in bonding_result.bonds:
             serial1 = bond._atom1._serial
             serial2 = bond._atom2._serial
+
+            if serial1 > serial2:
+                serial1, serial2 = serial2, serial1
+
             if serial1 in self.__atom_by_serial and serial2 in self.__atom_by_serial:
                 atom1 = self.__atom_by_serial[serial1]
                 atom2 = self.__atom_by_serial[serial2]
                 residue = atom1._residue
 
-                new_bond = self.__get_bond(atom1, atom2)
+                new_bond = None
+                for old_bond in atom1.bonds:
+                    if old_bond._atom2 == atom2:
+                        new_bond = old_bond
+                        break
+
                 if new_bond is None:
                     new_bond = _Bond._create()
+                    new_bond._kind = bond._kind
+
                     if self.__saved_is_conformer:
                         conformer_count = atom1.conformer_count
                         new_bond._kinds = [new_bond._kind] * conformer_count
@@ -121,8 +129,7 @@ class _Bonding():
                     residue._add_bond(new_bond)
 
                 if self.__saved_is_conformer:
-                    current_conformer = self.__molecule_idx
-                    new_bond._in_conformer[current_conformer] = True
+                    new_bond._in_conformer[self.__molecule_idx] = True
 
     def __done(self):
         self.__input.close()
