@@ -111,6 +111,8 @@ class _Bonding():
                 new_bond = self.__get_bond(atom1, atom2)
                 if new_bond is None:
                     new_bond = _Bond._create()
+                    new_bond._kind = bond._kind
+
                     if self.__saved_is_conformer:
                         conformer_count = atom1.conformer_count
                         new_bond._kinds = [new_bond._kind] * conformer_count
