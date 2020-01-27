@@ -1,9 +1,17 @@
 from nanome.util.logs import Logs
 from nanome._internal._ui import _Menu
 
+def __find_content(network, content_id):
+    for menu in network._plugin._menus.values():
+        content = menu._find_content(content_id)
+        if content is not None:
+            return content
+    return None
+
 def _menu_toggled(network, arg, request_id):
-    enabled = arg
-    active_menu = network._plugin.menu
+    index = arg[0]
+    enabled = arg[1]
+    active_menu = network._plugin._menus[index]
     if active_menu != None:
         active_menu._enabled = enabled
         if enabled == True:
@@ -17,7 +25,7 @@ def _slider_released(network, arg, request_id):
     tuple_obj = arg
     content_id = tuple_obj[0]
     slider_value = tuple_obj[1]
-    active_slider = network._plugin.menu._find_content(content_id)
+    active_slider = __find_content(network, content_id)
     if active_slider != None:
         active_slider.current_value = slider_value
         active_slider._on_slider_released()
@@ -28,7 +36,7 @@ def _slider_changed(network, arg, request_id):
     tuple_obj = arg
     content_id = tuple_obj[0]
     slider_value = tuple_obj[1]
-    active_slider = network._plugin.menu._find_content(content_id)
+    active_slider = __find_content(network, content_id)
     if active_slider != None:
         active_slider.current_value = slider_value
         active_slider._on_slider_changed()
@@ -39,7 +47,7 @@ def _text_submit(network, arg, request_id):
     tuple_obj = arg
     content_id = tuple_obj[0]
     text_value = tuple_obj[1]
-    active_txt = network._plugin.menu._find_content(content_id)
+    active_txt = __find_content(network, content_id)
     if active_txt != None:
         active_txt.input_text = text_value
         active_txt._on_text_submitted()
@@ -50,7 +58,7 @@ def _text_changed(network, arg, request_id):
     tuple_obj = arg
     content_id = tuple_obj[0]
     text_value = tuple_obj[1]
-    active_txt = network._plugin.menu._find_content(content_id)
+    active_txt = __find_content(network, content_id)
     if active_txt != None:
         active_txt.input_text = text_value
         active_txt._on_text_changed()
@@ -58,47 +66,47 @@ def _text_changed(network, arg, request_id):
         Logs.error("Can't find UI content for callback")
 
 def _button_pressed(network, arg, request_id):
-    button_id = arg[0]
-    btn = network._plugin.menu._find_content(button_id)
+    content_id = arg[0]
+    btn = __find_content(network, content_id)
     if btn != None:
         btn._on_button_pressed()
     else:
         Logs.error("Can't find UI content for callback")
 
 def _button_hover(network, arg, request_id):
-    button_id = arg[0]
+    content_id = arg[0]
     state = arg[1]
-    btn = network._plugin.menu._find_content(button_id)
+    btn = __find_content(network, content_id)
     if btn != None:
         btn._on_button_hover(state)
     else:
         Logs.error("Can't find UI content for callback")
         
 def _image_pressed(network, arg, request_id):
-    image_id = arg[0]
+    content_id = arg[0]
     x = arg[1]
     y = arg[2]
-    img = network._plugin.menu._find_content(image_id)
+    img = __find_content(network, content_id)
     if img != None:
         img._on_image_pressed(x, y)
     else:
         Logs.error("Can't find UI content for callback")
 
 def _image_held(network, arg, request_id):
-    image_id = arg[0]
+    content_id = arg[0]
     x = arg[1]
     y = arg[2]
-    img = network._plugin.menu._find_content(image_id)
+    img = __find_content(network, content_id)
     if img != None:
         img._on_image_held(x, y)
     else:
         Logs.error("Can't find UI content for callback")
 
 def _image_released(network, arg, request_id):
-    image_id = arg[0]
+    content_id = arg[0]
     x = arg[1]
     y = arg[2]
-    img = network._plugin.menu._find_content(image_id)
+    img = __find_content(network, content_id)
     if img != None:
         img._on_image_released(x, y)
     else:

@@ -10,7 +10,6 @@ class _Menu(object):
     def __init__(self, index = 0, title = "title"):
         #Protocol
         self._enabled = True
-        self._id = 0
         self._title = title
         self._locked = False
         self._width = 0.7

@@ -60,9 +60,11 @@ class _PluginInstance(object):
 
     def __init__(self, session_id, net_pipe, proc_pipe, serializer, plugin_id, version_table, original_version_table, verbose, custom_data):
         Logs._set_verbose(verbose)
+        self._menus = {}
 
         self._network = _ProcessNetwork(self, session_id, net_pipe, serializer, plugin_id, version_table)
         self._process_manager = _ProcessManagerInstance(proc_pipe)
+
         Logs.debug("Plugin constructed for session", session_id)
         self._network._send(_Messages.connect, [_Packet._compression_type(), original_version_table])
         self._run_text = "Run"
