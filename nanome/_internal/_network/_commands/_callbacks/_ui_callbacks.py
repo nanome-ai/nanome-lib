@@ -10,8 +10,9 @@ def __find_content(network, content_id):
 
 
 def _menu_toggled(network, arg, request_id):
-    enabled = arg
-    active_menu = network._plugin.menu
+    index = arg[0]
+    enabled = arg[1]
+    active_menu = network._plugin._menus[index]
     if active_menu != None:
         active_menu._enabled = enabled
         if enabled == True:

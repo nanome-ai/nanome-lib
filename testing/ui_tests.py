@@ -9,16 +9,15 @@ from testing.utilities import *
 
 #testing structures
 def test_ui():
-    button = UI.Button()
-    label = UI.Label()
-    mesh = UI.Mesh()
-    slider = UI.Slider()
-    text_input = UI.TextInput()
-    image = UI.Image()
-    loading_bar = UI.LoadingBar()
-    _list = UI.UIList()
-    # ui_base = UI.UIBase()
-    menu = UI.Menu()
+    UI.Button()
+    UI.Label()
+    UI.Mesh()
+    UI.Slider()
+    UI.TextInput()
+    UI.Image()
+    UI.LoadingBar()
+    UI.UIList()
+    UI.Menu()
 
 def prefab_button_pressed_callback(btn):
     pass
@@ -92,9 +91,6 @@ class FakeNetwork():
         self.original = original
         pass
     def on_menu_received(self, menu):
-        #del menu._root_id
-        menu._id = 0
-        self.original._id = 0
         assert(self.original != menu)
         assert_equal(self.original, menu)
 
