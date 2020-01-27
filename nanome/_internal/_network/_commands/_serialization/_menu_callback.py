@@ -17,7 +17,7 @@ class _MenuCallback(_TypeSerializer):
 
     def deserialize(self, version, context):
         if version >= 1:
-            index = context.read_bool()
+            index = context.read_int()
         else:
             index = 0
         value = context.read_bool()
