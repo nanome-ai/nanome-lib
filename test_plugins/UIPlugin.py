@@ -94,7 +94,6 @@ class UIPlugin(nanome.PluginInstance):
     def spawn_sub_menu(self):
         menu = nanome.api.ui.Menu(self.menu_index, "Menu " + str(self.menu_index))
         menu.register_closed_callback(menu_closed_callback)
-        menu.register_opened_callback(menu_opened_callback)
         menu.width = 0.5
         menu.height = 0.5
         if self.previous_menu != None:
