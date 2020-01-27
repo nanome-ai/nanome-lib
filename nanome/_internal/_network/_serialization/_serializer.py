@@ -166,6 +166,7 @@ add_message(CommandCallbacks._Messages.node_update, CommandSerializers._UpdateNo
 add_message(CommandCallbacks._Messages.menu_transform_set, CommandSerializers._SetMenuTransform())
 add_message(CommandCallbacks._Messages.menu_transform_request, CommandSerializers._GetMenuTransform())
 add_message(CommandCallbacks._Messages.notification_send, CommandSerializers._SendNotification())
+add_message(CommandCallbacks._Messages.hook_ui_callback, CommandSerializers._UIHook())
 
 #file
 add_message(CommandCallbacks._Messages.directory_request, CommandSerializers._DirectoryRequest())

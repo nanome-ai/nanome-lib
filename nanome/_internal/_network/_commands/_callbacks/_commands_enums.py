@@ -92,6 +92,7 @@ class _Messages(__CommandEnum):
     menu_transform_set = auto()
     menu_transform_request = auto()
     notification_send = auto()
+    hook_ui_callback = auto()
 
     #Structure
     structures_deep_update = auto()

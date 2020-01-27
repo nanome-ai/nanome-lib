@@ -12,6 +12,10 @@ import sys
 import json
 import cProfile
 import time
+import os
+import fnmatch
+import subprocess
+import signal
 
 try_reconnection_time = 20.0
 keep_alive_time_interval = 3600.0
@@ -27,12 +31,15 @@ class _Plugin(object):
         for i in range(1, len(sys.argv)):
             if sys.argv[i] == "-h":
                 Logs.message("Usage:", sys.argv[1],"[-h] [-a ADDRESS] [-p PORT]")
-                Logs.message(" -h  display this help")
-                Logs.message(" -a  connects to a NTS at the specified IP address")
-                Logs.message(" -p  connects to a NTS at the specified port")
-                Logs.message(" -k  specifies a key file to use to connect to NTS")
-                Logs.message(" -n  name to display for this plugin in Nanome")
-                Logs.message(" -v  enable verbose mode, to display Logs.debug")
+                Logs.message(" -h                   display this help")
+                Logs.message(" -a                   connects to a NTS at the specified IP address")
+                Logs.message(" -p                   connects to a NTS at the specified port")
+                Logs.message(" -k                   specifies a key file to use to connect to NTS")
+                Logs.message(" -n                   name to display for this plugin in Nanome")
+                Logs.message(" -v                   enable verbose mode, to display Logs.debug")
+                Logs.message(" -r, --auto-reload    restart plugin automatically if a .py or .json file in current directory changes")
+                Logs.message(" --ignore             to use with auto-reload. All paths matching this pattern will be ignored, " \
+                    "use commas to specify several. Supports */?/[seq]/[!seq]")
                 sys.exit(0)
             elif sys.argv[i] == "-a":
                 if i >= len(sys.argv):
@@ -63,7 +70,16 @@ class _Plugin(object):
                 self._description['name'] = sys.argv[i + 1]
                 i += 1
             elif sys.argv[i] == "-v":
+                self.__has_verbose = True
                 Logs._set_verbose(True)
+            elif sys.argv[i] == "-r" or sys.argv[i] == "--auto-reload":
+                self.__has_autoreload = True
+            elif sys.argv[i] == "--ignore":
+                if i >= len(sys.argv):
+                    Logs.error("Error: --ignore requires an argument")
+                    sys.exit(1)
+                split = sys.argv[i + 1].split(",")
+                self.__to_ignore.extend(split)
 
     def __read_key_file(self):
         try:
@@ -119,7 +135,64 @@ class _Plugin(object):
         else:
             Logs.warning("Received a packet of unknown type", packet.packet_type, ". Ignoring")
 
+    def __file_filter(self, name):
+        return name.endswith(".py") or name.endswith(".json")
+
+    def __file_times(self, path):
+        found_file = False
+        for root, dirs, files in os.walk(path):
+            for file in filter(self.__file_filter, files):
+                file_path = os.path.join(root, file)
+                matched = False
+                for pattern in self.__to_ignore:
+                    if fnmatch.fnmatch(file_path, pattern):
+                        matched = True
+                if matched == False:
+                    found_file = True
+                    yield os.stat(file_path).st_mtime
+        if found_file == False:
+            yield 0.0
+
+    def __autoreload(self):
+        wait = 3
+
+        if os.name == "nt":
+            sub_kwargs = { 'creationflags': subprocess.CREATE_NEW_PROCESS_GROUP }
+            break_signal = signal.CTRL_BREAK_EVENT
+        else:
+            sub_kwargs = {}
+            break_signal = signal.SIGTERM
+
+        sub_args = [x for x in sys.argv if x != '-r' and x != "--auto-reload"]
+
+        try:
+            sub_args = [sys.executable] + sub_args
+            process = subprocess.Popen(sub_args, **sub_kwargs)
+        except:
+            Logs.error("Couldn't find a suitable python executable")
+            sys.exit(1)
+
+        last_mtime = max(self.__file_times("."))
+        while True:
+            try:
+                max_mtime = max(self.__file_times("."))
+                if max_mtime > last_mtime:
+                    last_mtime = max_mtime
+                    Logs.message("Restarting plugin")
+                    process.send_signal(break_signal)
+                    process = subprocess.Popen(sub_args, **sub_kwargs)
+                time.sleep(wait)
+            except KeyboardInterrupt:
+                process.send_signal(break_signal)
+                break
+
     def __run(self):
+        if os.name == "nt":
+            signal.signal(signal.SIGBREAK, self.__on_termination_signal)
+        else:
+            signal.signal(signal.SIGTERM, self.__on_termination_signal)
+        if self._pre_run != None:
+            self._pre_run()
         _Plugin.instance = self
         self._description['auth'] = self.__read_key_file()
         self._process_manager = _ProcessManager()
@@ -187,11 +260,16 @@ class _Plugin(object):
             del self._sessions[id]
         self.__disconnection_time = timer()
 
+    def __on_termination_signal(self, signum, frame):
+        self.__exit()
+
     def __exit(self):
         Logs.debug('Exiting')
         for session in _Plugin.instance._sessions.values():
             session.signal_and_close_pipes()
             session.plugin_process.join()
+        if self._post_run != None:
+            self._post_run()
         sys.exit(0)
 
     def __on_client_connection(self, session_id, version_table):
@@ -230,3 +308,8 @@ class _Plugin(object):
         }
         self._plugin_class = None
         self.__connected = False
+        self.__has_autoreload = False
+        self.__has_verbose = False
+        self.__to_ignore = []
+        self._pre_run = None
+        self._post_run = None
