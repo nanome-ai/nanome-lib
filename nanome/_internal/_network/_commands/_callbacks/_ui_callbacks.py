@@ -8,7 +8,6 @@ def __find_content(network, content_id):
             return content
     return None
 
-
 def _menu_toggled(network, arg, request_id):
     index = arg[0]
     enabled = arg[1]
