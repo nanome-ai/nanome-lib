@@ -81,7 +81,6 @@ class UIPlugin(nanome.PluginInstance):
         menu.width = 1.0
         menu.height =  1.0
         menu.register_closed_callback(menu_closed_callback)
-        menu.register_opened_callback(menu_opened_callback)
         self.tab1 = self.create_tab1()
         self.tab2 = self.create_tab2()
         self.tab2.enabled = False
