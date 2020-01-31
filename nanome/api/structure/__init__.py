@@ -1,4 +1,7 @@
 from . import *
+from . import client
+from . import io
+
 from .base import Base
 from .atom import Atom
 from .bond import Bond
@@ -8,5 +11,4 @@ from .molecule import Molecule
 from .complex import Complex
 from .workspace import Workspace
 
-from . import io
 

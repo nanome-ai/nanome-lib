@@ -1,10 +1,14 @@
 from nanome._internal._structure._workspace import _Workspace
 from nanome.util import Matrix, Logs
+from .client import WorkspaceClient
 
 class Workspace(_Workspace):
+    client = WorkspaceClient()
+
     def __init__(self):
         _Workspace.__init__(self)
         self._transform = Workspace.Transform(self)
+        self.client = WorkspaceClient(self)
 
     @property
     def complexes(self):
@@ -81,4 +85,5 @@ class Workspace(_Workspace):
         def scale(self, value):
             self.parent.scale = value
     #endregion
+Workspace.client._setup_addon(Workspace)
 _Workspace._create = Workspace

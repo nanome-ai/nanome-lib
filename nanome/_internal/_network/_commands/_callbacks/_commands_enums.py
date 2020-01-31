@@ -107,7 +107,7 @@ class _Messages(__CommandEnum):
     complex_list_request = auto()
     bonds_add = auto()
     dssp_add = auto()
-    compute_hbond = auto()
+    compute_hbonds = auto()
 
     #Streams
     stream_create = auto()
