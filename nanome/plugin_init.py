@@ -38,6 +38,7 @@ def main():
         z.extractall(path)
 
     for root, dirs, files in os.walk(path):
+        if '.git' in root: continue
         for file in files:
             file_path = os.path.join(root, file)
             with open(file_path, 'r', encoding='utf-8') as f:
