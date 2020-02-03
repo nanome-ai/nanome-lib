@@ -9,10 +9,10 @@ TEMPLATE_ZIP = os.path.join(os.path.dirname(__file__), 'plugin-template.zip')
 def main():
     path = sys.argv[1] if len(sys.argv) > 1 else '.'
     fields = {
-        'name': 'Plugin',
+        'name': 'Example Plugin',
         'description': 'A Nanome Plugin',
         'category': 'other',
-        'version': '1.0.0',
+        'version': '0.1.0',
         'company': 'Nanome',
         'author': 'Nanome',
         'email': 'hello@nanome.ai',
@@ -24,12 +24,13 @@ def main():
             res = input('%s (%s): ' % (key, value))
             fields[key] = res.strip() or value
     except KeyboardInterrupt:
+        print('\nplugin init cancelled')
         sys.exit(0)
 
     name = ' '.join(w.title() if w.islower() else w for w in fields['name'].split())
     fields['name'] = name
-    fields['class'] = name.replace(' ', '')
-    fields['folder'] = 'nanome_' + name.lower().replace(' ', '_')
+    fields['class'] = re.sub(r'\W', '', name)
+    fields['folder'] = 'nanome_' + re.sub(r'\s', '_', name.lower())
     fields['command'] = fields['folder'].replace('_', '-')
     fields['year'] = str(datetime.datetime.today().year)
 
