@@ -54,5 +54,6 @@ from ._get_menu_transform_response import _GetMenuTransformResponse
 from ._set_menu_transform import _SetMenuTransform
 from ._load_file import _LoadFile
 from ._load_file_done import _LoadFileDone
+from ._compute_hbonds import _ComputeHBonds
 
 from ._macro_commands import _RunMacro, _SaveMacro, _DeleteMacro, _GetMacros, _GetMacrosResponse, _StopMacro

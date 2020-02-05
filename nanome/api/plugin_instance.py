@@ -23,7 +23,20 @@ class PluginInstance(_PluginInstance):
         pass
 
     def __pseudo_init__(self):
-        self.menu = Menu()
+        self.__menu = Menu() #deprecated
+        self.__set_first = False
+
+    @property
+    def menu(self):
+        if not self.__set_first:
+            self.__set_first = True
+            Logs.warning("The default menu (self.menu) is now deprecated and will be removed in a future version. Please use the ui.Menu() constructor to create the menu.")
+        return self.__menu
+
+    @menu.setter
+    def menu(self, value):
+        self.__set_first = True
+        self.__menu = value
 
     def __new__(cls):
         n = super(PluginInstance, cls).__new__(cls)
@@ -185,6 +198,7 @@ class PluginInstance(_PluginInstance):
         :param menu: Menu to update
         :type menu: :class:`~nanome.api.ui.menu.Menu`
         """
+        self._menus[menu.index] = menu
         self._network._send(_Messages.menu_update, menu)
         
     def update_content(self, content):

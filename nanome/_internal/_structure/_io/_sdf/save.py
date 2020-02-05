@@ -46,7 +46,7 @@ def to_file(path, complex, options=None):
             return None
         for chain in chains:
             for residue in chain._residues:
-                for atom in residue.atoms:
+                for atom in residue._atoms:
                     serial_by_atom_serial[atom._serial] = atom_serial
                     saved_atom = Results.SavedAtom()
                     saved_atom.serial = atom_serial

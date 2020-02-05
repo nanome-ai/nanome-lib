@@ -6,7 +6,7 @@ def _receive_menu(network, arg, request_id):
         temp_nodes = arg[1]
         temp_contents = arg[2]
 
-        plugin_menu = network._plugin.menu
+        plugin_menu = network._plugin.menu # dead API
         plugin_menu._copy_data(temp_menu)
         root_id = temp_menu._root_id
         
