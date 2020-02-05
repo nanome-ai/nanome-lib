@@ -93,16 +93,16 @@ class Complex(_Complex, Base):
         self._current_frame = value
 
     # returns true if the complex is selected on nanome.
-    @Logs.deprecated()
     def get_selected(self):
         return self._selected
 
-    @property
-    def selected(self):
-        return self._selected
-    @selected.setter
-    def selected(self, value):
-        self._selected = value
+    def get_all_selected(self):
+        for atom in self.atoms:
+            if not atom.selected:
+                return False
+        return True
+
+    def set_all_selected(self, value):
         for atom in self.atoms:
             atom.selected = value
 
