@@ -93,8 +93,18 @@ class Complex(_Complex, Base):
         self._current_frame = value
 
     # returns true if the complex is selected on nanome.
+    @Logs.deprecated()
     def get_selected(self):
         return self._selected
+
+    @property
+    def selected(self):
+        return self._selected
+    @selected.setter
+    def selected(self, value):
+        self._selected = value
+        for atom in self.atoms:
+            atom.selected = value
 
     def set_surface_needs_redraw(self):
         self._surface_dirty = True
