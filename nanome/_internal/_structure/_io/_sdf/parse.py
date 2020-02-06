@@ -42,6 +42,9 @@ def parse_model(lines):
         total_lines = len(lines)
         while (line_counter < total_lines):
             line = lines[line_counter]
+            if (len(line) == 0):
+                line_counter += 1
+                continue
             if line_counter == 0:
                 model.name = line
             if line_counter == 1:
