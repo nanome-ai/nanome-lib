@@ -1,3 +1,4 @@
+from nanome.util import enums
 from nanome.util import Vector3
 from nanome._internal._structure import _Complex, _Molecule, _Chain, _Residue, _Bond, _Atom
 from .content import Content
@@ -40,7 +41,7 @@ def structure_molecule(model):
             bond = _Bond._create()
             bond._atom1 = atoms_by_serial[cbond.serial_atom1]
             bond._atom2 = atoms_by_serial[cbond.serial_atom2]
-            bond._kind = cbond.bond_order
+            bond._kind = enums.Kind.safe_cast(cbond.bond_order)
             residue._add_bond(bond)
     molecule._associated = model._associated
     return molecule
