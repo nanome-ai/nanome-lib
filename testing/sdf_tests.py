@@ -76,6 +76,12 @@ def test_aromatic():
     complex1, complex2 = read_write_read_frames(input_dir)
     check_facts(complex1, 1, 1, 1, 34, 31)
     check_facts(complex2, 1, 1, 1, 34, 31)
+    aromatic_bond = False
+    for bond in complex2.bonds:
+        if bond.kind == nanome.util.enums.Kind.Aromatic:
+            aromatic_bond = True
+    assert(aromatic_bond)
+
 
 def test_thrombin():
     input_dir = test_assets + ("/sdf/small_thrombin.sdf")
