@@ -40,8 +40,11 @@ def parse_model(lines):
 
         line_counter = 0
         total_lines = len(lines)
-        while (line_counter < total_lines):
+        while line_counter < total_lines:
             line = lines[line_counter]
+            if len(line) == 0:
+                line_counter += 1
+                continue
             if line_counter == 0:
                 model.name = line
             if line_counter == 1:
@@ -51,7 +54,7 @@ def parse_model(lines):
             if line_counter == 3:
                 atom_counter = record_chunk_int(line, 1, 3)
                 bond_counter = record_chunk_int(line, 4, 6)
-                if ("V3000" in line):
+                if "V3000" in line:
                     version = "V3000"
             if line_counter > 3:
                 if version == "V2000":
@@ -74,11 +77,11 @@ def parse_model(lines):
                         bond.bond_order = record_chunk_int(line, 7, 9)
                         model.bonds.append(bond)
                         bond_counter = bond_counter - 1
-                    elif (line[0] == 'm'):
+                    elif line[0] == 'm':
                         model.properties.append(line)
                 elif version == "V3000":
                     parts = line.split()
-                    if (len(parts) >= 4):
+                    if len(parts) >= 4:
                         if parts[0] == "M" and parts[1] == "V30":
                             if parts[2] == "BEGIN":
                                 segment_stack.append(parts[3])
@@ -101,13 +104,13 @@ def parse_model(lines):
                                     bond.serial_atom1 = int(parts[4])
                                     bond.serial_atom2 = int(parts[5])
                                     model.bonds.append(bond)
-                if (line[0] == '>'):
+                if line[0] == '>':
                     regexpression = re.compile(r">\s+<(.+?)>")
                     title = re.match(regexpression, line).group(0)
                     line_counter = line_counter + 1
                     data = ""
                     # read line until you see another comment or the end of the molecule
-                    while (line_counter < total_lines):
+                    while line_counter < total_lines:
                         if len(lines[line_counter]) > 0:  #skip empty lines
                             if lines[line_counter][0] == '>' or "$$$$" in lines[line_counter]:
                                 line_counter = line_counter - 1
