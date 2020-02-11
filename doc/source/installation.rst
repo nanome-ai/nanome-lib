@@ -59,6 +59,7 @@ When starting a plugin, a few optional arguments are available:
 * -p [PORT]: Specifies NTS port
 * -k [FILE]: Specifies a key file to use (if NTS is protected by key)
 * -v: Enables verbose mode, to display :func:`~nanome.util.logs.Logs.debug` messages
+* -r: Enables Live Reload
 
 On the VR Side
 ^^^^^^^^^^^^^^
