@@ -94,6 +94,8 @@ add_command(CommandCallbacks._Commands.structures_deep_update_done, CommandSeria
 add_command(CommandCallbacks._Commands.position_structures_done, CommandSerializers._PositionStructuresDone())
 add_command(CommandCallbacks._Commands.dssp_add_done, CommandSerializers._AddDSSP())
 add_command(CommandCallbacks._Commands.bonds_add_done, CommandSerializers._AddBonds())
+add_command(CommandCallbacks._Commands.complex_updated, CommandSerializers._ComplexUpdated())
+add_command(CommandCallbacks._Commands.selection_changed, CommandSerializers._SelectionChanged())
 add_command(CommandCallbacks._Commands.compute_hbonds_done, CommandSerializers._ComputeHBonds())
 
 #Volume
@@ -156,6 +158,8 @@ add_message(CommandCallbacks._Messages.bonds_add, CommandSerializers._AddBonds()
 add_message(CommandCallbacks._Messages.dssp_add, CommandSerializers._AddDSSP())
 add_message(CommandCallbacks._Messages.structures_zoom, CommandSerializers._PositionStructures())
 add_message(CommandCallbacks._Messages.structures_center, CommandSerializers._PositionStructures())
+add_message(CommandCallbacks._Messages.hook_complex_updated, CommandSerializers._ComplexUpdatedHook())
+add_message(CommandCallbacks._Messages.hook_selection_changed, CommandSerializers._SelectionChangedHook())
 add_message(CommandCallbacks._Messages.compute_hbonds, CommandSerializers._ComputeHBonds())
 
 #volume
@@ -220,6 +224,8 @@ add_callback(CommandCallbacks._Commands.position_structures_done, CommandCallbac
 add_callback(CommandCallbacks._Commands.dssp_add_done, CommandCallbacks._add_dssp_done)
 add_callback(CommandCallbacks._Commands.bonds_add_done, CommandCallbacks._add_bonds_result)
 add_callback(CommandCallbacks._Commands.complexes_response, CommandCallbacks._receive_complexes)
+add_callback(CommandCallbacks._Commands.complex_updated, CommandCallbacks._complex_updated)
+add_callback(CommandCallbacks._Commands.selection_changed, CommandCallbacks._selection_changed)
 add_callback(CommandCallbacks._Commands.compute_hbonds_done, CommandCallbacks._compute_hbonds_response)
 
 #ui

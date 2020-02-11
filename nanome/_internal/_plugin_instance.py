@@ -10,10 +10,13 @@ from timeit import default_timer as timer
 
 UPDATE_RATE = 1.0 / 60.0
 MINIMUM_SLEEP = 0.001
+HOOK_UNREF_CHECK_TIME = 30.0
 
 __metaclass__ = type
 class _PluginInstance(object):
     __callbacks = dict()
+    __complex_updated_callbacks = dict()
+    __selection_changed_callbacks = dict()
 
     @classmethod
     def _save_callback(cls, id, callback):
@@ -29,6 +32,30 @@ class _PluginInstance(object):
             del callbacks[id]
         except KeyError:
             Logs.warning('Received an unknown callback id:', id)
+
+    @classmethod
+    def _hook_complex_updated(cls, index, callback):
+        cls.__complex_updated_callbacks[index] = callback
+
+    @classmethod
+    def _hook_selection_changed(cls, index, callback):
+        cls.__selection_changed_callbacks[index] = callback
+
+    @classmethod
+    def _on_complex_updated(cls, index, new_complex):
+        callbacks = _PluginInstance.__complex_updated_callbacks
+        try:
+            callbacks[index](new_complex)
+        except KeyError:
+            Logs.warning('Received an unknown updated complex index:', index)
+
+    @classmethod
+    def _on_selection_changed(cls, index, new_complex):
+        callbacks = _PluginInstance.__selection_changed_callbacks
+        try:
+            callbacks[index](new_complex)
+        except KeyError:
+            Logs.warning('Received an unknown updated complex index:', index)
 
     def _on_stop(self):
         try:

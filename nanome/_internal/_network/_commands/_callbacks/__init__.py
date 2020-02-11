@@ -7,6 +7,7 @@ from ._add_dssp_done import _add_dssp_done
 from ._advanced_settings import _advanced_settings
 from ._complex_list import _receive_complex_list, _receive_complexes
 from ._create_stream_result import _receive_create_stream_result
+from ._complex_updated import _complex_updated
 from ._connect import _connect
 from ._feed_stream import _feed_stream
 from ._feed_stream_done import _feed_stream_done
@@ -14,6 +15,7 @@ from ._file import _receive_directory, _receive_file, _receive_file_save_result
 from ._interrupt_stream import _receive_interrupt_stream
 from ._menu import _receive_menu
 from ._run import _run
+from ._selection_changed import _selection_changed
 from ._ui_callbacks import _button_pressed, _button_hover, _menu_toggled, _slider_changed, _slider_released, _text_changed, _text_submit, _image_pressed, _image_held, _image_released
 from ._update_structures_deep_done import _update_structures_deep_done
 from ._upload_cryo_em_done import _upload_cryo_em_done

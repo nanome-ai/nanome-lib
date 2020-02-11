@@ -4,6 +4,8 @@ from ._add_bonds import _AddBonds
 from ._add_dssp import _AddDSSP
 from ._add_to_workspace import _AddToWorkspace
 from ._advanced_settings import _AdvancedSettings
+from ._complex_updated import _ComplexUpdated
+from ._complex_updated_hook import _ComplexUpdatedHook
 from ._connect import _Connect
 from ._create_stream import _CreateStream
 from ._create_stream_result import _CreateStreamResult
@@ -21,6 +23,8 @@ from ._interrupt_stream import _InterruptStream
 from ._open_url import _OpenURL
 from ._run import _Run
 from ._receive_workspace import _ReceiveWorkspace
+from ._selection_changed import _SelectionChanged
+from ._selection_changed_hook import _SelectionChangedHook
 from ._complex_added_removed import _ComplexAddedRemoved
 from ._presenter_change import _PresenterChange
 from ._receive_complex_list import _ReceiveComplexList, _ReceiveComplexes

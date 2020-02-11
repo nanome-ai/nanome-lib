@@ -74,8 +74,11 @@ class _Complex(_Base):
                 except StopIteration:
                     pass
 
-    def _shallow_copy(self):
-        complex = _Complex._create()
+    def _shallow_copy(self, target = None):
+        if target == None:
+            complex = _Complex._create()
+        else:
+            complex = target
         #Molecular
         complex._name = self._name
         complex._index_tag = self._index_tag
@@ -106,3 +109,8 @@ class _Complex(_Base):
     def _convert_to_frames(self):
         result = _helpers._conformer_helper.convert_to_frames(self)
         return result
+
+    def __copy_received_complex(self, new_complex):
+        if new_complex != None:
+            new_complex._shallow_copy(self)
+            self._molecules = new_complex._molecules
