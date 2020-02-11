@@ -18,6 +18,10 @@ else:
 
 
 class _Dssp():
+    _types_coil = [' ', 'C', 'S', 'T']
+    _types_sheet = ['B', 'E']
+    _types_helix = ['G', 'H', 'I']
+
     def __init__(self, complex_list, callback):
         self.__complexes = complex_list
         self.__framed_complexes = [complex.convert_to_frames() for complex in complex_list]
@@ -61,7 +65,7 @@ class _Dssp():
             complex = self.__complexes[self.__complex_idx]
             framed_complex = self.__framed_complexes[self.__complex_idx]
             self.__molecule_idx = 0
-        
+
         molecule = framed_complex._molecules[self.__molecule_idx]
         single_frame = _Complex._create()
         single_frame._add_molecule(molecule)
@@ -128,11 +132,11 @@ class _Dssp():
                     chain = residues[dssp_info[0]]
                     residue = chain[dssp_info[1]]
                     structure_type = dssp_info[2]
-                    if structure_type == " ":
+                    if structure_type in _Dssp._types_coil:
                         residue._secondary_structure = _Residue.SecondaryStructure.Coil
-                    elif structure_type == "E":
+                    elif structure_type in _Dssp._types_sheet:
                         residue._secondary_structure = _Residue.SecondaryStructure.Sheet
-                    elif structure_type == "H":
+                    elif structure_type in _Dssp._types_helix:
                         residue._secondary_structure = _Residue.SecondaryStructure.Helix
                 except:
                     Logs.debug("[DSSP] Key not found:", dssp_info[0], dssp_info[1], traceback.format_exc())
