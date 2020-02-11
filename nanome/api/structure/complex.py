@@ -96,6 +96,16 @@ class Complex(_Complex, Base):
     def get_selected(self):
         return self._selected
 
+    def get_all_selected(self):
+        for atom in self.atoms:
+            if not atom.selected:
+                return False
+        return True
+
+    def set_all_selected(self, value):
+        for atom in self.atoms:
+            atom.selected = value
+
     def set_surface_needs_redraw(self):
         self._surface_dirty = True
 
