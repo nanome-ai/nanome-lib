@@ -36,7 +36,7 @@ def verbose_equals(first, second, options = TestOptions()):
     return compare_values(first, second, {}, options)
 
 def previously_evaluated(first, second, seen_cache):
-    #prevents infinite recursion by caching the results of things already seen. 
+    #prevents infinite recursion by caching the results of things already seen.
     #values in cache have already been evaluated or are currently being evaluated.
     if first in seen_cache:
         if second in seen_cache[first]:
@@ -142,7 +142,9 @@ def compare_dicts(first, second, seen_cache, options = TestOptions()):
                 return False, output
     return True, []
 
-def alter_object(target, seen_cache = {}):
+def alter_object(target, seen_cache=None):
+    if seen_cache is None:
+        seen_cache = {}
     if previously_altered(target, seen_cache):
         return target
     obj_dict = target.__dict__
@@ -150,7 +152,9 @@ def alter_object(target, seen_cache = {}):
         obj_dict[key] = alter_value(var, seen_cache)
     return target
 
-def alter_value(value, seen_cache = {}):
+def alter_value(value, seen_cache=None):
+    if seen_cache is None:
+        seen_cache = {}
     if isinstance(value, list):
         for i in range(len(value)):
             value[i] = alter_value(value[i], seen_cache)
@@ -178,7 +182,7 @@ def alter_value(value, seen_cache = {}):
                 return value
 
 def previously_altered(value, seen_cache):
-    #prevents infinite recursion by caching the results of things already seen. 
+    #prevents infinite recursion by caching the results of things already seen.
     #values in cache have already been evaluated or are currently being evaluated.
     if value in seen_cache:
         return True
@@ -188,8 +192,8 @@ def previously_altered(value, seen_cache):
 
 class TestCounter():
     def __init__(self):
-        self.passed = 0 
-        self.total = 0 
+        self.passed = 0
+        self.total = 0
 
 def run_test_group(test, options = TestOptions()):
     Logs.debug("runnning test group", test.__name__)
@@ -214,7 +218,7 @@ def run_test(test, counter):
 
 def run_timed_test(test, counter, loop_count = 1, maximum_time = -1.0):
     Logs.debug("\trunning test", test.__name__)
-    counter.total += 1    
+    counter.total += 1
     timed = True
     try:
         start_time = time.process_time_ns()
@@ -318,7 +322,7 @@ def print_tree_helper(structure, tabs):
         line += "\n" + "| "*(tabs+1) + "Atoms: "
         for atom in structure.atoms:
             line += atom.name + ", "
-        line += "\n" + "| "*(tabs+1) + "Bonds: "        
+        line += "\n" + "| "*(tabs+1) + "Bonds: "
         for bond in structure.bonds:
             # line += bond.atom1.name + "->" + bond.atom2.name + ", "
             line += str(bond._parent._name) + ", "
@@ -542,7 +546,7 @@ class DebugTimer():
     @classmethod
     def _get_time(cls):
         # return time.clock()
-        # return int(time.clock() * cls.nano) 
+        # return int(time.clock() * cls.nano)
         return time.clock() * cls.milli
 
 DebugTimer._start()
