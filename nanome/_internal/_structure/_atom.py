@@ -147,6 +147,7 @@ class _Atom(_Base):
         atom._serial = self._serial
         atom._name = self._name
         atom._is_het = self._is_het
+        atom._atom_type = self._atom_type
         #No API
         atom._occupancy = self._occupancy
         atom._bfactor = self._bfactor
