@@ -26,7 +26,7 @@ class _TextInputSerializer(_TypeSerializer):
         context.write_using_serializer(self.string, value._placeholder_text)
         context.write_using_serializer(self.string, value._input_text)
         if version >= 2:
-            context.write_bool(value._HiddenText)
+            context.write_bool(value._hidden)
 
     def deserialize(self, version, context):
         value = _TextInput._create()
