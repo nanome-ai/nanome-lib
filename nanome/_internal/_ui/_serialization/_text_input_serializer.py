@@ -26,7 +26,8 @@ class _TextInputSerializer(_TypeSerializer):
         context.write_using_serializer(self.string, value._placeholder_text)
         context.write_using_serializer(self.string, value._input_text)
         if version >= 2:
-            context.write_bool(value._hidden)
+            context.write_bool(value._password)
+            context.write_bool(value._number)
 
     def deserialize(self, version, context):
         value = _TextInput._create()
@@ -38,7 +39,8 @@ class _TextInputSerializer(_TypeSerializer):
         value._placeholder_text = context.read_using_serializer(self.string)
         value._input_text = context.read_using_serializer(self.string)
         if version >= 2:
-            value._hidden = context.read_bool()
+            value._password = context.read_bool()
+            value._number = context.read_bool()
         return value
 
 _UIBaseSerializer.register_type("TextInput", _UIBaseSerializer.ContentType.etextInput, _TextInputSerializer())

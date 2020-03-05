@@ -39,12 +39,20 @@ class TextInput(_TextInput, UIBase):
         self._input_text = value
 
     @property
-    def hidden(self):
-        return self._hidden
+    def password(self):
+        return self._password
     
-    @hidden.setter
-    def hidden(self, value):
-        self._hidden = value
+    @password.setter
+    def password(self, value):
+        self._password = value
+
+    @property
+    def number(self):
+        return self._number
+    
+    @number.setter
+    def number(self, value):
+        self._number = value
 
     def register_changed_callback(self, func):
         """
