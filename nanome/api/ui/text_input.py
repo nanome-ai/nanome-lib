@@ -38,6 +38,14 @@ class TextInput(_TextInput, UIBase):
             value = str(value)
         self._input_text = value
 
+    @property
+    def hidden(self):
+        return self._hidden
+    
+    @hidden.setter
+    def hidden(self, value):
+        self._hidden = value
+
     def register_changed_callback(self, func):
         """
         | Registers a function to be called whenever the text input is changed. 

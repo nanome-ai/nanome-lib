@@ -10,7 +10,7 @@ class _TextInputSerializer(_TypeSerializer):
         self.string = _StringSerializer()
     
     def version(self):
-        return 1
+        return 2
 
     def name(self):
         return "TextInput"
@@ -25,7 +25,8 @@ class _TextInputSerializer(_TypeSerializer):
         context.write_int(value._max_length)
         context.write_using_serializer(self.string, value._placeholder_text)
         context.write_using_serializer(self.string, value._input_text)
-        pass
+        if version >= 2:
+            context.write_bool(value._HiddenText)
 
     def deserialize(self, version, context):
         value = _TextInput._create()
@@ -36,7 +37,8 @@ class _TextInputSerializer(_TypeSerializer):
         value._max_length = context.read_int()
         value._placeholder_text = context.read_using_serializer(self.string)
         value._input_text = context.read_using_serializer(self.string)
-
+        if version >= 2:
+            value._hidden = context.read_bool()
         return value
 
 _UIBaseSerializer.register_type("TextInput", _UIBaseSerializer.ContentType.etextInput, _TextInputSerializer())

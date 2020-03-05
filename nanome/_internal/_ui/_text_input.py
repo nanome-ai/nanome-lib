@@ -12,6 +12,7 @@ class _TextInput(_UIBase):
         self._max_length = 10
         self._placeholder_text = "PlaceHolderText"
         self._input_text = ""
+        self._hidden = False
         #API
         self._changed_callback = lambda self: None
         self._submitted_callback = lambda self: None
