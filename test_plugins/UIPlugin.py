@@ -190,6 +190,7 @@ class UIPlugin(nanome.PluginInstance):
         textInput.max_length = 30
         textInput.register_changed_callback(text_changed_callback)
         textInput.register_submitted_callback(text_submitted_callback)
+        textInput.number = True
 
         Logs.message("Added text input")
 
@@ -298,6 +299,8 @@ class UIPlugin(nanome.PluginInstance):
         textInput.max_length = 30
         textInput.register_changed_callback(text_changed_callback)
         textInput.register_submitted_callback(text_submitted_callback)
+        textInput.password = True
+        textInput.input_text = "hello"
 
         Logs.message("Added text input")
 
