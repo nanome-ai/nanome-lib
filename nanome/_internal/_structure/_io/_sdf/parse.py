@@ -67,7 +67,7 @@ def parse_model(lines):
                         atom.z = record_chunk_float(line, 21, 30)
                         atom.symbol = record_chunk_string(line, 31, 33)
                         atom.mass = record_chunk_int(line, 35, 36)
-                        atom.charge = record_chunk_int(line, 37, 39)
+                        atom.charge = convert_formal_charge(record_chunk_int(line, 37, 39))
                         model.atoms.append(atom)
                         atom_counter = atom_counter - 1
                     elif bond_counter > 0:
@@ -164,3 +164,13 @@ def record_chunk_string(line, start, end):
     true_start = start - 1
     true_end = min(end, len(line))
     return line[true_start:true_end].strip()
+
+
+def convert_formal_charge(charge):
+    if charge == 4:
+        return 0  # TODO: This should be doublet radical
+
+    if charge == 0:
+        return 0
+
+    return -3 + (7 - charge)
