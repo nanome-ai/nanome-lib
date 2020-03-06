@@ -122,7 +122,11 @@ def record_atom(line, line_number):
     record.bfactor = record_chunk_float(line, 61, 66)
     record.segment_identifier = record_chunk_string(line, 73, 76)
     record.element_symbol = record_chunk_string(line, 77, 78)
-    record.atom_charge = record_chunk_string(line, 79, 80)
+    charge_str = record_chunk_string(line, 79, 80)
+    if len(charge_str) >= 1:
+        record.formal_charge = int(charge_str[:1])
+        if charge_str.Length >= 2 and charge_str[1] == '-':
+            record.formal_charge *= -1
     # Special cases
     if (len(record.element_symbol) <= 0):
         record.element_symbol = record.atom_name
@@ -154,7 +158,11 @@ def record_het_atom(line, line_number):
     record.bfactor = record_chunk_float(line, 61, 66)
     record.segment_identifier = record_chunk_string(line, 73, 76)
     record.element_symbol = record_chunk_string(line, 77, 78)
-    record.atom_charge = record_chunk_string(line, 79, 80)
+    charge_str = record_chunk_string(line, 79, 80)
+    if len(charge_str) >= 1:
+        record.formal_charge = int(charge_str[:1])
+        if charge_str.Length >= 2 and charge_str[1] == '-':
+            record.formal_charge *= -1
     # Special cases
     if len(record.element_symbol) <= 0:
         record.element_symbol = record.atom_name
