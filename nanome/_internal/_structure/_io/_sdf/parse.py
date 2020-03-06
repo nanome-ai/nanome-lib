@@ -66,8 +66,8 @@ def parse_model(lines):
                         atom.y = record_chunk_float(line, 11, 20)
                         atom.z = record_chunk_float(line, 21, 30)
                         atom.symbol = record_chunk_string(line, 31, 33)
-                        atom.mass = record_chunk_int(line, 34, 35)
-                        atom.charge = record_chunk_int(line, 36, 38)
+                        atom.mass = record_chunk_int(line, 35, 36)
+                        atom.charge = record_chunk_int(line, 37, 39)
                         model.atoms.append(atom)
                         atom_counter = atom_counter - 1
                     elif bond_counter > 0:
@@ -154,7 +154,10 @@ def record_chunk_float(line, start, end):
 
 def record_chunk_int(line, start, end):
     str = record_chunk_string(line, start, end)
-    return int(str)
+    try:
+        return int(str)
+    except:
+        return 0
 
 
 def record_chunk_string(line, start, end):
