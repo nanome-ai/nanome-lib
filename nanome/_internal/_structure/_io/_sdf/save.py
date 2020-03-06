@@ -105,6 +105,9 @@ def add_atoms(lines, saved_atoms):
         new_line += float_to_string(atom._position.z, 4)
         new_line += " "
         new_line += "0"
+        new_line += " "
+        if atom._formal_charge != 0:
+            new_line += "CHG=" + str(atom._formal_charge)
         lines.append(new_line)
     lines.append("M  V30 END ATOM")
 
