@@ -7,7 +7,7 @@ import time
 
 NAME = "Sand Box"
 DESCRIPTION = "A plugin that can be edited freely for testing."
-CATEGORY = "Simple Actions"
+CATEGORY = "Hydrogens"
 HAS_ADVANCED_OPTIONS = False
 
 # Plugin
@@ -25,6 +25,13 @@ class SandBox(nanome.PluginInstance):
 
     def on_run(self):
         self.request_workspace(self.y)
+        self.integration.on_add_hydrogen = self.add
+
+    def add(self, request):
+        complexes = request.get_args()
+        for complex in complexes:
+            Logs.message(complex.index)
+        request.send_response(complexes)
 
     def x(self, workspace):
         for complex in workspace.complexes:

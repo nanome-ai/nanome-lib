@@ -135,6 +135,8 @@ add_command(CommandCallbacks._Commands.controller_transforms_response, CommandSe
 
 #others
 add_command(CommandCallbacks._Commands.load_file_done, CommandSerializers._LoadFileDone())
+add_command(CommandCallbacks._Commands.integration, CommandSerializers._Integration())
+
 #-------------Messages-----------#
 # Messages are outgoing (plugin -> nanome)
 
@@ -199,6 +201,7 @@ add_message(CommandCallbacks._Messages.controller_transforms_request, CommandSer
 #others
 add_message(CommandCallbacks._Messages.open_url, CommandSerializers._OpenURL())
 add_message(CommandCallbacks._Messages.load_file, CommandSerializers._LoadFile())
+add_message(CommandCallbacks._Messages.integration, CommandSerializers._Integration())
 
 #-------------Callbacks-----------#
 # Callbacks are things to do after the command is decoded (plugin -> plugin)
@@ -263,3 +266,4 @@ add_callback(CommandCallbacks._Commands.controller_transforms_response, CommandC
 
 #others
 add_callback(CommandCallbacks._Commands.load_file_done, CommandCallbacks._load_file_done)
+add_callback(CommandCallbacks._Commands.integration, CommandCallbacks._integration)

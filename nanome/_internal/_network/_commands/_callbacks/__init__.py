@@ -12,6 +12,7 @@ from ._connect import _connect
 from ._feed_stream import _feed_stream
 from ._feed_stream_done import _feed_stream_done
 from ._file import _receive_directory, _receive_file, _receive_file_save_result
+from ._integration import _integration
 from ._interrupt_stream import _receive_interrupt_stream
 from ._menu import _receive_menu
 from ._run import _run
