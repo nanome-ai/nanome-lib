@@ -23,6 +23,7 @@ class _Atom(_Base):
         self._bfactor = 0.0
         self._acceptor = False
         self._donor = False
+        self._formal_charge = 0
         #Rendering
         #API
         self._selected = False
@@ -153,6 +154,7 @@ class _Atom(_Base):
         atom._bfactor = self._bfactor
         atom._acceptor = self._acceptor
         atom._donor = self._donor
+        atom._formal_charge = self._formal_charge
         #Rendering
         #API
         atom._selected = self._selected

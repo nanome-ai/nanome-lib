@@ -34,6 +34,7 @@ def structure_molecule(model):
         atom._position = Vector3(catom.x, catom.y, catom.z)
         atom._name = catom.symbol
         atom._is_het = True
+        atom._formal_charge = catom.charge
         residue._add_atom(atom)
         atoms_by_serial[atom._serial] = atom
     for cbond in model.bonds:

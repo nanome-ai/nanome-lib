@@ -88,7 +88,7 @@ class Content(object):
             self.bfactor = 0
             self.segment_identifier = ""
             self.element_symbol = ""
-            self.atom_charge = ""
+            self.formal_charge = 0
             self.is_het_atom = False
     class TerRecord(Record):
         def __init__(self):

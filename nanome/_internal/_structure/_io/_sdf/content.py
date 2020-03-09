@@ -10,6 +10,8 @@ class Content(object):
             self.y = 0
             self.z = 0
             self.symbol = "c"
+            self.mass = 0
+            self.charge = 0
 
     class Bond(object):
         def __init__(self):
