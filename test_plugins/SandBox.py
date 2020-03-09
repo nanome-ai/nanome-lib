@@ -16,6 +16,7 @@ class SandBox(nanome.PluginInstance):
     def start(self):
         self.request_presenter_info(self.received)
         self.send_notification(nanome.util.enums.NotificationTypes.message, "A" + "\u0394" + "A")
+        self.integration.hydrogen_add = self.add
 
     def on_presenter_change(self):
         self.request_presenter_info(self.received)
@@ -25,12 +26,12 @@ class SandBox(nanome.PluginInstance):
 
     def on_run(self):
         self.request_workspace(self.y)
-        self.integration.on_add_hydrogen = self.add
 
     def add(self, request):
         complexes = request.get_args()
         for complex in complexes:
-            Logs.message(complex.index)
+            for molecule in complex.molecules:
+                Logs.message(molecule.index)
         request.send_response(complexes)
 
     def x(self, workspace):

@@ -150,6 +150,7 @@ class _Hashes():
     CommandHashes = [None] * len(_Commands)
     MessageHashes = [None] * len(_Messages)
     IntegrationHashes = [None] * len(_IntegrationCommands)
+    HashToIntegrationName = dict()
 
 a_char_value = ord('a')
 z_char_value = ord('z')
@@ -204,5 +205,6 @@ def init_hashes():
             continue
         hashes[hash] = command.name
         _Hashes.IntegrationHashes[i] = hash
+        _Hashes.HashToIntegrationName[hash] = command.name
 
 init_hashes()
