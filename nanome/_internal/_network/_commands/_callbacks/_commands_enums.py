@@ -142,6 +142,9 @@ class _Messages(__CommandEnum):
     integration = auto()
 
 class _IntegrationCommands(__CommandEnum):
+    # Tmp hack
+    reset_auto() #Not an enum
+
     # Hydrogens
     hydrogen_add = auto()
     hydrogen_remove = auto()
