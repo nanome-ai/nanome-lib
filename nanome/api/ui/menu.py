@@ -10,9 +10,6 @@ class Menu(_Menu):
     def register_closed_callback(self, func):
         self._closed_callback = func
 
-    def register_opened_callback(self, func):
-        self._opened_callback = func
-
     #region properties
     @property
     def enabled(self):

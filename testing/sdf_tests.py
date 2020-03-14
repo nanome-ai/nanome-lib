@@ -16,6 +16,7 @@ options = TestOptions(ignore_vars=["_unique_identifier", "_remarks", "_associate
 def run(counter):
     run_test(read_all_ways, counter)
     run_test(test_thrombin, counter)
+    run_test(test_aromatic, counter)
 
 
 def read_all_ways():
@@ -35,40 +36,70 @@ def read_all_ways():
     assert(complex3 != None)
     assert(complex4 != None)
 
-# Testing save load
-# MMCIF
-def test_thrombin():
-    input_dir = test_assets + ("/sdf/small_thrombin.sdf")
-    output_dir = test_output_dir + ("/testOutput.sdf")
+i = 0
 
-    complex1 = struct.Complex.io.from_sdf(path=input_dir)
-    complex1 = complex1.convert_to_frames()
-
-    #fact checks
-    counters = count_structures(complex1)
-    (molecule_count, chain_count, residue_count, bond_count, atom_count) = counters
-    assert(molecule_count == 3)
-    assert(chain_count == 3)
-    assert(residue_count == 3)
-    assert(bond_count == 237)
-    assert(atom_count == 228)
-    #
-    complex1.io.to_sdf(output_dir)
-    complex2 = struct.Complex.io.from_sdf(path=output_dir)
-    complex2 = complex2.convert_to_frames()
-
-    #fact checks
-    counters = count_structures(complex2)
-    (molecule_count, chain_count, residue_count, bond_count, atom_count) = counters
-    assert(molecule_count == 3)
-    assert(chain_count == 3)
-    assert(residue_count == 3)
-    assert(bond_count == 237)
-    assert(atom_count == 228)
+def read_write_read(filename):
+    global i
+    output_file = test_output_dir + "/testOutput" + str(i) + ".sdf"
+    i += 1
+    complex1 = struct.Complex.io.from_sdf(path=filename)
+    complex1.io.to_sdf(output_file)
+    complex2 = struct.Complex.io.from_sdf(path=output_file)
 
     compare_atom_positions(complex1, complex2)
     assert_equal(complex1, complex2, options)
     assert_not_equal(complex2, struct.Complex(), options)
+
+    return complex1, complex2
+
+def read_write_read_frames(filename):
+    global i
+    output_file = test_output_dir + "/testOutput" + str(i) + ".sdf"
+    i += 1
+    complex1 = struct.Complex.io.from_sdf(path=filename)
+    complex1 = complex1.convert_to_frames()
+    complex1.io.to_sdf(output_file)
+    complex2 = struct.Complex.io.from_sdf(path=output_file)
+    complex2 = complex2.convert_to_frames()
+
+    compare_atom_positions(complex1, complex2)
+    assert_equal(complex1, complex2, options)
+    assert_not_equal(complex2, struct.Complex(), options)
+
+    return complex1, complex2
+
+
+def test_aromatic():
+    input_dir = test_assets + ("/sdf/aromatic.sdf")
+
+    read_write_read(input_dir)
+    complex1, complex2 = read_write_read_frames(input_dir)
+    check_facts(complex1, 1, 1, 1, 34, 31)
+    check_facts(complex2, 1, 1, 1, 34, 31)
+    aromatic_bond = False
+    for bond in complex2.bonds:
+        if bond.kind == nanome.util.enums.Kind.Aromatic:
+            aromatic_bond = True
+    assert(aromatic_bond)
+
+
+def test_thrombin():
+    input_dir = test_assets + ("/sdf/small_thrombin.sdf")
+
+    read_write_read(input_dir)
+    complex1, complex2 = read_write_read_frames(input_dir)
+
+    check_facts(complex1, 3, 3, 3, 237, 228)
+    check_facts(complex2, 3, 3, 3, 237, 228)
+
+def check_facts(complex, molecules, chains, residues, bonds, atoms):
+    counters = count_structures(complex)
+    (molecule_count, chain_count, residue_count, bond_count, atom_count) = counters
+    assert(molecule_count == molecules)
+    assert(chain_count == chains)
+    assert(residue_count == residues)
+    assert(bond_count == bonds)
+    assert(atom_count == atoms)
 
 def count_structures(complex):
     molecule_counter = sum(1 for i in complex.molecules)

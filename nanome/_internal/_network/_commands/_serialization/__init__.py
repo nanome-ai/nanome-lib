@@ -1,5 +1,6 @@
 from . import *
 #classes
+<<<<<<< HEAD
 
 from ._control import _AdvancedSettings
 from ._control import _Connect
@@ -47,12 +48,17 @@ from ._workspace import _AddBonds
 from ._workspace import _AddDSSP
 from ._workspace import _AddToWorkspace
 from ._workspace import _ComplexAddedRemoved
+from ._workspace import _ComplexUpdated
+from ._workspace import _ComplexUpdatedHook
+from ._workspace import _ComputeHBonds
 from ._workspace import _PositionStructures
 from ._workspace import _PositionStructuresDone
 from ._workspace import _ReceiveComplexList, _ReceiveComplexes
 from ._workspace import _ReceiveWorkspace
 from ._workspace import _RequestComplexList, _RequestComplexes
 from ._workspace import _RequestWorkspace
+from ._workspace import _SelectionChanged
+from ._workspace import _SelectionChangedHook
 from ._workspace import _UpdateStructures
 from ._workspace import _UpdateStructuresDeepDone
 from ._workspace import _UpdateWorkspace

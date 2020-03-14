@@ -124,6 +124,15 @@ def atom_to_string(atom_serial, atom, residue, chain):
     line += pad_left_float(6, atom._bfactor, 2)
     line += pad_left(10, "")
     line += pad_left(2, atom_element)
+    if atom._formal_charge == 0:
+        line += pad_left(2, "")
+    else:
+        charge_str = str(abs(atom._formal_charge))
+        if atom._formal_charge > 0:
+            sign = "+"
+        else:
+            sign = "-"
+        line += pad_left(2, charge_str[-1] + sign)
     line += pad_left(2, "")
     return line
 

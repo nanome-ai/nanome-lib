@@ -13,6 +13,8 @@ def parse_json(content_json):
         return _slider_json.parse_json(content_json)
     elif type_name == "Text Input":
         return _text_input_json.parse_json(content_json)
+    elif type_name == "TextInput":
+        return _text_input_json.parse_json(content_json)
     elif type_name == "Label":
         return _label_json.parse_json(content_json)
     elif type_name == "List":
@@ -38,7 +40,7 @@ def write_json(helper, content):
         type_name = "Slider"
         _slider_json.write_json(helper, content)
     elif(isinstance(content, _TextInput)):
-        type_name = "Text Input"
+        type_name = "TextInput"
         _text_input_json.write_json(helper, content)
     elif(isinstance(content, _Label)):
         type_name = "Label"

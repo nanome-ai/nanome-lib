@@ -87,13 +87,13 @@ def _bolded(self, value):
 
 _Button._ButtonText.bolded = _bolded
 
-@nanome.util.Logs.deprecated("text.set_all")
+@nanome.util.Logs.deprecated("text.value.set_all")
 def set_all_text(self, text):
     self.text.value.set_all(text)
 
 _Button.set_all_text = set_all_text
 
-@nanome.util.Logs.deprecated("icon.set_all")
+@nanome.util.Logs.deprecated("icon.value.set_all")
 def set_all_icon(self, icon):
     # type: (str)
     self.icon.active = True

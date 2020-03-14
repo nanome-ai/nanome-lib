@@ -40,8 +40,11 @@ def parse_model(lines):
 
         line_counter = 0
         total_lines = len(lines)
-        while (line_counter < total_lines):
+        while line_counter < total_lines:
             line = lines[line_counter]
+            if len(line) == 0:
+                line_counter += 1
+                continue
             if line_counter == 0:
                 model.name = line
             if line_counter == 1:
@@ -51,7 +54,7 @@ def parse_model(lines):
             if line_counter == 3:
                 atom_counter = record_chunk_int(line, 1, 3)
                 bond_counter = record_chunk_int(line, 4, 6)
-                if ("V3000" in line):
+                if "V3000" in line:
                     version = "V3000"
             if line_counter > 3:
                 if version == "V2000":
@@ -63,6 +66,8 @@ def parse_model(lines):
                         atom.y = record_chunk_float(line, 11, 20)
                         atom.z = record_chunk_float(line, 21, 30)
                         atom.symbol = record_chunk_string(line, 31, 33)
+                        atom.mass = record_chunk_int(line, 35, 36)
+                        atom.charge = convert_formal_charge(record_chunk_int(line, 37, 39))
                         model.atoms.append(atom)
                         atom_counter = atom_counter - 1
                     elif bond_counter > 0:
@@ -74,11 +79,11 @@ def parse_model(lines):
                         bond.bond_order = record_chunk_int(line, 7, 9)
                         model.bonds.append(bond)
                         bond_counter = bond_counter - 1
-                    elif (line[0] == 'm'):
+                    elif line[0] == 'm':
                         model.properties.append(line)
                 elif version == "V3000":
                     parts = line.split()
-                    if (len(parts) >= 4):
+                    if len(parts) >= 4:
                         if parts[0] == "M" and parts[1] == "V30":
                             if parts[2] == "BEGIN":
                                 segment_stack.append(parts[3])
@@ -93,6 +98,7 @@ def parse_model(lines):
                                     atom.z = float(parts[6])
                                     atom.serial = int(parts[2])
                                     atom.symbol = parts[3]
+                                    parse_additional_v3000_attributes(parts, atom)
                                     model.atoms.append(atom)
                                 elif current_segment == "BOND" and len(parts) >= 6:
                                     bond = Content.Bond()
@@ -101,13 +107,13 @@ def parse_model(lines):
                                     bond.serial_atom1 = int(parts[4])
                                     bond.serial_atom2 = int(parts[5])
                                     model.bonds.append(bond)
-                if (line[0] == '>'):
+                if line[0] == '>':
                     regexpression = re.compile(r">\s+<(.+?)>")
                     title = re.match(regexpression, line).group(0)
                     line_counter = line_counter + 1
                     data = ""
                     # read line until you see another comment or the end of the molecule
-                    while (line_counter < total_lines):
+                    while line_counter < total_lines:
                         if len(lines[line_counter]) > 0:  #skip empty lines
                             if lines[line_counter][0] == '>' or "$$$$" in lines[line_counter]:
                                 line_counter = line_counter - 1
@@ -129,6 +135,18 @@ def parse_model(lines):
         #           Logs.error("SDF Parsing error", e.Message + e.StackTrace)
         raise
 
+def parse_additional_v3000_attributes(parts, atom):
+    for i in range(8, len(parts)):
+        attr = parts[i].split('=')
+        if len(attr) != 2:
+            continue
+
+        if attr[0] == "CHG":
+            try:
+                atom.charge = int(attr[1])
+            except:
+                pass
+
 def record_chunk_float(line, start, end):
     str = record_chunk_string(line, start, end)
     return float(str)
@@ -136,10 +154,23 @@ def record_chunk_float(line, start, end):
 
 def record_chunk_int(line, start, end):
     str = record_chunk_string(line, start, end)
-    return int(str)
+    try:
+        return int(str)
+    except:
+        return 0
 
 
 def record_chunk_string(line, start, end):
     true_start = start - 1
     true_end = min(end, len(line))
     return line[true_start:true_end].strip()
+
+
+def convert_formal_charge(charge):
+    if charge == 4:
+        return 0  # TODO: This should be doublet radical
+
+    if charge == 0:
+        return 0
+
+    return -3 + (7 - charge)

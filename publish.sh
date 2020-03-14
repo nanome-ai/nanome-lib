@@ -14,7 +14,7 @@ python setup.py bdist_wheel --universal
 
 read -rp "Upload? [yes/no] "
 
-if [[ ${REPLY,,} =~ ^(yes)$ ]]; then
+if [[ $REPLY =~ ^yes$ ]]; then
 	twine upload dist/*
 else
 	echo "Upload canceled "

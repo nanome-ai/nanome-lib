@@ -15,6 +15,7 @@ class Kind(IntEnum):
     CovalentSingle = 1
     CovalentDouble = 2
     CovalentTriple = 3
+    Aromatic = 4
 
 class RibbonMode(IntEnum):
     SecondaryStructure = 0
