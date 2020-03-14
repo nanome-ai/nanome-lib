@@ -31,7 +31,7 @@ class Stream(object):
         :param data: List of data to send. i.e, for position stream: x, y, z, x, y, z, etc. (atom 1, atom 2, etc.)
         :type data: list of :class:`float` for position and scale streams, list of :class:`byte` for color streams
         """
-        id = self.__network._send(_Messages.stream_feed, (self.__id, data, self.__data_type))
+        id = self.__network._send(_Messages.stream_feed, (self.__id, data, self.__data_type), True)
         if done_callback == None:
             done_callback = lambda : None
         nanome.PluginInstance._save_callback(id, done_callback)
@@ -53,7 +53,7 @@ class Stream(object):
         | Destroy stream once plugin doesn't need it anymore
         """
         del Stream._streams[self.__id]
-        self.__network._send(_Messages.stream_destroy, self.__id)
+        self.__network._send(_Messages.stream_destroy, self.__id, False)
 
     def _interrupt(self, reason):
         self.__interrupt_callback(reason)

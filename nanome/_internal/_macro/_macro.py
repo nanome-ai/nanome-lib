@@ -16,19 +16,19 @@ class _Macro(object):
         return cls()
 
     def _save(self, all_users = False):
-        nanome._internal._network._ProcessNetwork._send(_Messages.save_macro, (self, all_users, _Macro._plugin_identifier))
+        nanome._internal._network._ProcessNetwork._send(_Messages.save_macro, (self, all_users, _Macro._plugin_identifier), False)
 
     def _run(self):
-        nanome._internal._network._ProcessNetwork._send(_Messages.run_macro, self)
+        nanome._internal._network._ProcessNetwork._send(_Messages.run_macro, self, False)
 
     def _delete(self, all_users = False):
-        nanome._internal._network._ProcessNetwork._send(_Messages.delete_macro, (self, all_users, _Macro._plugin_identifier))
+        nanome._internal._network._ProcessNetwork._send(_Messages.delete_macro, (self, all_users, _Macro._plugin_identifier), False)
 
     @classmethod
     def _stop(cls):
-        nanome._internal._network._ProcessNetwork._send(_Messages.stop_macro)
+        nanome._internal._network._ProcessNetwork._send(_Messages.stop_macro, None, False)
     
     @classmethod
     def _get_live(cls, callback):
-        id = nanome._internal._network._ProcessNetwork._send(_Messages.get_macros, _Macro._plugin_identifier)
+        id = nanome._internal._network._ProcessNetwork._send(_Messages.get_macros, _Macro._plugin_identifier, True)
         nanome._internal._PluginInstance._save_callback(id, callback)
