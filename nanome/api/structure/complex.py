@@ -198,12 +198,12 @@ class Complex(_Complex, Base):
     def register_complex_updated_callback(self, callback):
         self._complex_updated_callback = callback
         _PluginInstance._hook_complex_updated(self.index, callback)
-        _ProcessNetwork._send(_Messages.hook_complex_updated, self.index, False)
+        _ProcessNetwork._send(_Messages.hook_complex_updated, self.index)
 
     def register_selection_changed_callback(self, callback):
         self._selection_changed_callback = callback
         _PluginInstance._hook_selection_changed(self.index, callback)
-        _ProcessNetwork._send(_Messages.hook_selection_changed, self.index, False)
+        _ProcessNetwork._send(_Messages.hook_selection_changed, self.index)
 
     #region depricated
     @current_frame.setter

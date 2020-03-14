@@ -8,14 +8,9 @@ class _TypeSerializer(object):
 
     def __new__(cls, *args):
         result = super(_TypeSerializer, cls).__new__(cls)
-        cls.register_string_raw(result.name(), result.version())
+        _TypeSerializer.__version_table[result.name()] = result.version()
         result.__init__(*args)
         return result
-
-    @classmethod
-    def register_string_raw(cls, string, version):
-        cls.__version_table[string] = version
-
 
     @classmethod
     def get_version_table(cls):
