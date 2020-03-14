@@ -33,10 +33,18 @@ class _ProcessNetwork(object):
         self._process_conn.close()
 
     @classmethod
-    def _send(cls, code, arg = None): 
+    def _send_connect(cls, code, arg): 
+        return cls.__send(code, None, arg, False)
+
+    @classmethod
+    def _send(cls, code, arg, expects_response): 
+        return cls.__send(code, cls._instance.__version_table, arg, expects_response)
+
+    @classmethod
+    def __send(cls, code, version_table, arg, expects_response): 
         self = cls._instance
         command_id = self._command_id
-        to_send = self._serializer.serialize_message(command_id, code, arg, self.__version_table)
+        to_send = self._serializer.serialize_message(command_id, code, arg, self.__version_table, expects_response)
         packet = _Packet()
         packet.set(self._session_id, _Packet.packet_type_message_to_client, self._plugin_id)
         packet.write(to_send)
