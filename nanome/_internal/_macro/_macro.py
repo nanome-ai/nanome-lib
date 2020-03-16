@@ -30,5 +30,5 @@ class _Macro(object):
     
     @classmethod
     def _get_live(cls, callback):
-        id = nanome._internal._network._ProcessNetwork._send(_Messages.get_macros, _Macro._plugin_identifier, True)
+        id = nanome._internal._network._ProcessNetwork._send(_Messages.get_macros, _Macro._plugin_identifier, callback != None)
         nanome._internal._PluginInstance._save_callback(id, callback)

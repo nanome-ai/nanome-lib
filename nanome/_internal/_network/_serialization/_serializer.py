@@ -17,9 +17,9 @@ class Serializer(object):
         context.write_uint(request_id)
         command_hash = CommandCallbacks._Hashes.MessageHashes[message_type]
         context.write_uint(command_hash)
-
-        if version_table[MESSAGE_VERSION_KEY >=1]:
-            context.write_bool(expects_response)
+        if version_table != None:
+            if version_table[MESSAGE_VERSION_KEY] >= 1:
+                context.write_bool(expects_response)
 
         if arg != None:
             command = None
@@ -98,7 +98,7 @@ add_command(CommandCallbacks._Commands.dssp_add_done, CommandSerializers._AddDSS
 add_command(CommandCallbacks._Commands.bonds_add_done, CommandSerializers._AddBonds(), CommandCallbacks._simple_callback_arg)
 add_command(CommandCallbacks._Commands.complex_updated, CommandSerializers._ComplexUpdated(), CommandCallbacks._complex_updated)
 add_command(CommandCallbacks._Commands.selection_changed, CommandSerializers._SelectionChanged(), CommandCallbacks._selection_changed)
-add_command(CommandCallbacks._Commands.compute_hbonds_done, CommandSerializers._ComputeHBonds(), CommandCallbacks._simple_callback_arg)
+add_command(CommandCallbacks._Commands.compute_hbonds_done, CommandSerializers._ComputeHBonds(), CommandCallbacks._simple_callback_no_arg)
 
 #Volume
 add_command(CommandCallbacks._Commands.upload_cryo_em_done, CommandSerializers._UploadCryoEMDone(), CommandCallbacks._simple_callback_no_arg)
