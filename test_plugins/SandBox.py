@@ -1,4 +1,6 @@
+import os
 import nanome
+from nanome.api import structure as struct
 from nanome.util import Logs
 import sys
 import time
@@ -14,24 +16,21 @@ HAS_ADVANCED_OPTIONS = False
 
 class SandBox(nanome.PluginInstance):
     def start(self):
-        self.request_presenter_info(self.received)
-        self.send_notification(nanome.util.enums.NotificationTypes.message, "A" + "\u0394" + "A")
-
-    def on_presenter_change(self):
-        self.request_presenter_info(self.received)
+        test_assets = os.getcwd() + ("/testing/test_assets")
+        filename = test_assets + ("/sdf/small_thrombin.sdf")
+        self.complex1 = struct.Complex.io.from_sdf(path=filename)
+        self.complex2 = struct.Complex.io.from_sdf(path=filename)
+        self.complex3 = struct.Complex.io.from_sdf(path=filename)
 
     def received(self, presenter_info):
         Logs.message("Presenter:", presenter_info.account_id, presenter_info.account_name, presenter_info.account_email)
 
     def on_run(self):
-        self.request_workspace(self.zoom)
+        l = [self.complex1, self.complex2, self.complex3]
+        self.add_to_workspace(l)
 
-    def zoom(self, workspace):
-        for complex in workspace.complexes:
-            self.zoom_on_structures(complex)
-
-    def done(self):
-        Logs.message("zoom done")
+    def round_2(self, complexes):
+        self.add_to_workspace(complexes)
 
     def __init__(self):
         pass
