@@ -30,12 +30,11 @@ class _Bonding():
         self.__proc.output_text = True
         self.__proc.on_error = self.__on_error
         self.__proc.on_done = self.__bonding_done
-        
+
         self.nanobabel_path, self.obabel_path = shutil.which('nanobabel'), shutil.which('obabel')
         if self.nanobabel_path:
             self.__proc.executable_path = self.nanobabel_path
             self.__proc.args = ['bonding', '-i', self.__input.name, '-o', self.__output.name]
-            Logs.debug(f'nanobabel: {self.nanobabel_path}')
         elif self.obabel_path:
             self.__proc.executable_path = self.obabel_path
             self.__proc.args = ['-ipdb', self.__input.name, '-osdf', '-O' + self.__output.name]
