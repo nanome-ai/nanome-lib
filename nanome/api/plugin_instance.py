@@ -96,14 +96,14 @@ class PluginInstance(_PluginInstance):
         """
         | Request the entire workspace, in deep mode
         """
-        id = self._network._send(_Messages.workspace_request)
+        id = self._network._send(_Messages.workspace_request, None, callback != None)
         self._save_callback(id, callback)
 
     def request_complex_list(self, callback = None):
         """
         | Request the list of all complexes in the workspace, in shallow mode
         """
-        id = self._network._send(_Messages.complex_list_request)
+        id = self._network._send(_Messages.complex_list_request, None, callback != None)
         self._save_callback(id, callback)
 
     def request_complexes(self, id_list, callback = None):
@@ -114,7 +114,7 @@ class PluginInstance(_PluginInstance):
         :param id_list: List of indices
         :type id_list: list of :class:`int`
         """
-        id = self._network._send(_Messages.complexes_request, id_list)
+        id = self._network._send(_Messages.complexes_request, id_list, callback != None)
         self._save_callback(id, callback)
 
     def update_workspace(self, workspace):
@@ -124,7 +124,7 @@ class PluginInstance(_PluginInstance):
         :param workspace: New workspace
         :type workspace: :class:`~nanome.api.structure.workspace.Workspace`
         """
-        self._network._send(_Messages.workspace_update, workspace)
+        self._network._send(_Messages.workspace_update, workspace, False)
 
     def send_notification(self, type, message):
         """
@@ -138,7 +138,7 @@ class PluginInstance(_PluginInstance):
         #avoids unnecessary dependencies.
         #needs to match the command serializer.
         args = (type, message)
-        self._network._send(_Messages.notification_send, args)
+        self._network._send(_Messages.notification_send, args, False)
 
     def update_structures_deep(self, structures, callback = None):
         """
@@ -148,7 +148,7 @@ class PluginInstance(_PluginInstance):
         :param structures: List of molecular structures to update.
         :type structures: list of :class:`~nanome.api.structure.base.Base`
         """
-        id = self._network._send(_Messages.structures_deep_update, structures)
+        id = self._network._send(_Messages.structures_deep_update, structures, callback != None)
         self._save_callback(id, callback)
 
     def update_structures_shallow(self, structures):
@@ -159,7 +159,7 @@ class PluginInstance(_PluginInstance):
         :param structures: List of molecular structures to update.
         :type structures: list of :class:`~nanome.api.structure.base.Base`
         """
-        self._network._send(_Messages.structures_shallow_update, structures)
+        self._network._send(_Messages.structures_shallow_update, structures, False)
 
     def zoom_on_structures(self, structures, callback=None):
         """
@@ -169,7 +169,7 @@ class PluginInstance(_PluginInstance):
         :param structures: Molecular structure(s) to update.
         :type structures: list of :class:`~nanome.api.structure.base.Base`
         """
-        id = self._network._send(_Messages.structures_zoom, structures)
+        id = self._network._send(_Messages.structures_zoom, structures, callback != None)
         self._save_callback(id, callback)
 
     def center_on_structures(self, structures, callback=None):
@@ -180,7 +180,7 @@ class PluginInstance(_PluginInstance):
         :param structures: Molecular structure(s) to update.
         :type structures: list of :class:`~nanome.api.structure.base.Base`
         """
-        id = self._network._send(_Messages.structures_center, structures)
+        id = self._network._send(_Messages.structures_center, structures, callback != None)
         self._save_callback(id, callback)
         
     def add_to_workspace(self, complex_list):
@@ -190,7 +190,7 @@ class PluginInstance(_PluginInstance):
         :param complex_list: List of Complexes to add
         :type complex_list: list of :class:`~nanome.api.structure.complex.Complex`
         """
-        self._network._send(_Messages.add_to_workspace, complex_list)
+        self._network._send(_Messages.add_to_workspace, complex_list, False)
 
     def update_menu(self, menu):
         """
@@ -200,7 +200,7 @@ class PluginInstance(_PluginInstance):
         :type menu: :class:`~nanome.api.ui.menu.Menu`
         """
         self._menus[menu.index] = menu
-        self._network._send(_Messages.menu_update, menu)
+        self._network._send(_Messages.menu_update, menu, False)
         
     def update_content(self, content):
         """
@@ -209,7 +209,7 @@ class PluginInstance(_PluginInstance):
         :param content: UI element to update
         :type content: :class:`~nanome.api.ui.ui_base`
         """
-        self._network._send(_Messages.content_update, content)
+        self._network._send(_Messages.content_update, content, False)
 
     def update_node(self, node):
         """
@@ -218,7 +218,7 @@ class PluginInstance(_PluginInstance):
         :param node: Layout node to update
         :type node: :class:`~nanome.api.ui.layout_node`
         """
-        self._network._send(_Messages.node_update, node)
+        self._network._send(_Messages.node_update, node, False)
 
     def set_menu_transform(self, index, position, rotation, scale):
         """
@@ -234,7 +234,7 @@ class PluginInstance(_PluginInstance):
         :type scale: :class:`~nanome.util.vector3`
         """
         self._network._send(_Messages.menu_transform_set,
-                            (index, position, rotation, scale))
+                            (index, position, rotation, scale), False)
 
     def request_menu_transform(self, index, callback):
         """
@@ -243,7 +243,7 @@ class PluginInstance(_PluginInstance):
         :param index: Index of the menu you wish to read
         :type index: int
         """
-        id = self._network._send(_Messages.menu_transform_request, index)
+        id = self._network._send(_Messages.menu_transform_request, index, callback != None)
         self._save_callback(id, callback)
 
     def request_directory(self, path, callback = None, pattern = "*"):
@@ -258,7 +258,7 @@ class PluginInstance(_PluginInstance):
         options = DirectoryRequestOptions()
         options._directory_name = path
         options._pattern = pattern
-        id = self._network._send(_Messages.directory_request, options)
+        id = self._network._send(_Messages.directory_request, options, callback != None)
         self._save_callback(id, callback)
 
     def request_files(self, file_list, callback = None):
@@ -268,7 +268,7 @@ class PluginInstance(_PluginInstance):
         :param file_list: List of file name (with path) to read. E.g. ["a.sdf", "../b.sdf"] will read a.sdf in running directory, b.sdf in parent directory, and return them
         :type file_list: list of :class:`str`
         """
-        id = self._network._send(_Messages.file_request, file_list)
+        id = self._network._send(_Messages.file_request, file_list, callback != None)
         self._save_callback(id, callback)
 
     def save_files(self, file_list, callback = None):
@@ -278,12 +278,12 @@ class PluginInstance(_PluginInstance):
         :param file_list: List of files to save with their content
         :type file_list: list of :class:`~nanome.util.file.FileSaveData`
         """
-        id = self._network._send(_Messages.file_save, file_list)
+        id = self._network._send(_Messages.file_save, file_list, callback != None)
         self._save_callback(id, callback)
 
     @Logs.deprecated("create_atom_stream")
     def create_stream(self, atom_indices_list, callback):
-        id = self._network._send(_Messages.stream_create, (Stream.Type.position, atom_indices_list, StreamDirection.writing))
+        id = self._network._send(_Messages.stream_create, (Stream.Type.position, atom_indices_list, StreamDirection.writing), callback != None)
         self._save_callback(id, callback)
 
     @Logs.deprecated("create_writing_stream")
@@ -299,7 +299,7 @@ class PluginInstance(_PluginInstance):
         :param stream_type: Type of stream to create
         :type stream_type: list of :class:`~nanome.api.stream.Stream.Type`
         """
-        id = self._network._send(_Messages.stream_create, (stream_type, atom_indices_list, StreamDirection.writing))
+        id = self._network._send(_Messages.stream_create, (stream_type, atom_indices_list, StreamDirection.writing), callback != None)
         self._save_callback(id, callback)
 
     def create_reading_stream(self, atom_indices_list, stream_type, callback):
@@ -311,7 +311,7 @@ class PluginInstance(_PluginInstance):
         :param stream_type: Type of stream to create
         :type stream_type: list of :class:`~nanome.api.stream.Stream.Type`
         """
-        id = self._network._send(_Messages.stream_create, (stream_type, atom_indices_list, StreamDirection.reading))
+        id = self._network._send(_Messages.stream_create, (stream_type, atom_indices_list, StreamDirection.reading), callback != None)
         self._save_callback(id, callback)
 
     def add_bonds(self, complex_list, callback, fast_mode=None):
@@ -342,7 +342,7 @@ class PluginInstance(_PluginInstance):
         :param path: path to the .map or .map.gz file containing the map.
         :type path: str
         """
-        id = self._network._send(_Messages.upload_cryo_em, path)
+        id = self._network._send(_Messages.upload_cryo_em, path, callback != None)
         self._save_callback(id, callback)
 
     def open_url(self, url):
@@ -355,20 +355,20 @@ class PluginInstance(_PluginInstance):
         url = url.strip()
         if '://' not in url:
             url = 'http://' + url
-        self._network._send(_Messages.open_url, url)
+        self._network._send(_Messages.open_url, url, False)
 
     def request_presenter_info(self, callback):
         """
         | Requests presenter account info (unique ID, name, email)
         """
-        id = self._network._send(_Messages.presenter_info_request)
+        id = self._network._send(_Messages.presenter_info_request, None, callback != None)
         self._save_callback(id, callback)
 
     def request_controller_transforms(self, callback):
         """
         | Requests presenter controller info (head position, head rotation, left controller position, left controller rotation, right controller position, right controller rotation)
         """
-        id = self._network._send(_Messages.controller_transforms_request)
+        id = self._network._send(_Messages.controller_transforms_request, None, callback != None)
         self._save_callback(id, callback)
 
     class PluginListButtonType(IntEnum):
@@ -402,7 +402,7 @@ class PluginInstance(_PluginInstance):
         else:
             current_usable[0] = usable
 
-        self._network._send(_Messages.plugin_list_button_set, (button, text, usable))
+        self._network._send(_Messages.plugin_list_button_set, (button, text, usable), False)
 
     def send_files_to_load(self, files_list, callback = None):
         files = []
@@ -415,7 +415,7 @@ class PluginInstance(_PluginInstance):
                 data = content_file.read()
             files.append((file_name, data))
 
-        id = self._network._send(_Messages.load_file, (files, True, True))
+        id = self._network._send(_Messages.load_file, (files, True, True), callback != None)
         self._save_callback(id, callback)
 
     @property
