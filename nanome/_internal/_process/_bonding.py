@@ -6,7 +6,6 @@ import tempfile
 import os
 import shutil
 
-
 class _Bonding():
     def __init__(self, complex_list, callback, fast_mode=None):
         self.__complexes = complex_list
@@ -31,6 +30,9 @@ class _Bonding():
         nanobabel_path = shutil.which('nanobabel')
         if not obabel_path and not nanobabel_path:
             Logs.error("No bonding package installed.")
+
+        if nanobabel_path:
+            Logs.debug(f'nanobabel: {nanobabel_path}')
 
         self.__proc = Process()
         self.__proc.executable_path = nanobabel_path or obabel_path
