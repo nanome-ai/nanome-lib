@@ -8,6 +8,6 @@ class WorkspaceClient(_Addon):
 
     @classmethod
     def compute_hbonds(cls, callback):
-        id = nanome._internal._network._ProcessNetwork._send(_Messages.compute_hbonds)
+        id = nanome._internal._network._ProcessNetwork._send(_Messages.compute_hbonds, None, callback != None)
         nanome._internal._PluginInstance._save_callback(id, callback)
 

@@ -1,59 +1,69 @@
 from . import *
 #classes
-from ._add_bonds import _AddBonds
-from ._add_dssp import _AddDSSP
-from ._add_to_workspace import _AddToWorkspace
-from ._advanced_settings import _AdvancedSettings
-from ._complex_updated import _ComplexUpdated
-from ._complex_updated_hook import _ComplexUpdatedHook
-from ._connect import _Connect
-from ._create_stream import _CreateStream
-from ._create_stream_result import _CreateStreamResult
-from ._destroy_stream import _DestroyStream
-from ._directory_request import _DirectoryRequest
-from ._feed_stream import _FeedStream
-from ._feed_stream_done import _FeedStreamDone
-from ._file_request import _FileRequest
-from ._file_save import _FileSave
-from ._get_presenter_info_response import _GetPresenterInfoResponse
-from ._get_presenter_info import _GetPresenterInfo
-from ._get_controller_transforms_response import _GetControllerTransformsResponse
-from ._get_controller_transforms import _GetControllerTransforms
-from ._interrupt_stream import _InterruptStream
-from ._open_url import _OpenURL
-from ._run import _Run
-from ._receive_workspace import _ReceiveWorkspace
-from ._selection_changed import _SelectionChanged
-from ._selection_changed_hook import _SelectionChangedHook
-from ._complex_added_removed import _ComplexAddedRemoved
-from ._presenter_change import _PresenterChange
-from ._receive_complex_list import _ReceiveComplexList, _ReceiveComplexes
-from ._receive_menu import _ReceiveMenu
-from ._request_complex_list import _RequestComplexList, _RequestComplexes
-from ._request_workspace import _RequestWorkspace
-from ._update_structures import _UpdateStructures
-from ._update_structures_deep_done import _UpdateStructuresDeepDone
-from ._upload_cryo_em import _UploadCryoEM
-from ._upload_cryo_em_done import _UploadCryoEMDone
-from ._set_plugin_list_button import _SetPluginListButton
-from ._menu_callback import _MenuCallback
-from ._button_callback import _ButtonCallback
-from ._slider_callback import _SliderCallback
-from ._text_input_callback import _TextInputCallback
-from ._image_callback import _ImageCallback
-from ._ui_hook import _UIHook
-from ._update_content import _UpdateContent
-from ._update_node import _UpdateNode
-from ._update_menu import _UpdateMenu
-from ._update_workspace import _UpdateWorkspace
-from ._position_structures import _PositionStructures
-from ._position_structures_done import _PositionStructuresDone
-from ._send_notification import _SendNotification
-from ._get_menu_transform import _GetMenuTransform
-from ._get_menu_transform_response import _GetMenuTransformResponse
-from ._set_menu_transform import _SetMenuTransform
+from ._control import _AdvancedSettings
+from ._control import _Connect
+from ._control import _Run
+from ._control import _SetPluginListButton
+
+from ._file import _DirectoryRequest
+from ._file import _FileRequest
+from ._file import _FileSave
+
+from ._macro import _DeleteMacro
+from ._macro import _GetMacros
+from ._macro import _GetMacrosResponse
+from ._macro import _RunMacro
+from ._macro import _SaveMacro
+from ._macro import _StopMacro
+
+from ._stream import _CreateStream
+from ._stream import _CreateStreamResult
+from ._stream import _DestroyStream
+from ._stream import _FeedStream
+from ._stream import _FeedStreamDone
+from ._stream import _InterruptStream
+
+from ._ui import _ButtonCallback
+from ._ui import _GetMenuTransform
+from ._ui import _GetMenuTransformResponse
+from ._ui import _ImageCallback
+from ._ui import _MenuCallback
+from ._ui import _SetMenuTransform
+from ._ui import _SliderCallback
+from ._ui import _TextInputCallback
+from ._ui import _UIHook
+from ._ui import _UpdateContent
+from ._ui import _UpdateMenu
+from ._ui import _UpdateNode
+
+from ._user import _GetControllerTransforms
+from ._user import _GetControllerTransformsResponse
+from ._user import _GetPresenterInfo
+from ._user import _GetPresenterInfoResponse
+from ._user import _PresenterChange
+
+from ._workspace import _AddBonds
+from ._workspace import _AddDSSP
+from ._workspace import _AddToWorkspace
+from ._workspace import _ComplexAddedRemoved
+from ._workspace import _ComplexUpdated
+from ._workspace import _ComplexUpdatedHook
+from ._workspace import _ComputeHBonds
+from ._workspace import _PositionStructures
+from ._workspace import _PositionStructuresDone
+from ._workspace import _ReceiveComplexList, _ReceiveComplexes
+from ._workspace import _ReceiveWorkspace
+from ._workspace import _RequestComplexList, _RequestComplexes
+from ._workspace import _RequestWorkspace
+from ._workspace import _SelectionChanged
+from ._workspace import _SelectionChangedHook
+from ._workspace import _UpdateStructures
+from ._workspace import _UpdateStructuresDeepDone
+from ._workspace import _UpdateWorkspace
+
 from ._load_file import _LoadFile
 from ._load_file_done import _LoadFileDone
-from ._compute_hbonds import _ComputeHBonds
-
-from ._macro_commands import _RunMacro, _SaveMacro, _DeleteMacro, _GetMacros, _GetMacrosResponse, _StopMacro
+from ._open_url import _OpenURL
+from ._send_notification import _SendNotification
+from ._upload_cryo_em import _UploadCryoEM
+from ._upload_cryo_em_done import _UploadCryoEMDone

@@ -66,6 +66,8 @@ def parse_model(lines):
                         atom.y = record_chunk_float(line, 11, 20)
                         atom.z = record_chunk_float(line, 21, 30)
                         atom.symbol = record_chunk_string(line, 31, 33)
+                        atom.mass = record_chunk_int(line, 35, 36)
+                        atom.charge = convert_formal_charge(record_chunk_int(line, 37, 39))
                         model.atoms.append(atom)
                         atom_counter = atom_counter - 1
                     elif bond_counter > 0:
@@ -96,6 +98,7 @@ def parse_model(lines):
                                     atom.z = float(parts[6])
                                     atom.serial = int(parts[2])
                                     atom.symbol = parts[3]
+                                    parse_additional_v3000_attributes(parts, atom)
                                     model.atoms.append(atom)
                                 elif current_segment == "BOND" and len(parts) >= 6:
                                     bond = Content.Bond()
@@ -132,6 +135,18 @@ def parse_model(lines):
         #           Logs.error("SDF Parsing error", e.Message + e.StackTrace)
         raise
 
+def parse_additional_v3000_attributes(parts, atom):
+    for i in range(8, len(parts)):
+        attr = parts[i].split('=')
+        if len(attr) != 2:
+            continue
+
+        if attr[0] == "CHG":
+            try:
+                atom.charge = int(attr[1])
+            except:
+                pass
+
 def record_chunk_float(line, start, end):
     str = record_chunk_string(line, start, end)
     return float(str)
@@ -139,10 +154,23 @@ def record_chunk_float(line, start, end):
 
 def record_chunk_int(line, start, end):
     str = record_chunk_string(line, start, end)
-    return int(str)
+    try:
+        return int(str)
+    except:
+        return 0
 
 
 def record_chunk_string(line, start, end):
     true_start = start - 1
     true_end = min(end, len(line))
     return line[true_start:true_end].strip()
+
+
+def convert_formal_charge(charge):
+    if charge == 4:
+        return 0  # TODO: This should be doublet radical
+
+    if charge == 0:
+        return 0
+
+    return -3 + (7 - charge)

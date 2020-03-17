@@ -38,6 +38,22 @@ class TextInput(_TextInput, UIBase):
             value = str(value)
         self._input_text = value
 
+    @property
+    def password(self):
+        return self._password
+    
+    @password.setter
+    def password(self, value):
+        self._password = value
+
+    @property
+    def number(self):
+        return self._number
+    
+    @number.setter
+    def number(self, value):
+        self._number = value
+
     def register_changed_callback(self, func):
         """
         | Registers a function to be called whenever the text input is changed. 

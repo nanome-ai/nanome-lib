@@ -36,7 +36,7 @@ def to_file(path, complex, options=None):
             lines.append("$$$$")
         number_atoms = 0
         number_bonds = 0
-        serial_by_atom_serial = {}  #<long, int>
+        serial_by_atom_unique = {}  #<long, int>
         atom_serial = 1
 
         chains = molecule._chains
@@ -47,7 +47,7 @@ def to_file(path, complex, options=None):
         for chain in chains:
             for residue in chain._residues:
                 for atom in residue._atoms:
-                    serial_by_atom_serial[atom._serial] = atom_serial
+                    serial_by_atom_unique[atom._unique_identifier] = atom_serial
                     saved_atom = Results.SavedAtom()
                     saved_atom.serial = atom_serial
                     saved_atom.atom = atom
@@ -59,10 +59,10 @@ def to_file(path, complex, options=None):
             if (options.write_all_bonds) or (options.write_het_bonds and chain._name[0] == 'H'):
                 for residue in chain._residues:
                     for bond in residue._bonds:
-                        if bond.atom1._serial in serial_by_atom_serial and bond.atom2._serial in serial_by_atom_serial:
+                        if bond.atom1._unique_identifier in serial_by_atom_unique and bond.atom2._unique_identifier in serial_by_atom_unique:
                             saved_bond = Results.SavedBond()
-                            saved_bond.serial_atom1 = serial_by_atom_serial[bond.atom1._serial]
-                            saved_bond.serial_atom2 = serial_by_atom_serial[bond.atom2._serial]
+                            saved_bond.serial_atom1 = serial_by_atom_unique[bond.atom1._unique_identifier]
+                            saved_bond.serial_atom2 = serial_by_atom_unique[bond.atom2._unique_identifier]
                             saved_bond.bond = bond
                             result.saved_bonds.append(saved_bond)
                             number_bonds += 1
@@ -105,6 +105,9 @@ def add_atoms(lines, saved_atoms):
         new_line += float_to_string(atom._position.z, 4)
         new_line += " "
         new_line += "0"
+        new_line += " "
+        if atom._formal_charge != 0:
+            new_line += "CHG=" + str(atom._formal_charge)
         lines.append(new_line)
     lines.append("M  V30 END ATOM")
 

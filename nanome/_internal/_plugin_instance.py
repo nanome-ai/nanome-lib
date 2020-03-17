@@ -93,7 +93,7 @@ class _PluginInstance(object):
         self._process_manager = _ProcessManagerInstance(proc_pipe)
 
         Logs.debug("Plugin constructed for session", session_id)
-        self._network._send(_Messages.connect, [_Packet._compression_type(), original_version_table])
+        self._network._send_connect(_Messages.connect, [_Packet._compression_type(), original_version_table])
         self._run_text = "Run"
         self._run_usable = True
         self._advanced_settings_text = "Advanced Settings"
