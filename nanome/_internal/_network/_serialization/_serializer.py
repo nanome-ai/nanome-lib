@@ -5,6 +5,7 @@ from nanome._internal._util import _serializers as Serializers
 from nanome.util import Logs
 import struct, traceback
 
+MESSAGE_VERSION_KEY = "ToClientProtocol"
 packet_debugging = False
 
 class Serializer(object):
@@ -145,7 +146,6 @@ add_command(CommandCallbacks._Commands.load_file_done, CommandSerializers._LoadF
 def add_message(command, serializer):
     Serializer._messages[CommandCallbacks._Hashes.MessageHashes[command]] = serializer
 
-MESSAGE_VERSION_KEY = "ToClientProtocol"
 Serializers._type_serializer._TypeSerializer.register_string_raw(MESSAGE_VERSION_KEY, 1)
 #control
 add_message(CommandCallbacks._Messages.connect, CommandSerializers._Connect())
