@@ -93,6 +93,7 @@ add_command(CommandCallbacks._Commands.complex_remove, CommandSerializers._Compl
 add_command(CommandCallbacks._Commands.complex_list_response, CommandSerializers._ReceiveComplexList(), CommandCallbacks._simple_callback_arg)
 add_command(CommandCallbacks._Commands.complexes_response, CommandSerializers._ReceiveComplexes(), CommandCallbacks._receive_complexes)
 add_command(CommandCallbacks._Commands.structures_deep_update_done, CommandSerializers._UpdateStructuresDeepDone(), CommandCallbacks._simple_callback_no_arg)
+add_command(CommandCallbacks._Commands.add_to_workspace_done, CommandSerializers._AddToWorkspace(), CommandCallbacks._simple_callback_arg)
 add_command(CommandCallbacks._Commands.position_structures_done, CommandSerializers._PositionStructuresDone(), CommandCallbacks._simple_callback_no_arg)
 add_command(CommandCallbacks._Commands.dssp_add_done, CommandSerializers._AddDSSP(), CommandCallbacks._simple_callback_arg)
 add_command(CommandCallbacks._Commands.bonds_add_done, CommandSerializers._AddBonds(), CommandCallbacks._simple_callback_arg)
