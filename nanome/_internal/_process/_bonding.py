@@ -26,22 +26,23 @@ class _Bonding():
         self.__input = tempfile.NamedTemporaryFile(delete=False, suffix='.pdb')
         self.__output = tempfile.NamedTemporaryFile(delete=False, suffix='.mol')
 
-        obabel_path = shutil.which('obabel')
-        nanobabel_path = shutil.which('nanobabel')
-        if not obabel_path and not nanobabel_path:
-            Logs.error("No bonding package installed.")
-
-        if nanobabel_path:
-            Logs.debug(f'nanobabel: {nanobabel_path}')
-
         self.__proc = Process()
-        self.__proc.executable_path = nanobabel_path or obabel_path
-        self.__proc.args = ['-ipdb', self.__input.name, '-osdf', '-O' + self.__output.name]
         self.__proc.output_text = True
         self.__proc.on_error = self.__on_error
         self.__proc.on_done = self.__bonding_done
-        if self.__fast_mode:
-            self.__proc.args.append('-f')
+        
+        self.nanobabel_path, self.obabel_path = shutil.which('nanobabel'), shutil.which('obabel')
+        if self.nanobabel_path:
+            self.__proc.executable_path = self.nanobabel_path
+            self.__proc.args = ['bonding', '-i', self.__input.name, '-o', self.__output.name]
+            Logs.debug(f'nanobabel: {self.nanobabel_path}')
+        elif self.obabel_path:
+            self.__proc.executable_path = self.obabel_path
+            self.__proc.args = ['-ipdb', self.__input.name, '-osdf', '-O' + self.__output.name]
+            if self.__fast_mode:
+                self.__proc.args.append('-f')
+        else:
+            Logs.error("No bonding package found.")
 
         self.__next()
 
@@ -77,7 +78,7 @@ class _Bonding():
 
     def __bonding_done(self, result_code):
         if result_code == -1:
-            Logs.error("Couldn't execute openbabel to generate bonds. Is it installed?")
+            Logs.error("Couldn't execute nanobabel or openbabel to generate bonds. Is one installed?")
             self.__callback(self.__complexes)
             return
         with open(self.__output.name) as f:
