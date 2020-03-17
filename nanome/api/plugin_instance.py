@@ -189,7 +189,7 @@ class PluginInstance(_PluginInstance):
         :param complex_list: List of Complexes to add
         :type complex_list: list of :class:`~nanome.api.structure.complex.Complex`
         """
-        self._network._send(_Messages.add_to_workspace, complex_list, callback != None)
+        id = self._network._send(_Messages.add_to_workspace, complex_list, callback != None)
         self._save_callback(id, callback)
 
     def update_menu(self, menu):
