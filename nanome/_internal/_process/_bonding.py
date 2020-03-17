@@ -4,6 +4,7 @@ from nanome._internal._structure._io import _pdb, _sdf
 
 import tempfile
 import os
+import shutil
 
 
 class _Bonding():
@@ -26,8 +27,13 @@ class _Bonding():
         self.__input = tempfile.NamedTemporaryFile(delete=False, suffix='.pdb')
         self.__output = tempfile.NamedTemporaryFile(delete=False, suffix='.mol')
 
+        obabel_path = shutil.which('obabel')
+        nanobabel_path = shutil.which('nanobabel')
+        if not obabel_path and not nanobabel_path:
+            Logs.error("No bonding package installed.")
+
         self.__proc = Process()
-        self.__proc.executable_path = 'obabel'
+        self.__proc.executable_path = nanobabel_path or obabel_path
         self.__proc.args = ['-ipdb', self.__input.name, '-osdf', '-O' + self.__output.name]
         self.__proc.output_text = True
         self.__proc.on_error = self.__on_error
