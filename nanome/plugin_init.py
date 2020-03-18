@@ -1,6 +1,7 @@
 import datetime
 import os
 import re
+import stat
 import sys
 import zipfile
 
@@ -47,6 +48,9 @@ def main():
                 content = content.replace('{{%s}}' % key, value)
             with open(file_path, 'w', encoding='utf-8') as f:
                 f.write(content)
+            if file_path.endswith('.sh'):
+                perm = os.stat(file_path).st_mode
+                os.chmod(file_path, perm | 0o111)
 
     plugin_path = os.path.join(path, 'nanome_plugin', fields['class'] + '.py')
     os.rename(os.path.join(path, 'nanome_plugin/Plugin.py'), plugin_path)
