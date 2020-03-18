@@ -13,3 +13,4 @@ doc/source/_build/
 dist/
 nanome.egg-info/
 build/
+nanome/plugin-template.zip

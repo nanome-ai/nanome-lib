@@ -1,12 +1,8 @@
-if [ $# -eq 0 ]
-then
+if [ $# -eq 0 ]; then
 	echo "No version bump. To bump version, pass major/minor/patch "
 else
 	bump2version $1
 fi
-
-echo "Zipping plugin template "
-(cd plugin-template && zip -9r ../nanome/plugin-template.zip .)
 
 rm -rf build
 rm -rf dist
