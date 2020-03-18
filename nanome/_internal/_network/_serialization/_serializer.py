@@ -19,7 +19,7 @@ class Serializer(object):
         command_hash = CommandCallbacks._Hashes.MessageHashes[message_type]
         context.write_uint(command_hash)
         if version_table != None:
-            if version_table[MESSAGE_VERSION_KEY] >= 1:
+            if version_table.get(MESSAGE_VERSION_KEY, 0) >= 1:
                 context.write_bool(expects_response)
 
         if arg != None:
