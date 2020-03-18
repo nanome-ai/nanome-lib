@@ -1,7 +1,6 @@
 import datetime
 import os
 import re
-import stat
 import sys
 import zipfile
 
