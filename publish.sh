@@ -6,7 +6,7 @@ else
 fi
 
 echo "Zipping plugin template "
-zip -9r nanome/plugin-template.zip plugin-template
+(cd plugin-template && zip -9r ../nanome/plugin-template.zip .)
 
 rm -rf build
 rm -rf dist
