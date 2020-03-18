@@ -2,8 +2,10 @@ FROM continuumio/miniconda3
 
 ENV ARGS=''
 
+# TODO: install dependencies here
+
+ARG CACHEBUST
 RUN pip install nanome
-RUN conda install -c openbabel openbabel
 
 COPY . /app
 WORKDIR /app

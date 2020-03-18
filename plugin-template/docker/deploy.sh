@@ -1,5 +1,6 @@
-if [ "$(docker ps -aq -f name={{command}})" != "" ]; then
-    # cleanup
+#!/bin/bash
+
+if [ -n "$(docker ps -aqf name={{command}})" ]; then
     echo "removing exited container"
     docker rm -f {{command}}
 fi
