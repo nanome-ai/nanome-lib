@@ -21,7 +21,7 @@ class _RemoveHydrogen(_TypeSerializer):
     def serialize(self, version, value, context):
         subcontext = context.create_sub_context()
         subcontext.payload["Atom"] = {}
-        subcontext.write_using_serializer(self.__array, value)
+        subcontext.write_using_serializer(self.array_serializer, value)
         context.write_using_serializer(self.dict, subcontext.payload["Atom"])
         context.write_bytes(subcontext.to_array())
 
