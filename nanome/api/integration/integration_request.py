@@ -12,4 +12,4 @@ class IntegrationRequest():
 
     def send_response(self, args):
         response = (self.__request_id, self.__type, args)
-        self.__network._send(_Messages.integration, response)
+        self.__network._send(_Messages.integration, response, False)

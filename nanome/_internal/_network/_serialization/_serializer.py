@@ -204,3 +204,5 @@ add_message(CommandCallbacks._Messages.controller_transforms_request, CommandSer
 #others
 add_message(CommandCallbacks._Messages.open_url, CommandSerializers._OpenURL())
 add_message(CommandCallbacks._Messages.load_file, CommandSerializers._LoadFile())
+add_message(CommandCallbacks._Messages.integration, CommandSerializers._Integration())
+
