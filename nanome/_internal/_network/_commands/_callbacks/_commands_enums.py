@@ -45,6 +45,7 @@ class _Commands(__CommandEnum):
     complex_list_response = auto()
     complexes_response = auto()
     structures_deep_update_done = auto()
+    add_to_workspace_done = auto()
     position_structures_done = auto()
     complex_add = auto()
     complex_remove = auto()
