@@ -1,6 +1,6 @@
 from nanome._internal._util._serializers import _TypeSerializer
 
-class _UploadCryoEMDone(_TypeSerializer):
+class _AddVolumeDone(_TypeSerializer):
     def __init__(self):
         pass
 
@@ -8,7 +8,7 @@ class _UploadCryoEMDone(_TypeSerializer):
         return 0
 
     def name(self):
-        return "UploadCryoEMDone"
+        return "AddVolumeDone"
 
     def serialize(self, version, value, context):
         raise NotImplementedError

@@ -75,7 +75,7 @@ class _Commands(__CommandEnum):
     controller_transforms_response = auto()
 
     #Other
-    upload_cryo_em_done = auto()
+    add_volume_done = auto()
     load_file_done = auto()
 
 # /!\ /!\ /!\
@@ -135,7 +135,7 @@ class _Messages(__CommandEnum):
     controller_transforms_request = auto()
 
     #Other
-    upload_cryo_em = auto()
+    add_volume = auto()
     open_url = auto()
     load_file = auto()
 
