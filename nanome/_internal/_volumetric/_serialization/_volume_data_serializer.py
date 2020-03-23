@@ -23,7 +23,7 @@ class _VolumeDataSerializer(_TypeSerializer):
         context.write_float(value._mean)
         context.write_float(value._rmsd)
         context.write_int(value._type)
-        context.write_using_serializer(_VolumeDataSerializer.__string, value._type)
+        context.write_using_serializer(_VolumeDataSerializer.__string, value._name)
         context.write_using_serializer(_VolumeDataSerializer.__cell, value._cell)
 
         context.write_float_array(value._data)
