@@ -8,6 +8,7 @@ from ._create_stream_result import _receive_create_stream_result
 from ._complex_updated import _complex_updated
 from ._connect import _connect
 from ._feed_stream import _feed_stream
+from ._integration import _integration
 from ._interrupt_stream import _receive_interrupt_stream
 from ._menu import _receive_menu
 from ._run import _run

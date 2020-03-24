@@ -2,8 +2,8 @@ from nanome.util import Logs, DirectoryRequestOptions, IntEnum, config
 from nanome.util.enums import StreamDirection
 from nanome._internal import _PluginInstance
 from nanome._internal._process import _Bonding, _Dssp
-from nanome._internal._network import _ProcessNetwork
 from nanome._internal._network._commands._callbacks import _Messages
+from nanome.api.integration import Integration
 from nanome.api.ui import Menu
 from nanome.api.streams import Stream
 
@@ -24,6 +24,7 @@ class PluginInstance(_PluginInstance):
 
     def __pseudo_init__(self):
         self.__menu = Menu() #deprecated
+        self.integration = Integration()
         self.__set_first = False
 
     @property
