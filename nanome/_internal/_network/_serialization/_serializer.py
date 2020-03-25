@@ -103,7 +103,7 @@ add_command(CommandCallbacks._Commands.selection_changed, CommandSerializers._Se
 add_command(CommandCallbacks._Commands.compute_hbonds_done, CommandSerializers._ComputeHBonds(), CommandCallbacks._simple_callback_no_arg)
 
 #Volume
-add_command(CommandCallbacks._Commands.upload_cryo_em_done, CommandSerializers._UploadCryoEMDone(), CommandCallbacks._simple_callback_no_arg)
+add_command(CommandCallbacks._Commands.add_volume_done, CommandSerializers._AddVolumeDone(), CommandCallbacks._simple_callback_no_arg)
 
 #ui
 add_command(CommandCallbacks._Commands.menu_toggle, CommandSerializers._MenuCallback(), CommandCallbacks._menu_toggled)
@@ -168,7 +168,7 @@ add_message(CommandCallbacks._Messages.hook_selection_changed, CommandSerializer
 add_message(CommandCallbacks._Messages.compute_hbonds, CommandSerializers._ComputeHBonds())
 
 #volume
-add_message(CommandCallbacks._Messages.upload_cryo_em, CommandSerializers._UploadCryoEM())
+add_message(CommandCallbacks._Messages.add_volume, CommandSerializers._AddVolume())
 
 #ui
 add_message(CommandCallbacks._Messages.menu_update, CommandSerializers._UpdateMenu())

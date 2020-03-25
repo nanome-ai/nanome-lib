@@ -336,14 +336,8 @@ class PluginInstance(_PluginInstance):
         dssp = _Dssp(complex_list, callback)
         dssp._start()
 
-    def upload_cryo_em(self, path, callback = None):
-        """
-        | Renders a Cryo EM map in nanome.
-
-        :param path: path to the .map or .map.gz file containing the map.
-        :type path: str
-        """
-        id = self._network._send(_Messages.upload_cryo_em, path, callback != None)
+    def add_volume(self, complex, volume, properties, complex_to_align_index = -1, callback = None):
+        id = self._network._send(_Messages.add_volume, (complex, complex_to_align_index, volume, properties), callback != None)
         self._save_callback(id, callback)
 
     def open_url(self, url):
