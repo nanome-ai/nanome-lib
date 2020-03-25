@@ -148,6 +148,7 @@ class _IntegrationCommands(__CommandEnum):
     # Hydrogens
     hydrogen_add = auto()
     hydrogen_remove = auto()
+    structure_prep = auto()
     calculate_esp = auto()
 
 class _Hashes():

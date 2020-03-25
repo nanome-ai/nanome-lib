@@ -6,6 +6,7 @@ class _Integration(_TypeSerializer):
     __integrations = {
         _Hashes.IntegrationHashes[_IntegrationCommands.hydrogen_add]: Serializers._AddHydrogen(),
         _Hashes.IntegrationHashes[_IntegrationCommands.hydrogen_remove]: Serializers._RemoveHydrogen(),
+        _Hashes.IntegrationHashes[_IntegrationCommands.structure_prep]: Serializers._StructurePrep(),
         _Hashes.IntegrationHashes[_IntegrationCommands.calculate_esp]: Serializers._CalculateESP(),
     }
 
