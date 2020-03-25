@@ -139,6 +139,7 @@ add_command(CommandCallbacks._Commands.controller_transforms_response, CommandSe
 
 #others
 add_command(CommandCallbacks._Commands.load_file_done, CommandSerializers._LoadFileDone(), CommandCallbacks._simple_callback_arg)
+add_command(CommandCallbacks._Commands.integration, CommandSerializers._Integration(), CommandCallbacks._integration)
 
 #-------------Messages-----------#
 # Messages are outgoing (plugin -> nanome)
@@ -203,3 +204,5 @@ add_message(CommandCallbacks._Messages.controller_transforms_request, CommandSer
 #others
 add_message(CommandCallbacks._Messages.open_url, CommandSerializers._OpenURL())
 add_message(CommandCallbacks._Messages.load_file, CommandSerializers._LoadFile())
+add_message(CommandCallbacks._Messages.integration, CommandSerializers._Integration())
+
