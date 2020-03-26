@@ -3,6 +3,14 @@ import requests
 import tempfile
 
 import nanome
+from nanome.util import Logs
+import sys
+import time
+
+NAME = "Bonding Test"
+DESCRIPTION = "Tests add_bonds."
+CATEGORY = "testing"
+HAS_ADVANCED_OPTIONS = False
 
 class BondingTest(nanome.PluginInstance):
     def start(self):
@@ -27,4 +35,4 @@ class BondingTest(nanome.PluginInstance):
         self.add_bonds([complex], bonding_done)
         print('starting bonding')
 
-nanome.Plugin.setup('Bonding Test', 'Tests add_bonds', 'testing', False, BondingTest)
+nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, False, BondingTest)

@@ -1,4 +1,6 @@
+import os
 import nanome
+from nanome.api import structure as struct
 from nanome.util import Logs
 import sys
 import time
@@ -12,85 +14,36 @@ HAS_ADVANCED_OPTIONS = False
 
 # Plugin
 
+
 class SandBox(nanome.PluginInstance):
     def start(self):
-        self.request_presenter_info(self.received)
-        self.send_notification(nanome.util.enums.NotificationTypes.message, "A" + "\u0394" + "A")
-
-    def on_presenter_change(self):
-        self.request_presenter_info(self.received)
+        test_assets = os.getcwd() + ("/testing/test_assets")
+        filename = test_assets + ("/sdf/small_thrombin.sdf")
+        self.complex1 = struct.Complex.io.from_sdf(path=filename)
+        self.complex1.name = "complex1"
+        self.complex2 = struct.Complex.io.from_sdf(path=filename)
+        self.complex2.name = "complex2"
+        self.complex3 = struct.Complex.io.from_sdf(path=filename)
+        self.complex3.name = "complex3"
 
     def received(self, presenter_info):
-        Logs.message("Presenter:", presenter_info.account_id, presenter_info.account_name, presenter_info.account_email)
+        Logs.message("Presenter:", presenter_info.account_id,
+                     presenter_info.account_name, presenter_info.account_email)
 
     def on_run(self):
-        self.request_workspace(self.y)
+        l = [self.complex1, self.complex2, self.complex3]
+        self.add_to_workspace(l, self.round_2)
 
-    def x(self, workspace):
-        for complex in workspace.complexes:
-            for bond in complex.bonds:
-                for i in range(len(bond._kinds)):
-                    bond._kinds[i] = nanome.util.enums.Kind.safe_cast((i % 3) + 1)
-            for atom in complex.atoms:
-                for i in range(len(atom._positions)):
-                    atom._positions[i].x = i
-            for molecule in complex.molecules:
-                for i in range(len(molecule._names)):
-                    molecule._names[i] = str(i) + str(i)
-        self.update_workspace(workspace)
+    def round_2(self, complexes):
+        Logs.message("round2")
+        complexes[0].name = "c1"
+        complexes[1].name = "c2"
+        complexes[2].name = "c3"
+        self.add_to_workspace(complexes)
 
-    def display_complex(self, complex, msg):
-        atom_count = 0
-        selected_atoms = 0
-        for atom in complex.atoms:
-            atom_count += 1
-            if atom.selected:
-                selected_atoms += 1
-        Logs.message(msg, complex.index, "Nb atoms:", atom_count, "Selected:", selected_atoms)
 
-    def y(self, workspace):
-        for complex in workspace.complexes:
-            complex.register_complex_updated_callback(lambda c : self.display_complex(c, "Structure:"))
-            complex.register_selection_changed_callback(lambda c : self.display_complex(c, "Selection:"))
-
-    def on_complex_list_received(self, complexes):
-        Logs.debug("complex received: ", complexes)
-        ids = []
-        Logs.debug("Requested complex list")
-        for complex in complexes:
-            Logs.debug("selected: " + str(complex.get_selected()))
-            ids.append(complex._index)
-            ids.append(7)
-        self.request_complexes(ids, self.on_complexes_received)
-
-    def on_complexes_received(self, complexes):
-        Logs.debug("Requested complexes")
-        for complex in complexes:
-            if (complex is None):
-                Logs.debug("None received")
-            else:
-                complex.locked = True
-                self.label_all(complex)
-                self.update_structures_deep([complex])
-                
-
-    def label_all(self, complex):
-        all_labeled = True
-        all_text = True
-        for residue in complex.residues:
-            all_labeled = all_labeled and residue.labeled
-            all_text = all_text and residue.label_text == "RESIDUE"
-            residue.labeled = True
-            residue.label_text = "RESIDUE"
-            for atom in residue.atoms:
-                all_labeled = all_labeled and atom.labeled
-                all_text = all_text and atom.label_text == "ATOM"
-                atom.labeled = True
-                atom.label_text = "ATOM"
-        Logs.debug("labeled:", all_labeled)
-        Logs.debug("correct text:", all_text)
-
-    def __init__(self):
+def __init__(self):
         pass
+
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, SandBox)

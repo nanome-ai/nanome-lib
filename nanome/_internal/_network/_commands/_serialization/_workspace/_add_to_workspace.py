@@ -24,6 +24,8 @@ class _AddToWorkspace(_TypeSerializer):
         subcontext.write_using_serializer(self.__array, value)
         context.write_using_serializer(self.dict, subcontext.payload["Atom"])
         context.write_bytes(subcontext.to_array())
-        
+
     def deserialize(self, version, context):
-        return None
+        context.payload["Atom"] = context.read_using_serializer(self.dict)
+        complexes = context.read_using_serializer(self.__array)
+        return complexes

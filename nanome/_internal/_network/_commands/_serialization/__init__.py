@@ -42,6 +42,9 @@ from ._user import _GetPresenterInfo
 from ._user import _GetPresenterInfoResponse
 from ._user import _PresenterChange
 
+from ._volumes import _AddVolume
+from ._volumes import _AddVolumeDone
+
 from ._workspace import _AddBonds
 from ._workspace import _AddDSSP
 from ._workspace import _AddToWorkspace
@@ -63,7 +66,6 @@ from ._workspace import _UpdateWorkspace
 
 from ._load_file import _LoadFile
 from ._load_file_done import _LoadFileDone
+from ._integration import _Integration
 from ._open_url import _OpenURL
 from ._send_notification import _SendNotification
-from ._upload_cryo_em import _UploadCryoEM
-from ._upload_cryo_em_done import _UploadCryoEMDone

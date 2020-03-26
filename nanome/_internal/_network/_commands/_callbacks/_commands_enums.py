@@ -45,6 +45,7 @@ class _Commands(__CommandEnum):
     complex_list_response = auto()
     complexes_response = auto()
     structures_deep_update_done = auto()
+    add_to_workspace_done = auto()
     position_structures_done = auto()
     complex_add = auto()
     complex_remove = auto()
@@ -74,8 +75,9 @@ class _Commands(__CommandEnum):
     controller_transforms_response = auto()
 
     #Other
-    upload_cryo_em_done = auto()
+    add_volume_done = auto()
     load_file_done = auto()
+    integration = auto()
 
 # /!\ /!\ /!\
 # Values names are really important here, as they are hashed, and need to match Nanome
@@ -134,13 +136,26 @@ class _Messages(__CommandEnum):
     controller_transforms_request = auto()
 
     #Other
-    upload_cryo_em = auto()
+    add_volume = auto()
     open_url = auto()
     load_file = auto()
+    integration = auto()
+
+class _IntegrationCommands(__CommandEnum):
+    # Tmp hack
+    reset_auto() #Not an enum
+
+    # Hydrogens
+    hydrogen_add = auto()
+    hydrogen_remove = auto()
+    structure_prep = auto()
+    calculate_esp = auto()
 
 class _Hashes():
     CommandHashes = [None] * len(_Commands)
     MessageHashes = [None] * len(_Messages)
+    IntegrationHashes = [None] * len(_IntegrationCommands)
+    HashToIntegrationName = dict()
 
 a_char_value = ord('a')
 z_char_value = ord('z')
@@ -183,5 +198,18 @@ def init_hashes():
             continue
         hashes[hash] = command.name
         _Hashes.MessageHashes[i] = hash
+
+    hashes.clear()
+    i = -1
+
+    for command in _IntegrationCommands:
+        i += 1
+        hash = hash_command(command.name)
+        if hash in hashes:
+            Logs.error("Integration hash collision detected:", command.name, "and", hashes[hash])
+            continue
+        hashes[hash] = command.name
+        _Hashes.IntegrationHashes[i] = hash
+        _Hashes.HashToIntegrationName[hash] = command.name
 
 init_hashes()

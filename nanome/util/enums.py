@@ -92,3 +92,15 @@ class StreamDirection(IntEnum):
 class LoadFileErrorCode(IntEnum):
     no_error = 0
     loading_failed = 1
+
+class VolumeType(IntEnum):
+    default = 0
+    density = 1
+    density_diff = 2
+    cryo_em = 3
+    electrostatic = 4
+
+class VolumeVisualStyle(IntEnum):
+    Mesh = 0
+    FlatSurface = 1
+    SmoothSurface = 2

@@ -5,6 +5,7 @@ from nanome._internal._util import _serializers as Serializers
 from nanome.util import Logs
 import struct, traceback
 
+MESSAGE_VERSION_KEY = "ToClientProtocol"
 packet_debugging = False
 
 class Serializer(object):
@@ -12,11 +13,15 @@ class Serializer(object):
     _messages = dict()
     _command_callbacks = dict()
 
-    def serialize_message(self, request_id, message_type, arg, version_table):
+    def serialize_message(self, request_id, message_type, arg, version_table, expects_response):
         context = _ContextSerialization(self._plugin_id, version_table, packet_debugging)
         context.write_uint(request_id)
         command_hash = CommandCallbacks._Hashes.MessageHashes[message_type]
         context.write_uint(command_hash)
+        if version_table != None:
+            if version_table.get(MESSAGE_VERSION_KEY, 0) >= 1:
+                context.write_bool(expects_response)
+
         if arg != None:
             command = None
             try:
@@ -89,15 +94,16 @@ add_command(CommandCallbacks._Commands.complex_remove, CommandSerializers._Compl
 add_command(CommandCallbacks._Commands.complex_list_response, CommandSerializers._ReceiveComplexList(), CommandCallbacks._simple_callback_arg)
 add_command(CommandCallbacks._Commands.complexes_response, CommandSerializers._ReceiveComplexes(), CommandCallbacks._receive_complexes)
 add_command(CommandCallbacks._Commands.structures_deep_update_done, CommandSerializers._UpdateStructuresDeepDone(), CommandCallbacks._simple_callback_no_arg)
+add_command(CommandCallbacks._Commands.add_to_workspace_done, CommandSerializers._AddToWorkspace(), CommandCallbacks._simple_callback_arg)
 add_command(CommandCallbacks._Commands.position_structures_done, CommandSerializers._PositionStructuresDone(), CommandCallbacks._simple_callback_no_arg)
 add_command(CommandCallbacks._Commands.dssp_add_done, CommandSerializers._AddDSSP(), CommandCallbacks._simple_callback_arg)
 add_command(CommandCallbacks._Commands.bonds_add_done, CommandSerializers._AddBonds(), CommandCallbacks._simple_callback_arg)
 add_command(CommandCallbacks._Commands.complex_updated, CommandSerializers._ComplexUpdated(), CommandCallbacks._complex_updated)
 add_command(CommandCallbacks._Commands.selection_changed, CommandSerializers._SelectionChanged(), CommandCallbacks._selection_changed)
-add_command(CommandCallbacks._Commands.compute_hbonds_done, CommandSerializers._ComputeHBonds(), CommandCallbacks._simple_callback_arg)
+add_command(CommandCallbacks._Commands.compute_hbonds_done, CommandSerializers._ComputeHBonds(), CommandCallbacks._simple_callback_no_arg)
 
 #Volume
-add_command(CommandCallbacks._Commands.upload_cryo_em_done, CommandSerializers._UploadCryoEMDone(), CommandCallbacks._simple_callback_no_arg)
+add_command(CommandCallbacks._Commands.add_volume_done, CommandSerializers._AddVolumeDone(), CommandCallbacks._simple_callback_no_arg)
 
 #ui
 add_command(CommandCallbacks._Commands.menu_toggle, CommandSerializers._MenuCallback(), CommandCallbacks._menu_toggled)
@@ -133,6 +139,7 @@ add_command(CommandCallbacks._Commands.controller_transforms_response, CommandSe
 
 #others
 add_command(CommandCallbacks._Commands.load_file_done, CommandSerializers._LoadFileDone(), CommandCallbacks._simple_callback_arg)
+add_command(CommandCallbacks._Commands.integration, CommandSerializers._Integration(), CommandCallbacks._integration)
 
 #-------------Messages-----------#
 # Messages are outgoing (plugin -> nanome)
@@ -140,6 +147,7 @@ add_command(CommandCallbacks._Commands.load_file_done, CommandSerializers._LoadF
 def add_message(command, serializer):
     Serializer._messages[CommandCallbacks._Hashes.MessageHashes[command]] = serializer
 
+Serializers._type_serializer._TypeSerializer.register_string_raw(MESSAGE_VERSION_KEY, 1)
 #control
 add_message(CommandCallbacks._Messages.connect, CommandSerializers._Connect())
 
@@ -160,7 +168,7 @@ add_message(CommandCallbacks._Messages.hook_selection_changed, CommandSerializer
 add_message(CommandCallbacks._Messages.compute_hbonds, CommandSerializers._ComputeHBonds())
 
 #volume
-add_message(CommandCallbacks._Messages.upload_cryo_em, CommandSerializers._UploadCryoEM())
+add_message(CommandCallbacks._Messages.add_volume, CommandSerializers._AddVolume())
 
 #ui
 add_message(CommandCallbacks._Messages.menu_update, CommandSerializers._UpdateMenu())
@@ -196,3 +204,5 @@ add_message(CommandCallbacks._Messages.controller_transforms_request, CommandSer
 #others
 add_message(CommandCallbacks._Messages.open_url, CommandSerializers._OpenURL())
 add_message(CommandCallbacks._Messages.load_file, CommandSerializers._LoadFile())
+add_message(CommandCallbacks._Messages.integration, CommandSerializers._Integration())
+

@@ -41,7 +41,8 @@ class _Button(_UIBase):
         try:
             nanome._internal._network._ProcessNetwork._instance._send(
                 nanome._internal._network._commands._callbacks._Messages.hook_ui_callback,
-                (nanome._internal._network._commands._serialization._UIHook.Type.button_hover, self._content_id))
+                (nanome._internal._network._commands._serialization._UIHook.Type.button_hover, self._content_id),
+                False)
         except:
             nanome.util.Logs.error("Could not register hook")
         self._hover_callback = func

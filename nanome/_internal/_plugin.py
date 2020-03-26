@@ -18,7 +18,7 @@ import subprocess
 import signal
 
 try_reconnection_time = 20.0
-keep_alive_time_interval = 3600.0
+keep_alive_time_interval = 60.0
 
 __metaclass__ = type
 class _Plugin(object):
