@@ -6,6 +6,9 @@ class Integration():
         self.hydrogen_remove = None
         self.structure_prep = None
         self.calculate_esp = None
+        self.minimization_start = None
+        self.minimization_stop = None
+        self.export_file = None
 
     def _call(self, name, request):
         callback = getattr(self, name, None)

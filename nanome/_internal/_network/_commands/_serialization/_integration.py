@@ -8,6 +8,9 @@ class _Integration(_TypeSerializer):
         _Hashes.IntegrationHashes[_IntegrationCommands.hydrogen_remove]: Serializers._RemoveHydrogen(),
         _Hashes.IntegrationHashes[_IntegrationCommands.structure_prep]: Serializers._StructurePrep(),
         _Hashes.IntegrationHashes[_IntegrationCommands.calculate_esp]: Serializers._CalculateESP(),
+        _Hashes.IntegrationHashes[_IntegrationCommands.minimization_start]: Serializers._StartMinimization(),
+        _Hashes.IntegrationHashes[_IntegrationCommands.minimization_stop]: Serializers._StopMinimization(),
+        _Hashes.IntegrationHashes[_IntegrationCommands.file_export]: Serializers._FileExport(),
     }
 
     def __init__(self):
