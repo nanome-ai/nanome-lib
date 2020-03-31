@@ -9,7 +9,6 @@ class _StartMinimization(_TypeSerializer):
 
     def serialize(self, version, value, context):
         context.write_bool(value)
-        pass
 
     def deserialize(self, version, context):
         forcefield = context.read_byte()
