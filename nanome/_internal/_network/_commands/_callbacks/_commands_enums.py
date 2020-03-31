@@ -150,6 +150,9 @@ class _IntegrationCommands(__CommandEnum):
     hydrogen_remove = auto()
     structure_prep = auto()
     calculate_esp = auto()
+    minimization_start = auto()
+    minimization_stop = auto()
+    file_export = auto()
 
 class _Hashes():
     CommandHashes = [None] * len(_Commands)
