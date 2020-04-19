@@ -33,7 +33,7 @@ class _FeedStream(_TypeSerializer):
         if type == nanome.api.streams.Stream.DataType.byte:
             data = context.read_byte_array()
         elif type == nanome.api.streams.Stream.DataType.string:
-            data = context.read_using_serializer(self._array)
+            data = context.read_using_serializer(self.__array)
         else:
             data = context.read_float_array()
 
