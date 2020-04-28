@@ -87,6 +87,7 @@ class _PluginInstance(object):
 
     def __init__(self, session_id, net_pipe, proc_pipe, serializer, plugin_id, version_table, original_version_table, verbose, custom_data):
         Logs._set_verbose(verbose)
+        Logs._set_pipe(proc_pipe)
         self._menus = {}
 
         self._network = _ProcessNetwork(self, session_id, net_pipe, serializer, plugin_id, version_table)

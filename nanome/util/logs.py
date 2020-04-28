@@ -4,20 +4,36 @@ if sys.version_info >= (3, 0):
     from ._logs_3 import _print
 else:
     from ._logs_2 import _print
+from nanome.util.enum import IntEnum, auto
 
 class Logs(object):
+    class _LogType(IntEnum):
+        debug = auto()
+        warning = auto()
+        error = auto()
+
+    class _LogEntry():
+        def __init__(self):
+            self._type = Logs._LogType.debug
+            self._msg = None
+
     _is_windows_cmd = False
     _print_type = {
-        'debug': {'color': '\x1b[0m', 'msg': ''},
-        'warning': {'color': '\x1b[33m', 'msg': 'Warning: '},
-        'error': {'color': '\x1b[91m', 'msg': 'Error: '}
+        'debug': {'color': '\x1b[0m', 'msg': '', 'type': _LogType.debug},
+        'warning': {'color': '\x1b[33m', 'msg': 'Warning: ', 'type': _LogType.warning},
+        'error': {'color': '\x1b[91m', 'msg': 'Error: ', 'type': _LogType.error}
     }
     _closing = '\x1b[0m'
     __verbose = None
+    __pipe = None
 
     @classmethod
     def _set_verbose(cls, value):
         cls.__verbose = value
+
+    @classmethod
+    def _set_pipe(cls, value):
+        cls.__pipe = value
 
     @classmethod
     def _is_verbose(cls):
@@ -26,6 +42,21 @@ class Logs(object):
     @classmethod
     def _print(cls, col_type, *args):
         _print(cls, col_type, args)
+        entry = Logs._LogEntry()
+        entry._type = col_type['type']
+        arr = []
+        for arg in args:
+            arr.append(str(arg))
+        entry._msg = col_type['msg'] + ' '.join(arr)
+        if cls.__pipe != None:
+            from nanome._internal._util import _DataType, _ProcData
+            to_send = _ProcData()
+            to_send._type = _DataType.log
+            to_send._data = entry
+            cls.__pipe.send(to_send)
+        else:
+            from nanome._internal._process import _LogsManager
+            _LogsManager._Instance._received_request(entry)
 
     @classmethod
     def error(cls, *args):

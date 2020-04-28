@@ -1,6 +1,6 @@
 from . import _PluginInstance
 from nanome._internal import _network as Network
-from nanome._internal._process import _ProcessManager
+from nanome._internal._process import _ProcessManager, _LogsManager
 from nanome._internal._network._serialization._serializer import Serializer
 from nanome._internal._util._serializers import _TypeSerializer
 from nanome.util.logs import Logs
@@ -196,6 +196,7 @@ class _Plugin(object):
         _Plugin.instance = self
         self._description['auth'] = self.__read_key_file()
         self._process_manager = _ProcessManager()
+        self._logs_manager = _LogsManager(self._plugin_class.__name__ + ".log")
         self.__connect()
         self.__loop()
 
@@ -249,6 +250,7 @@ class _Plugin(object):
                     self._sessions[id]._send_disconnection_message(_Plugin._plugin_id)
                     del self._sessions[id]
                 self._process_manager._update()
+                self._logs_manager._update()
         except KeyboardInterrupt:
             self.__exit()
 
@@ -275,7 +277,7 @@ class _Plugin(object):
     def __on_client_connection(self, session_id, version_table):
         main_conn_net, process_conn_net = Pipe()
         main_conn_proc, process_conn_proc = Pipe()
-        session = Network._Session(session_id, self._network, self._process_manager, main_conn_net, main_conn_proc)
+        session = Network._Session(session_id, self._network, self._process_manager, self._logs_manager, main_conn_net, main_conn_proc)
         process = Process(target=_Plugin._launch_plugin, args=(self._plugin_class, session_id, process_conn_net, process_conn_proc, _Plugin.__serializer, _Plugin._plugin_id, version_table, _TypeSerializer.get_version_table(), Logs._is_verbose(), _Plugin._custom_data))
         process.start()
         session.plugin_process = process
