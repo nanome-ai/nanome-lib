@@ -241,7 +241,7 @@ class _Plugin(object):
                     packet = Network._Packet()
                     packet.set(_Plugin._plugin_id, Network._Packet.packet_type_keep_alive, 0)
                     self._network.send(packet)
-                to_remove.clear()
+                del to_remove[:]
                 for id, session in self._sessions.items():
                     if session._read_from_plugin() == False:
                         session.close_pipes()
