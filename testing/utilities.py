@@ -1,4 +1,3 @@
-from nanome.util import Logs, Color
 import time
 import traceback
 import os
@@ -19,6 +18,7 @@ def assert_equal(first, second, options = None):
         options = TestOptions()
     val, path = verbose_equals(first, second, options)
     if (not val):
+        from nanome.util import Logs
         Logs.debug("PATH:")
         Logs.debug("_"*80)
         for layer in path:
@@ -29,6 +29,7 @@ def assert_equal(first, second, options = None):
 def assert_not_equal(first, second, options = TestOptions()):
     val, path = verbose_equals(first, second, options)
     if (val):
+        from nanome.util import Logs
         Logs.debug("All variables equal")
         raise AssertionError
 
@@ -81,6 +82,7 @@ def compare_values(first, second, seen_cache, options = TestOptions()):
                 if (abs(first - second) > .00001):
                     diff = True
                 elif first != second and options.print_float_warnings:
+                    from nanome.util import Logs
                     Logs.debug("floating point variables slightly different")
             elif first != second:
                 diff = True
@@ -192,6 +194,7 @@ class TestCounter():
         self.total = 0 
 
 def run_test_group(test, options = TestOptions()):
+    from nanome.util import Logs
     Logs.debug("runnning test group", test.__name__)
     counter = TestCounter()
     test.run(counter)
@@ -202,6 +205,7 @@ def run_test_group(test, options = TestOptions()):
         return True
 
 def run_test(test, counter):
+    from nanome.util import Logs
     try:
         Logs.debug("\trunning test", test.__name__)
         counter.total += 1
@@ -213,6 +217,7 @@ def run_test(test, counter):
         counter.passed += 1
 
 def run_timed_test(test, counter, loop_count = 1, maximum_time = -1.0):
+    from nanome.util import Logs
     Logs.debug("\trunning test", test.__name__)
     counter.total += 1    
     timed = True
@@ -386,6 +391,7 @@ def rand_string():
     return str(rand_int())
 
 def rand_color():
+    from nanome.util import Color
     return Color(whole_num = rand_int())
 
 class Counter():
@@ -433,7 +439,9 @@ class DebugTimer():
 
     @classmethod
     def _process_closed(cls, process):
+        from nanome.util import Logs
         if process != cls.curr_process:
+            from nanome.util import Logs
             Logs.error("Timer process closed out of order.")
         cls.curr_process = process._parent
 
