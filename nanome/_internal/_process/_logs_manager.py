@@ -1,7 +1,6 @@
 from collections import deque
 import logging
 from logging.handlers import RotatingFileHandler
-from nanome.util import Logs
 
 class _LogsManager():
     __pending = deque()
@@ -15,12 +14,7 @@ class _LogsManager():
     def _update(self):
         for _ in range(0, len(_LogsManager.__pending)):
             entry = _LogsManager.__pending.popleft()
-            if entry._type == Logs._LogType.debug:
-                self.__logger.info(entry._msg)
-            elif entry._type == Logs._LogType.warning:
-                self.__logger.warning(entry._msg)
-            elif entry._type == Logs._LogType.error:
-                self.__logger.error(entry._msg)
+            self.__logger.info(entry)
 
     @classmethod
     def _received_request(cls, request):

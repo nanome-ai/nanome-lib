@@ -12,16 +12,11 @@ class Logs(object):
         warning = auto()
         error = auto()
 
-    class _LogEntry():
-        def __init__(self):
-            self._type = Logs._LogType.debug
-            self._msg = None
-
     _is_windows_cmd = False
     _print_type = {
-        'debug': {'color': '\x1b[0m', 'msg': '', 'type': _LogType.debug},
-        'warning': {'color': '\x1b[33m', 'msg': 'Warning: ', 'type': _LogType.warning},
-        'error': {'color': '\x1b[91m', 'msg': 'Error: ', 'type': _LogType.error}
+        'debug': {'color': '\x1b[0m', 'msg': ''},
+        'warning': {'color': '\x1b[33m', 'msg': 'Warning: '},
+        'error': {'color': '\x1b[91m', 'msg': 'Error: '}
     }
     _closing = '\x1b[0m'
     __verbose = None
@@ -42,21 +37,19 @@ class Logs(object):
     @classmethod
     def _print(cls, col_type, *args):
         _print(cls, col_type, args)
-        entry = Logs._LogEntry()
-        entry._type = col_type['type']
         arr = []
         for arg in args:
             arr.append(str(arg))
-        entry._msg = col_type['msg'] + ' '.join(arr)
+        msg = col_type['msg'] + ' '.join(arr)
         if cls.__pipe != None:
             from nanome._internal._util import _DataType, _ProcData
             to_send = _ProcData()
             to_send._type = _DataType.log
-            to_send._data = entry
+            to_send._data = msg
             cls.__pipe.send(to_send)
         else:
             from nanome._internal._process import _LogsManager
-            _LogsManager._received_request(entry)
+            _LogsManager._received_request(msg)
 
     @classmethod
     def error(cls, *args):

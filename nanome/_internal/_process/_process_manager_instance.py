@@ -1,5 +1,4 @@
 from nanome.util import Process, Logs
-from nanome._internal._util import _DataType, _ProcData
 from . import _ProcessManager
 
 from collections import deque
@@ -52,6 +51,7 @@ class _ProcessManagerInstance():
         self.send(request)
 
     def send(self, data):
+        from nanome._internal._util import _ProcData
         to_send = _ProcData()
         to_send._data = data
         self.__pipe.send(to_send)
