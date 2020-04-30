@@ -4,7 +4,7 @@ if sys.version_info >= (3, 0):
     from ._logs_3 import _print
 else:
     from ._logs_2 import _print
-from nanome.util.enum import IntEnum, auto
+from .enum import IntEnum, auto
 
 class Logs(object):
     class _LogType(IntEnum):
