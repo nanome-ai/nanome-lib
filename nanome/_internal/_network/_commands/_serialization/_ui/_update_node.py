@@ -1,19 +1,25 @@
 from nanome._internal._ui._serialization import _LayoutNodeSerializerDeep
-
+from nanome._internal._util._serializers import _ArraySerializer
 from nanome._internal._util._serializers import _TypeSerializer
+
 
 class _UpdateNode(_TypeSerializer):
     def __init__(self):
-        self.node_serializer = _LayoutNodeSerializerDeep()
+        self._array = _ArraySerializer()
+        self._array.set_type(_LayoutNodeSerializerDeep())
+        self._node_serializer = _LayoutNodeSerializerDeep()
 
     def version(self):
-        return 0
+        return 1
 
     def name(self):
         return "SendLayoutNode"
 
     def serialize(self, version, value, context):
-        context.write_using_serializer(self.node_serializer, value)
+        if version == 0:
+            context.write_using_serializer(self._node_serializer, value[0])
+        else:
+            context.write_using_serializer(self._array, value)
 
     def deserialize(self, version, context):
         return None

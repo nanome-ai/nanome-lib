@@ -212,14 +212,18 @@ class PluginInstance(_PluginInstance):
         """
         self._network._send(_Messages.content_update, content, False)
 
-    def update_node(self, node):
+    def update_node(self, *nodes):
         """
-        | Update a layout node and its children
+        | Updates layout nodes and their children
 
-        :param node: Layout node to update
-        :type node: :class:`~nanome.api.ui.layout_node`
+        :param nodes: Layout nodes to update
+        :type nodes: :class:`~nanome.api.ui.layout_node` 
+            or multiple :class:`~nanome.api.ui.layout_node` 
+            or a list of :class:`~nanome.api.ui.layout_node`
         """
-        self._network._send(_Messages.node_update, node, False)
+        if len(nodes) == 1 and isinstance(nodes[0], list):
+            nodes = nodes[0]
+        self._network._send(_Messages.node_update, nodes, False)
 
     def set_menu_transform(self, index, position, rotation, scale):
         """
@@ -336,8 +340,14 @@ class PluginInstance(_PluginInstance):
         dssp = _Dssp(complex_list, callback)
         dssp._start()
 
-    def add_volume(self, complex, volume, properties, complex_to_align_index = -1, callback = None):
-        id = self._network._send(_Messages.add_volume, (complex, complex_to_align_index, volume, properties), callback != None)
+    def upload_cryo_em(self, path, callback = None):
+        """
+        | Renders a Cryo EM map in nanome.
+
+        :param path: path to the .map or .map.gz file containing the map.
+        :type path: str
+        """
+        id = self._network._send(_Messages.upload_cryo_em, path, callback != None)
         self._save_callback(id, callback)
 
     def open_url(self, url):
