@@ -1,4 +1,5 @@
 from nanome.util import Logs
+from nanome.util.enum import IntEnum, auto
 from . import _Packet
 import traceback
 
@@ -23,8 +24,12 @@ class _Session(object):
                     return False
                 self._net_plugin.send(packet)
             if has_proc_data:
+                from nanome._internal._util import _DataType
                 request = self.__proc_plugin_pipe.recv()
-                self._process_manager._received_request(request, self)
+                if request._type == _DataType.process:
+                    self._process_manager._received_request(request._data, self)
+                elif request._type == _DataType.log:
+                    self._logs_manager._received_request(request._data)
         except EOFError:
             Logs.error("Plugin encountered an error, please check the logs.", traceback.format_exc())
             return False
@@ -56,10 +61,11 @@ class _Session(object):
         self.__net_plugin_pipe.close()
         self.__proc_plugin_pipe.close()
 
-    def __init__(self, session_id, net_plugin, process_manager, net_pipe, proc_pipe):
+    def __init__(self, session_id, net_plugin, process_manager, logs_manager, net_pipe, proc_pipe):
         self._session_id = session_id
         self._net_plugin = net_plugin
         self._process_manager = process_manager
+        self._logs_manager = logs_manager
         self.__net_plugin_pipe = net_pipe
         self.__proc_plugin_pipe = proc_pipe
         self.plugin_process = None

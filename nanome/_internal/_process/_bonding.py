@@ -82,9 +82,9 @@ class _Bonding():
     def __match_and_bond(self, bonding_result):
         if self.__molecule_idx == 0:
             for atom in self.__saved_complex.atoms:
-                atom._bonds.clear()
+                del atom._bonds[:]
             for residue in self.__saved_complex.residues:
-                residue._bonds.clear()
+                del residue._bonds[:]
 
         if self.__molecule_idx == 0 or not self.__saved_is_conformer:
             self.__atom_by_serial = dict()

@@ -51,4 +51,7 @@ class _ProcessManagerInstance():
         self.send(request)
 
     def send(self, data):
-        self.__pipe.send(data)
+        from nanome._internal._util import _ProcData
+        to_send = _ProcData()
+        to_send._data = data
+        self.__pipe.send(to_send)
