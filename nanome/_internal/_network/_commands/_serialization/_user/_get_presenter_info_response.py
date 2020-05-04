@@ -1,6 +1,4 @@
 from nanome._internal._util._serializers import _TypeSerializer, _StringSerializer
-from nanome.api.user import PresenterInfo
-
 
 class _GetPresenterInfoResponse(_TypeSerializer):
     def __init__(self):
@@ -16,6 +14,8 @@ class _GetPresenterInfoResponse(_TypeSerializer):
         pass
 
     def deserialize(self, version, context):
+        from nanome.api.user import PresenterInfo
+
         result = PresenterInfo()
         result.account_id = context.read_using_serializer(self.string)
         result.account_name = context.read_using_serializer(self.string)
