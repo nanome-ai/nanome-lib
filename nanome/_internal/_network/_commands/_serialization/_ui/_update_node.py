@@ -6,8 +6,8 @@ from nanome._internal._util._serializers import _TypeSerializer
 class _UpdateNode(_TypeSerializer):
     def __init__(self):
         self._array = _ArraySerializer()
-        self._array.set_type(_LayoutNodeSerializerDeep())
         self._node_serializer = _LayoutNodeSerializerDeep()
+        self._array.set_type(self._node_serializer)
 
     def version(self):
         return 1
