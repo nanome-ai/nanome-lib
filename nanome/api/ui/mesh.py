@@ -4,7 +4,7 @@ from nanome._internal._ui import _Mesh
 
 class Mesh(_Mesh, UIBase):
     def __init__(self):
-        # type: (_Button)
+        # type: (_Mesh)
         _Mesh.__init__(self)
         UIBase.__init__(self)
 
