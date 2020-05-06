@@ -33,4 +33,8 @@ class DropdownItem(_DropdownItem):
         # type: (bool)
         self._selected = value
 
+    def clone(self):
+        # type: (_DropdownItem)
+        return self._clone()
+
 _DropdownItem._create = DropdownItem
