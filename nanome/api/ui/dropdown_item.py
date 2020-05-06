@@ -7,13 +7,13 @@ class DropdownItem(_DropdownItem):
         _DropdownItem.__init__(self)
 
     @property
-    def permanent_name(self):
+    def name(self):
         # type: () -> str
-        return self._permanent_name
-    @permanent_name.setter
-    def permanent_name(self, value):
+        return self._name
+    @name.setter
+    def name(self, value):
         # type: (str)
-        self._permanent_name = value
+        self._name = value
 
     @property
     def close_on_selected(self):

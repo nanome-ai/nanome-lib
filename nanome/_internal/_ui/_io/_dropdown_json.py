@@ -17,12 +17,12 @@ def write_json(helper, dropdown):
 
 def _parse_item(content_json):
     item = _DropdownItem._create()
-    item._permanent_name = content_json.read("permanent_name", item._permanent_name)
+    item._name = content_json.read("name", item._name)
     item._close_on_selected = content_json.read("close_on_selected", item._close_on_selected)
     item._selected = content_json.read("selected", item._selected)
     return item
 
 def _write_item(helper, item):
-    helper.write("permanent_name", item._permanent_name)
+    helper.write("name", item._name)
     helper.write("close_on_selected", item._close_on_selected)
     helper.write("selected", item._selected)

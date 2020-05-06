@@ -7,12 +7,12 @@ class _DropdownItem():
 
     def __init__(self):
         super(_DropdownItem, self).__init__()
-        self._permanent_name = ""
+        self._name = ""
         self._close_on_selected = True
         self._selected = False
 
     def _copy_values_deep(self, other):
-        self._permanent_name = other._permanent_name
+        self._name = other._name
         self._close_on_selected = other._close_on_selected
         self._selected = other._selected
 
