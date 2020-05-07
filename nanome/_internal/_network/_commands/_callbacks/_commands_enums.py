@@ -38,6 +38,7 @@ class _Commands(__CommandEnum):
     image_press = auto()
     image_hold = auto()
     image_release = auto()
+    dropdown_item_click = auto()
     menu_transform_response = auto()
 
     #Structure
