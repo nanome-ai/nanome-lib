@@ -116,8 +116,12 @@ def _dropdown_item_clicked(network, arg, request_id):
     content_id = arg[0]
     index = arg[1]
     dropdown = __find_content(network, content_id)
-    if (dropdown != None):
-        item = dropdown._items[index]
-        dropdown._on_item_clicked(item)
+
+    if dropdown != None:
+        for item in dropdown._items:
+            item._selected = False
+        clickedItem = dropdown._items[index]
+        clickedItem._selected = True
+        dropdown._on_item_clicked(clickedItem)
     else:
         Logs.error("Can't find UI content for callback")
