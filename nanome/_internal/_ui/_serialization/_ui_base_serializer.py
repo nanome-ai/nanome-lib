@@ -12,7 +12,7 @@ class _UIBaseSerializer(_TypeSerializer):
         elist = 5
         eimage = 6
         eloadingBar = 7
-        edropdown = 7
+        edropdown = 8
 
     registered_classes = dict()
     registered_serializers = dict()

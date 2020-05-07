@@ -2,9 +2,10 @@ from nanome.util.color import Color
 from nanome._internal._ui import _DropdownItem
 
 class DropdownItem(_DropdownItem):
-    def __init__(self):
+    def __init__(self, name = "item"):
         # type: (_DropdownItem)
         _DropdownItem.__init__(self)
+        self.name = name
 
     @property
     def name(self):

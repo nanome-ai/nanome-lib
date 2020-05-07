@@ -1,6 +1,6 @@
 from nanome._internal._util._serializers import _TypeSerializer
 
-class DropdownCallback(_TypeSerializer):
+class _DropdownCallback(_TypeSerializer):
     def __init__(self):
         pass
 

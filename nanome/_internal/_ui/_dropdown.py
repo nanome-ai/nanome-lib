@@ -10,7 +10,7 @@ class _Dropdown(_UIBase):
         super(_Dropdown, self).__init__()
         self._permanent_title = ""
         self._use_permanent_title = False
-        self._max_displayed_items = 5
+        self._max_displayed_items = 3
         self._items = []
         self._item_clicked_callback = lambda self, item: None
 

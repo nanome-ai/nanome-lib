@@ -15,13 +15,13 @@ class _DropdownItemSerializer(_TypeSerializer):
     def serialize(self, version, value, context):
         context.write_using_serializer(self.string, value._name)
         context.write_bool(value._selected)
-        context.write_bool(value._closed_on_selected)
+        context.write_bool(value._close_on_selected)
         context.write_byte(1)
 
     def deserialize(self, version, context):
         value = _DropdownItem._create()
         value._name = context.read_using_serializer(self.string)
         value._selected = context.read_bool()
-        value._closed_on_selected = context.read_bool()
+        value._close_on_selected = context.read_bool()
         context.read_byte() #eat the type for now, since it isn't supported quite yet
         return value
