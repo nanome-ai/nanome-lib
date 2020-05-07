@@ -41,4 +41,7 @@ class Dropdown(_Dropdown, UIBase):
     def items(self, value):
         self._items = value
 
+    def register_item_clicked_callback(self, func):
+        _Dropdown._register_item_clicked_callback(self, func)
+
 _Dropdown._create = Dropdown
