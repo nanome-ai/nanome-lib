@@ -124,7 +124,7 @@ class _ProcessManager():
 
     def __stop_process(self, id):
         for entry in self.__running:
-            if entry.request.id == id:
+            if entry.request._id == id:
                 entry.process.terminate()
                 break
 

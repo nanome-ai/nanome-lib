@@ -32,7 +32,7 @@ class _ProcessManagerInstance():
         if type == _ProcessManager._DataType.queued:
             process = self.__pending_start.popleft()
             process.on_queued()
-            process.id = data[1].id
+            process._id = data[1].id
             self.__processes[data[1].id] = process
         elif type == _ProcessManager._DataType.position_changed:
             self.__processes[data[1]].on_queue_position_change(data[2])

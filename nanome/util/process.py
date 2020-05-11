@@ -61,11 +61,11 @@ class Process():
             self.__request.encoding = None
 
     @property
-    def id(self):
+    def _id(self):
         return self.__request.id
 
-    @id.setter
-    def id(self, value):
+    @_id.setter
+    def _id(self, value):
         self.__request.id = value
 
     def start(self):
