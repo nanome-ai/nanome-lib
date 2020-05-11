@@ -52,7 +52,7 @@ class _ProcessManagerInstance():
         self.send(_ProcessManager._CommandType.start, request)
 
     def stop_process(self, process):
-        self.send(_ProcessManager._CommandType.stop, process.id)
+        self.send(_ProcessManager._CommandType.stop, process._id)
 
     def send(self, type, data):
         from nanome._internal._util import _ProcData
