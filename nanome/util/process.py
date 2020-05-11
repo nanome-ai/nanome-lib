@@ -17,12 +17,13 @@ class Process():
         self.on_error = lambda _: None
         self.on_output = lambda _: None
         self.__request = Process._ProcessRequest()
+
         if executable_path is not None:
-            self.__request.executable_path = executable_path
+            self.executable_path = executable_path
         if args is not None:
-            self.__request.args = args
+            self.args = args
         if output_text is not None:
-            self.__request.output_text = output_text
+            self.output_text = output_text
 
     @property
     def executable_path(self):
