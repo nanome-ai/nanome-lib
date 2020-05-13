@@ -116,6 +116,7 @@ add_command(CommandCallbacks._Commands.text_change, CommandSerializers._TextInpu
 add_command(CommandCallbacks._Commands.image_press, CommandSerializers._ImageCallback(), CommandCallbacks._image_pressed)
 add_command(CommandCallbacks._Commands.image_hold, CommandSerializers._ImageCallback(), CommandCallbacks._image_held)
 add_command(CommandCallbacks._Commands.image_release, CommandSerializers._ImageCallback(), CommandCallbacks._image_released)
+add_command(CommandCallbacks._Commands.dropdown_item_click, CommandSerializers._DropdownCallback(), CommandCallbacks._dropdown_item_clicked)
 add_command(CommandCallbacks._Commands.menu_transform_response, CommandSerializers._GetMenuTransformResponse(), CommandCallbacks._simple_callback_arg_unpack)
 
 #file

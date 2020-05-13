@@ -14,6 +14,6 @@ from ._menu import _receive_menu
 from ._run import _run
 from ._simple_callback import _simple_callback_arg_unpack, _simple_callback_arg, _simple_callback_no_arg
 from ._selection_changed import _selection_changed
-from ._ui_callbacks import _button_pressed, _button_hover, _menu_toggled, _slider_changed, _slider_released, _text_changed, _text_submit, _image_pressed, _image_held, _image_released
+from ._ui_callbacks import _button_pressed, _button_hover, _menu_toggled, _slider_changed, _slider_released, _text_changed, _text_submit, _image_pressed, _image_held, _image_released, _dropdown_item_clicked
 from ._presenter_change import _presenter_change
 from ._workspace_callbacks import _complex_added, _complex_removed

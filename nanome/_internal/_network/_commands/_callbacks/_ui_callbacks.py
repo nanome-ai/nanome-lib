@@ -111,3 +111,17 @@ def _image_released(network, arg, request_id):
         img._on_image_released(x, y)
     else:
         Logs.error("Can't find UI content for callback")
+
+def _dropdown_item_clicked(network, arg, request_id):
+    content_id = arg[0]
+    index = arg[1]
+    dropdown = __find_content(network, content_id)
+
+    if dropdown != None:
+        for item in dropdown._items:
+            item._selected = False
+        clickedItem = dropdown._items[index]
+        clickedItem._selected = True
+        dropdown._on_item_clicked(clickedItem)
+    else:
+        Logs.error("Can't find UI content for callback")

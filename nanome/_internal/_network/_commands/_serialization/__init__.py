@@ -27,6 +27,7 @@ from ._ui import _ButtonCallback
 from ._ui import _GetMenuTransform
 from ._ui import _GetMenuTransformResponse
 from ._ui import _ImageCallback
+from ._ui import _DropdownCallback
 from ._ui import _MenuCallback
 from ._ui import _SetMenuTransform
 from ._ui import _SliderCallback

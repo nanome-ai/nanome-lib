@@ -21,6 +21,9 @@ def menu_opened_callback(menu):
 def slider_changed_callback(slider): 
     Logs.message("slider changed: " + str(slider.current_value))
 
+def dropdown_callback(dropdown, item): 
+    Logs.message("dropdown item selected: " + str(item.name))
+
 def slider_released_callback(slider): 
     Logs.message("slider released: " + str(slider.current_value))
 
@@ -252,7 +255,7 @@ class UIPlugin(nanome.PluginInstance):
         ln_contentBase = nanome.ui.LayoutNode()
         ln_label = nanome.ui.LayoutNode()
         ln_button = nanome.ui.LayoutNode()
-        ln_slider = nanome.ui.LayoutNode()
+        ln_dropdown = nanome.ui.LayoutNode()
         ln_textInput = nanome.ui.LayoutNode()
 
         content.forward_dist = .02
@@ -281,15 +284,15 @@ class UIPlugin(nanome.PluginInstance):
 
         Logs.message("Added button")
 
-        ln_slider.padding_type = nanome.ui.LayoutNode.PaddingTypes.ratio
-        ln_slider.padding = (0.01, 0.01, 0.01, 0.01)
-        ln_slider.forward_dist = .001
+        ln_dropdown.padding_type = nanome.ui.LayoutNode.PaddingTypes.ratio
+        ln_dropdown.padding = (0.01, 0.01, 0.01, 0.01)
+        ln_dropdown.forward_dist = .004
 
-        slider = nanome.ui.Slider()
-        slider.register_changed_callback(slider_changed_callback)
-        slider.register_released_callback(slider_released_callback)
+        dropdown = nanome.ui.Dropdown()
+        dropdown.items = [nanome.ui.DropdownItem(name) for name in ["option1", "option2", "option3", "option4", "option5", "option6"]]
+        dropdown.register_item_clicked_callback(dropdown_callback)
 
-        Logs.message("Added slider")
+        Logs.message("Added dropdown")
 
         ln_textInput.padding_type = nanome.ui.LayoutNode.PaddingTypes.ratio
         ln_textInput.padding = (0.01, 0.01, 0.01, 0.01)
@@ -326,18 +329,18 @@ class UIPlugin(nanome.PluginInstance):
         child2.set_content(prefabButton)
 
         ln_loading_bar = nanome.ui.LayoutNode(name="LoadingBar")
-        ln_loading_bar.forward_dist = .03
+        ln_loading_bar.forward_dist = .003
         self.loadingBar = ln_loading_bar.add_new_loading_bar()
 
         content.add_child(ln_contentBase)
         ln_contentBase.add_child(ln_label)
         ln_contentBase.add_child(ln_button)
-        ln_contentBase.add_child(ln_slider)
+        ln_contentBase.add_child(ln_dropdown)
         ln_contentBase.add_child(ln_textInput)
         ln_contentBase.add_child(ln_loading_bar)
         ln_label.set_content(label)
         ln_button.set_content(button)
-        ln_slider.set_content(slider)
+        ln_dropdown.set_content(dropdown)
         ln_textInput.set_content(textInput)
         return content
 
