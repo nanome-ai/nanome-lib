@@ -34,6 +34,7 @@ Currently available UI elements are:
 - :class:`~nanome.api.ui.image.Image`
 - :class:`~nanome.api.ui.mesh.Mesh`
 - :class:`~nanome.api.ui.ui_list.UIList`
+- :class:`~nanome.api.ui.dropdown.Dropdown`
 
 Following is an example of manual UI creation:
 
