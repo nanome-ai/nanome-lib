@@ -8,6 +8,7 @@ from ._control import _SetPluginListButton
 from ._file import _DirectoryRequest
 from ._file import _FileRequest
 from ._file import _FileSave
+from ._file import _ExportFiles
 
 from ._macro import _DeleteMacro
 from ._macro import _GetMacros

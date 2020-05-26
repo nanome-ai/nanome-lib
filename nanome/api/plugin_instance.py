@@ -417,6 +417,23 @@ class PluginInstance(_PluginInstance):
         id = self._network._send(_Messages.load_file, (files, True, True), callback != None)
         self._save_callback(id, callback)
 
+    def request_export(self, format, callback, entities = None):
+        """
+        Request a file export using Nanome exporters
+        Can request either molecule or workspace export, for entities in Nanome workspace
+        or directly sent by the plugin (without begin uploaded to workspace)
+
+        :param format: File format to export
+        :type format: :class:`~nanome.util.enums.ExportFormats`
+        :param entities: Entities to export (complexes to send, or indices if referencing complexes in workspace, or a workspace, or nothing if exporting Nanome workspace)
+        :type entities: list of or unique object of type :class:`~nanome.api.structure.workspace` or :class:`~nanome.api.structure.complex`, or None, or list of or unique :class:`int`
+        """
+        if entities != None and not isinstance(entities, list):
+            entities = [entities]
+
+        id = self._network._send(_Messages.export_files, (format, entities), True)
+        self._save_callback(id, callback)
+
     @property
     def plugin_files_path(self):
         path = os.path.expanduser(config.fetch('plugin_files_path'))
