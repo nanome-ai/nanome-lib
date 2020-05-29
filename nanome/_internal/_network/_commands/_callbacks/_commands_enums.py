@@ -66,6 +66,7 @@ class _Commands(__CommandEnum):
     directory_response= auto()
     file_response= auto()
     file_save_done= auto()
+    export_files_result= auto()
 
     #Macro
     get_macros_response = auto()
@@ -124,6 +125,7 @@ class _Messages(__CommandEnum):
     directory_request = auto()
     file_request = auto()
     file_save = auto()
+    export_files = auto()
 
     #Macro
     save_macro = auto()

@@ -123,6 +123,7 @@ add_command(CommandCallbacks._Commands.menu_transform_response, CommandSerialize
 add_command(CommandCallbacks._Commands.directory_response, CommandSerializers._DirectoryRequest(), CommandCallbacks._simple_callback_arg)
 add_command(CommandCallbacks._Commands.file_response, CommandSerializers._FileRequest(), CommandCallbacks._simple_callback_arg)
 add_command(CommandCallbacks._Commands.file_save_done, CommandSerializers._FileSave(), CommandCallbacks._simple_callback_arg)
+add_command(CommandCallbacks._Commands.export_files_result, CommandSerializers._ExportFiles(), CommandCallbacks._simple_callback_arg)
 
 #streams
 add_command(CommandCallbacks._Commands.stream_create_done, CommandSerializers._CreateStreamResult(), CommandCallbacks._receive_create_stream_result)
@@ -184,6 +185,7 @@ add_message(CommandCallbacks._Messages.hook_ui_callback, CommandSerializers._UIH
 add_message(CommandCallbacks._Messages.directory_request, CommandSerializers._DirectoryRequest())
 add_message(CommandCallbacks._Messages.file_request, CommandSerializers._FileRequest())
 add_message(CommandCallbacks._Messages.file_save, CommandSerializers._FileSave())
+add_message(CommandCallbacks._Messages.export_files, CommandSerializers._ExportFiles())
 add_message(CommandCallbacks._Messages.plugin_list_button_set, CommandSerializers._SetPluginListButton())
 
 #macros

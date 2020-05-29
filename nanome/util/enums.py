@@ -104,3 +104,10 @@ class VolumeVisualStyle(IntEnum):
     Mesh = 0
     FlatSurface = 1
     SmoothSurface = 2
+
+class ExportFormats(IntEnum):
+    Nanome = 0
+    PDB = 1
+    SDF = 2
+    MMCIF = 3
+    SMILES = 4
