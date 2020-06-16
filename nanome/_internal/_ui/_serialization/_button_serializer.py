@@ -28,9 +28,9 @@ class _ButtonSerializer(_TypeSerializer):
             context.write_using_serializer(self.string, button._name)
         context.write_bool(button._selected)
         context.write_bool(button._unusable)
-        context.write_bool(button._text._active)
         if version >= 4:
             context.write_bool(button._disable_on_press)
+        context.write_bool(button._text._active)
         context.write_using_serializer(self.string, button._text._value._idle)
         context.write_using_serializer(self.string, button._text._value._selected)
         context.write_using_serializer(self.string, button._text._value._highlighted)
