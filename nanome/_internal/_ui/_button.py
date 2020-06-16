@@ -19,6 +19,7 @@ class _Button(_UIBase):
         self._name = ""
         self._selected = False
         self._unusable = False
+        self._disable_on_press = False
         self._text = _Button._ButtonText._create()
         self._icon = _Button._ButtonIcon._create()
         self._mesh = _Button._ButtonMesh._create()
@@ -126,8 +127,10 @@ class _Button(_UIBase):
     def _copy_values_deep(self, other):
         super(_Button, self)._copy_values_deep(other)
         # States
+        self._name = other._name
         self._selected = other._selected
         self._unusable = other._unusable
+        self._disable_on_press = other._disable_on_press
         # Text
         self._text._active = other._text._active
         self._text._value._copy(other._text._value)

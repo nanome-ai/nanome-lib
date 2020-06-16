@@ -12,7 +12,7 @@ class _ButtonSerializer(_TypeSerializer):
         self.vector = _Vector3Serializer()
 
     def version(self):
-        return 3
+        return 4
 
     def name(self):
         return "Button"
@@ -29,6 +29,8 @@ class _ButtonSerializer(_TypeSerializer):
         context.write_bool(button._selected)
         context.write_bool(button._unusable)
         context.write_bool(button._text._active)
+        if version >= 4:
+            context.write_bool(button._disable_on_press)
         context.write_using_serializer(self.string, button._text._value._idle)
         context.write_using_serializer(self.string, button._text._value._selected)
         context.write_using_serializer(self.string, button._text._value._highlighted)
@@ -142,6 +144,8 @@ class _ButtonSerializer(_TypeSerializer):
             value._name = context.read_using_serializer(self.string)
         value._selected = context.read_bool()
         value._unusable = context.read_bool()
+        if version >= 4:
+            value._disable_on_press = context.read_bool()
         value._text._active = context.read_bool()
         value._text._value._idle = context.read_using_serializer(self.string)
         value._text._value._selected = context.read_using_serializer(self.string)
