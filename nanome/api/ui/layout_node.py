@@ -272,7 +272,7 @@ class LayoutNode(_LayoutNode):
         self.set_content(list_)
         return list_
 
-    def add_dropdown(self):
+    def add_new_dropdown(self):
         # type: () -> Dropdown
         dropdown_ = Dropdown()
         self.set_content(dropdown_)
