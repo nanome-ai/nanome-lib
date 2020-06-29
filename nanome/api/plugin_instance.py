@@ -203,13 +203,17 @@ class PluginInstance(_PluginInstance):
         self._menus[menu.index] = menu
         self._network._send(_Messages.menu_update, menu, False)
         
-    def update_content(self, content):
+    def update_content(self, *content):
         """
-        | Update a specific UI element (button, slider, list...)
+        | Update specific UI elements (button, slider, list...)
 
-        :param content: UI element to update
+        :param content: UI elements to update
         :type content: :class:`~nanome.api.ui.ui_base`
+            or multiple :class:`~nanome.api.ui.ui_base`
+            or a list of :class:`~nanome.api.ui.ui_base`
         """
+        if len(content) == 1 and isinstance(content[0], list):
+            content = content[0]
         self._network._send(_Messages.content_update, content, False)
 
     def update_node(self, *nodes):

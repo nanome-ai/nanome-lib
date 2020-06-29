@@ -359,8 +359,7 @@ class UIPlugin(nanome.PluginInstance):
             self.tab2.enabled = False
 
             self.update_node(self.tabs)
-            self.update_content(self.tab_button1)
-            self.update_content(self.tab_button2)
+            self.update_content(self.tab_button1, self.tab_button2)
 
         def tab2_callback(button):
             self.tab_button2.selected  = True
@@ -369,8 +368,7 @@ class UIPlugin(nanome.PluginInstance):
             self.tab1.enabled = False
 
             self.update_node(self.tabs)
-            self.update_content(self.tab_button2)
-            self.update_content(self.tab_button1)
+            self.update_content([self.tab_button2, self.tab_button1])
 
         tab_button_node1 = ln.create_child_node("tab1")
         self.tab_button1 = tab_button_node1.add_new_button("tab1")
