@@ -13,8 +13,10 @@ def parse_json(content_json):
     # type: () -> Button
     #region text
     button = _Button._create()
+    button._name = content_json.read("selected", button._name)
     button._selected = content_json.read("selected", button._selected)
     button._unusable = content_json.read("unusable", button._unusable)
+    button._disable_on_press = content_json.read("disable_on_press", button._disable_on_press)
     button._text._active = content_json.read("text_active", button._text._active)
     button._text._value._idle = content_json.read("text_value_idle", button._text._value._idle)
     button._text._value._selected = content_json.read("text_value_selected", button._text._value._selected)
@@ -104,8 +106,11 @@ def parse_json(content_json):
 
 def write_json(helper, button):
     # type: (_Button) -> dict
+    helper.write("name", button._name)
     helper.write("selected", button._selected)
     helper.write("unusable", button._unusable)
+    helper.write("disable_on_press", button._disable_on_press)
+
     #region text
     helper.write("text_active", button._text._active)
     helper.write("text_value_idle", button._text._value._idle)

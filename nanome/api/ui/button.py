@@ -52,6 +52,14 @@ class Button(_Button, UIBase):
         # type: (bool)
         self._unusable = value
 
+    @property
+    def disable_on_press(self):
+        return self._disable_on_press
+
+    @disable_on_press.setter
+    def disable_on_press(self, value):
+        self._disable_on_press = value
+
     class ButtonText(_Button._ButtonText):
         @property
         def value(self):
