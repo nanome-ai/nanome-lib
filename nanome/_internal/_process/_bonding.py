@@ -21,6 +21,10 @@ class _Bonding():
             self.__fast_mode = fast_mode
 
     def _start(self):
+        if len(self.__complexes) == 0:
+            self.__callback(self.__complexes)
+            return
+
         self.__complex_idx = 0
         self.__molecule_idx = -1
         self.__input = tempfile.NamedTemporaryFile(delete=False, suffix='.pdb')
