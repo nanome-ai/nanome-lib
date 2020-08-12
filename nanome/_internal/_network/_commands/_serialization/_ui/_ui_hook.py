@@ -4,6 +4,9 @@ from nanome.util import IntEnum
 class _UIHook(_TypeSerializer):
     class Type(IntEnum):
         button_hover = 0
+        image_pressed = 1
+        image_held = 2
+        image_released = 3
 
     def __init__(self):
         pass

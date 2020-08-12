@@ -27,13 +27,25 @@ class _Image(_UIBase):
         self._released_callback(self, x, y)
 
     def _register_pressed_callback(self, func):
+        self._send_hook(nanome._internal._network._commands._serialization._UIHook.Type.image_pressed)
         self._pressed_callback = func
 
     def _register_held_callback(self, func):
+        self._send_hook(nanome._internal._network._commands._serialization._UIHook.Type.image_held)
         self._held_callback = func
 
     def _register_released_callback(self, func):
+        self._send_hook(nanome._internal._network._commands._serialization._UIHook.Type.image_released)
         self._released_callback = func
+
+    def _send_hook(self, hook_type):
+        try:
+            nanome._internal._network._ProcessNetwork._instance._send(
+                nanome._internal._network._commands._callbacks._Messages.hook_ui_callback,
+                (hook_type, self._content_id),
+                False)
+        except:
+            nanome.util.Logs.error("Could not register hook")
 
     def _copy_values_deep(self, other):
         super()._copy_values_deep(other)
