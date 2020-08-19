@@ -6,8 +6,17 @@ import zipfile
 
 TEMPLATE_ZIP = os.path.join(os.path.dirname(__file__), 'plugin-template.zip')
 
+USAGE = '\n' + sys.argv[0].split('/')[-1] + """ <folder>
+
+    <folder> - name of plugin folder to be created
+"""
+
 def main():
-    path = sys.argv[1] if len(sys.argv) > 1 else '.'
+    if len(sys.argv) != 2:
+        print(USAGE)
+        sys.exit(1)
+
+    path = sys.argv[1]
     fields = {
         'name': 'Example Plugin',
         'description': 'A Nanome Plugin',
