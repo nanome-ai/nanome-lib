@@ -6,8 +6,7 @@ import zipfile
 
 TEMPLATE_ZIP = os.path.join(os.path.dirname(__file__), 'plugin-template.zip')
 
-USAGE = """
-nanome-plugin-init <folder>
+USAGE = '\n' + sys.argv[0].split('/')[-1] + """ <folder>
 
     <folder> - name of plugin folder to be created
 """
