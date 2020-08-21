@@ -18,12 +18,13 @@ class _Atom(_Base):
         self._name = "default"
         self._is_het = False
         self._atom_type = "C"
+        self._formal_charge = 0
+        self._partial_charge = 0.0
         #No API
         self._occupancy = 0.0
         self._bfactor = 0.0
         self._acceptor = False
         self._donor = False
-        self._formal_charge = 0
         #Rendering
         #API
         self._selected = False
@@ -155,6 +156,7 @@ class _Atom(_Base):
         atom._acceptor = self._acceptor
         atom._donor = self._donor
         atom._formal_charge = self._formal_charge
+        atom._partial_charge = self._partial_charge
         #Rendering
         #API
         atom._selected = self._selected

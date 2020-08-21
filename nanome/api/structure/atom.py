@@ -163,6 +163,20 @@ class Atom(_Atom, Base):
     @is_het.setter
     def is_het(self, value):
         self._is_het = value
+
+    @property
+    def formal_charge(self):
+        return self._formal_charge
+    @formal_charge.setter
+    def formal_charge(self, value):
+        self._formal_charge = value
+
+    @property
+    def partial_charge(self):
+        return self._partial_charge
+    @partial_charge.setter
+    def partial_charge(self, value):
+        self._partial_charge = value
     #endregion
 
     #region conformer stuff

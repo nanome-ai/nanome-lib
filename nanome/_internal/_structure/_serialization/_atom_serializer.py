@@ -17,7 +17,8 @@ class _AtomSerializer(_TypeSerializer):
         #Version 2 corresponds to Nanome release 1.12
         #Version 3 corresponds to Nanome release 1.13
         #Version 4 corresponds to Nanome release 1.16
-        return 4
+        #Version 4 corresponds to Nanome release 1.19
+        return 5
 
     def name(self):
         return "Atom"
@@ -67,6 +68,9 @@ class _AtomSerializer(_TypeSerializer):
             context.write_using_serializer(self.string, value._atom_type)
             context.write_int(value._formal_charge)
 
+        if version >= 5:
+            context.write_float(value._partial_charge)
+
     def deserialize(self, version, context):
         # type: (_Atom, _ContextDeserialization) -> _Atom
         atom = _Atom._create()
@@ -115,5 +119,8 @@ class _AtomSerializer(_TypeSerializer):
         if version >= 4:
             atom._atom_type = context.read_using_serializer(self.string)
             atom._formal_charge = context.read_int()
+
+        if version >= 5:
+            atom._partial_charge = context.read_float()
 
         return atom
