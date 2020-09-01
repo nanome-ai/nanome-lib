@@ -139,6 +139,10 @@ add_command(CommandCallbacks._Commands.presenter_info_response, CommandSerialize
 add_command(CommandCallbacks._Commands.presenter_change, CommandSerializers._PresenterChange(), CommandCallbacks._presenter_change)
 add_command(CommandCallbacks._Commands.controller_transforms_response, CommandSerializers._GetControllerTransformsResponse(), CommandCallbacks._simple_callback_arg_unpack)
 
+# Shape
+add_command(CommandCallbacks._Commands.set_shape_result, CommandSerializers._SetShape(), CommandCallbacks._simple_callback_arg)
+add_command(CommandCallbacks._Commands.delete_shape_result, CommandSerializers._DeleteShape(), CommandCallbacks._simple_callback_arg)
+
 #others
 add_command(CommandCallbacks._Commands.load_file_done, CommandSerializers._LoadFileDone(), CommandCallbacks._simple_callback_arg)
 add_command(CommandCallbacks._Commands.integration, CommandSerializers._Integration(), CommandCallbacks._integration)
@@ -203,6 +207,10 @@ add_message(CommandCallbacks._Messages.stream_destroy, CommandSerializers._Destr
 # Presenter
 add_message(CommandCallbacks._Messages.presenter_info_request, CommandSerializers._GetPresenterInfo())
 add_message(CommandCallbacks._Messages.controller_transforms_request, CommandSerializers._GetControllerTransforms())
+
+# Shape
+add_message(CommandCallbacks._Messages.set_shape, CommandSerializers._SetShape())
+add_message(CommandCallbacks._Messages.delete_shape, CommandSerializers._DeleteShape())
 
 #others
 add_message(CommandCallbacks._Messages.open_url, CommandSerializers._OpenURL())

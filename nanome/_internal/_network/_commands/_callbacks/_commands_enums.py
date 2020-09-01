@@ -76,6 +76,10 @@ class _Commands(__CommandEnum):
     presenter_change = auto()
     controller_transforms_response = auto()
 
+    # Shapes
+    set_shape_result = auto()
+    delete_shape_result = auto()
+
     #Other
     add_volume_done = auto()
     load_file_done = auto()
@@ -137,6 +141,10 @@ class _Messages(__CommandEnum):
     # Presenter
     presenter_info_request = auto()
     controller_transforms_request = auto()
+
+    # Shapes
+    set_shape = auto()
+    delete_shape = auto()
 
     #Other
     add_volume = auto()
