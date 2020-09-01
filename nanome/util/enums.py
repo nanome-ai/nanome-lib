@@ -114,3 +114,8 @@ class ExportFormats(IntEnum):
 
 class ShapeType(IntEnum):
     Sphere = 0
+
+class ShapeAnchorType(IntEnum):
+    Workspace = 0
+    Complex = 1
+    Atom = 2
