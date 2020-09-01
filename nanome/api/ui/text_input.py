@@ -1,3 +1,4 @@
+import nanome
 from nanome._internal._ui import _TextInput
 from . import UIBase
 
@@ -66,6 +67,24 @@ class TextInput(_TextInput, UIBase):
     def background_color(self, value):
         #type: (Color)
         self._background_color = value
+
+    @property
+    def text_size(self):
+        # type: () -> float
+        return self._text_size
+    @text_size.setter
+    def text_size(self, value):
+        # type: (float)
+        self._text_size = value
+
+    @property
+    def text_horizontal_align(self):
+        # type: () -> HorizAlignOptions
+        return self._text_horizontal_align
+    @text_horizontal_align.setter
+    def text_horizontal_align(self, value):
+        # type: (HorizAlignOptions)
+        self._text_horizontal_align = value
 
     @property
     def password(self):

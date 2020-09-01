@@ -194,6 +194,11 @@ class UIPlugin(nanome.PluginInstance):
         textInput.register_changed_callback(text_changed_callback)
         textInput.register_submitted_callback(text_submitted_callback)
         textInput.number = True
+        textInput.text_color = nanome.util.Color.Blue()
+        textInput.placeholder_text_color = nanome.util.Color.Red()
+        textInput.background_color = nanome.util.Color.Grey()
+        textInput.text_horizontal_align = nanome.ui.TextInput.HorizAlignOptions.Right
+        textInput.text_size = -1
 
         Logs.message("Added text input")
 

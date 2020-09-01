@@ -33,6 +33,7 @@ class _TextInputSerializer(_TypeSerializer):
             context.write_using_serializer(self.color, value._placeholder_text_color)
             context.write_using_serializer(self.color, value._text_color)
             context.write_using_serializer(self.color, value._background_color)
+            context.write_float(value._text_size)
             context.write_uint(value._text_horizontal_align)
             context.write_bool(value._multi_line)
 
@@ -52,6 +53,7 @@ class _TextInputSerializer(_TypeSerializer):
             value._placeholder_text_color = context.read_using_serializer(self.color)
             value._text_color = context.read_using_serializer(self.color)
             value._background_color = context.read_using_serializer(self.color)
+            value._text_size = context.read_float()
             value._text_horizontal_align = context.read_uint()
             value._multi_line = context.read_bool()
         return value
