@@ -87,6 +87,34 @@ class TextInput(_TextInput, UIBase):
         self._text_horizontal_align = value
 
     @property
+    def padding_left(self):
+        return self._padding_left
+    @padding_left.setter
+    def padding_left(self, value):
+        self._padding_left = value
+
+    @property
+    def padding_right(self):
+        return self._padding_right
+    @padding_right.setter
+    def padding_right(self, value):
+        self._padding_right = value
+
+    @property
+    def padding_top(self):
+        return self._padding_top
+    @padding_top.setter
+    def padding_top(self, value):
+        self._padding_top = value
+
+    @property
+    def padding_bottom(self):
+        return self._padding_bottom
+    @padding_bottom.setter
+    def padding_bottom(self, value):
+        self._padding_bottom = value
+
+    @property
     def password(self):
         return self._password
     
