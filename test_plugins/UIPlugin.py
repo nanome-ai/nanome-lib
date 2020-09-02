@@ -198,7 +198,8 @@ class UIPlugin(nanome.PluginInstance):
         textInput.placeholder_text_color = nanome.util.Color.Red()
         textInput.background_color = nanome.util.Color.Grey()
         textInput.text_horizontal_align = nanome.ui.TextInput.HorizAlignOptions.Right
-        textInput.text_size = -1
+        textInput.padding_right = .2
+        textInput.text_size = .6
 
         Logs.message("Added text input")
 
