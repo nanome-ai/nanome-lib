@@ -36,6 +36,10 @@ class _TextInputSerializer(_TypeSerializer):
             context.write_float(value._text_size)
             context.write_uint(value._text_horizontal_align)
             context.write_bool(value._multi_line)
+            context.write_float(value._padding_left)
+            context.write_float(value._padding_right)
+            context.write_float(value._padding_top)
+            context.write_float(value._padding_bottom)
 
     def deserialize(self, version, context):
         value = _TextInput._create()
@@ -56,6 +60,10 @@ class _TextInputSerializer(_TypeSerializer):
             value._text_size = context.read_float()
             value._text_horizontal_align = context.read_uint()
             value._multi_line = context.read_bool()
+            value._padding_left = context.read_float()
+            value._padding_right = context.read_float()
+            value._padding_top = context.read_float()
+            value._padding_bottom = context.read_float()
         return value
 
 _UIBaseSerializer.register_type("TextInput", _UIBaseSerializer.ContentType.etextInput, _TextInputSerializer())

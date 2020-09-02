@@ -14,6 +14,10 @@ def parse_json(content_json):
     text_input._text_size = content_json.read("text_size", -1.0)
     text_input._text_horizontal_align = content_json.read("text_horizontal_align", text_input._text_horizontal_align)
     text_input._multi_line = content_json.read("multi_line", text_input._multi_line)
+    text_input._padding_left = content_json.read("padding_left", text_input._padding_left)
+    text_input._padding_right = content_json.read("padding_right", text_input._padding_right)    
+    text_input._padding_top = content_json.read("padding_top", text_input._padding_top)
+    text_input._padding_bottom = content_json.read("padding_bottom", text_input._padding_bottom)
     return text_input
 
 def write_json(helper, text_input):
@@ -28,3 +32,7 @@ def write_json(helper, text_input):
     helper.write("text_size", text_input._text_size)
     helper.write("text_horizontal_align", text_input._text_horizontal_align)
     helper.write("multi_line", text_input._multi_line)
+    helper.write("padding_left", text_input._padding_left)
+    helper.write("padding_right", text_input._padding_right)
+    helper.write("padding_top", text_input._padding_top)
+    helper.write("padding_bottom", text_input._padding_bottom)

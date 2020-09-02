@@ -20,6 +20,10 @@ class _TextInput(_UIBase):
         self._background_color = Color.Black()
         self._text_size = 1.0
         self._text_horizontal_align = _TextInput.HorizAlignOptions.Left
+        self._padding_left = 0.015
+        self._padding_right = 0.01
+        self._padding_top = 0.0
+        self._padding_bottom = 0.0
         self._multi_line = False
         self._password = False
         self._number = False
