@@ -140,7 +140,7 @@ add_command(CommandCallbacks._Commands.presenter_change, CommandSerializers._Pre
 add_command(CommandCallbacks._Commands.controller_transforms_response, CommandSerializers._GetControllerTransformsResponse(), CommandCallbacks._simple_callback_arg_unpack)
 
 # Shape
-add_command(CommandCallbacks._Commands.set_shape_result, CommandSerializers._SetShape(), CommandCallbacks._simple_callback_arg)
+add_command(CommandCallbacks._Commands.set_shape_result, CommandSerializers._SetShape(), CommandCallbacks._simple_callback_arg_unpack)
 add_command(CommandCallbacks._Commands.delete_shape_result, CommandSerializers._DeleteShape(), CommandCallbacks._simple_callback_arg)
 
 #others

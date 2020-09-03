@@ -1,4 +1,4 @@
-from nanome.util import Logs, DirectoryRequestOptions, IntEnum, config, shape
+from nanome.util import Logs, DirectoryRequestOptions, IntEnum, config
 from nanome.util.enums import StreamDirection, ShapeType
 from nanome._internal import _PluginInstance
 from nanome._internal._process import _Bonding, _Dssp
@@ -6,6 +6,7 @@ from nanome._internal._network._commands._callbacks import _Messages
 from nanome.api.integration import Integration
 from nanome.api.ui import Menu
 from nanome.api.streams import Stream
+from nanome.api import shapes
 
 import inspect
 import sys
@@ -440,7 +441,7 @@ class PluginInstance(_PluginInstance):
 
     def create_shape(self, shape_type):
         if shape_type == ShapeType.Sphere:
-            return shape.Sphere()
+            return shapes.Sphere(self._network)
 
         raise ValueError('Parameter shape_type must be a value of nanome.util.enums.ShapeType')
 

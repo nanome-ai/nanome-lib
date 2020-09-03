@@ -1,4 +1,4 @@
-from nanome import PluginInstance
+import nanome
 from nanome._internal._network._commands._callbacks import _Messages
 from nanome.util import Vector3, Color, Logs
 from nanome.util.enums import ShapeAnchorType
@@ -51,20 +51,15 @@ class Shape(object):
         self.__color = value
 
     def upload(self, done_callback=None):
-        if done_callback == None:
-            done_callback = lambda _ : None
-
-        def set_callback(self, index, result):
+        def set_callback(index, result):
             if self.__index != -1 and index != self.__index:
                 Logs.error("SetShapeCallback received for the wrong shape")
             self.__index = index
-            done_callback(result)
+            if done_callback != None:
+                done_callback(result)
 
-        id = self.__network._send(_Messages.set_shape, self)
-        PluginInstance._save_callback(id, set_callback)
+        id = self.__network._send(_Messages.set_shape, self, True)
+        nanome.PluginInstance._save_callback(id, set_callback)
 
     def destroy(self):
-        callback = lambda _, _ : None
-
-        id = self.__network._send(_Messages.delete_shape, self.__index)
-        PluginInstance._save_callback(id, callback)
+        self.__network._send(_Messages.delete_shape, self.__index, False)

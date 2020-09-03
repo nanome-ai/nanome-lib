@@ -1,5 +1,6 @@
 import nanome
 import random
+import itertools
 
 # Config
 
@@ -13,23 +14,34 @@ class TestShapes(nanome.PluginInstance):
         self.menu = nanome.ui.Menu()
         self.shapes = []
         menu = self.menu
-        menu.title = "Shapes API"
+        menu.title = "Shapes"
         menu.width = 0.5
-        menu.height = 0.7
+        menu.height = 0.5
 
         ln = nanome.ui.LayoutNode()
         ln.layout_orientation = nanome.util.enums.LayoutTypes.vertical
 
-        btn = ln.add_new_button("Add to workspace")
+        ln_btn = ln.create_child_node()
+        btn = ln_btn.add_new_button("Add to workspace")
         btn.register_pressed_callback(self.create_in_workspace)
-        btn = ln.add_new_button("Add to random complex")
+        ln_btn = ln.create_child_node()
+        btn = ln_btn.add_new_button("Add to random complex")
         btn.register_pressed_callback(self.create_in_complex)
-        btn = ln.add_new_button("Add to random atom")
+        ln_btn = ln.create_child_node()
+        btn = ln_btn.add_new_button("Add to random atom")
         btn.register_pressed_callback(self.create_in_atom)
-        btn = ln.add_new_button("Delete last created")
+        ln_btn = ln.create_child_node()
+        btn = ln_btn.add_new_button("Change anchor last created")
+        btn.register_pressed_callback(self.change_anchor)
+        ln_btn = ln.create_child_node()
+        btn = ln_btn.add_new_button("Delete last created")
         btn.register_pressed_callback(self.delete_last)
 
         menu.root.add_child(ln)
+
+    def on_run(self):
+        self.menu.enabled = True
+        self.update_menu(self.menu)
 
     def create_in_workspace(self, button):
         sphere = self.create_random_sphere()
@@ -41,7 +53,10 @@ class TestShapes(nanome.PluginInstance):
         def received(workspace):
             if len(workspace.complexes) == 0:
                 return
-            c = random.randrange(0, len(workspace.complexes) - 1)
+            elif len(workspace.complexes) == 1:
+                c = 0
+            else:
+                c = random.randrange(0, len(workspace.complexes) - 1)
             
             sphere = self.create_random_sphere()
             sphere.anchor = nanome.util.enums.ShapeAnchorType.Complex
@@ -56,21 +71,35 @@ class TestShapes(nanome.PluginInstance):
         def received(workspace):
             if len(workspace.complexes) == 0:
                 return
-            c = random.randrange(0, len(workspace.complexes) - 1)
+            elif len(workspace.complexes) == 1:
+                c = 0
+            else:
+                c = random.randrange(0, len(workspace.complexes) - 1)
             atom_count = 0
-            for _ in workspace.complexes[c]:
+            for _ in workspace.complexes[c].atoms:
                 atom_count += 1
-            a = random.randrange(0, len(atom_count) - 1)
+            a = random.randrange(0, atom_count - 1)
             
             sphere = self.create_random_sphere()
             sphere.anchor = nanome.util.enums.ShapeAnchorType.Atom
-            sphere.target = workspace.complexes[c].atoms[a].index
+            if a == 0:
+                atom = next(workspace.complexes[c].atoms)
+            else:
+                atom = next(itertools.islice(workspace.complexes[c].atoms, a, None))
+            sphere.target = atom.index
             sphere.position = nanome.util.Vector3()
             def done(success):
                 self.shapes.append(sphere)
             sphere.upload(done)
 
         self.request_workspace(received)
+
+    def change_anchor(self, button):
+        if len(self.shapes) == 0:
+            return
+        shape = self.shapes[-1]
+        shape.anchor = (shape.anchor + 1) % len(nanome.util.enums.ShapeAnchorType)
+        shape.upload()
 
     def delete_last(self, button):
         if len(self.shapes) == 0:

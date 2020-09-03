@@ -17,6 +17,9 @@ from ._macro import _RunMacro
 from ._macro import _SaveMacro
 from ._macro import _StopMacro
 
+from ._shapes import _DeleteShape
+from ._shapes import _SetShape
+
 from ._stream import _CreateStream
 from ._stream import _CreateStreamResult
 from ._stream import _DestroyStream
@@ -66,10 +69,8 @@ from ._workspace import _UpdateStructures
 from ._workspace import _UpdateStructuresDeepDone
 from ._workspace import _UpdateWorkspace
 
-from ._delete_shape import _DeleteShape
 from ._load_file import _LoadFile
 from ._load_file_done import _LoadFileDone
 from ._integration import _Integration
 from ._open_url import _OpenURL
 from ._send_notification import _SendNotification
-from ._set_shape import _SetShape
