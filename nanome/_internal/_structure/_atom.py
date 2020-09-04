@@ -17,7 +17,7 @@ class _Atom(_Base):
         self._serial = 1
         self._name = "default"
         self._is_het = False
-        self._atom_type = "C"
+        self._atom_type = {}
         self._formal_charge = 0
         self._partial_charge = 0.0
         #No API

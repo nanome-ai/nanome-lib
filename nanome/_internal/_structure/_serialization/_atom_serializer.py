@@ -1,7 +1,8 @@
-from nanome._internal._util._serializers import _StringSerializer, _ColorSerializer, _Vector3Serializer, _ArraySerializer, _BoolSerializer
+from nanome._internal._util._serializers import _StringSerializer, _ColorSerializer, _Vector3Serializer, _ArraySerializer, _BoolSerializer, _DictionarySerializer
 from .. import _Atom
 from nanome._internal._util._serializers import _TypeSerializer
 from nanome.util import Logs
+
 
 class _AtomSerializer(_TypeSerializer):
     def __init__(self):
@@ -10,14 +11,16 @@ class _AtomSerializer(_TypeSerializer):
         self.vector = _Vector3Serializer()
         self.array = _ArraySerializer()
         self.bool = _BoolSerializer()
+        self.dict = _DictionarySerializer()
+        self.dict.set_types(self.string, self.string)
 
     def version(self):
-        #Version 0 corresponds to Nanome release 1.10
-        #Version 1 corresponds to Nanome release 1.11
-        #Version 2 corresponds to Nanome release 1.12
-        #Version 3 corresponds to Nanome release 1.13
-        #Version 4 corresponds to Nanome release 1.16
-        #Version 4 corresponds to Nanome release 1.19
+        # Version 0 corresponds to Nanome release 1.10
+        # Version 1 corresponds to Nanome release 1.11
+        # Version 2 corresponds to Nanome release 1.12
+        # Version 3 corresponds to Nanome release 1.13
+        # Version 4 corresponds to Nanome release 1.16
+        # Version 5 corresponds to Nanome release 1.19
         return 5
 
     def name(self):
@@ -64,12 +67,16 @@ class _AtomSerializer(_TypeSerializer):
         context.write_bool(value._acceptor)
         context.write_bool(value._donor)
 
+        if version == 4:
+            context.write_using_serializer(
+                self.string, value._atom_type["IDATM"])
+
         if version >= 4:
-            context.write_using_serializer(self.string, value._atom_type)
             context.write_int(value._formal_charge)
 
         if version >= 5:
             context.write_float(value._partial_charge)
+            context.write_using_serializer(self.dict, value._atom_type)
 
     def deserialize(self, version, context):
         # type: (_Atom, _ContextDeserialization) -> _Atom
@@ -98,7 +105,7 @@ class _AtomSerializer(_TypeSerializer):
         atom._symbol = context.read_using_serializer(self.string)
         atom._serial = context.read_int()
         atom._name = context.read_using_serializer(self.string)
-        if version >=3:
+        if version >= 3:
             has_conformer = context.read_bool()
             if has_conformer:
                 self.array.set_type(self.vector)
@@ -116,11 +123,15 @@ class _AtomSerializer(_TypeSerializer):
         atom._acceptor = context.read_bool()
         atom._donor = context.read_bool()
 
+        if version == 4:
+            atom._atom_type["IDATM"] = context.read_using_serializer(
+                self.string)
+
         if version >= 4:
-            atom._atom_type = context.read_using_serializer(self.string)
             atom._formal_charge = context.read_int()
 
         if version >= 5:
             atom._partial_charge = context.read_float()
+            atom._atom_type = context.read_using_serializer(self.dict)
 
         return atom
