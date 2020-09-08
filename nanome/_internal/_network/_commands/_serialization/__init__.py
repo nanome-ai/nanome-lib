@@ -17,6 +17,9 @@ from ._macro import _RunMacro
 from ._macro import _SaveMacro
 from ._macro import _StopMacro
 
+from ._shapes import _DeleteShape
+from ._shapes import _SetShape
+
 from ._stream import _CreateStream
 from ._stream import _CreateStreamResult
 from ._stream import _DestroyStream

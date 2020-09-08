@@ -1,6 +1,7 @@
 from . import *
 #folders
 from . import _util
+from . import _shapes
 from . import _structure
 from . import _ui
 from . import _network

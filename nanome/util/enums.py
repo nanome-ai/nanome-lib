@@ -111,3 +111,11 @@ class ExportFormats(IntEnum):
     SDF = 2
     MMCIF = 3
     SMILES = 4
+
+class ShapeType(IntEnum):
+    Sphere = 0
+
+class ShapeAnchorType(IntEnum):
+    Workspace = 0
+    Complex = 1
+    Atom = 2
