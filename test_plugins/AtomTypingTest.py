@@ -19,6 +19,7 @@ class AtomTypingTest(nanome.PluginInstance):
         for complex in workspace.complexes:
             atom: nanome.structure.Atom
             for atom in complex.atoms:
+                print(atom._atom_type)
                 atom._atom_type["Test"] = "TestAtomType"
         self.update_workspace(workspace)
 
