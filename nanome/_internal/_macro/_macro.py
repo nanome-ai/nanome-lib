@@ -18,8 +18,10 @@ class _Macro(object):
     def _save(self, all_users = False):
         nanome._internal._network._ProcessNetwork._send(_Messages.save_macro, (self, all_users, _Macro._plugin_identifier), False)
 
-    def _run(self):
-        nanome._internal._network._ProcessNetwork._send(_Messages.run_macro, self, False)
+    def _run(self, callback = None):
+        id = nanome._internal._network._ProcessNetwork._send(_Messages.run_macro, self, callback != None)
+        if callback != None:
+            nanome._internal._PluginInstance._save_callback(id, callback)
 
     def _delete(self, all_users = False):
         nanome._internal._network._ProcessNetwork._send(_Messages.delete_macro, (self, all_users, _Macro._plugin_identifier), False)

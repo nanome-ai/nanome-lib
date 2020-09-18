@@ -133,6 +133,7 @@ add_command(CommandCallbacks._Commands.stream_feed_done, CommandSerializers._Fee
 
 #macros
 add_command(CommandCallbacks._Commands.get_macros_response, CommandSerializers._GetMacrosResponse(), CommandCallbacks._simple_callback_arg)
+add_command(CommandCallbacks._Commands.run_macro_result, CommandSerializers._RunMacro(), CommandCallbacks._simple_callback_arg)
 
 # Presenter
 add_command(CommandCallbacks._Commands.presenter_info_response, CommandSerializers._GetPresenterInfoResponse(), CommandCallbacks._simple_callback_arg)
