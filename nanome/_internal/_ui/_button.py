@@ -120,9 +120,9 @@ class _Button(_UIBase):
             return cls()
 
         def __init__(self):
-            self._active = True
-            self._on_color = Color.Red()
-            self._off_color = Color.Red()
+            self._active = False
+            self._on_color = Color.from_int(0x00FFD5FF)
+            self._off_color = Color.from_int(0x727272FF)
 
     class _ButtonTooltip(object):
         @classmethod

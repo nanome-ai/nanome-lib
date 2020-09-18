@@ -61,6 +61,14 @@ class Button(_Button, UIBase):
     def disable_on_press(self, value):
         self._disable_on_press = value
 
+    @property
+    def toggle_on_press(self):
+        return self._toggle_on_press
+
+    @toggle_on_press.setter
+    def toggle_on_press(self, value):
+        self._toggle_on_press = value
+
     class ButtonText(_Button._ButtonText):
         @property
         def value(self):
