@@ -20,10 +20,12 @@ class _Button(_UIBase):
         self._selected = False
         self._unusable = False
         self._disable_on_press = False
+        self._toggle_on_press = False
         self._text = _Button._ButtonText._create()
         self._icon = _Button._ButtonIcon._create()
         self._mesh = _Button._ButtonMesh._create()
         self._outline = _Button._ButtonOutline._create()
+        self._switch = _Button._ButtonSwitch._create()
         self._tooltip = _Button._ButtonTooltip._create()
         #API
         self._pressed_callback = lambda _: None
@@ -111,6 +113,16 @@ class _Button(_UIBase):
             self._color._selected = Color(whole_num = 0x00e5bfff)
             self._color._selected_highlighted = Color(whole_num = 0x00f9d0ff)
             self._color._unusable = Color.Grey()
+
+    class _ButtonSwitch(object):
+        @classmethod
+        def _create(cls):
+            return cls()
+
+        def __init__(self):
+            self._active = True
+            self._on_color = Color.Red()
+            self._off_color = Color.Red()
 
     class _ButtonTooltip(object):
         @classmethod
