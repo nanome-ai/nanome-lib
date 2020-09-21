@@ -30,6 +30,7 @@ class _ButtonSerializer(_TypeSerializer):
         context.write_bool(button._unusable)
         if version >= 4:
             context.write_bool(button._disable_on_press)
+            context.write_bool(button._toggle_on_press)
         context.write_bool(button._text._active)
         context.write_using_serializer(self.string, button._text._value._idle)
         context.write_using_serializer(self.string, button._text._value._selected)
@@ -133,6 +134,10 @@ class _ButtonSerializer(_TypeSerializer):
             context.write_using_serializer(self.vector, button._tooltip._bounds)
             context.write_uint(button._tooltip._positioning_target)
             context.write_uint(button._tooltip._positioning_origin)
+        if version >= 4:
+            context.write_bool(button._switch._active)
+            context.write_using_serializer(self.color, button._switch._on_color)
+            context.write_using_serializer(self.color, button._switch._off_color)
 
     def deserialize(self, version, context):
         value = _Button._create()
@@ -146,6 +151,7 @@ class _ButtonSerializer(_TypeSerializer):
         value._unusable = context.read_bool()
         if version >= 4:
             value._disable_on_press = context.read_bool()
+            value._toggle_on_press = context.read_bool()
         value._text._active = context.read_bool()
         value._text._value._idle = context.read_using_serializer(self.string)
         value._text._value._selected = context.read_using_serializer(self.string)
@@ -232,6 +238,10 @@ class _ButtonSerializer(_TypeSerializer):
             value._tooltip._bounds = context.read_using_serializer(self.vector)
             value._tooltip._positioning_target = ToolTipPositioning.safe_cast(context.read_uint())
             value._tooltip._positioning_origin = ToolTipPositioning.safe_cast(context.read_uint())
+        if version >= 4:
+            value._switch._active = context.read_bool()
+            value._switch._on_color = context.read_using_serializer(self.color)
+            value._switch._off_color = context.read_using_serializer(self.color)
         return value
 
 _UIBaseSerializer.register_type("Button", _UIBaseSerializer.ContentType.ebutton, _ButtonSerializer())

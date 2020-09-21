@@ -232,6 +232,17 @@ class LayoutNode(_LayoutNode):
         self.set_content(button)
         return button
 
+    def add_new_toggle_switch(self, text = None):
+        # type: (str) -> Button
+        button = Button(text=text)
+        button.switch.active = True
+        button.outline.active = False
+        button.mesh.active = False
+        button.toggle_on_press = True
+        button.text.horizontal_align = nanome.util.enums.HorizAlignOptions.Left
+        self.set_content(button)
+        return button
+
     def add_new_label(self, text = None):
         # type: (str) -> Label
         label = Label(text=text)

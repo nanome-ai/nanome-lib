@@ -69,6 +69,8 @@ def _button_pressed(network, arg, request_id):
     content_id = arg[0]
     btn = __find_content(network, content_id)
     if btn != None:
+        if btn._toggle_on_press:
+            btn._selected = arg[1]
         btn._on_button_pressed()
     else:
         Logs.error("Can't find UI content for callback")

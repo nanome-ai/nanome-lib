@@ -56,14 +56,11 @@ class UIPlugin(nanome.PluginInstance):
 
         def loading_bar_callback(button): 
             Logs.message("button pressed: " + button.text.value.idle)
-            button.text.value.selected = "Button Pressed!"
-            button.selected = not button.selected
 
             self.loadingBar.percentage += .1
             self.loadingBar.title = "TITLE"
             self.loadingBar.description = "DESCRIPTION " + str(self.loadingBar.percentage)
 
-            self.update_content(button)
             self.update_content(self.loadingBar)
 
         self.loading_bar_callback = loading_bar_callback
@@ -282,10 +279,9 @@ class UIPlugin(nanome.PluginInstance):
         ln_button.padding = (0.01, 0.01, 0.01, 0.01)
         ln_button.forward_dist = .001
 
-        button = nanome.ui.Button()
-        button.text.active = True
-        button.text.vertical_align = nanome.util.enums.VertAlignOptions.Middle
-        button.text.horizontal_align = nanome.util.enums.HorizAlignOptions.Middle
+        button = ln_button.add_new_toggle_switch("Toggle Switch")
+        button.text.size = .5
+        button.text.auto_size = False
         button.register_pressed_callback(self.loading_bar_callback)
         button.register_hover_callback(self.hover_callback)
 

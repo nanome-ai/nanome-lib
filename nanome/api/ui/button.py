@@ -15,6 +15,7 @@ class Button(_Button, UIBase):
         self.icon = self._icon
         self.mesh = self._mesh
         self.outline = self._outline
+        self.switch = self._switch
         self.tooltip = self._tooltip
         if (text != None):
             self.text.value.set_all(text)
@@ -59,6 +60,14 @@ class Button(_Button, UIBase):
     @disable_on_press.setter
     def disable_on_press(self, value):
         self._disable_on_press = value
+
+    @property
+    def toggle_on_press(self):
+        return self._toggle_on_press
+
+    @toggle_on_press.setter
+    def toggle_on_press(self, value):
+        self._toggle_on_press = value
 
     class ButtonText(_Button._ButtonText):
         @property
@@ -316,50 +325,69 @@ class Button(_Button, UIBase):
             self._active = value
     _Button._ButtonOutline._create = ButtonOutline
 
+    class ButtonSwitch(_Button._ButtonSwitch):
+        @property
+        def active(self):
+            # type: () -> bool
+            return self._active
+        @active.setter
+        def active(self, value):
+            # type: (bool)
+            self._active = value
+
+        @property
+        def on_color(self):
+            # type: () -> bool
+            return self._on_color
+        @on_color.setter
+        def on_color(self, value):
+            # type: (bool)
+            self._on_color = value
+
+        @property
+        def off_color(self):
+            # type: () -> bool
+            return self._off_color
+        @off_color.setter
+        def off_color(self, value):
+            # type: (bool)
+            self._off_color = value
+    _Button._ButtonSwitch._create = ButtonSwitch
+
     class ButtonTooltip(_Button._ButtonTooltip):
         @property
         def title(self):
-            # type: () -> bool
             return self._title
         @title.setter
         def title(self, value):
-            # type: (bool)
             self._title = value
 
         @property
         def content(self):
-            # type: () -> bool
             return self._content
         @content.setter
         def content(self, value):
-            # type: (bool)
             self._content = value
 
         @property
         def bounds(self):
-            # type: () -> bool
             return self._bounds
         @bounds.setter
         def bounds(self, value):
-            # type: (bool)
             self._bounds = value
 
         @property
         def positioning_target(self):
-            # type: () -> bool
             return self._positioning_target
         @positioning_target.setter
         def positioning_target(self, value):
-            # type: (bool)
             self._positioning_target = value
 
         @property
         def positioning_origin(self):
-            # type: () -> bool
             return self._positioning_origin
         @positioning_origin.setter
         def positioning_origin(self, value):
-            # type: (bool)
             self._positioning_origin = value
     _Button._ButtonTooltip._create = ButtonTooltip
 
