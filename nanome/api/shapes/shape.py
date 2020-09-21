@@ -12,7 +12,7 @@ class Shape(object):
         self.__shape_type = shape_type
         self.__anchor = ShapeAnchorType.Workspace
         self.__position = Vector3()
-        self.__orientation = Quaternion()
+        self.__rotation = Quaternion()
         self.__color = Color()
 
     @property
@@ -45,11 +45,11 @@ class Shape(object):
         self.__position = value
 
     @property
-    def orientation(self):
-        return self.__orientation
-    @orientation.setter
-    def orientation(self, value):
-        self.__orientation = value
+    def rotation(self):
+        return self.__rotation
+    @rotation.setter
+    def rotation(self, value):
+        self.__rotation = value
 
     @property
     def color(self):
