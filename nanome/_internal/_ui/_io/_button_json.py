@@ -62,12 +62,8 @@ def parse_json(content_json):
     button._icon._sharpness = content_json.read( "icon_sharpness", button._icon._sharpness)
     button._icon._size = content_json.read( "icon_size", button._icon._size)
     button._icon._ratio = content_json.read( "icon_ratio", button._icon._ratio)
-    button._icon._position = Vector3(content_json.read( "icon_position_x", button._icon._position.x),
-        content_json.read( "icon_position_y", button._icon._position.y),
-        content_json.read( "icon_position_z", button._icon._position.z))
-    button._icon._rotation = Vector3(content_json.read( "icon_rotation_x", button._icon._rotation.x),
-        content_json.read( "icon_rotation_y", button._icon._rotation.y),
-        content_json.read( "icon_rotation_z", button._icon._rotation.z))
+    button._icon._position = content_json.read("icon_position", button._icon._position)
+    button._icon._rotation = content_json.read("icon_rotation", button._icon._rotation)
     #endregion
     #region mesh
     button._mesh._active = content_json.read("mesh_active", button._mesh._active)
