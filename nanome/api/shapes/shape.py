@@ -1,6 +1,6 @@
 import nanome
 from nanome._internal._network._commands._callbacks import _Messages
-from nanome.util import Vector3, Color, Logs
+from nanome.util import Vector3, Color, Logs, Quaternion
 from nanome.util.enums import ShapeAnchorType
 
 class Shape(object):
@@ -12,6 +12,7 @@ class Shape(object):
         self.__shape_type = shape_type
         self.__anchor = ShapeAnchorType.Workspace
         self.__position = Vector3()
+        self.__rotation = Quaternion()
         self.__color = Color()
 
     @property
@@ -42,6 +43,13 @@ class Shape(object):
     @position.setter
     def position(self, value):
         self.__position = value
+
+    @property
+    def rotation(self):
+        return self.__rotation
+    @rotation.setter
+    def rotation(self, value):
+        self.__rotation = value
 
     @property
     def color(self):

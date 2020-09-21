@@ -70,6 +70,7 @@ class _Commands(__CommandEnum):
 
     #Macro
     get_macros_response = auto()
+    run_macro_result = auto()
 
     # Presenter
     presenter_info_response = auto()
