@@ -12,7 +12,7 @@ class _ButtonSerializer(_TypeSerializer):
         self.vector = _Vector3Serializer()
 
     def version(self):
-        return 4
+        return 5
 
     def name(self):
         return "Button"
@@ -28,7 +28,7 @@ class _ButtonSerializer(_TypeSerializer):
             context.write_using_serializer(self.string, button._name)
         context.write_bool(button._selected)
         context.write_bool(button._unusable)
-        if version >= 4:
+        if version >= 5:
             context.write_bool(button._disable_on_press)
             context.write_bool(button._toggle_on_press)
         context.write_bool(button._text._active)
@@ -134,7 +134,7 @@ class _ButtonSerializer(_TypeSerializer):
             context.write_using_serializer(self.vector, button._tooltip._bounds)
             context.write_uint(button._tooltip._positioning_target)
             context.write_uint(button._tooltip._positioning_origin)
-        if version >= 4:
+        if version >= 5:
             context.write_bool(button._switch._active)
             context.write_using_serializer(self.color, button._switch._on_color)
             context.write_using_serializer(self.color, button._switch._off_color)
@@ -149,7 +149,7 @@ class _ButtonSerializer(_TypeSerializer):
             value._name = context.read_using_serializer(self.string)
         value._selected = context.read_bool()
         value._unusable = context.read_bool()
-        if version >= 4:
+        if version >= 5:
             value._disable_on_press = context.read_bool()
             value._toggle_on_press = context.read_bool()
         value._text._active = context.read_bool()
@@ -238,7 +238,7 @@ class _ButtonSerializer(_TypeSerializer):
             value._tooltip._bounds = context.read_using_serializer(self.vector)
             value._tooltip._positioning_target = ToolTipPositioning.safe_cast(context.read_uint())
             value._tooltip._positioning_origin = ToolTipPositioning.safe_cast(context.read_uint())
-        if version >= 4:
+        if version >= 5:
             value._switch._active = context.read_bool()
             value._switch._on_color = context.read_using_serializer(self.color)
             value._switch._off_color = context.read_using_serializer(self.color)
