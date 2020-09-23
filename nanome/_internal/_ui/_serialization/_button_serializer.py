@@ -28,8 +28,9 @@ class _ButtonSerializer(_TypeSerializer):
             context.write_using_serializer(self.string, button._name)
         context.write_bool(button._selected)
         context.write_bool(button._unusable)
-        if version >= 5:
+        if version >= 4:
             context.write_bool(button._disable_on_press)
+        if version >= 5:
             context.write_bool(button._toggle_on_press)
         context.write_bool(button._text._active)
         context.write_using_serializer(self.string, button._text._value._idle)
@@ -149,8 +150,9 @@ class _ButtonSerializer(_TypeSerializer):
             value._name = context.read_using_serializer(self.string)
         value._selected = context.read_bool()
         value._unusable = context.read_bool()
-        if version >= 5:
+        if version >= 4:
             value._disable_on_press = context.read_bool()
+        if version >= 5:
             value._toggle_on_press = context.read_bool()
         value._text._active = context.read_bool()
         value._text._value._idle = context.read_using_serializer(self.string)
