@@ -36,8 +36,8 @@ class ShapeStreamTest(nanome.PluginInstance):
             return
 
         for i in range(0, len(self.__positions)):
-            self.__positions[i] = str(int(self.__positions[i]) + 1)
-        for i in range(0, len(self.__colors), 3):
+            self.__positions[i] = (self.__positions[i] + 0.2) % 5.0
+        for i in range(0, len(self.__colors)):
             self.__colors[i] = (self.__colors[i] + 3) % 255
         for i in range(0, len(self.__scales)):
             self.__scales[i] = (self.__scales[i] + 0.1) % 1.5
@@ -60,6 +60,7 @@ class ShapeStreamTest(nanome.PluginInstance):
         self.__colors.append(255)
         self.__colors.append(0)
         self.__colors.append(0)
+        self.__colors.append(255)
         self.__scales.append(0.5)
 
         self.create_writing_stream(self.__indices, nanome.api.streams.Stream.Type.shape_position_rotation, self.on_stream_position_creation)
@@ -68,7 +69,7 @@ class ShapeStreamTest(nanome.PluginInstance):
 
     def on_stream_update_done(self):
         self.__done_count += 1
-        if self.__done_count >= 4:
+        if self.__done_count >= 3:
             self.__done_count = 0
             self.update_streams()
 
