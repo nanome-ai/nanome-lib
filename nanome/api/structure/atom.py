@@ -177,6 +177,34 @@ class Atom(_Atom, Base):
     @partial_charge.setter
     def partial_charge(self, value):
         self._partial_charge = value
+
+    @property
+    def occupancy(self):
+        return self._occupancy
+    @occupancy.setter
+    def occupancy(self, value):
+        self._occupancy = value
+
+    @property
+    def bfactor(self):
+        return self._bfactor
+    @bfactor.setter
+    def bfactor(self, value):
+        self._bfactor = value
+
+    @property
+    def acceptor(self):
+        return self._acceptor
+    @acceptor.setter
+    def acceptor(self, value):
+        self._acceptor = value
+
+    @property
+    def donor(self):
+        return self._donor
+    @donor.setter
+    def donor(self, value):
+        self._donor = value
     #endregion
 
     #region conformer stuff
