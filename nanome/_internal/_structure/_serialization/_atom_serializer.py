@@ -68,8 +68,11 @@ class _AtomSerializer(_TypeSerializer):
         context.write_bool(value._donor)
 
         if version == 4:
-            context.write_using_serializer(
-                self.string, value._atom_type["IDATM"])
+            try:
+                atom_type = value._atom_type["IDATM"]
+            except KeyError:
+                atom_type = ""
+            context.write_using_serializer(self.string, atom_type)
 
         if version >= 4:
             context.write_int(value._formal_charge)
