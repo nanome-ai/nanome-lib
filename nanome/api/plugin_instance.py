@@ -6,7 +6,7 @@ from nanome._internal._network._commands._callbacks import _Messages
 from nanome.api.integration import Integration
 from nanome.api.ui import Menu
 from nanome.api.streams import Stream
-from nanome.api import shapes
+from nanome.api import shapes, Room
 
 import inspect
 import sys
@@ -25,6 +25,7 @@ class PluginInstance(_PluginInstance):
 
     def __pseudo_init__(self):
         self.__menu = Menu() #deprecated
+        self.room = Room()
         self.integration = Integration()
         self.__set_first = False
 
