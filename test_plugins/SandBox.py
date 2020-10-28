@@ -48,16 +48,17 @@ class SandBox(nanome.PluginInstance):
         connected_components = []
         while len(unsorted_atoms) > 0:
             connected_components.append(self.bonded_mass(unsorted_atoms[0], unsorted_atoms))
-
+        Logs.debug("Connected Components:" + str(len(connected_components)))
         for component in connected_components:
             heavy_count = self.count_heavy_atoms(component)
             if heavy_count > 100:
-                if self.contains_starred_atoms(component):
-                    proteins.extend(component)
+                proteins.extend(component)
             elif heavy_count < 6:
                 solvents.extend(component)
-            else:
+            elif self.contains_starred_atoms(component):
                 ligands.extend(component)
+            else:
+                proteins.extend(component)
         return proteins, ligands, solvents
 
     def star_atoms(self, atom):
