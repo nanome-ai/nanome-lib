@@ -205,6 +205,12 @@ class Complex(_Complex, Base):
         _PluginInstance._hook_selection_changed(self.index, callback)
         _ProcessNetwork._send(_Messages.hook_selection_changed, self.index, False)
 
+    @staticmethod
+    def align_origins(target_complex, *other_complexes):
+        for complex in other_complexes:
+            complex.position = target_complex.position
+            complex.rotation = target_complex.rotation
+
     #region depricated
     @current_frame.setter
     @Logs.deprecated()
