@@ -152,6 +152,7 @@ class _Messages(__CommandEnum):
     open_url = auto()
     load_file = auto()
     integration = auto()
+    apply_color_scheme = auto()
 
 class _IntegrationCommands(__CommandEnum):
     # Tmp hack
