@@ -217,4 +217,5 @@ add_message(CommandCallbacks._Messages.delete_shape, CommandSerializers._DeleteS
 add_message(CommandCallbacks._Messages.open_url, CommandSerializers._OpenURL())
 add_message(CommandCallbacks._Messages.load_file, CommandSerializers._LoadFile())
 add_message(CommandCallbacks._Messages.integration, CommandSerializers._Integration())
+add_message(CommandCallbacks._Messages.set_skybox, CommandSerializers._SetSkybox())
 

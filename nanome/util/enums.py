@@ -122,3 +122,12 @@ class ShapeAnchorType(IntEnum):
     Workspace = 0
     Complex = 1
     Atom = 2
+
+class SkyBoxes(IntEnum):
+    Unknown = -1
+    BlueSkyAndClouds = 0
+    Sunset = 1
+    BlueSkyAndGround = 2
+    Black = 3
+    White = 4
+    Graydient = 5
