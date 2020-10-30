@@ -208,8 +208,8 @@ class Complex(_Complex, Base):
     @staticmethod
     def align_origins(target_complex, *other_complexes):
         for complex in other_complexes:
-            complex.position = target_complex.position
-            complex.rotation = target_complex.rotation
+            complex.position = target_complex.position.get_copy()
+            complex.rotation = target_complex.rotation.get_copy()
 
     #region depricated
     @current_frame.setter
