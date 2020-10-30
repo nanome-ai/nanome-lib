@@ -252,6 +252,7 @@ class LayoutNode(_LayoutNode):
     def add_new_text_input(self, placeholder_text = ""):
         # type: () -> TextInput
         text_input = TextInput()
+        text_input.placeholder_text = placeholder_text
         self.set_content(text_input)
         return text_input
 
