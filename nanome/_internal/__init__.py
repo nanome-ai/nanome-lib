@@ -10,4 +10,5 @@ from . import _macro
 #classes
 from ._addon import _Addon
 from ._plugin_instance import _PluginInstance
+from ._room import _Room
 from ._plugin import _Plugin

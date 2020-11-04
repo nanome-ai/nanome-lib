@@ -13,7 +13,7 @@ class _TextInput(_UIBase):
         #Protocol
         super(_TextInput, self).__init__()
         self._max_length = 10
-        self._placeholder_text = "PlaceHolderText"
+        self._placeholder_text = ""
         self._input_text = ""
         self._placeholder_text_color = Color.from_int(0x7C7F89FF)
         self._text_color = Color.Black()
