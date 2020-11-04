@@ -9,7 +9,7 @@ class _ApplyColorScheme(_TypeSerializer):
         return 0
 
     def name(self):
-        return "ApplyCholorScheme"
+        return "ApplyColorScheme"
 
     def serialize(self, version, value, context):
         context.write_int(value[0])
