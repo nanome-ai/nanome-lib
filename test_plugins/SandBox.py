@@ -21,7 +21,7 @@ class SandBox(nanome.PluginInstance):
       self.room.set_skybox(nanome.util.enums.SkyBoxes.Graydient)
       
     def on_run(self):
-        self.apply_color_scheme(enums.ColorScheme.BFactor, enums.Mode.All, False)
+        self.apply_color_scheme(enums.ColorScheme.BFactor, enums.ColorSchemeTarget.All, False)
         self.request_workspace(self.work)
     
     def work(self, workspace):
