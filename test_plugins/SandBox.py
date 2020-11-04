@@ -1,6 +1,7 @@
 import os
 import nanome
 from nanome.api import structure as struct
+from nanome.util import enums
 from nanome.util import Logs
 import sys
 import time
@@ -17,13 +18,12 @@ HAS_ADVANCED_OPTIONS = False
 
 class SandBox(nanome.PluginInstance):
     def start(self):
-        self.room.set_skybox(nanome.util.enums.SkyBoxes.Graydient)
-        pass
-
+      self.room.set_skybox(nanome.util.enums.SkyBoxes.Graydient)
+      
     def on_run(self):
+        self.apply_color_scheme(enums.ColorScheme.BFactor, enums.Mode.All, False)
         self.request_workspace(self.work)
-        pass
-
+    
     def work(self, workspace):
         (proteins, ligands, solvents) = self.categorize_atoms(workspace)
         self.color_categories(proteins, ligands, solvents)

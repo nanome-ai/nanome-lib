@@ -153,6 +153,7 @@ class _Messages(__CommandEnum):
     load_file = auto()
     integration = auto()
     set_skybox = auto()
+    apply_color_scheme = auto()
 
 class _IntegrationCommands(__CommandEnum):
     # Tmp hack

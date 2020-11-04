@@ -75,3 +75,4 @@ from ._integration import _Integration
 from ._open_url import _OpenURL
 from ._send_notification import _SendNotification
 from ._set_skybox import _SetSkybox
+from ._apply_color_scheme import _ApplyColorScheme
