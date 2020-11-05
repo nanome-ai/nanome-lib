@@ -140,7 +140,7 @@ class ColorScheme(IntEnum):
     Kabat = 13
     Chothia = 14
 
-class Mode(IntEnum):
+class ColorSchemeTarget(IntEnum):
     AtomBond = 0
     Ribbon = 1
     Surface = 2

@@ -446,18 +446,18 @@ class PluginInstance(_PluginInstance):
 
         raise ValueError('Parameter shape_type must be a value of nanome.util.enums.ShapeType')
 
-    def apply_color_scheme(self, color_scheme, mode, only_carbons):
+    def apply_color_scheme(self, color_scheme, target, only_carbons):
         """
         Applies a color scheme to selected atoms.
 
         :param color_scheme: the color scheme to use on atoms
         :type color_scheme: :class:`~nanome.util.enums.ColorScheme`
-        :param mode: whether you want to color the atom, the surface, or the ribbon
-        :type mode: :class:`~nanome.util.enums.Mode`
+        :param target: whether you want to color the atom, the surface, or the ribbon
+        :type target: :class:`~nanome.util.enums.ColorSchemeTarget`
         :param only_carbons: whether you want to only color carbons, or all atoms.
         :type only_carbons: bool
         """
-        self._network._send(_Messages.apply_color_scheme, (color_scheme, mode, only_carbons), False)
+        self._network._send(_Messages.apply_color_scheme, (color_scheme, target, only_carbons), False)
 
     @property
     def plugin_files_path(self):
