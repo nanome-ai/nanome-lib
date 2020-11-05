@@ -457,7 +457,7 @@ class PluginInstance(_PluginInstance):
         :param only_carbons: whether you want to only color carbons, or all atoms.
         :type only_carbons: bool
         """
-        self._network._send(_Messages.apply_color_scheme, (color_scheme, mode, only_carbons), False)
+        self._network._send(_Messages.apply_color_scheme, (color_scheme, target, only_carbons), False)
 
     @property
     def plugin_files_path(self):
