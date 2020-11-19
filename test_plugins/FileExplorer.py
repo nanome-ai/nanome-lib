@@ -18,6 +18,7 @@ class FileExplorer(nanome.PluginInstance):
         self.menu = Menu.io.from_json(test_assets + "/FileExplorer.json")
         self.grid = self.menu.root.find_node("Grid", True).get_content()
         self.selected_button = None
+        self.files.ls()
 
     def run(self):
         self.request_directory(".", self.on_directory_received)
