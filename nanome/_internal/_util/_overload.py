@@ -1,3 +1,4 @@
+import functools
 import inspect
 from functools import wraps
 
@@ -10,16 +11,18 @@ class overload (object):
         self.cases = {}
         signature = inspect.getargspec(f).args
         self.cases[len(signature)] = f
-        self.f = f
+        self.method = f
 
-    @property
     def alternate(self):
-        @wraps(self.f)
-        def store_function(f):
-            signature = inspect.getargspec(f).args
-            self.cases[len(signature)] = f
-            return self
-        return store_function
+        def alternate_decorator(f):
+            @wraps(f)
+            def wrapper(f):
+                signature = inspect.getargspec(f).args
+                self.cases[len(signature)] = f
+                return self
+            # functools.update_wrapper(store_function, self.f)
+            return wrapper
+        return alternate_decorator
 
     def __call__(self, *args):
         function = self.cases[len(args) + 1]
