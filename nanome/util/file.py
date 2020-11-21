@@ -11,6 +11,13 @@ class FileErrorCode(IntEnum):
     path_too_long = 2
     missing_permission = 3
 
+class FileMeta(object):
+    def __init__(self):
+        self.name = ""
+        self.size = 0
+        self.date_modified = 0
+        self.is_directory = False
+
 class DirectoryEntry(object):
     def __init__(self):
         self.name = ""

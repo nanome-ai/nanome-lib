@@ -62,11 +62,21 @@ class _Commands(__CommandEnum):
     stream_feed_done = auto()
     stream_interrupt = auto()
 
-    #File
+    #File deprecated
     directory_response= auto()
     file_response= auto()
     file_save_done= auto()
     export_files_result= auto()
+
+    #Files
+    pwd_response = auto()
+    cd_response = auto()
+    ls_response = auto()
+    mv_response = auto()
+    get_response = auto()
+    put_response = auto()
+    rm_response = auto()
+    rmdir_response = auto()
 
     #Macro
     get_macros_response = auto()
@@ -126,11 +136,21 @@ class _Messages(__CommandEnum):
     stream_feed = auto()
     stream_destroy = auto()
 
-    #File
+    #Files Deprecated
     directory_request = auto()
     file_request = auto()
     file_save = auto()
     export_files = auto()
+
+    #Files
+    pwd = auto()
+    cd = auto()
+    ls = auto()
+    mv = auto()
+    get = auto()
+    put = auto()
+    rm = auto()
+    rmdir = auto()
 
     #Macro
     save_macro = auto()

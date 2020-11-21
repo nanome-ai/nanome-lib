@@ -25,7 +25,7 @@ class PluginInstance(_PluginInstance):
         self.__menu = Menu() #deprecated
         self.room = Room()
         self.integration = Integration()
-        self.files = Files()
+        self.files = Files(self)
         self.__set_first = False
 
     @property

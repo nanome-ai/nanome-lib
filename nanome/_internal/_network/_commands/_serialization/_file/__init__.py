@@ -1,6 +1,11 @@
-from . import *
-#classes
-from ._directory_request import _DirectoryRequest
-from ._file_request import _FileRequest
-from ._file_save import _FileSave
-from ._export_files import _ExportFiles
+from . import _deprecated
+
+from ._file_meta import _FileMeta
+from ._pwd import _PWD
+from ._cd import _CD
+from ._ls import _LS
+from ._mv import _MV
+from ._get import _Get
+from ._put import _Put
+from ._rm import _RM
+from ._rmdir import _RMDir

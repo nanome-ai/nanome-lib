@@ -5,6 +5,7 @@ from ._type_serializer import _TypeSerializer
 from ._string_serializer import _StringSerializer
 from ._tuple_serializer import _TupleSerializer
 from ._array_serializer import _ArraySerializer
+from ._bytes_array_serializer import _BytesArraySerializer
 from ._bool_serializer import _BoolSerializer
 from ._byte_serializer import _ByteSerializer
 from ._color_serializer import _ColorSerializer
