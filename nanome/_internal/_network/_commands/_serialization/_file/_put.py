@@ -15,7 +15,7 @@ class _Put(_TypeSerializer):
 
     def serialize(self, version, value, context):
         context.write_using_serializer(self.__string, value[0])
-        context.write_int(len(value[1]))
+        context.write_uint(len(value[1]))
         context.write_bytes(value[1])
 
     def deserialize(self, version, context):

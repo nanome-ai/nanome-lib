@@ -36,7 +36,7 @@ class Files(_Files):
     def cd(self, directory, callback):
         """
         | changes current directory
-        :param directory: directory to change to. Supports pattern matching.
+        :param directory: directory to change to.
         :type directory: str
         :param callback: called when operation is completed with any potential errors.
         :type Callable
@@ -47,7 +47,7 @@ class Files(_Files):
     def ls(self, directory, callback):
         """
         | list directory contents
-        :param directory: directory to request. Supports pattern matching.
+        :param directory: directory to request.
         :type directory: str
         :param callback: function that will be called with contents of the directory
         :type Callable
@@ -58,7 +58,7 @@ class Files(_Files):
     def mv(self, source, dest, callback):
         """
         | Rename SOURCE to DEST, or move SOURCE(s) to directory DEST
-        :param source: file to move or rename. Supports pattern matching.
+        :param source: file to move or rename.
         :type source: str
         :param dest: name or destination directory for the file
         :type dest: str
@@ -71,19 +71,18 @@ class Files(_Files):
     def get(self, source, dest, callback):
         """
         | Moves a file from the nanome user to the a local directory
-        :param source: file(s) to move. Supports pattern matching.
+        :param source: file(s) to move.
         :type source: str
         :param dest: local destination directory for the file
         :type dest: str
         :param callback: called when operation is completed with any potential errors.
         :type Callable
         """
-        def cb(error, file):
+        def cb(error, name, file):
             if (error == FileErrorCode.no_error):
-                path = os.path.join(dest, file[0])
-                data = file[1]
+                path = os.path.join(dest, name)
                 with open(path, 'wb') as ofile:
-                    ofile.write(data)
+                    ofile.write(file)
                     ofile.close()
             callback(error)
         id = self.plugin._network._send(_Messages.ls, source, True)
@@ -92,7 +91,7 @@ class Files(_Files):
     def put(self, source, dest, callback):
         """
         | Moves a file from a local directory to the the nanome user
-        :param source: local file(s) to move. Supports pattern matching.
+        :param source: local file(s) to move.
         :type source: str
         :param dest: destination directory for the file
         :type dest: str
@@ -108,7 +107,7 @@ class Files(_Files):
     def rm(self, target, callback):
         """
         | remove non-directory file
-        :param directory: file to remove. Supports pattern matching.
+        :param directory: file to remove.
         :type directory: str
         :param callback: called when operation is completed with any potential errors.
         :type Callable
@@ -119,7 +118,7 @@ class Files(_Files):
     def rmdir(self, target, callback):
         """
         | remove directory
-        :param directory: directory to remove. Supports pattern matching.
+        :param directory: directory to remove.
         :type directory: str
         :param callback: called when operation is completed with any potential errors.
         :type Callable
