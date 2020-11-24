@@ -15,26 +15,31 @@ class FileMeta(object):
         self.date_modified = 0
         self.is_directory = False
 
+#deprecated: This is part of the deprecated file API
 class DirectoryErrorCode(IntEnum):
     no_error = 0
     folder_unreachable = 1
 
+#deprecated: This is part of the deprecated file API
 class FileErrorCode(IntEnum):
     no_error = 0
     file_unreachable = 1
     path_too_long = 2
     missing_permission = 3
 
+#deprecated: This is part of the deprecated file API
 class DirectoryEntry(object):
     def __init__(self):
         self.name = ""
         self.is_directory = False
 
+#deprecated: This is part of the deprecated file API
 class FileData(object):
     def __init__(self):
         self.data = None
         self.error_code = FileErrorCode.no_error
 
+#deprecated: This is part of the deprecated file API
 class FileSaveData(object):
     def __init__(self):
         self.path = ""
@@ -44,11 +49,13 @@ class FileSaveData(object):
     def write_text(self, text):
         self.data.extend(text.encode('ascii'))
 
+#deprecated: This is part of the deprecated file API
 class DirectoryRequestResult(object):
     def __init__(self):
         self.entry_array = []
         self.error_code = DirectoryErrorCode.no_error
 
+#deprecated: This is part of the deprecated file API
 class DirectoryRequestOptions(object):
     def __init__(self):
         self._directory_name = "."
