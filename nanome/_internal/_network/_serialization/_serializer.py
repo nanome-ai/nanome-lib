@@ -126,7 +126,7 @@ add_command(CommandCallbacks._Commands.file_save_done, CommandSerializers._FileS
 add_command(CommandCallbacks._Commands.export_files_result, CommandSerializers._ExportFiles(), CommandCallbacks._simple_callback_arg)
 
 #files
-add_command(CommandCallbacks._Commands.pwd_response, CommandSerializers._PWD(), CommandCallbacks._simple_callback_arg_unpack)
+add_command(CommandCallbacks._Commands.print_working_directory_response, CommandSerializers._PWD(), CommandCallbacks._simple_callback_arg_unpack)
 add_command(CommandCallbacks._Commands.cd_response, CommandSerializers._CD(), CommandCallbacks._simple_callback_arg)
 add_command(CommandCallbacks._Commands.ls_response, CommandSerializers._LS(), CommandCallbacks._simple_callback_arg_unpack)
 add_command(CommandCallbacks._Commands.mv_response, CommandSerializers._MV(), CommandCallbacks._simple_callback_arg)
@@ -206,7 +206,7 @@ add_message(CommandCallbacks._Messages.export_files, CommandSerializers._ExportF
 add_message(CommandCallbacks._Messages.plugin_list_button_set, CommandSerializers._SetPluginListButton())
 
 #files
-add_message(CommandCallbacks._Messages.pwd, CommandSerializers._PWD())
+add_message(CommandCallbacks._Messages.print_working_directory, CommandSerializers._PWD())
 add_message(CommandCallbacks._Messages.cd, CommandSerializers._CD())
 add_message(CommandCallbacks._Messages.ls, CommandSerializers._LS())
 add_message(CommandCallbacks._Messages.mv, CommandSerializers._MV())

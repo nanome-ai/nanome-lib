@@ -14,7 +14,7 @@ test_assets = os.getcwd() + ("/testing/test_assets")
 
 class FileExplorer(nanome.PluginInstance):
 
-    def __init__(self):
+    def start(self):
         self.running = False
         self.item_prefab = LayoutNode.io.from_json(test_assets + "/File.json")
         self.menu = Menu.io.from_json(test_assets + "/FileExplorer.json")

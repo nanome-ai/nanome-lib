@@ -5,8 +5,8 @@ from nanome.util import FileError
 class _LS(_TypeSerializer):
     def __init__(self):
         self.__string = _StringSerializer()
-        _file_meta = _FileMeta()
-        self.__array = _ArraySerializer(_file_meta)
+        self.__array = _ArraySerializer()
+        self.__array.set_type(_FileMeta())
 
     def version(self):
         return 0

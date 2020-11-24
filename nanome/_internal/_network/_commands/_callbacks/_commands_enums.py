@@ -69,7 +69,7 @@ class _Commands(__CommandEnum):
     export_files_result= auto()
 
     #Files
-    pwd_response = auto()
+    print_working_directory_response = auto()
     cd_response = auto()
     ls_response = auto()
     mv_response = auto()
@@ -145,7 +145,7 @@ class _Messages(__CommandEnum):
     export_files = auto()
 
     #Files
-    pwd = auto()
+    print_working_directory = auto()
     cd = auto()
     ls = auto()
     mv = auto()
