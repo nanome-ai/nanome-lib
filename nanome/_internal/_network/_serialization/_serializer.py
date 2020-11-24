@@ -130,10 +130,12 @@ add_command(CommandCallbacks._Commands.pwd_response, CommandSerializers._PWD(), 
 add_command(CommandCallbacks._Commands.cd_response, CommandSerializers._CD(), CommandCallbacks._simple_callback_arg)
 add_command(CommandCallbacks._Commands.ls_response, CommandSerializers._LS(), CommandCallbacks._simple_callback_arg_unpack)
 add_command(CommandCallbacks._Commands.mv_response, CommandSerializers._MV(), CommandCallbacks._simple_callback_arg)
+add_command(CommandCallbacks._Commands.cp_response, CommandSerializers._CP(), CommandCallbacks._simple_callback_arg)
 add_command(CommandCallbacks._Commands.get_response, CommandSerializers._Get(), CommandCallbacks._simple_callback_arg_unpack)
 add_command(CommandCallbacks._Commands.put_response, CommandSerializers._Put(), CommandCallbacks._simple_callback_arg)
 add_command(CommandCallbacks._Commands.rm_response, CommandSerializers._RM(), CommandCallbacks._simple_callback_arg)
 add_command(CommandCallbacks._Commands.rmdir_response, CommandSerializers._RMDir(), CommandCallbacks._simple_callback_arg)
+add_command(CommandCallbacks._Commands.mkdir_response, CommandSerializers._MKDir(), CommandCallbacks._simple_callback_arg)
 
 #streams
 add_command(CommandCallbacks._Commands.stream_create_done, CommandSerializers._CreateStreamResult(), CommandCallbacks._receive_create_stream_result)
@@ -208,10 +210,12 @@ add_message(CommandCallbacks._Messages.pwd, CommandSerializers._PWD())
 add_message(CommandCallbacks._Messages.cd, CommandSerializers._CD())
 add_message(CommandCallbacks._Messages.ls, CommandSerializers._LS())
 add_message(CommandCallbacks._Messages.mv, CommandSerializers._MV())
+add_message(CommandCallbacks._Messages.cp, CommandSerializers._CP())
 add_message(CommandCallbacks._Messages.get, CommandSerializers._Get())
 add_message(CommandCallbacks._Messages.put, CommandSerializers._Put())
 add_message(CommandCallbacks._Messages.rm, CommandSerializers._RM())
 add_message(CommandCallbacks._Messages.rmdir, CommandSerializers._RMDir())
+add_message(CommandCallbacks._Messages.mkdir, CommandSerializers._MKDir())
 
 #macros
 add_message(CommandCallbacks._Messages.run_macro, CommandSerializers._RunMacro())

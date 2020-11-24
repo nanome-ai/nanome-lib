@@ -1,8 +1,5 @@
 from nanome.util.file import FileMeta
-from nanome._internal._util._serializers import _StringSerializer, _ArraySerializer, _DirectoryEntrySerializer
-from nanome.util import DirectoryErrorCode
-
-from nanome._internal._util._serializers import _TypeSerializer
+from nanome._internal._util._serializers import _StringSerializer, _TypeSerializer
 
 class _FileMeta(_TypeSerializer):
     def __init__(self):
@@ -22,8 +19,8 @@ class _FileMeta(_TypeSerializer):
 
     def deserialize(self, version, context):
         result = FileMeta()
-        result.name = context.read_using_serializer(self.__string())
+        result.name = context.read_using_serializer(self.__string)
         result.size = context.read_long()
-        result.date_modified = context.read_using_serializer(self.__string())
+        result.date_modified = context.read_using_serializer(self.__string)
         result.is_directory = context.read_bool()
         return result

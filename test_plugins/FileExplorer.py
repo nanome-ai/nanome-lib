@@ -24,7 +24,7 @@ class FileExplorer(nanome.PluginInstance):
         self.request_directory(".", self.on_directory_received)
 
     def on_directory_received(self, result):
-        if result.error_code != nanome.util.DirectoryErrorCode.no_error: # If API couldn't access directory, display error
+        if result.error_code != nanome.util.FileError.no_error: # If API couldn't access directory, display error
             nanome.util.Logs.error("Directory request error:", str(result.error_code))
             return
 

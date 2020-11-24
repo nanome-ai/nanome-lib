@@ -1,7 +1,5 @@
-from nanome._internal._util._serializers import _StringSerializer, _ArraySerializer, _DirectoryEntrySerializer
-from nanome.util import DirectoryRequestResult, DirectoryErrorCode
-
-from nanome._internal._util._serializers import _TypeSerializer
+from nanome._internal._util._serializers import _StringSerializer, _TypeSerializer
+from nanome.util import FileError
 
 class _PWD(_TypeSerializer):
     def __init__(self):
@@ -17,6 +15,6 @@ class _PWD(_TypeSerializer):
         pass
 
     def deserialize(self, version, context):
-        error_code = DirectoryErrorCode(context.read_int())
+        error_code = FileError.safe_cast(context.read_int())
         path = context.read_using_serializer(self.__string)
         return (error_code, path)

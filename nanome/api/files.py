@@ -78,10 +78,9 @@ class Files(_Files):
         :param callback: called when operation is completed with any potential errors.
         :type Callable
         """
-        def cb(error, name, file):
+        def cb(error, file):
             if (error == FileErrorCode.no_error):
-                path = os.path.join(dest, name)
-                with open(path, 'wb') as ofile:
+                with open(dest, 'wb') as ofile:
                     ofile.write(file)
                     ofile.close()
             callback(error)
@@ -124,4 +123,28 @@ class Files(_Files):
         :type Callable
         """
         id = self.plugin._network._send(_Messages.ls, target, callback != None)
+        self.plugin._save_callback(id, callback)
+
+    def cp(self, source, dest, callback):
+        """
+        | Copy SOURCE to DEST
+        :param source: file to copy.
+        :type source: str
+        :param dest: desired path for the copy
+        :type dest: str
+        :param callback: called when operation is completed with any potential errors.
+        :type Callable
+        """
+        id = self.plugin._network._send(_Messages.cp, source, dest, callback != None)
+        self.plugin._save_callback(id, callback)
+
+    def mkdir(self, target, callback):
+        """
+        | Create the DIRECTORY(ies), if they do not already exist. 
+        :param directory: directory to create.
+        :type directory: str
+        :param callback: called when operation is completed with any potential errors.
+        :type Callable
+        """
+        id = self.plugin._network._send(_Messages.mkdir, target, callback != None)
         self.plugin._save_callback(id, callback)

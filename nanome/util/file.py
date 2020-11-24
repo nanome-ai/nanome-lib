@@ -1,6 +1,20 @@
 from . import IntEnum
 from .enums import LoadFileErrorCode
 
+class FileError(IntEnum):
+    no_error = 0,
+    invalid_path = 1,
+    io_error = 2,
+    security_error = 3,
+    unauthorized_access = 4
+
+class FileMeta(object):
+    def __init__(self):
+        self.name = ""
+        self.size = 0
+        self.date_modified = 0
+        self.is_directory = False
+
 class DirectoryErrorCode(IntEnum):
     no_error = 0
     folder_unreachable = 1
@@ -10,13 +24,6 @@ class FileErrorCode(IntEnum):
     file_unreachable = 1
     path_too_long = 2
     missing_permission = 3
-
-class FileMeta(object):
-    def __init__(self):
-        self.name = ""
-        self.size = 0
-        self.date_modified = 0
-        self.is_directory = False
 
 class DirectoryEntry(object):
     def __init__(self):

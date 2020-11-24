@@ -1,7 +1,5 @@
-from nanome._internal._util._serializers import _StringSerializer, _ArraySerializer, _DirectoryEntrySerializer
-from nanome.util import DirectoryRequestResult, DirectoryErrorCode
-
-from nanome._internal._util._serializers import _TypeSerializer
+from nanome._internal._util._serializers import _StringSerializer, _TypeSerializer
+from nanome.util import FileError
 
 class _MV(_TypeSerializer):
     def __init__(self):
@@ -18,4 +16,4 @@ class _MV(_TypeSerializer):
         context.write_using_serializer(self.__string, value[1])
 
     def deserialize(self, version, context):
-        return DirectoryErrorCode.safe_cast(context.read_int())
+        return FileError.safe_cast(context.read_int())

@@ -1,8 +1,6 @@
-from nanome._internal._util._serializers import _StringSerializer, _ArraySerializer
-from nanome.util import DirectoryErrorCode
+from nanome._internal._util._serializers import _TypeSerializer, _StringSerializer, _ArraySerializer
 from nanome._internal._network._commands._serialization._file._file_meta import _FileMeta
-
-from nanome._internal._util._serializers import _TypeSerializer
+from nanome.util import FileError
 
 class _LS(_TypeSerializer):
     def __init__(self):
@@ -20,6 +18,6 @@ class _LS(_TypeSerializer):
         context.write_using_serializer(self.__string, value)
 
     def deserialize(self, version, context):
-        error_code = DirectoryErrorCode.safe_cast(context.read_int())
+        error_code = FileError.safe_cast(context.read_int())
         filemetas = context.read_using_serializer(self.__array)
         return error_code, filemetas
