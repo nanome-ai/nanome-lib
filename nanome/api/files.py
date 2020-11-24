@@ -28,7 +28,7 @@ class Files(_Files):
         """
         | Print the full filename of the current working directory
         :param callback: function that will be called with the full filename
-        :type Callable
+        :type Callable[string]
         """
         id = self.plugin._network._send(_Messages.ls, None, callback != None)
         self.plugin._save_callback(id, callback)
@@ -75,7 +75,7 @@ class Files(_Files):
         :type source: str
         :param dest: local destination directory for the file
         :type dest: str
-        :param callback: called when operation is completed with any potential errors.
+        :param callback: called with the path to the file and any potential errors
         :type Callable
         """
         def cb(error, file):
@@ -83,7 +83,7 @@ class Files(_Files):
                 with open(dest, 'wb') as ofile:
                     ofile.write(file)
                     ofile.close()
-            callback(error)
+            callback(error, dest)
         id = self.plugin._network._send(_Messages.ls, source, True)
         self.plugin._save_callback(id, cb)
 
