@@ -73,10 +73,12 @@ class _Commands(__CommandEnum):
     cd_response = auto()
     ls_response = auto()
     mv_response = auto()
+    cp_response = auto()
     get_response = auto()
     put_response = auto()
     rm_response = auto()
     rmdir_response = auto()
+    mkdir_response = auto()
 
     #Macro
     get_macros_response = auto()
@@ -151,6 +153,8 @@ class _Messages(__CommandEnum):
     put = auto()
     rm = auto()
     rmdir = auto()
+    mkdir = auto()
+    cp = auto()
 
     #Macro
     save_macro = auto()

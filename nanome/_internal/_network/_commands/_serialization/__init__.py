@@ -9,10 +9,12 @@ from ._file import _PWD
 from ._file import _CD
 from ._file import _LS
 from ._file import _MV
+from ._file import _CP
 from ._file import _Get
 from ._file import _Put
 from ._file import _RM
 from ._file import _RMDir
+from ._file import _MKDir
 
 from ._file._deprecated import _DirectoryRequest
 from ._file._deprecated import _FileRequest
