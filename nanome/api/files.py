@@ -97,7 +97,7 @@ class Files(_Files):
         :param callback: called when operation is completed with any potential errors.
         :type Callable
         """
-        with open(source) as f:
+        with open(source, "rb") as f:
             file = f.read()
             f.close()
         id = self.plugin._network._send(_Messages.put, (dest, file), callback != None)
@@ -135,7 +135,7 @@ class Files(_Files):
         :param callback: called when operation is completed with any potential errors.
         :type Callable
         """
-        id = self.plugin._network._send(_Messages.cp, source, dest, callback != None)
+        id = self.plugin._network._send(_Messages.cp, (source, dest), callback != None)
         self.plugin._save_callback(id, callback)
 
     def mkdir(self, target, callback):
