@@ -1,8 +1,10 @@
 import nanome
 import os
 import tempfile
+import ntpath
 from nanome.api.ui import Menu
 from nanome.api.ui import LayoutNode
+from nanome.util.logs import Logs
 
 NAME = "File Explorer"
 DESCRIPTION = "Allows you to browse your files"
@@ -21,14 +23,17 @@ class FileExplorer(nanome.PluginInstance):
         self.grid = self.menu.root.find_node("Grid", True).get_content()
         self.path_text = self.menu.root.find_node("path", True).get_content()
         self.load_button = self.menu.root.find_node("LoadButton", True).get_content()
+        self.load_button.register_pressed_callback(self.load_pressed)
         self.save_button = self.menu.root.find_node("SaveButton", True).get_content()
+        self.save_button.register_pressed_callback(self.save_pressed)
+        self.back_button = self.menu.root.find_node("back", True).get_content()
+        self.back_button.register_pressed_callback(self.back_pressed)
         self.selected_button = None
         self.fetch_children()
         self.fetch_wd()
         self.temp_dir = tempfile.mkdtemp()
-        self.load_count = 0
 
-    def run(self):
+    def on_run(self):
         self.running = True
         self.update_menu(self.menu)
 
@@ -38,7 +43,7 @@ class FileExplorer(nanome.PluginInstance):
 
     def __set_dir(self, error, wd):
         self.wd = wd
-        self.path_text.text = wd
+        self.path_text.text_value = wd
         if self.running:
             self.update_content(self.path_text)
 
@@ -59,12 +64,18 @@ class FileExplorer(nanome.PluginInstance):
     def create_file_rep(self, entry):
         item = self.item_prefab.clone()
         button = item.find_node("Button", True).get_content()
+        button.text.value.set_all(entry.name)
         button.register_pressed_callback(self.entry_pressed)
         button.entry = entry
-        button.text.value.set_all(entry.name)
+        button.text.value.set_all(self.path_leaf(entry.name))
+        button.text.size = .3
+        button.text.ellipsis = True
         return item
 
     def entry_pressed(self, button):
+        if button.entry.is_directory:
+            self.files.cd(button.entry.name, self.directory_changed)
+            return
         to_update = []
         button.selected = True
         if self.selected_button is not None:
@@ -84,15 +95,15 @@ class FileExplorer(nanome.PluginInstance):
 
     def load_pressed(self, button):
         entry = self.selected_button.entry
-        if entry.is_directory:
-            self.files.cd(entry.name, self.directory_changed)
-        else:
-            self.files.get(entry.name, os.path.join(self.temp_dir, str(self.load_count)), self.file_fetched)
-            self.load_count+=1
+        if not entry.is_directory:
+            self.files.get(entry.name, os.path.join(self.temp_dir, str(self.path_leaf(entry.name))), self.file_fetched)
 
     def file_fetched(self, error, path):
-        if error != nanome.util.FileError.no_error:
+        if error == nanome.util.FileError.no_error:
+            Logs.debug(path)
             self.send_files_to_load(path)
+        else:
+            Logs.debug(error)
 
     def save_pressed(self, button):
         pass
@@ -104,4 +115,7 @@ class FileExplorer(nanome.PluginInstance):
         self.fetch_wd()
         self.fetch_children()
 
+    def path_leaf(self, path):
+        head, tail = ntpath.split(path)
+        return tail or ntpath.basename(head)
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, FileExplorer)

@@ -30,7 +30,7 @@ class Files(_Files):
         :param callback: function that will be called with the full filename
         :type Callable[string]
         """
-        id = self.plugin._network._send(_Messages.ls, None, callback != None)
+        id = self.plugin._network._send(_Messages.print_working_directory, None, callback != None)
         self.plugin._save_callback(id, callback)
 
     def cd(self, directory, callback):
@@ -41,7 +41,7 @@ class Files(_Files):
         :param callback: called when operation is completed with any potential errors.
         :type Callable
         """
-        id = self.plugin._network._send(_Messages.ls, directory, callback != None)
+        id = self.plugin._network._send(_Messages.cd, directory, callback != None)
         self.plugin._save_callback(id, callback)
 
     def ls(self, directory, callback):
@@ -65,7 +65,7 @@ class Files(_Files):
         :param callback: called when operation is completed with any potential errors.
         :type Callable
         """
-        id = self.plugin._network._send(_Messages.ls, (source, dest), callback != None)
+        id = self.plugin._network._send(_Messages.mv, (source, dest), callback != None)
         self.plugin._save_callback(id, callback)
 
     def get(self, source, dest, callback):
@@ -84,7 +84,7 @@ class Files(_Files):
                     ofile.write(file)
                     ofile.close()
             callback(error, dest)
-        id = self.plugin._network._send(_Messages.ls, source, True)
+        id = self.plugin._network._send(_Messages.get, source, True)
         self.plugin._save_callback(id, cb)
 
     def put(self, source, dest, callback):
@@ -100,7 +100,7 @@ class Files(_Files):
         with open(source) as f:
             file = f.read()
             f.close()
-        id = self.plugin._network._send(_Messages.ls, (dest, file), callback != None)
+        id = self.plugin._network._send(_Messages.put, (dest, file), callback != None)
         self.plugin._save_callback(id, callback)
 
     def rm(self, target, callback):
@@ -111,7 +111,7 @@ class Files(_Files):
         :param callback: called when operation is completed with any potential errors.
         :type Callable
         """
-        id = self.plugin._network._send(_Messages.ls, target, callback != None)
+        id = self.plugin._network._send(_Messages.rm, target, callback != None)
         self.plugin._save_callback(id, callback)
 
     def rmdir(self, target, callback):
@@ -122,7 +122,7 @@ class Files(_Files):
         :param callback: called when operation is completed with any potential errors.
         :type Callable
         """
-        id = self.plugin._network._send(_Messages.ls, target, callback != None)
+        id = self.plugin._network._send(_Messages.rmdir, target, callback != None)
         self.plugin._save_callback(id, callback)
 
     def cp(self, source, dest, callback):
