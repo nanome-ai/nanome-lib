@@ -36,9 +36,9 @@ class FileExplorer(nanome.PluginInstance):
         # self.test_path1 = "C:\\Users\\ETHANV~1\\AppData\\Local\\Temp\\tmpuzepx_cf\\1.jpg"
         # self.test_path2 = "C:\\Users\\ETHANV~1\\AppData\\Local\\Temp\\tmpuzepx_cf\\2.jpg"
         # self.test_path3 = "C:\\Users\\ETHANV~1\\AppData\\Local\\Temp\\tmpuzepx_cf\\3.jpg"
-        self.files.cp(self.test_path, self.test_path1, self.cp_done)
-        self.files.put(self.test_path, self.test_path2, self.put_done)
-        self.files.mv(self.test_path, self.test_path3, self.mv_done)
+        # self.files.cp(self.test_path, self.test_path1, self.cp_done)
+        # self.files.put(self.test_path, self.test_path2, self.put_done)
+        # self.files.mv(self.test_path, self.test_path3, self.mv_done)
 
     def cp_done(self, *args):
         Logs.debug("cp done")
