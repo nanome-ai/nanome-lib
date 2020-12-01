@@ -88,8 +88,8 @@ class Files(_Files):
     def rm(self, target, callback):
         """
         | remove non-directory file
-        :param directory: file to remove.
-        :type directory: str
+        :param target: file to remove.
+        :type target: str
         :param callback: called when operation is completed with any potential errors.
         :type Callable
         """
@@ -99,8 +99,8 @@ class Files(_Files):
     def rmdir(self, target, callback):
         """
         | remove directory
-        :param directory: directory to remove.
-        :type directory: str
+        :param target: directory to remove.
+        :type target: str
         :param callback: called when operation is completed with any potential errors.
         :type Callable
         """
@@ -123,8 +123,8 @@ class Files(_Files):
     def mkdir(self, target, callback):
         """
         | Create the DIRECTORY(ies), if they do not already exist. 
-        :param directory: directory to create.
-        :type directory: str
+        :param target: directory to create.
+        :type target: str
         :param callback: called when operation is completed with any potential errors.
         :type Callable
         """

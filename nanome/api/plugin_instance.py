@@ -1,4 +1,4 @@
-from nanome.util import Logs, DirectoryRequestOptions, IntEnum, config
+from nanome.util import Logs, IntEnum, config
 from nanome.util.enums import StreamDirection, ShapeType
 from nanome._internal import _PluginInstance
 from nanome._internal._process import _Bonding, _Dssp

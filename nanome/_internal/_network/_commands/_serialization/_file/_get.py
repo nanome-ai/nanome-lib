@@ -1,4 +1,4 @@
-from nanome._internal._util._serializers import _StringSerializer, _ArraySerializer, _TupleSerializer, _BytesArraySerializer
+from nanome._internal._util._serializers import _StringSerializer
 from nanome.util import FileError
 
 from nanome._internal._util._serializers import _TypeSerializer
