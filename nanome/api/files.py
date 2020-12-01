@@ -1,7 +1,5 @@
-import os
-from typing import Callable
 from nanome._internal._files import _Files
-from nanome.util import DirectoryRequestOptions, FileErrorCode
+from nanome.util import FileErrorCode
 from nanome._internal._network._commands._callbacks import _Messages
 
 class Files(_Files):
