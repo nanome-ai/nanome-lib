@@ -4,22 +4,6 @@ from nanome._internal._files import _Files
 from nanome.util import DirectoryRequestOptions, FileErrorCode
 from nanome._internal._network._commands._callbacks import _Messages
 
-
-class overload:
-    def __init__(self, f):
-        self.cases = {}
-
-    def args(self, *args):
-        def store_function(f):
-            self.cases[tuple(args)] = f
-            return self
-        return store_function
-
-    def __call__(self, *args):
-        function = self.cases[tuple(type(arg) for arg in args)]
-        return function(*args)
-
-
 class Files(_Files):
     def __init__(self, plugin_instance):
         self.plugin = plugin_instance
