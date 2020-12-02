@@ -278,7 +278,8 @@ class _Plugin(object):
         main_conn_net, process_conn_net = Pipe()
         main_conn_proc, process_conn_proc = Pipe()
         session = Network._Session(session_id, self._network, self._process_manager, self._logs_manager, main_conn_net, main_conn_proc)
-        process = Process(target=_Plugin._launch_plugin, args=(self._plugin_class, session_id, process_conn_net, process_conn_proc, _Plugin.__serializer, _Plugin._plugin_id, version_table, _TypeSerializer.get_version_table(), Logs._is_verbose(), _Plugin._custom_data))
+        permissions = self._description["permissions"]
+        process = Process(target=_Plugin._launch_plugin, args=(self._plugin_class, session_id, process_conn_net, process_conn_proc, _Plugin.__serializer, _Plugin._plugin_id, version_table, _TypeSerializer.get_version_table(), Logs._is_verbose(), _Plugin._custom_data, permissions))
         process.start()
         session.plugin_process = process
         self._sessions[session_id] = session
@@ -289,24 +290,36 @@ class _Plugin(object):
         return current_process().name != 'MainProcess'
 
     @classmethod
-    def _launch_plugin_profile(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data):
-        cProfile.runctx('_Plugin._launch_plugin(plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data)', globals(), locals(), 'profile.out')
+    def _launch_plugin_profile(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
+        cProfile.runctx('_Plugin._launch_plugin(plugin_class, session_id, pipe_net, pipe_proc, serializer, '
+                        'plugin_id, version_table, original_version_table, verbose, custom_data,'
+                        'permissions)'
+                        , globals(), locals(), 'profile.out')
 
     @classmethod
-    def _launch_plugin(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data):
+    def _launch_plugin(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
         plugin = plugin_class()
-        _PluginInstance.__init__(plugin, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data)
+        _PluginInstance.__init__(plugin, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions)
         Logs.debug("Starting plugin")
         plugin._run()
 
-    def __init__(self, name, description, category = "", has_advanced = False):
+    def __init__(self, name, description, category="", has_advanced=False, permissions=None):
         self._sessions = dict()
+        if permissions == None:
+            permissions = {}
+        for key in permissions.keys():
+            if permissions[key] == True:
+                permissions[key] = 1
+            elif permissions[key] == False:
+                permissions[key] = 0
+
         self._description = {
             'name': name,
             'description': description,
             'category': category,
             'hasAdvanced': has_advanced,
-            'auth': None
+            'auth': None,
+            'permissions': permissions
         }
         self._plugin_class = None
         self.__connected = False

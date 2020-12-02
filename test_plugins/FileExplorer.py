@@ -134,4 +134,4 @@ class FileExplorer(nanome.PluginInstance):
     def path_leaf(self, path):
         head, tail = ntpath.split(path)
         return tail or ntpath.basename(head)
-nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, FileExplorer)
+nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, FileExplorer, permissions={"files": True})
