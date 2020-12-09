@@ -11,8 +11,8 @@ class _GenerateMoleculeImage(_TypeSerializer):
 
         temp = _ArraySerializer()
         temp.set_type(_ByteSerializer())
-        self.byte_array = _ArraySerializer()
-        self.byte_array.set_type(temp)
+        self.image_array = _ArraySerializer()
+        self.image_array.set_type(temp)
 
         self.dict = _DictionarySerializer()
         self.dict.set_types(_LongSerializer(), _AtomSerializer())
@@ -24,7 +24,7 @@ class _GenerateMoleculeImage(_TypeSerializer):
         return "GenerateMoleculeImage"
 
     def serialize(self, version, value, context):
-        context.write_using_serializer(value)
+        context.write_using_serializer(self.image_array, value)
 
     def deserialize(self, version, context):
         context.payload["Atom"] = context.read_using_serializer(self.dict)
