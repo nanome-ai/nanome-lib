@@ -10,5 +10,7 @@ from . import _macro
 #classes
 from ._addon import _Addon
 from ._plugin_instance import _PluginInstance
+from . import _plugin_instance_deprecated
 from ._room import _Room
+from ._files import _Files
 from ._plugin import _Plugin

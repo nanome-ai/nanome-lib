@@ -1,5 +1,6 @@
 from . import *
 from .room import Room
+from .files import Files
 from .plugin_instance import PluginInstance, _DefaultPlugin
 from .plugin import Plugin
 from . import streams
