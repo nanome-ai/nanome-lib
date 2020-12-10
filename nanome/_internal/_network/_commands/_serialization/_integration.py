@@ -11,6 +11,7 @@ class _Integration(_TypeSerializer):
         _Hashes.IntegrationHashes[_IntegrationCommands.minimization_start]: Serializers._StartMinimization(),
         _Hashes.IntegrationHashes[_IntegrationCommands.minimization_stop]: Serializers._StopMinimization(),
         _Hashes.IntegrationHashes[_IntegrationCommands.file_export]: Serializers._FileExport(),
+        _Hashes.IntegrationHashes[_IntegrationCommands.export_locations]: Serializers._ExportLocations(),
     }
 
     def __init__(self):
