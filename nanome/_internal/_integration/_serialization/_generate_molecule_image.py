@@ -1,4 +1,4 @@
-from nanome._internal._util._serializers import _ArraySerializer, _DictionarySerializer, _LongSerializer, _ByteSerializer
+from nanome._internal._util._serializers import _ArraySerializer, _DictionarySerializer, _LongSerializer, _ByteArraySerializer
 from nanome._internal._structure._serialization import _ResidueSerializer, _AtomSerializer
 from nanome._internal._util._serializers import _TypeSerializer
 
@@ -9,10 +9,8 @@ class _GenerateMoleculeImage(_TypeSerializer):
         self.res_serializer = _ArraySerializer()
         self.res_serializer.set_type(temp)
 
-        temp = _ArraySerializer()
-        temp.set_type(_ByteSerializer())
         self.image_array = _ArraySerializer()
-        self.image_array.set_type(temp)
+        self.image_array.set_type(_ByteArraySerializer())
 
         self.dict = _DictionarySerializer()
         self.dict.set_types(_LongSerializer(), _AtomSerializer())

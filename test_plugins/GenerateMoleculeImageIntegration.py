@@ -4,8 +4,8 @@ import os
 
 # Config
 
-NAME = "File export"
-DESCRIPTION = "Test for File Export Integration"
+NAME = "Generate Molecule Image"
+DESCRIPTION = ""
 CATEGORY = "Molecule Image"
 HAS_ADVANCED_OPTIONS = False
 
@@ -26,6 +26,7 @@ class GenerateMoleculeImageIntegration(nanome.PluginInstance):
                 data = f.read()
             images.append(data)
             i = (i % 4) + 1
+        Logs.debug("Responding...")
         request.send_response(images)
 
 
