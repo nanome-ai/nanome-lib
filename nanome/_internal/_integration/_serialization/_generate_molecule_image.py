@@ -4,7 +4,8 @@ from nanome._internal._util._serializers import _TypeSerializer
 
 class _GenerateMoleculeImage(_TypeSerializer):
     def __init__(self):
-        self.complex = _ComplexSerializer()
+        self.complex_array = _ArraySerializer()
+        self.complex_array.set_type(_ComplexSerializer())
 
         self.image_array = _ArraySerializer()
         self.image_array.set_type(_ByteArraySerializer())
@@ -23,4 +24,4 @@ class _GenerateMoleculeImage(_TypeSerializer):
 
     def deserialize(self, version, context):
         context.payload["Atom"] = context.read_using_serializer(self.dict)
-        return context.read_using_serializer(self.complex)
+        return context.read_using_serializer(self.complex_array)
