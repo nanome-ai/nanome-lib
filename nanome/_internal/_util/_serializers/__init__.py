@@ -14,5 +14,6 @@ from ._file_data_serializer import _FileDataSerializer
 from ._file_save_data_serializer import _FileSaveDataSerializer
 from ._int_serializer import _IntSerializer
 from ._long_serializer import _LongSerializer
+from ._byte_array_serializer import _ByteArraySerializer
 from ._quaternion_serializer import _QuaternionSerializer, _UnityRotationSerializer
 from ._vector3_serializer import _Vector3Serializer, _UnityPositionSerializer
