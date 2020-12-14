@@ -7,3 +7,4 @@ from ._calculate_esp import _CalculateESP
 from ._start_minimization import _StartMinimization
 from ._stop_minimization import _StopMinimization
 from ._export_file import _FileExport
+from ._generate_molecule_image import _GenerateMoleculeImage
