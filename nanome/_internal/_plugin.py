@@ -19,6 +19,7 @@ import signal
 
 try_reconnection_time = 20.0
 keep_alive_time_interval = 60.0
+keep_alive_timeout = 15.0
 
 __metaclass__ = type
 class _Plugin(object):
@@ -131,7 +132,7 @@ class _Plugin(object):
             except:
                 pass
         elif packet.packet_type == Network._Packet.packet_type_keep_alive:
-            pass
+            self.__waiting_keep_alive = False
         else:
             Logs.warning("Received a packet of unknown type", packet.packet_type, ". Ignoring")
 
@@ -222,12 +223,14 @@ class _Plugin(object):
         to_remove = []
         try:
             while True:
+                now = timer()
+
                 if self.__connected == False:
-                    elapsed = timer() - self.__disconnection_time
+                    elapsed = now - self.__disconnection_time
                     if elapsed >= try_reconnection_time:
                         Logs.message("Trying to reconnect...")
                         if self.__connect() == False:
-                            self.__disconnection_time = timer()
+                            self.__disconnection_time = now
                             continue
                     else:
                         time.sleep(try_reconnection_time - elapsed)
@@ -236,11 +239,19 @@ class _Plugin(object):
                     self.__connected = False
                     self.__disconnect()
                     continue
-                if timer() - self.__last_keep_alive >= keep_alive_time_interval:
-                    self.__last_keep_alive = timer()
-                    packet = Network._Packet()
-                    packet.set(_Plugin._plugin_id, Network._Packet.packet_type_keep_alive, 0)
-                    self._network.send(packet)
+
+                if self.__waiting_keep_alive:
+                    if now - self.__last_keep_alive >= keep_alive_timeout:
+                        self.__connected = False
+                        self.__disconnect()
+                        continue
+                elif now - self.__last_keep_alive >= keep_alive_time_interval:
+                        self.__last_keep_alive = now
+                        self.__waiting_keep_alive = True
+                        packet = Network._Packet()
+                        packet.set(_Plugin._plugin_id, Network._Packet.packet_type_keep_alive, 0)
+                        self._network.send(packet)
+
                 del to_remove[:]
                 for id, session in self._sessions.items():
                     if session._read_from_plugin() == False:
@@ -315,3 +326,4 @@ class _Plugin(object):
         self.__to_ignore = []
         self._pre_run = None
         self._post_run = None
+        self.__waiting_keep_alive = False
