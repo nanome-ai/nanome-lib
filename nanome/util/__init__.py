@@ -17,5 +17,6 @@ from .octree import Octree
 from .quaternion import Quaternion
 from .vector3 import Vector3
 from .matrix import Matrix
+from .file import FileMeta, FileError
 from .file import DirectoryErrorCode, DirectoryRequestResult, DirectoryRequestOptions, FileErrorCode, FileData, FileSaveData, DirectoryEntry
 from .process import Process

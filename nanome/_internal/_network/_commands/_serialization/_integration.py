@@ -11,6 +11,7 @@ class _Integration(_TypeSerializer):
         _Hashes.IntegrationHashes[_IntegrationCommands.minimization_start]: Serializers._StartMinimization(),
         _Hashes.IntegrationHashes[_IntegrationCommands.minimization_stop]: Serializers._StopMinimization(),
         _Hashes.IntegrationHashes[_IntegrationCommands.file_export]: Serializers._FileExport(),
+        _Hashes.IntegrationHashes[_IntegrationCommands.generate_molecule_image]: Serializers._GenerateMoleculeImage(),
     }
 
     def __init__(self):

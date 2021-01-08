@@ -122,3 +122,35 @@ class ShapeAnchorType(IntEnum):
     Workspace = 0
     Complex = 1
     Atom = 2
+
+class ColorScheme(IntEnum):
+    #None = 0 this one is on nanome but does nothing
+    Residue = 1
+    Occupancy = 2
+    BFactor = 3
+    Element = 4
+    Rainbow = 5
+    Chain = 6
+    DonorAcceptor = 7
+    SecondaryStructure = 8
+    Monochrome = 9
+    YRBHydrophobicity = 10
+    Hydrophobicity = 11
+    IMGT = 12
+    Kabat = 13
+    Chothia = 14
+
+class ColorSchemeTarget(IntEnum):
+    AtomBond = 0
+    Ribbon = 1
+    Surface = 2
+    All = 3
+
+class SkyBoxes(IntEnum):
+    Unknown = -1
+    BlueSkyAndClouds = 0
+    Sunset = 1
+    BlueSkyAndGround = 2
+    Black = 3
+    White = 4
+    Graydient = 5

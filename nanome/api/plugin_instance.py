@@ -1,4 +1,4 @@
-from nanome.util import Logs, DirectoryRequestOptions, IntEnum, config
+from nanome.util import Logs, IntEnum, config
 from nanome.util.enums import StreamDirection, ShapeType
 from nanome._internal import _PluginInstance
 from nanome._internal._process import _Bonding, _Dssp
@@ -6,10 +6,8 @@ from nanome._internal._network._commands._callbacks import _Messages
 from nanome.api.integration import Integration
 from nanome.api.ui import Menu
 from nanome.api.streams import Stream
-from nanome.api import shapes
+from nanome.api import shapes, Room, Files
 
-import inspect
-import sys
 import os
 
 class PluginInstance(_PluginInstance):
@@ -25,7 +23,9 @@ class PluginInstance(_PluginInstance):
 
     def __pseudo_init__(self):
         self.__menu = Menu() #deprecated
+        self.room = Room()
         self.integration = Integration()
+        self.files = Files(self)
         self.__set_first = False
 
     @property
@@ -256,31 +256,6 @@ class PluginInstance(_PluginInstance):
         id = self._network._send(_Messages.menu_transform_request, index, callback != None)
         self._save_callback(id, callback)
 
-    def request_directory(self, path, callback = None, pattern = "*"):
-        """
-        | Requests the content of a directory on the machine running Nanome
-
-        :param path: Path to request. E.g. "." means Nanome's running directory
-        :type path: str
-        :param pattern: Pattern to match. E.g. "*.txt" will match all .txt files. Default value is "*" (match everything)
-        :type pattern: str
-        """
-        options = DirectoryRequestOptions()
-        options._directory_name = path
-        options._pattern = pattern
-        id = self._network._send(_Messages.directory_request, options, callback != None)
-        self._save_callback(id, callback)
-
-    def request_files(self, file_list, callback = None):
-        """
-        | Reads files on the machine running Nanome, and returns them
-
-        :param file_list: List of file name (with path) to read. E.g. ["a.sdf", "../b.sdf"] will read a.sdf in running directory, b.sdf in parent directory, and return them
-        :type file_list: list of :class:`str`
-        """
-        id = self._network._send(_Messages.file_request, file_list, callback != None)
-        self._save_callback(id, callback)
-
     def save_files(self, file_list, callback = None):
         """
         | Save files on the machine running Nanome, and returns result
@@ -444,6 +419,19 @@ class PluginInstance(_PluginInstance):
             return shapes.Sphere(self._network)
 
         raise ValueError('Parameter shape_type must be a value of nanome.util.enums.ShapeType')
+
+    def apply_color_scheme(self, color_scheme, target, only_carbons):
+        """
+        Applies a color scheme to selected atoms.
+
+        :param color_scheme: the color scheme to use on atoms
+        :type color_scheme: :class:`~nanome.util.enums.ColorScheme`
+        :param target: whether you want to color the atom, the surface, or the ribbon
+        :type target: :class:`~nanome.util.enums.ColorSchemeTarget`
+        :param only_carbons: whether you want to only color carbons, or all atoms.
+        :type only_carbons: bool
+        """
+        self._network._send(_Messages.apply_color_scheme, (color_scheme, target, only_carbons), False)
 
     @property
     def plugin_files_path(self):

@@ -62,11 +62,23 @@ class _Commands(__CommandEnum):
     stream_feed_done = auto()
     stream_interrupt = auto()
 
-    #File
+    #File deprecated
     directory_response= auto()
     file_response= auto()
     file_save_done= auto()
     export_files_result= auto()
+
+    #Files
+    print_working_directory_response = auto()
+    cd_response = auto()
+    ls_response = auto()
+    mv_response = auto()
+    cp_response = auto()
+    get_response = auto()
+    put_response = auto()
+    rm_response = auto()
+    rmdir_response = auto()
+    mkdir_response = auto()
 
     #Macro
     get_macros_response = auto()
@@ -126,11 +138,23 @@ class _Messages(__CommandEnum):
     stream_feed = auto()
     stream_destroy = auto()
 
-    #File
+    #Files Deprecated
     directory_request = auto()
     file_request = auto()
     file_save = auto()
     export_files = auto()
+
+    #Files
+    print_working_directory = auto()
+    cd = auto()
+    ls = auto()
+    mv = auto()
+    get = auto()
+    put = auto()
+    rm = auto()
+    rmdir = auto()
+    mkdir = auto()
+    cp = auto()
 
     #Macro
     save_macro = auto()
@@ -152,6 +176,8 @@ class _Messages(__CommandEnum):
     open_url = auto()
     load_file = auto()
     integration = auto()
+    set_skybox = auto()
+    apply_color_scheme = auto()
 
 class _IntegrationCommands(__CommandEnum):
     # Tmp hack
@@ -165,6 +191,7 @@ class _IntegrationCommands(__CommandEnum):
     minimization_start = auto()
     minimization_stop = auto()
     file_export = auto()
+    generate_molecule_image = auto()
 
 class _Hashes():
     CommandHashes = [None] * len(_Commands)
