@@ -19,7 +19,7 @@ class _CreateStream(_TypeSerializer):
         if version >= 2:
             context.write_byte(value[2])
 
-        if stream_type == SType.shape_position_rotation or stream_type == SType.shape_color or stream_type == SType.shape_position_rotation:
+        if stream_type == SType.shape_position_rotation or stream_type == SType.shape_color or stream_type == SType.sphere_shape_radius:
             context.write_int_array(value[1])
         else:
             context.write_long_array(value[1])

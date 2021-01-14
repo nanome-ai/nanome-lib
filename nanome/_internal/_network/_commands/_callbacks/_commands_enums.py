@@ -191,6 +191,7 @@ class _IntegrationCommands(__CommandEnum):
     minimization_start = auto()
     minimization_stop = auto()
     file_export = auto()
+    generate_molecule_image = auto()
 
 class _Hashes():
     CommandHashes = [None] * len(_Commands)

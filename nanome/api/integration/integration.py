@@ -9,6 +9,7 @@ class Integration():
         self.minimization_start = None
         self.minimization_stop = None
         self.export_file = None
+        self.generate_molecule_image = None
 
     def _call(self, name, request):
         callback = getattr(self, name, None)

@@ -2,7 +2,6 @@ from nanome._internal._files import _Files
 from nanome.util import FileErrorCode
 from nanome._internal._network._commands._callbacks import _Messages
 
-
 class Files(_Files):
     def __init__(self, plugin_instance):
         self.plugin = plugin_instance
