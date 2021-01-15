@@ -2,7 +2,7 @@ from nanome._internal._util._serializers import _StringSerializer
 
 from nanome._internal._util._serializers import _TypeSerializer
 
-class _FileExport(_TypeSerializer):
+class _ExportFile(_TypeSerializer):
     _String = _StringSerializer()
 
     def version(self):
@@ -15,6 +15,6 @@ class _FileExport(_TypeSerializer):
         pass
 
     def deserialize(self, version, context):
-        filename = context.read_using_serializer(_FileExport._String)
+        filename = context.read_using_serializer(_ExportFile._String)
         data = context.read_byte_array()
         return (filename, data)
