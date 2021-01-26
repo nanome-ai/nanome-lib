@@ -1,17 +1,18 @@
 from nanome._internal._util._serializers import _TypeSerializer
-from nanome._internal._network._commands._callbacks._commands_enums import _Hashes, _IntegrationCommands
+from nanome._internal._network._commands._callbacks._commands_enums import _Hashes
 from nanome._internal._integration import _serialization as Serializers
+from nanome.util.enums import Integrations
 
 class _Integration(_TypeSerializer):
     __integrations = {
-        _Hashes.IntegrationHashes[_IntegrationCommands.hydrogen_add]: Serializers._AddHydrogen(),
-        _Hashes.IntegrationHashes[_IntegrationCommands.hydrogen_remove]: Serializers._RemoveHydrogen(),
-        _Hashes.IntegrationHashes[_IntegrationCommands.structure_prep]: Serializers._StructurePrep(),
-        _Hashes.IntegrationHashes[_IntegrationCommands.calculate_esp]: Serializers._CalculateESP(),
-        _Hashes.IntegrationHashes[_IntegrationCommands.minimization_start]: Serializers._StartMinimization(),
-        _Hashes.IntegrationHashes[_IntegrationCommands.minimization_stop]: Serializers._StopMinimization(),
-        _Hashes.IntegrationHashes[_IntegrationCommands.file_export]: Serializers._FileExport(),
-        _Hashes.IntegrationHashes[_IntegrationCommands.generate_molecule_image]: Serializers._GenerateMoleculeImage(),
+        _Hashes.IntegrationHashes[Integrations.hydrogen_add]: Serializers._AddHydrogen(),
+        _Hashes.IntegrationHashes[Integrations.hydrogen_remove]: Serializers._RemoveHydrogen(),
+        _Hashes.IntegrationHashes[Integrations.structure_prep]: Serializers._StructurePrep(),
+        _Hashes.IntegrationHashes[Integrations.calculate_esp]: Serializers._CalculateESP(),
+        _Hashes.IntegrationHashes[Integrations.minimization_start]: Serializers._StartMinimization(),
+        _Hashes.IntegrationHashes[Integrations.minimization_stop]: Serializers._StopMinimization(),
+        _Hashes.IntegrationHashes[Integrations.file_export]: Serializers._FileExport(),
+        _Hashes.IntegrationHashes[Integrations.generate_molecule_image]: Serializers._GenerateMoleculeImage(),
     }
 
     def __init__(self):

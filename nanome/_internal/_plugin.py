@@ -1,6 +1,7 @@
 from . import _PluginInstance
 from nanome._internal import _network as Network
 from nanome._internal._process import _ProcessManager, _LogsManager
+from nanome._internal._network._commands._callbacks._commands_enums import _Hashes
 from nanome._internal._network._serialization._serializer import Serializer
 from nanome._internal._util._serializers import _TypeSerializer
 from nanome.util.logs import Logs
@@ -319,6 +320,12 @@ class _Plugin(object):
 
         if isinstance(tags, str):
             tags = [tags]
+
+        for i in range(0, len(permissions)):
+            permissions[i] = _Hashes.PermissionHashes[permissions[i]]
+
+        for i in range(0, len(integrations)):
+            integrations[i] = _Hashes.IntegrationHashes[integrations[i]]
 
         self._description = {
             'name': name,
