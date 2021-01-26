@@ -314,23 +314,20 @@ class _Plugin(object):
         Logs.debug("Starting plugin")
         plugin._run()
 
-    def __init__(self, name, description, category="", has_advanced=False, permissions=None):
+    def __init__(self, name, description, tags=[], has_advanced=False, permissions=[], integrations=[]):
         self._sessions = dict()
-        if permissions == None:
-            permissions = {}
-        for key in permissions.keys():
-            if permissions[key] == True:
-                permissions[key] = 1
-            elif permissions[key] == False:
-                permissions[key] = 0
+
+        if isinstance(tags, str):
+            tags = [tags]
 
         self._description = {
             'name': name,
             'description': description,
-            'category': category,
+            'categories': tags,
             'hasAdvanced': has_advanced,
             'auth': None,
-            'permissions': permissions
+            'permissions': permissions,
+            'integrations': integrations
         }
         self._plugin_class = None
         self.__connected = False
