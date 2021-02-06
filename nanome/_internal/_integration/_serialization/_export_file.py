@@ -15,6 +15,7 @@ class _ExportFile(_TypeSerializer):
         pass
 
     def deserialize(self, version, context):
+        location = context.read_using_serializer(_ExportFile._String)
         filename = context.read_using_serializer(_ExportFile._String)
         data = context.read_byte_array()
-        return (filename, data)
+        return (location, filename, data)
