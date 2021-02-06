@@ -11,6 +11,7 @@ class Integration():
         self.export_file = None
         self.export_locations = None
         self.generate_molecule_image = None
+        self.import_file = None
 
     def _call(self, name, request):
         callback = getattr(self, name, None)
