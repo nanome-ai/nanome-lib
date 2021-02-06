@@ -8,8 +8,9 @@ class Integration():
         self.calculate_esp = None
         self.minimization_start = None
         self.minimization_stop = None
-        self.generate_molecule_image = None
         self.export_file = None
+        self.export_locations = None
+        self.generate_molecule_image = None
         self.import_file = None
 
     def _call(self, name, request):

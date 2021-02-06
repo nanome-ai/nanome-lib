@@ -10,9 +10,10 @@ class _Integration(_TypeSerializer):
         _Hashes.IntegrationHashes[_IntegrationCommands.calculate_esp]: Serializers._CalculateESP(),
         _Hashes.IntegrationHashes[_IntegrationCommands.minimization_start]: Serializers._StartMinimization(),
         _Hashes.IntegrationHashes[_IntegrationCommands.minimization_stop]: Serializers._StopMinimization(),
-        _Hashes.IntegrationHashes[_IntegrationCommands.generate_molecule_image]: Serializers._GenerateMoleculeImage(),
+        _Hashes.IntegrationHashes[_IntegrationCommands.export_locations]: Serializers._ExportLocations(),
         _Hashes.IntegrationHashes[_IntegrationCommands.export_file]: Serializers._ExportFile(),
         _Hashes.IntegrationHashes[_IntegrationCommands.import_file]: Serializers._ImportFile(),
+        _Hashes.IntegrationHashes[_IntegrationCommands.generate_molecule_image]: Serializers._GenerateMoleculeImage(),
     }
 
     def __init__(self):

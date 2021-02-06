@@ -190,6 +190,7 @@ class _IntegrationCommands(__CommandEnum):
     calculate_esp = auto()
     minimization_start = auto()
     minimization_stop = auto()
+    export_locations = auto()
     generate_molecule_image = auto()
     export_file = auto()
     import_file = auto()
