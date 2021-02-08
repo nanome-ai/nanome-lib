@@ -1,5 +1,5 @@
 from nanome.util import Logs, config
-from nanome.util.enums import StreamDirection, ShapeType, PluginListButtonType
+from nanome.util.enums import IntEnum, StreamDirection, ShapeType, PluginListButtonType
 from nanome._internal import _PluginInstance
 from nanome._internal._process import _Bonding, _Dssp
 from nanome._internal._network._commands._callbacks import _Messages
@@ -349,6 +349,10 @@ class PluginInstance(_PluginInstance):
         """
         id = self._network._send(_Messages.controller_transforms_request, None, callback != None)
         self._save_callback(id, callback)
+
+    class PluginListButtonType(IntEnum):
+        run = 0
+        advanced_settings = 1
 
     def set_plugin_list_button(self, button, text = None, usable = None):
         """
