@@ -1,6 +1,5 @@
 from . import IntEnum
-# TODO normalize styling
-
+#TODO normalize styling
 
 class AtomRenderingMode(IntEnum):
     BallStick = 0
