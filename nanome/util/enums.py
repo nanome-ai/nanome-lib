@@ -32,6 +32,10 @@ class PaddingTypes(IntEnum):
     fixed = 0
     ratio = 1
 
+class PluginListButtonType(IntEnum):
+    run = 0
+    advanced_settings = 1
+
 class SizingTypes(IntEnum):
     expand = 0
     fixed = 1
@@ -40,7 +44,7 @@ class SizingTypes(IntEnum):
 class LayoutTypes(IntEnum):
     vertical = 0
     horizontal = 1
-    
+
 class ScalingOptions(IntEnum):
     stretch = 0
     fill = 1
