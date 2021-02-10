@@ -172,11 +172,26 @@ class _Messages(_CommandEnum):
     set_skybox = auto()
     apply_color_scheme = auto()
 
+class _Integrations(_CommandEnum):
+    # Tmp hack
+    reset_auto() #Not an enum
+
+    # Hydrogens
+    hydrogen_add = auto()
+    hydrogen_remove = auto()
+    structure_prep = auto()
+    calculate_esp = auto()
+    minimization_start = auto()
+    minimization_stop = auto()
+    file_export = auto()
+    generate_molecule_image = auto()
+
 class _Hashes():
     CommandHashes = [None] * len(_Commands)
     MessageHashes = [None] * len(_Messages)
-    IntegrationHashes = [None] * len(Integrations)
-    PermissionHashes = [None] * len(Permissions)
+    IntegrationHashes = [None] * len(_Integrations)
+    IntegrationRequestHashes = [None] * len(Integrations)
+    PermissionRequestHashes = [None] * len(Permissions)
     HashToIntegrationName = dict()
 
 a_char_value = ord('a')
@@ -224,7 +239,7 @@ def init_hashes():
     hashes.clear()
     i = -1
 
-    for command in Integrations:
+    for command in _Integrations:
         i += 1
         hash = hash_command(command.name)
         if hash in hashes:
@@ -232,6 +247,18 @@ def init_hashes():
             continue
         hashes[hash] = command.name
         _Hashes.IntegrationHashes[i] = hash
+
+    hashes.clear()
+    i = -1
+
+    for command in Integrations:
+        i += 1
+        hash = hash_command(command.name)
+        if hash in hashes:
+            Logs.error("Integration request hash collision detected:", command.name, "and", hashes[hash])
+            continue
+        hashes[hash] = command.name
+        _Hashes.IntegrationRequestHashes[i] = hash
         _Hashes.HashToIntegrationName[hash] = command.name
 
     hashes.clear()
@@ -241,9 +268,9 @@ def init_hashes():
         i += 1
         hash = hash_command(command.name)
         if hash in hashes:
-            Logs.error("Permission hash collision detected:", command.name, "and", hashes[hash])
+            Logs.error("Permission request hash collision detected:", command.name, "and", hashes[hash])
             continue
         hashes[hash] = command.name
-        _Hashes.PermissionHashes[i] = hash
+        _Hashes.PermissionRequestHashes[i] = hash
 
 init_hashes()

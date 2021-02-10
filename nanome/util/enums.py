@@ -175,15 +175,14 @@ class Integrations(_CommandEnum):
     # Tmp hack
     reset_auto() #Not an enum
 
-    # Hydrogens
-    hydrogen_add = auto()
-    hydrogen_remove = auto()
+    hydrogens = auto()
     structure_prep = auto()
     calculate_esp = auto()
-    minimization_start = auto()
-    minimization_stop = auto()
-    file_export = auto()
+    minimization = auto()
+    export_file = auto()
+    export_locations = auto()
     generate_molecule_image = auto()
+    import_file = auto()
 
 class Permissions(_CommandEnum):
     # Tmp hack

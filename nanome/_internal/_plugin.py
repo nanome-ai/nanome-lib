@@ -321,16 +321,21 @@ class _Plugin(object):
         if isinstance(tags, str):
             tags = [tags]
 
+        category = ""
+        if len(tags) > 0:
+            category = tags[0]
+
         for i in range(0, len(permissions)):
-            permissions[i] = _Hashes.PermissionHashes[permissions[i]]
+            permissions[i] = _Hashes.PermissionRequestHashes[permissions[i]]
 
         for i in range(0, len(integrations)):
-            integrations[i] = _Hashes.IntegrationHashes[integrations[i]]
+            integrations[i] = _Hashes.IntegrationRequestHashes[integrations[i]]
 
         self._description = {
             'name': name,
             'description': description,
-            'categories': tags,
+            'category': category,
+            'tags': tags,
             'hasAdvanced': has_advanced,
             'auth': None,
             'permissions': permissions,
