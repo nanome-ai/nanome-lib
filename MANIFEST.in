@@ -1,0 +1,4 @@
+include nanome/_internal/_process/_external/_dssp/*
+include nanome/template/*
+include nanome/template/docker/*
+include nanome/template/nanome_plugin/*

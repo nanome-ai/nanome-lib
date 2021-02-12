@@ -5,9 +5,6 @@ else
 	bump2version $1
 fi
 
-echo "Zipping plugin template "
-(cd plugin-template && zip -9r ../nanome/plugin-template.zip .)
-
 rm -rf build
 rm -rf dist
 rm -rf *.egg-info

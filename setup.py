@@ -34,10 +34,5 @@ setup(
         "nanome-setup-plugins = nanome.setup_config:main",
         "nanome-plugin-init = nanome.plugin_init:main"
     ]},
-    package_data={
-        "nanome": [
-            "_internal/_process/_external/_dssp/*",
-            "plugin-template.zip"
-        ]
-    },
+    include_package_data=True,
 )

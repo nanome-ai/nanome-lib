@@ -2,9 +2,9 @@ import datetime
 import os
 import re
 import sys
-import zipfile
+from shutil import copytree
 
-TEMPLATE_ZIP = os.path.join(os.path.dirname(__file__), 'plugin-template.zip')
+TEMPLATE = os.path.join(os.path.dirname(__file__), 'template')
 
 USAGE = '\n' + sys.argv[0].split('/')[-1] + """ <folder>
 
@@ -43,14 +43,12 @@ def main():
     fields['command'] = fields['folder'].replace('_', '-')
     fields['year'] = str(datetime.datetime.today().year)
 
-    with zipfile.ZipFile(TEMPLATE_ZIP, 'r') as z:
-        z.extractall(path)
-
+    copytree(TEMPLATE, path)
     for root, dirs, files in os.walk(path):
         if '.git' in root: continue
         for file in files:
             file_path = os.path.join(root, file)
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, 'r', encoding='ISO-8859-1') as f:
                 content = f.read()
             for key, value in fields.items():
                 content = content.replace('{{%s}}' % key, value)
