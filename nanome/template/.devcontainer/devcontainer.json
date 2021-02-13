@@ -26,7 +26,14 @@
   },
 
   // Add the IDs of extensions you want installed when the container is created.
-  "extensions": ["ms-azuretools.vscode-docker", "spadin.remote-x11", "ms-python.python", "ms-python.vscode-pylance", "ms-vscode-remote.vscode-remote-extensionpack", "ms-vsliveshare.vsliveshare"],
+  "extensions": [
+    "ms-azuretools.vscode-docker",
+    "spadin.remote-x11",
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "ms-vscode-remote.vscode-remote-extensionpack",
+    "ms-vsliveshare.vsliveshare"
+  ]
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   // "forwardPorts": [],
@@ -35,5 +42,5 @@
   // "postCreateCommand": "docker --version",
 
   // Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
-  "remoteUser": "vscode"
+  // "remoteUser": "vscode"
 }
