@@ -27,5 +27,5 @@ function dcreset() {
 }
 
 function direset() {
-  docker image rm -f $(docker image ls -aq) && dkreset
+  docker image rm -f $(docker image ls -aq) && dcreset
 }
