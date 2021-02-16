@@ -24,4 +24,7 @@ class _GenerateMoleculeImage(_TypeSerializer):
 
     def deserialize(self, version, context):
         context.payload["Atom"] = context.read_using_serializer(self.dict)
-        return context.read_using_serializer(self.complex_array)
+        ligands = context.read_using_serializer(self.complex_array)
+        x = context.read_int()
+        y = context.read_int()
+        return ligands, (x, y)
