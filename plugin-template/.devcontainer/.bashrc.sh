@@ -1,6 +1,6 @@
 export PLUGINS=plugins.nanome.ai
 
-plugin() {
+function plugin() {
   if [ $# -eq 0 ]; then
   args="-a $PLUGINS -p 9999 -v -debug"
   else
@@ -10,11 +10,11 @@ plugin() {
   python3 run.py -r $args
 }
 
-pip-save() {
+function pip-save() {
   pip install $1 && pip freeze | grep $1 >> requirements.txt
 }
 
-nanome-source() {(
+function nanome-source() {(
   cd .. && git clone https://github.com/nanome-ai/nanome-lib.git && cd nanome-lib &&\
   if [[ $1 == latest ]]; then
     git checkout $(git describe --tags `git rev-list --tags --max-count=1`)
