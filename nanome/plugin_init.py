@@ -45,6 +45,7 @@ def main():
 
     with zipfile.ZipFile(TEMPLATE_ZIP, 'r') as z:
         z.extractall(path)
+
     for root, dirs, files in os.walk(path):
         if '.git' in root: continue
         for file in files:
