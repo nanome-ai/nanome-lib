@@ -41,8 +41,8 @@ def main():
     fields['class'] = re.sub(r'\W', '', name)
     fields['folder'] = 'nanome_' + re.sub(r'\s', '_', name.lower())
     fields['command'] = fields['folder'].replace('_', '-')
+    fields['workspace'] = 'plugin-'+fields["command"][7:]
     fields['year'] = str(datetime.datetime.today().year)
-    fields['path'] = path
 
     with zipfile.ZipFile(TEMPLATE_ZIP, 'r') as z:
         z.extractall(path)
