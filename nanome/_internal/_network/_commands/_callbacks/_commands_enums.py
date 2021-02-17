@@ -247,6 +247,7 @@ def init_hashes():
             continue
         hashes[hash] = command.name
         _Hashes.IntegrationHashes[i] = hash
+        _Hashes.HashToIntegrationName[hash] = command.name
 
     hashes.clear()
     i = -1
@@ -259,7 +260,6 @@ def init_hashes():
             continue
         hashes[hash] = command.name
         _Hashes.IntegrationRequestHashes[i] = hash
-        _Hashes.HashToIntegrationName[hash] = command.name
 
     hashes.clear()
     i = -1
