@@ -33,20 +33,20 @@ RUN export DISPLAY=${DISPLAY}
 # Remember session using xfce4
 RUN echo xfce4-session > ~/.xsession
 
-COPY .bashrc.sh /tmp/.bashrc
-RUN mv /tmp/.bashrc ~/.bashrc
-
 # Install xterm (& wget & default-jre) for graphical applications
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends python3-pip xterm wget
 
 # Install miniconda
-RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh && \
+RUN wget https://repo.anaconda.com/miniconda/Miniconda3-py37_4.8.3-Linux-x86_64.sh -O miniconda.sh && \
     chmod +x ./miniconda.sh && \
     ./miniconda.sh -b && \
     eval "$(~/miniconda3/bin/conda shell.bash hook)" && \
     conda init && \
     rm ./miniconda.sh
+
+COPY .bashrc.sh /tmp/.bashrc
+RUN mv /tmp/.bashrc ~/.bashrc
 
 # Install nanome-lib
 RUN ~/miniconda3/bin/pip3 install install setuptools
