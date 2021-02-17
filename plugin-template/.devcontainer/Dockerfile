@@ -46,10 +46,9 @@ RUN wget https://repo.anaconda.com/miniconda/Miniconda3-py37_4.8.3-Linux-x86_64.
     rm ./miniconda.sh
 
 COPY .bashrc.sh /tmp/.bashrc
-RUN mv /tmp/.bashrc ~/.bashrc
+RUN cat /tmp/.bashrc >> ~/.bashrc
 
 # Install nanome-lib
-RUN ~/miniconda3/bin/pip3 install install setuptools
-RUN ~/miniconda3/bin/pip3 install -e git+https://github.com/nanome-ai/nanome-lib.git#egg=nanome
+RUN ~/miniconda3/bin/pip install setuptools nanome
 ENTRYPOINT [ "/usr/local/share/docker-init.sh" ]
 CMD [ "sleep", "infinity" ]
