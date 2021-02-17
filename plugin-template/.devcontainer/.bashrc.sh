@@ -14,6 +14,22 @@ pip-save() {
   pip install $1 && pip freeze | grep $1 >> requirements.txt
 }
 
+nanome-source() {
+  wd=$(pwd)
+  cd .. && git clone https://github.com/nanome-ai/nanome-lib.git && cd nanome-lib
+  if [[ $1 == latest ]]; then
+    branch=$(git describe --tags `git rev-list --tags --max-count=1`)
+  elif [[ $1 != "" ]]; then
+    branch=$1
+  else
+    branch=master
+  fi
+  git checkout $branch
+  (cd plugin-template && zip -9r ../nanome/plugin-template.zip .)
+  pip install --upgrade . && cd $wd
+  rm -rf ../nanome-lib
+}
+
 function dipop() {
   docker rmi -f $(docker image ls -aq | head -n 1)
 }

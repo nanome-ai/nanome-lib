@@ -26,7 +26,7 @@ RUN apt-get update \
 # the Docker socket if "overrideCommand": false is set in devcontainer.json.
 # The script will also execute CMD if you need to alter startup behaviors.
 
-WORKDIR /workspaces/plugin-knime-docking
+WORKDIR /workspaces/{{path}}
 # Give environment 'display' for x11 interface
 ENV DISPLAY="0.0.0.0"
 # add DISPLAY to .bashrc
@@ -34,12 +34,10 @@ RUN export DISPLAY=${DISPLAY}
 # Remember session using xfce4
 RUN echo xfce4-session > ~/.xsession
 
-COPY logo.txt /tmp/logo.txt
-RUN cat /tmp/logo.txt
 COPY .bashrc.sh /tmp/.bashrc
 RUN mv /tmp/.bashrc ~/.bashrc
 
-# Install xterm (& wget & default-jre) for graphical applications (Knime)
+# Install xterm (& wget & default-jre) for graphical applications
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends python3-pip xterm wget
 

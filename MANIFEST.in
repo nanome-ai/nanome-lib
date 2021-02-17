@@ -1,7 +1,2 @@
 include nanome/_internal/_process/_external/_dssp/*
-include nanome/template/*
-include nanome/template/docker/*
-include nanome/template/nanome_plugin/*
-include nanome/template/.devcontainer/*
-include nanome/template/.devcontainer/library-scripts/*
-include nanome/template/.vscode/*
+include nanome/plugin-template.zip
