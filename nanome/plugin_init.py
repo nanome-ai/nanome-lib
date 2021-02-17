@@ -61,7 +61,7 @@ def main():
                 os.chmod(file_path, perm | 0o111)
 
     plugin_path = os.path.join(path, 'nanome_plugin', fields['class'] + '.py')
-    os.rename(os.path.join(path, 'nanome_plugin/Plugin.py'), plugin_path)
+    os.rename(os.path.join(path, 'nanome_plugin', 'Plugin.py'), plugin_path)
     folder_path = os.path.join(path, fields['folder'])
     os.rename(os.path.join(path, 'nanome_plugin'), folder_path)
 
