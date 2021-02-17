@@ -26,7 +26,6 @@ RUN apt-get update \
 # the Docker socket if "overrideCommand": false is set in devcontainer.json.
 # The script will also execute CMD if you need to alter startup behaviors.
 
-WORKDIR /workspaces/{{workspace}}
 # Give environment 'display' for x11 interface
 ENV DISPLAY="0.0.0.0"
 # add DISPLAY to .bashrc
