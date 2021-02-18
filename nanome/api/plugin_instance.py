@@ -165,7 +165,7 @@ class PluginInstance(_PluginInstance):
 
     def zoom_on_structures(self, structures, callback=None):
         """
-        | Repositions and resizes the workspace such that the provided structure(s) will be in the 
+        | Repositions and resizes the workspace such that the provided structure(s) will be in the
         | center of the users view.
 
         :param structures: Molecular structure(s) to update.
@@ -176,7 +176,7 @@ class PluginInstance(_PluginInstance):
 
     def center_on_structures(self, structures, callback=None):
         """
-        | Repositions the workspace such that the provided structure(s) will be in the 
+        | Repositions the workspace such that the provided structure(s) will be in the
         | center of the world.
 
         :param structures: Molecular structure(s) to update.
@@ -184,7 +184,7 @@ class PluginInstance(_PluginInstance):
         """
         id = self._network._send(_Messages.structures_center, structures, callback != None)
         self._save_callback(id, callback)
-        
+
     def add_to_workspace(self, complex_list, callback=None):
         """
         | Add a list of complexes to the current workspace
@@ -204,7 +204,7 @@ class PluginInstance(_PluginInstance):
         """
         self._menus[menu.index] = menu
         self._network._send(_Messages.menu_update, menu, False)
-        
+
     def update_content(self, *content):
         """
         | Update specific UI elements (button, slider, list...)
@@ -223,8 +223,8 @@ class PluginInstance(_PluginInstance):
         | Updates layout nodes and their children
 
         :param nodes: Layout nodes to update
-        :type nodes: :class:`~nanome.api.ui.layout_node` 
-            or multiple :class:`~nanome.api.ui.layout_node` 
+        :type nodes: :class:`~nanome.api.ui.layout_node`
+            or multiple :class:`~nanome.api.ui.layout_node`
             or a list of :class:`~nanome.api.ui.layout_node`
         """
         if len(nodes) == 1 and isinstance(nodes[0], list):
@@ -368,7 +368,7 @@ class PluginInstance(_PluginInstance):
         else:
             current_text = [self._advanced_settings_text]
             current_usable = [self._advanced_settings_usable]
-        
+
         if text == None:
             text = current_text[0]
         else:
@@ -380,13 +380,24 @@ class PluginInstance(_PluginInstance):
 
         self._network._send(_Messages.plugin_list_button_set, (button, text, usable), False)
 
-    def send_files_to_load(self, files_list, callback = None):
+    def send_files_to_load(self, files_list, callback=None):
+        """
+        | Send file(s) to Nanome to load directly using Nanome's importers.
+        | Can send just a list of paths, or a list of tuples containing (path, name)
+
+        :param files_list: List of files to load
+        :type files_list: list of or unique object of type :class:`str` or (:class:`str`, :class:`str`)
+        """
         files = []
         if not isinstance(files_list, list):
             files_list = [files_list]
         for file in files_list:
-            full_path = file.replace('\\', '/')
-            file_name = full_path.split('/')[-1]
+            if isinstance(file, tuple):
+                full_path, file_name = file
+                file_name += full_path.split('.')[-1]
+            else:
+                full_path = file.replace('\\', '/')
+                file_name = full_path.split('/')[-1]
             with open(full_path, 'rb') as content_file:
                 data = content_file.read()
             files.append((file_name, data))
@@ -445,7 +456,7 @@ class PluginInstance(_PluginInstance):
         :type: tuple of objects or None if no data has been set
         """
         return self._custom_data
-        
+
 class _DefaultPlugin(PluginInstance):
     def __init__(self):
         pass
