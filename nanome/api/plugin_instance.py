@@ -394,7 +394,7 @@ class PluginInstance(_PluginInstance):
         for file in files_list:
             if isinstance(file, tuple):
                 full_path, file_name = file
-                file_name += full_path.split('.')[-1]
+                file_name += '.' + full_path.split('.')[-1]
             else:
                 full_path = file.replace('\\', '/')
                 file_name = full_path.split('/')[-1]
