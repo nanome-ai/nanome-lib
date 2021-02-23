@@ -1,4 +1,6 @@
 import datetime
+from functools import reduce
+from nanome.util import config
 import os
 import re
 import sys
@@ -28,6 +30,8 @@ def main():
         'repo': 'https://github.com/nanome-ai/'
     }
 
+    fields.update(config.default_json)
+
     try:
         for key, value in fields.items():
             res = input('%s (%s): ' % (key, value))
@@ -42,6 +46,14 @@ def main():
     fields['folder'] = 'nanome_' + re.sub(r'\s', '_', name.lower())
     fields['command'] = fields['folder'].replace('_', '-')
     fields['year'] = str(datetime.datetime.today().year)
+
+    key_to_tack = {'host': '-a', 'port': '-p', 'key_file': '-k', 'plugin_files_path': '-f'}
+    def concat_args(acc, key):
+        if (fields.get(key)):
+            return acc + key_to_tack.get(key,'')+' '+fields.get(key,'')+' '
+        else:
+            return acc
+    fields['setup_args'] = reduce(concat_args, key_to_tack.keys(), '')
 
     with zipfile.ZipFile(TEMPLATE_ZIP, 'r') as z:
         z.extractall(path)

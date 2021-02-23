@@ -1,16 +1,16 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Python: Nanome Plugin",
-            "type": "python",
-            "request": "launch",
-            "program": "run.py",
-            "args": ["-a", "plugins.nanome.ai", "-p", "9999", "-v", "-r"],
-            "console": "externalTerminal"
-       }
-    ]
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Nanome Plugin",
+      "type": "python",
+      "request": "launch",
+      "program": "run.py",
+      "args": ["-a", "{{host}}", "-p", "{{port}}", "-v", "-r"],
+      "console": "integratedTerminal"
+    }
+  ]
 }

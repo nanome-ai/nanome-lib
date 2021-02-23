@@ -26,10 +26,10 @@ RUN apt-get update \
 # the Docker socket if "overrideCommand": false is set in devcontainer.json.
 # The script will also execute CMD if you need to alter startup behaviors.
 
-# Give environment 'display' for x11 interface
+# Give environment 'DISPLAY' for x11 interface
 ENV DISPLAY="0.0.0.0"
 # add DISPLAY to .bashrc
-RUN export DISPLAY=${DISPLAY}
+RUN echo "export DISPLAY=$DISPLAY" >> ~/.bashrc
 # Remember session using xfce4
 RUN echo xfce4-session > ~/.xsession
 
@@ -50,5 +50,7 @@ RUN cat /tmp/.bashrc >> ~/.bashrc
 
 # Install nanome-lib
 RUN ~/miniconda3/bin/pip install setuptools nanome
+RUN ~/miniconda3/bin/nanome-setup-plugins {{setup_args}}
+
 ENTRYPOINT [ "/usr/local/share/docker-init.sh" ]
 CMD [ "sleep", "infinity" ]
