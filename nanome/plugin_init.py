@@ -50,7 +50,7 @@ def main():
     key_to_tack = {'host': '-a', 'port': '-p', 'key_file': '-k', 'plugin_files_path': '-f'}
     def concat_args(acc, key):
         if (fields.get(key)):
-            return acc + key_to_tack.get(key,'')+' '+fields.get(key,'')+' '
+            return acc + key_to_tack.get(key,'')+' '+str(fields.get(key,''))+' '
         else:
             return acc
     fields['setup_args'] = reduce(concat_args, key_to_tack.keys(), '')
