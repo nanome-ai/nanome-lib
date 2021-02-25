@@ -18,7 +18,7 @@ class {{class}}(nanome.PluginInstance):
 def main():
     plugin = nanome.Plugin('{{name}}', '{{description}}', '{{category}}', False)
     plugin.set_plugin_class({{class}})
-    plugin.run('127.0.0.1', 8888)
+    plugin.run(nanome.config.fetch('host'), nanome.config.fetch('port'))
 
 if __name__ == '__main__':
     main()

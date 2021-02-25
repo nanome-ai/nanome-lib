@@ -12,6 +12,7 @@
   ],
   "mounts": [
     "source=/var/run/docker.sock,target=/var/run/docker-host.sock,type=bind"
+    "source=${localEnv:HOME}${localEnv:APPDATA}/.nanome_lib,target=/root/.nanome_lib,type=bind,consistency=cached"
   ],
   "overrideCommand": false,
 

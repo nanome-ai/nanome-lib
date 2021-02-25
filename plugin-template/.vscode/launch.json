@@ -10,7 +10,8 @@
       "request": "launch",
       "program": "run.py",
       "args": ["-a", "{{host}}", "-p", "{{port}}", "-v", "-r"],
-      "console": "integratedTerminal"
+      "console": "integratedTerminal",
+      "pythonPath": "/root/miniconda3/bin/python"
     }
   ]
 }
