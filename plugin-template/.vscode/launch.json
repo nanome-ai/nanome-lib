@@ -9,9 +9,8 @@
       "type": "python",
       "request": "launch",
       "program": "run.py",
-      "args": ["-a", "{{host}}", "-p", "{{port}}", "-v", "-r"],
-      "console": "integratedTerminal",
-      "pythonPath": "/root/miniconda3/bin/python"
+      "args": ["-v", "-r"],
+      "console": "integratedTerminal"
     }
   ]
 }
