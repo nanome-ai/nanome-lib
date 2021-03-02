@@ -1,5 +1,5 @@
 .vs/
-.vscode/
+/.vscode
 *__pycache__*
 *.log
 *.pyproj

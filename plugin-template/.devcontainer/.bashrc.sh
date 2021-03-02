@@ -1,10 +1,8 @@
-export PLUGINS=plugins.nanome.ai
-
 function plugin() {
   if [ $# -eq 0 ]; then
-  args="-a $PLUGINS -p 9999 -v -debug"
+    args="-v"
   else
-  args=$*
+    args=$*
   fi
   echo python run.py -r $args
   python3 run.py -r $args
