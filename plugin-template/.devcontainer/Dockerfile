@@ -1,5 +1,5 @@
 # Note: You can use any Debian/Ubuntu based image you want.
-FROM mcr.microsoft.com/vscode/devcontainers/base:0-buster
+FROM nanome/plugin-env
 # [Option] Install zsh
 ARG INSTALL_ZSH="true"
 # [Option] Upgrade OS packages to their latest versions
