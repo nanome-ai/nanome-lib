@@ -50,7 +50,6 @@ RUN cat /tmp/.bashrc >> ~/.bashrc
 
 # Install nanome-lib
 RUN ~/miniconda3/bin/pip install setuptools nanome
-RUN ~/miniconda3/bin/nanome-setup-plugins {{setup_args}}
 
 ENTRYPOINT [ "/usr/local/share/docker-init.sh" ]
 CMD [ "sleep", "infinity" ]
