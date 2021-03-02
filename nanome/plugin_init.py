@@ -1,6 +1,4 @@
 import datetime
-from functools import reduce
-from nanome.util import config
 import os
 import re
 import sys

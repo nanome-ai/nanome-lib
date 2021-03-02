@@ -1,6 +1,6 @@
 function plugin() {
   if [ $# -eq 0 ]; then
-    args="-v -debug"
+    args="-v"
   else
     args=$*
   fi
