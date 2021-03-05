@@ -7,6 +7,8 @@ from ._label_serializer import _LabelSerializer
 from ._text_input_serializer import _TextInputSerializer
 from ._slider_serializer import _SliderSerializer
 from ._button_serializer import _ButtonSerializer
+from ._dropdown_item_serializer import _DropdownItemSerializer
+from ._dropdown_serializer import _DropdownSerializer
 
 from ._layout_node_serializer import _LayoutNodeSerializer
 from ._layout_node_serializer_deep import _LayoutNodeSerializerDeep

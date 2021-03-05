@@ -32,6 +32,10 @@ class PaddingTypes(IntEnum):
     fixed = 0
     ratio = 1
 
+class PluginListButtonType(IntEnum):
+    run = 0
+    advanced_settings = 1
+
 class SizingTypes(IntEnum):
     expand = 0
     fixed = 1
@@ -40,7 +44,7 @@ class SizingTypes(IntEnum):
 class LayoutTypes(IntEnum):
     vertical = 0
     horizontal = 1
-    
+
 class ScalingOptions(IntEnum):
     stretch = 0
     fill = 1
@@ -79,6 +83,9 @@ class StreamType(IntEnum):
     scale = 2
     label = 3
     complex_position_rotation = 4
+    shape_position_rotation = 5
+    shape_color = 6
+    sphere_shape_radius = 7
 
 class StreamDataType(IntEnum):
     float = 0
@@ -104,3 +111,50 @@ class VolumeVisualStyle(IntEnum):
     Mesh = 0
     FlatSurface = 1
     SmoothSurface = 2
+
+class ExportFormats(IntEnum):
+    Nanome = 0
+    PDB = 1
+    SDF = 2
+    MMCIF = 3
+    SMILES = 4
+
+class ShapeType(IntEnum):
+    Sphere = 0
+
+class ShapeAnchorType(IntEnum):
+    Workspace = 0
+    Complex = 1
+    Atom = 2
+
+class ColorScheme(IntEnum):
+    #None = 0 this one is on nanome but does nothing
+    Residue = 1
+    Occupancy = 2
+    BFactor = 3
+    Element = 4
+    Rainbow = 5
+    Chain = 6
+    DonorAcceptor = 7
+    SecondaryStructure = 8
+    Monochrome = 9
+    YRBHydrophobicity = 10
+    Hydrophobicity = 11
+    IMGT = 12
+    Kabat = 13
+    Chothia = 14
+
+class ColorSchemeTarget(IntEnum):
+    AtomBond = 0
+    Ribbon = 1
+    Surface = 2
+    All = 3
+
+class SkyBoxes(IntEnum):
+    Unknown = -1
+    BlueSkyAndClouds = 0
+    Sunset = 1
+    BlueSkyAndGround = 2
+    Black = 3
+    White = 4
+    Graydient = 5

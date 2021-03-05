@@ -163,6 +163,48 @@ class Atom(_Atom, Base):
     @is_het.setter
     def is_het(self, value):
         self._is_het = value
+
+    @property
+    def formal_charge(self):
+        return self._formal_charge
+    @formal_charge.setter
+    def formal_charge(self, value):
+        self._formal_charge = value
+
+    @property
+    def partial_charge(self):
+        return self._partial_charge
+    @partial_charge.setter
+    def partial_charge(self, value):
+        self._partial_charge = value
+
+    @property
+    def occupancy(self):
+        return self._occupancy
+    @occupancy.setter
+    def occupancy(self, value):
+        self._occupancy = value
+
+    @property
+    def bfactor(self):
+        return self._bfactor
+    @bfactor.setter
+    def bfactor(self, value):
+        self._bfactor = value
+
+    @property
+    def acceptor(self):
+        return self._acceptor
+    @acceptor.setter
+    def acceptor(self, value):
+        self._acceptor = value
+
+    @property
+    def donor(self):
+        return self._donor
+    @donor.setter
+    def donor(self, value):
+        self._donor = value
     #endregion
 
     #region conformer stuff
@@ -211,114 +253,114 @@ class Atom(_Atom, Base):
 
     class Rendering(object):
         def __init__(self, parent):
-            self.parent = parent
+            self._parent = parent
 
         def set_visible(self, value):
-            self.parent.atom_rendering = value
-            self.parent.hydrogened = value
-            self.parent.watered = value
-            self.parent.hetatomed = value
+            self._parent.atom_rendering = value
+            self._parent.hydrogened = value
+            self._parent.watered = value
+            self._parent.hetatomed = value
 
         @property
         def selected(self):
-            return self.parent.selected
+            return self._parent.selected
         @selected.setter
         def selected(self, value):
-            self.parent.selected = value
+            self._parent.selected = value
         
         @property
         def atom_mode(self):
-            return self.parent.atom_mode
+            return self._parent.atom_mode
         @atom_mode.setter
         def atom_mode(self, value):
-            self.parent.atom_mode = value
+            self._parent.atom_mode = value
         
         @property
         def labeled(self):
-            return self.parent.labeled
+            return self._parent.labeled
         @labeled.setter
         def labeled(self, value):
-            self.parent.labeled = value
+            self._parent.labeled = value
         
         @property
         def label_text(self):
-            return self.parent.label_text
+            return self._parent.label_text
         @label_text.setter
         def label_text(self, value):
-            self.parent.label_text = value
+            self._parent.label_text = value
 
         @property
         def atom_rendering(self):
-            return self.parent.atom_rendering
+            return self._parent.atom_rendering
         @atom_rendering.setter
         def atom_rendering(self, value):
-            self.parent.atom_rendering = value
+            self._parent.atom_rendering = value
         
         @property
         def atom_color(self):
-            return self.parent.atom_color
+            return self._parent.atom_color
         @atom_color.setter
         def atom_color(self, value):
-            self.parent.atom_color = value
+            self._parent.atom_color = value
         
         @property
         def surface_rendering(self):
-            return self.parent.surface_rendering
+            return self._parent.surface_rendering
         @surface_rendering.setter
         def surface_rendering(self, value):
-            self.parent.surface_rendering = value
+            self._parent.surface_rendering = value
         
         @property
         def surface_color(self):
-            return self.parent.surface_color
+            return self._parent.surface_color
         @surface_color.setter
         def surface_color(self, value):
-            self.parent.surface_color = value
+            self._parent.surface_color = value
         
         @property
         def surface_opacity(self):
-            return self.parent.surface_opacity
+            return self._parent.surface_opacity
         @surface_opacity.setter
         def surface_opacity(self, value):
-            self.parent.surface_opacity = value
+            self._parent.surface_opacity = value
 
     class Molecular(object):
         def __init__(self, parent):
-            self.parent = parent
+            self._parent = parent
 
         @property
         def symbol(self):
-            return self.parent.symbol
+            return self._parent.symbol
         @symbol.setter
         def symbol(self, value):
-            self.parent.symbol = value
+            self._parent.symbol = value
 
         @property
         def serial(self):
-            return self.parent.serial
+            return self._parent.serial
         @serial.setter
         def serial(self, value):
-            self.parent.serial = value
+            self._parent.serial = value
 
         @property
         def name(self):
-            return self.parent.name
+            return self._parent.name
         @name.setter
         def name(self, value):
-            self.parent.name = value
+            self._parent.name = value
 
         @property
         def position(self):
-            return self.parent.position
+            return self._parent.position
         @position.setter
         def position(self, value):
-            self.parent.position = value
+            self._parent.position = value
 
         @property
         def is_het(self):
-            return self.parent.is_het
+            return self._parent.is_het
         @is_het.setter
         def is_het(self, value):
-            self.parent.is_het = value
+            self._parent.is_het = value
     #endregion
 _Atom._create = Atom

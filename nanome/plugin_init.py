@@ -6,8 +6,17 @@ import zipfile
 
 TEMPLATE_ZIP = os.path.join(os.path.dirname(__file__), 'plugin-template.zip')
 
+USAGE = '\n' + sys.argv[0].split('/')[-1] + """ <folder>
+
+    <folder> - name of plugin folder to be created
+"""
+
 def main():
-    path = sys.argv[1] if len(sys.argv) > 1 else '.'
+    if len(sys.argv) != 2:
+        print(USAGE)
+        sys.exit(1)
+
+    path = sys.argv[1]
     fields = {
         'name': 'Example Plugin',
         'description': 'A Nanome Plugin',
@@ -41,18 +50,18 @@ def main():
         if '.git' in root: continue
         for file in files:
             file_path = os.path.join(root, file)
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, 'r', encoding='utf-8', newline='') as f:
                 content = f.read()
             for key, value in fields.items():
                 content = content.replace('{{%s}}' % key, value)
-            with open(file_path, 'w', encoding='utf-8') as f:
+            with open(file_path, 'w', encoding='utf-8', newline='') as f:
                 f.write(content)
             if file_path.endswith('.sh'):
                 perm = os.stat(file_path).st_mode
                 os.chmod(file_path, perm | 0o111)
 
     plugin_path = os.path.join(path, 'nanome_plugin', fields['class'] + '.py')
-    os.rename(os.path.join(path, 'nanome_plugin/Plugin.py'), plugin_path)
+    os.rename(os.path.join(path, 'nanome_plugin', 'Plugin.py'), plugin_path)
     folder_path = os.path.join(path, fields['folder'])
     os.rename(os.path.join(path, 'nanome_plugin'), folder_path)
 

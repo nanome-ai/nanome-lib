@@ -1,4 +1,4 @@
-FROM continuumio/miniconda3
+FROM nanome/plugin-env
 
 ENV ARGS=''
 

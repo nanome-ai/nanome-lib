@@ -1,6 +1,4 @@
 from nanome._internal._network._serialization import _ContextDeserialization, _ContextSerialization
-from nanome._internal._util._serializers import _DictionarySerializer, _LongSerializer
-from nanome._internal._structure._serialization import _WorkspaceSerializer, _AtomSerializer
 from nanome._internal._util._serializers import _StringSerializer
 from nanome._internal._util._serializers import _TypeSerializer
 

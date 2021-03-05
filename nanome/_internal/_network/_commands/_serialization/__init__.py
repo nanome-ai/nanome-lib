@@ -5,9 +5,21 @@ from ._control import _Connect
 from ._control import _Run
 from ._control import _SetPluginListButton
 
-from ._file import _DirectoryRequest
-from ._file import _FileRequest
-from ._file import _FileSave
+from ._file import _PWD
+from ._file import _CD
+from ._file import _LS
+from ._file import _MV
+from ._file import _CP
+from ._file import _Get
+from ._file import _Put
+from ._file import _RM
+from ._file import _RMDir
+from ._file import _MKDir
+
+from ._file._deprecated import _DirectoryRequest
+from ._file._deprecated import _FileRequest
+from ._file._deprecated import _FileSave
+from ._file._deprecated import _ExportFiles
 
 from ._macro import _DeleteMacro
 from ._macro import _GetMacros
@@ -15,6 +27,9 @@ from ._macro import _GetMacrosResponse
 from ._macro import _RunMacro
 from ._macro import _SaveMacro
 from ._macro import _StopMacro
+
+from ._shapes import _DeleteShape
+from ._shapes import _SetShape
 
 from ._stream import _CreateStream
 from ._stream import _CreateStreamResult
@@ -27,6 +42,7 @@ from ._ui import _ButtonCallback
 from ._ui import _GetMenuTransform
 from ._ui import _GetMenuTransformResponse
 from ._ui import _ImageCallback
+from ._ui import _DropdownCallback
 from ._ui import _MenuCallback
 from ._ui import _SetMenuTransform
 from ._ui import _SliderCallback
@@ -69,3 +85,5 @@ from ._load_file_done import _LoadFileDone
 from ._integration import _Integration
 from ._open_url import _OpenURL
 from ._send_notification import _SendNotification
+from ._set_skybox import _SetSkybox
+from ._apply_color_scheme import _ApplyColorScheme

@@ -4,7 +4,7 @@ User Interface API
 Plugin Menu Creator
 ^^^^^^^^^^^^^^^^^^^
 
-In order to make menu creation easier, we provide a tool called Pluginator.
+In order to make menu creation easier, we provide a tool called StackStudio.
 
 .. todo::
     Write how to integrate plugin menu creator menus in a plugin
@@ -34,6 +34,7 @@ Currently available UI elements are:
 - :class:`~nanome.api.ui.image.Image`
 - :class:`~nanome.api.ui.mesh.Mesh`
 - :class:`~nanome.api.ui.ui_list.UIList`
+- :class:`~nanome.api.ui.dropdown.Dropdown`
 
 Following is an example of manual UI creation:
 

@@ -13,8 +13,10 @@ def parse_json(content_json):
     # type: () -> Button
     #region text
     button = _Button._create()
+    button._name = content_json.read("selected", button._name)
     button._selected = content_json.read("selected", button._selected)
     button._unusable = content_json.read("unusable", button._unusable)
+    button._disable_on_press = content_json.read("disable_on_press", button._disable_on_press)
     button._text._active = content_json.read("text_active", button._text._active)
     button._text._value._idle = content_json.read("text_value_idle", button._text._value._idle)
     button._text._value._selected = content_json.read("text_value_selected", button._text._value._selected)
@@ -60,12 +62,8 @@ def parse_json(content_json):
     button._icon._sharpness = content_json.read( "icon_sharpness", button._icon._sharpness)
     button._icon._size = content_json.read( "icon_size", button._icon._size)
     button._icon._ratio = content_json.read( "icon_ratio", button._icon._ratio)
-    button._icon._position = Vector3(content_json.read( "icon_position_x", button._icon._position.x),
-        content_json.read( "icon_position_y", button._icon._position.y),
-        content_json.read( "icon_position_z", button._icon._position.z))
-    button._icon._rotation = Vector3(content_json.read( "icon_rotation_x", button._icon._rotation.x),
-        content_json.read( "icon_rotation_y", button._icon._rotation.y),
-        content_json.read( "icon_rotation_z", button._icon._rotation.z))
+    button._icon._position = content_json.read("icon_position", button._icon._position)
+    button._icon._rotation = content_json.read("icon_rotation", button._icon._rotation)
     #endregion
     #region mesh
     button._mesh._active = content_json.read("mesh_active", button._mesh._active)
@@ -104,8 +102,11 @@ def parse_json(content_json):
 
 def write_json(helper, button):
     # type: (_Button) -> dict
+    helper.write("name", button._name)
     helper.write("selected", button._selected)
     helper.write("unusable", button._unusable)
+    helper.write("disable_on_press", button._disable_on_press)
+
     #region text
     helper.write("text_active", button._text._active)
     helper.write("text_value_idle", button._text._value._idle)

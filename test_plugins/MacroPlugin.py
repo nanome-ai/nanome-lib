@@ -104,16 +104,19 @@ class MacroPlugin(nanome.PluginInstance):
         print("Started")
         nanome.api.macro.Macro.set_plugin_identifier("MacroPlugin")
         self.macro = nanome.api.macro.Macro()
-        self.macro.title = "testmacro1"
+        self.macro.title = "testmacro2"
         self.macro.logic = TESTMACRO1
 
     def on_run(self):
         nanome.api.macro.Macro.get_live(self.on_get_macros)
 
+    def result(self, success):
+        Logs.message("Macro result:", success)
+
     def on_get_macros(self, macros):
         print(list(macro.title for macro in macros))
         if self.macro.title in map(lambda m: m.title, macros):
-            self.macro.delete()
+            self.macro.run(self.result)
         else:
             self.macro.save()
 

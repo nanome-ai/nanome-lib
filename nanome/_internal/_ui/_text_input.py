@@ -1,6 +1,9 @@
+import nanome
 from . import _UIBase
+from nanome.util import Color
 
 class _TextInput(_UIBase):
+    HorizAlignOptions = nanome.util.enums.HorizAlignOptions
         
     @classmethod
     def _create(cls):
@@ -10,8 +13,18 @@ class _TextInput(_UIBase):
         #Protocol
         super(_TextInput, self).__init__()
         self._max_length = 10
-        self._placeholder_text = "PlaceHolderText"
+        self._placeholder_text = ""
         self._input_text = ""
+        self._placeholder_text_color = Color.from_int(0x7C7F89FF)
+        self._text_color = Color.Black()
+        self._background_color = Color.White()
+        self._text_size = 1.0
+        self._text_horizontal_align = _TextInput.HorizAlignOptions.Left
+        self._padding_left = 0.015
+        self._padding_right = 0.01
+        self._padding_top = 0.0
+        self._padding_bottom = 0.0
+        self._multi_line = False
         self._password = False
         self._number = False
         #API

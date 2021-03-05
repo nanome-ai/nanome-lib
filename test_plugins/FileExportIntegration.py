@@ -13,7 +13,7 @@ HAS_ADVANCED_OPTIONS = False
 
 class FileExportIntegration(nanome.PluginInstance):
     def start(self):
-        self.integration.file_export = self.export
+        self.integration.export_file = self.export
     
     def export(self, request):
         (name, data) = request.get_args()

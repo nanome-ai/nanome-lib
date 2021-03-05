@@ -34,8 +34,8 @@ class Macro(_Macro):
     def save(self, all_users = False):
         self._save(all_users)
 
-    def run(self):
-        self._run()
+    def run(self, callback = None):
+        self._run(callback)
 
     def delete(self, all_users = False):
         self._delete(all_users)

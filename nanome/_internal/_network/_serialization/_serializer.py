@@ -116,12 +116,26 @@ add_command(CommandCallbacks._Commands.text_change, CommandSerializers._TextInpu
 add_command(CommandCallbacks._Commands.image_press, CommandSerializers._ImageCallback(), CommandCallbacks._image_pressed)
 add_command(CommandCallbacks._Commands.image_hold, CommandSerializers._ImageCallback(), CommandCallbacks._image_held)
 add_command(CommandCallbacks._Commands.image_release, CommandSerializers._ImageCallback(), CommandCallbacks._image_released)
+add_command(CommandCallbacks._Commands.dropdown_item_click, CommandSerializers._DropdownCallback(), CommandCallbacks._dropdown_item_clicked)
 add_command(CommandCallbacks._Commands.menu_transform_response, CommandSerializers._GetMenuTransformResponse(), CommandCallbacks._simple_callback_arg_unpack)
 
-#file
+#files deprecated
 add_command(CommandCallbacks._Commands.directory_response, CommandSerializers._DirectoryRequest(), CommandCallbacks._simple_callback_arg)
 add_command(CommandCallbacks._Commands.file_response, CommandSerializers._FileRequest(), CommandCallbacks._simple_callback_arg)
 add_command(CommandCallbacks._Commands.file_save_done, CommandSerializers._FileSave(), CommandCallbacks._simple_callback_arg)
+add_command(CommandCallbacks._Commands.export_files_result, CommandSerializers._ExportFiles(), CommandCallbacks._simple_callback_arg)
+
+#files
+add_command(CommandCallbacks._Commands.print_working_directory_response, CommandSerializers._PWD(), CommandCallbacks._simple_callback_arg_unpack)
+add_command(CommandCallbacks._Commands.cd_response, CommandSerializers._CD(), CommandCallbacks._simple_callback_arg)
+add_command(CommandCallbacks._Commands.ls_response, CommandSerializers._LS(), CommandCallbacks._simple_callback_arg_unpack)
+add_command(CommandCallbacks._Commands.mv_response, CommandSerializers._MV(), CommandCallbacks._simple_callback_arg)
+add_command(CommandCallbacks._Commands.cp_response, CommandSerializers._CP(), CommandCallbacks._simple_callback_arg)
+add_command(CommandCallbacks._Commands.get_response, CommandSerializers._Get(), CommandCallbacks._simple_callback_arg_unpack)
+add_command(CommandCallbacks._Commands.put_response, CommandSerializers._Put(), CommandCallbacks._simple_callback_arg)
+add_command(CommandCallbacks._Commands.rm_response, CommandSerializers._RM(), CommandCallbacks._simple_callback_arg)
+add_command(CommandCallbacks._Commands.rmdir_response, CommandSerializers._RMDir(), CommandCallbacks._simple_callback_arg)
+add_command(CommandCallbacks._Commands.mkdir_response, CommandSerializers._MKDir(), CommandCallbacks._simple_callback_arg)
 
 #streams
 add_command(CommandCallbacks._Commands.stream_create_done, CommandSerializers._CreateStreamResult(), CommandCallbacks._receive_create_stream_result)
@@ -131,11 +145,16 @@ add_command(CommandCallbacks._Commands.stream_feed_done, CommandSerializers._Fee
 
 #macros
 add_command(CommandCallbacks._Commands.get_macros_response, CommandSerializers._GetMacrosResponse(), CommandCallbacks._simple_callback_arg)
+add_command(CommandCallbacks._Commands.run_macro_result, CommandSerializers._RunMacro(), CommandCallbacks._simple_callback_arg)
 
 # Presenter
 add_command(CommandCallbacks._Commands.presenter_info_response, CommandSerializers._GetPresenterInfoResponse(), CommandCallbacks._simple_callback_arg)
 add_command(CommandCallbacks._Commands.presenter_change, CommandSerializers._PresenterChange(), CommandCallbacks._presenter_change)
 add_command(CommandCallbacks._Commands.controller_transforms_response, CommandSerializers._GetControllerTransformsResponse(), CommandCallbacks._simple_callback_arg_unpack)
+
+# Shape
+add_command(CommandCallbacks._Commands.set_shape_result, CommandSerializers._SetShape(), CommandCallbacks._simple_callback_arg_unpack)
+add_command(CommandCallbacks._Commands.delete_shape_result, CommandSerializers._DeleteShape(), CommandCallbacks._simple_callback_arg)
 
 #others
 add_command(CommandCallbacks._Commands.load_file_done, CommandSerializers._LoadFileDone(), CommandCallbacks._simple_callback_arg)
@@ -179,11 +198,24 @@ add_message(CommandCallbacks._Messages.menu_transform_request, CommandSerializer
 add_message(CommandCallbacks._Messages.notification_send, CommandSerializers._SendNotification())
 add_message(CommandCallbacks._Messages.hook_ui_callback, CommandSerializers._UIHook())
 
-#file
+#files deprecated
 add_message(CommandCallbacks._Messages.directory_request, CommandSerializers._DirectoryRequest())
 add_message(CommandCallbacks._Messages.file_request, CommandSerializers._FileRequest())
 add_message(CommandCallbacks._Messages.file_save, CommandSerializers._FileSave())
+add_message(CommandCallbacks._Messages.export_files, CommandSerializers._ExportFiles())
 add_message(CommandCallbacks._Messages.plugin_list_button_set, CommandSerializers._SetPluginListButton())
+
+#files
+add_message(CommandCallbacks._Messages.print_working_directory, CommandSerializers._PWD())
+add_message(CommandCallbacks._Messages.cd, CommandSerializers._CD())
+add_message(CommandCallbacks._Messages.ls, CommandSerializers._LS())
+add_message(CommandCallbacks._Messages.mv, CommandSerializers._MV())
+add_message(CommandCallbacks._Messages.cp, CommandSerializers._CP())
+add_message(CommandCallbacks._Messages.get, CommandSerializers._Get())
+add_message(CommandCallbacks._Messages.put, CommandSerializers._Put())
+add_message(CommandCallbacks._Messages.rm, CommandSerializers._RM())
+add_message(CommandCallbacks._Messages.rmdir, CommandSerializers._RMDir())
+add_message(CommandCallbacks._Messages.mkdir, CommandSerializers._MKDir())
 
 #macros
 add_message(CommandCallbacks._Messages.run_macro, CommandSerializers._RunMacro())
@@ -201,8 +233,13 @@ add_message(CommandCallbacks._Messages.stream_destroy, CommandSerializers._Destr
 add_message(CommandCallbacks._Messages.presenter_info_request, CommandSerializers._GetPresenterInfo())
 add_message(CommandCallbacks._Messages.controller_transforms_request, CommandSerializers._GetControllerTransforms())
 
+# Shape
+add_message(CommandCallbacks._Messages.set_shape, CommandSerializers._SetShape())
+add_message(CommandCallbacks._Messages.delete_shape, CommandSerializers._DeleteShape())
+
 #others
 add_message(CommandCallbacks._Messages.open_url, CommandSerializers._OpenURL())
 add_message(CommandCallbacks._Messages.load_file, CommandSerializers._LoadFile())
 add_message(CommandCallbacks._Messages.integration, CommandSerializers._Integration())
-
+add_message(CommandCallbacks._Messages.set_skybox, CommandSerializers._SetSkybox())
+add_message(CommandCallbacks._Messages.apply_color_scheme, CommandSerializers._ApplyColorScheme())

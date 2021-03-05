@@ -1,14 +1,13 @@
-from nanome.util import Logs, DirectoryRequestOptions, IntEnum, config
-from nanome.util.enums import StreamDirection
+from nanome.util import Logs, config
+from nanome.util.enums import StreamDirection, ShapeType, PluginListButtonType
 from nanome._internal import _PluginInstance
 from nanome._internal._process import _Bonding, _Dssp
 from nanome._internal._network._commands._callbacks import _Messages
 from nanome.api.integration import Integration
 from nanome.api.ui import Menu
 from nanome.api.streams import Stream
+from nanome.api import shapes, Room, Files
 
-import inspect
-import sys
 import os
 
 class PluginInstance(_PluginInstance):
@@ -24,8 +23,11 @@ class PluginInstance(_PluginInstance):
 
     def __pseudo_init__(self):
         self.__menu = Menu() #deprecated
+        self.room = Room()
         self.integration = Integration()
+        self.files = Files(self)
         self.__set_first = False
+        self.PluginListButtonType = PluginListButtonType
 
     @property
     def menu(self):
@@ -163,7 +165,7 @@ class PluginInstance(_PluginInstance):
 
     def zoom_on_structures(self, structures, callback=None):
         """
-        | Repositions and resizes the workspace such that the provided structure(s) will be in the 
+        | Repositions and resizes the workspace such that the provided structure(s) will be in the
         | center of the users view.
 
         :param structures: Molecular structure(s) to update.
@@ -174,7 +176,7 @@ class PluginInstance(_PluginInstance):
 
     def center_on_structures(self, structures, callback=None):
         """
-        | Repositions the workspace such that the provided structure(s) will be in the 
+        | Repositions the workspace such that the provided structure(s) will be in the
         | center of the world.
 
         :param structures: Molecular structure(s) to update.
@@ -182,7 +184,7 @@ class PluginInstance(_PluginInstance):
         """
         id = self._network._send(_Messages.structures_center, structures, callback != None)
         self._save_callback(id, callback)
-        
+
     def add_to_workspace(self, complex_list, callback=None):
         """
         | Add a list of complexes to the current workspace
@@ -202,24 +204,32 @@ class PluginInstance(_PluginInstance):
         """
         self._menus[menu.index] = menu
         self._network._send(_Messages.menu_update, menu, False)
-        
-    def update_content(self, content):
-        """
-        | Update a specific UI element (button, slider, list...)
 
-        :param content: UI element to update
-        :type content: :class:`~nanome.api.ui.ui_base`
+    def update_content(self, *content):
         """
+        | Update specific UI elements (button, slider, list...)
+
+        :param content: UI elements to update
+        :type content: :class:`~nanome.api.ui.ui_base`
+            or multiple :class:`~nanome.api.ui.ui_base`
+            or a list of :class:`~nanome.api.ui.ui_base`
+        """
+        if len(content) == 1 and isinstance(content[0], list):
+            content = content[0]
         self._network._send(_Messages.content_update, content, False)
 
-    def update_node(self, node):
+    def update_node(self, *nodes):
         """
-        | Update a layout node and its children
+        | Updates layout nodes and their children
 
-        :param node: Layout node to update
-        :type node: :class:`~nanome.api.ui.layout_node`
+        :param nodes: Layout nodes to update
+        :type nodes: :class:`~nanome.api.ui.layout_node`
+            or multiple :class:`~nanome.api.ui.layout_node`
+            or a list of :class:`~nanome.api.ui.layout_node`
         """
-        self._network._send(_Messages.node_update, node, False)
+        if len(nodes) == 1 and isinstance(nodes[0], list):
+            nodes = nodes[0]
+        self._network._send(_Messages.node_update, nodes, False)
 
     def set_menu_transform(self, index, position, rotation, scale):
         """
@@ -245,31 +255,6 @@ class PluginInstance(_PluginInstance):
         :type index: int
         """
         id = self._network._send(_Messages.menu_transform_request, index, callback != None)
-        self._save_callback(id, callback)
-
-    def request_directory(self, path, callback = None, pattern = "*"):
-        """
-        | Requests the content of a directory on the machine running Nanome
-
-        :param path: Path to request. E.g. "." means Nanome's running directory
-        :type path: str
-        :param pattern: Pattern to match. E.g. "*.txt" will match all .txt files. Default value is "*" (match everything)
-        :type pattern: str
-        """
-        options = DirectoryRequestOptions()
-        options._directory_name = path
-        options._pattern = pattern
-        id = self._network._send(_Messages.directory_request, options, callback != None)
-        self._save_callback(id, callback)
-
-    def request_files(self, file_list, callback = None):
-        """
-        | Reads files on the machine running Nanome, and returns them
-
-        :param file_list: List of file name (with path) to read. E.g. ["a.sdf", "../b.sdf"] will read a.sdf in running directory, b.sdf in parent directory, and return them
-        :type file_list: list of :class:`str`
-        """
-        id = self._network._send(_Messages.file_request, file_list, callback != None)
         self._save_callback(id, callback)
 
     def save_files(self, file_list, callback = None):
@@ -366,10 +351,6 @@ class PluginInstance(_PluginInstance):
         id = self._network._send(_Messages.controller_transforms_request, None, callback != None)
         self._save_callback(id, callback)
 
-    class PluginListButtonType(IntEnum):
-        run = 0
-        advanced_settings = 1
-
     def set_plugin_list_button(self, button, text = None, usable = None):
         """
         | Set text and/or usable state of the buttons on the plugin connection menu in Nanome
@@ -381,13 +362,13 @@ class PluginInstance(_PluginInstance):
         :param usable: Set button to be usable or not. If None, doesn't set usable text
         :type usable: bool
         """
-        if button == PluginInstance.PluginListButtonType.run:
+        if button == PluginListButtonType.run:
             current_text = [self._run_text]
             current_usable = [self._run_usable]
         else:
             current_text = [self._advanced_settings_text]
             current_usable = [self._advanced_settings_usable]
-        
+
         if text == None:
             text = current_text[0]
         else:
@@ -399,19 +380,66 @@ class PluginInstance(_PluginInstance):
 
         self._network._send(_Messages.plugin_list_button_set, (button, text, usable), False)
 
-    def send_files_to_load(self, files_list, callback = None):
+    def send_files_to_load(self, files_list, callback=None):
+        """
+        | Send file(s) to Nanome to load directly using Nanome's importers.
+        | Can send just a list of paths, or a list of tuples containing (path, name)
+
+        :param files_list: List of files to load
+        :type files_list: list of or unique object of type :class:`str` or (:class:`str`, :class:`str`)
+        """
         files = []
         if not isinstance(files_list, list):
             files_list = [files_list]
         for file in files_list:
-            full_path = file.replace('\\', '/')
-            file_name = full_path.split('/')[-1]
+            if isinstance(file, tuple):
+                full_path, file_name = file
+                file_name += '.' + full_path.split('.')[-1]
+            else:
+                full_path = file.replace('\\', '/')
+                file_name = full_path.split('/')[-1]
             with open(full_path, 'rb') as content_file:
                 data = content_file.read()
             files.append((file_name, data))
 
         id = self._network._send(_Messages.load_file, (files, True, True), callback != None)
         self._save_callback(id, callback)
+
+    def request_export(self, format, callback, entities = None):
+        """
+        Request a file export using Nanome exporters
+        Can request either molecule or workspace export, for entities in Nanome workspace
+        or directly sent by the plugin (without begin uploaded to workspace)
+
+        :param format: File format to export
+        :type format: :class:`~nanome.util.enums.ExportFormats`
+        :param entities: Entities to export (complexes to send, or indices if referencing complexes in workspace, or a workspace, or nothing if exporting Nanome workspace)
+        :type entities: list of or unique object of type :class:`~nanome.api.structure.workspace` or :class:`~nanome.api.structure.complex`, or None, or list of or unique :class:`int`
+        """
+        if entities != None and not isinstance(entities, list):
+            entities = [entities]
+
+        id = self._network._send(_Messages.export_files, (format, entities), True)
+        self._save_callback(id, callback)
+
+    def create_shape(self, shape_type):
+        if shape_type == ShapeType.Sphere:
+            return shapes.Sphere(self._network)
+
+        raise ValueError('Parameter shape_type must be a value of nanome.util.enums.ShapeType')
+
+    def apply_color_scheme(self, color_scheme, target, only_carbons):
+        """
+        Applies a color scheme to selected atoms.
+
+        :param color_scheme: the color scheme to use on atoms
+        :type color_scheme: :class:`~nanome.util.enums.ColorScheme`
+        :param target: whether you want to color the atom, the surface, or the ribbon
+        :type target: :class:`~nanome.util.enums.ColorSchemeTarget`
+        :param only_carbons: whether you want to only color carbons, or all atoms.
+        :type only_carbons: bool
+        """
+        self._network._send(_Messages.apply_color_scheme, (color_scheme, target, only_carbons), False)
 
     @property
     def plugin_files_path(self):
@@ -428,7 +456,7 @@ class PluginInstance(_PluginInstance):
         :type: tuple of objects or None if no data has been set
         """
         return self._custom_data
-        
+
 class _DefaultPlugin(PluginInstance):
     def __init__(self):
         pass

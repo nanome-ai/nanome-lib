@@ -31,7 +31,8 @@ class _TypeSerializer(object):
                 version = version_table[key]
                 result[key] = min(version, nanome_version)
             except:
-                Logs.warning("Plugin Library might be outdated: received a serializer version for an unknown serializer:", key, "Version:", nanome_version)
+                # Logs.warning("Plugin Library might be outdated: received a serializer version for an unknown serializer:", key, "Version:", nanome_version)
+                pass
         return result
 
     @abstractmethod

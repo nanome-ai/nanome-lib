@@ -38,6 +38,7 @@ class _Commands(__CommandEnum):
     image_press = auto()
     image_hold = auto()
     image_release = auto()
+    dropdown_item_click = auto()
     menu_transform_response = auto()
 
     #Structure
@@ -61,18 +62,36 @@ class _Commands(__CommandEnum):
     stream_feed_done = auto()
     stream_interrupt = auto()
 
-    #File
+    #File deprecated
     directory_response= auto()
     file_response= auto()
     file_save_done= auto()
+    export_files_result= auto()
+
+    #Files
+    print_working_directory_response = auto()
+    cd_response = auto()
+    ls_response = auto()
+    mv_response = auto()
+    cp_response = auto()
+    get_response = auto()
+    put_response = auto()
+    rm_response = auto()
+    rmdir_response = auto()
+    mkdir_response = auto()
 
     #Macro
     get_macros_response = auto()
+    run_macro_result = auto()
 
     # Presenter
     presenter_info_response = auto()
     presenter_change = auto()
     controller_transforms_response = auto()
+
+    # Shapes
+    set_shape_result = auto()
+    delete_shape_result = auto()
 
     #Other
     add_volume_done = auto()
@@ -119,10 +138,23 @@ class _Messages(__CommandEnum):
     stream_feed = auto()
     stream_destroy = auto()
 
-    #File
+    #Files Deprecated
     directory_request = auto()
     file_request = auto()
     file_save = auto()
+    export_files = auto()
+
+    #Files
+    print_working_directory = auto()
+    cd = auto()
+    ls = auto()
+    mv = auto()
+    get = auto()
+    put = auto()
+    rm = auto()
+    rmdir = auto()
+    mkdir = auto()
+    cp = auto()
 
     #Macro
     save_macro = auto()
@@ -135,11 +167,17 @@ class _Messages(__CommandEnum):
     presenter_info_request = auto()
     controller_transforms_request = auto()
 
+    # Shapes
+    set_shape = auto()
+    delete_shape = auto()
+
     #Other
     add_volume = auto()
     open_url = auto()
     load_file = auto()
     integration = auto()
+    set_skybox = auto()
+    apply_color_scheme = auto()
 
 class _IntegrationCommands(__CommandEnum):
     # Tmp hack
@@ -152,7 +190,10 @@ class _IntegrationCommands(__CommandEnum):
     calculate_esp = auto()
     minimization_start = auto()
     minimization_stop = auto()
-    file_export = auto()
+    export_locations = auto()
+    generate_molecule_image = auto()
+    export_file = auto()
+    import_file = auto()
 
 class _Hashes():
     CommandHashes = [None] * len(_Commands)

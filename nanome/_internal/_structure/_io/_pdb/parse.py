@@ -125,7 +125,7 @@ def record_atom(line, line_number):
     charge_str = record_chunk_string(line, 79, 80)
     if len(charge_str) >= 1:
         record.formal_charge = int(charge_str[:1])
-        if charge_str.Length >= 2 and charge_str[1] == '-':
+        if len(charge_str) >= 2 and charge_str[1] == '-':
             record.formal_charge *= -1
     # Special cases
     if (len(record.element_symbol) <= 0):
@@ -161,7 +161,7 @@ def record_het_atom(line, line_number):
     charge_str = record_chunk_string(line, 79, 80)
     if len(charge_str) >= 1:
         record.formal_charge = int(charge_str[:1])
-        if charge_str.Length >= 2 and charge_str[1] == '-':
+        if len(charge_str) >= 2 and charge_str[1] == '-':
             record.formal_charge *= -1
     # Special cases
     if len(record.element_symbol) <= 0:

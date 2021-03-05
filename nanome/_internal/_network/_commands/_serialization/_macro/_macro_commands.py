@@ -53,7 +53,7 @@ class _RunMacro(_TypeSerializer):
         pass
 
     def version(self):
-        return 0
+        return 1
 
     def name(self):
         return "RunMacro"
@@ -62,7 +62,9 @@ class _RunMacro(_TypeSerializer):
         context.write_using_serializer(self._macro_serializer, value)
 
     def deserialize(self, version, context):
-        raise NotImplementedError
+        if version < 1:
+            return
+        return context.read_bool()
 
 
 class _GetMacros(_TypeSerializer):

@@ -57,7 +57,7 @@ class _Dssp():
         # first frame if conformer, all frames if in frames (may change)
         if self.__molecule_idx >= len(complex._molecules):
             self.__update_secondary_structure(complex)
-            self.__current_complex_result.clear()
+            del self.__current_complex_result[:]
             self.__complex_idx += 1
             if self.__complex_idx >= len(self.__complexes):
                 self.__done()

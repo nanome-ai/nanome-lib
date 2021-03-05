@@ -1,6 +1,6 @@
 from . import _PluginInstance
 from nanome._internal import _network as Network
-from nanome._internal._process import _ProcessManager
+from nanome._internal._process import _ProcessManager, _LogsManager
 from nanome._internal._network._serialization._serializer import Serializer
 from nanome._internal._util._serializers import _TypeSerializer
 from nanome.util.logs import Logs
@@ -19,6 +19,7 @@ import signal
 
 try_reconnection_time = 20.0
 keep_alive_time_interval = 60.0
+keep_alive_timeout = 15.0
 
 __metaclass__ = type
 class _Plugin(object):
@@ -131,7 +132,7 @@ class _Plugin(object):
             except:
                 pass
         elif packet.packet_type == Network._Packet.packet_type_keep_alive:
-            pass
+            self.__waiting_keep_alive = False
         else:
             Logs.warning("Received a packet of unknown type", packet.packet_type, ". Ignoring")
 
@@ -196,6 +197,7 @@ class _Plugin(object):
         _Plugin.instance = self
         self._description['auth'] = self.__read_key_file()
         self._process_manager = _ProcessManager()
+        self._logs_manager = _LogsManager(self._plugin_class.__name__ + ".log")
         self.__connect()
         self.__loop()
 
@@ -221,12 +223,14 @@ class _Plugin(object):
         to_remove = []
         try:
             while True:
+                now = timer()
+
                 if self.__connected == False:
-                    elapsed = timer() - self.__disconnection_time
+                    elapsed = now - self.__disconnection_time
                     if elapsed >= try_reconnection_time:
                         Logs.message("Trying to reconnect...")
                         if self.__connect() == False:
-                            self.__disconnection_time = timer()
+                            self.__disconnection_time = now
                             continue
                     else:
                         time.sleep(try_reconnection_time - elapsed)
@@ -235,12 +239,20 @@ class _Plugin(object):
                     self.__connected = False
                     self.__disconnect()
                     continue
-                if timer() - self.__last_keep_alive >= keep_alive_time_interval:
-                    self.__last_keep_alive = timer()
-                    packet = Network._Packet()
-                    packet.set(_Plugin._plugin_id, Network._Packet.packet_type_keep_alive, 0)
-                    self._network.send(packet)
-                to_remove.clear()
+
+                if self.__waiting_keep_alive:
+                    if now - self.__last_keep_alive >= keep_alive_timeout:
+                        self.__connected = False
+                        self.__disconnect()
+                        continue
+                elif now - self.__last_keep_alive >= keep_alive_time_interval:
+                        self.__last_keep_alive = now
+                        self.__waiting_keep_alive = True
+                        packet = Network._Packet()
+                        packet.set(_Plugin._plugin_id, Network._Packet.packet_type_keep_alive, 0)
+                        self._network.send(packet)
+
+                del to_remove[:]
                 for id, session in self._sessions.items():
                     if session._read_from_plugin() == False:
                         session.close_pipes()
@@ -249,6 +261,7 @@ class _Plugin(object):
                     self._sessions[id]._send_disconnection_message(_Plugin._plugin_id)
                     del self._sessions[id]
                 self._process_manager._update()
+                self._logs_manager._update()
         except KeyboardInterrupt:
             self.__exit()
 
@@ -275,7 +288,7 @@ class _Plugin(object):
     def __on_client_connection(self, session_id, version_table):
         main_conn_net, process_conn_net = Pipe()
         main_conn_proc, process_conn_proc = Pipe()
-        session = Network._Session(session_id, self._network, self._process_manager, main_conn_net, main_conn_proc)
+        session = Network._Session(session_id, self._network, self._process_manager, self._logs_manager, main_conn_net, main_conn_proc)
         process = Process(target=_Plugin._launch_plugin, args=(self._plugin_class, session_id, process_conn_net, process_conn_proc, _Plugin.__serializer, _Plugin._plugin_id, version_table, _TypeSerializer.get_version_table(), Logs._is_verbose(), _Plugin._custom_data))
         process.start()
         session.plugin_process = process
@@ -313,3 +326,4 @@ class _Plugin(object):
         self.__to_ignore = []
         self._pre_run = None
         self._post_run = None
+        self.__waiting_keep_alive = False

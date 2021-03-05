@@ -7,7 +7,7 @@ import time
 
 NAME = "UI Plugin"
 DESCRIPTION = "A simple plugin demonstrating how plugin system can be used to extend Nanome capabilities"
-CATEGORY = "Simple Actions"
+CATEGORY = "File Import"
 HAS_ADVANCED_OPTIONS = False
 
 # Plugin
@@ -20,6 +20,9 @@ def menu_opened_callback(menu):
 
 def slider_changed_callback(slider): 
     Logs.message("slider changed: " + str(slider.current_value))
+
+def dropdown_callback(dropdown, item): 
+    Logs.message("dropdown item selected: " + str(item.name))
 
 def slider_released_callback(slider): 
     Logs.message("slider released: " + str(slider.current_value))
@@ -53,22 +56,23 @@ class UIPlugin(nanome.PluginInstance):
 
         def loading_bar_callback(button): 
             Logs.message("button pressed: " + button.text.value.idle)
-            button.text.value.selected = "Button Pressed!"
-            button.selected = not button.selected
 
             self.loadingBar.percentage += .1
             self.loadingBar.title = "TITLE"
             self.loadingBar.description = "DESCRIPTION " + str(self.loadingBar.percentage)
 
-            self.update_content(button)
             self.update_content(self.loadingBar)
 
         self.loading_bar_callback = loading_bar_callback
 
     def start(self):
+        self.integration.import_file = self.import_file
         Logs.message("Start UI Plugin")
         self.create_callbacks()
     
+    def import_file(self, request):
+        self.on_run()
+
     def on_run(self):
         Logs.message("Run UI Plugin")
         menu = self.rebuild_menu()
@@ -191,6 +195,12 @@ class UIPlugin(nanome.PluginInstance):
         textInput.register_changed_callback(text_changed_callback)
         textInput.register_submitted_callback(text_submitted_callback)
         textInput.number = True
+        textInput.text_color = nanome.util.Color.Blue()
+        textInput.placeholder_text_color = nanome.util.Color.Red()
+        textInput.background_color = nanome.util.Color.Grey()
+        textInput.text_horizontal_align = nanome.ui.TextInput.HorizAlignOptions.Right
+        textInput.padding_right = .2
+        textInput.text_size = .6
 
         Logs.message("Added text input")
 
@@ -217,6 +227,7 @@ class UIPlugin(nanome.PluginInstance):
         prefabButton = nanome.ui.Button()
         prefabButton.text.active = True
         prefabButton.text.value.set_all("Molecule Button")
+        prefabButton.disable_on_press = True
         prefabButton.register_pressed_callback(self.select_button_callback)
         child1.set_content(prefabLabel)
         child2.set_content(prefabButton)
@@ -252,7 +263,7 @@ class UIPlugin(nanome.PluginInstance):
         ln_contentBase = nanome.ui.LayoutNode()
         ln_label = nanome.ui.LayoutNode()
         ln_button = nanome.ui.LayoutNode()
-        ln_slider = nanome.ui.LayoutNode()
+        ln_dropdown = nanome.ui.LayoutNode()
         ln_textInput = nanome.ui.LayoutNode()
 
         content.forward_dist = .02
@@ -272,24 +283,23 @@ class UIPlugin(nanome.PluginInstance):
         ln_button.padding = (0.01, 0.01, 0.01, 0.01)
         ln_button.forward_dist = .001
 
-        button = nanome.ui.Button()
-        button.text.active = True
-        button.text.vertical_align = nanome.util.enums.VertAlignOptions.Middle
-        button.text.horizontal_align = nanome.util.enums.HorizAlignOptions.Middle
+        button = ln_button.add_new_toggle_switch("Toggle Switch")
+        button.text.size = .5
+        button.text.auto_size = False
         button.register_pressed_callback(self.loading_bar_callback)
         button.register_hover_callback(self.hover_callback)
 
         Logs.message("Added button")
 
-        ln_slider.padding_type = nanome.ui.LayoutNode.PaddingTypes.ratio
-        ln_slider.padding = (0.01, 0.01, 0.01, 0.01)
-        ln_slider.forward_dist = .001
+        ln_dropdown.padding_type = nanome.ui.LayoutNode.PaddingTypes.ratio
+        ln_dropdown.padding = (0.01, 0.01, 0.01, 0.01)
+        ln_dropdown.forward_dist = .004
 
-        slider = nanome.ui.Slider()
-        slider.register_changed_callback(slider_changed_callback)
-        slider.register_released_callback(slider_released_callback)
+        dropdown = nanome.ui.Dropdown()
+        dropdown.items = [nanome.ui.DropdownItem(name) for name in ["option1", "option2", "option3", "option4", "option5", "option6"]]
+        dropdown.register_item_clicked_callback(dropdown_callback)
 
-        Logs.message("Added slider")
+        Logs.message("Added dropdown")
 
         ln_textInput.padding_type = nanome.ui.LayoutNode.PaddingTypes.ratio
         ln_textInput.padding = (0.01, 0.01, 0.01, 0.01)
@@ -326,18 +336,18 @@ class UIPlugin(nanome.PluginInstance):
         child2.set_content(prefabButton)
 
         ln_loading_bar = nanome.ui.LayoutNode(name="LoadingBar")
-        ln_loading_bar.forward_dist = .03
+        ln_loading_bar.forward_dist = .003
         self.loadingBar = ln_loading_bar.add_new_loading_bar()
 
         content.add_child(ln_contentBase)
         ln_contentBase.add_child(ln_label)
         ln_contentBase.add_child(ln_button)
-        ln_contentBase.add_child(ln_slider)
+        ln_contentBase.add_child(ln_dropdown)
         ln_contentBase.add_child(ln_textInput)
         ln_contentBase.add_child(ln_loading_bar)
         ln_label.set_content(label)
         ln_button.set_content(button)
-        ln_slider.set_content(slider)
+        ln_dropdown.set_content(dropdown)
         ln_textInput.set_content(textInput)
         return content
 
@@ -355,8 +365,7 @@ class UIPlugin(nanome.PluginInstance):
             self.tab2.enabled = False
 
             self.update_node(self.tabs)
-            self.update_content(self.tab_button1)
-            self.update_content(self.tab_button2)
+            self.update_content(self.tab_button1, self.tab_button2)
 
         def tab2_callback(button):
             self.tab_button2.selected  = True
@@ -365,8 +374,7 @@ class UIPlugin(nanome.PluginInstance):
             self.tab1.enabled = False
 
             self.update_node(self.tabs)
-            self.update_content(self.tab_button2)
-            self.update_content(self.tab_button1)
+            self.update_content([self.tab_button2, self.tab_button1])
 
         tab_button_node1 = ln.create_child_node("tab1")
         self.tab_button1 = tab_button_node1.add_new_button("tab1")

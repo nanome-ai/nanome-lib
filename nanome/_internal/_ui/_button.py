@@ -19,10 +19,13 @@ class _Button(_UIBase):
         self._name = ""
         self._selected = False
         self._unusable = False
+        self._disable_on_press = False
+        self._toggle_on_press = False
         self._text = _Button._ButtonText._create()
         self._icon = _Button._ButtonIcon._create()
         self._mesh = _Button._ButtonMesh._create()
         self._outline = _Button._ButtonOutline._create()
+        self._switch = _Button._ButtonSwitch._create()
         self._tooltip = _Button._ButtonTooltip._create()
         #API
         self._pressed_callback = lambda _: None
@@ -111,6 +114,16 @@ class _Button(_UIBase):
             self._color._selected_highlighted = Color(whole_num = 0x00f9d0ff)
             self._color._unusable = Color.Grey()
 
+    class _ButtonSwitch(object):
+        @classmethod
+        def _create(cls):
+            return cls()
+
+        def __init__(self):
+            self._active = False
+            self._on_color = Color.from_int(0x00FFD5FF)
+            self._off_color = Color.from_int(0x727272FF)
+
     class _ButtonTooltip(object):
         @classmethod
         def _create(cls):
@@ -126,8 +139,10 @@ class _Button(_UIBase):
     def _copy_values_deep(self, other):
         super(_Button, self)._copy_values_deep(other)
         # States
+        self._name = other._name
         self._selected = other._selected
         self._unusable = other._unusable
+        self._disable_on_press = other._disable_on_press
         # Text
         self._text._active = other._text._active
         self._text._value._copy(other._text._value)

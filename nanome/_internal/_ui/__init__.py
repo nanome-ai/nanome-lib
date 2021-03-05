@@ -7,6 +7,8 @@ from ._label import _Label
 from ._text_input import _TextInput
 from ._slider import _Slider
 from ._button import _Button
+from ._dropdown import _Dropdown
+from ._dropdown_item import _DropdownItem
 from ._ui_list import _UIList
 
 from ._layout_node import _LayoutNode

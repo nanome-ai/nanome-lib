@@ -1,6 +1,6 @@
 import nanome
 from nanome._internal._ui import _LayoutNode
-from nanome.api.ui import Button, Slider, UIList, Mesh, Label, TextInput, Image, LoadingBar
+from nanome.api.ui import Button, Slider, UIList, Mesh, Label, TextInput, Image, LoadingBar, Dropdown
 from .io import LayoutNodeIO
 
 class LayoutNode(_LayoutNode):
@@ -227,31 +227,43 @@ class LayoutNode(_LayoutNode):
     #endregion
     #region Content adders
     def add_new_button(self, text = None):
-        # type: (str, str) -> Button
+        # type: (str) -> Button
         button = Button(text=text)
         self.set_content(button)
         return button
 
+    def add_new_toggle_switch(self, text = None):
+        # type: (str) -> Button
+        button = Button(text=text)
+        button.switch.active = True
+        button.outline.active = False
+        button.mesh.active = False
+        button.toggle_on_press = True
+        button.text.horizontal_align = nanome.util.enums.HorizAlignOptions.Left
+        self.set_content(button)
+        return button
+
     def add_new_label(self, text = None):
-        # type: (str, str) -> Label
+        # type: (str) -> Label
         label = Label(text=text)
         self.set_content(label)
         return label
 
-    def add_new_text_input(self):
-        # type: (str) -> TextInput
+    def add_new_text_input(self, placeholder_text = ""):
+        # type: () -> TextInput
         text_input = TextInput()
+        text_input.placeholder_text = placeholder_text
         self.set_content(text_input)
         return text_input
 
     def add_new_slider(self, min_value = 0, max_value = 10, current_value = 5):
-        # type: (str) -> Slider
+        # type: () -> Slider
         slider = Slider(min_value, max_value, current_value)
         self.set_content(slider)
         return slider
 
     def add_new_mesh(self):
-        # type: (str) -> Mesh
+        # type: () -> Mesh
         mesh = Mesh()
         self.set_content(mesh)
         return mesh
@@ -267,10 +279,16 @@ class LayoutNode(_LayoutNode):
         return loadingBar
 
     def add_new_list(self):
-        # type: (str) -> UIList
+        # type: () -> UIList
         list_ = UIList()
         self.set_content(list_)
         return list_
+
+    def add_new_dropdown(self):
+        # type: () -> Dropdown
+        dropdown_ = Dropdown()
+        self.set_content(dropdown_)
+        return dropdown_
     #endregion
 LayoutNode.io._setup_addon(LayoutNode)
 _LayoutNode._create = LayoutNode

@@ -21,6 +21,10 @@ class _Bonding():
             self.__fast_mode = fast_mode
 
     def _start(self):
+        if len(self.__complexes) == 0:
+            self.__callback(self.__complexes)
+            return
+
         self.__complex_idx = 0
         self.__molecule_idx = -1
         self.__input = tempfile.NamedTemporaryFile(delete=False, suffix='.pdb')
@@ -90,9 +94,9 @@ class _Bonding():
     def __match_and_bond(self, bonding_result):
         if self.__molecule_idx == 0:
             for atom in self.__saved_complex.atoms:
-                atom._bonds.clear()
+                del atom._bonds[:]
             for residue in self.__saved_complex.residues:
-                residue._bonds.clear()
+                del residue._bonds[:]
 
         if self.__molecule_idx == 0 or not self.__saved_is_conformer:
             self.__atom_by_serial = dict()
