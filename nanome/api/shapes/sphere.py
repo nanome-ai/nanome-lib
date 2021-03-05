@@ -1,12 +1,11 @@
-from . import Shape
-from .anchor import Anchor
+from nanome._internal._shapes._sphere import _Sphere
 from nanome.util.enums import ShapeType
+from . import Shape
 
-class Sphere(Shape):
-    def __init__(self, network):
-        super().__init__(network, ShapeType.Sphere)
-        self._anchors = [Anchor()]
-        self._radius = 1.0
+class Sphere(_Sphere, Shape):
+    def __init__(self):
+        _Sphere.__init__(self)
+        Shape.__init__(self, ShapeType.Sphere)
 
     @property
     def radius(self):

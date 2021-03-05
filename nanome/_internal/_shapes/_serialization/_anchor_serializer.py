@@ -1,0 +1,26 @@
+from nanome.util.enum import safe_cast
+from nanome._internal._util._serializers import _TypeSerializer, _UnityPositionSerializer
+from nanome._internal._shapes import _Anchor
+from nanome.util.enums import ShapeType
+
+class _AnchorSerializer(_TypeSerializer):
+    def __init__(self):
+        self._position = _UnityPositionSerializer()
+
+    def version(self):
+        return 0
+
+    def name(self):
+        return "SetShape"
+
+    def serialize(self, version, value, context):
+        context.write_int(value._target)
+        context.write_using_serializer(self._position, value._position)
+        context.write_byte(int(value._anchor_type))
+
+    def deserialize(self, version, context):
+        result = _Anchor._create()
+        result._target = context.read_int()
+        result._position = context.read_using_serializer(self._position)
+        result._anchor_type = ShapeType.safe_cast(context.read_byte())
+        return result

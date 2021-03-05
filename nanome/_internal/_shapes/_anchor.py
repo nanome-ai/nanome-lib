@@ -5,6 +5,10 @@ from nanome.util.enums import ShapeAnchorType
 
 class _Anchor(object):
     def __init__(self):
-        self._target = 0.0
+        self._target = 0
         self._position = Vector3()
         self._anchor_type = ShapeAnchorType.Workspace
+
+    @classmethod
+    def _create(cls):
+        return cls()

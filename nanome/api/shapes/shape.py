@@ -25,3 +25,4 @@ class Shape(_Shape):
 
     def destroy(self):
         self._destroy()
+_Shape._create = Shape

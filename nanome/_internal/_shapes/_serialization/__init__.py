@@ -1,1 +1,3 @@
 from ._sphere_serializer import _SphereSerializer
+from ._shape_serializer import _ShapeSerializer
+from ._anchor_serializer import _AnchorSerializer

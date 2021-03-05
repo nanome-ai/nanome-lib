@@ -27,3 +27,4 @@ class Anchor(_Anchor):
     @anchor_type.setter
     def anchor_type(self, value):
         self._anchor_type = value
+_Anchor._create = Anchor

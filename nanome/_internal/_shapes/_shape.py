@@ -10,6 +10,10 @@ class _Shape(object):
         self._anchors = []
         self._color = Color()
 
+    @classmethod
+    def _create(cls):
+        return cls()
+
     def _upload(self, done_callback=None):
         def set_callback(index, result):
             if self._index != -1 and index != self._index:
