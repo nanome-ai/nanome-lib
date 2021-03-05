@@ -121,6 +121,7 @@ class ExportFormats(IntEnum):
 
 class ShapeType(IntEnum):
     Sphere = 0
+    Line = 1
 
 class ShapeAnchorType(IntEnum):
     Workspace = 0
