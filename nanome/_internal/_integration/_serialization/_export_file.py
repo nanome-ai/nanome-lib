@@ -12,7 +12,7 @@ class _ExportFile(_TypeSerializer):
         return "ExportFile"
 
     def serialize(self, version, value, context):
-        pass
+        context.write_bool(value)
 
     def deserialize(self, version, context):
         location = context.read_using_serializer(_ExportFile._String)
