@@ -22,11 +22,11 @@ def anchor(self, value):
 @property
 @nanome.util.Logs.deprecated()
 def position(self):
-    return self._anchors[0].position
+    return self._anchors[0].offset
 @position.setter
 @nanome.util.Logs.deprecated()
 def position(self, value):
-    self._anchors[0].position = value
+    self._anchors[0].offset = value
 
 _Shape.target = target
 _Shape.anchor = anchor

@@ -1,5 +1,5 @@
 from nanome._internal._util._serializers import _TypeSerializer, _UnityPositionSerializer, _ColorSerializer, _UnityRotationSerializer
-from nanome._internal._shapes._serialization import _SphereSerializer
+from nanome._internal._shapes._serialization import _SphereSerializer, _ShapeSerializer
 from nanome.util.enums import ShapeType
 from nanome.util import Quaternion
 
@@ -9,6 +9,7 @@ class _SetShape(_TypeSerializer):
         self._rotation = _UnityRotationSerializer()
         self._color = _ColorSerializer()
         self._sphere = _SphereSerializer()
+        self._shape = _ShapeSerializer()
 
     def version(self):
         return 1
@@ -28,7 +29,7 @@ class _SetShape(_TypeSerializer):
             context.write_using_serializer(self._rotation, Quaternion())
             context.write_using_serializer(self._color, value.color)
         else:
-            pass
+            context.write_using_serializer(self._shape, value)
 
     def deserialize(self, version, context):
         return (context.read_int(), context.read_bool())

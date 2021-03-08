@@ -3,16 +3,15 @@ from nanome._internal._network._commands._callbacks import _Messages
 from nanome.util import Color, Logs
 
 class _Shape(object):
-    def __init__(self, network, shape_type):
-        self.__network = network
+    def __init__(self, shape_type):
         self._index = -1
         self._shape_type = shape_type
         self._anchors = []
         self._color = Color()
 
     @classmethod
-    def _create(cls):
-        return cls()
+    def _create(cls, shape_type):
+        return cls(shape_type)
 
     def _upload(self, done_callback=None):
         def set_callback(index, result):
@@ -22,8 +21,8 @@ class _Shape(object):
             if done_callback != None:
                 done_callback(result)
 
-        id = self.__network._send(_Messages.set_shape, self, True)
+        id = nanome._internal._network._ProcessNetwork._instance._send(_Messages.set_shape, self, True)
         nanome.PluginInstance._save_callback(id, set_callback)
 
     def _destroy(self):
-        self.__network._send(_Messages.delete_shape, self._index, False)
+        nanome._internal._network._ProcessNetwork._instance._send(_Messages.delete_shape, self._index, False)

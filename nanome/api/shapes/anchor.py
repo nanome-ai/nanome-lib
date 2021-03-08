@@ -13,12 +13,12 @@ class Anchor(_Anchor):
         self._target = value
 
     @property
-    def position(self):
-        return self._position
+    def offset(self):
+        return self._offset
 
-    @position.setter
-    def position(self, value):
-        self._position = value
+    @offset.setter
+    def offset(self, value):
+        self._offset = value
 
     @property
     def anchor_type(self):

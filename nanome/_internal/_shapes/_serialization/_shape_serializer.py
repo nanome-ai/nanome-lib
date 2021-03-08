@@ -13,7 +13,7 @@ class _SetShape(_TypeSerializer):
         self._anchor_array.set_type(_AnchorSerializer)
 
     def version(self):
-        return 0
+        return 1
 
     def name(self):
         return "SetShape"
@@ -30,15 +30,15 @@ class _SetShape(_TypeSerializer):
         context.write_using_serializer(self._color, value.Color)
 
     def deserialize(self, version, context):
-        result = _Shape()
-        context.write_byte(int(value.ShapeType))
-        if value.shape_type == ShapeType.Sphere:
-            context.write_using_serializer(self._sphere, value)
-        if value.shape_type == ShapeType.Line:
+        shapeType = ShapeType.safe_cast(context.read_byte())
+        result = None
+        if shapeType == ShapeType.Sphere:
+            result = context.read_using_serializer(self._sphere)
+        if shapeType == ShapeType.Line:
             pass
-            # context.write_using_serializer(_Line, (Line)value)
-        context.write_int(value.Index)
-        context.write_using_serializer(self._anchor_array, value.Anchors)
-        context.write_using_serializer(self._color, value.Color)
+            # result = context.read_using_serializer(self._line)
+        result._Index = context.read_int()
+        result._Anchors = context.read_using_serializer(self._anchor_array)
+        result._Color = context.read_using_serializer(self._color)
 
         return (context.read_int(), context.read_bool())

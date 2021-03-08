@@ -2,8 +2,8 @@ import nanome
 from nanome._internal._shapes._shape import _Shape
 
 class Shape(_Shape):
-    def __init__(self, network, shape_type):
-        _Shape.__init__(self, network, shape_type)
+    def __init__(self, shape_type):
+        _Shape.__init__(self, shape_type)
 
     @property
     def index(self):
