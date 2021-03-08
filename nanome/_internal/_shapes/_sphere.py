@@ -1,5 +1,5 @@
-from ._shape import _Shape
 from ._anchor import _Anchor
+from ._shape import _Shape
 from nanome.util.enums import ShapeType
 
 

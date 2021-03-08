@@ -5,7 +5,7 @@ from nanome.util.enums import ShapeType
 
 class _AnchorSerializer(_TypeSerializer):
     def __init__(self):
-        self._position = _UnityPositionSerializer()
+        self._offset = _UnityPositionSerializer()
 
     def version(self):
         return 0
