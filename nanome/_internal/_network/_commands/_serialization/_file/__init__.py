@@ -11,3 +11,4 @@ from ._put import _Put
 from ._rm import _RM
 from ._rmdir import _RMDir
 from ._mkdir import _MKDir
+from ._export_files import _ExportFiles
