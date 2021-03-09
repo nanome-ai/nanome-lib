@@ -15,11 +15,11 @@ from ._file import _Put
 from ._file import _RM
 from ._file import _RMDir
 from ._file import _MKDir
+from ._file import _ExportFiles
 
 from ._file._deprecated import _DirectoryRequest
 from ._file._deprecated import _FileRequest
 from ._file._deprecated import _FileSave
-from ._file._deprecated import _ExportFiles
 
 from ._macro import _DeleteMacro
 from ._macro import _GetMacros
