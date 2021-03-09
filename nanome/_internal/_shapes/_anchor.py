@@ -1,5 +1,3 @@
-import nanome
-from nanome._internal._network._commands._callbacks import _Messages
 from nanome.util import Vector3, Logs
 from nanome.util.enums import ShapeAnchorType
 

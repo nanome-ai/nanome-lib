@@ -1,4 +1,3 @@
-from nanome.util.enum import safe_cast
 from nanome._internal._util._serializers import _TypeSerializer, _UnityPositionSerializer
 from nanome._internal._shapes import _Anchor
 from nanome.util.enums import ShapeType

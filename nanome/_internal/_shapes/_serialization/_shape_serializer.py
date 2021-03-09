@@ -4,7 +4,7 @@ from nanome._internal._shapes import _Shape
 
 from nanome.util.enums import ShapeType
 
-class _SetShape(_TypeSerializer):
+class _ShapeSerializer(_TypeSerializer):
     def __init__(self):
         self._position = _UnityPositionSerializer()
         self._color = _ColorSerializer()
