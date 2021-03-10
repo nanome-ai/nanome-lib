@@ -3,6 +3,7 @@ from nanome._internal._shapes._serialization import _SphereSerializer, _AnchorSe
 
 from nanome.util.enums import ShapeType
 
+
 class _ShapeSerializer(_TypeSerializer):
     def __init__(self):
         self._position = _UnityPositionSerializer()
@@ -16,15 +17,13 @@ class _ShapeSerializer(_TypeSerializer):
         return 1
 
     def name(self):
-        return "SetShape"
+        return "Shape"
 
     def serialize(self, version, value, context):
         context.write_byte(int(value._shape_type))
         if value.shape_type == ShapeType.Sphere:
-            print(ShapeType.Sphere)
             context.write_using_serializer(self._sphere, value)
         if value.shape_type == ShapeType.Line:
-            print(ShapeType.Line)
             context.write_using_serializer(self._line, value)
         context.write_int(value._index)
         context.write_using_serializer(self._anchor_array, value._anchors)

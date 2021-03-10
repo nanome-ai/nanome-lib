@@ -10,16 +10,16 @@ class _AnchorSerializer(_TypeSerializer):
         return 0
 
     def name(self):
-        return "SetShape"
+        return "ShapeAnchor"
 
     def serialize(self, version, value, context):
-        context.write_int(value._target)
-        context.write_using_serializer(self._offset, value._offset)
+        context.write_long(value._target)
         context.write_byte(int(value._anchor_type))
+        context.write_using_serializer(self._offset, value._offset)
 
     def deserialize(self, version, context):
         result = _Anchor._create()
-        result._target = context.read_int()
-        result._offset = context.read_using_serializer(self._offset)
+        result._target = context.read_long()
         result._anchor_type = ShapeType.safe_cast(context.read_byte())
+        result._offset = context.read_using_serializer(self._offset)
         return result
