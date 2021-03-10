@@ -1,4 +1,3 @@
-import nanome
 from nanome._internal._shapes._shape import _Shape
 
 class Shape(_Shape):

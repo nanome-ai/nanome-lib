@@ -4,8 +4,8 @@ from . import Shape
 
 class Sphere(_Sphere, Shape):
     def __init__(self):
-        _Sphere.__init__(self)
         Shape.__init__(self, ShapeType.Sphere)
+        _Sphere.__init__(self)
 
     @property
     def radius(self):
@@ -13,3 +13,4 @@ class Sphere(_Sphere, Shape):
     @radius.setter
     def radius(self, value):
         self._radius = value
+_Sphere._create = Sphere
