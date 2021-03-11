@@ -99,8 +99,9 @@ class TestShapes(nanome.PluginInstance):
                     c = random.randrange(0, len(workspace.complexes) - 1)
 
                 sphere = cls.create_random_sphere()
-                sphere.anchor = nanome.util.enums.ShapeAnchorType.Complex
-                sphere.target = workspace.complexes[c].index
+                anchor = sphere.anchors[0]
+                anchor.anchor_type = nanome.util.enums.ShapeAnchorType.Complex
+                anchor.target = workspace.complexes[c].index
 
                 def done(success):
                     cls.spheres.append(sphere)
@@ -123,13 +124,14 @@ class TestShapes(nanome.PluginInstance):
                 a = random.randrange(0, atom_count - 1)
 
                 sphere = cls.create_random_sphere()
-                sphere.anchor = nanome.util.enums.ShapeAnchorType.Atom
                 if a == 0:
                     atom = next(workspace.complexes[c].atoms)
                 else:
                     atom = next(itertools.islice(workspace.complexes[c].atoms, a, None))
-                sphere.target = atom.index
-                sphere.position = nanome.util.Vector3()
+
+                anchor = sphere.anchors[0]
+                anchor.anchor_type = nanome.util.enums.ShapeAnchorType.Atom
+                anchor.target = atom.index
 
                 def done(success):
                     cls.spheres.append(sphere)
@@ -142,7 +144,8 @@ class TestShapes(nanome.PluginInstance):
             if len(cls.spheres) == 0:
                 return
             shape = cls.spheres[-1]
-            shape.anchor = (shape.anchor + 1) % len(nanome.util.enums.ShapeAnchorType)
+            anchor = shape.anchors[0]
+            anchor.anchor_type = (anchor.anchor_type + 1) % len(nanome.util.enums.ShapeAnchorType)
             shape.upload()
 
         @classmethod
@@ -156,8 +159,9 @@ class TestShapes(nanome.PluginInstance):
         def create_random_sphere(cls):
             sphere = Sphere()
             sphere.radius = random.uniform(0.5, 2.0)
-            sphere.position = nanome.util.Vector3(random.uniform(-2.0, 2.0), random.uniform(-2.0, 2.0), random.uniform(-2.0, 2.0))
             sphere.color = nanome.util.Color(random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255), random.randrange(100, 255))
+            anchor = sphere.anchors[0]
+            anchor.offset = nanome.util.Vector3(random.uniform(-.05, .05), random.uniform(-.05, .05), random.uniform(-.05, .05))
             return sphere
 
     class LineFactory():
@@ -201,7 +205,7 @@ class TestShapes(nanome.PluginInstance):
                     atom = next(workspace.complexes[c].atoms)
                 else:
                     atom = next(itertools.islice(workspace.complexes[c].atoms, a, None))
-                
+
                 cls.create_anchor(atom.index, nanome.util.enums.ShapeAnchorType.Atom)
 
             cls.parent.request_workspace(received)
@@ -211,7 +215,8 @@ class TestShapes(nanome.PluginInstance):
             if len(cls.lines) == 0:
                 return
             shape = cls.lines[-1]
-            shape.anchor = (shape.anchor + 1) % len(nanome.util.enums.ShapeAnchorType)
+            anchor = shape.anchors[0]
+            anchor.anchor_type = (anchor.anchor_type + 1) % len(nanome.util.enums.ShapeAnchorType)
             shape.upload()
 
         @classmethod
@@ -225,7 +230,7 @@ class TestShapes(nanome.PluginInstance):
         def create_anchor(cls, target, a_type):
             anchor = Anchor()
             anchor.target = target
-            anchor.offset = nanome.util.Vector3(random.uniform(-2.0, 2.0), random.uniform(-2.0, 2.0), random.uniform(-2.0, 2.0))
+            anchor.offset = nanome.util.Vector3(random.uniform(-.05, .05), random.uniform(-.05, .05), random.uniform(-.05, .05))
             anchor.anchor_type = a_type
             if cls.queued_anchor == None:
                 cls.queued_anchor = anchor
@@ -238,6 +243,7 @@ class TestShapes(nanome.PluginInstance):
             line = Line()
             line.thickness = random.uniform(0.5, 2.0)
             line.anchors = [anchor1, anchor2]
+
             def done(success):
                 cls.lines.append(line)
             line.upload(done)

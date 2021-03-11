@@ -19,6 +19,13 @@ class Shape(_Shape):
     def color(self, value):
         self._color = value
 
+    @property
+    def anchors(self):
+        return self._anchors
+    @anchors.setter
+    def anchors(self, value):
+        self._anchors = value
+
     def upload(self, done_callback=None):
         self._upload(done_callback)
 
