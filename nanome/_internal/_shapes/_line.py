@@ -7,9 +7,9 @@ class _Line(_Shape):
     def __init__(self):
         _Shape.__init__(self, ShapeType.Line)
         self._anchors = [_Anchor._create(), _Anchor._create()]
-        self._thickness = 0.0
-        self._dash_length = 0.0
-        self._dash_distance = 0.0
+        self._thickness = 0.1
+        self._dash_length = 0.4
+        self._dash_distance = 0.1
         self._label = ""
 
     @classmethod
