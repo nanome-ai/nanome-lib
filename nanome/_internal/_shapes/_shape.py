@@ -6,7 +6,7 @@ class _Shape(object):
         self._index = -1
         self._shape_type = shape_type
         self._anchors = []
-        self._color = Color()
+        self._color = Color.Grey()
 
     @classmethod
     def _create(cls, shape_type):

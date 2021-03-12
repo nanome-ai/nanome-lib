@@ -244,7 +244,6 @@ class TestShapes(nanome.PluginInstance):
             line.anchors = [anchor1, anchor2]
             line.dash_distance = .4
             line.thickness *= 2
-            line.color = nanome.util.Color.Black()
 
             def done(success):
                 cls.lines.append(line)
