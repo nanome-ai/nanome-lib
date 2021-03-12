@@ -230,7 +230,7 @@ class TestShapes(nanome.PluginInstance):
         def create_anchor(cls, target, a_type):
             anchor = Anchor()
             anchor.target = target
-            anchor.offset = nanome.util.Vector3(random.uniform(-.05, .05), random.uniform(-.05, .05), random.uniform(-.05, .05))
+            anchor.offset = nanome.util.Vector3(1,0,0) #nanome.util.Vector3(random.uniform(-.05, .05), random.uniform(-.05, .05), random.uniform(-.05, .05))
             anchor.anchor_type = a_type
             if cls.queued_anchor == None:
                 cls.queued_anchor = anchor
@@ -241,8 +241,10 @@ class TestShapes(nanome.PluginInstance):
         @classmethod
         def create_line(cls, anchor1, anchor2):
             line = Line()
-            line.thickness = random.uniform(0.5, 2.0)
             line.anchors = [anchor1, anchor2]
+            line.dash_distance = .4
+            line.thickness *= 2
+            line.color = nanome.util.Color.Black()
 
             def done(success):
                 cls.lines.append(line)
