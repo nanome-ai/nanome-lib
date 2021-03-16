@@ -161,7 +161,7 @@ class TestShapes(nanome.PluginInstance):
             sphere.radius = random.uniform(0.5, 2.0)
             sphere.color = nanome.util.Color(random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255), random.randrange(100, 255))
             anchor = sphere.anchors[0]
-            anchor.offset = nanome.util.Vector3(random.uniform(-.05, .05), random.uniform(-.05, .05), random.uniform(-.05, .05))
+            anchor.local_offset = nanome.util.Vector3(random.uniform(-.05, .05), random.uniform(-.05, .05), random.uniform(-.05, .05))
             return sphere
 
     class LineFactory():
@@ -230,7 +230,7 @@ class TestShapes(nanome.PluginInstance):
         def create_anchor(cls, target, a_type):
             anchor = Anchor()
             anchor.target = target
-            anchor.offset = nanome.util.Vector3(1,0,0) #nanome.util.Vector3(random.uniform(-.05, .05), random.uniform(-.05, .05), random.uniform(-.05, .05))
+            anchor.local_offset = nanome.util.Vector3(1,0,0) #nanome.util.Vector3(random.uniform(-.05, .05), random.uniform(-.05, .05), random.uniform(-.05, .05))
             anchor.anchor_type = a_type
             if cls.queued_anchor == None:
                 cls.queued_anchor = anchor
