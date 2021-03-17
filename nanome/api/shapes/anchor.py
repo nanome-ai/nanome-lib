@@ -21,6 +21,22 @@ class Anchor(_Anchor):
         self._local_offset = value
 
     @property
+    def global_offset(self):
+        return self._global_offset
+
+    @global_offset.setter
+    def global_offset(self, value):
+        self._global_offset = value
+
+    @property
+    def viewer_offset(self):
+        return self._viewer_offset
+
+    @viewer_offset.setter
+    def viewer_offset(self, value):
+        self._viewer_offset = value
+
+    @property
     def anchor_type(self):
         return self._anchor_type
 

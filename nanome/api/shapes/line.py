@@ -40,11 +40,4 @@ class Line(_Line, Shape):
     def dash_distance(self, value):
         self._dash_distance = value
 
-    @property
-    def label(self):
-        return self._label
-
-    @label.setter
-    def label(self, value):
-        self._label = value
 _Line._create = Line

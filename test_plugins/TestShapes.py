@@ -2,7 +2,7 @@ from nanome.util.vector3 import Vector3
 import nanome
 import random
 import itertools
-from nanome.api.shapes import Sphere, Line, Anchor
+from nanome.api.shapes import Sphere, Line, Anchor, Label
 
 # Config
 
@@ -167,6 +167,7 @@ class TestShapes(nanome.PluginInstance):
     class LineFactory():
         queued_anchor = None
         lines = []
+        labels = []
         parent = None
 
         @classmethod
@@ -214,23 +215,27 @@ class TestShapes(nanome.PluginInstance):
         def change_anchor(cls, button):
             if len(cls.lines) == 0:
                 return
-            shape = cls.lines[-1]
-            anchor = shape.anchors[0]
-            anchor.anchor_type = (anchor.anchor_type + 1) % len(nanome.util.enums.ShapeAnchorType)
-            shape.upload()
+            line = cls.lines[-1]
+            label = cls.labels[-1]
+            anchor_type = (line.anchors[0].anchor_type + 1) % len(nanome.util.enums.ShapeAnchorType)
+            line.anchors[0].anchor_type = anchor_type
+            label.anchors[0].anchor_type = anchor_type
+            line.upload()
+            label.upload()
 
         @classmethod
         def delete_last(cls, button):
             if len(cls.lines) == 0:
                 return
             shape = cls.lines.pop()
+            shape = cls.labels.pop()
             shape.destroy()
 
         @classmethod
         def create_anchor(cls, target, a_type):
             anchor = Anchor()
             anchor.target = target
-            anchor.local_offset = nanome.util.Vector3(1,0,0) #nanome.util.Vector3(random.uniform(-.05, .05), random.uniform(-.05, .05), random.uniform(-.05, .05))
+            anchor.local_offset = nanome.util.Vector3(1, 0, 0)  # nanome.util.Vector3(random.uniform(-.05, .05), random.uniform(-.05, .05), random.uniform(-.05, .05))
             anchor.anchor_type = a_type
             if cls.queued_anchor == None:
                 cls.queued_anchor = anchor
@@ -245,9 +250,15 @@ class TestShapes(nanome.PluginInstance):
             line.dash_distance = .4
             line.thickness *= 2
 
-            def done(success):
+            label = Label()
+            label.text = "bloop"
+
+            def done1(success):
                 cls.lines.append(line)
-            line.upload(done)
+            def done2(success):
+                cls.labels.append(label)
+            line.upload(done1)
+            label.upload(done2)
 
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, TestShapes)

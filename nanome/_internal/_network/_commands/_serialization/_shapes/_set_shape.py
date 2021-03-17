@@ -10,6 +10,7 @@ class _SetShape(_TypeSerializer):
         self._color = _ColorSerializer()
         self._sphere = _SphereSerializer()
         self._line = _LineSerializer()
+        self._label = _LabelSerializer()
         self._shape = _ShapeSerializer()
 
     def version(self):
@@ -25,6 +26,8 @@ class _SetShape(_TypeSerializer):
                 context.write_using_serializer(self._sphere, value)
             if value.shape_type == ShapeType.Line:
                 context.write_using_serializer(self._line, value)
+            if value.shape_type == ShapeType.Label:
+                context.write_using_serializer(self._label, value)
             context.write_int(value.index)
             context.write_long(value.target)
             context.write_byte(int(value.anchor))
