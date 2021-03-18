@@ -24,9 +24,9 @@ class _ShapeSerializer(_TypeSerializer):
         context.write_byte(int(value._shape_type))
         if value.shape_type == ShapeType.Sphere:
             context.write_using_serializer(self._sphere, value)
-        if value.shape_type == ShapeType.Line:
+        elif value.shape_type == ShapeType.Line:
             context.write_using_serializer(self._line, value)
-        if value.shape_type == ShapeType.Label:
+        elif value.shape_type == ShapeType.Label:
             context.write_using_serializer(self._label, value)
         context.write_int(value._index)
         context.write_using_serializer(self._anchor_array, value._anchors)
@@ -37,9 +37,9 @@ class _ShapeSerializer(_TypeSerializer):
         result = None
         if shapeType == ShapeType.Sphere:
             result = context.read_using_serializer(self._sphere)
-        if shapeType == ShapeType.Line:
+        elif shapeType == ShapeType.Line:
             result = context.read_using_serializer(self._line)
-        if shapeType == ShapeType.Label:
+        elif shapeType == ShapeType.Label:
             result = context.read_using_serializer(self._label)
         result._index = context.read_int()
         result._anchors = context.read_using_serializer(self._anchor_array)
