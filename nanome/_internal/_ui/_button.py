@@ -205,10 +205,11 @@ class _Button(_UIBase):
 
         def _set_each(self, **values):
             default = copy.deepcopy(values.get('default'))
+            selected = copy.deepcopy(values.get('selected'))
             self._idle = copy.deepcopy(values.get('idle')) or default or self._idle
             self._highlighted = copy.deepcopy(values.get('highlighted')) or default or self._highlighted
             self._selected = copy.deepcopy(values.get('selected')) or default or self._selected
-            self._selected_highlighted = copy.deepcopy(values.get('selected_highlighted')) or self._selected or default or self._selected_highlighted
+            self._selected_highlighted = copy.deepcopy(values.get('selected_highlighted')) or selected or default or self._selected_highlighted
             self._unusable = copy.deepcopy(values.get('unusable')) or default or self._unusable
 
         def _copy(self, other):
