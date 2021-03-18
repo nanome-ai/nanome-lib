@@ -409,11 +409,12 @@ class Button(_Button, UIBase):
             """
             | Sets the value for each state
             """
-            self._idle = copy.deepcopy(values.get('idle')) or self._idle
-            self._highlighted = copy.deepcopy(values.get('highlighted')) or self._highlighted
-            self._selected = copy.deepcopy(values.get('selected')) or self._selected
-            self._selected_highlighted = copy.deepcopy(values.get('selected_highlighted')) or self._selected or self._selected_highlighted
-            self._unusable = copy.deepcopy(values.get('unusable')) or self._unusable
+            default = copy.deepcopy(values.get('default'))
+            self._idle = copy.deepcopy(values.get('idle')) or default or self._idle
+            self._highlighted = copy.deepcopy(values.get('highlighted')) or default or self._highlighted
+            self._selected = copy.deepcopy(values.get('selected')) or default or self._selected
+            self._selected_highlighted = copy.deepcopy(values.get('selected_highlighted')) or self._selected or default or self._selected_highlighted
+            self._unusable = copy.deepcopy(values.get('unusable')) or default or self._unusable
 
         @property
         def idle(self):
