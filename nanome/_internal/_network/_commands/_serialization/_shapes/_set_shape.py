@@ -1,5 +1,5 @@
 from nanome._internal._util._serializers import _TypeSerializer, _UnityPositionSerializer, _ColorSerializer, _UnityRotationSerializer
-from nanome._internal._shapes._serialization import _SphereSerializer, _ShapeSerializer, _LineSerializer
+from nanome._internal._shapes._serialization import _SphereSerializer, _ShapeSerializer, _LineSerializer, _LabelSerializer
 from nanome.util.enums import ShapeType
 from nanome.util import Quaternion
 

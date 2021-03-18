@@ -228,8 +228,22 @@ class TestShapes(nanome.PluginInstance):
             if len(cls.lines) == 0:
                 return
             shape = cls.lines.pop()
+            shape.destroy()
             shape = cls.labels.pop()
             shape.destroy()
+
+        @classmethod
+        def create_anchor(cls, target, a_type):
+            anchor = Anchor()
+            anchor.target = target
+            anchor.local_offset = nanome.util.Vector3(1, 0, 0)  # nanome.util.Vector3(random.uniform(-.05, .05), random.uniform(-.05, .05), random.uniform(-.05, .05))
+            anchor.viewer_offset = nanome.util.Vector3(0, 0, .01)
+            anchor.anchor_type = a_type
+            if cls.queued_anchor == None:
+                cls.queued_anchor = anchor
+            else:
+                cls.create_line(cls.queued_anchor, anchor)
+                cls.queued_anchor = None
 
         @classmethod
         def create_anchor(cls, target, a_type):
@@ -244,6 +258,15 @@ class TestShapes(nanome.PluginInstance):
                 cls.queued_anchor = None
 
         @classmethod
+        def copy_anchor(cls, other):
+            anchor = Anchor()
+            anchor.target = other.target
+            anchor.local_offset = other.local_offset
+            anchor.viewer_offset = other.viewer_offset
+            anchor.anchor_type = other.anchor_type
+            return anchor
+
+        @classmethod
         def create_line(cls, anchor1, anchor2):
             line = Line()
             line.anchors = [anchor1, anchor2]
@@ -251,6 +274,9 @@ class TestShapes(nanome.PluginInstance):
             line.thickness *= 2
 
             label = Label()
+            label.anchors = [cls.copy_anchor(anchor1), cls.copy_anchor(anchor2)]
+            label.anchors[0].viewer_offset = nanome.util.Vector3(0, 0, -.01)
+            label.anchors[1].viewer_offset = nanome.util.Vector3(0, 0, -.01)
             label.text = "bloop"
 
             def done1(success):
