@@ -1,7 +1,7 @@
 from . import _UIBase
 from nanome.util import Vector3, Color
 import nanome
-import copy
+from copy import deepcopy
 
 class _Button(_UIBase):
 
@@ -197,20 +197,20 @@ class _Button(_UIBase):
             self._set_all(default)
 
         def _set_all(self, value):
-            self._idle = copy.deepcopy(value)
-            self._highlighted = copy.deepcopy(value)
-            self._selected = copy.deepcopy(value)
-            self._selected_highlighted = copy.deepcopy(value)
-            self._unusable = copy.deepcopy(value)
+            self._idle = deepcopy(value)
+            self._highlighted = deepcopy(value)
+            self._selected = deepcopy(value)
+            self._selected_highlighted = deepcopy(value)
+            self._unusable = deepcopy(value)
 
         def _set_each(self, **values):
-            default = copy.deepcopy(values.get('default'))
-            selected = copy.deepcopy(values.get('selected'))
-            self._idle = copy.deepcopy(values.get('idle')) or default or self._idle
-            self._highlighted = copy.deepcopy(values.get('highlighted')) or default or self._highlighted
-            self._selected = copy.deepcopy(values.get('selected')) or default or self._selected
-            self._selected_highlighted = copy.deepcopy(values.get('selected_highlighted')) or selected or default or self._selected_highlighted
-            self._unusable = copy.deepcopy(values.get('unusable')) or default or self._unusable
+            default = values.get('default')
+            selected = values.get('selected')
+            self._idle = deepcopy(values.get('idle')) or deepcopy(default) or self._idle
+            self._highlighted = deepcopy(values.get('highlighted')) or deepcopy(default) or self._highlighted
+            self._selected = deepcopy(selected) or deepcopy(default) or self._selected
+            self._selected_highlighted = deepcopy(values.get('selected_highlighted')) or deepcopy(selected) or deepcopy(default) or self._selected_highlighted
+            self._unusable = deepcopy(values.get('unusable')) or deepcopy(default) or self._unusable
 
         def _copy(self, other):
             self._idle = other._idle
