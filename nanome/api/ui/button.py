@@ -405,7 +405,7 @@ class Button(_Button, UIBase):
             """
             | Sets the value for each state
             """
-            self._set_each(values)
+            self._set_each(**values)
 
         @property
         def idle(self):
