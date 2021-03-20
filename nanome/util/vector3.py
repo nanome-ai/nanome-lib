@@ -1,6 +1,9 @@
 import math
 
 class Vector3(object):
+    """
+    | Vector that holds 3 values. Used for position and scale
+    """
     def __init__(self, x=0, y=0, z=0):
         self._positions = [float(x), float(y), float(z)]
 

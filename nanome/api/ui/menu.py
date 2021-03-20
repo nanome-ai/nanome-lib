@@ -2,6 +2,9 @@ from nanome._internal._ui import _Menu
 from .io import MenuIO
 
 class Menu(_Menu):
+    """
+    | Represents a menu for a plugin
+    """
     io = MenuIO()
     def __init__(self, index = 0, title = "title"):
         _Menu.__init__(self, index, title)

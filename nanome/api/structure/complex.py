@@ -8,6 +8,9 @@ from . import Base
 
 
 class Complex(_Complex, Base):
+    """
+    | Represents a Complex that contains molecules.
+    """
     io = ComplexIO()
 
     def __init__(self):
@@ -18,39 +21,66 @@ class Complex(_Complex, Base):
         self.io = ComplexIO(self)
 
     def add_molecule(self, molecule):
+        """
+        | Add a molecule to this complex
+
+        :param molecule: Molecule to add to the chain
+        :type molecule: :class:`~nanome._internal._structure._molecule`
+        """
         molecule.index = -1
         self._add_molecule(molecule)
 
     def remove_molecule(self, molecule):
+        """
+        | Remove a molecule from this complex
+
+        :param molecule: Molecule to remove from the chain
+        :type molecule: :class:`~nanome._internal._structure._molecule`
+        """
         molecule.index = -1
         self._remove_molecule(molecule)
 
     #region Generators
     @property
     def molecules(self):
+        """
+        | The list of molecules within this complex
+        """
         for molecule in self._molecules:
             yield molecule
 
     @property
     def chains(self):
+        """
+        | The list of chains within this complex
+        """
         for molecule in self.molecules:
             for chain in molecule.chains:
                 yield chain
 
     @property
     def residues(self):
+        """
+        | The list of residues within this complex
+        """
         for chain in self.chains:
             for residue in chain.residues:
                 yield residue
 
     @property
     def atoms(self):
+        """
+        | The list of atoms within this complex
+        """
         for residue in self.residues:
             for atom in residue.atoms:
                 yield atom
 
     @property
     def bonds(self):
+        """
+        | The list of bonds within this complex
+        """
         for residue in self.residues:
             for bond in residue.bonds:
                 yield bond
@@ -59,6 +89,11 @@ class Complex(_Complex, Base):
     #region all fields
     @property
     def boxed(self):
+        """
+        | Represents if this complex is boxed/bordered in Nanome.
+
+        :type: boolean
+        """
         return self._boxed
     @boxed.setter
     def boxed(self, value):
@@ -66,6 +101,11 @@ class Complex(_Complex, Base):
 
     @property
     def locked(self):
+        """
+        | Represents if this complex is locked and unchangeable in Nanome.
+
+        :type: boolean
+        """
         return self._locked
     @locked.setter
     def locked(self, value):
@@ -75,6 +115,11 @@ class Complex(_Complex, Base):
 
     @property
     def visible(self):
+        """
+        | Represents if this complex is visible in Nanome.
+
+        :type: boolean
+        """
         return self._visible
     @visible.setter
     def visible(self, value):
@@ -89,6 +134,11 @@ class Complex(_Complex, Base):
 
     @property
     def current_frame(self):
+        """
+        | Represents the current animation frame the complex is in.
+
+        :type: int
+        """
         return self._current_frame
 
     def set_current_frame(self, value):
@@ -114,6 +164,11 @@ class Complex(_Complex, Base):
 
     @property
     def box_label(self):
+        """
+        | Represents the label on the box surrounding the complex
+
+        :type: String
+        """
         return self._box_label
     @box_label.setter
     def box_label(self, value):
@@ -121,6 +176,11 @@ class Complex(_Complex, Base):
 
     @property
     def name(self):
+        """
+        | Represents the name of the complex
+
+        :type: String
+        """
         return self._name
     @name.setter
     def name(self, value):
@@ -144,6 +204,11 @@ class Complex(_Complex, Base):
 
     @property
     def full_name(self):
+        """
+        | Represents the full name of the complex with its tags and name
+
+        :type: String
+        """
         fullname = self._name
         has_tag = False
 
@@ -170,6 +235,11 @@ class Complex(_Complex, Base):
 
     @property
     def position(self):
+        """
+        | Position of the complex
+
+        :type: :class:`~nanome.util.Vector3`
+        """
         return self._position
     @position.setter
     def position(self, value):
@@ -177,6 +247,11 @@ class Complex(_Complex, Base):
 
     @property
     def rotation(self):
+        """
+        | Rotation of the complex
+
+        :type: :class:`~nanome.util.Quaternion`
+        """
         return self._rotation
     @rotation.setter
     def rotation(self, value):

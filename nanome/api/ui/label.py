@@ -4,6 +4,9 @@ from nanome.util.color import Color
 from . import UIBase
 
 class Label(_Label, UIBase):
+    """
+    | Represents a label that cannot be interacted with in a menu
+    """
     HorizAlignOptions = nanome.util.enums.HorizAlignOptions
     VertAlignOptions = nanome.util.enums.VertAlignOptions
 

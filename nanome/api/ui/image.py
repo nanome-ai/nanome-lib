@@ -4,6 +4,9 @@ from nanome.util.color import Color
 from nanome._internal._ui import _Image
 
 class Image(_Image, UIBase):
+    """
+    | Represents an image in a menu
+    """
     ScalingOptions = nanome.util.enums.ScalingOptions
     
     def __init__(self, file_path = ""):

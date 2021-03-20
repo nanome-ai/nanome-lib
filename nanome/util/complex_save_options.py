@@ -1,4 +1,8 @@
 class PDBSaveOptions(object):
+    """
+    | Options for saving PDB files.
+    | Includes writing hydrogens, ters, bonds, het bonds, and only saving selected atoms.
+    """
     def __init__(self):
         self.write_hydrogens = True
         self.write_ters = True
@@ -7,11 +11,19 @@ class PDBSaveOptions(object):
         self.only_save_these_atoms = None
 
 class SDFSaveOptions(object):
+    """
+    | Options for saving SDF files.
+    | Includes writing all bonds and/or het bonds.
+    """
     def __init__(self):
         self.write_all_bonds = True
         self.write_het_bonds = True
 
 class MMCIFSaveOptions(object):
+    """
+    | Options for saving MMCIF files.
+    | Includes writing hydrogens and/or only saving selected atoms.
+    """
     def __init__(self):
         self.write_hydrogens = True
         self.only_save_these_atoms = None

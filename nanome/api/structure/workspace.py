@@ -3,6 +3,9 @@ from nanome.util import Matrix, Logs
 from .client import WorkspaceClient
 
 class Workspace(_Workspace):
+    """
+    | Workspace that contains all the complexes shown in Nanome.
+    """
     client = WorkspaceClient()
 
     def __init__(self):
@@ -12,22 +15,44 @@ class Workspace(_Workspace):
 
     @property
     def complexes(self):
+        """
+        | The list of complexes within the workspace
+
+        :type: list of :class:`~nanome.api.structure.atom.Atom`
+        """
         return self._complexes
     @complexes.setter
     def complexes(self, value):
         self._complexes = value
 
     def add_complex(self, complex):
+        """
+        | Add complex to the workspace
+
+        :param complex: Complex to add to the workspace
+        :type complex: :class:`~nanome._internal._structure._complex`
+        """
         complex.index = -1
         self._add_complex(complex)
 
     def remove_complex(self, complex):
+        """
+        | Remove complex from the workspace
+
+        :param complex: Complex to remove from the workspace
+        :type complex: :class:`~nanome._internal._structure._complex`
+        """
         complex.index = -1
         self._remove_complex(complex)
 
     #region fields
     @property
     def position(self):
+        """
+        | Position of the workspace
+
+        :type: :class:`~nanome.util.Vector3`
+        """
         return self._position
     @position.setter
     def position(self, value):
@@ -35,6 +60,11 @@ class Workspace(_Workspace):
 
     @property
     def rotation(self):
+        """
+        | Rotation of the workspace
+
+        :type: :class:`~nanome.util.Quaternion`
+        """
         return self._rotation
     @rotation.setter
     def rotation(self, value):
@@ -42,6 +72,11 @@ class Workspace(_Workspace):
 
     @property
     def scale(self):
+        """
+        | Scale of the workspace
+
+        :type: :class:`~nanome.util.Vector3`
+        """
         return self._scale
     @scale.setter
     def scale(self, value):

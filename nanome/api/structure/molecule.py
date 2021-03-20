@@ -3,38 +3,65 @@ from nanome.util import Logs
 from . import Base
 
 class Molecule(_Molecule, Base):
+    """
+    | Represents a molecule. Contains chains.
+    """
     def __init__(self):
         super(Molecule, self).__init__()
         self._molecular = Molecule.Molecular(self)
         
     def add_chain(self, chain):
+        """
+        | Add a chain to this molecule
+
+        :param chain: Chain to add to the molecule
+        :type chain: :class:`~nanome._internal._structure._chain`
+        """
         chain.index = -1
         self._add_chain(chain)
 
     def remove_chain(self, chain):
+        """
+        | Remove a chain from this molecule
+
+        :param chain: Chain to remove from the molecule
+        :type chain: :class:`~nanome._internal._structure._chain`
+        """
         chain.index = -1
         self._remove_chain(chain)
 
     #region Generators:
     @property
     def chains(self):
+        """
+        | The list of chains within this complex
+        """
         for chain in self._chains:
             yield chain
 
     @property
     def residues(self):
+        """
+        | The list of residues within this complex
+        """
         for chain in self.chains:
             for residue in chain.residues:
                 yield residue
 
     @property
     def atoms(self):
+        """
+        | The list of atoms within this complex
+        """
         for residue in self.residues:
             for atom in residue.atoms:
                 yield atom
                 
     @property
     def bonds(self):
+        """
+        | The list of bonds within this complex
+        """
         for residue in self.residues:
             for bond in residue.bonds:
                 yield bond
@@ -43,12 +70,20 @@ class Molecule(_Molecule, Base):
     #region connections
     @property
     def complex(self):
+        """
+        | Complex that the molecule is part of
+        """
         return self._complex
     #endregion
 
     #region all fields
     @property
     def name(self):
+        """
+        | Represents the name of the molecule
+
+        :type: String
+        """
         return self._name
     @name.setter
     def name(self, value):

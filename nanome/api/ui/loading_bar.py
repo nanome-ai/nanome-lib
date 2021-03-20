@@ -3,6 +3,9 @@ from . import UIBase
 from nanome._internal._ui import _LoadingBar
 
 class LoadingBar(_LoadingBar, UIBase):
+    """
+    | Represents a loading bar that can display a percentage
+    """
     def __init__(self):
         _LoadingBar.__init__(self)
         UIBase.__init__(self)

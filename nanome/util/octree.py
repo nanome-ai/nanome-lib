@@ -1,4 +1,8 @@
 class Octree:
+    """
+    | Tree containing inserted atoms and their positions.
+    | Commonly used to get atoms near other atoms.
+    """
     def __init__(self, world_size=5000, max_per_node=8):
         self._max_objects = max_per_node
         self._world_size = world_size
@@ -7,6 +11,12 @@ class Octree:
         self._knowns = {}
 
     def remove(self, data):
+        """
+        | Remove a data node from the Octree
+
+        :param data: The data to remove from the Octree
+        :type data: :class:`Object`
+        """
         if data in self._knowns:
             node = self._knowns[data]
             del self._knowns[data]
@@ -17,10 +27,26 @@ class Octree:
             return False
 
     def move(self, data, new_position):
+        """
+        | Move a data node in the octree
+
+        :param data: Data node in the octree to move
+        :param new_position: New position of the data node
+        :type data: :class:`Object`
+        :type new_positon: :class:`~nanome.util.Vector3`
+        """
         self.remove(data)
         self.add(data, new_position)
 
     def add(self, data, position):
+        """
+        | Add a data node to the octree
+
+        :param data: Data node to add to the octree
+        :param position: Position of this data node
+        :type data: :class:`Object`
+        :type positon: :class:`~nanome.util.Vector3`
+        """
         try:
             entry = Octree._Entry(data, position)
             self._root.add(self, entry)
@@ -30,11 +56,24 @@ class Octree:
             raise
     
     def get_near(self, pos, radius, max_result_nb = None):
+        """
+        | Get the nodes within the octree that are near a specific position
+
+        :param pos: Position to check near
+        :param radius: Get nodes within this radius of the position
+        :param max_result_nb: Number of results to get
+        :type pos: :class:`~nanome.util.Vector3`
+        :type radius: float
+        :type max_result_nb: int
+        """
         near_objs = []
         self.get_near_append(pos, radius, near_objs, max_result_nb)
         return near_objs
 
     def get_near_append(self, pos, radius, out_list, max_result_nb = None):
+        """
+        | Helper function to append specific object if it is near
+        """
         self._root.near(pos, radius*radius, out_list, max_result_nb)
         return out_list
 

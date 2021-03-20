@@ -2,6 +2,9 @@ import math
 #placeholder quaternion
 
 class Quaternion(object):
+    """
+    | Vector that holds 4 values. Used for rotation
+    """
     def __init__(self, x=0, y=0, z=0, w=1):
         self._x = float(x)
         self._y = float(y)

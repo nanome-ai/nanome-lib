@@ -2,6 +2,9 @@ from . import UIBase
 from nanome._internal._ui import _Dropdown
 
 class Dropdown(_Dropdown, UIBase):
+    """
+    | Represents a dropdown menu
+    """
     def __init__(self):
         # type: (_Dropdown)
         _Dropdown.__init__(self)

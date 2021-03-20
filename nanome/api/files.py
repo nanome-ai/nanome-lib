@@ -3,12 +3,17 @@ from nanome.util import FileErrorCode
 from nanome._internal._network._commands._callbacks import _Messages
 
 class Files(_Files):
+    """
+    | Class to navigate through directories and files.
+
+    """
     def __init__(self, plugin_instance):
         self.plugin = plugin_instance
 
     def pwd(self, callback):
         """
         | Print the full filename of the current working directory
+
         :param callback: function that will be called with the full filename
         :type callback: method (:class:`~nanome.util.file.FileError`, str) -> None
         """
@@ -18,6 +23,7 @@ class Files(_Files):
     def cd(self, directory, callback):
         """
         | changes current directory
+
         :param directory: directory to change to.
         :type directory: str
         :param callback: called when operation is completed with any potential errors.
@@ -29,6 +35,7 @@ class Files(_Files):
     def ls(self, directory, callback):
         """
         | list directory contents
+
         :param directory: directory to request.
         :type directory: str
         :param callback: function that will be called with contents of the directory
@@ -40,6 +47,7 @@ class Files(_Files):
     def mv(self, source, dest, callback):
         """
         | Rename SOURCE to DEST, or move SOURCE(s) to directory DEST
+
         :param source: file to move or rename.
         :type source: str
         :param dest: name or destination directory for the file
@@ -53,6 +61,7 @@ class Files(_Files):
     def get(self, source, dest, callback):
         """
         | Moves a file from the nanome user to the a local directory
+
         :param source: file(s) to move.
         :type source: str
         :param dest: local destination directory for the file
@@ -72,6 +81,7 @@ class Files(_Files):
     def put(self, source, dest, callback):
         """
         | Moves a file from a local directory to the the nanome user
+
         :param source: local file(s) to move.
         :type source: str
         :param dest: destination directory for the file
@@ -88,6 +98,7 @@ class Files(_Files):
     def rm(self, target, callback):
         """
         | remove non-directory file
+
         :param target: file to remove.
         :type target: str
         :param callback: called when operation is completed with any potential errors.
@@ -99,6 +110,7 @@ class Files(_Files):
     def rmdir(self, target, callback):
         """
         | remove directory
+
         :param target: directory to remove.
         :type target: str
         :param callback: called when operation is completed with any potential errors.
@@ -110,6 +122,7 @@ class Files(_Files):
     def cp(self, source, dest, callback):
         """
         | Copy SOURCE to DEST
+
         :param source: file to copy.
         :type source: str
         :param dest: desired path for the copy
@@ -123,6 +136,7 @@ class Files(_Files):
     def mkdir(self, target, callback):
         """
         | Create the DIRECTORY(ies), if they do not already exist. 
+        
         :param target: directory to create.
         :type target: str
         :param callback: called when operation is completed with any potential errors.

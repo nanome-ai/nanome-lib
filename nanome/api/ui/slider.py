@@ -2,6 +2,9 @@ from . import UIBase
 from nanome._internal._ui import _Slider
 
 class Slider(_Slider, UIBase):
+    """
+    | Represents a slider that has a set range of values
+    """
     def __init__(self,  
                  min_val     = None, 
                  max_val     = None, 

@@ -6,7 +6,7 @@ from . import Base
 
 class Bond(_Bond, Base):
     """
-    Represents a Bond between two atoms
+    | Represents a Bond between two atoms
     """
     Kind = nanome.util.enums.Kind
     
@@ -43,24 +43,41 @@ class Bond(_Bond, Base):
 
     @property
     def residue(self):
+        """
+        | Residue that the bond is part of
+        """
         return self._residue
 
     @property
     def chain(self):
+        """
+        | Chain that the bond is part of
+        """
         return self._chain
 
     @property
     def molecule(self):
+        """
+        | Molecule that the bond is part of
+        """
         return self._molecule
 
     @property
     def complex(self):
+        """
+        | Complex that the bond is part of
+        """
         return self._complex
     #endregion
 
     #region all fields
     @property
     def kind(self):
+        """
+        | Kind of bond
+        
+        :type: :class:`~nanome.util.enums.Kind`
+        """
         return self._kind
 
     @kind.setter
@@ -69,6 +86,11 @@ class Bond(_Bond, Base):
 
     @property
     def exists(self):
+        """
+        | Represents if bond exists for calculations.
+
+        :type: boolean
+        """
         return self._exists
     
     @exists.setter

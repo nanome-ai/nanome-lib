@@ -9,6 +9,9 @@ class MatrixException(Exception):
     pass
 
 class Matrix(object):
+    """
+    | Represents a matrix. Used to do calculations within a workspace
+    """
     def __init__(self, m, n):
         self.__rows = [[0] * n for i in range(m)]
         self.__m = m

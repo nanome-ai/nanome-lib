@@ -1,4 +1,18 @@
 class Color(object):
+    """
+    | Represents a Color in RGBA form.
+
+    :param r: Red value
+    :param g: Green value
+    :param b: Blue value
+    :param a: Alpha value
+    :param whole_num: Optional way to input color. The int or hex form of the color.
+    :type r: int
+    :type g: int
+    :type b: int
+    :type a: int
+    :type whole_num: int or hex
+    """
     def __init__(self, r=0, g=0, b=0, a=255, whole_num = None):
         if (whole_num != None):
             self.set_color_int(whole_num)
@@ -6,9 +20,27 @@ class Color(object):
             self.set_color_rgb(r,g,b,a)
 
     def set_color_int(self, num):
+        """
+        | Set color to an int or hex
+
+        :param num: Number to set color to
+        :type num: int or hex
+        """
         self._color = num
 
     def set_color_rgb(self, r=0, g=0, b=0, a=255):
+        """
+        | Set color after initializing.
+
+        :param r: Red value
+        :param g: Green value
+        :param b: Blue value
+        :param a: Alpha value
+        :type r: int
+        :type g: int
+        :type b: int
+        :type a: int
+        """
         r = max(0, min(int(r), 255))
         g = max(0, min(int(g), 255))
         b = max(0, min(int(b), 255))
@@ -17,6 +49,12 @@ class Color(object):
 
     @classmethod
     def from_int(cls, value):
+        """
+        | Set color from int after initializing.
+
+        :param value: Int value of color
+        :type value: int
+        """
         if (value < 0): #convert to uint
             value += 4294967295 #max int
         value = int(value)
