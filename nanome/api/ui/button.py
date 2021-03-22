@@ -401,11 +401,11 @@ class Button(_Button, UIBase):
             """
             self._set_all(value)
 
-        def set_each(self, **values):
+        def set_each(self, idle=None, selected=None, highlighted=None, selected_highlighted=None, unusable=None, default=None):
             """
             | Sets the value for each state
             """
-            self._set_each(**values)
+            self._set_each(idle, selected, highlighted, selected_highlighted, unusable, default)
 
         @property
         def idle(self):
