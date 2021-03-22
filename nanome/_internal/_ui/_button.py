@@ -1,7 +1,7 @@
 from . import _UIBase
 from nanome.util import Vector3, Color
 import nanome
-import copy
+from copy import deepcopy
 
 class _Button(_UIBase):
 
@@ -197,11 +197,18 @@ class _Button(_UIBase):
             self._set_all(default)
 
         def _set_all(self, value):
-            self._idle = copy.deepcopy(value)
-            self._highlighted = copy.deepcopy(value)
-            self._selected = copy.deepcopy(value)
-            self._selected_highlighted = copy.deepcopy(value)
-            self._unusable = copy.deepcopy(value)
+            self._idle = deepcopy(value)
+            self._highlighted = deepcopy(value)
+            self._selected = deepcopy(value)
+            self._selected_highlighted = deepcopy(value)
+            self._unusable = deepcopy(value)
+
+        def _set_each(self, idle=None, selected=None, highlighted=None, selected_highlighted=None, unusable=None, default=None):
+            self._idle = deepcopy(idle) or deepcopy(default) or self._idle
+            self._highlighted = deepcopy(highlighted) or deepcopy(default) or self._highlighted
+            self._selected = deepcopy(selected) or deepcopy(default) or self._selected
+            self._selected_highlighted = deepcopy(selected_highlighted) or deepcopy(selected) or deepcopy(default) or self._selected_highlighted
+            self._unusable = deepcopy(unusable) or deepcopy(default) or self._unusable
 
         def _copy(self, other):
             self._idle = other._idle
