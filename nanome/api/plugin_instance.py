@@ -6,7 +6,7 @@ from nanome._internal._network._commands._callbacks import _Messages
 from nanome.api.integration import Integration
 from nanome.api.ui import Menu
 from nanome.api.streams import Stream
-from nanome.api import shapes, Room, Files
+from nanome.api import Room, Files
 
 import os
 
@@ -267,7 +267,7 @@ class PluginInstance(_PluginInstance):
         id = self._network._send(_Messages.file_save, file_list, callback != None)
         self._save_callback(id, callback)
 
-    @Logs.deprecated("create_atom_stream")
+    @Logs.deprecated("create_writing_stream")
     def create_stream(self, atom_indices_list, callback):
         id = self._network._send(_Messages.stream_create, (Stream.Type.position, atom_indices_list, StreamDirection.writing), callback != None)
         self._save_callback(id, callback)
@@ -276,28 +276,28 @@ class PluginInstance(_PluginInstance):
     def create_atom_stream(self, atom_indices_list, stream_type, callback):
         self.create_writing_stream(atom_indices_list, stream_type, callback)
 
-    def create_writing_stream(self, atom_indices_list, stream_type, callback):
+    def create_writing_stream(self, indices_list, stream_type, callback):
         """
-        | Create a stream allowing to continuously update properties of many structures
+        | Create a stream allowing to continuously update properties of many objects
 
-        :param atom_indices_list: List of indices of all atoms that should be in the stream
-        :type atom_indices_list: list of :class:`int`
+        :param indices_list: List of indices of all objects that should be in the stream
+        :type indices_list: list of :class:`int`
         :param stream_type: Type of stream to create
         :type stream_type: list of :class:`~nanome.api.stream.Stream.Type`
         """
-        id = self._network._send(_Messages.stream_create, (stream_type, atom_indices_list, StreamDirection.writing), callback != None)
+        id = self._network._send(_Messages.stream_create, (stream_type, indices_list, StreamDirection.writing), callback != None)
         self._save_callback(id, callback)
 
-    def create_reading_stream(self, atom_indices_list, stream_type, callback):
+    def create_reading_stream(self, indices_list, stream_type, callback):
         """
-        | Create a stream allowing to continuously receive properties of many structures
+        | Create a stream allowing to continuously receive properties of many objects
 
-        :param atom_indices_list: List of indices of all atoms that should be in the stream
-        :type atom_indices_list: list of :class:`int`
+        :param indices_list: List of indices of all objects that should be in the stream
+        :type indices_list: list of :class:`int`
         :param stream_type: Type of stream to create
         :type stream_type: list of :class:`~nanome.api.stream.Stream.Type`
         """
-        id = self._network._send(_Messages.stream_create, (stream_type, atom_indices_list, StreamDirection.reading), callback != None)
+        id = self._network._send(_Messages.stream_create, (stream_type, indices_list, StreamDirection.reading), callback != None)
         self._save_callback(id, callback)
 
     def add_bonds(self, complex_list, callback, fast_mode=None):
@@ -421,12 +421,6 @@ class PluginInstance(_PluginInstance):
 
         id = self._network._send(_Messages.export_files, (format, entities), True)
         self._save_callback(id, callback)
-
-    def create_shape(self, shape_type):
-        if shape_type == ShapeType.Sphere:
-            return shapes.Sphere(self._network)
-
-        raise ValueError('Parameter shape_type must be a value of nanome.util.enums.ShapeType')
 
     def apply_color_scheme(self, color_scheme, target, only_carbons):
         """
