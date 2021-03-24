@@ -7,13 +7,15 @@ def parse_json(content_json):
     dropdown._permanent_title = content_json.read("permanent_title", dropdown._permanent_title)
     dropdown._max_displayed_items = content_json.read("max_displayed_items", dropdown._max_displayed_items)
     dropdown._items = content_json.read("items", dropdown._items)
+    dropdown._unusable = content_json.read("unusable", dropdown._unusable)
     return dropdown
 
 def write_json(helper, dropdown):
     helper.write("use_permanent_title", dropdown._use_permanent_title)
     helper.write("permanent_title", dropdown._permanent_title)
     helper.write("max_displayed_items", dropdown._max_displayed_items)
-    helper.write("items", dropdown._Items)
+    helper.write("items", dropdown._items)
+    helper.write("unusable", dropdown._unusable)
 
 def _parse_item(content_json):
     item = _DropdownItem._create()
