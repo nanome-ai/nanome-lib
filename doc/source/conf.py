@@ -15,7 +15,7 @@ def run_apidoc(_):
         "-f",
         "-e",
         "-o", "../source/",
-        "../../nanome-lib"
+        "../../nanome"
     ]
 
     try:
