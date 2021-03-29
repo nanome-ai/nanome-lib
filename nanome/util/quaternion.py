@@ -3,7 +3,7 @@ import math
 
 class Quaternion(object):
     """
-    | Vector that holds 4 values. Used for rotation
+    | A vector that holds 4 values. Used for rotation.
     """
     def __init__(self, x=0, y=0, z=0, w=1):
         self._x = float(x)
@@ -22,34 +22,69 @@ class Quaternion(object):
         self._w = float(w)
 
     def get_copy(self):
+        """
+        :return: A copy of this Quaternion.
+        :rtype: :class:`~nanome.util.quaternion`
+        """
         return Quaternion(self.x,self.y,self.z,self.w)
 
     @property
     def x(self):
+        """
+        :return: This quaternion's x component.
+        :rtype: float
+        """
         return self._x
 
     @property
     def y(self):
+        """
+        :return: This quaternion's y component.
+        :rtype: :class:`float`
+        """
         return self._y
 
     @property
     def z(self):
+        """
+        :return: This quaternion's z component.
+        :rtype: :class:`float`
+        """
         return self._z
 
     @property
     def w(self):
+        """
+        :return: This quaternion's w component.
+        :rtype: :class:`float`
+        """
         return self._w
 
     def _inverse_handedness(self):
+        """Inverts the handedness of this Quaternion.
+        
+        :return: This Quaternion.
+        :rtype: :class:`~nanome.util.quaternion`
+        """
         self._y *= -1.0
         self._z *= -1.0
         return self
 
     def get_conjugate(self):
+        """Returns the conjugate of this Quaternion.
+        
+        :return: A new Quaternion that is the conjugate of this Quaternion.
+        :rtype: :class:`~nanome.util.quaternion`
+        """
         return Quaternion(-self.x, -self.y, -self.z, self.w)
 
     @classmethod
     def _get_inversed_handedness(cls, value):
+        """Returns an inverse-handed version of this Quaternion.
+        
+        :return: A new Quaternion with inverse handedness to this Quaternion.
+        :rtype: :class:`~nanome.util.quaternion`
+        """
         return Quaternion(value.x, -value.y, -value.z, value.w)
 
     def __mul__(self, other):
@@ -68,6 +103,11 @@ class Quaternion(object):
             raise NotImplementedError
 
     def dot(self, other):
+        """Returns the dot between this and another Quaternion
+        
+        :return: A float value representing the dot product.
+        :rtype: :class:`float`
+        """
         return self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
 
     EPS = 1*(10**-6)
@@ -75,6 +115,11 @@ class Quaternion(object):
         return abs(self.dot(other)) > 1-Quaternion.EPS
 
     def rotate_vector(self, point):
+        """Rotates a vector using this Quaternion.
+        
+        :return: A rotated vector.
+        :rtype: :class:`~nanome.util.vector3`
+        """
         r = Quaternion(point.x, point.y, point.z, 0)
         q_conj = self.get_conjugate()
         result = ((self * r) * q_conj)
@@ -87,6 +132,11 @@ class Quaternion(object):
     #algorithm credit https://d3cw3dd2w32x2b.cloudfront.net/wp-content/uploads/2015/01/matrix-to-quat.pdf
     @classmethod
     def from_matrix(cls, matrix):
+        """Creates a Quaternion from a 4x4 affine transformation matrix.
+        
+        :return: A Quaternion representing a rotation.
+        :rtype: :class:`~nanome.util.quaternion`
+        """
         m = matrix
         if (m[2][2] < 0):
             if (m[0][0] > m[1][1]):

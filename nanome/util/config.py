@@ -38,6 +38,17 @@ def _setup_clean_config(config_path):
         json.dump(default_json, file)
 
 def fetch(key):
+    """
+    | Fetch a configuration entry from your nanome configuration.
+    | Built-in keys are:
+    |  host - your NTS server address
+    |  port - your NTS server port
+    |  key_file - your NTS license file, and
+    |  plugin_files_path - where your plugins will store files
+
+    :param key: The key to fetch the config value for
+    :type key: str
+    """
     if (config_path):
         try:
             with open(config_path, "r") as file:
@@ -51,6 +62,16 @@ def fetch(key):
         return default_json[key]
 
 def set(key, value):
+    """
+    | Set a configuration entry in your nanome configuration.
+    | Built-in keys are host, port, key_file and plugin_files_path.
+    | Built-in values are 127.0.0.1, 8888, nts_key and ~/Documents/nanome-plugins
+
+    :param key: The key to set the configuration value for
+    :param value: The value to set the configuration to
+    :type key: str
+    :type value: str
+    """
     if (config_path):
         with open(config_path, "r") as file:
             config_json = json.load(file)

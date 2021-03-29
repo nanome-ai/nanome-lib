@@ -8,8 +8,8 @@ from .enum import IntEnum, auto
 
 class Logs(object):
     """
-    | Class to log messages easily.
-    | Possible logs are Debug, Warning, and Error.
+    | Allows for easy message logging without buffer issues.
+    | Possible log types are Debug, Warning, and Error.
     """
     class _LogType(IntEnum):
         debug = auto()

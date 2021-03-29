@@ -1,11 +1,11 @@
 class Color(object):
     """
-    | Represents a Color in RGBA form.
+    | Represents a 32-bit color with red, green, blue and alpha channels (8 bits each).
 
-    :param r: Red value
-    :param g: Green value
-    :param b: Blue value
-    :param a: Alpha value
+    :param r: Red component
+    :param g: Green component
+    :param b: Blue component
+    :param a: Alpha component
     :param whole_num: Optional way to input color. The int or hex form of the color.
     :type r: int
     :type g: int
@@ -21,25 +21,32 @@ class Color(object):
 
     def set_color_int(self, num):
         """
-        | Set color to an int or hex
+        | Assigns the color an integer value representing
+        | the red component bitshifted 24 bits, bitwise ORed with
+        | the green component bitshifted 16 bits, bitwise ORed with
+        | the blue component bitshifted 8 bits, ORed with 
+        | the alpha component, or more simply:
+        | r << 24 | g << 16 | b << 8 | a
+        | OR
+        | 0xRRGGBBAA
 
-        :param num: Number to set color to
-        :type num: int or hex
+        :param num: Number to set the color to
+        :type num: int
         """
         self._color = num
 
     def set_color_rgb(self, r=0, g=0, b=0, a=255):
         """
-        | Set color after initializing.
+        | Assign a value by individual color components.
 
-        :param r: Red value
-        :param g: Green value
-        :param b: Blue value
-        :param a: Alpha value
-        :type r: int
-        :type g: int
-        :type b: int
-        :type a: int
+        :param r: Red component
+        :param g: Green component
+        :param b: Blue component
+        :param a: Alpha component
+        :type r: int (0-255)
+        :type g: int (0-255)
+        :type b: int (0-255)
+        :type a: int (0-255)
         """
         r = max(0, min(int(r), 255))
         g = max(0, min(int(g), 255))
@@ -52,7 +59,7 @@ class Color(object):
         """
         | Set color from int after initializing.
 
-        :param value: Int value of color
+        :param value: Int value of the color
         :type value: int
         """
         if (value < 0): #convert to uint
@@ -118,6 +125,9 @@ class Color(object):
     # properties
     @property
     def r(self):
+        """
+        | The red component of the color.
+        """
         return self._color >> 24 & 0x000000FF
 
     @r.setter
@@ -127,6 +137,9 @@ class Color(object):
 
     @property
     def g(self):
+        """
+        | The green component of the color.
+        """
         return self._color >> 16 & 0x000000FF
 
     @g.setter
@@ -136,6 +149,9 @@ class Color(object):
 
     @property
     def b(self):
+        """
+        | The blue component of the color.
+        """
         return self._color >> 8 & 0x000000FF
 
     @b.setter
@@ -145,6 +161,9 @@ class Color(object):
 
     @property
     def a(self):
+        """
+        | The alpha component of the color.
+        """
         return self._color & 0x000000FF
 
     @a.setter
@@ -154,7 +173,13 @@ class Color(object):
 
     #functions
     def copy(self):
+        """
+        | Create a new color from this one.
+        """
         return Color(whole_num = self._color)
 
     def to_string_hex(self):
+        """
+        | Returns a hex string representing the color.
+        """
         return hex(self._color)

@@ -1,4 +1,6 @@
 class Process():
+    """A command-line process wrapper.
+    """
     _manager = None
 
     class _ProcessRequest():
@@ -27,6 +29,8 @@ class Process():
 
     @property
     def executable_path(self):
+        """The path to the executable to be run.
+        """
         return self.__request.executable_path
 
     @executable_path.setter
@@ -35,6 +39,8 @@ class Process():
 
     @property
     def args(self):
+        """A list of arguments to pass to the executable.
+        """
         return self.__request.args
 
     @args.setter
@@ -43,6 +49,8 @@ class Process():
 
     @property
     def cwd_path(self):
+        """The working directory path where the process will be/was executed.
+        """
         return self.__request.cwd_path
 
     @cwd_path.setter
@@ -51,6 +59,8 @@ class Process():
 
     @property
     def output_text(self):
+        """A boolean indicating whether or not the process produced output.
+        """
         return self.__request.encoding == "utf-8"
 
     @output_text.setter
@@ -69,7 +79,11 @@ class Process():
         self.__request.id = value
 
     def start(self):
+        """Starts the process.
+        """
         Process._manager.start_process(self, self.__request)
 
     def stop(self):
+        """Stops the process.
+        """
         Process._manager.stop_process(self)
