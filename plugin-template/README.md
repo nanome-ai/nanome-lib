@@ -2,51 +2,15 @@
 
 {{description}}
 
-### Preparation
+## Dependencies
 
-Install the latest version of [Python 3](https://www.python.org/downloads/)
-
-| NOTE for Windows: replace `python3` in the following commands with `python` |
-| --------------------------------------------------------------------------- |
-
-
-Install the latest `nanome` lib:
-
-```sh
-$ python3 -m pip install nanome --upgrade
-```
-
-### Dependencies
+[Docker](https://docs.docker.com/get-docker/)
 
 **TODO**: Provide instructions on how to install and link any external dependencies for this plugin.
 
 **TODO**: Update docker/Dockerfile to install any necessary dependencies.
 
-### Installation
-
-To install {{name}}:
-
-```sh
-$ python3 -m pip install {{command}}
-```
-
-### Usage
-
-To start {{name}}:
-
-```sh
-$ {{command}} -a <plugin_server_address> [optional args]
-```
-
-#### Optional arguments:
-
-- `-x arg`
-
-  Example argument documentation
-
-**TODO**: Add any optional argument documentation here, or remove section entirely.
-
-### Docker Usage
+## Usage
 
 To run {{name}} in a Docker container:
 
@@ -56,7 +20,15 @@ $ ./build.sh
 $ ./deploy.sh -a <plugin_server_address> [optional args]
 ```
 
-### Development
+### Optional arguments:
+
+- `-x arg`
+
+  Example argument documentation
+
+**TODO**: Add any optional argument documentation here, or remove section entirely.
+
+## Development
 
 To run {{name}} with autoreload:
 
@@ -64,6 +36,6 @@ To run {{name}} with autoreload:
 $ python3 run.py -r -a <plugin_server_address> [optional args]
 ```
 
-### License
+## License
 
 MIT
