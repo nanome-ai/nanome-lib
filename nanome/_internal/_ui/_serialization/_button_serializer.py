@@ -1,4 +1,4 @@
-from nanome._internal._util._serializers import _StringSerializer, _ColorSerializer, _Vector3Serializer
+from nanome._internal._util._serializers import _StringSerializer, _ColorSerializer, _Vector3Serializer, _CachedImageSerializer
 from nanome.util.enums import VertAlignOptions, HorizAlignOptions, ToolTipPositioning
 from . import _UIBaseSerializer
 from .. import _Button
@@ -10,9 +10,10 @@ class _ButtonSerializer(_TypeSerializer):
         self.string = _StringSerializer()
         self.color = _ColorSerializer()
         self.vector = _Vector3Serializer()
+        self.cached_image = _CachedImageSerializer()
 
     def version(self):
-        return 5
+        return 6
 
     def name(self):
         return "Button"
@@ -67,36 +68,44 @@ class _ButtonSerializer(_TypeSerializer):
 
         if version >= 2:
             context.write_bool(button._icon._active)
-            context.write_using_serializer(self.string, button._icon._value._idle)
-            context.write_using_serializer(self.string, button._icon._value._selected)
-            context.write_using_serializer(self.string, button._icon._value._highlighted)
-            context.write_using_serializer(self.string, button._icon._value._selected_highlighted)
-            context.write_using_serializer(self.string, button._icon._value._unusable)
-            data = []
-            if (button._icon._value._idle != ""):
-                with open(button._icon._value._idle, "rb") as f:
-                    data = f.read()
-            context.write_byte_array(data)
-            data = []
-            if (button._icon._value._selected != ""):
-                with open(button._icon._value._selected, "rb") as f:
-                    data = f.read()
-            context.write_byte_array(data)
-            data = []
-            if (button._icon._value._highlighted != ""):
-                with open(button._icon._value._highlighted, "rb") as f:
-                    data = f.read()
-            context.write_byte_array(data)
-            data = []
-            if (button._icon._value._selected_highlighted != ""):
-                with open(button._icon._value._selected_highlighted, "rb") as f:
-                    data = f.read()
-            context.write_byte_array(data)
-            data = []
-            if (button._icon._value._unusable != ""):
-                with open(button._icon._value._unusable, "rb") as f:
-                    data = f.read()
-            context.write_byte_array(data)
+            if version >= 6:
+                context.write_using_serializer(self.cached_image, button._icon._value._idle)
+                context.write_using_serializer(self.cached_image, button._icon._value._selected)
+                context.write_using_serializer(self.cached_image, button._icon._value._highlighted)
+                context.write_using_serializer(self.cached_image, button._icon._value._selected_highlighted)
+                context.write_using_serializer(self.cached_image, button._icon._value._unusable)
+            else:
+                context.write_using_serializer(self.string, button._icon._value._idle)
+                context.write_using_serializer(self.string, button._icon._value._selected)
+                context.write_using_serializer(self.string, button._icon._value._highlighted)
+                context.write_using_serializer(self.string, button._icon._value._selected_highlighted)
+                context.write_using_serializer(self.string, button._icon._value._unusable)
+                data = []
+                if (button._icon._value._idle != ""):
+                    with open(button._icon._value._idle, "rb") as f:
+                        data = f.read()
+                context.write_byte_array(data)
+                data = []
+                if (button._icon._value._selected != ""):
+                    with open(button._icon._value._selected, "rb") as f:
+                        data = f.read()
+                context.write_byte_array(data)
+                data = []
+                if (button._icon._value._highlighted != ""):
+                    with open(button._icon._value._highlighted, "rb") as f:
+                        data = f.read()
+                context.write_byte_array(data)
+                data = []
+                if (button._icon._value._selected_highlighted != ""):
+                    with open(button._icon._value._selected_highlighted, "rb") as f:
+                        data = f.read()
+                context.write_byte_array(data)
+                data = []
+                if (button._icon._value._unusable != ""):
+                    with open(button._icon._value._unusable, "rb") as f:
+                        data = f.read()
+                context.write_byte_array(data)
+
             context.write_using_serializer(self.color, button._icon._color._idle)
             context.write_using_serializer(self.color, button._icon._color._selected)
             context.write_using_serializer(self.color, button._icon._color._highlighted)
@@ -192,16 +201,18 @@ class _ButtonSerializer(_TypeSerializer):
 
         if version >= 2:
             value._icon._active = context.read_bool()
-            value._icon._value._idle = context.read_using_serializer(self.string)
-            value._icon._value._selected = context.read_using_serializer(self.string)
-            value._icon._value._highlighted = context.read_using_serializer(self.string)
-            value._icon._value._selected_highlighted = context.read_using_serializer(self.string)
-            value._icon._value._unusable = context.read_using_serializer(self.string)
-            context.read_byte_array()
-            context.read_byte_array()
-            context.read_byte_array()
-            context.read_byte_array()
-            context.read_byte_array()
+            if version < 6:
+                value._icon._value._idle = context.read_using_serializer(self.string)
+                value._icon._value._selected = context.read_using_serializer(self.string)
+                value._icon._value._highlighted = context.read_using_serializer(self.string)
+                value._icon._value._selected_highlighted = context.read_using_serializer(self.string)
+                value._icon._value._unusable = context.read_using_serializer(self.string)
+                context.read_byte_array()
+                context.read_byte_array()
+                context.read_byte_array()
+                context.read_byte_array()
+                context.read_byte_array()
+                
             value._icon._color._idle = context.read_using_serializer(self.color)
             value._icon._color._selected = context.read_using_serializer(self.color)
             value._icon._color._highlighted = context.read_using_serializer(self.color)
