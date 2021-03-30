@@ -49,6 +49,8 @@ class _ImageSerializer(_TypeSerializer):
         value._scaling_option = context.read_uint()
         if version < 2:
             context.read_using_serializer(self.data) #skipping data.
+        else:
+            context.read_using_serializer(self.cached_image)
 
         return value
 

@@ -212,6 +212,8 @@ class _ButtonSerializer(_TypeSerializer):
                 context.read_byte_array()
                 context.read_byte_array()
                 context.read_byte_array()
+            else:
+                context.read_using_serializer(self.cached_image)
                 
             value._icon._color._idle = context.read_using_serializer(self.color)
             value._icon._color._selected = context.read_using_serializer(self.color)

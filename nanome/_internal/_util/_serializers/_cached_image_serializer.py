@@ -31,4 +31,10 @@ class _CachedImageSerializer(_TypeSerializer):
             _CachedImageSerializer.Cache.add(value)
 
     def deserialize(self, version, context):
-        raise NotImplementedError
+        # This function is only used by unit tests
+        is_cached = context.read_bool()
+        if is_cached:
+            context.read_using_serializer(self._string)
+        else:
+            context.read_using_serializer(self._string)
+            context.read_byte_array()
