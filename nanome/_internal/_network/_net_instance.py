@@ -17,6 +17,7 @@ class _NetInstance(object):
         self._instance = instance
         self._on_received_packet = packet_callback
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self._socket.settimeout(10.0)
         self._context = ssl.SSLContext(ssl.PROTOCOL_TLS)
         self._context.verify_mode = ssl.CERT_NONE
         self._connection = self._context.wrap_socket(self._socket, server_hostname="nanome.ai", suppress_ragged_eofs=False)
@@ -27,14 +28,15 @@ class _NetInstance(object):
 
     def connect(self, host, port):
         try:
+            Logs.message("Connecting to server", host, port)
             self._connection.connect((host, port))
             self._connection.setblocking(False)
-            Logs.message("Connected to server", host, port)
+            Logs.message("Connected to server")
         except (ssl.SSLError, socket.error) as e:
             self._socket = None
             self._context = None
             self._connection = None
-            Logs.error("Cannot connect to plugin server at", host, port, e)
+            Logs.error("Cannot connect to server:", e)
             return False
         return True
 
