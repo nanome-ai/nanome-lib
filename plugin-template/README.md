@@ -33,6 +33,7 @@ $ ./deploy.sh -a <plugin_server_address> [optional args]
 To run {{name}} with autoreload:
 
 ```sh
+$ python3 -m pip install -r requirements.txt
 $ python3 run.py -r -a <plugin_server_address> [optional args]
 ```
 
