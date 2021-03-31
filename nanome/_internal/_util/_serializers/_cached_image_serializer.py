@@ -3,7 +3,7 @@ from nanome._internal._util._serializers import _TypeSerializer
 
 class _CachedImageSerializer(_TypeSerializer):
     cache = set()
-    session = ""
+    session = 0
     def __init__(self):
         self._string = _StringSerializer()
 
@@ -17,18 +17,18 @@ class _CachedImageSerializer(_TypeSerializer):
         session = _CachedImageSerializer.session
         if value == None or value == "":
             context.write_bool(False)
-            context.write_using_serializer(self._string, session + "-")
+            context.write_using_serializer(self._string, str(session) + "-")
             context.write_byte_array([])
             return
 
         if value in _CachedImageSerializer.cache:
             context.write_bool(True)
-            context.write_using_serializer(self._string, session + "-" + value)
+            context.write_using_serializer(self._string, str(session) + "-" + value)
         else:
             with open(value, "rb") as f:
                 data = f.read()
             context.write_bool(False)
-            context.write_using_serializer(self._string, session + "-" + value)
+            context.write_using_serializer(self._string, str(session) + "-" + value)
             context.write_byte_array(data)
             _CachedImageSerializer.cache.add(value)
 
