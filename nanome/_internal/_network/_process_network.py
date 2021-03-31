@@ -1,9 +1,8 @@
 from nanome.util import Logs
+from nanome._internal._util._serializers import _CachedImageSerializer
 from . import _Packet
 
-
 stop_bytes = bytearray("CLOSEPIPE", "utf-8")
-
 
 # Plugin networking class, used from the instance processes
 class _ProcessNetwork(object):
@@ -95,5 +94,7 @@ class _ProcessNetwork(object):
         self._plugin_id = plugin_id
         self._command_id = 0
         self.__version_table = version_table
+
+        _CachedImageSerializer.session = session_id
 
         _ProcessNetwork._instance = self
