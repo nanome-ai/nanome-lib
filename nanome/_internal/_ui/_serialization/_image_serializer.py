@@ -1,7 +1,7 @@
 from nanome.util import IntEnum
 from . import _UIBaseSerializer
 from .. import _Image
-from nanome._internal._util._serializers import _ColorSerializer, _ArraySerializer, _ByteSerializer, _StringSerializer, _TypeSerializer
+from nanome._internal._util._serializers import _ColorSerializer, _ArraySerializer, _ByteSerializer, _StringSerializer, _TypeSerializer, _CachedImageSerializer
 
 class _ImageSerializer(_TypeSerializer):
     def __init__(self):
@@ -9,9 +9,10 @@ class _ImageSerializer(_TypeSerializer):
         self.data.set_type(_ByteSerializer())
         self.color = _ColorSerializer()
         self.string = _StringSerializer()
+        self.cached_image = _CachedImageSerializer()
 
     def version(self):
-        return 1
+        return 2
 
     def name(self):
         return "Image"
@@ -23,14 +24,18 @@ class _ImageSerializer(_TypeSerializer):
         else:
             safe_id = value._content_id
         context.write_int(safe_id)
-        context.write_using_serializer(self.string, value._file_path)
+        if version < 2:
+            context.write_using_serializer(self.string, value._file_path)
         context.write_using_serializer(self.color, value._color)
         context.write_uint(value._scaling_option)
-        data = []
-        if (value._file_path != ""):
-            with open(value._file_path, "rb") as f:
-                data = f.read()
-        context.write_using_serializer(self.data, data)
+        if version >= 2:
+            context.write_using_serializer(self.cached_image, value._file_path)
+        else:
+            data = []
+            if (value._file_path != ""):
+                with open(value._file_path, "rb") as f:
+                    data = f.read()
+            context.write_using_serializer(self.data, data)
 
     def deserialize(self, version, context):
         value = _Image._create()
@@ -38,10 +43,15 @@ class _ImageSerializer(_TypeSerializer):
         if (version == 0):
             id_mask = 0x00FFFFFF
             value._content_id &= id_mask
-        value._file_path = context.read_using_serializer(self.string)
+        if version < 2:
+            value._file_path = context.read_using_serializer(self.string)
         value._color = context.read_using_serializer(self.color)
         value._scaling_option = context.read_uint()
-        context.read_using_serializer(self.data) #skipping data.
+        if version < 2:
+            context.read_using_serializer(self.data) #skipping data.
+        else:
+            context.read_using_serializer(self.cached_image)
+
         return value
 
 _UIBaseSerializer.register_type("Image", _UIBaseSerializer.ContentType.eimage, _ImageSerializer())
