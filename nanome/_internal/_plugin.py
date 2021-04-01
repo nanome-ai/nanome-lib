@@ -120,7 +120,7 @@ class _Plugin(object):
                     Logs.error("Connection refused by NTS. Your security key file might be invalid")
                 sys.exit(1)
             else:
-                Logs.debug("Connection ended by NTS")
+                Logs.message("Connection ended by NTS")
                 sys.exit(0)
 
         elif packet.packet_type == Network._Packet.packet_type_client_disconnection:
@@ -238,6 +238,7 @@ class _Plugin(object):
                 if self._network.receive() == False:
                     self.__connected = False
                     self.__disconnect()
+                    self._network.disconnect()
                     continue
 
                 if self.__waiting_keep_alive:
