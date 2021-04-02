@@ -13,8 +13,6 @@ def parse_json(content_json):
         return _slider_json.parse_json(content_json)
     elif type_name == "TextInput" or type_name == "Text Input":
         return _text_input_json.parse_json(content_json)
-    elif type_name == "TextInput" or type_name == "Text Input":
-        return _text_input_json.parse_json(content_json)
     elif type_name == "Label":
         return _label_json.parse_json(content_json)
     elif type_name == "List":
