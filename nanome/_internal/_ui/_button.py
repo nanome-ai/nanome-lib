@@ -1,5 +1,5 @@
 from . import _UIBase
-from nanome.util import Vector3, Color, Logs
+from nanome.util import Vector3, Color
 import nanome
 from copy import deepcopy
 

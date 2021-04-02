@@ -1,6 +1,6 @@
 import nanome
 from . import _UIBase
-from nanome.util import Color, Logs
+from nanome.util import Color
 
 class _Image(_UIBase):
     ScalingOptions = nanome.util.enums.ScalingOptions
@@ -18,15 +18,15 @@ class _Image(_UIBase):
         self._released_callback = None
 
     def _on_image_pressed (self, x, y):
-        if (self._pressed_callback != None):
+        if self._pressed_callback != None:
             self._pressed_callback(self, x, y)
 
     def _on_image_held (self, x, y):
-        if (self._held_callback != None):
+        if self._held_callback != None:
             self._held_callback(self, x, y)
 
     def _on_image_released (self, x, y):
-        if (self._released_callback != None):
+        if self._released_callback != None:
             self._released_callback(self, x, y)
 
     def _register_pressed_callback(self, func):
