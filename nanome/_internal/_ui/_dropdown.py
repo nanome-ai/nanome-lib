@@ -11,6 +11,7 @@ class _Dropdown(_UIBase):
         self._permanent_title = ""
         self._use_permanent_title = False
         self._max_displayed_items = 3
+        self._unusable = False
         self._items = []
         self._item_clicked_callback = lambda self, item: None
 
