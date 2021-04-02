@@ -1,5 +1,5 @@
 from . import _UIBase
-from nanome.util import Vector3, Color
+from nanome.util import Vector3, Color, Logs
 import nanome
 from copy import deepcopy
 
@@ -29,18 +29,21 @@ class _Button(_UIBase):
         self._tooltip = _Button._ButtonTooltip._create()
         #API
         self._pressed_callback = lambda _: None
-        self._hover_callback = lambda _, __: None
+        self._hover_callback = None
 
     def _on_button_pressed(self):
         self._pressed_callback(self)
 
     def _on_button_hover(self, state):
-        self._hover_callback(self, state)
+        if self._hover_callback != None:
+            self._hover_callback(self, state)
 
     def _register_pressed_callback(self, func):
         self._pressed_callback = func
 
     def _register_hover_callback(self, func):
+        if func == None and self._hover_callback == None: # Low hanging filter but there may be others
+            return
         try:
             nanome._internal._network._ProcessNetwork._instance._send(
                 nanome._internal._network._commands._callbacks._Messages.hook_ui_callback,
@@ -66,11 +69,11 @@ class _Button(_UIBase):
             self._ellipsis = True
             self._bold = _Button._MultiStateVariable._create(True)
             self._color = _Button._MultiStateVariable._create(Color.White())
-            self._padding_top = 0
-            self._padding_bottom = 0
-            self._padding_left = 0
-            self._padding_right = 0
-            self._line_spacing = 0
+            self._padding_top = 0.0
+            self._padding_bottom = 0.0
+            self._padding_left = 0.0
+            self._padding_right = 0.0
+            self._line_spacing = 0.0
             self._vertical_align =  _Button.VertAlignOptions.Middle
             self._horizontal_align = _Button.HorizAlignOptions.Middle
 
