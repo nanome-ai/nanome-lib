@@ -60,6 +60,7 @@ class _Session(object):
     def close_pipes(self):
         self.__net_plugin_pipe.close()
         self.__proc_plugin_pipe.close()
+        self._process_manager._remove_session_processes(self._session_id)
 
     def __init__(self, session_id, net_plugin, process_manager, logs_manager, net_pipe, proc_pipe):
         self._session_id = session_id
