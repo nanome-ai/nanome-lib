@@ -88,7 +88,7 @@ class PluginInstance(_PluginInstance):
         """
         | Request the entire workspace, in deep mode
 
-        callback: Callable[Workspace,] None]
+        callback: Callable[[Workspace], None]
         """
         id = self._network._send(_Messages.workspace_request, None, callback is not None)
         self._save_callback(id, callback)
