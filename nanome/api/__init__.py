@@ -1,7 +1,7 @@
 from . import *
 from .room import Room
 from .files import Files
-from .plugin_instance import PluginInstance, _DefaultPlugin
+from .plugin_instance import AsyncPluginInstance, PluginInstance, _DefaultPlugin
 from .plugin import Plugin
 from . import streams
 from . import ui

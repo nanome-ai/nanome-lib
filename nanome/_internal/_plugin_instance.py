@@ -8,28 +8,45 @@ import traceback
 import time
 from timeit import default_timer as timer
 
+try:
+    import asyncio
+    from ._plugin_instance_async import _update
+except ImportError:
+    asyncio = False
+
 UPDATE_RATE = 1.0 / 60.0
 MINIMUM_SLEEP = 0.001
-HOOK_UNREF_CHECK_TIME = 30.0
 
 __metaclass__ = type
 class _PluginInstance(object):
     __callbacks = dict()
+    __futures = dict()
     __complex_updated_callbacks = dict()
     __selection_changed_callbacks = dict()
 
     @classmethod
     def _save_callback(cls, id, callback):
-        if callback == None:
-            cls.__callbacks[id] = lambda _=None: None
+        if callback is None:
+            if asyncio and cls._is_async:
+                loop = asyncio.get_event_loop()
+                future = loop.create_future()
+                cls.__futures[id] = future
+                return future
+            else:
+                cls.__callbacks[id] = lambda *_: None
         else:
             cls.__callbacks[id] = callback
 
     def _call(self, id, *args):
         callbacks = _PluginInstance.__callbacks
+        futures = _PluginInstance.__futures
         try:
-            callbacks[id](*args)
-            del callbacks[id]
+            if asyncio and self._is_async:
+                futures[id].set_result(args)
+                del futures[id]
+            else:
+                callbacks[id](*args)
+                del callbacks[id]
         except KeyError:
             Logs.warning('Received an unknown callback id:', id)
 
@@ -63,7 +80,7 @@ class _PluginInstance(object):
         except:
             Logs.error("Error in on_stop function:", traceback.format_exc())
 
-    def _run(self):
+    def _update(self):
         try:
             self.start()
             last_update = timer()
@@ -84,6 +101,13 @@ class _PluginInstance(object):
             self._process_manager._close()
             self._network._close()
             return
+
+    def _run(self):
+        if asyncio and self._is_async:
+            coro = _update(self, UPDATE_RATE, MINIMUM_SLEEP)
+            asyncio.run(coro)
+        else:
+            self._update()
 
     def __init__(self, session_id, net_pipe, proc_pipe, serializer, plugin_id, version_table, original_version_table, verbose, custom_data):
         Logs._set_verbose(verbose)
