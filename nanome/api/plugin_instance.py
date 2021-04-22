@@ -11,7 +11,7 @@ from nanome.api import Room, Files
 import os
 
 class PluginInstance(_PluginInstance):
-    _is_async = False
+    is_async = False
 
     """
     | Base class of any Plugin class.
@@ -99,14 +99,14 @@ class PluginInstance(_PluginInstance):
         """
         | Request the entire workspace, in deep mode
         """
-        id = self._network._send(_Messages.workspace_request, None, callback != None or self._is_async)
+        id = self._network._send(_Messages.workspace_request, None, callback != None or self.is_async)
         return self._save_callback(id, callback)
 
     def request_complex_list(self, callback=None):
         """
         | Request the list of all complexes in the workspace, in shallow mode
         """
-        id = self._network._send(_Messages.complex_list_request, None, callback != None or self._is_async)
+        id = self._network._send(_Messages.complex_list_request, None, callback != None or self.is_async)
         return self._save_callback(id, callback)
 
     def request_complexes(self, id_list, callback=None):
@@ -117,7 +117,7 @@ class PluginInstance(_PluginInstance):
         :param id_list: List of indices
         :type id_list: list of :class:`int`
         """
-        id = self._network._send(_Messages.complexes_request, id_list, callback != None or self._is_async)
+        id = self._network._send(_Messages.complexes_request, id_list, callback != None or self.is_async)
         return self._save_callback(id, callback)
 
     def update_workspace(self, workspace):
@@ -151,7 +151,7 @@ class PluginInstance(_PluginInstance):
         :param structures: List of molecular structures to update.
         :type structures: list of :class:`~nanome.api.structure.base.Base`
         """
-        id = self._network._send(_Messages.structures_deep_update, structures, callback != None or self._is_async)
+        id = self._network._send(_Messages.structures_deep_update, structures, callback != None or self.is_async)
         return self._save_callback(id, callback)
 
     def update_structures_shallow(self, structures):
@@ -172,7 +172,7 @@ class PluginInstance(_PluginInstance):
         :param structures: Molecular structure(s) to update.
         :type structures: list of :class:`~nanome.api.structure.base.Base`
         """
-        id = self._network._send(_Messages.structures_zoom, structures, callback != None or self._is_async)
+        id = self._network._send(_Messages.structures_zoom, structures, callback != None or self.is_async)
         return self._save_callback(id, callback)
 
     def center_on_structures(self, structures, callback=None):
@@ -183,7 +183,7 @@ class PluginInstance(_PluginInstance):
         :param structures: Molecular structure(s) to update.
         :type structures: list of :class:`~nanome.api.structure.base.Base`
         """
-        id = self._network._send(_Messages.structures_center, structures, callback != None or self._is_async)
+        id = self._network._send(_Messages.structures_center, structures, callback != None or self.is_async)
         return self._save_callback(id, callback)
 
     def add_to_workspace(self, complex_list, callback=None):
@@ -193,7 +193,7 @@ class PluginInstance(_PluginInstance):
         :param complex_list: List of Complexes to add
         :type complex_list: list of :class:`~nanome.api.structure.complex.Complex`
         """
-        id = self._network._send(_Messages.add_to_workspace, complex_list, callback != None or self._is_async)
+        id = self._network._send(_Messages.add_to_workspace, complex_list, callback != None or self.is_async)
         return self._save_callback(id, callback)
 
     def update_menu(self, menu):
@@ -255,7 +255,7 @@ class PluginInstance(_PluginInstance):
         :param index: Index of the menu you wish to read
         :type index: int
         """
-        id = self._network._send(_Messages.menu_transform_request, index, callback != None or self._is_async)
+        id = self._network._send(_Messages.menu_transform_request, index, callback != None or self.is_async)
         return self._save_callback(id, callback)
 
     def save_files(self, file_list, callback=None):
@@ -265,7 +265,7 @@ class PluginInstance(_PluginInstance):
         :param file_list: List of files to save with their content
         :type file_list: list of :class:`~nanome.util.file.FileSaveData`
         """
-        id = self._network._send(_Messages.file_save, file_list, callback != None or self._is_async)
+        id = self._network._send(_Messages.file_save, file_list, callback != None or self.is_async)
         return self._save_callback(id, callback)
 
     @Logs.deprecated("create_writing_stream")
@@ -286,7 +286,7 @@ class PluginInstance(_PluginInstance):
         :param stream_type: Type of stream to create
         :type stream_type: list of :class:`~nanome.api.stream.Stream.Type`
         """
-        id = self._network._send(_Messages.stream_create, (stream_type, indices_list, StreamDirection.writing), callback != None or self._is_async)
+        id = self._network._send(_Messages.stream_create, (stream_type, indices_list, StreamDirection.writing), callback != None or self.is_async)
         return self._save_callback(id, callback)
 
     def create_reading_stream(self, indices_list, stream_type, callback=None):
@@ -298,7 +298,7 @@ class PluginInstance(_PluginInstance):
         :param stream_type: Type of stream to create
         :type stream_type: list of :class:`~nanome.api.stream.Stream.Type`
         """
-        id = self._network._send(_Messages.stream_create, (stream_type, indices_list, StreamDirection.reading), callback != None or self._is_async)
+        id = self._network._send(_Messages.stream_create, (stream_type, indices_list, StreamDirection.reading), callback != None or self.is_async)
         return self._save_callback(id, callback)
 
     def add_bonds(self, complex_list, callback, fast_mode=None):
@@ -323,7 +323,7 @@ class PluginInstance(_PluginInstance):
         dssp._start()
 
     def add_volume(self, complex, volume, properties, complex_to_align_index=-1, callback=None):
-        id = self._network._send(_Messages.add_volume, (complex, complex_to_align_index, volume, properties), callback != None or self._is_async)
+        id = self._network._send(_Messages.add_volume, (complex, complex_to_align_index, volume, properties), callback != None or self.is_async)
         return self._save_callback(id, callback)
 
     def open_url(self, url):
@@ -342,14 +342,14 @@ class PluginInstance(_PluginInstance):
         """
         | Requests presenter account info (unique ID, name, email)
         """
-        id = self._network._send(_Messages.presenter_info_request, None, callback != None or self._is_async)
+        id = self._network._send(_Messages.presenter_info_request, None, callback != None or self.is_async)
         return self._save_callback(id, callback)
 
     def request_controller_transforms(self, callback=None):
         """
         | Requests presenter controller info (head position, head rotation, left controller position, left controller rotation, right controller position, right controller rotation)
         """
-        id = self._network._send(_Messages.controller_transforms_request, None, callback != None or self._is_async)
+        id = self._network._send(_Messages.controller_transforms_request, None, callback != None or self.is_async)
         return self._save_callback(id, callback)
 
     def set_plugin_list_button(self, button, text = None, usable = None):
@@ -403,7 +403,7 @@ class PluginInstance(_PluginInstance):
                 data = content_file.read()
             files.append((file_name, data))
 
-        id = self._network._send(_Messages.load_file, (files, True, True), callback != None or self._is_async)
+        id = self._network._send(_Messages.load_file, (files, True, True), callback != None or self.is_async)
         return self._save_callback(id, callback)
 
     def request_export(self, format, callback=None, entities=None):
@@ -453,7 +453,7 @@ class PluginInstance(_PluginInstance):
         return self._custom_data
 
 class AsyncPluginInstance(PluginInstance):
-    _is_async = True
+    is_async = True
 
 class _DefaultPlugin(PluginInstance):
     def __init__(self):

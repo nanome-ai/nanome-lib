@@ -27,7 +27,7 @@ class _PluginInstance(object):
     @classmethod
     def _save_callback(cls, id, callback):
         if callback is None:
-            if asyncio and cls._is_async:
+            if asyncio and cls.is_async:
                 loop = asyncio.get_event_loop()
                 future = loop.create_future()
                 cls.__futures[id] = future
@@ -41,7 +41,7 @@ class _PluginInstance(object):
         callbacks = _PluginInstance.__callbacks
         futures = _PluginInstance.__futures
 
-        if asyncio and self._is_async and futures.get(id):
+        if asyncio and self.is_async and futures.get(id):
             futures[id].set_result(args)
             del futures[id]
             return
@@ -105,7 +105,7 @@ class _PluginInstance(object):
             return
 
     def _run(self):
-        if asyncio and self._is_async:
+        if asyncio and self.is_async:
             coro = _async_update_loop(self, UPDATE_RATE, MINIMUM_SLEEP)
             asyncio.run(coro)
         else:
