@@ -10,7 +10,7 @@ from timeit import default_timer as timer
 
 try:
     import asyncio
-    from ._plugin_instance_async import _update
+    from ._plugin_instance_async import _async_update_loop
 except ImportError:
     asyncio = False
 
@@ -82,7 +82,7 @@ class _PluginInstance(object):
         except:
             Logs.error("Error in on_stop function:", traceback.format_exc())
 
-    def _update(self):
+    def _update_loop(self):
         try:
             self.start()
             last_update = timer()
@@ -106,7 +106,7 @@ class _PluginInstance(object):
 
     def _run(self):
         if asyncio and self._is_async:
-            coro = _update(self, UPDATE_RATE, MINIMUM_SLEEP)
+            coro = _async_update_loop(self, UPDATE_RATE, MINIMUM_SLEEP)
             asyncio.run(coro)
         else:
             self._update()
