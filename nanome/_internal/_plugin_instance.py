@@ -40,13 +40,15 @@ class _PluginInstance(object):
     def _call(self, id, *args):
         callbacks = _PluginInstance.__callbacks
         futures = _PluginInstance.__futures
+
+        if asyncio and self._is_async and futures.get(id):
+            futures[id].set_result(args)
+            del futures[id]
+            return
+
         try:
-            if asyncio and self._is_async:
-                futures[id].set_result(args)
-                del futures[id]
-            else:
-                callbacks[id](*args)
-                del callbacks[id]
+            callbacks[id](*args)
+            del callbacks[id]
         except KeyError:
             Logs.warning('Received an unknown callback id:', id)
 
