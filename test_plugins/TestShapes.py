@@ -1,6 +1,8 @@
+from nanome.util.vector3 import Vector3
 import nanome
 import random
 import itertools
+from nanome.api.shapes import Sphere, Line, Anchor, Label
 
 # Config
 
@@ -9,109 +11,280 @@ DESCRIPTION = "Tests for plugin shapes API"
 CATEGORY = "Tests"
 HAS_ADVANCED_OPTIONS = False
 
+
 class TestShapes(nanome.PluginInstance):
     def start(self):
+        sf = TestShapes.SphereFactory
+        sf.parent = self
+        lf = TestShapes.LineFactory
+        lf.parent = self
         self.menu = nanome.ui.Menu()
-        self.shapes = []
         menu = self.menu
         menu.title = "Shapes"
         menu.width = 0.5
         menu.height = 0.5
 
-        ln = nanome.ui.LayoutNode()
-        ln.layout_orientation = nanome.util.enums.LayoutTypes.vertical
+        left = nanome.ui.LayoutNode()
+        left.layout_orientation = nanome.util.enums.LayoutTypes.vertical
 
-        ln_btn = ln.create_child_node()
+        ln_label = left.create_child_node()
+        label = ln_label.add_new_label()
+        label.text_value = "spheres"
+        ln_btn = left.create_child_node()
         btn = ln_btn.add_new_button("Add to workspace")
-        btn.register_pressed_callback(self.create_in_workspace)
-        ln_btn = ln.create_child_node()
+        btn.register_pressed_callback(sf.create_in_workspace)
+        ln_btn = left.create_child_node()
         btn = ln_btn.add_new_button("Add to random complex")
-        btn.register_pressed_callback(self.create_in_complex)
-        ln_btn = ln.create_child_node()
+        btn.register_pressed_callback(sf.create_in_complex)
+        ln_btn = left.create_child_node()
         btn = ln_btn.add_new_button("Add to random atom")
-        btn.register_pressed_callback(self.create_in_atom)
-        ln_btn = ln.create_child_node()
+        btn.register_pressed_callback(sf.create_in_atom)
+        ln_btn = left.create_child_node()
         btn = ln_btn.add_new_button("Change anchor last created")
-        btn.register_pressed_callback(self.change_anchor)
-        ln_btn = ln.create_child_node()
+        btn.register_pressed_callback(sf.change_anchor)
+        ln_btn = left.create_child_node()
         btn = ln_btn.add_new_button("Delete last created")
-        btn.register_pressed_callback(self.delete_last)
+        btn.register_pressed_callback(sf.delete_last)
 
-        menu.root.add_child(ln)
+        right = nanome.ui.LayoutNode()
+        right.layout_orientation = nanome.util.enums.LayoutTypes.vertical
+
+        ln_label = right.create_child_node()
+        label = ln_label.add_new_label()
+        label.text_value = "lines"
+        ln_btn = right.create_child_node()
+        btn = ln_btn.add_new_button("Add to workspace")
+        btn.register_pressed_callback(lf.create_in_workspace)
+        ln_btn = right.create_child_node()
+        btn = ln_btn.add_new_button("Add to random complex")
+        btn.register_pressed_callback(lf.create_in_complex)
+        ln_btn = right.create_child_node()
+        btn = ln_btn.add_new_button("Add to random atom")
+        btn.register_pressed_callback(lf.create_in_atom)
+        ln_btn = right.create_child_node()
+        btn = ln_btn.add_new_button("Change anchor last created")
+        btn.register_pressed_callback(lf.change_anchor)
+        ln_btn = right.create_child_node()
+        btn = ln_btn.add_new_button("Delete last created")
+        btn.register_pressed_callback(lf.delete_last)
+
+        menu.root.layout_orientation = nanome.util.enums.LayoutTypes.horizontal
+        menu.root.add_child(left)
+        menu.root.add_child(right)
 
     def on_run(self):
         self.menu.enabled = True
         self.update_menu(self.menu)
 
-    def create_in_workspace(self, button):
-        sphere = self.create_random_sphere()
-        def done(success):
-            self.shapes.append(sphere)
-        sphere.upload(done)
+    class SphereFactory():
+        spheres = []
+        parent = None
 
-    def create_in_complex(self, button):
-        def received(workspace):
-            if len(workspace.complexes) == 0:
-                return
-            elif len(workspace.complexes) == 1:
-                c = 0
-            else:
-                c = random.randrange(0, len(workspace.complexes) - 1)
-            
-            sphere = self.create_random_sphere()
-            sphere.anchor = nanome.util.enums.ShapeAnchorType.Complex
-            sphere.target = workspace.complexes[c].index
+        @classmethod
+        def create_in_workspace(cls, button):
+            sphere = cls.create_random_sphere()
+
             def done(success):
-                self.shapes.append(sphere)
+                cls.spheres.append(sphere)
             sphere.upload(done)
 
-        self.request_workspace(received)
+        @classmethod
+        def create_in_complex(cls, button):
+            def received(workspace):
+                if len(workspace.complexes) == 0:
+                    return
+                elif len(workspace.complexes) == 1:
+                    c = 0
+                else:
+                    c = random.randrange(0, len(workspace.complexes) - 1)
 
-    def create_in_atom(self, button):
-        def received(workspace):
-            if len(workspace.complexes) == 0:
+                sphere = cls.create_random_sphere()
+                anchor = sphere.anchors[0]
+                anchor.anchor_type = nanome.util.enums.ShapeAnchorType.Complex
+                anchor.target = workspace.complexes[c].index
+
+                def done(success):
+                    cls.spheres.append(sphere)
+                sphere.upload(done)
+
+            cls.parent.request_workspace(received)
+
+        @classmethod
+        def create_in_atom(cls, button):
+            def received(workspace):
+                if len(workspace.complexes) == 0:
+                    return
+                elif len(workspace.complexes) == 1:
+                    c = 0
+                else:
+                    c = random.randrange(0, len(workspace.complexes) - 1)
+                atom_count = 0
+                for _ in workspace.complexes[c].atoms:
+                    atom_count += 1
+                a = random.randrange(0, atom_count - 1)
+
+                sphere = cls.create_random_sphere()
+                if a == 0:
+                    atom = next(workspace.complexes[c].atoms)
+                else:
+                    atom = next(itertools.islice(workspace.complexes[c].atoms, a, None))
+
+                anchor = sphere.anchors[0]
+                anchor.anchor_type = nanome.util.enums.ShapeAnchorType.Atom
+                anchor.target = atom.index
+
+                def done(success):
+                    cls.spheres.append(sphere)
+                sphere.upload(done)
+
+            cls.parent.request_workspace(received)
+
+        @classmethod
+        def change_anchor(cls, button):
+            if len(cls.spheres) == 0:
                 return
-            elif len(workspace.complexes) == 1:
-                c = 0
+            shape = cls.spheres[-1]
+            anchor = shape.anchors[0]
+            anchor.anchor_type = (anchor.anchor_type + 1) % len(nanome.util.enums.ShapeAnchorType)
+            shape.upload()
+
+        @classmethod
+        def delete_last(cls, button):
+            if len(cls.spheres) == 0:
+                return
+            shape = cls.spheres.pop()
+            shape.destroy()
+
+        @classmethod
+        def create_random_sphere(cls):
+            sphere = Sphere()
+            sphere.radius = random.uniform(0.5, 2.0)
+            sphere.color = nanome.util.Color(random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255), random.randrange(100, 255))
+            anchor = sphere.anchors[0]
+            anchor.local_offset = nanome.util.Vector3(random.uniform(-.05, .05), random.uniform(-.05, .05), random.uniform(-.05, .05))
+            return sphere
+
+    class LineFactory():
+        queued_anchor = None
+        lines = []
+        labels = []
+        parent = None
+
+        @classmethod
+        def create_in_workspace(cls, button):
+            cls.create_anchor(0, nanome.util.enums.ShapeAnchorType.Workspace)
+
+        @classmethod
+        def create_in_complex(cls, button):
+            def received(workspace):
+                if len(workspace.complexes) == 0:
+                    return
+                elif len(workspace.complexes) == 1:
+                    c = 0
+                else:
+                    c = random.randrange(0, len(workspace.complexes) - 1)
+
+                cls.create_anchor(workspace.complexes[c].index, nanome.util.enums.ShapeAnchorType.Complex)
+
+            cls.parent.request_workspace(received)
+
+        @classmethod
+        def create_in_atom(cls, button):
+            def received(workspace):
+                if len(workspace.complexes) == 0:
+                    return
+                elif len(workspace.complexes) == 1:
+                    c = 0
+                else:
+                    c = random.randrange(0, len(workspace.complexes) - 1)
+                atom_count = 0
+                for _ in workspace.complexes[c].atoms:
+                    atom_count += 1
+                a = random.randrange(0, atom_count - 1)
+
+                if a == 0:
+                    atom = next(workspace.complexes[c].atoms)
+                else:
+                    atom = next(itertools.islice(workspace.complexes[c].atoms, a, None))
+
+                cls.create_anchor(atom.index, nanome.util.enums.ShapeAnchorType.Atom)
+
+            cls.parent.request_workspace(received)
+
+        @classmethod
+        def change_anchor(cls, button):
+            if len(cls.lines) == 0:
+                return
+            line = cls.lines[-1]
+            label = cls.labels[-1]
+            anchor_type = (line.anchors[0].anchor_type + 1) % len(nanome.util.enums.ShapeAnchorType)
+            line.anchors[0].anchor_type = anchor_type
+            label.anchors[0].anchor_type = anchor_type
+            line.upload()
+            label.upload()
+
+        @classmethod
+        def delete_last(cls, button):
+            if len(cls.lines) == 0:
+                return
+            shape = cls.lines.pop()
+            shape.destroy()
+            shape = cls.labels.pop()
+            shape.destroy()
+
+        @classmethod
+        def create_anchor(cls, target, a_type):
+            anchor = Anchor()
+            anchor.target = target
+            anchor.local_offset = nanome.util.Vector3(1, 0, 0)  # nanome.util.Vector3(random.uniform(-.05, .05), random.uniform(-.05, .05), random.uniform(-.05, .05))
+            anchor.viewer_offset = nanome.util.Vector3(0, 0, .01)
+            anchor.anchor_type = a_type
+            if cls.queued_anchor == None:
+                cls.queued_anchor = anchor
             else:
-                c = random.randrange(0, len(workspace.complexes) - 1)
-            atom_count = 0
-            for _ in workspace.complexes[c].atoms:
-                atom_count += 1
-            a = random.randrange(0, atom_count - 1)
-            
-            sphere = self.create_random_sphere()
-            sphere.anchor = nanome.util.enums.ShapeAnchorType.Atom
-            if a == 0:
-                atom = next(workspace.complexes[c].atoms)
+                cls.create_line(cls.queued_anchor, anchor)
+                cls.queued_anchor = None
+
+        @classmethod
+        def create_anchor(cls, target, a_type):
+            anchor = Anchor()
+            anchor.target = target
+            anchor.local_offset = nanome.util.Vector3(1, 0, 0)  # nanome.util.Vector3(random.uniform(-.05, .05), random.uniform(-.05, .05), random.uniform(-.05, .05))
+            anchor.anchor_type = a_type
+            if cls.queued_anchor == None:
+                cls.queued_anchor = anchor
             else:
-                atom = next(itertools.islice(workspace.complexes[c].atoms, a, None))
-            sphere.target = atom.index
-            sphere.position = nanome.util.Vector3()
-            def done(success):
-                self.shapes.append(sphere)
-            sphere.upload(done)
+                cls.create_line(cls.queued_anchor, anchor)
+                cls.queued_anchor = None
 
-        self.request_workspace(received)
+        @classmethod
+        def copy_anchor(cls, other):
+            anchor = Anchor()
+            anchor.target = other.target
+            anchor.local_offset = other.local_offset
+            anchor.viewer_offset = other.viewer_offset
+            anchor.anchor_type = other.anchor_type
+            return anchor
 
-    def change_anchor(self, button):
-        if len(self.shapes) == 0:
-            return
-        shape = self.shapes[-1]
-        shape.anchor = (shape.anchor + 1) % len(nanome.util.enums.ShapeAnchorType)
-        shape.upload()
+        @classmethod
+        def create_line(cls, anchor1, anchor2):
+            line = Line()
+            line.anchors = [anchor1, anchor2]
+            line.dash_distance = .4
+            line.thickness *= 2
 
-    def delete_last(self, button):
-        if len(self.shapes) == 0:
-            return
-        shape = self.shapes.pop()
-        shape.destroy()
+            label = Label()
+            label.anchors = [cls.copy_anchor(anchor1), cls.copy_anchor(anchor2)]
+            label.anchors[0].viewer_offset = nanome.util.Vector3(0, 0, -.01)
+            label.anchors[1].viewer_offset = nanome.util.Vector3(0, 0, -.01)
+            label.text = "bloop"
 
-    def create_random_sphere(self):
-        sphere = self.create_shape(nanome.util.enums.ShapeType.Sphere)
-        sphere.radius = random.uniform(0.5, 2.0)
-        sphere.position = nanome.util.Vector3(random.uniform(-2.0, 2.0), random.uniform(-2.0, 2.0), random.uniform(-2.0, 2.0))
-        sphere.color = nanome.util.Color(random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255), random.randrange(100, 255))
-        return sphere
+            def done1(success):
+                cls.lines.append(line)
+            def done2(success):
+                cls.labels.append(label)
+            line.upload(done1)
+            label.upload(done2)
+
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, TestShapes)

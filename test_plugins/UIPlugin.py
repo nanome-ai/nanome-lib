@@ -7,7 +7,7 @@ import time
 
 NAME = "UI Plugin"
 DESCRIPTION = "A simple plugin demonstrating how plugin system can be used to extend Nanome capabilities"
-CATEGORY = "Simple Actions"
+CATEGORY = "File Import"
 HAS_ADVANCED_OPTIONS = False
 
 # Plugin
@@ -66,9 +66,13 @@ class UIPlugin(nanome.PluginInstance):
         self.loading_bar_callback = loading_bar_callback
 
     def start(self):
+        self.integration.import_file = self.import_file
         Logs.message("Start UI Plugin")
         self.create_callbacks()
     
+    def import_file(self, request):
+        self.on_run()
+
     def on_run(self):
         Logs.message("Run UI Plugin")
         menu = self.rebuild_menu()

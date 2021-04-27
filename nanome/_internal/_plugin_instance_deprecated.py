@@ -2,9 +2,12 @@ import nanome
 from . import _PluginInstance
 from nanome._internal._network._commands._callbacks import _Messages
 from nanome.util import DirectoryRequestOptions
+from nanome.util.enums import ShapeType
+from nanome._internal import _shapes
+
 
 @nanome.util.Logs.deprecated("files.ls")
-def _request_directory(self, path, callback = None, pattern = "*"):
+def _request_directory(self, path, callback=None, pattern="*"):
     """
     | Requests the content of a directory on the machine running Nanome
 
@@ -19,10 +22,12 @@ def _request_directory(self, path, callback = None, pattern = "*"):
     id = self._network._send(_Messages.directory_request, options, callback != None)
     self._save_callback(id, callback)
 
+
 _PluginInstance.request_directory = _request_directory
 
+
 @nanome.util.Logs.deprecated("files.get")
-def _request_files(self, file_list, callback = None):
+def _request_files(self, file_list, callback=None):
     """
     | Reads files on the machine running Nanome, and returns them
 
@@ -32,4 +37,18 @@ def _request_files(self, file_list, callback = None):
     id = self._network._send(_Messages.file_request, file_list, callback != None)
     self._save_callback(id, callback)
 
+
 _PluginInstance.request_files = _request_files
+
+
+@nanome.util.Logs.deprecated()
+def _create_shape(self, shape_type):
+    if shape_type == ShapeType.Sphere:
+        return _shapes._Sphere._create()
+    if shape_type == ShapeType.Line:
+        return _shapes._Line._create()
+
+    raise ValueError('Parameter shape_type must be a value of nanome.util.enums.ShapeType')
+
+
+_PluginInstance.create_shape = _create_shape

@@ -246,12 +246,12 @@ class _Plugin(object):
                         self.__connected = False
                         self.__disconnect()
                         continue
-                elif now - self.__last_keep_alive >= keep_alive_time_interval:
-                        self.__last_keep_alive = now
-                        self.__waiting_keep_alive = True
-                        packet = Network._Packet()
-                        packet.set(_Plugin._plugin_id, Network._Packet.packet_type_keep_alive, 0)
-                        self._network.send(packet)
+                elif now - self.__last_keep_alive >= keep_alive_time_interval and _Plugin._plugin_id >= 0:
+                    self.__last_keep_alive = now
+                    self.__waiting_keep_alive = True
+                    packet = Network._Packet()
+                    packet.set(_Plugin._plugin_id, Network._Packet.packet_type_keep_alive, 0)
+                    self._network.send(packet)
 
                 del to_remove[:]
                 for id, session in self._sessions.items():

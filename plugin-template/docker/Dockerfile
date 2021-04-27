@@ -1,13 +1,14 @@
 FROM nanome/plugin-env
 
 ENV ARGS=''
+WORKDIR /app
 
-# TODO: install dependencies here
+# TODO: install non-pip dependencies here
 
 ARG CACHEBUST
-RUN pip install nanome
+COPY requirements.txt .
+RUN pip install -r requirements.txt
 
-COPY . /app
-WORKDIR /app
+COPY . .
 
 CMD python run.py ${ARGS}

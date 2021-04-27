@@ -20,7 +20,7 @@ class GenerateMoleculeImageIntegration(nanome.PluginInstance):
     def make_image(self, request):
         images = []
         i = 1
-        for component in request.get_args():
+        for component in request.get_args()[0]:
             path = self.image_path + str(i) + ".png"
             with open(path, "rb") as f:
                 data = f.read()

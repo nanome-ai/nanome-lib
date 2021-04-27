@@ -1,4 +1,4 @@
-import copy
+from copy import deepcopy
 import nanome
 from nanome._internal._ui import _Button
 from . import UIBase
@@ -399,11 +399,13 @@ class Button(_Button, UIBase):
             """
             | Sets the value for every state
             """
-            self.idle = copy.deepcopy(value)
-            self.highlighted = copy.deepcopy(value)
-            self.selected = copy.deepcopy(value)
-            self.selected_highlighted = copy.deepcopy(value)
-            self.unusable = copy.deepcopy(value)
+            self._set_all(value)
+
+        def set_each(self, idle=None, selected=None, highlighted=None, selected_highlighted=None, unusable=None, default=None):
+            """
+            | Sets the value for each state
+            """
+            self._set_each(idle, selected, highlighted, selected_highlighted, unusable, default)
 
         @property
         def idle(self):

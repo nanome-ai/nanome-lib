@@ -17,3 +17,4 @@ from ._long_serializer import _LongSerializer
 from ._byte_array_serializer import _ByteArraySerializer
 from ._quaternion_serializer import _QuaternionSerializer, _UnityRotationSerializer
 from ._vector3_serializer import _Vector3Serializer, _UnityPositionSerializer
+from ._cached_image_serializer import _CachedImageSerializer
