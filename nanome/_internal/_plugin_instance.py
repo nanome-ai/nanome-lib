@@ -109,7 +109,7 @@ class _PluginInstance(object):
             coro = _async_update_loop(self, UPDATE_RATE, MINIMUM_SLEEP)
             asyncio.run(coro)
         else:
-            self._update()
+            self._update_loop()
 
     def __init__(self, session_id, net_pipe, proc_pipe, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
         Logs._set_verbose(verbose)
