@@ -10,6 +10,7 @@ class _Integration(_TypeSerializer):
         _Hashes.IntegrationHashes[_Integrations.calculate_esp]: Serializers._CalculateESP(),
         _Hashes.IntegrationHashes[_Integrations.minimization_start]: Serializers._StartMinimization(),
         _Hashes.IntegrationHashes[_Integrations.minimization_stop]: Serializers._StopMinimization(),
+        _Hashes.IntegrationHashes[_Integrations.export_locations]: Serializers._ExportLocations(),
         _Hashes.IntegrationHashes[_Integrations.export_file]: Serializers._ExportFile(),
         _Hashes.IntegrationHashes[_Integrations.import_file]: Serializers._ImportFile(),
         _Hashes.IntegrationHashes[_Integrations.generate_molecule_image]: Serializers._GenerateMoleculeImage(),
