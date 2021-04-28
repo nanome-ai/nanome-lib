@@ -20,8 +20,9 @@ class _Macro(object):
 
     def _run(self, callback = None):
         id = nanome._internal._network._ProcessNetwork._send(_Messages.run_macro, self, callback != None)
-        if callback != None:
-            nanome._internal._PluginInstance._save_callback(id, callback)
+        is_async = nanome._internal._network._ProcessNetwork._instance._plugin.is_async
+        if callback != None or is_async:
+            return nanome._internal._PluginInstance._save_callback(id, callback)
 
     def _delete(self, all_users = False):
         nanome._internal._network._ProcessNetwork._send(_Messages.delete_macro, (self, all_users, _Macro._plugin_identifier), False)
@@ -29,8 +30,8 @@ class _Macro(object):
     @classmethod
     def _stop(cls):
         nanome._internal._network._ProcessNetwork._send(_Messages.stop_macro, None, False)
-    
+
     @classmethod
     def _get_live(cls, callback):
         id = nanome._internal._network._ProcessNetwork._send(_Messages.get_macros, _Macro._plugin_identifier, callback != None)
-        nanome._internal._PluginInstance._save_callback(id, callback)
+        return nanome._internal._PluginInstance._save_callback(id, callback)

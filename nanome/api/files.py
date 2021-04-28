@@ -12,8 +12,9 @@ class Files(_Files):
         :param callback: function that will be called with the full filename
         :type callback: method (:class:`~nanome.util.file.FileError`, str) -> None
         """
-        id = self.plugin._network._send(_Messages.print_working_directory, None, callback != None)
-        self.plugin._save_callback(id, callback)
+        expects_response = callback is not None or self.plugin.is_async
+        id = self.plugin._network._send(_Messages.print_working_directory, None, expects_response)
+        return self.plugin._save_callback(id, callback)
 
     def cd(self, directory, callback):
         """
@@ -23,8 +24,9 @@ class Files(_Files):
         :param callback: called when operation is completed with any potential errors.
         :type callback: method (:class:`~nanome.util.file.FileError`) -> None
         """
-        id = self.plugin._network._send(_Messages.cd, directory, callback != None)
-        self.plugin._save_callback(id, callback)
+        expects_response = callback is not None or self.plugin.is_async
+        id = self.plugin._network._send(_Messages.cd, directory, expects_response)
+        return self.plugin._save_callback(id, callback)
 
     def ls(self, directory, callback):
         """
@@ -34,8 +36,9 @@ class Files(_Files):
         :param callback: function that will be called with contents of the directory
         :type callback: method (:class:`~nanome.util.file.FileError`, list of :class:`~nanome.util.file.FileMeta`) -> None
         """
-        id = self.plugin._network._send(_Messages.ls, directory, callback != None)
-        self.plugin._save_callback(id, callback)
+        expects_response = callback is not None or self.plugin.is_async
+        id = self.plugin._network._send(_Messages.ls, directory, expects_response)
+        return self.plugin._save_callback(id, callback)
 
     def mv(self, source, dest, callback):
         """
@@ -47,8 +50,9 @@ class Files(_Files):
         :param callback: called when operation is completed with any potential errors.
         :type callback: method (:class:`~nanome.util.file.FileError`) -> None
         """
-        id = self.plugin._network._send(_Messages.mv, (source, dest), callback != None)
-        self.plugin._save_callback(id, callback)
+        expects_response = callback is not None or self.plugin.is_async
+        id = self.plugin._network._send(_Messages.mv, (source, dest), expects_response)
+        return self.plugin._save_callback(id, callback)
 
     def get(self, source, dest, callback):
         """
@@ -67,7 +71,7 @@ class Files(_Files):
                     ofile.close()
             callback(error, dest)
         id = self.plugin._network._send(_Messages.get, source, True)
-        self.plugin._save_callback(id, cb)
+        return self.plugin._save_callback(id, cb)
 
     def put(self, source, dest, callback):
         """
@@ -82,8 +86,9 @@ class Files(_Files):
         with open(source, "rb") as f:
             file = f.read()
             f.close()
-        id = self.plugin._network._send(_Messages.put, (dest, file), callback != None)
-        self.plugin._save_callback(id, callback)
+        expects_response = callback is not None or self.plugin.is_async
+        id = self.plugin._network._send(_Messages.put, (dest, file), expects_response)
+        return self.plugin._save_callback(id, callback)
 
     def rm(self, target, callback):
         """
@@ -93,8 +98,9 @@ class Files(_Files):
         :param callback: called when operation is completed with any potential errors.
         :type callback: method (:class:`~nanome.util.file.FileError`) -> None
         """
-        id = self.plugin._network._send(_Messages.rm, target, callback != None)
-        self.plugin._save_callback(id, callback)
+        expects_response = callback is not None or self.plugin.is_async
+        id = self.plugin._network._send(_Messages.rm, target, expects_response)
+        return self.plugin._save_callback(id, callback)
 
     def rmdir(self, target, callback):
         """
@@ -104,8 +110,9 @@ class Files(_Files):
         :param callback: called when operation is completed with any potential errors.
         :type callback: method (:class:`~nanome.util.file.FileError`) -> None
         """
-        id = self.plugin._network._send(_Messages.rmdir, target, callback != None)
-        self.plugin._save_callback(id, callback)
+        expects_response = callback is not None or self.plugin.is_async
+        id = self.plugin._network._send(_Messages.rmdir, target, expects_response)
+        return self.plugin._save_callback(id, callback)
 
     def cp(self, source, dest, callback):
         """
@@ -117,16 +124,18 @@ class Files(_Files):
         :param callback: called when operation is completed with any potential errors.
         :type callback: method (:class:`~nanome.util.file.FileError`) -> None
         """
-        id = self.plugin._network._send(_Messages.cp, (source, dest), callback != None)
-        self.plugin._save_callback(id, callback)
+        expects_response = callback is not None or self.plugin.is_async
+        id = self.plugin._network._send(_Messages.cp, (source, dest), expects_response)
+        return self.plugin._save_callback(id, callback)
 
     def mkdir(self, target, callback):
         """
-        | Create the DIRECTORY(ies), if they do not already exist. 
+        | Create the DIRECTORY(ies), if they do not already exist.
         :param target: directory to create.
         :type target: str
         :param callback: called when operation is completed with any potential errors.
         :type callback: method (:class:`~nanome.util.file.FileError`) -> None
         """
-        id = self.plugin._network._send(_Messages.mkdir, target, callback != None)
-        self.plugin._save_callback(id, callback)
+        expects_response = callback is not None or self.plugin.is_async
+        id = self.plugin._network._send(_Messages.mkdir, target, expects_response)
+        return self.plugin._save_callback(id, callback)
