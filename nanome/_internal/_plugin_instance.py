@@ -27,7 +27,7 @@ class _PluginInstance(object):
     @classmethod
     def _save_callback(cls, id, callback):
         if callback is None:
-            if asyncio and cls.is_async:
+            if asyncio and nanome.PluginInstance._instance.is_async:
                 loop = asyncio.get_event_loop()
                 future = loop.create_future()
                 cls.__futures[id] = future
