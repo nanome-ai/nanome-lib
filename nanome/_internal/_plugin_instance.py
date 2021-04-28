@@ -42,7 +42,7 @@ class _PluginInstance(object):
         futures = _PluginInstance.__futures
 
         if asyncio and self.is_async and futures.get(id):
-            futures[id].set_result(args)
+            futures[id].set_result(args[0] if len(args) == 1 else args)
             del futures[id]
             return
 
