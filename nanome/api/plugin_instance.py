@@ -19,6 +19,7 @@ class PluginInstance(_PluginInstance):
     | Start, update, and all methods starting by "on" can be overridden by user, in order to get requests results
     """
 
+    _instance = None
     is_async = False
 
     def __init__(self):
@@ -32,6 +33,7 @@ class PluginInstance(_PluginInstance):
         self.files = Files(self)
         self.__set_first = False
         self.PluginListButtonType = PluginListButtonType
+        PluginInstance._instance = self
 
     def __new__(cls):
         n = super(PluginInstance, cls).__new__(cls)
