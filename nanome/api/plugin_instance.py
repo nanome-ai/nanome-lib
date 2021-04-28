@@ -281,7 +281,7 @@ class PluginInstance(_PluginInstance):
         id = self._network._send(_Messages.file_save, file_list, expects_response)
         return self._save_callback(id, callback)
 
-    def create_writing_stream(self, indices_list, stream_type, callback):
+    def create_writing_stream(self, indices_list, stream_type, callback=None):
         """
         | Create a stream allowing to continuously update properties of many objects
 
