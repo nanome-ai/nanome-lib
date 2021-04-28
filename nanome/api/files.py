@@ -6,7 +6,7 @@ class Files(_Files):
     def __init__(self, plugin_instance):
         self.plugin = plugin_instance
 
-    def pwd(self, callback):
+    def pwd(self, callback=None):
         """
         | Print the full filename of the current working directory
         :param callback: function that will be called with the full filename
@@ -16,7 +16,7 @@ class Files(_Files):
         id = self.plugin._network._send(_Messages.print_working_directory, None, expects_response)
         return self.plugin._save_callback(id, callback)
 
-    def cd(self, directory, callback):
+    def cd(self, directory, callback=None):
         """
         | changes current directory
         :param directory: directory to change to.
@@ -28,7 +28,7 @@ class Files(_Files):
         id = self.plugin._network._send(_Messages.cd, directory, expects_response)
         return self.plugin._save_callback(id, callback)
 
-    def ls(self, directory, callback):
+    def ls(self, directory, callback=None):
         """
         | list directory contents
         :param directory: directory to request.
@@ -40,7 +40,7 @@ class Files(_Files):
         id = self.plugin._network._send(_Messages.ls, directory, expects_response)
         return self.plugin._save_callback(id, callback)
 
-    def mv(self, source, dest, callback):
+    def mv(self, source, dest, callback=None):
         """
         | Rename SOURCE to DEST, or move SOURCE(s) to directory DEST
         :param source: file to move or rename.
@@ -73,7 +73,7 @@ class Files(_Files):
         id = self.plugin._network._send(_Messages.get, source, True)
         return self.plugin._save_callback(id, cb)
 
-    def put(self, source, dest, callback):
+    def put(self, source, dest, callback=None):
         """
         | Moves a file from a local directory to the the nanome user
         :param source: local file(s) to move.
@@ -90,7 +90,7 @@ class Files(_Files):
         id = self.plugin._network._send(_Messages.put, (dest, file), expects_response)
         return self.plugin._save_callback(id, callback)
 
-    def rm(self, target, callback):
+    def rm(self, target, callback=None):
         """
         | remove non-directory file
         :param target: file to remove.
@@ -102,7 +102,7 @@ class Files(_Files):
         id = self.plugin._network._send(_Messages.rm, target, expects_response)
         return self.plugin._save_callback(id, callback)
 
-    def rmdir(self, target, callback):
+    def rmdir(self, target, callback=None):
         """
         | remove directory
         :param target: directory to remove.
@@ -114,7 +114,7 @@ class Files(_Files):
         id = self.plugin._network._send(_Messages.rmdir, target, expects_response)
         return self.plugin._save_callback(id, callback)
 
-    def cp(self, source, dest, callback):
+    def cp(self, source, dest, callback=None):
         """
         | Copy SOURCE to DEST
         :param source: file to copy.
@@ -128,7 +128,7 @@ class Files(_Files):
         id = self.plugin._network._send(_Messages.cp, (source, dest), expects_response)
         return self.plugin._save_callback(id, callback)
 
-    def mkdir(self, target, callback):
+    def mkdir(self, target, callback=None):
         """
         | Create the DIRECTORY(ies), if they do not already exist.
         :param target: directory to create.
