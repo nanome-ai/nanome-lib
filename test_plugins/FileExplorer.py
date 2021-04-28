@@ -108,8 +108,8 @@ class FileExplorer(nanome.AsyncPluginInstance):
         if entry.is_directory:
             return
 
-        path = os.path.join(self.temp_dir, str(self.path_leaf(entry.name)))
-        error, _ = await self.files.get(entry.name, path)
+        dest = os.path.join(self.temp_dir, str(self.path_leaf(entry.name)))
+        error, path = await self.files.get(entry.name, dest)
         if error == nanome.util.FileError.no_error:
             Logs.debug(path)
             self.send_files_to_load(path)

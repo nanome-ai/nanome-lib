@@ -69,12 +69,13 @@ class Files(_Files):
                 with open(dest, 'wb') as ofile:
                     ofile.write(file)
                     ofile.close()
-            if callback is not None:
-                callback(error, dest)
+            callback(error, dest)
         id = self.plugin._network._send(_Messages.get, source, True)
         result = self.plugin._save_callback(id, cb if callback else None)
-        if self.plugin.is_async:
-            result.add_done_callback(lambda fut: cb(*fut.result()))
+        if callback is None and self.plugin.is_async:
+            result.real_set_result = result.set_result
+            result.set_result = lambda args: cb(*args)
+            callback = lambda *args: result.real_set_result(args)
         return result
 
     def put(self, source, dest, callback=None):
