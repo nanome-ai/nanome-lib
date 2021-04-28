@@ -23,8 +23,7 @@ class _Macro(object):
     def _run(self, callback=None):
         expects_response = callback is not None or nanome.PluginInstance._instance.is_async
         id = _ProcessNetwork._send(_Messages.run_macro, self, expects_response)
-        if expects_response:
-            return nanome.PluginInstance._save_callback(id, callback)
+        return nanome.PluginInstance._save_callback(id, callback)
 
     def _delete(self, all_users=False):
         _ProcessNetwork._send(_Messages.delete_macro, (self, all_users, _Macro._plugin_identifier), False)
