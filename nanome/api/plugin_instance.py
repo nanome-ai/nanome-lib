@@ -92,7 +92,8 @@ class PluginInstance(_PluginInstance):
 
         callback: Callable[[Workspace], None]
         """
-        id = self._network._send(_Messages.workspace_request, None, callback is not None or self.is_async)
+        expects_response = callback is not None or self.is_async
+        id = self._network._send(_Messages.workspace_request, None, expects_response)
         return self._save_callback(id, callback)
 
     def request_complex_list(self, callback=None):
@@ -100,7 +101,8 @@ class PluginInstance(_PluginInstance):
         | Request the list of all complexes in the workspace, in shallow mode
         kwarg callback: Callable[[List[Complex]], None]
         """
-        id = self._network._send(_Messages.complex_list_request, None, callback is not None or self.is_async)
+        expects_response = callback is not None or self.is_async
+        id = self._network._send(_Messages.complex_list_request, None, expects_response)
         return self._save_callback(id, callback)
 
     def request_complexes(self, id_list, callback=None):
@@ -112,7 +114,8 @@ class PluginInstance(_PluginInstance):
         :type id_list: list of :class:`int`
         :callback: Callable[[List[Complex]], None]
         """
-        id = self._network._send(_Messages.complexes_request, id_list, callback is not None or self.is_async)
+        expects_response = callback is not None or self.is_async
+        id = self._network._send(_Messages.complexes_request, id_list, expects_response)
         return self._save_callback(id, callback)
 
     def update_workspace(self, workspace):
@@ -148,7 +151,8 @@ class PluginInstance(_PluginInstance):
 
         callback: Callable[[], None]
         """
-        id = self._network._send(_Messages.structures_deep_update, structures, callback is not None or self.is_async)
+        expects_response = callback is not None or self.is_async
+        id = self._network._send(_Messages.structures_deep_update, structures, expects_response)
         return self._save_callback(id, callback)
 
     def update_structures_shallow(self, structures):
@@ -170,7 +174,8 @@ class PluginInstance(_PluginInstance):
         :type structures: list of :class:`~nanome.api.structure.base.Base`
         :kwarg callback: Callable[[], None]
         """
-        id = self._network._send(_Messages.structures_zoom, structures, callback is not None or self.is_async)
+        expects_response = callback is not None or self.is_async
+        id = self._network._send(_Messages.structures_zoom, structures, expects_response)
         return self._save_callback(id, callback)
 
     def center_on_structures(self, structures, callback=None):
@@ -182,7 +187,8 @@ class PluginInstance(_PluginInstance):
         :type structures: list of :class:`~nanome.api.structure.base.Base`
         :kwarg callback: Callable[[], None]
         """
-        id = self._network._send(_Messages.structures_center, structures, callback is not None or self.is_async)
+        expects_response = callback is not None or self.is_async
+        id = self._network._send(_Messages.structures_center, structures, expects_response)
         return self._save_callback(id, callback)
 
     def add_to_workspace(self, complex_list, callback=None):
@@ -192,7 +198,8 @@ class PluginInstance(_PluginInstance):
         :param complex_list: List of Complexes to add
         :type complex_list: list of :class:`~nanome.api.structure.complex.Complex`
         """
-        id = self._network._send(_Messages.add_to_workspace, complex_list, callback is not None or self.is_async)
+        expects_response = callback is not None or self.is_async
+        id = self._network._send(_Messages.add_to_workspace, complex_list, expects_response)
         return self._save_callback(id, callback)
 
     def update_menu(self, menu):
@@ -256,7 +263,8 @@ class PluginInstance(_PluginInstance):
 
         callback: Callable[[Vector3, Quaternion, Vector3], None]
         """
-        id = self._network._send(_Messages.menu_transform_request, index, callback is not None or self.is_async)
+        expects_response = callback is not None or self.is_async
+        id = self._network._send(_Messages.menu_transform_request, index, expects_response)
         return self._save_callback(id, callback)
 
     def save_files(self, file_list, callback=None):
@@ -267,7 +275,8 @@ class PluginInstance(_PluginInstance):
         :type file_list: list of :class:`~nanome.util.file.FileSaveData`
         :kwarg callable: Callable[[List[FileSaveData]], None]
         """
-        id = self._network._send(_Messages.file_save, file_list, callback is not None or self.is_async)
+        expects_response = callback is not None or self.is_async
+        id = self._network._send(_Messages.file_save, file_list, expects_response)
         return self._save_callback(id, callback)
 
     def create_writing_stream(self, indices_list, stream_type, callback):
@@ -281,7 +290,8 @@ class PluginInstance(_PluginInstance):
 
         :param callback: Callable[[Stream, StreamCreationError], None]
         """
-        id = self._network._send(_Messages.stream_create, (stream_type, indices_list, StreamDirection.writing), callback is not None or self.is_async)
+        expects_response = callback is not None or self.is_async
+        id = self._network._send(_Messages.stream_create, (stream_type, indices_list, StreamDirection.writing), expects_response)
         return self._save_callback(id, callback)
 
     def create_reading_stream(self, indices_list, stream_type, callback=None):
@@ -294,7 +304,8 @@ class PluginInstance(_PluginInstance):
         :type stream_type: list of :class:`~nanome.api.stream.Stream.Type`
         :param callable: Callable[[Stream, StreamCreationError], None]
         """
-        id = self._network._send(_Messages.stream_create, (stream_type, indices_list, StreamDirection.reading), callback is not None or self.is_async)
+        expects_response = callback is not None or self.is_async
+        id = self._network._send(_Messages.stream_create, (stream_type, indices_list, StreamDirection.reading), expects_response)
         return self._save_callback(id, callback)
 
     def add_bonds(self, complex_list, callback, fast_mode=None):
@@ -321,7 +332,8 @@ class PluginInstance(_PluginInstance):
         dssp._start()
 
     def add_volume(self, complex, volume, properties, complex_to_align_index=-1, callback=None):
-        id = self._network._send(_Messages.add_volume, (complex, complex_to_align_index, volume, properties), callback is not None or self.is_async)
+        expects_response = callback is not None or self.is_async
+        id = self._network._send(_Messages.add_volume, (complex, complex_to_align_index, volume, properties), expects_response)
         return self._save_callback(id, callback)
 
     def open_url(self, url):
@@ -342,7 +354,8 @@ class PluginInstance(_PluginInstance):
 
         callback: Callable[[PresenterInfo], None]
         """
-        id = self._network._send(_Messages.presenter_info_request, None, callback is not None or self.is_async)
+        expects_response = callback is not None or self.is_async
+        id = self._network._send(_Messages.presenter_info_request, None, expects_response)
         return self._save_callback(id, callback)
 
     def request_controller_transforms(self, callback=None):
@@ -351,7 +364,8 @@ class PluginInstance(_PluginInstance):
 
         param callback: Callable[[Vector3, Quaternion, Vector3, Quaternion, Vector3, Quaternion], None]
         """
-        id = self._network._send(_Messages.controller_transforms_request, None, callback is not None or self.is_async)
+        expects_response = callback is not None or self.is_async
+        id = self._network._send(_Messages.controller_transforms_request, None, expects_response)
         return self._save_callback(id, callback)
 
     def set_plugin_list_button(self, button, text=None, usable=None):
@@ -405,7 +419,8 @@ class PluginInstance(_PluginInstance):
                 data = content_file.read()
             files.append((file_name, data))
 
-        id = self._network._send(_Messages.load_file, (files, True, True), callback is not None or self.is_async)
+        expects_response = callback is not None or self.is_async
+        id = self._network._send(_Messages.load_file, (files, True, True), expects_response)
         return self._save_callback(id, callback)
 
     def request_export(self, format, callback=None, entities=None):
