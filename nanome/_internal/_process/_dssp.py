@@ -8,6 +8,12 @@ import stat
 import sys
 import traceback
 
+try:
+    import asyncio
+except ImportError:
+    asyncio = False
+
+
 if sys.platform.startswith("linux"):
     DSSP_PATH = os.path.join(os.path.dirname(__file__), '_external', '_dssp', 'dssp-linux')
     os.chmod(DSSP_PATH, 0o777)
@@ -22,15 +28,23 @@ class _Dssp():
     _types_sheet = ['B', 'E']
     _types_helix = ['G', 'H', 'I']
 
-    def __init__(self, complex_list, callback):
+    def __init__(self, plugin, complex_list, callback=None):
         self.__complexes = complex_list
         self.__framed_complexes = [complex.convert_to_frames() for complex in complex_list]
         self.__callback = callback
+        self.__future = None
+        self.__input = None
+        self.__output = None
+
+        if asyncio and plugin.is_async:
+            loop = asyncio.get_event_loop()
+            future = loop.create_future()
+            self.__future = future
 
     def _start(self):
         if DSSP_PATH == None:
             Logs.error("Unsupported platform, cannot call DSSP")
-            self.__callback(self.__complexes)
+            self.__done()
             return
 
         self.__complex_idx = 0
@@ -47,6 +61,7 @@ class _Dssp():
         self.__proc.on_done = self.__dssp_done
 
         self.__next()
+        return self.__future
 
     def __next(self):
         # Go to next molecule
@@ -79,7 +94,7 @@ class _Dssp():
     def __dssp_done(self, result_code):
         if result_code != 0:
             Logs.error("DSSP failed, code:", result_code)
-            self.__callback(self.__complexes)
+            self.__done()
             return
         with open(self.__output.name) as f:
             lines = f.readlines()
@@ -142,8 +157,16 @@ class _Dssp():
                     Logs.debug("[DSSP] Key not found:", dssp_info[0], dssp_info[1], traceback.format_exc())
 
     def __done(self):
-        self.__input.close()
-        self.__output.close()
-        os.remove(self.__input.name)
-        os.remove(self.__output.name)
-        self.__callback(self.__complexes)
+        if self.__input is not None:
+            self.__input.close()
+            os.remove(self.__input.name)
+
+        if self.__output is not None:
+            self.__output.close()
+            os.remove(self.__output.name)
+
+        if self.__callback is not None:
+            self.__callback(self.__complexes)
+
+        if self.__future is not None:
+            self.__future.set_result(self.__complexes)

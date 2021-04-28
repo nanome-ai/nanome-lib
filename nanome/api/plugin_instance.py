@@ -308,7 +308,7 @@ class PluginInstance(_PluginInstance):
         id = self._network._send(_Messages.stream_create, (stream_type, indices_list, StreamDirection.reading), expects_response)
         return self._save_callback(id, callback)
 
-    def add_bonds(self, complex_list, callback, fast_mode=None):
+    def add_bonds(self, complex_list, callback=None, fast_mode=None):
         """
         | Calculate bonds
         | Needs openbabel to be installed
@@ -317,10 +317,10 @@ class PluginInstance(_PluginInstance):
         :type complex_list: list of :class:`~nanome.api.structure.complex.Complex`
         :param callback: Callable[[List[Complex]], None]
         """
-        bonding = _Bonding(complex_list, callback, fast_mode)
-        bonding._start()
+        bonding = _Bonding(self, complex_list, callback, fast_mode)
+        return bonding._start()
 
-    def add_dssp(self, complex_list, callback):
+    def add_dssp(self, complex_list, callback=None):
         """
         | Use DSSP to calculate secondary structures
 
@@ -328,8 +328,8 @@ class PluginInstance(_PluginInstance):
         :type complex_list: list of :class:`~nanome.api.structure.complex.Complex`
         :param callback: Callable[[List[Complex]], None]
         """
-        dssp = _Dssp(complex_list, callback)
-        dssp._start()
+        dssp = _Dssp(self, complex_list, callback)
+        return dssp._start()
 
     def add_volume(self, complex, volume, properties, complex_to_align_index=-1, callback=None):
         expects_response = callback is not None or self.is_async
