@@ -54,7 +54,7 @@ class Files(_Files):
         id = self.plugin._network._send(_Messages.mv, (source, dest), expects_response)
         return self.plugin._save_callback(id, callback)
 
-    def get(self, source, dest, callback):
+    def get(self, source, dest, callback=None):
         """
         | Moves a file from the nanome user to the a local directory
         :param source: file(s) to move.
@@ -65,13 +65,17 @@ class Files(_Files):
         :type callback: method (:class:`~nanome.util.file.FileError`, str) -> None
         """
         def cb(error, file):
-            if (error == FileErrorCode.no_error):
+            if error == FileErrorCode.no_error:
                 with open(dest, 'wb') as ofile:
                     ofile.write(file)
                     ofile.close()
-            callback(error, dest)
+            if callback is not None:
+                callback(error, dest)
         id = self.plugin._network._send(_Messages.get, source, True)
-        return self.plugin._save_callback(id, cb)
+        result = self.plugin._save_callback(id, cb if callback else None)
+        if self.plugin.is_async:
+            result.add_done_callback(lambda fut: cb(*fut.result()))
+        return result
 
     def put(self, source, dest, callback=None):
         """
