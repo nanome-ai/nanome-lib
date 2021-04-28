@@ -17,9 +17,9 @@ import fnmatch
 import subprocess
 import signal
 
-try_reconnection_time = 20.0
-keep_alive_time_interval = 60.0
-keep_alive_timeout = 15.0
+MAX_RECONNECT_WAIT = 20.0
+KEEP_ALIVE_TIME_INTERVAL = 60.0
+KEEP_ALIVE_TIMEOUT = 15.0
 
 __metaclass__ = type
 class _Plugin(object):
@@ -198,6 +198,7 @@ class _Plugin(object):
         self._description['auth'] = self.__read_key_file()
         self._process_manager = _ProcessManager()
         self._logs_manager = _LogsManager(self._plugin_class.__name__ + ".log")
+        self.__reconnect_attempt = 0
         self.__connect()
         self.__loop()
 
@@ -213,10 +214,12 @@ class _Plugin(object):
             packet.write_string(json.dumps(self._description))
             self._network.send(packet)
             self.__connected = True
+            self.__reconnect_attempt = 0
             self.__last_keep_alive = timer()
             return True
         else:
             self.__disconnection_time = timer()
+            self.__reconnect_attempt += 1
             return False
 
     def __loop(self):
@@ -226,14 +229,14 @@ class _Plugin(object):
                 now = timer()
 
                 if self.__connected == False:
+                    reconnect_wait = min(2 ** self.__reconnect_attempt, MAX_RECONNECT_WAIT)
                     elapsed = now - self.__disconnection_time
-                    if elapsed >= try_reconnection_time:
+                    if elapsed >= reconnect_wait:
                         Logs.message("Trying to reconnect...")
                         if self.__connect() == False:
-                            self.__disconnection_time = now
                             continue
                     else:
-                        time.sleep(try_reconnection_time - elapsed)
+                        time.sleep(reconnect_wait - elapsed)
                         continue
                 if self._network.receive() == False:
                     self.__connected = False
@@ -241,11 +244,11 @@ class _Plugin(object):
                     continue
 
                 if self.__waiting_keep_alive:
-                    if now - self.__last_keep_alive >= keep_alive_timeout:
+                    if now - self.__last_keep_alive >= KEEP_ALIVE_TIMEOUT:
                         self.__connected = False
                         self.__disconnect()
                         continue
-                elif now - self.__last_keep_alive >= keep_alive_time_interval and _Plugin._plugin_id >= 0:
+                elif now - self.__last_keep_alive >= KEEP_ALIVE_TIME_INTERVAL and _Plugin._plugin_id >= 0:
                     self.__last_keep_alive = now
                     self.__waiting_keep_alive = True
                     packet = Network._Packet()
