@@ -4,15 +4,15 @@ from nanome._internal._structure._io import _pdb, _sdf
 
 import tempfile
 import os
-import shutil
+from distutils.spawn import find_executable
 
 try:
     import asyncio
 except ImportError:
     asyncio = False
 
-NANOBABEL_PATH = shutil.which('nanobabel')
-OBABEL_PATH = shutil.which('obabel')
+NANOBABEL_PATH = find_executable('nanobabel')
+OBABEL_PATH = find_executable('obabel')
 
 class _Bonding():
     def __init__(self, plugin, complex_list, callback=None, fast_mode=None):
