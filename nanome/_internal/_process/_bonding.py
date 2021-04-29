@@ -4,11 +4,15 @@ from nanome._internal._structure._io import _pdb, _sdf
 
 import tempfile
 import os
+from distutils.spawn import find_executable
 
 try:
     import asyncio
 except ImportError:
     asyncio = False
+
+NANOBABEL_PATH = find_executable('nanobabel')
+OBABEL_PATH = find_executable('obabel')
 
 class _Bonding():
     def __init__(self, plugin, complex_list, callback=None, fast_mode=None):
@@ -43,11 +47,19 @@ class _Bonding():
         self.__output = tempfile.NamedTemporaryFile(delete=False, suffix='.mol')
 
         self.__proc = Process()
-        self.__proc.executable_path = 'obabel'
-        self.__proc.args = ['-ipdb', self.__input.name, '-osdf', '-O' + self.__output.name]
         self.__proc.output_text = True
         self.__proc.on_error = self.__on_error
         self.__proc.on_done = self.__bonding_done
+
+        if NANOBABEL_PATH:
+            self.__proc.executable_path = NANOBABEL_PATH
+            self.__proc.args += ['bonding', '-i', self.__input.name, '-o', self.__output.name]
+        elif OBABEL_PATH:
+            self.__proc.executable_path = OBABEL_PATH
+            self.__proc.args += ['-ipdb', self.__input.name, '-osdf', '-O' + self.__output.name]
+        else:
+            Logs.error("No bonding package found.")
+
         if self.__fast_mode:
             self.__proc.args.append('-f')
 
@@ -86,7 +98,7 @@ class _Bonding():
 
     def __bonding_done(self, result_code):
         if result_code == -1:
-            Logs.error("Couldn't execute openbabel to generate bonds. Is it installed?")
+            Logs.error("Couldn't execute nanobabel or openbabel to generate bonds. Is one installed?")
             self.__done()
             return
         with open(self.__output.name) as f:
