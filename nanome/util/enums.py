@@ -83,7 +83,7 @@ class StreamType(IntEnum):
     scale = 2
     label = 3
     complex_position_rotation = 4
-    shape_position_rotation = 5
+    shape_position = 5
     shape_color = 6
     sphere_shape_radius = 7
 
@@ -121,6 +121,8 @@ class ExportFormats(IntEnum):
 
 class ShapeType(IntEnum):
     Sphere = 0
+    Line = 1
+    Label = 2
 
 class ShapeAnchorType(IntEnum):
     Workspace = 0

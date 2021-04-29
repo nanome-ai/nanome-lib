@@ -26,28 +26,75 @@ Overriding these functions in your plugin will give you several entry points:
 
 .. code-block:: python
 
-    # On plugin instantiation, when user clicked on "Activate" and a
-    #   connection between Nanome and Plugin is established
     def start(self):
+        """
+        | Called when user "Activates" the plugin
+        """
         pass
 
-    # Provides a mean to regularly execute code. Called multiple times per second
-    def on_update(self):
+    def update(self):
+        """
+        | Called when when instance updates (multiple times per second)
+        """
         pass
 
-    # Called when user clicks on the "Run" button in Nanome
     def on_run(self):
+        """
+        | Called when user presses "Run"
+        """
         pass
 
-    # Called when user clicks on the "Advanced Settings" button in Nanome.
-    #   has_advanced should be set to True in nanome.Plugin constructor (see `Plugin description`_)
+    def on_stop(self):
+        """
+        | Called when user disconnects or plugin crashes
+        """
+        pass
+
     def on_advanced_settings(self):
+        """
+        | Called when user presses "Advanced Settings"
+        """
         pass
 
-    # Called whenever a complex is added to the workspace.
     def on_complex_added(self):
+        """
+        | Called whenever a complex is added to the workspace.
+        """
         pass
 
-    # Called whenever a complex is removed from the workspace.
     def on_complex_removed(self):
+        """
+        | Called whenever a complex is removed from the workspace.
+        """
         pass
+
+    def on_presenter_change(self):
+        """
+        | Called when room's presenter changes.
+        """
+        pass
+
+    def on_advanced_settings(self):
+        """
+        | Called when user presses "Advanced Settings"
+        """
+        pass
+
+    def on_complex_added(self):
+        """
+        | Called whenever a complex is added to the workspace.
+        """
+        pass
+
+    def on_complex_removed(self):
+        """
+        | Called whenever a complex is removed from the workspace.
+        """
+        pass
+
+    def on_presenter_change(self):
+        """
+        | Called when room's presenter changes.
+        """
+        pass
+    

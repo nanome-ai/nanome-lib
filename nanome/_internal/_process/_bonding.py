@@ -6,11 +6,24 @@ import tempfile
 import os
 import shutil
 
+try:
+    import asyncio
+except ImportError:
+    asyncio = False
+
 class _Bonding():
-    def __init__(self, complex_list, callback, fast_mode=None):
+    def __init__(self, plugin, complex_list, callback=None, fast_mode=None):
         self.__complexes = complex_list
         self.__framed_complexes = [complex.convert_to_frames() for complex in complex_list]
         self.__callback = callback
+        self.__future = None
+        self.__input = None
+        self.__output = None
+
+        if asyncio and plugin.is_async:
+            loop = asyncio.get_event_loop()
+            future = loop.create_future()
+            self.__future = future
 
         atom_count = 0
         if fast_mode == None:
@@ -22,7 +35,7 @@ class _Bonding():
 
     def _start(self):
         if len(self.__complexes) == 0:
-            self.__callback(self.__complexes)
+            self.__done()
             return
 
         self.__complex_idx = 0
@@ -48,6 +61,7 @@ class _Bonding():
             Logs.error("No bonding package found.")
 
         self.__next()
+        return self.__future
 
     def __next(self):
         # Go to next molecule
@@ -82,7 +96,7 @@ class _Bonding():
     def __bonding_done(self, result_code):
         if result_code == -1:
             Logs.error("Couldn't execute nanobabel or openbabel to generate bonds. Is one installed?")
-            self.__callback(self.__complexes)
+            self.__done()
             return
         with open(self.__output.name) as f:
             lines = f.readlines()
@@ -144,8 +158,16 @@ class _Bonding():
                     new_bond._in_conformer[self.__molecule_idx] = True
 
     def __done(self):
-        self.__input.close()
-        self.__output.close()
-        os.remove(self.__input.name)
-        os.remove(self.__output.name)
-        self.__callback(self.__complexes)
+        if self.__input is not None:
+            self.__input.close()
+            os.remove(self.__input.name)
+
+        if self.__output is not None:
+            self.__output.close()
+            os.remove(self.__output.name)
+
+        if self.__callback is not None:
+            self.__callback(self.__complexes)
+
+        if self.__future is not None:
+            self.__future.set_result(self.__complexes)
