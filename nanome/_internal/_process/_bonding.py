@@ -51,14 +51,15 @@ class _Bonding():
         self.nanobabel_path, self.obabel_path = shutil.which('nanobabel'), shutil.which('obabel')
         if self.nanobabel_path:
             self.__proc.executable_path = self.nanobabel_path
-            self.__proc.args = ['bonding', '-i', self.__input.name, '-o', self.__output.name]
+            self.__proc.args += ['bonding', '-i', self.__input.name, '-o', self.__output.name]
         elif self.obabel_path:
             self.__proc.executable_path = self.obabel_path
-            self.__proc.args = ['-ipdb', self.__input.name, '-osdf', '-O' + self.__output.name]
-            if self.__fast_mode:
-                self.__proc.args.append('-f')
+            self.__proc.args += ['-ipdb', self.__input.name, '-osdf', '-O' + self.__output.name]
         else:
             Logs.error("No bonding package found.")
+
+        if self.__fast_mode:
+            self.__proc.args.append('-f')
 
         self.__next()
         return self.__future
