@@ -85,7 +85,7 @@ class _Plugin(object):
     def __read_key_file(self):
         try:
             f = open(self.__key_file, "r")
-            key = f.read()
+            key = f.read().strip()
             return key
         except:
             return None
