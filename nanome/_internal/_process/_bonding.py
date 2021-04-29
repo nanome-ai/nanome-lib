@@ -11,6 +11,9 @@ try:
 except ImportError:
     asyncio = False
 
+NANOBABEL_PATH = shutil.which('nanobabel')
+OBABEL_PATH = shutil.which('obabel')
+
 class _Bonding():
     def __init__(self, plugin, complex_list, callback=None, fast_mode=None):
         self.__complexes = complex_list
@@ -48,12 +51,11 @@ class _Bonding():
         self.__proc.on_error = self.__on_error
         self.__proc.on_done = self.__bonding_done
 
-        self.nanobabel_path, self.obabel_path = shutil.which('nanobabel'), shutil.which('obabel')
-        if self.nanobabel_path:
-            self.__proc.executable_path = self.nanobabel_path
+        if NANOBABEL_PATH:
+            self.__proc.executable_path = NANOBABEL_PATH
             self.__proc.args += ['bonding', '-i', self.__input.name, '-o', self.__output.name]
-        elif self.obabel_path:
-            self.__proc.executable_path = self.obabel_path
+        elif OBABEL_PATH:
+            self.__proc.executable_path = OBABEL_PATH
             self.__proc.args += ['-ipdb', self.__input.name, '-osdf', '-O' + self.__output.name]
         else:
             Logs.error("No bonding package found.")
