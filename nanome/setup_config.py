@@ -19,9 +19,9 @@ config_items = [
     {
         'arg_key': '-k',
         'name': 'Key File',
-        'description': 'Plugin authentication key file',
+        'description': 'Plugin authentication key file or string',
         'parse_method': None,
-        'key': 'key_file',
+        'key': 'key',
     },
     {
         'arg_key': '-f',

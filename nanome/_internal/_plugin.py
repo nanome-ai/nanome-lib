@@ -14,6 +14,7 @@ import cProfile
 import time
 import os
 import fnmatch
+import re
 import subprocess
 import signal
 
@@ -35,7 +36,7 @@ class _Plugin(object):
                 Logs.message(" -h                   display this help")
                 Logs.message(" -a                   connects to a NTS at the specified IP address")
                 Logs.message(" -p                   connects to a NTS at the specified port")
-                Logs.message(" -k                   specifies a key file to use to connect to NTS")
+                Logs.message(" -k                   specifies a key file or key string to use to connect to NTS")
                 Logs.message(" -n                   name to display for this plugin in Nanome")
                 Logs.message(" -v                   enable verbose mode, to display Logs.debug")
                 Logs.message(" -r, --auto-reload    restart plugin automatically if a .py or .json file in current directory changes")
@@ -62,7 +63,7 @@ class _Plugin(object):
                 if i >= len(sys.argv):
                     Logs.error("Error: -k requires an argument")
                     sys.exit(1)
-                self.__key_file = sys.argv[i + 1]
+                self.__key = sys.argv[i + 1]
                 i += 1
             elif sys.argv[i] == "-n":
                 if i >= len(sys.argv):
@@ -82,9 +83,12 @@ class _Plugin(object):
                 split = sys.argv[i + 1].split(",")
                 self.__to_ignore.extend(split)
 
-    def __read_key_file(self):
+    def __read_key(self):
+        # check if arg is key data
+        if re.match(r'^[0-9A-F]+$', self.__key):
+            return self.__key
         try:
-            f = open(self.__key_file, "r")
+            f = open(self.__key, "r")
             key = f.read().strip()
             return key
         except:
@@ -195,7 +199,7 @@ class _Plugin(object):
         if self._pre_run != None:
             self._pre_run()
         _Plugin.instance = self
-        self._description['auth'] = self.__read_key_file()
+        self._description['auth'] = self.__read_key()
         self._process_manager = _ProcessManager()
         self._logs_manager = _LogsManager(self._plugin_class.__name__ + ".log")
         self.__reconnect_attempt = 0
