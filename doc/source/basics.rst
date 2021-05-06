@@ -80,18 +80,6 @@ Overriding these functions in your plugin will give you several entry points:
         """
         pass
 
-    def on_complex_added(self):
-        """
-        | Called whenever a complex is added to the workspace.
-        """
-        pass
-
-    def on_complex_removed(self):
-        """
-        | Called whenever a complex is removed from the workspace.
-        """
-        pass
-
     def on_presenter_change(self):
         """
         | Called when room's presenter changes.
