@@ -48,7 +48,7 @@ class PluginInstance(_PluginInstance):
 
     def update(self):
         """
-        | Called when when instance updates (multiple times per second)
+        | Called when instance updates (multiple times per second)
         """
         pass
 
