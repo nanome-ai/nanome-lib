@@ -34,7 +34,7 @@ Overriding these functions in your plugin will give you several entry points:
 
     def update(self):
         """
-        | Called when when instance updates (multiple times per second)
+        | Called when instance updates (multiple times per second)
         """
         pass
 
