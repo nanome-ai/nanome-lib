@@ -19,6 +19,9 @@ Or, if using the one-line plugin setup:
 
     nanome.Plugin.setup(name, description, category, has_advanced, plugin_class, host, port, key_file)
 
+For Plugin examples and how-tos, check out our cookbook at
+https://github.com/nanome-ai/plugin-cookbook
+
 Entry points
 ^^^^^^^^^^^^
 
@@ -97,4 +100,3 @@ Overriding these functions in your plugin will give you several entry points:
         | Called when room's presenter changes.
         """
         pass
-    
