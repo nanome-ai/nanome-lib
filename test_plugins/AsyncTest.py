@@ -12,10 +12,10 @@ class AsyncTest(nanome.AsyncPluginInstance):
 
     @async_callback
     async def on_run(self):
-        shallow, = await self.request_complex_list()
+        shallow = await self.request_complex_list()
         index = shallow[0].index
 
-        deep, = await self.request_complexes([index])
+        deep = await self.request_complexes([index])
         complex = deep[0]
         complex.position.x += 1
 
