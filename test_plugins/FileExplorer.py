@@ -126,4 +126,4 @@ class FileExplorer(nanome.AsyncPluginInstance):
         head, tail = ntpath.split(path)
         return tail or ntpath.basename(head)
 
-nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, FileExplorer)
+nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, FileExplorer, permissions=[nanome.util.enums.Permissions.local_files_access])

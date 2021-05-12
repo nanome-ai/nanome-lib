@@ -3,6 +3,7 @@ from nanome.util import Logs
 from nanome._internal._network import _ProcessNetwork, _Packet
 from nanome._internal._process import _ProcessManagerInstance
 from nanome._internal._network._commands._callbacks import _Messages
+from nanome._internal._network._commands._callbacks._commands_enums import _Hashes
 
 import traceback
 import time
@@ -111,7 +112,10 @@ class _PluginInstance(object):
         else:
             self._update_loop()
 
-    def __init__(self, session_id, net_pipe, proc_pipe, serializer, plugin_id, version_table, original_version_table, verbose, custom_data):
+    def _has_permission(self, permission):
+        return _Hashes.PermissionRequestHashes[permission] in self._permissions
+
+    def __init__(self, session_id, net_pipe, proc_pipe, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
         Logs._set_verbose(verbose)
         Logs._set_pipe(proc_pipe)
         self._menus = {}
@@ -126,3 +130,4 @@ class _PluginInstance(object):
         self._advanced_settings_text = "Advanced Settings"
         self._advanced_settings_usable = True
         self._custom_data = custom_data
+        self._permissions = permissions
