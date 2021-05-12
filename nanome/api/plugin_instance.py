@@ -14,8 +14,8 @@ from nanome.api import Room, Files
 
 class PluginInstance(_PluginInstance):
     """
-    | Base class of any Plugin class.
-    | Constructor should never be called by the user as it is instantiated by network, when a session connects.
+    | Base class of any plugin.
+    | Constructor should never be called by the user as it is network-instantiated when a session connects.
     | Start, update, and all methods starting by "on" can be overridden by user, in order to get requests results
     """
 
@@ -313,7 +313,7 @@ class PluginInstance(_PluginInstance):
     def add_bonds(self, complex_list, callback=None, fast_mode=None):
         """
         | Calculate bonds
-        | Needs openbabel to be installed
+        | Requires openbabel to be installed
 
         :param complex_list: List of complexes to add bonds to
         :type complex_list: list of :class:`~nanome.api.structure.complex.Complex`
@@ -340,7 +340,7 @@ class PluginInstance(_PluginInstance):
 
     def open_url(self, url):
         """
-        | Opens a URL in Nanome's computer browser
+        | Opens a URL alongside the Nanome session in the default web browser.
 
         :param url: url to open
         :type url: str
@@ -494,6 +494,12 @@ class PluginInstance(_PluginInstance):
         self.create_writing_stream(atom_indices_list, stream_type, callback)
 
 class AsyncPluginInstance(PluginInstance):
+    """
+    | Base class of any asyncronous plugin.
+    | Constructor should never be called by the user as it is network-instantiated when a session connects.
+    | All methods available to PluginInstance are available to AsyncPluginInstance.
+    | Decorating these methods with @async_callback will allow them to use the async keyword in their definition
+    """
     is_async = True
 
 class _DefaultPlugin(PluginInstance):
