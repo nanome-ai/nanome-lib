@@ -10,8 +10,10 @@ import time
 
 NAME = "Sand Box"
 DESCRIPTION = "A plugin that can be edited freely for testing."
-CATEGORY = "Simple Actions"
+CATEGORY = ["Simple Actions", "Test", "Sandbox"]
 HAS_ADVANCED_OPTIONS = False
+INTEGRATIONS = [enums.Integrations.structure_prep, enums.Integrations.minimization]
+PERMISSIONS = [enums.Permissions.local_files_access]
 
 # Plugin
 
@@ -125,4 +127,4 @@ def __init__(self):
     pass
 
 
-nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, SandBox)
+nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, SandBox, integrations=INTEGRATIONS, permissions=PERMISSIONS)

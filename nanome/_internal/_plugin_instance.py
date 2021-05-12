@@ -111,7 +111,7 @@ class _PluginInstance(object):
         else:
             self._update_loop()
 
-    def __init__(self, session_id, net_pipe, proc_pipe, serializer, plugin_id, version_table, original_version_table, verbose, custom_data):
+    def __init__(self, session_id, net_pipe, proc_pipe, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
         Logs._set_verbose(verbose)
         Logs._set_pipe(proc_pipe)
         self._menus = {}
@@ -126,3 +126,4 @@ class _PluginInstance(object):
         self._advanced_settings_text = "Advanced Settings"
         self._advanced_settings_usable = True
         self._custom_data = custom_data
+        self._permissions = permissions

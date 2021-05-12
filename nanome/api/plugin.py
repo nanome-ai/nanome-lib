@@ -24,9 +24,9 @@ class Plugin(_Plugin):
     :type has_advanced: bool
     """
     @classmethod
-    def setup(cls, name, description, category, has_advanced, plugin_class, host = "config", port = "config", key = "config"):
+    def setup(cls, name, description, category, has_advanced, plugin_class, host = "config", port = "config", key = "config", permissions=[], integrations=[]):
         if not _Plugin._is_process():
-            plugin = cls(name, description, category, has_advanced)
+            plugin = cls(name, description, tags, has_advanced, permissions, integrations)
             plugin.set_plugin_class(plugin_class)
             plugin.run(host, port, key)
 
@@ -106,6 +106,6 @@ class Plugin(_Plugin):
     def post_run(self, value):
         self._post_run = value
 
-    def __init__(self, name, description, category = "", has_advanced = False):
-        super(Plugin, self).__init__(name, description, category, has_advanced)
+    def __init__(self, name, description, tags=[], has_advanced = False, permissions=[], integrations=[]):
+        super(Plugin, self).__init__(name, description, tags, has_advanced, permissions, integrations)
         self._plugin_class = _DefaultPlugin

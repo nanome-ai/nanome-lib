@@ -1,4 +1,5 @@
 from nanome.util import Logs, IntEnum, auto
+from nanome.util.enums import _CommandEnum, Integrations, Permissions
 
 try:
     from nanome.util import reset_auto
@@ -8,17 +9,9 @@ except:
 
 import sys
 
-class __CommandEnum(IntEnum):
-    if sys.version_info >= (3, 6): # Tmp hack
-        # Override for auto()
-        def _generate_next_value_(name, start, count, last_values):
-            return IntEnum._generate_next_value_(name, 0, count, last_values)
-    else:
-        pass
-
 # /!\ /!\ /!\
 # Values names are really important here, as they are hashed, and need to match Nanome
-class _Commands(__CommandEnum):
+class _Commands(_CommandEnum):
     # Tmp hack
     reset_auto() #Not an enum
 
@@ -100,7 +93,7 @@ class _Commands(__CommandEnum):
 
 # /!\ /!\ /!\
 # Values names are really important here, as they are hashed, and need to match Nanome
-class _Messages(__CommandEnum):
+class _Messages(_CommandEnum):
     # Tmp hack
     reset_auto() #Not an enum
     
@@ -179,7 +172,7 @@ class _Messages(__CommandEnum):
     set_skybox = auto()
     apply_color_scheme = auto()
 
-class _IntegrationCommands(__CommandEnum):
+class _Integrations(_CommandEnum):
     # Tmp hack
     reset_auto() #Not an enum
 
@@ -198,7 +191,9 @@ class _IntegrationCommands(__CommandEnum):
 class _Hashes():
     CommandHashes = [None] * len(_Commands)
     MessageHashes = [None] * len(_Messages)
-    IntegrationHashes = [None] * len(_IntegrationCommands)
+    IntegrationHashes = [None] * len(_Integrations)
+    IntegrationRequestHashes = [None] * len(Integrations)
+    PermissionRequestHashes = [None] * len(Permissions)
     HashToIntegrationName = dict()
 
 a_char_value = ord('a')
@@ -246,7 +241,7 @@ def init_hashes():
     hashes.clear()
     i = -1
 
-    for command in _IntegrationCommands:
+    for command in _Integrations:
         i += 1
         hash = hash_command(command.name)
         if hash in hashes:
@@ -255,5 +250,29 @@ def init_hashes():
         hashes[hash] = command.name
         _Hashes.IntegrationHashes[i] = hash
         _Hashes.HashToIntegrationName[hash] = command.name
+
+    hashes.clear()
+    i = -1
+
+    for command in Integrations:
+        i += 1
+        hash = hash_command(command.name)
+        if hash in hashes:
+            Logs.error("Integration request hash collision detected:", command.name, "and", hashes[hash])
+            continue
+        hashes[hash] = command.name
+        _Hashes.IntegrationRequestHashes[i] = hash
+
+    hashes.clear()
+    i = -1
+
+    for command in Permissions:
+        i += 1
+        hash = hash_command(command.name)
+        if hash in hashes:
+            Logs.error("Permission request hash collision detected:", command.name, "and", hashes[hash])
+            continue
+        hashes[hash] = command.name
+        _Hashes.PermissionRequestHashes[i] = hash
 
 init_hashes()

@@ -16,6 +16,6 @@ class Integration():
     def _call(self, name, request):
         callback = getattr(self, name, None)
         if callback == None:
-            Logs.warning("Integration", name, "called without being set by the plugin")
+            Logs.warning("Integration", name, "called but not implemented by the plugin")
             return
         callback(request)
