@@ -387,4 +387,7 @@ class UIPlugin(nanome.PluginInstance):
     def __init__(self):
         pass
 
-nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, UIPlugin)
+permissions = [nanome.util.enums.Permissions.local_files_access]
+integrations = [nanome.util.enums.Integrations.minimization, nanome.util.enums.Integrations.structure_prep]
+
+nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, UIPlugin, permissions=permissions, integrations=integrations)

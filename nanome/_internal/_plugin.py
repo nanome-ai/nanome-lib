@@ -1,6 +1,7 @@
 from . import _PluginInstance
 from nanome._internal import _network as Network
 from nanome._internal._process import _ProcessManager, _LogsManager
+from nanome._internal._network._commands._callbacks._commands_enums import _Hashes
 from nanome._internal._network._serialization._serializer import Serializer
 from nanome._internal._util._serializers import _TypeSerializer
 from nanome.util.logs import Logs
@@ -296,7 +297,8 @@ class _Plugin(object):
         main_conn_net, process_conn_net = Pipe()
         main_conn_proc, process_conn_proc = Pipe()
         session = Network._Session(session_id, self._network, self._process_manager, self._logs_manager, main_conn_net, main_conn_proc)
-        process = Process(target=_Plugin._launch_plugin, args=(self._plugin_class, session_id, process_conn_net, process_conn_proc, _Plugin.__serializer, _Plugin._plugin_id, version_table, _TypeSerializer.get_version_table(), Logs._is_verbose(), _Plugin._custom_data))
+        permissions = self._description["permissions"]
+        process = Process(target=_Plugin._launch_plugin, args=(self._plugin_class, session_id, process_conn_net, process_conn_proc, _Plugin.__serializer, _Plugin._plugin_id, version_table, _TypeSerializer.get_version_table(), Logs._is_verbose(), _Plugin._custom_data, permissions))
         process.start()
         session.plugin_process = process
         self._sessions[session_id] = session
@@ -307,24 +309,44 @@ class _Plugin(object):
         return current_process().name != 'MainProcess'
 
     @classmethod
-    def _launch_plugin_profile(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data):
-        cProfile.runctx('_Plugin._launch_plugin(plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data)', globals(), locals(), 'profile.out')
+    def _launch_plugin_profile(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
+        cProfile.runctx('_Plugin._launch_plugin(plugin_class, session_id, pipe_net, pipe_proc, serializer, '
+                        'plugin_id, version_table, original_version_table, verbose, custom_data,'
+                        'permissions)'
+                        , globals(), locals(), 'profile.out')
 
     @classmethod
-    def _launch_plugin(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data):
+    def _launch_plugin(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
         plugin = plugin_class()
-        _PluginInstance.__init__(plugin, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data)
+        _PluginInstance.__init__(plugin, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions)
         Logs.debug("Starting plugin")
         plugin._run()
 
-    def __init__(self, name, description, category = "", has_advanced = False):
+    def __init__(self, name, description, tags=[], has_advanced=False, permissions=[], integrations=[]):
         self._sessions = dict()
+
+        if isinstance(tags, str):
+            tags = [tags]
+
+        category = ""
+        if len(tags) > 0:
+            category = tags[0]
+
+        for i in range(0, len(permissions)):
+            permissions[i] = _Hashes.PermissionRequestHashes[permissions[i]]
+
+        for i in range(0, len(integrations)):
+            integrations[i] = _Hashes.IntegrationRequestHashes[integrations[i]]
+
         self._description = {
             'name': name,
             'description': description,
             'category': category,
+            'tags': tags,
             'hasAdvanced': has_advanced,
-            'auth': None
+            'auth': None,
+            'permissions': permissions,
+            'integrations': integrations
         }
         self._plugin_class = None
         self.__connected = False
