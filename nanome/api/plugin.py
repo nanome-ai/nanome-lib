@@ -24,7 +24,7 @@ class Plugin(_Plugin):
     :type has_advanced: bool
     """
     @classmethod
-    def setup(cls, name, description, category, has_advanced, plugin_class, host = "config", port = "config", key = "config", permissions=[], integrations=[]):
+    def setup(cls, name, description, tags, has_advanced, plugin_class, host = "config", port = "config", key = "config", permissions=[], integrations=[]):
         if not _Plugin._is_process():
             plugin = cls(name, description, tags, has_advanced, permissions, integrations)
             plugin.set_plugin_class(plugin_class)
