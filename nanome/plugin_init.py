@@ -22,10 +22,7 @@ def main():
         'description': 'A Nanome Plugin',
         'category': 'other',
         'version': '0.1.0',
-        'company': 'Nanome',
-        'author': 'Nanome',
-        'email': 'hello@nanome.ai',
-        'repo': 'https://github.com/nanome-ai/'
+        'company': 'Nanome'
     }
 
     try:
@@ -40,7 +37,7 @@ def main():
     fields['name'] = name
     fields['class'] = re.sub(r'\W', '', name)
     fields['folder'] = 'nanome_' + re.sub(r'\s', '_', name.lower())
-    fields['command'] = fields['folder'].replace('_', '-')
+    fields['command'] = re.sub(r'\s', '-', name.lower())
     fields['year'] = str(datetime.datetime.today().year)
 
     with zipfile.ZipFile(TEMPLATE_ZIP, 'r') as z:

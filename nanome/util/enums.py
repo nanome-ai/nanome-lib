@@ -1,4 +1,12 @@
 from . import IntEnum
+from .enum import auto
+try:
+    from nanome.util import reset_auto
+except:
+    def reset_auto():
+        pass
+import sys
+
 #TODO normalize styling
 
 class AtomRenderingMode(IntEnum):
@@ -139,7 +147,7 @@ class StreamType(IntEnum):
     scale = 2
     label = 3
     complex_position_rotation = 4
-    shape_position_rotation = 5
+    shape_position = 5
     shape_color = 6
     sphere_shape_radius = 7
 
@@ -205,6 +213,8 @@ class ShapeType(IntEnum):
     | Used internally
     """
     Sphere = 0
+    Line = 1
+    Label = 2
 
 class ShapeAnchorType(IntEnum):
     """
@@ -258,3 +268,30 @@ class SkyBoxes(IntEnum):
     Black = 3
     White = 4
     Graydient = 5
+
+class _CommandEnum(IntEnum):
+    if sys.version_info >= (3, 6): # Tmp hack
+        # Override for auto()
+        def _generate_next_value_(name, start, count, last_values):
+            return IntEnum._generate_next_value_(name, 0, count, last_values)
+    else:
+        pass
+
+class Integrations(_CommandEnum):
+    # Tmp hack
+    reset_auto() #Not an enum
+
+    hydrogens = auto()
+    structure_prep = auto()
+    calculate_esp = auto()
+    minimization = auto()
+    export_file = auto()
+    export_locations = auto()
+    generate_molecule_image = auto()
+    import_file = auto()
+
+class Permissions(_CommandEnum):
+    # Tmp hack
+    reset_auto() #Not an enum
+
+    local_files_access = auto()

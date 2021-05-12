@@ -1,45 +1,39 @@
+
+import os
+
 from nanome.util import Logs, config
-from nanome.util.enums import StreamDirection, ShapeType, PluginListButtonType
+from nanome.util.enums import StreamDirection, PluginListButtonType
 from nanome._internal import _PluginInstance
 from nanome._internal._process import _Bonding, _Dssp
 from nanome._internal._network._commands._callbacks import _Messages
 from nanome.api.integration import Integration
 from nanome.api.ui import Menu
 from nanome.api.streams import Stream
-from nanome.api import shapes, Room, Files
+from nanome.api import Room, Files
 
-import os
 
 class PluginInstance(_PluginInstance):
-
     """
     | Base class of any Plugin class.
     | Constructor should never be called by the user as it is instantiated by network, when a session connects.
     | Start, update, and all methods starting by "on" can be overridden by user, in order to get requests results
     """
+
+    _instance = None
+    is_async = False
+
     def __init__(self):
-        #!important: do not delete and leave empty to prevent double init.
+        # important: do not delete and leave empty to prevent double init.
         pass
 
     def __pseudo_init__(self):
-        self.__menu = Menu() #deprecated
+        self.__menu = Menu()  # deprecated
         self.room = Room()
         self.integration = Integration()
         self.files = Files(self)
         self.__set_first = False
         self.PluginListButtonType = PluginListButtonType
-
-    @property
-    def menu(self):
-        if not self.__set_first:
-            self.__set_first = True
-            Logs.warning("The default menu (self.menu) is now deprecated and will be removed in a future version. Please use the ui.Menu() constructor to create the menu.")
-        return self.__menu
-
-    @menu.setter
-    def menu(self, value):
-        self.__set_first = True
-        self.__menu = value
+        PluginInstance._instance = self
 
     def __new__(cls):
         n = super(PluginInstance, cls).__new__(cls)
@@ -94,30 +88,37 @@ class PluginInstance(_PluginInstance):
         """
         pass
 
-    def request_workspace(self, callback = None):
+    def request_workspace(self, callback=None):
         """
         | Request the entire workspace, in deep mode
-        """
-        id = self._network._send(_Messages.workspace_request, None, callback != None)
-        self._save_callback(id, callback)
 
-    def request_complex_list(self, callback = None):
+        callback: Callable[[Workspace], None]
+        """
+        expects_response = callback is not None or self.is_async
+        id = self._network._send(_Messages.workspace_request, None, expects_response)
+        return self._save_callback(id, callback)
+
+    def request_complex_list(self, callback=None):
         """
         | Request the list of all complexes in the workspace, in shallow mode
+        kwarg callback: Callable[[List[Complex]], None]
         """
-        id = self._network._send(_Messages.complex_list_request, None, callback != None)
-        self._save_callback(id, callback)
+        expects_response = callback is not None or self.is_async
+        id = self._network._send(_Messages.complex_list_request, None, expects_response)
+        return self._save_callback(id, callback)
 
-    def request_complexes(self, id_list, callback = None):
+    def request_complexes(self, id_list, callback=None):
         """
         | Requests a list of complexes by their indices
         | Complexes returned contains the full structure (atom/bond/residue/chain/molecule)
 
         :param id_list: List of indices
         :type id_list: list of :class:`int`
+        :callback: Callable[[List[Complex]], None]
         """
-        id = self._network._send(_Messages.complexes_request, id_list, callback != None)
-        self._save_callback(id, callback)
+        expects_response = callback is not None or self.is_async
+        id = self._network._send(_Messages.complexes_request, id_list, expects_response)
+        return self._save_callback(id, callback)
 
     def update_workspace(self, workspace):
         """
@@ -137,21 +138,24 @@ class PluginInstance(_PluginInstance):
         :param message: Text to display to the user.
         :type message: str
         """
-        #avoids unnecessary dependencies.
-        #needs to match the command serializer.
+        # avoids unnecessary dependencies.
+        # needs to match the command serializer.
         args = (type, message)
         self._network._send(_Messages.notification_send, args, False)
 
-    def update_structures_deep(self, structures, callback = None):
+    def update_structures_deep(self, structures, callback=None):
         """
         | Update the specific molecular structures in the scene to match the structures in parameter.
         | Will also update descendent structures and can be used to remove descendent structures.
 
         :param structures: List of molecular structures to update.
         :type structures: list of :class:`~nanome.api.structure.base.Base`
+
+        callback: Callable[[], None]
         """
-        id = self._network._send(_Messages.structures_deep_update, structures, callback != None)
-        self._save_callback(id, callback)
+        expects_response = callback is not None or self.is_async
+        id = self._network._send(_Messages.structures_deep_update, structures, expects_response)
+        return self._save_callback(id, callback)
 
     def update_structures_shallow(self, structures):
         """
@@ -170,9 +174,11 @@ class PluginInstance(_PluginInstance):
 
         :param structures: Molecular structure(s) to update.
         :type structures: list of :class:`~nanome.api.structure.base.Base`
+        :kwarg callback: Callable[[], None]
         """
-        id = self._network._send(_Messages.structures_zoom, structures, callback != None)
-        self._save_callback(id, callback)
+        expects_response = callback is not None or self.is_async
+        id = self._network._send(_Messages.structures_zoom, structures, expects_response)
+        return self._save_callback(id, callback)
 
     def center_on_structures(self, structures, callback=None):
         """
@@ -181,9 +187,11 @@ class PluginInstance(_PluginInstance):
 
         :param structures: Molecular structure(s) to update.
         :type structures: list of :class:`~nanome.api.structure.base.Base`
+        :kwarg callback: Callable[[], None]
         """
-        id = self._network._send(_Messages.structures_center, structures, callback != None)
-        self._save_callback(id, callback)
+        expects_response = callback is not None or self.is_async
+        id = self._network._send(_Messages.structures_center, structures, expects_response)
+        return self._save_callback(id, callback)
 
     def add_to_workspace(self, complex_list, callback=None):
         """
@@ -192,8 +200,9 @@ class PluginInstance(_PluginInstance):
         :param complex_list: List of Complexes to add
         :type complex_list: list of :class:`~nanome.api.structure.complex.Complex`
         """
-        id = self._network._send(_Messages.add_to_workspace, complex_list, callback != None)
-        self._save_callback(id, callback)
+        expects_response = callback is not None or self.is_async
+        id = self._network._send(_Messages.add_to_workspace, complex_list, expects_response)
+        return self._save_callback(id, callback)
 
     def update_menu(self, menu):
         """
@@ -247,83 +256,87 @@ class PluginInstance(_PluginInstance):
         self._network._send(_Messages.menu_transform_set,
                             (index, position, rotation, scale), False)
 
-    def request_menu_transform(self, index, callback):
+    def request_menu_transform(self, index, callback=None):
         """
         | Requests spacial information of the plugin menu (position, rotation, scale)
 
         :param index: Index of the menu you wish to read
         :type index: int
-        """
-        id = self._network._send(_Messages.menu_transform_request, index, callback != None)
-        self._save_callback(id, callback)
 
-    def save_files(self, file_list, callback = None):
+        callback: Callable[[Vector3, Quaternion, Vector3], None]
+        """
+        expects_response = callback is not None or self.is_async
+        id = self._network._send(_Messages.menu_transform_request, index, expects_response)
+        return self._save_callback(id, callback)
+
+    def save_files(self, file_list, callback=None):
         """
         | Save files on the machine running Nanome, and returns result
 
         :param file_list: List of files to save with their content
         :type file_list: list of :class:`~nanome.util.file.FileSaveData`
+        :kwarg callable: Callable[[List[FileSaveData]], None]
         """
-        id = self._network._send(_Messages.file_save, file_list, callback != None)
-        self._save_callback(id, callback)
+        expects_response = callback is not None or self.is_async
+        id = self._network._send(_Messages.file_save, file_list, expects_response)
+        return self._save_callback(id, callback)
 
-    @Logs.deprecated("create_atom_stream")
-    def create_stream(self, atom_indices_list, callback):
-        id = self._network._send(_Messages.stream_create, (Stream.Type.position, atom_indices_list, StreamDirection.writing), callback != None)
-        self._save_callback(id, callback)
-
-    @Logs.deprecated("create_writing_stream")
-    def create_atom_stream(self, atom_indices_list, stream_type, callback):
-        self.create_writing_stream(atom_indices_list, stream_type, callback)
-
-    def create_writing_stream(self, atom_indices_list, stream_type, callback):
+    def create_writing_stream(self, indices_list, stream_type, callback=None):
         """
-        | Create a stream allowing to continuously update properties of many structures
+        | Create a stream allowing to continuously update properties of many objects
 
-        :param atom_indices_list: List of indices of all atoms that should be in the stream
-        :type atom_indices_list: list of :class:`int`
+        :param indices_list: List of indices of all objects that should be in the stream
+        :type indices_list: list of :class:`int`
         :param stream_type: Type of stream to create
         :type stream_type: list of :class:`~nanome.api.stream.Stream.Type`
-        """
-        id = self._network._send(_Messages.stream_create, (stream_type, atom_indices_list, StreamDirection.writing), callback != None)
-        self._save_callback(id, callback)
 
-    def create_reading_stream(self, atom_indices_list, stream_type, callback):
+        :param callback: Callable[[Stream, StreamCreationError], None]
         """
-        | Create a stream allowing to continuously receive properties of many structures
+        expects_response = callback is not None or self.is_async
+        id = self._network._send(_Messages.stream_create, (stream_type, indices_list, StreamDirection.writing), expects_response)
+        return self._save_callback(id, callback)
 
-        :param atom_indices_list: List of indices of all atoms that should be in the stream
-        :type atom_indices_list: list of :class:`int`
+    def create_reading_stream(self, indices_list, stream_type, callback=None):
+        """
+        | Create a stream allowing to continuously receive properties of many objects
+
+        :param indices_list: List of indices of all objects that should be in the stream
+        :type indices_list: list of :class:`int`
         :param stream_type: Type of stream to create
         :type stream_type: list of :class:`~nanome.api.stream.Stream.Type`
+        :param callable: Callable[[Stream, StreamCreationError], None]
         """
-        id = self._network._send(_Messages.stream_create, (stream_type, atom_indices_list, StreamDirection.reading), callback != None)
-        self._save_callback(id, callback)
+        expects_response = callback is not None or self.is_async
+        id = self._network._send(_Messages.stream_create, (stream_type, indices_list, StreamDirection.reading), expects_response)
+        return self._save_callback(id, callback)
 
-    def add_bonds(self, complex_list, callback, fast_mode=None):
+    def add_bonds(self, complex_list, callback=None, fast_mode=None):
         """
         | Calculate bonds
         | Needs openbabel to be installed
 
         :param complex_list: List of complexes to add bonds to
         :type complex_list: list of :class:`~nanome.api.structure.complex.Complex`
+        :param callback: Callable[[List[Complex]], None]
         """
-        bonding = _Bonding(complex_list, callback, fast_mode)
-        bonding._start()
+        bonding = _Bonding(self, complex_list, callback, fast_mode)
+        return bonding._start()
 
-    def add_dssp(self, complex_list, callback):
+    def add_dssp(self, complex_list, callback=None):
         """
         | Use DSSP to calculate secondary structures
 
         :param complex_list: List of complexes to add ribbons to
         :type complex_list: list of :class:`~nanome.api.structure.complex.Complex`
+        :param callback: Callable[[List[Complex]], None]
         """
-        dssp = _Dssp(complex_list, callback)
-        dssp._start()
+        dssp = _Dssp(self, complex_list, callback)
+        return dssp._start()
 
-    def add_volume(self, complex, volume, properties, complex_to_align_index = -1, callback = None):
-        id = self._network._send(_Messages.add_volume, (complex, complex_to_align_index, volume, properties), callback != None)
-        self._save_callback(id, callback)
+    def add_volume(self, complex, volume, properties, complex_to_align_index=-1, callback=None):
+        expects_response = callback is not None or self.is_async
+        id = self._network._send(_Messages.add_volume, (complex, complex_to_align_index, volume, properties), expects_response)
+        return self._save_callback(id, callback)
 
     def open_url(self, url):
         """
@@ -337,21 +350,27 @@ class PluginInstance(_PluginInstance):
             url = 'http://' + url
         self._network._send(_Messages.open_url, url, False)
 
-    def request_presenter_info(self, callback):
+    def request_presenter_info(self, callback=None):
         """
         | Requests presenter account info (unique ID, name, email)
-        """
-        id = self._network._send(_Messages.presenter_info_request, None, callback != None)
-        self._save_callback(id, callback)
 
-    def request_controller_transforms(self, callback):
+        callback: Callable[[PresenterInfo], None]
+        """
+        expects_response = callback is not None or self.is_async
+        id = self._network._send(_Messages.presenter_info_request, None, expects_response)
+        return self._save_callback(id, callback)
+
+    def request_controller_transforms(self, callback=None):
         """
         | Requests presenter controller info (head position, head rotation, left controller position, left controller rotation, right controller position, right controller rotation)
-        """
-        id = self._network._send(_Messages.controller_transforms_request, None, callback != None)
-        self._save_callback(id, callback)
 
-    def set_plugin_list_button(self, button, text = None, usable = None):
+        param callback: Callable[[Vector3, Quaternion, Vector3, Quaternion, Vector3, Quaternion], None]
+        """
+        expects_response = callback is not None or self.is_async
+        id = self._network._send(_Messages.controller_transforms_request, None, expects_response)
+        return self._save_callback(id, callback)
+
+    def set_plugin_list_button(self, button, text=None, usable=None):
         """
         | Set text and/or usable state of the buttons on the plugin connection menu in Nanome
 
@@ -369,11 +388,11 @@ class PluginInstance(_PluginInstance):
             current_text = [self._advanced_settings_text]
             current_usable = [self._advanced_settings_usable]
 
-        if text == None:
+        if text is None:
             text = current_text[0]
         else:
             current_text[0] = text
-        if usable == None:
+        if usable is None:
             usable = current_usable[0]
         else:
             current_usable[0] = usable
@@ -402,10 +421,11 @@ class PluginInstance(_PluginInstance):
                 data = content_file.read()
             files.append((file_name, data))
 
-        id = self._network._send(_Messages.load_file, (files, True, True), callback != None)
-        self._save_callback(id, callback)
+        expects_response = callback is not None or self.is_async
+        id = self._network._send(_Messages.load_file, (files, True, True), expects_response)
+        return self._save_callback(id, callback)
 
-    def request_export(self, format, callback, entities = None):
+    def request_export(self, format, callback=None, entities=None):
         """
         Request a file export using Nanome exporters
         Can request either molecule or workspace export, for entities in Nanome workspace
@@ -415,18 +435,13 @@ class PluginInstance(_PluginInstance):
         :type format: :class:`~nanome.util.enums.ExportFormats`
         :param entities: Entities to export (complexes to send, or indices if referencing complexes in workspace, or a workspace, or nothing if exporting Nanome workspace)
         :type entities: list of or unique object of type :class:`~nanome.api.structure.workspace` or :class:`~nanome.api.structure.complex`, or None, or list of or unique :class:`int`
+        :kwarg callback: Callable[[Union[str, bytes]], None]
         """
-        if entities != None and not isinstance(entities, list):
+        if entities is not None and not isinstance(entities, list):
             entities = [entities]
 
         id = self._network._send(_Messages.export_files, (format, entities), True)
-        self._save_callback(id, callback)
-
-    def create_shape(self, shape_type):
-        if shape_type == ShapeType.Sphere:
-            return shapes.Sphere(self._network)
-
-        raise ValueError('Parameter shape_type must be a value of nanome.util.enums.ShapeType')
+        return self._save_callback(id, callback)
 
     def apply_color_scheme(self, color_scheme, target, only_carbons):
         """
@@ -456,6 +471,30 @@ class PluginInstance(_PluginInstance):
         :type: tuple of objects or None if no data has been set
         """
         return self._custom_data
+
+    @property
+    def menu(self):
+        if not self.__set_first:
+            self.__set_first = True
+            Logs.warning("The default menu (self.menu) is now deprecated and will be removed in a future version. Please use the ui.Menu() constructor to create the menu.")
+        return self.__menu
+
+    @menu.setter
+    def menu(self, value):
+        self.__set_first = True
+        self.__menu = value
+
+    @Logs.deprecated("create_writing_stream")
+    def create_stream(self, atom_indices_list, callback):
+        id = self._network._send(_Messages.stream_create, (Stream.Type.position, atom_indices_list, StreamDirection.writing), callback is not None)
+        self._save_callback(id, callback)
+
+    @Logs.deprecated("create_writing_stream")
+    def create_atom_stream(self, atom_indices_list, stream_type, callback):
+        self.create_writing_stream(atom_indices_list, stream_type, callback)
+
+class AsyncPluginInstance(PluginInstance):
+    is_async = True
 
 class _DefaultPlugin(PluginInstance):
     def __init__(self):

@@ -1,7 +1,4 @@
-import nanome
-from nanome._internal._network._commands._callbacks import _Messages
-from nanome.util import Vector3, Color, Logs, Quaternion
-from nanome.util.enums import ShapeAnchorType
+from nanome._internal._shapes._shape import _Shape
 
 class Shape(object):
     """
@@ -100,7 +97,7 @@ class Shape(object):
         return self.__color
     @color.setter
     def color(self, value):
-        self.__color = value
+        self._color = value
 
     def upload(self, done_callback=None):
         """
@@ -113,8 +110,8 @@ class Shape(object):
             if done_callback != None:
                 done_callback(result)
 
-        id = self.__network._send(_Messages.set_shape, self, True)
-        nanome.PluginInstance._save_callback(id, set_callback)
+    def upload(self, done_callback=None):
+        self._upload(done_callback)
 
     def destroy(self):
         """

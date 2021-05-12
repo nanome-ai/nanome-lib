@@ -2,10 +2,10 @@ import os
 import json
 from nanome.util import Logs
 
-default_json_string = """{ 
+default_json_string = """{
     "host":"127.0.0.1",
     "port":8888,
-    "key_file":"nts_key",
+    "key":"nts_key",
     "plugin_files_path":"~/Documents/nanome-plugins"
 }"""
 
@@ -13,7 +13,7 @@ default_json = json.loads(default_json_string)
 
 def _setup_file():
     s = "/"
-    
+
     home = os.getenv('APPDATA')
     if (home == None):
         home = os.getenv('HOME')

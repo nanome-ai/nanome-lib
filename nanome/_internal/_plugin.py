@@ -1,6 +1,7 @@
 from . import _PluginInstance
 from nanome._internal import _network as Network
 from nanome._internal._process import _ProcessManager, _LogsManager
+from nanome._internal._network._commands._callbacks._commands_enums import _Hashes
 from nanome._internal._network._serialization._serializer import Serializer
 from nanome._internal._util._serializers import _TypeSerializer
 from nanome.util.logs import Logs
@@ -14,12 +15,13 @@ import cProfile
 import time
 import os
 import fnmatch
+import re
 import subprocess
 import signal
 
-try_reconnection_time = 20.0
-keep_alive_time_interval = 60.0
-keep_alive_timeout = 15.0
+MAX_RECONNECT_WAIT = 20.0
+KEEP_ALIVE_TIME_INTERVAL = 60.0
+KEEP_ALIVE_TIMEOUT = 15.0
 
 __metaclass__ = type
 class _Plugin(object):
@@ -35,7 +37,7 @@ class _Plugin(object):
                 Logs.message(" -h                   display this help")
                 Logs.message(" -a                   connects to a NTS at the specified IP address")
                 Logs.message(" -p                   connects to a NTS at the specified port")
-                Logs.message(" -k                   specifies a key file to use to connect to NTS")
+                Logs.message(" -k                   specifies a key file or key string to use to connect to NTS")
                 Logs.message(" -n                   name to display for this plugin in Nanome")
                 Logs.message(" -v                   enable verbose mode, to display Logs.debug")
                 Logs.message(" -r, --auto-reload    restart plugin automatically if a .py or .json file in current directory changes")
@@ -62,7 +64,7 @@ class _Plugin(object):
                 if i >= len(sys.argv):
                     Logs.error("Error: -k requires an argument")
                     sys.exit(1)
-                self.__key_file = sys.argv[i + 1]
+                self.__key = sys.argv[i + 1]
                 i += 1
             elif sys.argv[i] == "-n":
                 if i >= len(sys.argv):
@@ -82,10 +84,13 @@ class _Plugin(object):
                 split = sys.argv[i + 1].split(",")
                 self.__to_ignore.extend(split)
 
-    def __read_key_file(self):
+    def __read_key(self):
+        # check if arg is key data
+        if re.match(r'^[0-9A-F]+$', self.__key):
+            return self.__key
         try:
-            f = open(self.__key_file, "r")
-            key = f.read()
+            f = open(self.__key, "r")
+            key = f.read().strip()
             return key
         except:
             return None
@@ -195,9 +200,10 @@ class _Plugin(object):
         if self._pre_run != None:
             self._pre_run()
         _Plugin.instance = self
-        self._description['auth'] = self.__read_key_file()
+        self._description['auth'] = self.__read_key()
         self._process_manager = _ProcessManager()
         self._logs_manager = _LogsManager(self._plugin_class.__name__ + ".log")
+        self.__reconnect_attempt = 0
         self.__connect()
         self.__loop()
 
@@ -213,10 +219,12 @@ class _Plugin(object):
             packet.write_string(json.dumps(self._description))
             self._network.send(packet)
             self.__connected = True
+            self.__reconnect_attempt = 0
             self.__last_keep_alive = timer()
             return True
         else:
             self.__disconnection_time = timer()
+            self.__reconnect_attempt += 1
             return False
 
     def __loop(self):
@@ -226,14 +234,14 @@ class _Plugin(object):
                 now = timer()
 
                 if self.__connected == False:
+                    reconnect_wait = min(2 ** self.__reconnect_attempt, MAX_RECONNECT_WAIT)
                     elapsed = now - self.__disconnection_time
-                    if elapsed >= try_reconnection_time:
+                    if elapsed >= reconnect_wait:
                         Logs.message("Trying to reconnect...")
                         if self.__connect() == False:
-                            self.__disconnection_time = now
                             continue
                     else:
-                        time.sleep(try_reconnection_time - elapsed)
+                        time.sleep(reconnect_wait - elapsed)
                         continue
                 if self._network.receive() == False:
                     self.__connected = False
@@ -241,16 +249,16 @@ class _Plugin(object):
                     continue
 
                 if self.__waiting_keep_alive:
-                    if now - self.__last_keep_alive >= keep_alive_timeout:
+                    if now - self.__last_keep_alive >= KEEP_ALIVE_TIMEOUT:
                         self.__connected = False
                         self.__disconnect()
                         continue
-                elif now - self.__last_keep_alive >= keep_alive_time_interval:
-                        self.__last_keep_alive = now
-                        self.__waiting_keep_alive = True
-                        packet = Network._Packet()
-                        packet.set(_Plugin._plugin_id, Network._Packet.packet_type_keep_alive, 0)
-                        self._network.send(packet)
+                elif now - self.__last_keep_alive >= KEEP_ALIVE_TIME_INTERVAL and _Plugin._plugin_id >= 0:
+                    self.__last_keep_alive = now
+                    self.__waiting_keep_alive = True
+                    packet = Network._Packet()
+                    packet.set(_Plugin._plugin_id, Network._Packet.packet_type_keep_alive, 0)
+                    self._network.send(packet)
 
                 del to_remove[:]
                 for id, session in self._sessions.items():
@@ -289,7 +297,8 @@ class _Plugin(object):
         main_conn_net, process_conn_net = Pipe()
         main_conn_proc, process_conn_proc = Pipe()
         session = Network._Session(session_id, self._network, self._process_manager, self._logs_manager, main_conn_net, main_conn_proc)
-        process = Process(target=_Plugin._launch_plugin, args=(self._plugin_class, session_id, process_conn_net, process_conn_proc, _Plugin.__serializer, _Plugin._plugin_id, version_table, _TypeSerializer.get_version_table(), Logs._is_verbose(), _Plugin._custom_data))
+        permissions = self._description["permissions"]
+        process = Process(target=_Plugin._launch_plugin, args=(self._plugin_class, session_id, process_conn_net, process_conn_proc, _Plugin.__serializer, _Plugin._plugin_id, version_table, _TypeSerializer.get_version_table(), Logs._is_verbose(), _Plugin._custom_data, permissions))
         process.start()
         session.plugin_process = process
         self._sessions[session_id] = session
@@ -300,24 +309,44 @@ class _Plugin(object):
         return current_process().name != 'MainProcess'
 
     @classmethod
-    def _launch_plugin_profile(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data):
-        cProfile.runctx('_Plugin._launch_plugin(plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data)', globals(), locals(), 'profile.out')
+    def _launch_plugin_profile(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
+        cProfile.runctx('_Plugin._launch_plugin(plugin_class, session_id, pipe_net, pipe_proc, serializer, '
+                        'plugin_id, version_table, original_version_table, verbose, custom_data,'
+                        'permissions)'
+                        , globals(), locals(), 'profile.out')
 
     @classmethod
-    def _launch_plugin(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data):
+    def _launch_plugin(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
         plugin = plugin_class()
-        _PluginInstance.__init__(plugin, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data)
+        _PluginInstance.__init__(plugin, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions)
         Logs.debug("Starting plugin")
         plugin._run()
 
-    def __init__(self, name, description, category = "", has_advanced = False):
+    def __init__(self, name, description, tags=[], has_advanced=False, permissions=[], integrations=[]):
         self._sessions = dict()
+
+        if isinstance(tags, str):
+            tags = [tags]
+
+        category = ""
+        if len(tags) > 0:
+            category = tags[0]
+
+        for i in range(0, len(permissions)):
+            permissions[i] = _Hashes.PermissionRequestHashes[permissions[i]]
+
+        for i in range(0, len(integrations)):
+            integrations[i] = _Hashes.IntegrationRequestHashes[integrations[i]]
+
         self._description = {
             'name': name,
             'description': description,
             'category': category,
+            'tags': tags,
             'hasAdvanced': has_advanced,
-            'auth': None
+            'auth': None,
+            'permissions': permissions,
+            'integrations': integrations
         }
         self._plugin_class = None
         self.__connected = False

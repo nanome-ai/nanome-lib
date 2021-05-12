@@ -13,7 +13,7 @@ def parse_json(content_json):
     # type: () -> Button
     #region text
     button = _Button._create()
-    button._name = content_json.read("selected", button._name)
+    button._name = content_json.read("name", button._name)
     button._selected = content_json.read("selected", button._selected)
     button._unusable = content_json.read("unusable", button._unusable)
     button._disable_on_press = content_json.read("disable_on_press", button._disable_on_press)

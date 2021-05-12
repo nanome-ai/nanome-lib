@@ -1,4 +1,4 @@
-__version__ = "0.22.1"
+__version__ = "0.24.5"
 
 from . import *
 from . import util

@@ -1,8 +1,12 @@
 #!/bin/bash
 
-if [ -n "$(docker ps -aqf name={{command}})" ]; then
-    echo "removing exited container"
-    docker rm -f {{command}}
+echo "./deploy.sh $*" > redeploy.sh
+chmod +x redeploy.sh
+
+existing=$(docker ps -aqf name={{command}})
+if [ -n "$existing" ]; then
+    echo "removing existing container"
+    docker rm -f $existing
 fi
 
 docker run -d \

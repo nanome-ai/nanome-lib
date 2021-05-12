@@ -24,11 +24,11 @@ class Plugin(_Plugin):
     :type has_advanced: bool
     """
     @classmethod
-    def setup(cls, name, description, category, has_advanced, plugin_class, host = "config", port = "config", key_file = "config"):
+    def setup(cls, name, description, category, has_advanced, plugin_class, host = "config", port = "config", key = "config", permissions=[], integrations=[]):
         if not _Plugin._is_process():
-            plugin = cls(name, description, category, has_advanced)
+            plugin = cls(name, description, tags, has_advanced, permissions, integrations)
             plugin.set_plugin_class(plugin_class)
-            plugin.run(host, port, key_file)
+            plugin.run(host, port, key)
 
     @staticmethod
     def set_custom_data(*args):
@@ -44,7 +44,7 @@ class Plugin(_Plugin):
     def set_maximum_processes_count(max_process_nb):
         _ProcessManager._max_process_count = max_process_nb
 
-    def run(self, host = "config", port = "config", key_file = "config"):
+    def run(self, host = "config", port = "config", key = "config"):
         """
         | Starts the plugin by connecting to the server specified.
         | If arguments (-a, -p) are given when starting plugin, host/port will be ignored.
@@ -63,10 +63,10 @@ class Plugin(_Plugin):
             self.__port = config.fetch("port")
         else:
             self.__port = port
-        if (key_file == "config"):
-            self.__key_file = config.fetch("key_file")
+        if (key == "config"):
+            self.__key = config.fetch("key")
         else:
-            self.__key_file = key_file
+            self.__key = key
         self.__parse_args()
         Logs.debug("Start plugin")
         if self.__has_autoreload:
@@ -106,6 +106,6 @@ class Plugin(_Plugin):
     def post_run(self, value):
         self._post_run = value
 
-    def __init__(self, name, description, category = "", has_advanced = False):
-        super(Plugin, self).__init__(name, description, category, has_advanced)
+    def __init__(self, name, description, tags=[], has_advanced = False, permissions=[], integrations=[]):
+        super(Plugin, self).__init__(name, description, tags, has_advanced, permissions, integrations)
         self._plugin_class = _DefaultPlugin

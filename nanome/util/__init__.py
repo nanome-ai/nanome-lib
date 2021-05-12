@@ -9,6 +9,11 @@ try:
 except:
     pass
 
+try:
+    from .asyncio import async_callback
+except:
+    pass
+
 from . import enums
 from . import complex_save_options
 

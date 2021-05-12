@@ -1,5 +1,6 @@
-from . import Shape
+from nanome._internal._shapes._sphere import _Sphere
 from nanome.util.enums import ShapeType
+from . import Shape
 
 class Sphere(Shape):
     """
@@ -21,6 +22,5 @@ class Sphere(Shape):
         return self.__radius
     @radius.setter
     def radius(self, value):
-        self.__radius = value
-
-    
+        self._radius = value
+_Sphere._create = Sphere

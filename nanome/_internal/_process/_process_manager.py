@@ -128,6 +128,17 @@ class _ProcessManager():
                 entry.process.terminate()
                 break
 
+    def _remove_session_processes(self, session_id):
+        pending = [e for e in self.__pending if e.session._session_id == session_id]
+        running = [e for e in self.__running if e.session._session_id == session_id]
+
+        for entry in pending:
+            self.__pending.remove(entry)
+
+        for entry in running:
+            entry.process.kill()
+            self.__running.remove(entry)
+
     def _received_request(self, data, session):
         type = data[0]
         if type == _ProcessManager._CommandType.start:
