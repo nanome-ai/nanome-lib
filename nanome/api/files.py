@@ -72,9 +72,9 @@ class Files(_Files):
 
     def get(self, source, dest, callback=None):
         """
-        | Gets file source from the nanome session's machine and writes to dest of the plugin machine.
+        | Gets file source from the Nanome session's machine and writes to dest of the plugin machine.
 
-        :param source: nanome machine filename of the file to move
+        :param source: Nanome machine filename of the file to move
         :type source: str
         :param dest: plugin machine filename for the file's destination
         :type dest: str
@@ -100,11 +100,11 @@ class Files(_Files):
 
     def put(self, source, dest, callback=None):
         """
-        | Send the file source on the plugin machine to be placed at dest on the nanome session's machine.
+        | Send the file source on the plugin machine to be placed at dest on the Nanome session's machine.
 
         :param source: plugin machine filename of the file to send
         :type source: str
-        :param dest: nanome machine filename for the file's destination
+        :param dest: Nanome machine filename for the file's destination
         :type dest: str
         :param callback: called when operation has completed, potentially with errors
         :type callback: method (:class:`~nanome.util.file.FileError`) -> None
@@ -122,7 +122,7 @@ class Files(_Files):
         """
         | remove non-directory file
 
-        :param target: filepath of nanome machine file to remove.
+        :param target: filepath of Nanome machine file to remove.
         :type target: str
         :param callback: called when operation has completed, potentially with errors
         :type callback: method (:class:`~nanome.util.file.FileError`) -> None
@@ -137,7 +137,7 @@ class Files(_Files):
         """
         | remove directory
 
-        :param target: nanome machine directory to remove.
+        :param target: Nanome machine directory to remove.
         :type target: str
         :param callback: called when operation has completed, potentially with errors
         :type callback: method (:class:`~nanome.util.file.FileError`) -> None
@@ -152,9 +152,9 @@ class Files(_Files):
         """
         | Copy source to dest
 
-        :param source: the nanome machine filename of the file to copy
+        :param source: the Nanome machine filename of the file to copy
         :type source: str
-        :param dest: the nanome machine filename to copy to
+        :param dest: the Nanome machine filename to copy to
         :type dest: str
         :param callback: called when operation has completed, potentially with errors
         :type callback: method (:class:`~nanome.util.file.FileError`) -> None
