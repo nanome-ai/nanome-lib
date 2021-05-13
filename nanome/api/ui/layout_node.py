@@ -5,8 +5,9 @@ from .io import LayoutNodeIO
 
 class LayoutNode(_LayoutNode):
     """
-    | Class containing UI elements. Layout nodes are used to architecture menus, by defining where one UI element should be placed relatively to another.
-    | One layout node can contain one UI element, and several children Layout Nodes.
+    | Class for hierarchical UI objects representing part of a Nanome menu. 
+    | Layout nodes are used to create menus, by defining where one UI element should be placed relative to another.
+    | One LayoutNode can contain one interactive UI element as well as any number of child Layout Nodes.
 
     :param name: Name of the node, used to identify it and find it later
     :type name: :class:`str`
