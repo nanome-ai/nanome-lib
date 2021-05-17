@@ -21,6 +21,12 @@ class Slider(_Slider, UIBase):
 
     @property
     def current_value(self):
+        """
+        | The current value of the slider
+
+        :type: float
+
+        """
         # type: () -> float
         return self._current_value
     @current_value.setter
@@ -30,6 +36,12 @@ class Slider(_Slider, UIBase):
 
     @property
     def min_value(self):
+        """
+        | The minimum (far left) value of the slider
+
+        :type: float
+
+        """
         # type: () -> float
         return self._min_value
     @min_value.setter
@@ -39,6 +51,12 @@ class Slider(_Slider, UIBase):
 
     @property
     def max_value(self):
+        """
+        | The minimum (far right) value of the slider
+
+        :type: float
+
+        """
         # type: () -> float
         return self._max_value
     @max_value.setter
@@ -47,9 +65,23 @@ class Slider(_Slider, UIBase):
         self._max_value = value
 
     def register_changed_callback(self, func):
+        """
+        | Register a function to be called every time the value of the slider changes
+
+        :param func: callback function to execute when slider changes values
+        :type func: method (:class:`~nanome.ui.Slider`) -> None
+
+        """
         self._changed_callback = func
     
     def register_released_callback(self, func):
+        """
+        | Register a function to be called when the slider is released.
+
+        :param func: callback function to execute when slider is released
+        :type func: method (:class:`~nanome.ui.Slider`) -> None
+
+        """
         self._released_callback = func
 
 _Slider._create = Slider
