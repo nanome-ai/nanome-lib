@@ -15,6 +15,12 @@ class TextInput(_TextInput, UIBase):
 
     @property
     def max_length(self):
+        """
+        | The character limit of the input string
+
+        :type: int
+
+        """
         # type: () -> int
         return self._max_length
     @max_length.setter
@@ -24,6 +30,12 @@ class TextInput(_TextInput, UIBase):
 
     @property
     def placeholder_text(self):
+        """
+        | The text to display when the input is empty
+
+        :type: str
+
+        """
         # type: () -> str
         return self._placeholder_text
     @placeholder_text.setter
@@ -35,6 +47,12 @@ class TextInput(_TextInput, UIBase):
 
     @property
     def input_text(self):
+        """
+        | The string that has been entered into this text input
+
+        :type: str
+
+        """
         # type: () -> str
         return self._input_text
     @input_text.setter
@@ -46,6 +64,12 @@ class TextInput(_TextInput, UIBase):
 
     @property
     def placeholder_text_color(self):
+        """
+        | Color of the placeholder text
+
+        :type: :class: `~nanome.util.Color`
+
+        """
         # type: () -> Color
         return self._placeholder_text_color
     @placeholder_text_color.setter
@@ -55,6 +79,12 @@ class TextInput(_TextInput, UIBase):
 
     @property
     def text_color(self):
+        """
+        | The color of the input text
+
+        :type: :class: `~nanome.util.Color`
+
+        """
         # type: () -> Color
         return self._text_color
     @text_color.setter
@@ -64,6 +94,12 @@ class TextInput(_TextInput, UIBase):
 
     @property
     def background_color(self):
+        """
+        | The color of the background of this text input
+
+        :type: :class: `~nanome.util.Color`
+
+        """
         # type: () -> Color
         return self._background_color
     @background_color.setter
@@ -73,6 +109,12 @@ class TextInput(_TextInput, UIBase):
 
     @property
     def text_size(self):
+        """
+        | The font size of the input and placeholder text
+
+        :type: float
+
+        """
         # type: () -> float
         return self._text_size
     @text_size.setter
@@ -82,6 +124,12 @@ class TextInput(_TextInput, UIBase):
 
     @property
     def text_horizontal_align(self):
+        """
+        | The horizontal alignment of the input and placeholder text
+
+        :type: :class: `~nanome.util.enums.HorizAlignOptions`
+
+        """
         # type: () -> HorizAlignOptions
         return self._text_horizontal_align
     @text_horizontal_align.setter
@@ -91,6 +139,12 @@ class TextInput(_TextInput, UIBase):
 
     @property
     def padding_left(self):
+        """
+        | The left padding of the input and placeholder text
+
+        :type: float
+
+        """
         return self._padding_left
     @padding_left.setter
     def padding_left(self, value):
@@ -98,6 +152,12 @@ class TextInput(_TextInput, UIBase):
 
     @property
     def padding_right(self):
+        """
+        | The right padding of the input and placeholder text
+
+        :type: float
+
+        """
         return self._padding_right
     @padding_right.setter
     def padding_right(self, value):
@@ -105,6 +165,12 @@ class TextInput(_TextInput, UIBase):
 
     @property
     def padding_top(self):
+        """
+        | The top padding of the input and placeholder text
+
+        :type: float
+
+        """
         return self._padding_top
     @padding_top.setter
     def padding_top(self, value):
@@ -112,6 +178,12 @@ class TextInput(_TextInput, UIBase):
 
     @property
     def padding_bottom(self):
+        """
+        | The bottom padding of the input and placeholder text
+
+        :type: float
+
+        """
         return self._padding_bottom
     @padding_bottom.setter
     def padding_bottom(self, value):
@@ -119,6 +191,13 @@ class TextInput(_TextInput, UIBase):
 
     @property
     def password(self):
+        """
+        | Whether or not the input represents a password.
+        | i.e. will display '123' as ••• if true.
+
+        :type: bool
+
+        """
         return self._password
     
     @password.setter
@@ -127,6 +206,13 @@ class TextInput(_TextInput, UIBase):
 
     @property
     def number(self):
+        """
+        | Whether or not the input represents a number.
+        | Will display the number keyboard if set to true.
+
+        :type: bool
+
+        """
         return self._number
     
     @number.setter

@@ -10,6 +10,7 @@ class LayoutNodeIO(_Addon):
     
     :param base_object: The LayoutNode to serialize
     :type base_object: :class:`~nanome.ui.LayoutNode`
+
     """
     def __init__(self, base_object=None):
         _Addon.__init__(self, base_object)
@@ -19,6 +20,7 @@ class LayoutNodeIO(_Addon):
         | Serializes this instance's base_object to the json file specified by path.
         :param path: The path to serialize base_object's json representation to
         :type path: string
+
         """
         helper = _JsonHelper()
         helper.write("is_menu", False)
@@ -41,6 +43,7 @@ class LayoutNodeIO(_Addon):
         | Parses a LayoutNode json file and returns a LayoutNode.
         :param path: The path to the LayoutNode json to parse
         :type path: string
+        
         """
         try:
             with open(path) as f:

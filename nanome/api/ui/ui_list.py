@@ -2,6 +2,9 @@ from nanome._internal._ui import _UIList
 from . import UIBase
 
 class UIList(_UIList, UIBase):
+    """
+    | A class representing a list of UI elements.
+    """
     def __init__(self):
         # type: (str)
         _UIList.__init__(self)
@@ -9,6 +12,12 @@ class UIList(_UIList, UIBase):
 
     @property
     def items(self):
+        """
+        | LayoutNodes items to be displayed in the list.
+
+        :type: list
+
+        """
         return self._items
     @items.setter
     def items(self, value):
@@ -16,6 +25,12 @@ class UIList(_UIList, UIBase):
 
     @property
     def display_columns(self):
+        """
+        | Number of columns of items to display simultaneously.
+
+        :type: int
+
+        """
         # type: () -> int
         return self._display_columns
     @display_columns.setter
@@ -25,6 +40,12 @@ class UIList(_UIList, UIBase):
 
     @property
     def display_rows(self):
+        """
+        | Number of rows of items to display simultaneously.
+
+        :type: int
+        
+        """
         # type: () -> int
         return self._display_rows
     @display_rows.setter
@@ -34,6 +55,14 @@ class UIList(_UIList, UIBase):
         
     @property
     def total_columns(self):
+        """
+        | Total number of columns to display across scrolling.
+        | i.e. If there are 2 display columns and 4 total columns, 
+        | the horizontal scroll bar will have two possible positions.
+
+        :type: int
+        
+        """
         # type: () -> int
         return self._total_columns
     @total_columns.setter
@@ -43,6 +72,12 @@ class UIList(_UIList, UIBase):
     
     @property
     def unusable(self):
+        """
+        | Whether or not the UI list is usable.
+
+        :type: bool
+        
+        """
         # type: () -> bool
         return self._unusable
     @unusable.setter
