@@ -3,6 +3,9 @@ from . import UIBase
 from nanome._internal._ui import _Mesh
 
 class Mesh(_Mesh, UIBase):
+    """
+    | Represents a flat rectangular mesh with a solid color.
+    """
     def __init__(self):
         # type: (_Mesh)
         _Mesh.__init__(self)
@@ -10,6 +13,12 @@ class Mesh(_Mesh, UIBase):
 
     @property
     def mesh_color(self):
+        """
+        | The color of the mesh
+
+        :type: :class:`~nanome.util.Color`
+
+        """
         # type: () -> Color
         return self._mesh_color
     @mesh_color.setter
