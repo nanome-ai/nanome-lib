@@ -455,7 +455,7 @@ class Button(_Button, UIBase):
             | A position of (1, 1, 1) represents right, top, front,
             | whereas (0, 0, 0) represents the middle.
 
-            :type: :class:`tuple` <:class:`float`,:class:`float`,:class:`float`>
+            :type: :class:`tuple` <:class:`float`, :class:`float`, :class:`float`>
             
             """
             return self._position
@@ -470,7 +470,7 @@ class Button(_Button, UIBase):
             | A position of (90, 90, 90) represents a quarter rotation
             | about each of the X, Y and Z axes, whereas (0, 0, 0) represents no rotation.
 
-            :type: :class:`tuple` <:class:`float`,:class:`float`,:class:`float`>
+            :type: :class:`tuple` <:class:`float`, :class:`float`, :class:`float`>
             
             """
             return self._rotation
@@ -648,7 +648,7 @@ class Button(_Button, UIBase):
             """
             | The bounds of the tooltip
 
-            :type: :class:`tuple` <:class:`float`,:class:`float`,:class:`float`>
+            :type: :class:`tuple` <:class:`float`, :class:`float`, :class:`float`>
             
             """
             return self._bounds
