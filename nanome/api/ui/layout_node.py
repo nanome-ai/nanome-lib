@@ -54,6 +54,11 @@ class LayoutNode(_LayoutNode):
     
     @property
     def padding_type(self):
+        """
+        | The padding type of the LayoutNode.
+
+        :type: :class:`~nanome.util.enums.PaddingTypes`
+        """
         return self._padding_type
     
     @padding_type.setter

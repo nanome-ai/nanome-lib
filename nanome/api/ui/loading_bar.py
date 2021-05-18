@@ -12,6 +12,9 @@ class LoadingBar(_LoadingBar, UIBase):
 
     @property
     def percentage(self):
+        """
+        | The load percentage to indicate
+        """
         return self._percentage
     
     @percentage.setter
@@ -20,6 +23,10 @@ class LoadingBar(_LoadingBar, UIBase):
 
     @property
     def title(self):
+        """
+        | The title of the loading bar.
+        | Appears over the loading bar
+        """
         return self._title
     
     @title.setter
@@ -30,6 +37,10 @@ class LoadingBar(_LoadingBar, UIBase):
 
     @property
     def description(self):
+        """
+        | A description of what is being loaded.
+        | Appears under the loading bar title
+        """
         return self._description
     
     @description.setter
@@ -40,6 +51,10 @@ class LoadingBar(_LoadingBar, UIBase):
 
     @property
     def failure(self):
+        """
+        | Whether or not loading has failed
+        | Setting this to true and updating the UI will make the loading bar appear red in Nanome
+        """
         return self._failure
     
     @failure.setter

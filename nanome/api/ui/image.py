@@ -16,6 +16,12 @@ class Image(_Image, UIBase):
 
     @property
     def color(self):
+        """
+        | The color of the image
+
+        :type: :class:`~nanome.ui.Color`
+        
+        """
         return self._color
     @color.setter
     def color(self, value):
@@ -23,6 +29,13 @@ class Image(_Image, UIBase):
 
     @property
     def file_path(self):
+        """
+        | The file path to the image.
+        | Setting this and calling update_content will change the image.
+
+        :type: :class:`str`
+        
+        """
         return self._file_path
     
     @file_path.setter
@@ -31,6 +44,12 @@ class Image(_Image, UIBase):
 
     @property
     def scaling_option(self):
+        """
+        | Determines how the image scales.
+
+        :type: :class:`~nanome.util.enums.ScalingOptions`
+        
+        """
         return self._scaling_option
     
     @scaling_option.setter
@@ -38,11 +57,32 @@ class Image(_Image, UIBase):
         self._scaling_option = value
 
     def register_pressed_callback(self, func):
+        """
+        | Registers a function to be called when the image is pressed
+
+        :param func: called the image is pressed
+        :type func: method (:class:`~nanome.ui.Image`) -> None
+        
+        """
         _Image._register_pressed_callback(self, func)
 
     def register_held_callback(self, func):
+        """
+        | Registers a function to be called rapidly while the image is being pressed
+
+        :param func: called while the image is being pressed
+        :type func: method (:class:`~nanome.ui.Image`) -> None
+        
+        """
         _Image._register_held_callback(self, func)
 
     def register_released_callback(self, func):
+        """
+        | Registers a function to be called when the image is released
+
+        :param func: called the image is released
+        :type func: method (:class:`~nanome.ui.Image`) -> None
+        
+        """
         _Image._register_released_callback(self, func)
 _Image._create = Image
