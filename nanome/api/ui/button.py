@@ -659,7 +659,8 @@ class Button(_Button, UIBase):
         @property
         def positioning_target(self):
             """
-            | The positioning target for the tooltip
+            | Determines which side of the button the tooltip (origin) will appear on
+            | Refers to the tooltip's button
 
             :type: :class:`~nanome.util.enums.ToolTipPositioning`
             
@@ -672,7 +673,8 @@ class Button(_Button, UIBase):
         @property
         def positioning_origin(self):
             """
-            | The positioning origin for the tooltip
+            | Determines which part of the tooltip is closest to the button (target)
+            | Refers to the tooltip
 
             :type: :class:`~nanome.util.enums.ToolTipPositioning`
             
