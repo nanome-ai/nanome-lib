@@ -24,7 +24,7 @@ class Shape(object):
         """
         | Type of shape. Currently only supports spheres.
         """
-        return self.__shape_type
+        return self._shape_type
 
     @property
     def target(self):
@@ -34,10 +34,10 @@ class Shape(object):
         :param value: Object to center the shape on
         :type value: Object
         """
-        return self.__target
+        return self._target
     @target.setter
     def target(self, value):
-        self.__target = value
+        self._target = value
 
     @property
     def anchor(self):
@@ -47,10 +47,10 @@ class Shape(object):
         :param value: Type of target object
         :type value: :class:`~nanome.util.enums.ShapeAnchorType`
         """
-        return self.__anchor
+        return self._anchor
     @anchor.setter
     def anchor(self, value):
-        self.__anchor = value
+        self._anchor = value
 
     @property
     def position(self):
@@ -60,10 +60,10 @@ class Shape(object):
         :param value: Position of the shape
         :type value: :class:`~nanome.util.Vector3`
         """
-        return self.__position
+        return self._position
     @position.setter
     def position(self, value):
-        self.__position = value
+        self._position = value
 
     @property
     def rotation(self):
@@ -73,10 +73,10 @@ class Shape(object):
         :param value: Rotation of the shape
         :type value: :class:`~nanome.util.Quaternion`
         """
-        return self.__rotation
+        return self._rotation
     @rotation.setter
     def rotation(self, value):
-        self.__rotation = value
+        self._rotation = value
 
     @property
     def color(self):
@@ -86,21 +86,10 @@ class Shape(object):
         :param value: Color of the shape
         :type value: :class:`~nanome.util.Color`
         """
-        return self.__color
+        return self._color
     @color.setter
     def color(self, value):
         self._color = value
-
-    def upload(self, done_callback=None):
-        """
-        | Upload the shape to Nanome App.
-        """
-        def set_callback(index, result):
-            if self._index != -1 and index != self._index:
-                Logs.error("SetShapeCallback received for the wrong shape")
-            self._index = index
-            if done_callback != None:
-                done_callback(result)
 
     def upload(self, done_callback=None):
         self._upload(done_callback)

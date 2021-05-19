@@ -9,7 +9,7 @@ class Sphere(Shape):
     def __init__(self, network):
         super().__init__(network, ShapeType.Sphere)
 
-        self.__radius = 1.0
+        self._radius = 1.0
 
     @property
     def radius(self):
@@ -19,7 +19,7 @@ class Sphere(Shape):
         :param value: Radius of the sphere
         :type value: float
         """
-        return self.__radius
+        return self._radius
     @radius.setter
     def radius(self, value):
         self._radius = value
