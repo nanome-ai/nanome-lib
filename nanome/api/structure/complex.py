@@ -25,7 +25,7 @@ class Complex(_Complex, Base):
         | Add a molecule to this complex
 
         :param molecule: Molecule to add to the chain
-        :type molecule: :class:`nanome.api.structure.molecule`
+        :type molecule: :class:`~nanome.structure.Molecule`
         """
         molecule.index = -1
         self._add_molecule(molecule)
@@ -35,7 +35,7 @@ class Complex(_Complex, Base):
         | Remove a molecule from this complex
 
         :param molecule: Molecule to remove from the chain
-        :type molecule: :class:`nanome.api.structure.molecule`
+        :type molecule: :class:`~nanome.structure.Molecule`
         """
         molecule.index = -1
         self._remove_molecule(molecule)
@@ -92,7 +92,7 @@ class Complex(_Complex, Base):
         """
         | Represents if this complex is boxed/bordered in Nanome.
 
-        :type: boolean
+        :type: :class:`bool`
         """
         return self._boxed
     @boxed.setter
@@ -102,9 +102,9 @@ class Complex(_Complex, Base):
     @property
     def locked(self):
         """
-        | Represents if this complex is locked and unchangeable in Nanome.
+        | Represents if this complex is locked and unmovable in Nanome.
 
-        :type: boolean
+        :type: :class:`bool`
         """
         return self._locked
     @locked.setter
@@ -118,7 +118,7 @@ class Complex(_Complex, Base):
         """
         | Represents if this complex is visible in Nanome.
 
-        :type: boolean
+        :type: :class:`bool`
         """
         return self._visible
     @visible.setter
@@ -137,7 +137,7 @@ class Complex(_Complex, Base):
         """
         | Represents the current animation frame the complex is in.
 
-        :type: int
+        :type: :class:`int`
         """
         return self._current_frame
 
@@ -167,7 +167,7 @@ class Complex(_Complex, Base):
         """
         | Represents the label on the box surrounding the complex
 
-        :type: String
+        :type: :class:`str`
         """
         return self._box_label
     @box_label.setter
@@ -179,7 +179,7 @@ class Complex(_Complex, Base):
         """
         | Represents the name of the complex
 
-        :type: String
+        :type: :class:`str`
         """
         return self._name
     @name.setter
@@ -207,7 +207,7 @@ class Complex(_Complex, Base):
         """
         | Represents the full name of the complex with its tags and name
 
-        :type: String
+        :type: :class:`str`
         """
         fullname = self._name
         has_tag = False

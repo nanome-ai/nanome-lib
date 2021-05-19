@@ -14,9 +14,11 @@ class LoadingBar(_LoadingBar, UIBase):
     def percentage(self):
         """
         | The load percentage to indicate
+
+        :type: :class:`float`
         """
         return self._percentage
-    
+
     @percentage.setter
     def percentage(self, value):
         self._percentage = value
@@ -26,9 +28,11 @@ class LoadingBar(_LoadingBar, UIBase):
         """
         | The title of the loading bar.
         | Appears over the loading bar
+
+        :type: :class:`str`
         """
         return self._title
-    
+
     @title.setter
     def title(self, value):
         if type(value) is not str:
@@ -40,9 +44,11 @@ class LoadingBar(_LoadingBar, UIBase):
         """
         | A description of what is being loaded.
         | Appears under the loading bar title
+
+        :type: :class:`str`
         """
         return self._description
-    
+
     @description.setter
     def description(self, value):
         if type(value) is not str:
@@ -54,9 +60,11 @@ class LoadingBar(_LoadingBar, UIBase):
         """
         | Whether or not loading has failed
         | Setting this to true and updating the UI will make the loading bar appear red in Nanome
+
+        :type: :class:`bool`
         """
         return self._failure
-    
+
     @failure.setter
     def failure(self, value):
         self._failure = value

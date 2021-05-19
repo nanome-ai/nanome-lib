@@ -18,7 +18,7 @@ class Workspace(_Workspace):
         """
         | The list of complexes within the workspace
 
-        :type: list of :class:`~nanome.api.structure.atom.Atom`
+        :type: list of :class:`~nanome.structure.Complex`
         """
         return self._complexes
     @complexes.setter
@@ -30,7 +30,7 @@ class Workspace(_Workspace):
         | Add complex to the workspace
 
         :param complex: Complex to add to the workspace
-        :type complex: :class:`nanome.api.structure.complex`
+        :type complex: :class:`~nanome.structure.Complex`
         """
         complex.index = -1
         self._add_complex(complex)
@@ -40,7 +40,7 @@ class Workspace(_Workspace):
         | Remove complex from the workspace
 
         :param complex: Complex to remove from the workspace
-        :type complex: :class:`nanome.api.structure.complex`
+        :type complex: :class:`~nanome.structure.Complex`
         """
         complex.index = -1
         self._remove_complex(complex)

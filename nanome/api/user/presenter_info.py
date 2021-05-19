@@ -10,9 +10,9 @@ class PresenterInfo():
     @property
     def account_id(self):
         """
-        Get the nanome account ID of the presenter
+        | The Nanome account ID of the presenter
 
-        :type: string
+        :type: :class:`str`
         """
         return self._account_id
     @account_id.setter
@@ -22,9 +22,9 @@ class PresenterInfo():
     @property
     def account_name(self):
         """
-        Get the nanome account name of the presenter
-        
-        :type: string
+        | The Nanome account name of the presenter
+
+        :type: :class:`str`
         """
         return self._account_name
     @account_name.setter
@@ -34,9 +34,9 @@ class PresenterInfo():
     @property
     def account_email(self):
         """
-        Get the nanome account email of the presenter
-        
-        :type: string
+        | The Nanome account email of the presenter
+
+        :type: :class:`str`
         """
         return self._account_email
     @account_email.setter

@@ -11,7 +11,6 @@ class Button(_Button, UIBase):
     VertAlignOptions = nanome.util.enums.VertAlignOptions
 
     def __init__(self, text = None, icon = None):
-        # type: (str, str)
         _Button.__init__(self)
         UIBase.__init__(self)
         self.text = self._text
@@ -31,7 +30,6 @@ class Button(_Button, UIBase):
 
         :param func: called when a button is pressed
         :type func: method (:class:`~nanome.ui.Button`) -> None
-        
         """
         _Button._register_pressed_callback(self, func)
 
@@ -41,7 +39,6 @@ class Button(_Button, UIBase):
 
         :param func: called when a button is hovered over
         :type func: method (:class:`~nanome.ui.Button`) -> None
-        
         """
         _Button._register_hover_callback(self, func)
 
@@ -51,7 +48,6 @@ class Button(_Button, UIBase):
         | The name of the button
 
         :type: :class:`str`
-        
         """
         return self._name
     @name.setter
@@ -65,13 +61,10 @@ class Button(_Button, UIBase):
         | Corresponds to a potentially visually distinct UI state
 
         :type: :class:`bool`
-        
         """
-        # type: () -> bool
         return self._selected
     @selected.setter
     def selected(self, value):
-        # type: (bool)
         self._selected = value
 
     @property
@@ -81,13 +74,10 @@ class Button(_Button, UIBase):
         | Corresponds to a potentially visually distinct UI state
 
         :type: :class:`bool`
-        
         """
-        # type: () -> bool
         return self._unusable
     @unusable.setter
     def unusable(self, value):
-        # type: (bool)
         self._unusable = value
 
     @property
@@ -96,7 +86,6 @@ class Button(_Button, UIBase):
         | Whether or not to disable the button after it has been pressed once.
 
         :type: :class:`bool`
-        
         """
         return self._disable_on_press
 
@@ -110,7 +99,6 @@ class Button(_Button, UIBase):
         | Whether or not to toggle the selected state of the button when it is pressed.
 
         :type: :class:`bool`
-        
         """
         return self._toggle_on_press
 
@@ -125,10 +113,9 @@ class Button(_Button, UIBase):
             | The text displayed by button state
 
             :type: :class:`~nanome.ui.Button.MultiStateVariable`
-            
             """
             return self._value
-        
+
         @value.setter
         def value(self, value):
             raise ValueError("Cannot set multi-variable value directly. Specify the state or use set_all")
@@ -139,10 +126,9 @@ class Button(_Button, UIBase):
             | Whether or not the text is bold by button state
 
             :type: :class:`~nanome.ui.Button.MultiStateVariable`
-            
             """
             return self._bold
-        
+
         @bold.setter
         def bold(self, value):
             raise ValueError("Cannot set multi-variable value directly. Specify the state or use set_all")
@@ -153,10 +139,9 @@ class Button(_Button, UIBase):
             | The color of the text by button state
 
             :type: :class:`~nanome.ui.Button.MultiStateVariable`
-            
             """
             return self._color
-        
+
         @color.setter
         def color(self, value):
             raise ValueError("Cannot set multi-variable value directly. Specify the state or use set_all")
@@ -167,13 +152,10 @@ class Button(_Button, UIBase):
             | Whether or not the button text is visible
 
             :type: :class:`bool`
-            
             """
-            # type: () -> bool
             return self._active
         @active.setter
         def active(self, value):
-            # type: (bool)
             self._active = value
 
         @property
@@ -183,13 +165,10 @@ class Button(_Button, UIBase):
             | based on the size of the button
 
             :type: :class:`bool`
-            
             """
-            # type: () -> bool
             return self._auto_size
         @auto_size.setter
         def auto_size(self, value):
-            # type: (bool)
             self._auto_size = value
 
         @property
@@ -199,13 +178,10 @@ class Button(_Button, UIBase):
             | This is the lower bound for auto sizing.
 
             :type: :class:`float`
-            
             """
-            # type: () -> float
             return self._min_size
         @min_size.setter
         def min_size(self, value):
-            # type: (float)
             self._min_size = value
 
         @property
@@ -215,13 +191,10 @@ class Button(_Button, UIBase):
             | This is the upper bound for auto sizing.
 
             :type: :class:`float`
-            
             """
-            # type: () -> float
             return self._max_size
         @max_size.setter
         def max_size(self, value):
-            # type: (float)
             self._max_size = value
 
         @property
@@ -230,13 +203,10 @@ class Button(_Button, UIBase):
             | The font size of the text displayed
 
             :type: :class:`float`
-
             """
-            # type: () -> float
             return self._size
         @size.setter
         def size(self, value):
-            # type: (float)
             self._size = value
 
         @property
@@ -245,13 +215,10 @@ class Button(_Button, UIBase):
             | Whether or not the button text is underlined.
 
             :type: :class:`bool`
-            
             """
-            # type: () -> bool
             return self._underlined
         @underlined.setter
         def underlined(self, value):
-            # type: (bool)
             self._underlined = value
 
         @property
@@ -260,13 +227,10 @@ class Button(_Button, UIBase):
             | Whether or not to use an ellipsis if there is too much text to display
 
             :type: :class:`bool`
-            
             """
-            # type: () -> bool
             return self._ellipsis
         @ellipsis.setter
         def ellipsis(self, value):
-            # type: (bool)
             self._ellipsis = value
 
         @property
@@ -275,7 +239,6 @@ class Button(_Button, UIBase):
             | The padding above the text
 
             :type: :class:`float`
-            
             """
             return self._padding_top
         @padding_top.setter
@@ -288,7 +251,6 @@ class Button(_Button, UIBase):
             | The padding below the text
 
             :type: :class:`float`
-            
             """
             return self._padding_bottom
         @padding_bottom.setter
@@ -301,7 +263,6 @@ class Button(_Button, UIBase):
             | The padding to the left of the text
 
             :type: :class:`float`
-            
             """
             return self._padding_left
         @padding_left.setter
@@ -314,7 +275,6 @@ class Button(_Button, UIBase):
             | The padding to the right of the text
 
             :type: :class:`float`
-            
             """
             return self._padding_right
         @padding_right.setter
@@ -327,7 +287,6 @@ class Button(_Button, UIBase):
             | The space between lines of text
 
             :type: :class:`float`
-            
             """
             return self._line_spacing
         @line_spacing.setter
@@ -340,13 +299,10 @@ class Button(_Button, UIBase):
             | The vertical alignment of the text
 
             :type: :class:`~nanome.util.enums.VertAlignOptions`
-            
             """
-            # type: () -> VertAlignOptions
             return self._vertical_align
         @vertical_align.setter
         def vertical_align(self, value):
-            # type: (VertAlignOptions)
             self._vertical_align = value
 
         @property
@@ -354,14 +310,11 @@ class Button(_Button, UIBase):
             """
             | The horizontal alignment of the text
 
-            :type: :class:`~nanome.util.enums.VertAlignOptions`
-            
+            :type: :class:`~nanome.util.enums.HorizAlignOptions`
             """
-            # type: () -> HorizAlignOptions
             return self._horizontal_align
         @horizontal_align.setter
         def horizontal_align(self, value):
-            # type: (HorizAlignOptions)
             self._horizontal_align = value
     _Button._ButtonText._create = ButtonText
 
@@ -372,7 +325,6 @@ class Button(_Button, UIBase):
             | The file paths to the icon image by button state.
 
             :type: :class:`~nanome.ui.Button.MultiStateVariable`
-            
             """
             return self._value
 
@@ -386,7 +338,6 @@ class Button(_Button, UIBase):
             | The color of the image by button state.
 
             :type: :class:`~nanome.ui.Button.MultiStateVariable`
-            
             """
             return self._color
 
@@ -400,7 +351,6 @@ class Button(_Button, UIBase):
             | Whether or not the icon is visible
 
             :type: :class:`bool`
-            
             """
             return self._active
         @active.setter
@@ -413,7 +363,6 @@ class Button(_Button, UIBase):
             | The sharpness of the icon image (between 0 and 1)
 
             :type: :class:`float`
-            
             """
             return self._sharpness
         @sharpness.setter
@@ -427,7 +376,6 @@ class Button(_Button, UIBase):
             | A size of 1 represents the full size.
 
             :type: :class:`float`
-            
             """
             return self._size
         @size.setter
@@ -441,7 +389,6 @@ class Button(_Button, UIBase):
             | A size of 0.5 represents equal width and height
 
             :type: :class:`float`
-            
             """
             return self._ratio
         @ratio.setter
@@ -456,7 +403,6 @@ class Button(_Button, UIBase):
             | whereas (0, 0, 0) represents the middle.
 
             :type: :class:`tuple` <:class:`float`, :class:`float`, :class:`float`>
-            
             """
             return self._position
         @position.setter
@@ -471,7 +417,6 @@ class Button(_Button, UIBase):
             | about each of the X, Y and Z axes, whereas (0, 0, 0) represents no rotation.
 
             :type: :class:`tuple` <:class:`float`, :class:`float`, :class:`float`>
-            
             """
             return self._rotation
         @rotation.setter
@@ -486,10 +431,9 @@ class Button(_Button, UIBase):
             | The color of the mesh by button state
 
             :type: :class:`~nanome.ui.Button.MultiStateVariable`
-            
             """
             return self._color
-        
+
         @color.setter
         def color(self, value):
             raise ValueError("Cannot set multi-variable value directly. Specify the state or use set_all")
@@ -500,10 +444,9 @@ class Button(_Button, UIBase):
             | Whether or not the mesh is visible by button state
 
             :type: :class:`~nanome.ui.Button.MultiStateVariable`
-            
             """
             return self._enabled
-        
+
         @enabled.setter
         def enabled(self, value):
             raise ValueError("Cannot set multi-variable value directly. Specify the state or use set_all")
@@ -514,13 +457,10 @@ class Button(_Button, UIBase):
             | Whether or not the mesh is visible
 
             :type: :class:`bool`
-            
             """
-            # type: () -> bool
             return self._active
         @active.setter
         def active(self, value):
-            # type: (bool)
             self._active = value
     _Button._ButtonMesh._create = ButtonMesh
 
@@ -531,10 +471,9 @@ class Button(_Button, UIBase):
             | The line thickness of the outline by button state
 
             :type: :class:`~nanome.ui.Button.MultiStateVariable`
-            
             """
             return self._size
-        
+
         @size.setter
         def size(self, value):
             raise ValueError("Cannot set multi-variable value directly. Specify the state or use set_all")
@@ -542,14 +481,13 @@ class Button(_Button, UIBase):
         @property
         def color(self):
             return self._color
-        
+
         @color.setter
         def color(self, value):
             """
             | The color of the outline by button state
 
             :type: :class:`~nanome.ui.Button.MultiStateVariable`
-            
             """
             raise ValueError("Cannot set multi-variable value directly. Specify the state or use set_all")
 
@@ -559,13 +497,10 @@ class Button(_Button, UIBase):
             | Whether or not the outline is visible
 
             :type: :class:`bool`
-            
             """
-            # type: () -> bool
             return self._active
         @active.setter
         def active(self, value):
-            # type: (bool)
             self._active = value
     _Button._ButtonOutline._create = ButtonOutline
 
@@ -576,13 +511,10 @@ class Button(_Button, UIBase):
             | Whether or not the button is visible
 
             :type: :class:`bool`
-            
             """
-            # type: () -> bool
             return self._active
         @active.setter
         def active(self, value):
-            # type: (bool)
             self._active = value
 
         @property
@@ -591,13 +523,10 @@ class Button(_Button, UIBase):
             | The color for the button when it is on
 
             :type: :class:`~nanome.ui.Color`
-            
             """
-            # type: () -> bool
             return self._on_color
         @on_color.setter
         def on_color(self, value):
-            # type: (bool)
             self._on_color = value
 
         @property
@@ -606,13 +535,10 @@ class Button(_Button, UIBase):
             | The color for the button when it is off
 
             :type: :class:`~nanome.ui.Color`
-            
             """
-            # type: () -> bool
             return self._off_color
         @off_color.setter
         def off_color(self, value):
-            # type: (bool)
             self._off_color = value
     _Button._ButtonSwitch._create = ButtonSwitch
 
@@ -623,7 +549,6 @@ class Button(_Button, UIBase):
             | The title of the tooltip
 
             :type: :class:`str`
-            
             """
             return self._title
         @title.setter
@@ -636,7 +561,6 @@ class Button(_Button, UIBase):
             | The main textual content of the tooltip
 
             :type: :class:`str`
-            
             """
             return self._content
         @content.setter
@@ -649,7 +573,6 @@ class Button(_Button, UIBase):
             | The bounds of the tooltip
 
             :type: :class:`tuple` <:class:`float`, :class:`float`, :class:`float`>
-            
             """
             return self._bounds
         @bounds.setter
@@ -663,7 +586,6 @@ class Button(_Button, UIBase):
             | Refers to the tooltip's button
 
             :type: :class:`~nanome.util.enums.ToolTipPositioning`
-            
             """
             return self._positioning_target
         @positioning_target.setter
@@ -677,7 +599,6 @@ class Button(_Button, UIBase):
             | Refers to the tooltip
 
             :type: :class:`~nanome.util.enums.ToolTipPositioning`
-            
             """
             return self._positioning_origin
         @positioning_origin.setter
@@ -707,10 +628,9 @@ class Button(_Button, UIBase):
             | Represents the idle state where the element is not being hovered and is not selected
 
             :type: Any
-            
             """
             return self._idle
-        
+
         @idle.setter
         def idle(self, value):
             self._idle = value
@@ -721,10 +641,9 @@ class Button(_Button, UIBase):
             | Represents the highlighted state where the element is being hovered
 
             :type: Any
-            
             """
             return self._highlighted
-        
+
         @highlighted.setter
         def highlighted(self, value):
             self._highlighted = value
@@ -735,10 +654,9 @@ class Button(_Button, UIBase):
             | Represents the highlighted state where the element has been selected
 
             :type: Any
-            
             """
             return self._selected
-        
+
         @selected.setter
         def selected(self, value):
             self._selected = value
@@ -749,10 +667,9 @@ class Button(_Button, UIBase):
             | Represents the selected, highlighted state where the element has been selected and is being hovered over
 
             :type: Any
-            
             """
             return self._selected_highlighted
-        
+
         @selected_highlighted.setter
         def selected_highlighted(self, value):
             self._selected_highlighted = value
@@ -763,10 +680,9 @@ class Button(_Button, UIBase):
             | Represents the unusable state where the element cannot be interacted with
 
             :type: Any
-            
             """
             return self._unusable
-        
+
         @unusable.setter
         def unusable(self, value):
             self._unusable = value

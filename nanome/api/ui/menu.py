@@ -9,14 +9,13 @@ class Menu(_Menu):
     def __init__(self, index = 0, title = "title"):
         _Menu.__init__(self, index, title)
         self.io = MenuIO(self)
-    
+
     def register_closed_callback(self, func):
         """
         | Registers a function to be called when the menu's close button is pressed.
 
         :param func: called the menu is closed
         :type func: method (:class:`~nanome.ui.Menu`) -> None
-
         """
         self._closed_callback = func
 
@@ -25,9 +24,11 @@ class Menu(_Menu):
     def enabled(self):
         """
         | Determines the visibility of the menu
+
+        :type: :class:`bool`
         """
         return self._enabled
-    
+
     @enabled.setter
     def enabled(self, value):
         self._enabled = value
@@ -38,10 +39,9 @@ class Menu(_Menu):
         | The title which appears at the top of the menu
 
         :type: :class:`str`
-
         """
         return self._title
-    
+
     @title.setter
     def title(self, value):
         if type(value) is not str:
@@ -54,10 +54,9 @@ class Menu(_Menu):
         | Whether or not the menu is locked in place
 
         :type: :class:`bool`
-
         """
         return self._locked
-    
+
     @locked.setter
     def locked(self, value):
         self._locked = value
@@ -68,10 +67,9 @@ class Menu(_Menu):
         | The hierarchical root LayoutNode of the menu
 
         :type: :class:`~nanome.ui.LayoutNode`
-
         """
         return self._root
-    
+
     @root.setter
     def root(self, value):
         self._root = value
@@ -82,24 +80,22 @@ class Menu(_Menu):
         | The width of the menu
 
         :type: :class:`float`
-
         """
         return self._width
-    
+
     @width.setter
     def width(self, value):
         self._width = value
-        
+
     @property
     def height(self):
         """
         | The height of the menu
 
         :type: :class:`float`
-
         """
         return self._height
-    
+
     @height.setter
     def height(self, value):
         self._height = value
@@ -112,10 +108,9 @@ class Menu(_Menu):
         | Menus with the same index will replace one another when updated.
 
         :type: :class:`int`
-
         """
         return self._index
-    
+
     @index.setter
     def index(self, value):
         self._index = value
@@ -127,7 +122,8 @@ class Menu(_Menu):
 
         :param content_id: the ID of the content to find
         :type content_id: :class:`int`
-
+        :return: The UI content on this menu matching the ID
+        :rtype: :class:`~nanome.ui.UIBase`
         """
         return self._find_content(content_id)
 
@@ -137,7 +133,6 @@ class Menu(_Menu):
 
         :return: A list of all UI content on this menu
         :rtype: :class:`list` <:class:`~nanome.ui.UIBase`>
-
         """
         return self._get_all_content()
 
@@ -147,7 +142,6 @@ class Menu(_Menu):
 
         :return: A list of all LayoutNodes on this menu
         :rtype: :class:`list` <:class:`~nanome.ui.LayoutNode`>
-
         """
         return self._get_all_nodes()
 

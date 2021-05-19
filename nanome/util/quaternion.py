@@ -10,7 +10,7 @@ class Quaternion(object):
         self._y = float(y)
         self._z = float(z)
         self._w = float(w)
-    
+
     def __str__(self):
         s = ' '.join([str(self._x), str(self._y), str(self._z), str(self._w)])
         return s
@@ -24,7 +24,7 @@ class Quaternion(object):
     def get_copy(self):
         """
         :return: A copy of this Quaternion.
-        :rtype: :class:`~nanome.util.quaternion`
+        :rtype: :class:`~nanome.util.Quaternion`
         """
         return Quaternion(self.x,self.y,self.z,self.w)
 
@@ -32,7 +32,7 @@ class Quaternion(object):
     def x(self):
         """
         :return: This quaternion's x component.
-        :rtype: float
+        :rtype: :class:`float`
         """
         return self._x
 
@@ -61,29 +61,32 @@ class Quaternion(object):
         return self._w
 
     def _inverse_handedness(self):
-        """Inverts the handedness of this Quaternion.
-        
+        """
+        | Inverts the handedness of this Quaternion.
+
         :return: This Quaternion.
-        :rtype: :class:`~nanome.util.quaternion`
+        :rtype: :class:`~nanome.util.Quaternion`
         """
         self._y *= -1.0
         self._z *= -1.0
         return self
 
     def get_conjugate(self):
-        """Returns the conjugate of this Quaternion.
-        
+        """
+        | Returns the conjugate of this Quaternion.
+
         :return: A new Quaternion that is the conjugate of this Quaternion.
-        :rtype: :class:`~nanome.util.quaternion`
+        :rtype: :class:`~nanome.util.Quaternion`
         """
         return Quaternion(-self.x, -self.y, -self.z, self.w)
 
     @classmethod
     def _get_inversed_handedness(cls, value):
-        """Returns an inverse-handed version of this Quaternion.
-        
+        """
+        | Returns an inverse-handed version of this Quaternion.
+
         :return: A new Quaternion with inverse handedness to this Quaternion.
-        :rtype: :class:`~nanome.util.quaternion`
+        :rtype: :class:`~nanome.util.Quaternion`
         """
         return Quaternion(value.x, -value.y, -value.z, value.w)
 
@@ -96,15 +99,18 @@ class Quaternion(object):
             y = r.w * q.y + r.x * q.z + r.y * q.w - r.z * q.x
             z = r.w * q.z - r.x * q.y + r.y * q.x + r.z * q.w
             return Quaternion(x,y,z,w)
-        elif (isinstance(other, float) or isinstance(other, int)):
+        elif isinstance(other, float) or isinstance(other, int):
             n = other
             return Quaternion(q.x * n, q.y * n, q.z * n, q.w * n)
         else:
             raise NotImplementedError
 
     def dot(self, other):
-        """Returns the dot between this and another Quaternion
-        
+        """
+        | Returns the dot between this and another Quaternion
+
+        :param other: Quaternion to dot product with
+        :type other: :class:`~nanome.util.Quaternion`
         :return: A float value representing the dot product.
         :rtype: :class:`float`
         """
@@ -115,8 +121,11 @@ class Quaternion(object):
         return abs(self.dot(other)) > 1-Quaternion.EPS
 
     def rotate_vector(self, point):
-        """Rotates a vector using this Quaternion.
-        
+        """
+        | Rotates a vector using this Quaternion.
+
+        :param point: The vector to rotate
+        :type point: :class:`~nanome.util.Vector3`
         :return: A rotated vector.
         :rtype: :class:`~nanome.util.vector3`
         """
@@ -133,24 +142,26 @@ class Quaternion(object):
     @classmethod
     def from_matrix(cls, matrix):
         """Creates a Quaternion from a 4x4 affine transformation matrix.
-        
+
+        :param matrix: A 4x4 affine transformation matrix
+        :type matrix: :class:`list` <:class:`list` <:class:`float`>>
         :return: A Quaternion representing a rotation.
-        :rtype: :class:`~nanome.util.quaternion`
+        :rtype: :class:`~nanome.util.Quaternion`
         """
         m = matrix
-        if (m[2][2] < 0):
-            if (m[0][0] > m[1][1]):
+        if m[2][2] < 0:
+            if m[0][0] > m[1][1]:
                 t = 1 + m[0][0] - m[1][1] - m[2][2]
-                q = cls( t, m[1][0]+m[0][1], m[0][2]+m[2][0], m[2][1]-m[1][2] )
+                q = cls(t, m[1][0] + m[0][1], m[0][2] + m[2][0], m[2][1] - m[1][2])
             else:
                 t = 1 - m[0][0] + m[1][1] - m[2][2]
-                q = cls( m[1][0]+m[0][1], t, m[2][1]+m[1][2], m[0][2]-m[2][0] )
+                q = cls(m[1][0] + m[0][1], t, m[2][1] + m[1][2], m[0][2] - m[2][0])
         else:
-            if (m[0][0] < -m[1][1]):
+            if m[0][0] < -m[1][1]:
                 t = 1 - m[0][0] - m[1][1] + m[2][2]
-                q = cls( m[0][2]+m[2][0], m[2][1]+m[1][2], t, m[1][0]-m[0][1] )
+                q = cls(m[0][2] + m[2][0], m[2][1] + m[1][2], t, m[1][0] - m[0][1])
             else:
                 t = 1 + m[0][0] + m[1][1] + m[2][2]
-                q = cls( m[2][1]-m[1][2], m[0][2]-m[2][0], m[1][0]-m[0][1], t )
+                q = cls(m[2][1] - m[1][2], m[0][2] - m[2][0], m[1][0] - m[0][1], t)
         q *= 0.5 / math.sqrt(t)
         return q

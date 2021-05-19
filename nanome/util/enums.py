@@ -11,7 +11,7 @@ import sys
 
 class AtomRenderingMode(IntEnum):
     """
-    | Enumerates shape types an atom can be rendered as.
+    | Shape types an atom can be rendered as.
     | To be used with atom.atom_mode
     """
     BallStick = 0
@@ -24,7 +24,7 @@ class AtomRenderingMode(IntEnum):
 
 class Kind(IntEnum):
     """
-    | Enumerates bond types.
+    | Bond types.
     | To be used with bond.kind and elements of bond.kinds
     """
     Unknown = 0
@@ -35,7 +35,7 @@ class Kind(IntEnum):
 
 class RibbonMode(IntEnum):
     """
-    | Enumerates ribbon display modes.
+    | Ribbon display modes.
     | To be used with structure.Residue().ribbon_mode
     """
     SecondaryStructure = 0
@@ -44,7 +44,7 @@ class RibbonMode(IntEnum):
 
 class SecondaryStructure(IntEnum):
     """
-    | Enumerates secondary structure types.
+    | Secondary structure types.
     | To be used with structure.Residue().secondary_structure
     """
     Unknown = 0
@@ -54,7 +54,7 @@ class SecondaryStructure(IntEnum):
 
 class PaddingTypes(IntEnum):
     """
-    | Enumerates UI padding types.
+    | UI padding types.
     | To be used with ui.LayoutNode().padding_type
     """
     fixed = 0
@@ -62,7 +62,7 @@ class PaddingTypes(IntEnum):
 
 class PluginListButtonType(IntEnum):
     """
-    | Enumerates buttons on the plugin list, modifiable by the plugin itself.
+    | Buttons on the plugin list, modifiable by the plugin itself.
     | To be used with plugin_instance.set_plugin_list_button
     """
     run = 0
@@ -70,7 +70,7 @@ class PluginListButtonType(IntEnum):
 
 class SizingTypes(IntEnum):
     """
-    | Enumerates ways in which a Layout Node can be sized within a UI layout.
+    | Ways in which a Layout Node can be sized within a UI layout.
     | To be used with ui.LayoutNode().sizing_type
     """
     expand = 0
@@ -79,7 +79,7 @@ class SizingTypes(IntEnum):
 
 class LayoutTypes(IntEnum):
     """
-    | Enumerates orientation modes for Layout Nodes.
+    | Orientation modes for Layout Nodes.
     | To be used with ui.LayoutNode().layout_orientation
     """
     vertical = 0
@@ -87,7 +87,7 @@ class LayoutTypes(IntEnum):
 
 class ScalingOptions(IntEnum):
     """
-    | Enumerates ways for an image to scale.
+    | Ways for an image to scale.
     | To be used with ui.Image().scaling_option
     """
     stretch = 0
@@ -96,7 +96,7 @@ class ScalingOptions(IntEnum):
 
 class NotificationTypes(IntEnum):
     """
-    | Enumerates types of user notifications.
+    | Types of user notifications.
     | Each value exists as a method on nanome.util.Logs
     """
     message = 0
@@ -106,7 +106,7 @@ class NotificationTypes(IntEnum):
 
 class HorizAlignOptions(IntEnum):
     """
-    | Enumerates horizontal alignment modes for text.
+    | Horizontal alignment modes for text.
     | To be used with ui.Label().text_horizontal_align and ui.Button().horizontal_align
     """
     Left = 0
@@ -115,7 +115,7 @@ class HorizAlignOptions(IntEnum):
 
 class VertAlignOptions(IntEnum):
     """
-    | Enumerates vertical alignment modes for text.
+    | Vertical alignment modes for text.
     | To be used with ui.Label().text_vertical_align and ui.Button().vertical_align
     """
     Top = 0
@@ -124,7 +124,7 @@ class VertAlignOptions(IntEnum):
 
 class ToolTipPositioning(IntEnum):
     """
-    | Enumerates ways in which a tooltip can appear on top of its Layout Node.
+    | Ways in which a tooltip can appear on top of its Layout Node.
     | To be used with ui.Button().tooltip.positioning_target
     """
     top_right = 0
@@ -139,7 +139,7 @@ class ToolTipPositioning(IntEnum):
 
 class StreamType(IntEnum):
     """
-    | Enumerates object attributes and sets of attributes that can be streamed to Nanome.
+    | Object attributes and sets of attributes that can be streamed to Nanome.
     | To be used with plugin_instance.create_writing_stream and plugin_instance.create_reading_stream
     """
     position = 0
@@ -153,7 +153,7 @@ class StreamType(IntEnum):
 
 class StreamDataType(IntEnum):
     """
-    | Enumerates stream datatypes.
+    | Stream datatypes.
     | Used internally
     """
     float = 0
@@ -162,7 +162,7 @@ class StreamDataType(IntEnum):
 
 class StreamDirection(IntEnum):
     """
-    | Enumerates stream directions (reading and writing).
+    | Stream directions (reading and writing).
     | Used internally
     """
     writing = 0
@@ -170,7 +170,7 @@ class StreamDirection(IntEnum):
 
 class LoadFileErrorCode(IntEnum):
     """
-    | An enumeration for errors when loading files into Nanome.
+    | Errors when loading files into Nanome.
     | Accessible via the first parameter of the 'done' callback for plugin_instance.send_files_to_load
     """
     no_error = 0
@@ -178,7 +178,7 @@ class LoadFileErrorCode(IntEnum):
 
 class VolumeType(IntEnum):
     """
-    | Enumerates volume types visible within a complex.
+    | Volume types visible within a complex.
     | To be used with _internal._volumetric._VolumeData()._type
     """
     default = 0
@@ -189,7 +189,7 @@ class VolumeType(IntEnum):
 
 class VolumeVisualStyle(IntEnum):
     """
-    | Enumerates ways that a complex's volume can be displayed.
+    | Ways that a complex's volume can be displayed.
     | To be used with _internal._volumetric._VolumeProperties()._style
     """
     Mesh = 0
@@ -198,7 +198,7 @@ class VolumeVisualStyle(IntEnum):
 
 class ExportFormats(IntEnum):
     """
-    | Enumerates file export formats.
+    | File export formats.
     | To be used with plugin_instance.request_export
     """
     Nanome = 0
@@ -209,7 +209,7 @@ class ExportFormats(IntEnum):
 
 class ShapeType(IntEnum):
     """
-    | Enumerates types of shapes that can be created within Nanome.
+    | Types of shapes that can be created within Nanome.
     | Used internally
     """
     Sphere = 0
@@ -218,7 +218,7 @@ class ShapeType(IntEnum):
 
 class ShapeAnchorType(IntEnum):
     """
-    | An enumeration to represent which object type to anchor to.
+    | Object type to anchor a Shape to.
     | To be used with shapes.Shape().anchors
     """
     Workspace = 0
@@ -227,7 +227,7 @@ class ShapeAnchorType(IntEnum):
 
 class ColorScheme(IntEnum):
     """
-    | Enumerates color schemes for all structure representations.
+    | Color schemes for all structure representations.
     | To be used with plugin_instance.apply_color_scheme
     """
     #None = 0 this one is on nanome but does nothing
@@ -248,7 +248,7 @@ class ColorScheme(IntEnum):
 
 class ColorSchemeTarget(IntEnum):
     """
-    | Enumerates structure representations.
+    | Structure representations.
     | To be used with plugin_instance.apply_color_scheme
     """
     AtomBond = 0
@@ -258,7 +258,7 @@ class ColorSchemeTarget(IntEnum):
 
 class SkyBoxes(IntEnum):
     """
-    | Enumerates preset skyboxes to show in a Nanome room
+    | Preset skyboxes to show in a Nanome room
     | To be used with plugin_instance.room.set_skybox
     """
     Unknown = -1

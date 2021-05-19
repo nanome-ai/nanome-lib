@@ -15,17 +15,17 @@ def _setup_file():
     s = "/"
 
     home = os.getenv('APPDATA')
-    if (home == None):
+    if home == None:
         home = os.getenv('HOME')
     directory = home + s + ".nanome_lib"
     config = directory + s + "config.txt"
 
-    if (not os.path.isdir(directory)):
+    if not os.path.isdir(directory):
         try:
             os.mkdir(directory)
         except:
             return False
-    if (not os.path.isfile(config)):
+    if not os.path.isfile(config):
         try:
             Logs.message("Creating config file with path " + config)
             _setup_clean_config(config)
@@ -43,13 +43,13 @@ def fetch(key):
     | Built-in keys are:
     |  host - your NTS server address
     |  port - your NTS server port
-    |  key_file - your NTS license file, and
+    |  key - your NTS key file or string
     |  plugin_files_path - where your plugins will store files
 
-    :param key: The key to fetch the config value for
-    :type key: str
+    :param key: The key of the config value to fetch
+    :type key: :class:`str`
     """
-    if (config_path):
+    if config_path:
         try:
             with open(config_path, "r") as file:
                 config_json = json.load(file)
@@ -64,15 +64,15 @@ def fetch(key):
 def set(key, value):
     """
     | Set a configuration entry in your nanome configuration.
-    | Built-in keys are host, port, key_file and plugin_files_path.
-    | Built-in values are 127.0.0.1, 8888, nts_key and ~/Documents/nanome-plugins
+    | Built-in keys are host, port, key and plugin_files_path.
+    | Default values are 127.0.0.1, 8888, nts_key and ~/Documents/nanome-plugins
 
-    :param key: The key to set the configuration value for
-    :param value: The value to set the configuration to
-    :type key: str
-    :type value: str
+    :param key: The key of the config value to set
+    :type key: :class:`str`
+    :param value: The value to set the config item to
+    :type value: :class:`str`
     """
-    if (config_path):
+    if config_path:
         with open(config_path, "r") as file:
             config_json = json.load(file)
             config_json[key] = value

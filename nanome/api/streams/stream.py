@@ -4,7 +4,7 @@ import nanome
 class Stream(object):
     """
     | Class allowing a update or read properties of a lot of structures
-    | Created by calling :func:`~nanome.api.plugin_instance.PluginInstance.create_writing_stream` or :func:`~nanome.api.plugin_instance.PluginInstance.create_reading_stream`
+    | Created by calling :func:`~nanome.PluginInstance.create_writing_stream` or :func:`~nanome.PluginInstance.create_reading_stream`
 
     | When created, a stream is linked to a number of structures. Each call to :func:`~update` will update all these structures
     """

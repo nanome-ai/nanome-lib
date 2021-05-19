@@ -4,7 +4,7 @@ from nanome.util import Vector3, Color, Logs
 from . import Base
 
 class Atom(_Atom, Base):
-    """    
+    """
     | Represents an Atom
     """
     AtomRenderingMode = nanome.util.enums.AtomRenderingMode
@@ -57,7 +57,7 @@ class Atom(_Atom, Base):
         """
         | Set the atom to be visible or invisible in Nanome.
 
-        :type: boolean
+        :type: :class:`bool`
         """
         self._atom_rendering = value
         self._hydrogened = value
@@ -69,13 +69,13 @@ class Atom(_Atom, Base):
         """
         | Represents if the atom is currently selected in the Nanome workspace.
 
-        :type: boolean
+        :type: :class:`bool`
         """
         return self._selected
     @selected.setter
     def selected(self, value):
         self._selected = value
-    
+
     @property
     def atom_mode(self):
         """
@@ -87,25 +87,25 @@ class Atom(_Atom, Base):
     @atom_mode.setter
     def atom_mode(self, value):
         self._atom_mode = value
-    
+
     @property
     def labeled(self):
         """
         | Represents if the atom has a label or not. If it does, show the label.
 
-        :type: boolean
+        :type: :class:`bool`
         """
         return self._labeled
     @labeled.setter
     def labeled(self, value):
         self._labeled = value
-    
+
     @property
     def label_text(self):
         """
         | Represents the text that would show up if atom is labeled.
 
-        :type: String
+        :type: :class:`str`
         """
         return self._label_text
     @label_text.setter
@@ -119,18 +119,18 @@ class Atom(_Atom, Base):
         """
         | Represents if the atom should be rendered specifically.
 
-        :type: boolean
+        :type: :class:`bool`
         """
         return self._atom_rendering
     @atom_rendering.setter
     def atom_rendering(self, value):
         self._atom_rendering = value
-    
+
     @property
     def atom_color(self):
         """
         | Color of the atom
-        
+
         :type: :class:`~nanome.util.Color`
         """
         return self._atom_color
@@ -143,43 +143,43 @@ class Atom(_Atom, Base):
         """
         | Scale/size/radius of the atom
 
-        :type: float
+        :type: :class:`float`
         """
         return self._atom_scale
     @atom_scale.setter
     def atom_scale(self, value):
         self._atom_scale = value
-    
+
     @property
     def surface_rendering(self):
         """
         | Represents if the atom surface should be rendered specifically.
 
-        :type: boolean
+        :type: :class:`bool`
         """
         return self._surface_rendering
     @surface_rendering.setter
     def surface_rendering(self, value):
         self._surface_rendering = value
-    
+
     @property
     def surface_color(self):
         """
         | Color of the atom surface
-        
+
         :type: :class:`~nanome.util.Color`
         """
         return self._surface_color
     @surface_color.setter
     def surface_color(self, value):
         self._surface_color = value
-    
+
     @property
     def surface_opacity(self):
         """
         | Opacity of the atom surface
-        
-        :type: float
+
+        :type: :class:`float`
         """
         return self._surface_opacity
     @surface_opacity.setter
@@ -191,7 +191,7 @@ class Atom(_Atom, Base):
         """
         | Represents the symbol of the atom. E.g.: C for Carbon
 
-        :type: String
+        :type: :class:`str`
         """
         return self._symbol
     @symbol.setter
@@ -212,7 +212,7 @@ class Atom(_Atom, Base):
         """
         | Represents the name of the atom. Ideally, the same as symbol.
 
-        :type: String
+        :type: :class:`str`
         """
         return self._name
     @name.setter
@@ -238,7 +238,7 @@ class Atom(_Atom, Base):
         """
         | Represents if atom exists for calculations.
 
-        :type: boolean
+        :type: :class:`bool`
         """
         return self._exists
     @exists.setter
@@ -250,7 +250,7 @@ class Atom(_Atom, Base):
         """
         | Represents if the atom is a HET (Heteroatom - not C or H).
 
-        :type: boolean
+        :type: :class:`bool`
         """
         return self._is_het
     @is_het.setter
@@ -312,7 +312,7 @@ class Atom(_Atom, Base):
     @property
     def positions(self):
         return self._positions
-    
+
     @positions.setter
     def positions(self, value):
         if self.molecule != None:
@@ -323,7 +323,7 @@ class Atom(_Atom, Base):
     @property
     def in_conformer(self):
         return self._in_conformer
-    
+
     @in_conformer.setter
     def in_conformer(self, value):
         if self.molecule != None:
@@ -360,21 +360,21 @@ class Atom(_Atom, Base):
         @selected.setter
         def selected(self, value):
             self._parent.selected = value
-        
+
         @property
         def atom_mode(self):
             return self._parent.atom_mode
         @atom_mode.setter
         def atom_mode(self, value):
             self._parent.atom_mode = value
-        
+
         @property
         def labeled(self):
             return self._parent.labeled
         @labeled.setter
         def labeled(self, value):
             self._parent.labeled = value
-        
+
         @property
         def label_text(self):
             return self._parent.label_text
@@ -388,28 +388,28 @@ class Atom(_Atom, Base):
         @atom_rendering.setter
         def atom_rendering(self, value):
             self._parent.atom_rendering = value
-        
+
         @property
         def atom_color(self):
             return self._parent.atom_color
         @atom_color.setter
         def atom_color(self, value):
             self._parent.atom_color = value
-        
+
         @property
         def surface_rendering(self):
             return self._parent.surface_rendering
         @surface_rendering.setter
         def surface_rendering(self, value):
             self._parent.surface_rendering = value
-        
+
         @property
         def surface_color(self):
             return self._parent.surface_color
         @surface_color.setter
         def surface_color(self, value):
             self._parent.surface_color = value
-        
+
         @property
         def surface_opacity(self):
             return self._parent.surface_opacity

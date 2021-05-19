@@ -125,7 +125,7 @@ class PluginInstance(_PluginInstance):
         | Replace the current workspace in the scene by the workspace in parameter
 
         :param workspace: New workspace
-        :type workspace: :class:`~nanome.api.structure.workspace.Workspace`
+        :type workspace: :class:`~nanome.structure.Workspace`
         """
         self._network._send(_Messages.workspace_update, workspace, False)
 
@@ -149,7 +149,7 @@ class PluginInstance(_PluginInstance):
         | Will also update descendent structures and can be used to remove descendent structures.
 
         :param structures: List of molecular structures to update.
-        :type structures: list of :class:`~nanome.api.structure.base.Base`
+        :type structures: list of :class:`~nanome.structure.Base`
 
         callback: Callable[[], None]
         """
@@ -163,7 +163,7 @@ class PluginInstance(_PluginInstance):
         | Only updates the structure's data, will not update children or other descendents.
 
         :param structures: List of molecular structures to update.
-        :type structures: list of :class:`~nanome.api.structure.base.Base`
+        :type structures: list of :class:`~nanome.structure.Base`
         """
         self._network._send(_Messages.structures_shallow_update, structures, False)
 
@@ -173,7 +173,7 @@ class PluginInstance(_PluginInstance):
         | center of the users view.
 
         :param structures: Molecular structure(s) to update.
-        :type structures: list of :class:`~nanome.api.structure.base.Base`
+        :type structures: list of :class:`~nanome.structure.Base`
         :kwarg callback: Callable[[], None]
         """
         expects_response = callback is not None or self.is_async
@@ -186,7 +186,7 @@ class PluginInstance(_PluginInstance):
         | center of the world.
 
         :param structures: Molecular structure(s) to update.
-        :type structures: list of :class:`~nanome.api.structure.base.Base`
+        :type structures: list of :class:`~nanome.structure.Base`
         :kwarg callback: Callable[[], None]
         """
         expects_response = callback is not None or self.is_async
@@ -198,7 +198,7 @@ class PluginInstance(_PluginInstance):
         | Add a list of complexes to the current workspace
 
         :param complex_list: List of Complexes to add
-        :type complex_list: list of :class:`~nanome.api.structure.complex.Complex`
+        :type complex_list: list of :class:`~nanome.structure.Complex`
         """
         expects_response = callback is not None or self.is_async
         id = self._network._send(_Messages.add_to_workspace, complex_list, expects_response)
@@ -209,7 +209,7 @@ class PluginInstance(_PluginInstance):
         | Update the menu in Nanome
 
         :param menu: Menu to update
-        :type menu: :class:`~nanome.api.ui.menu.Menu`
+        :type menu: :class:`~nanome.ui.Menu`
         """
         self._menus[menu.index] = menu
         self._network._send(_Messages.menu_update, menu, False)
@@ -219,9 +219,9 @@ class PluginInstance(_PluginInstance):
         | Update specific UI elements (button, slider, list...)
 
         :param content: UI elements to update
-        :type content: :class:`~nanome.api.ui.ui_base`
-            or multiple :class:`~nanome.api.ui.ui_base`
-            or a list of :class:`~nanome.api.ui.ui_base`
+        :type content: :class:`~nanome.ui.UIBase`
+            or multiple :class:`~nanome.ui.UIBase`
+            or a list of :class:`~nanome.ui.UIBase`
         """
         if len(content) == 1 and isinstance(content[0], list):
             content = content[0]
@@ -232,9 +232,9 @@ class PluginInstance(_PluginInstance):
         | Updates layout nodes and their children
 
         :param nodes: Layout nodes to update
-        :type nodes: :class:`~nanome.api.ui.layout_node`
-            or multiple :class:`~nanome.api.ui.layout_node`
-            or a list of :class:`~nanome.api.ui.layout_node`
+        :type nodes: :class:`~nanome.ui.LayoutNode`
+            or multiple :class:`~nanome.ui.LayoutNode`
+            or a list of :class:`~nanome.ui.LayoutNode`
         """
         if len(nodes) == 1 and isinstance(nodes[0], list):
             nodes = nodes[0]
@@ -288,7 +288,7 @@ class PluginInstance(_PluginInstance):
         :param indices_list: List of indices of all objects that should be in the stream
         :type indices_list: list of :class:`int`
         :param stream_type: Type of stream to create
-        :type stream_type: list of :class:`~nanome.api.stream.Stream.Type`
+        :type stream_type: list of :class:`~nanome.streams.Stream.Type`
 
         :param callback: Callable[[Stream, StreamCreationError], None]
         """
@@ -303,7 +303,7 @@ class PluginInstance(_PluginInstance):
         :param indices_list: List of indices of all objects that should be in the stream
         :type indices_list: list of :class:`int`
         :param stream_type: Type of stream to create
-        :type stream_type: list of :class:`~nanome.api.stream.Stream.Type`
+        :type stream_type: list of :class:`~nanome.streams.Stream.Type`
         :param callable: Callable[[Stream, StreamCreationError], None]
         """
         expects_response = callback is not None or self.is_async
@@ -316,7 +316,7 @@ class PluginInstance(_PluginInstance):
         | Requires openbabel to be installed
 
         :param complex_list: List of complexes to add bonds to
-        :type complex_list: list of :class:`~nanome.api.structure.complex.Complex`
+        :type complex_list: list of :class:`~nanome.structure.Complex`
         :param callback: Callable[[List[Complex]], None]
         """
         bonding = _Bonding(self, complex_list, callback, fast_mode)
@@ -327,7 +327,7 @@ class PluginInstance(_PluginInstance):
         | Use DSSP to calculate secondary structures
 
         :param complex_list: List of complexes to add ribbons to
-        :type complex_list: list of :class:`~nanome.api.structure.complex.Complex`
+        :type complex_list: list of :class:`~nanome.structure.Complex`
         :param callback: Callable[[List[Complex]], None]
         """
         dssp = _Dssp(self, complex_list, callback)
@@ -434,7 +434,7 @@ class PluginInstance(_PluginInstance):
         :param format: File format to export
         :type format: :class:`~nanome.util.enums.ExportFormats`
         :param entities: Entities to export (complexes to send, or indices if referencing complexes in workspace, or a workspace, or nothing if exporting Nanome workspace)
-        :type entities: list of or unique object of type :class:`~nanome.api.structure.workspace` or :class:`~nanome.api.structure.complex`, or None, or list of or unique :class:`int`
+        :type entities: list of or unique object of type :class:`~nanome.structure.Workspace` or :class:`~nanome.structure.Complex`, or None, or list of or unique :class:`int`
         :kwarg callback: Callable[[Union[str, bytes]], None]
         """
         if entities is not None and not isinstance(entities, list):

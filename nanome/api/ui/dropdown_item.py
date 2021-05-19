@@ -6,7 +6,6 @@ class DropdownItem(_DropdownItem):
     | Represents a dropdown item in a dropdown menu
     """
     def __init__(self, name = "item"):
-        # type: (_DropdownItem)
         _DropdownItem.__init__(self)
         self.name = name
 
@@ -18,13 +17,10 @@ class DropdownItem(_DropdownItem):
         | and in the collapsed Dropdown when the item is the selected item.
 
         :type: :class:`str`
-        
         """
-        # type: () -> str
         return self._name
     @name.setter
     def name(self, value):
-        # type: (str)
         self._name = value
 
     @property
@@ -34,13 +30,10 @@ class DropdownItem(_DropdownItem):
         | Setting this value to false can allows for multiple items to be selected.
 
         :type: :class:`bool`
-        
         """
-        # type: () -> bool
         return self._close_on_selected
     @close_on_selected.setter
     def close_on_selected(self, value):
-        # type: (bool)
         self._close_on_selected = value
 
     @property
@@ -51,13 +44,10 @@ class DropdownItem(_DropdownItem):
         | the item's text will appear on the Dropdown when it is collapsed
 
         :type: :class:`bool`
-        
         """
-        # type: () -> bool
         return self._selected
     @selected.setter
     def selected(self, value):
-        # type: (bool)
         self._selected = value
 
     def clone(self):
@@ -65,9 +55,7 @@ class DropdownItem(_DropdownItem):
         | Returns a deep copy this DropdownItem.
 
         :type: :class:`~nanome.ui.DropdownItem`
-        
         """
-        # type: (_DropdownItem)
         return self._clone()
 
 _DropdownItem._create = DropdownItem

@@ -3,7 +3,7 @@ from .enums import LoadFileErrorCode
 
 class FileError(IntEnum):
     """
-    | Enumerates file errors encounterable after performing a file operation on the Nanome host machine.
+    | File errors encounterable after performing a file operation on the Nanome host machine.
     | Accessible via the first parameter of the 'done' callback for all methods on plugin_instance.files
     """
     no_error = 0,

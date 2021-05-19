@@ -45,7 +45,7 @@ class Shape(_Shape):
         | Anchors of the shape
 
         :param value: Anchors of the shape
-        :type value: list of :class:`~nanome.api.shapes.Anchor`
+        :type value: list of :class:`~nanome.shapes.Anchor`
         """
         return self._anchors
     @anchors.setter

@@ -15,16 +15,16 @@ class Plugin(_Plugin):
     | Manages network, callbacks and APIs
 
     :param name: Name of the plugin to display
+    :type name: :class:`str`
     :param description: Description of the plugin to display
-    :param category: Category of the plugin
+    :type description: :class:`str`
+    :param tags: Tags of the plugin
+    :type tags: :class:`list` <:class:`str`>
     :param has_advanced: If true, plugin will display an "Advanced Settings" button
-    :type name: str
-    :type description: str
-    :type category: str
-    :type has_advanced: bool
+    :type has_advanced: :class:`bool`
     """
     @classmethod
-    def setup(cls, name, description, category, has_advanced, plugin_class, host = "config", port = "config", key = "config", permissions=[], integrations=[]):
+    def setup(cls, name, description, tags, has_advanced, plugin_class, host = "config", port = "config", key = "config", permissions=[], integrations=[]):
         if not _Plugin._is_process():
             plugin = cls(name, description, tags, has_advanced, permissions, integrations)
             plugin.set_plugin_class(plugin_class)
@@ -77,10 +77,10 @@ class Plugin(_Plugin):
     def set_plugin_class(self, plugin_class):
         """
         | Set plugin class to instantiate when a new session is connected
-        | The plugin class should interact with or override functions in :class:`~nanome.api.plugin_instance.PluginInstance` to interact with Nanome
+        | The plugin class should interact with or override functions in :class:`~nanome.PluginInstance` to interact with Nanome
 
         :param plugin_class: Plugin class to instantiate
-        :type plugin_class: :class:`~nanome.api.plugin_instance.PluginInstance`
+        :type plugin_class: :class:`~nanome.PluginInstance`
         """
         self._plugin_class = plugin_class
 

@@ -5,11 +5,7 @@ class Slider(_Slider, UIBase):
     """
     | Represents a slider that has a set range of values
     """
-    def __init__(self,  
-                 min_val     = None, 
-                 max_val     = None, 
-                 current_val = None):
-        # type: (str, float, float, float)
+    def __init__(self, min_val=None, max_val=None, current_val=None):
         _Slider.__init__(self)
         UIBase.__init__(self)
         if min_val != None:
@@ -24,14 +20,11 @@ class Slider(_Slider, UIBase):
         """
         | The current value of the slider
 
-        :type: float
-
+        :type: :class:`float`
         """
-        # type: () -> float
         return self._current_value
     @current_value.setter
     def current_value(self, value):
-        # type: (float)
         self._current_value = value
 
     @property
@@ -39,14 +32,11 @@ class Slider(_Slider, UIBase):
         """
         | The minimum (far left) value of the slider
 
-        :type: float
-
+        :type: :class:`float`
         """
-        # type: () -> float
         return self._min_value
     @min_value.setter
     def min_value(self, value):
-        # type: (float)
         self._min_value = value
 
     @property
@@ -54,14 +44,11 @@ class Slider(_Slider, UIBase):
         """
         | The minimum (far right) value of the slider
 
-        :type: float
-
+        :type: :class:`float`
         """
-        # type: () -> float
         return self._max_value
     @max_value.setter
     def max_value(self, value):
-        # type: (float)
         self._max_value = value
 
     def register_changed_callback(self, func):
@@ -70,17 +57,15 @@ class Slider(_Slider, UIBase):
 
         :param func: callback function to execute when slider changes values
         :type func: method (:class:`~nanome.ui.Slider`) -> None
-
         """
         self._changed_callback = func
-    
+
     def register_released_callback(self, func):
         """
         | Register a function to be called when the slider is released.
 
         :param func: callback function to execute when slider is released
         :type func: method (:class:`~nanome.ui.Slider`) -> None
-
         """
         self._released_callback = func
 

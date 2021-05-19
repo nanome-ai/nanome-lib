@@ -8,7 +8,7 @@ class Image(_Image, UIBase):
     | Represents an image in a menu
     """
     ScalingOptions = nanome.util.enums.ScalingOptions
-    
+
     def __init__(self, file_path = ""):
         _Image.__init__(self)
         UIBase.__init__(self)
@@ -20,7 +20,6 @@ class Image(_Image, UIBase):
         | The color of the image
 
         :type: :class:`~nanome.ui.Color`
-        
         """
         return self._color
     @color.setter
@@ -34,10 +33,9 @@ class Image(_Image, UIBase):
         | Setting this and calling update_content will change the image.
 
         :type: :class:`str`
-        
         """
         return self._file_path
-    
+
     @file_path.setter
     def file_path(self, value):
         self._file_path = value
@@ -48,10 +46,9 @@ class Image(_Image, UIBase):
         | Determines how the image scales.
 
         :type: :class:`~nanome.util.enums.ScalingOptions`
-        
         """
         return self._scaling_option
-    
+
     @scaling_option.setter
     def scaling_option(self, value):
         self._scaling_option = value
@@ -61,8 +58,7 @@ class Image(_Image, UIBase):
         | Registers a function to be called when the image is pressed
 
         :param func: called the image is pressed
-        :type func: method (:class:`~nanome.ui.Image`) -> None
-        
+        :type func: method (:class:`~nanome.ui.Image`, :class:`int`, :class:`int`) -> None
         """
         _Image._register_pressed_callback(self, func)
 
@@ -71,8 +67,7 @@ class Image(_Image, UIBase):
         | Registers a function to be called rapidly while the image is being pressed
 
         :param func: called while the image is being pressed
-        :type func: method (:class:`~nanome.ui.Image`) -> None
-        
+        :type func: method (:class:`~nanome.ui.Image`, :class:`int`, :class:`int`) -> None
         """
         _Image._register_held_callback(self, func)
 
@@ -81,8 +76,7 @@ class Image(_Image, UIBase):
         | Registers a function to be called when the image is released
 
         :param func: called the image is released
-        :type func: method (:class:`~nanome.ui.Image`) -> None
-        
+        :type func: method (:class:`~nanome.ui.Image`, :class:`int`, :class:`int`) -> None
         """
         _Image._register_released_callback(self, func)
 _Image._create = Image

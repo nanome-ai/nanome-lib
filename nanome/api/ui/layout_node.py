@@ -5,7 +5,7 @@ from .io import LayoutNodeIO
 
 class LayoutNode(_LayoutNode):
     """
-    | Class for hierarchical UI objects representing part of a Nanome menu. 
+    | Class for hierarchical UI objects representing part of a Nanome menu.
     | Layout nodes are used to create menus, by defining where one UI element should be placed relative to another.
     | One LayoutNode can contain one interactive UI element as well as any number of child Layout Nodes.
 
@@ -34,7 +34,7 @@ class LayoutNode(_LayoutNode):
         :type: :class:`bool`
         """
         return self._enabled
-    
+
     @enabled.setter
     def enabled(self, value):
         self._enabled = value
@@ -47,11 +47,11 @@ class LayoutNode(_LayoutNode):
         :type: :class:`str`
         """
         return self._name
-    
+
     @name.setter
     def name(self, value):
         self._name = value
-    
+
     @property
     def padding_type(self):
         """
@@ -60,7 +60,7 @@ class LayoutNode(_LayoutNode):
         :type: :class:`~nanome.util.enums.PaddingTypes`
         """
         return self._padding_type
-    
+
     @padding_type.setter
     def padding_type(self, value):
         self._padding_type = value
@@ -74,7 +74,7 @@ class LayoutNode(_LayoutNode):
         :type: :class:`int`
         """
         return self._layer
-    
+
     @layer.setter
     def layer(self, value):
         self._layer = value
@@ -88,7 +88,7 @@ class LayoutNode(_LayoutNode):
         :type: :class:`~LayoutOrientation`
         """
         return self._layout_orientation
-    
+
     @layout_orientation.setter
     def layout_orientation(self, value):
         self._layout_orientation = value
@@ -102,7 +102,7 @@ class LayoutNode(_LayoutNode):
         :type: :class:`~SizingTypes`
         """
         return self._sizing_type
-    
+
     @sizing_type.setter
     def sizing_type(self, value):
         self._sizing_type = value
@@ -117,7 +117,7 @@ class LayoutNode(_LayoutNode):
         :type: :class:`float`
         """
         return self._sizing_value
-    
+
     @sizing_value.setter
     def sizing_value(self, value):
         self._sizing_value = value
@@ -131,7 +131,7 @@ class LayoutNode(_LayoutNode):
         :type: :class:`float`
         """
         return self._forward_dist
-    
+
     @forward_dist.setter
     def forward_dist(self, value):
         self._forward_dist = value
@@ -140,7 +140,7 @@ class LayoutNode(_LayoutNode):
     @property
     def padding(self):
         return self._padding
-    
+
     @padding.setter
     def padding(self, value):
         self._padding = value
@@ -149,7 +149,7 @@ class LayoutNode(_LayoutNode):
     @property
     def parent(self):
         return self._parent
-    
+
     @parent.setter
     def parent(self, value):
         self._parent = value
@@ -164,7 +164,7 @@ class LayoutNode(_LayoutNode):
         :param name: Name of the node to find.
         :type name: str
         :return: LayoutNode with matching name
-        :rtype: :class:`~nanome.api.ui.layout_node.LayoutNode`
+        :rtype: :class:`~nanome.ui.LayoutNode`
         """
         res = None
         for child in self.get_children():
@@ -175,7 +175,7 @@ class LayoutNode(_LayoutNode):
             if res != None:
                 break
         return res
-        
+
     def find_ancestor(self, name):
         if (self._parent != None):
             if (self._parent.name == name):

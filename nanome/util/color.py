@@ -3,15 +3,15 @@ class Color(object):
     | Represents a 32-bit color with red, green, blue and alpha channels (8 bits each).
 
     :param r: Red component
+    :type r: :class:`int`
     :param g: Green component
+    :type g: :class:`int`
     :param b: Blue component
+    :type b: :class:`int`
     :param a: Alpha component
-    :param whole_num: Optional way to input color. The int or hex form of the color.
-    :type r: int
-    :type g: int
-    :type b: int
-    :type a: int
-    :type whole_num: int or hex
+    :type a: :class:`int`
+    :param whole_num: Optional way to input color. The int or hex form of the color. e.g. 0x8000FFFF
+    :type whole_num: :class:`int` or hex
     """
     def __init__(self, r=0, g=0, b=0, a=255, whole_num = None):
         if (whole_num != None):
@@ -24,14 +24,14 @@ class Color(object):
         | Assigns the color an integer value representing
         | the red component bitshifted 24 bits, bitwise ORed with
         | the green component bitshifted 16 bits, bitwise ORed with
-        | the blue component bitshifted 8 bits, ORed with 
+        | the blue component bitshifted 8 bits, ORed with
         | the alpha component, or more simply:
         | r << 24 | g << 16 | b << 8 | a
         | OR
         | 0xRRGGBBAA
 
         :param num: Number to set the color to
-        :type num: int
+        :type num: :class:`int`
         """
         self._color = num
 
@@ -40,13 +40,13 @@ class Color(object):
         | Assign a value by individual color components.
 
         :param r: Red component
+        :type r: :class:`int` (0-255)
         :param g: Green component
+        :type g: :class:`int` (0-255)
         :param b: Blue component
+        :type b: :class:`int` (0-255)
         :param a: Alpha component
-        :type r: int (0-255)
-        :type g: int (0-255)
-        :type b: int (0-255)
-        :type a: int (0-255)
+        :type a: :class:`int` (0-255)
         """
         r = max(0, min(int(r), 255))
         g = max(0, min(int(g), 255))
@@ -60,7 +60,7 @@ class Color(object):
         | Set color from int after initializing.
 
         :param value: Int value of the color
-        :type value: int
+        :type value: :class:`int`
         """
         if (value < 0): #convert to uint
             value += 4294967295 #max int
@@ -127,6 +127,8 @@ class Color(object):
     def r(self):
         """
         | The red component of the color.
+
+        :type: :class:`int`
         """
         return self._color >> 24 & 0x000000FF
 
@@ -139,6 +141,8 @@ class Color(object):
     def g(self):
         """
         | The green component of the color.
+
+        :type: :class:`int`
         """
         return self._color >> 16 & 0x000000FF
 
@@ -151,6 +155,8 @@ class Color(object):
     def b(self):
         """
         | The blue component of the color.
+
+        :type: :class:`int`
         """
         return self._color >> 8 & 0x000000FF
 
@@ -163,6 +169,8 @@ class Color(object):
     def a(self):
         """
         | The alpha component of the color.
+
+        :type: :class:`int`
         """
         return self._color & 0x000000FF
 
@@ -175,11 +183,15 @@ class Color(object):
     def copy(self):
         """
         | Create a new color from this one.
+
+        :rtype: :class:`~nanome.util.Color`
         """
         return Color(whole_num = self._color)
 
     def to_string_hex(self):
         """
         | Returns a hex string representing the color.
+
+        :rtype: class:`str`
         """
         return hex(self._color)

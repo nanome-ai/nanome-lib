@@ -6,7 +6,6 @@ class Dropdown(_Dropdown, UIBase):
     | Represents a dropdown menu
     """
     def __init__(self):
-        # type: (_Dropdown)
         _Dropdown.__init__(self)
         UIBase.__init__(self)
 
@@ -16,13 +15,10 @@ class Dropdown(_Dropdown, UIBase):
         | The permanent text to display over the Dropdown's selected item area.
 
         :type: :class:`str`
-        
         """
-        # type: () -> str
         return self._permanent_title
     @permanent_title.setter
     def permanent_title(self, value):
-        # type: (str)
         self._permanent_title = value
 
     @property
@@ -31,13 +27,10 @@ class Dropdown(_Dropdown, UIBase):
         | Whether or not to display permanent text where the Dropdown would otherwise display the selected item
 
         :type: :class:`bool`
-        
         """
-        # type: () -> bool
         return self._use_permanent_title
     @use_permanent_title.setter
     def use_permanent_title(self, value):
-        # type: (bool)
         self._use_permanent_title = value
 
     @property
@@ -48,13 +41,10 @@ class Dropdown(_Dropdown, UIBase):
         | a scrollbar will be appear on the dropdown.
 
         :type: :class:`int`
-        
         """
-        # type: () -> int
         return self._max_displayed_items
     @max_displayed_items.setter
     def max_displayed_items(self, value):
-        # type: (int)
         self._max_displayed_items = value
 
     @property
@@ -63,7 +53,6 @@ class Dropdown(_Dropdown, UIBase):
         | A list of DropdownItems in the list
 
         :type: :class:`list` <:class:`~nanome.ui.DropdownItem`>
-        
         """
         return self._items
     @items.setter
@@ -76,7 +65,6 @@ class Dropdown(_Dropdown, UIBase):
 
         :param func: called when a dropdown item is pressed
         :type func: method (:class:`~nanome.ui.Dropdown`, :class:`~nanome.ui.DropdownItem`) -> None
-        
         """
         _Dropdown._register_item_clicked_callback(self, func)
 

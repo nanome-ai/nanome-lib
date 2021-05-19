@@ -5,7 +5,7 @@ class PDBSaveOptions(object):
     | - hydrogens
     | - TER records
     | - bonds
-    | - heterogen bonds and
+    | - heterogen bonds
     | - only selected atoms
     """
     def __init__(self):
@@ -19,7 +19,7 @@ class SDFSaveOptions(object):
     """
     | Options for saving SDF files.
     | Includes options for writing:
-    | - all bonds and
+    | - all bonds
     | - heterogen bonds
     """
     def __init__(self):
@@ -30,7 +30,7 @@ class MMCIFSaveOptions(object):
     """
     | Options for saving MMCIF files.
     | Includes options for writing:
-    | - hydrogens and 
+    | - hydrogens
     | - only selected atoms
     """
     def __init__(self):

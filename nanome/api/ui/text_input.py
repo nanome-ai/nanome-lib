@@ -9,7 +9,6 @@ class TextInput(_TextInput, UIBase):
     HorizAlignOptions = nanome.util.enums.HorizAlignOptions
 
     def __init__(self):
-        # type: (str)
         _TextInput.__init__(self)
         UIBase.__init__(self)
 
@@ -18,14 +17,11 @@ class TextInput(_TextInput, UIBase):
         """
         | The character limit of the input string
 
-        :type: int
-
+        :type: :class:`int`
         """
-        # type: () -> int
         return self._max_length
     @max_length.setter
     def max_length(self, value):
-        # type: (int)
         self._max_length = value
 
     @property
@@ -33,14 +29,11 @@ class TextInput(_TextInput, UIBase):
         """
         | The text to display when the input is empty
 
-        :type: str
-
+        :type: :class:`str`
         """
-        # type: () -> str
         return self._placeholder_text
     @placeholder_text.setter
     def placeholder_text(self, value):
-        # type: (str)
         if type(value) is not str:
             value = str(value)
         self._placeholder_text = value
@@ -50,14 +43,11 @@ class TextInput(_TextInput, UIBase):
         """
         | The string that has been entered into this text input
 
-        :type: str
-
+        :type: :class:`str`
         """
-        # type: () -> str
         return self._input_text
     @input_text.setter
     def input_text(self, value):
-        # type: (str)
         if type(value) is not str:
             value = str(value)
         self._input_text = value
@@ -67,14 +57,11 @@ class TextInput(_TextInput, UIBase):
         """
         | Color of the placeholder text
 
-        :type: :class: `~nanome.util.Color`
-
+        :type: :class:`~nanome.util.Color`
         """
-        # type: () -> Color
         return self._placeholder_text_color
     @placeholder_text_color.setter
     def placeholder_text_color(self, value):
-        #type: (Color)
         self._placeholder_text_color = value
 
     @property
@@ -82,14 +69,11 @@ class TextInput(_TextInput, UIBase):
         """
         | The color of the input text
 
-        :type: :class: `~nanome.util.Color`
-
+        :type: :class:`~nanome.util.Color`
         """
-        # type: () -> Color
         return self._text_color
     @text_color.setter
     def text_color(self, value):
-        #type: (Color)
         self._text_color = value
 
     @property
@@ -97,14 +81,11 @@ class TextInput(_TextInput, UIBase):
         """
         | The color of the background of this text input
 
-        :type: :class: `~nanome.util.Color`
-
+        :type: :class:`~nanome.util.Color`
         """
-        # type: () -> Color
         return self._background_color
     @background_color.setter
     def background_color(self, value):
-        #type: (Color)
         self._background_color = value
 
     @property
@@ -112,14 +93,11 @@ class TextInput(_TextInput, UIBase):
         """
         | The font size of the input and placeholder text
 
-        :type: float
-
+        :type: :class:`float`
         """
-        # type: () -> float
         return self._text_size
     @text_size.setter
     def text_size(self, value):
-        # type: (float)
         self._text_size = value
 
     @property
@@ -127,14 +105,11 @@ class TextInput(_TextInput, UIBase):
         """
         | The horizontal alignment of the input and placeholder text
 
-        :type: :class: `~nanome.util.enums.HorizAlignOptions`
-
+        :type: :class:`~nanome.util.enums.HorizAlignOptions`
         """
-        # type: () -> HorizAlignOptions
         return self._text_horizontal_align
     @text_horizontal_align.setter
     def text_horizontal_align(self, value):
-        # type: (HorizAlignOptions)
         self._text_horizontal_align = value
 
     @property
@@ -142,8 +117,7 @@ class TextInput(_TextInput, UIBase):
         """
         | The left padding of the input and placeholder text
 
-        :type: float
-
+        :type: :class:`float`
         """
         return self._padding_left
     @padding_left.setter
@@ -155,8 +129,7 @@ class TextInput(_TextInput, UIBase):
         """
         | The right padding of the input and placeholder text
 
-        :type: float
-
+        :type: :class:`float`
         """
         return self._padding_right
     @padding_right.setter
@@ -168,8 +141,7 @@ class TextInput(_TextInput, UIBase):
         """
         | The top padding of the input and placeholder text
 
-        :type: float
-
+        :type: :class:`float`
         """
         return self._padding_top
     @padding_top.setter
@@ -181,8 +153,7 @@ class TextInput(_TextInput, UIBase):
         """
         | The bottom padding of the input and placeholder text
 
-        :type: float
-
+        :type: :class:`float`
         """
         return self._padding_bottom
     @padding_bottom.setter
@@ -195,11 +166,10 @@ class TextInput(_TextInput, UIBase):
         | Whether or not the input represents a password.
         | i.e. will display 123 as *** if true.
 
-        :type: bool
-
+        :type: :class:`bool`
         """
         return self._password
-    
+
     @password.setter
     def password(self, value):
         self._password = value
@@ -210,32 +180,31 @@ class TextInput(_TextInput, UIBase):
         | Whether or not the input represents a number.
         | Will display the number keyboard if set to true.
 
-        :type: bool
-
+        :type: :class:`bool`
         """
         return self._number
-    
+
     @number.setter
     def number(self, value):
         self._number = value
 
     def register_changed_callback(self, func):
         """
-        | Registers a function to be called whenever the text input is changed. 
+        | Registers a function to be called whenever the text input is changed.
         | The function must take a text input as its only parameter.
 
         :param func: The function that will be called when the text input is changed.
-        :type text: FunctionType
+        :type text: method (:class:`~nanome.ui.TextInput`) -> None
         """
         self._changed_callback = func
 
     def register_submitted_callback(self, func):
         """
-        | Registers a function to be called whenever the user submits a text input. 
+        | Registers a function to be called whenever the user submits a text input.
         | The function must take a text input as its only parameter.
 
         :param func: The function that will be called when the user submits a text input.
-        :type text: FunctionType
+        :type text: method (:class:`~nanome.ui.TextInput`) -> None
         """
         self._submitted_callback = func
 

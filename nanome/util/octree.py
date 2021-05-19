@@ -1,7 +1,7 @@
 class Octree:
     """
-    | Tree containing inserted atoms and their positions.
-    | Commonly used to get neighboring atoms.
+    | Tree containing inserted objects and their positions.
+    | Commonly used to get neighboring objects.
     """
     def __init__(self, world_size=5000, max_per_node=8):
         self._max_objects = max_per_node
@@ -15,7 +15,7 @@ class Octree:
         | Remove a data node from the Octree.
 
         :param data: The data to remove from the Octree
-        :type data: :class:`Object`
+        :type data: :class:`object`
         """
         if data in self._knowns:
             node = self._knowns[data]
@@ -31,8 +31,8 @@ class Octree:
         | Move a data node in the octree.
 
         :param data: Data node in the octree to move
+        :type data: :class:`object`
         :param new_position: New position for the data node
-        :type data: :class:`Object`
         :type new_positon: :class:`~nanome.util.Vector3`
         """
         self.remove(data)
@@ -43,8 +43,8 @@ class Octree:
         | Add a data node to the octree.
 
         :param data: Data node to add to the octree
+        :type data: :class:`object`
         :param position: Position of this data node
-        :type data: :class:`Object`
         :type positon: :class:`~nanome.util.Vector3`
         """
         try:
@@ -54,17 +54,17 @@ class Octree:
             from . import Logs
             Logs.error("Maximum recursion depth reached. Make sure you don't add more than the max_objects number of objects with the exact same position.")
             raise
-    
+
     def get_near(self, pos, radius, max_result_nb = None):
         """
         | Get nodes within the octree neighboring a position.
 
         :param pos: Position to check around
-        :param radius: Radius around position where nodes within will be returned
-        :param max_result_nb: Maximum number of neighbors to return
         :type pos: :class:`~nanome.util.Vector3`
-        :type radius: float
-        :type max_result_nb: int
+        :param radius: Radius around position where nodes within will be returned
+        :type radius: :class:`float`
+        :param max_result_nb: Maximum number of neighbors to return
+        :type max_result_nb: :class:`int`
         """
         near_objs = []
         self.get_near_append(pos, radius, near_objs, max_result_nb)
@@ -74,14 +74,21 @@ class Octree:
         """
         | Functions like get_near, but with an externally controlled list.
 
+        :param pos: Position to check around
+        :type pos: :class:`~nanome.util.Vector3`
+        :param radius: Radius around position where nodes within will be returned
+        :type radius: :class:`float`
         :param out_list: Parent-scoped list to append search neighbors to
         :type out_list: :class:`list`
+        :param max_result_nb: Maximum number of neighbors to return
+        :type max_result_nb: :class:`int`
         """
         self._root.near(pos, radius*radius, out_list, max_result_nb)
         return out_list
 
     def print_out(self):
-        """Prints out information about the octree.
+        """
+        | Prints out information about the octree.
         """
         print("knowns:", len(self._knowns))
         print("Root:")
@@ -108,7 +115,7 @@ class Octree:
             if self.branches == None:
                 self._subdivide(tree)
             self.branches[self._findBranch(entry.pos)].add(tree, entry)
-            
+
         def _add_here(self, tree, entry):
             self.here.append(entry)
             tree._knowns[entry.data] = self

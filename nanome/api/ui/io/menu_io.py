@@ -12,9 +12,9 @@ class MenuIO(_Addon):
     def to_json(self, path):
         """
         | Serializes this instance's base_object to the json file specified by path.
-        :param path: The path to serialize base_object's json representation to
-        :type path: string
 
+        :param path: The path to serialize base_object's json representation to
+        :type path: :class:`str`
         """
         helper = _JsonHelper()
         _menu_json.write_json(helper, self.base_object)
@@ -29,9 +29,9 @@ class MenuIO(_Addon):
     def from_json(self, path):
         """
         | Parses a Menu json file and returns a Menu.
+
         :param path: The path to the Menu json to parse
-        :type path: string
-        
+        :type path: :class:`str`
         """
         try:
             with open(path, "r") as f:
@@ -53,7 +53,7 @@ class MenuIO(_Addon):
         | Call once before reading and run once. Then you can remove the call.
 
         :param path: path to the menu you wish to update.
-        :type path: str
+        :type path: :class:`str`
         """
         menu = self.from_json(path)
         menu.io.to_json(path)

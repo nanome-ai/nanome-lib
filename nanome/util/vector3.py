@@ -30,8 +30,8 @@ class Vector3(object):
         | Returns the distance between two vectors.
 
         :param v1: The first vector
-        :param v2: The second vector
         :type v1: :class:`~nanome.util.Vector3`
+        :param v2: The second vector
         :type v2: :class:`~nanome.util.Vector3`
         """
         return math.sqrt((v2.x - v1.x) ** 2 + (v2.y - v1.y) ** 2 + (v2.z - v1.z) ** 2)
@@ -66,10 +66,10 @@ class Vector3(object):
     def set(self, x, y, z):
         """
         :param x: The x component to set this vector to
-        :param y: The y component to set this vector to
-        :param z: The z component to set this vector to
         :type x: :class:`float`
+        :param y: The y component to set this vector to
         :type y: :class:`float`
+        :param z: The z component to set this vector to
         :type z: :class:`float`
         """
         self._positions[0] = x
@@ -80,6 +80,8 @@ class Vector3(object):
     def x(self):
         """
         | The x component of this vector
+
+        :type: :class:`float`
         """
         return self._positions[0]
     @x.setter
@@ -90,6 +92,8 @@ class Vector3(object):
     def y(self):
         """
         | The y component of this vector
+
+        :type: :class:`float`
         """
         return self._positions[1]
     @y.setter
@@ -100,6 +104,8 @@ class Vector3(object):
     def z(self):
         """
         | The z component of this vector
+
+        :type: :class:`float`
         """
         return self._positions[2]
     @z.setter
