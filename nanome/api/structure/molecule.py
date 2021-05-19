@@ -34,7 +34,9 @@ class Molecule(_Molecule, Base):
     @property
     def chains(self):
         """
-        | The list of chains within this complex
+        | The chains of this complex
+
+        :type: :class:`generator` <:class:`~nanome.api.structure.Chain`>
         """
         for chain in self._chains:
             yield chain
@@ -42,7 +44,9 @@ class Molecule(_Molecule, Base):
     @property
     def residues(self):
         """
-        | The list of residues within this complex
+        | The residues of this complex
+
+        :type: :class:`generator` <:class:`~nanome.api.structure.Molecule`>
         """
         for chain in self.chains:
             for residue in chain.residues:
@@ -51,7 +55,9 @@ class Molecule(_Molecule, Base):
     @property
     def atoms(self):
         """
-        | The list of atoms within this complex
+        | The atoms of this complex
+
+        :type: :class:`generator` <:class:`~nanome.api.structure.Atom`>
         """
         for residue in self.residues:
             for atom in residue.atoms:
@@ -60,7 +66,9 @@ class Molecule(_Molecule, Base):
     @property
     def bonds(self):
         """
-        | The list of bonds within this complex
+        | The bonds of this complex
+
+        :type: :class:`generator` <:class:`~nanome.api.structure.Bond`>
         """
         for residue in self.residues:
             for bond in residue.bonds:
@@ -71,7 +79,7 @@ class Molecule(_Molecule, Base):
     @property
     def complex(self):
         """
-        | Complex that the molecule is part of
+        | Complex that the molecule belongs to
         """
         return self._complex
     #endregion
@@ -93,6 +101,12 @@ class Molecule(_Molecule, Base):
 
     @property
     def associated(self):
+        """
+        | Metadata associated with the molecule.
+        | PDB REMARKs end up here.
+
+        :type: :class:`dict`
+        """
         return self._associated
     
     @associated.setter

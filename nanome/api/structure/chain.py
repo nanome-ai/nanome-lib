@@ -15,7 +15,7 @@ class Chain(_Chain, Base):
         | Add a residue to this chain
 
         :param residue: Residue to add to the chain
-        :type residue: :class:`~nanome.api.structure.Chain`
+        :type residue: :class:`~nanome.api.structure.Residue`
         """
         residue.index = -1
         self._add_residue(residue)
@@ -25,7 +25,7 @@ class Chain(_Chain, Base):
         | Remove a residue from this chain
 
         :param residue: Residue to remove from the chain
-        :type residue: :class:`~nanome.api.structure.Chain`
+        :type residue: :class:`~nanome.api.structure.Residue`
         """
         residue.index = -1
         self._remove_residue(residue)
