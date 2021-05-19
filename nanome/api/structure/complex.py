@@ -25,7 +25,7 @@ class Complex(_Complex, Base):
         | Add a molecule to this complex
 
         :param molecule: Molecule to add to the chain
-        :type molecule: :class:`~nanome._internal._structure._molecule`
+        :type molecule: :class:`nanome.api.structure.molecule`
         """
         molecule.index = -1
         self._add_molecule(molecule)
@@ -35,7 +35,7 @@ class Complex(_Complex, Base):
         | Remove a molecule from this complex
 
         :param molecule: Molecule to remove from the chain
-        :type molecule: :class:`~nanome._internal._structure._molecule`
+        :type molecule: :class:`nanome.api.structure.molecule`
         """
         molecule.index = -1
         self._remove_molecule(molecule)

@@ -30,7 +30,7 @@ class Workspace(_Workspace):
         | Add complex to the workspace
 
         :param complex: Complex to add to the workspace
-        :type complex: :class:`~nanome._internal._structure._complex`
+        :type complex: :class:`nanome.api.structure.complex`
         """
         complex.index = -1
         self._add_complex(complex)
@@ -40,7 +40,7 @@ class Workspace(_Workspace):
         | Remove complex from the workspace
 
         :param complex: Complex to remove from the workspace
-        :type complex: :class:`~nanome._internal._structure._complex`
+        :type complex: :class:`nanome.api.structure.complex`
         """
         complex.index = -1
         self._remove_complex(complex)

@@ -15,7 +15,7 @@ class Molecule(_Molecule, Base):
         | Add a chain to this molecule
 
         :param chain: Chain to add to the molecule
-        :type chain: :class:`~nanome._internal._structure._chain`
+        :type chain: :class:`~nanome.api.structure.Chain`
         """
         chain.index = -1
         self._add_chain(chain)
@@ -25,7 +25,7 @@ class Molecule(_Molecule, Base):
         | Remove a chain from this molecule
 
         :param chain: Chain to remove from the molecule
-        :type chain: :class:`~nanome._internal._structure._chain`
+        :type chain: :class:`~nanome.api.structure.Chain`
         """
         chain.index = -1
         self._remove_chain(chain)

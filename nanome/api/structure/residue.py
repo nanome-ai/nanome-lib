@@ -21,7 +21,7 @@ class Residue(_Residue, Base):
         | Add an atom to this residue
 
         :param atom: Atom to add to the residue
-        :type atom: :class:`~nanome._internal._structure._atom`
+        :type atom: :class:`nanome.api.structure.atom`
         """
         if (self.molecule != None and len(atom.in_conformer) > self.molecule.conformer_count):
             raise ValueError("Length of in_conformer must match the conformer count of the parent molecule.")
@@ -35,7 +35,7 @@ class Residue(_Residue, Base):
         | Remove an atom from this residue
 
         :param atom: Atom to remove from the residue
-        :type atom: :class:`~nanome._internal._structure._atom`
+        :type atom: :class:`nanome.api.structure.atom`
         """
         atom.index = -1
         self._remove_atom(atom)
@@ -45,7 +45,7 @@ class Residue(_Residue, Base):
         | Add a bond to this residue
 
         :param bond: Bond to add to the residue
-        :type bond: :class:`~nanome._internal._structure._bond`
+        :type bond: :class:`nanome.api.structure.bond`
         """
         if (self.molecule != None and len(bond.in_conformer) > self.molecule.conformer_count):
             raise ValueError("Length of in_conformer must match the conformer count of the parent molecule.")
@@ -59,7 +59,7 @@ class Residue(_Residue, Base):
         | Remove a bond from this residue
 
         :param bond: Bond to remove from the residue
-        :type bond: :class:`~nanome._internal._structure._bond`
+        :type bond: :class:`nanome.api.structure.bond`
         """
         bond.index = -1
         self._remove_bond(bond)
