@@ -34,9 +34,9 @@ Some examples of plugins that our customers love are:
  - Custom Database Integrations
  - Loading PDFs and PowerPoints
  - Running custom molecular dynamics
- - All of our public plugins are available on our `Github <https://github.com/nanome-ai>` (pre-fixed with "plugins-").
+ - All of our public plugins are available on our `Github <https://github.com/nanome-ai>` (prefixed with "plugin-").
 
-The primary requirements for running plugins is the Nanome Virtual Reality Software and access to the Nanome Plugin Server (NTS). The Nanome Plugin Server acts as a relay to forward plugin information and processes data in and out of the Nanome virtual environment. 
+The primary requirements for running plugins are the Nanome Virtual Reality Software and access to the Nanome Plugin Server (NTS). The Nanome Plugin Server acts as a relay to forward plugin information and processes data coming into and going out of the Nanome virtual environment. 
 
 The Nanome Virtual Reality Software can be acquired directly from Nanome or in any of the VR stores here:
  * Oculus Store: https://www.oculus.com/experiences/rift/1873145426039242
