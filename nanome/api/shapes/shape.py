@@ -54,13 +54,13 @@ class Shape(_Shape):
 
     def upload(self, done_callback=None):
         """
-        | Upload the shape to Nanome App
+        | Upload the shape to the Nanome App
         """
         self._upload(done_callback)
 
     def destroy(self):
         """
-        | Remove the shape from Nanome App and destroy it.
+        | Remove the shape from the Nanome App and destroy it.
         """
         self._destroy()
 _Shape._create = Shape
