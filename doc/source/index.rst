@@ -28,29 +28,30 @@ Plugins can be designed and ran from different operating systems - Windows, Linu
 
 Some examples of plugins that our customers love are:
  - Docking
- - Molecular Dynamics
- - Custom Database Integration
+ - Chemical Interactions
+ - Electrostatic Potential Map generation
+ - Chemical Properties
+ - Custom Database Integrations
  - Loading PDFs and PowerPoints
  - Running custom molecular dynamics
- - All of our public plugins are available on our `Github <https://github.com/nanome-ai>`_.
+ - All of our public plugins are available on our `Github <https://github.com/nanome-ai>` (pre-fixed with "plugins-").
 
 The primary requirements for running plugins is the Nanome Virtual Reality Software and access to the Nanome Plugin Server (NTS). The Nanome Plugin Server acts as a relay to forward plugin information and processes data in and out of the Nanome virtual environment. 
 
 The Nanome Virtual Reality Software can be acquired directly from Nanome or in any of the VR stores here:
-
  * Oculus Store: https://www.oculus.com/experiences/rift/1873145426039242
  * Viveport: https://www.viveport.com/apps/0a467f78-2ed2-43eb-ada8-9d677d5acf54
  * Steam: https://store.steampowered.com/app/493430/Nanome/
  * Direct Download: https://nanome.ai/setup
  * SideQuest: https://xpan.cc/a-333
 
-Please contact sales@nanome.ai to enable your account to use Plugins. 
-
-
 Using Plugins
 --------------
+Please contact sales@nanome.ai to enable your account to use Plugins. 
 
 **In order to use a plugin**
+
+Make sure you are fully connected to your Nanome plugin server. After the Nanome team has configured your account to use Plugins and has provided the target server location and port (NTS DNS and Port, e.g. organization.nanome.ai 8888), log into Nanome, create a room, and click on the purple "Stacks" button to the left of the Entry list. You should see an empty list or a list of plugins. If you see "Not connected to NTS", please contact support@nanome.ai or your dedicated Account Manager.
 
 *Editing the Config File*
 
