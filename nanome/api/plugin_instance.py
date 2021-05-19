@@ -495,7 +495,7 @@ class PluginInstance(_PluginInstance):
 
 class AsyncPluginInstance(PluginInstance):
     """
-    | Base class of any asyncronous plugin.
+    | Base class of any asynchronous plugin.
     | Constructor should never be called by the user as it is network-instantiated when a session connects.
     | All methods available to PluginInstance are available to AsyncPluginInstance.
     | Decorating these methods with @async_callback will allow them to use the async keyword in their definition
