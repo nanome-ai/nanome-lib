@@ -283,7 +283,7 @@ class PluginInstance(_PluginInstance):
 
     def create_writing_stream(self, indices_list, stream_type, callback=None):
         """
-        | Create a stream allowing to continuously update properties of many objects
+        | Create a stream allowing the plugin to continuously update properties of many objects
 
         :param indices_list: List of indices of all objects that should be in the stream
         :type indices_list: list of :class:`int`
@@ -298,7 +298,7 @@ class PluginInstance(_PluginInstance):
 
     def create_reading_stream(self, indices_list, stream_type, callback=None):
         """
-        | Create a stream allowing to continuously receive properties of many objects
+        | Create a stream allowing the plugin to continuously receive properties of many objects
 
         :param indices_list: List of indices of all objects that should be in the stream
         :type indices_list: list of :class:`int`
