@@ -9,16 +9,8 @@ class Shape(object):
     :type network: nanome._internal._network
     :type shape_type: :class:`~nanome.util.enums.ShapeType`
     """
-    def __init__(self, network, shape_type):
-        self.__network = network
-
-        self.__index = -1
-        self.__target = 0
-        self.__shape_type = shape_type
-        self.__anchor = ShapeAnchorType.Workspace
-        self.__position = Vector3()
-        self.__rotation = Quaternion()
-        self.__color = Color()
+    def __init__(self, shape_type):
+        _Shape.__init__(self, shape_type)
 
     @property
     def index(self):
