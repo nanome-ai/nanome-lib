@@ -29,40 +29,33 @@ class Shape(object):
     @property
     def color(self):
         """
-        | Get color of the shape
-
-        :rtype: :class:`~nanome.util.Color`
-        """
-        return self._color
-    @color.setter
-    def color(self, value):
-        """
-        | Set color of the shape
+        | Color of the shape
 
         :param value: Color of the shape
         :type value: :class:`~nanome.util.Color`
         """
+        return self._color
+    @color.setter
+    def color(self, value):
         self._color = value
 
     @property
     def anchors(self):
         """
-        | Get anchors of the shape
-
-        :rtype: list of :class:`~nanome.api.shapes.Anchor`
-        """
-        return self._anchors
-    @anchors.setter
-    def anchors(self, value):
-        """
-        | Set anchors of the shape
+        | Anchors of the shape
 
         :param value: Anchors of the shape
         :type value: list of :class:`~nanome.api.shapes.Anchor`
         """
+        return self._anchors
+    @anchors.setter
+    def anchors(self, value):
         self._anchors = value
 
     def upload(self, done_callback=None):
+        """
+        | Upload the shape to Nanome App
+        """
         self._upload(done_callback)
 
     def destroy(self):
