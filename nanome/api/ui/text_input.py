@@ -193,7 +193,7 @@ class TextInput(_TextInput, UIBase):
     def password(self):
         """
         | Whether or not the input represents a password.
-        | i.e. will display '123' as ••• if true.
+        | i.e. will display '123' as *** if true.
 
         :type: bool
 
