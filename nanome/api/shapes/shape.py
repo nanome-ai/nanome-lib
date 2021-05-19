@@ -17,7 +17,7 @@ class Shape(object):
         """
         | Index of the shape
         """
-        return self.__index
+        return self._index
 
     @property
     def shape_type(self):
@@ -96,9 +96,9 @@ class Shape(object):
         | Upload the shape to Nanome App.
         """
         def set_callback(index, result):
-            if self.__index != -1 and index != self.__index:
+            if self._index != -1 and index != self._index:
                 Logs.error("SetShapeCallback received for the wrong shape")
-            self.__index = index
+            self._index = index
             if done_callback != None:
                 done_callback(result)
 
@@ -109,4 +109,4 @@ class Shape(object):
         """
         | Remove the shape from Nanome App and destroy it.
         """
-        self.__network._send(_Messages.delete_shape, self.__index, False)
+        self.__network._send(_Messages.delete_shape, self._index, False)
