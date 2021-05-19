@@ -4,13 +4,17 @@ from nanome.util.enums import Permissions
 from nanome._internal._network._commands._callbacks import _Messages
 
 class Files(_Files):
+    """
+    | Class to navigate through files and directories on the machine running Nanome using unix-like filesystem methods.
+    """
     def __init__(self, plugin_instance):
         self.plugin = plugin_instance
 
     def pwd(self, callback=None):
         """
-        | Print the full filename of the current working directory
-        :param callback: function that will be called with the full filename
+        | Print the absolute path of the current working directory
+
+        :param callback: function that will be called with the full working directory path
         :type callback: method (:class:`~nanome.util.file.FileError`, str) -> None
         """
         if not self.plugin._has_permission(Permissions.local_files_access):
@@ -21,10 +25,11 @@ class Files(_Files):
 
     def cd(self, directory, callback=None):
         """
-        | changes current directory
-        :param directory: directory to change to.
+        | changes the current working directory
+
+        :param directory: directory to change to
         :type directory: str
-        :param callback: called when operation is completed with any potential errors.
+        :param callback: called when operation has completed, potentially with errors
         :type callback: method (:class:`~nanome.util.file.FileError`) -> None
         """
         if not self.plugin._has_permission(Permissions.local_files_access):
@@ -35,8 +40,9 @@ class Files(_Files):
 
     def ls(self, directory, callback=None):
         """
-        | list directory contents
-        :param directory: directory to request.
+        | list directory's contents
+
+        :param directory: directory to request
         :type directory: str
         :param callback: function that will be called with contents of the directory
         :type callback: method (:class:`~nanome.util.file.FileError`, list of :class:`~nanome.util.file.FileMeta`) -> None
@@ -49,12 +55,13 @@ class Files(_Files):
 
     def mv(self, source, dest, callback=None):
         """
-        | Rename SOURCE to DEST, or move SOURCE(s) to directory DEST
-        :param source: file to move or rename.
+        | Rename source to dest, or move source into directory dest/
+
+        :param source: file to move or rename
         :type source: str
-        :param dest: name or destination directory for the file
+        :param dest: file or pathname of the file's destination
         :type dest: str
-        :param callback: called when operation is completed with any potential errors.
+        :param callback: called when operation has completed, potentially with errors
         :type callback: method (:class:`~nanome.util.file.FileError`) -> None
         """
         if not self.plugin._has_permission(Permissions.local_files_access):
@@ -65,12 +72,13 @@ class Files(_Files):
 
     def get(self, source, dest, callback=None):
         """
-        | Moves a file from the nanome user to the a local directory
-        :param source: file(s) to move.
+        | Gets file source from the Nanome session's machine and writes to dest of the plugin machine.
+
+        :param source: Nanome machine filename of the file to move
         :type source: str
-        :param dest: local destination directory for the file
+        :param dest: plugin machine filename for the file's destination
         :type dest: str
-        :param callback: called with the path to the file and any potential errors
+        :param callback: called when operation has completed, with dest and any potential errors
         :type callback: method (:class:`~nanome.util.file.FileError`, str) -> None
         """
         if not self.plugin._has_permission(Permissions.local_files_access):
@@ -92,12 +100,13 @@ class Files(_Files):
 
     def put(self, source, dest, callback=None):
         """
-        | Moves a file from a local directory to the the nanome user
-        :param source: local file(s) to move.
+        | Send the file source on the plugin machine to be placed at dest on the Nanome session's machine.
+
+        :param source: plugin machine filename of the file to send
         :type source: str
-        :param dest: destination directory for the file
+        :param dest: Nanome machine filename for the file's destination
         :type dest: str
-        :param callback: called when operation is completed with any potential errors.
+        :param callback: called when operation has completed, potentially with errors
         :type callback: method (:class:`~nanome.util.file.FileError`) -> None
         """
         if not self.plugin._has_permission(Permissions.local_files_access):
@@ -112,9 +121,10 @@ class Files(_Files):
     def rm(self, target, callback=None):
         """
         | remove non-directory file
-        :param target: file to remove.
+
+        :param target: filepath of Nanome machine file to remove.
         :type target: str
-        :param callback: called when operation is completed with any potential errors.
+        :param callback: called when operation has completed, potentially with errors
         :type callback: method (:class:`~nanome.util.file.FileError`) -> None
         """
         if not self.plugin._has_permission(Permissions.local_files_access):
@@ -126,9 +136,10 @@ class Files(_Files):
     def rmdir(self, target, callback=None):
         """
         | remove directory
-        :param target: directory to remove.
+
+        :param target: Nanome machine directory to remove.
         :type target: str
-        :param callback: called when operation is completed with any potential errors.
+        :param callback: called when operation has completed, potentially with errors
         :type callback: method (:class:`~nanome.util.file.FileError`) -> None
         """
         if not self.plugin._has_permission(Permissions.local_files_access):
@@ -139,12 +150,13 @@ class Files(_Files):
 
     def cp(self, source, dest, callback=None):
         """
-        | Copy SOURCE to DEST
-        :param source: file to copy.
+        | Copy source to dest
+
+        :param source: the Nanome machine filename of the file to copy
         :type source: str
-        :param dest: desired path for the copy
+        :param dest: the Nanome machine filename to copy to
         :type dest: str
-        :param callback: called when operation is completed with any potential errors.
+        :param callback: called when operation has completed, potentially with errors
         :type callback: method (:class:`~nanome.util.file.FileError`) -> None
         """
         if not self.plugin._has_permission(Permissions.local_files_access):
@@ -155,10 +167,10 @@ class Files(_Files):
 
     def mkdir(self, target, callback=None):
         """
-        | Create the DIRECTORY(ies), if they do not already exist.
-        :param target: directory to create.
+        | Create all directories along the path provided
+        :param target: pathname of the final directory to create
         :type target: str
-        :param callback: called when operation is completed with any potential errors.
+        :param callback: called when operation has completed, potentially with errors
         :type callback: method (:class:`~nanome.util.file.FileError`) -> None
         """
         if not self.plugin._has_permission(Permissions.local_files_access):

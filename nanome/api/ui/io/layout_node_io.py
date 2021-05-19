@@ -5,10 +5,22 @@ from nanome._internal._ui._io import _layout_node_json
 from nanome._internal import _Addon
 
 class LayoutNodeIO(_Addon):
+    """
+    | A class for json serialization and parsing of LayoutNode objects.
+
+    :param base_object: The LayoutNode to serialize
+    :type base_object: :class:`~nanome.ui.LayoutNode`
+    """
     def __init__(self, base_object=None):
         _Addon.__init__(self, base_object)
 
     def to_json(self, path):
+        """
+        | Serializes this instance's base_object to the json file specified by path.
+
+        :param path: The path to serialize base_object's json representation to
+        :type path: :class:`str`
+        """
         helper = _JsonHelper()
         helper.write("is_menu", False)
         helper.write("title", "node")
@@ -26,6 +38,12 @@ class LayoutNodeIO(_Addon):
 
 
     def from_json(self, path):
+        """
+        | Parses a LayoutNode json file and returns a LayoutNode.
+
+        :param path: The path to the LayoutNode json to parse
+        :type path: :class:`str`
+        """
         try:
             with open(path) as f:
                 node_string = f.read()

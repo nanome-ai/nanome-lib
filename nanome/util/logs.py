@@ -7,6 +7,10 @@ else:
 from .enum import IntEnum, auto
 
 class Logs(object):
+    """
+    | Allows for easy message logging without buffer issues.
+    | Possible log types are Debug, Warning, and Error.
+    """
     class _LogType(IntEnum):
         debug = auto()
         warning = auto()

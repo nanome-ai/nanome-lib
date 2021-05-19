@@ -21,13 +21,13 @@ class ComplexIO(_Addon):
         """
 
         _pdb.to_file(path, self.base_object, options)
-    
+
     def from_pdb(self, **kwargs):
         """
         | Loads the complex from a .pdb file
 
         :return: The complex read from the file
-        :rtype: :class:`~nanome.api.structure.complex.Complex`
+        :rtype: :class:`~nanome.structure.Complex`
         :param kwargs: See below
         :Keyword Arguments:
             *path* (:class:`str`)
@@ -58,7 +58,7 @@ class ComplexIO(_Addon):
         | Loads the complex from a .sdf file
 
         :return: The complex read from the file
-        :rtype: :class:`~nanome.api.structure.complex.Complex`
+        :rtype: :class:`~nanome.structure.Complex`
         :param kwargs: See below
         :Keyword Arguments:
             *path* (:class:`str`)
@@ -89,7 +89,7 @@ class ComplexIO(_Addon):
         | Loads the complex from a .cif file
 
         :return: The complex read from the file
-        :rtype: :class:`~nanome.api.structure.complex.Complex`
+        :rtype: :class:`~nanome.structure.Complex`
         :param kwargs: See below
         :Keyword Arguments:
             *path* (:class:`str`)

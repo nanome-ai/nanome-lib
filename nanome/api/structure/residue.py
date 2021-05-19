@@ -4,6 +4,9 @@ from nanome._internal._structure._residue import _Residue
 from . import Base
 
 class Residue(_Residue, Base):
+    """
+    | Represents a Residue. Contains atoms. Chains contain residues.
+    """
 
     RibbonMode = nanome.util.enums.RibbonMode
     SecondaryStructure = nanome.util.enums.SecondaryStructure
@@ -14,6 +17,12 @@ class Residue(_Residue, Base):
         self._molecular = Residue.Molecular(self)
 
     def add_atom(self, atom):
+        """
+        | Add an atom to this residue
+
+        :param atom: Atom to add to the residue
+        :type atom: :class:`~nanome.structure.Atom`
+        """
         if (self.molecule != None and len(atom.in_conformer) > self.molecule.conformer_count):
             raise ValueError("Length of in_conformer must match the conformer count of the parent molecule.")
         if (self.molecule != None and len(atom.positions) > self.molecule.conformer_count):
@@ -22,10 +31,22 @@ class Residue(_Residue, Base):
         self._add_atom(atom)
 
     def remove_atom(self, atom):
+        """
+        | Remove an atom from this residue
+
+        :param atom: Atom to remove from the residue
+        :type atom: :class:`~nanome.structure.Atom`
+        """
         atom.index = -1
         self._remove_atom(atom)
-    
+
     def add_bond(self, bond):
+        """
+        | Add a bond to this residue
+
+        :param bond: Bond to add to the residue
+        :type bond: :class:`~nanome.structure.Bond`
+        """
         if (self.molecule != None and len(bond.in_conformer) > self.molecule.conformer_count):
             raise ValueError("Length of in_conformer must match the conformer count of the parent molecule.")
         if (self.molecule != None and len(bond.kinds) > self.molecule.conformer_count):
@@ -34,17 +55,29 @@ class Residue(_Residue, Base):
         self._add_bond(bond)
 
     def remove_bond(self, bond):
+        """
+        | Remove a bond from this residue
+
+        :param bond: Bond to remove from the residue
+        :type bond: :class:`~nanome.structure.Bond`
+        """
         bond.index = -1
         self._remove_bond(bond)
 
     #region Generators
     @property
     def atoms(self):
+        """
+        | The list of atoms within this complex
+        """
         for atom in self._atoms:
             yield atom
 
     @property
     def bonds(self):
+        """
+        | The list of bonds within this complex
+        """
         for bond in self._bonds:
             yield bond
     #endregion
@@ -52,14 +85,23 @@ class Residue(_Residue, Base):
     #region connections
     @property
     def chain(self):
+        """
+        | Chain that the residue is part of
+        """
         return self._chain
 
     @property
     def molecule(self):
+        """
+        | Molecule that the residue is part of
+        """
         return  self._molecule
 
     @property
     def complex(self):
+        """
+        | Complex that the residue is part of
+        """
         return self._complex
     #endregion
 
@@ -70,23 +112,33 @@ class Residue(_Residue, Base):
     @ribboned.setter
     def ribboned(self, value):
         self._ribboned = value
-    
+
     @property
     def ribbon_size(self):
         return self._ribbon_size
     @ribbon_size.setter
     def ribbon_size(self, value):
         self._ribbon_size = value
-    
+
     @property
     def ribbon_mode(self):
+        """
+        | Represents how the residue ribbon should be shown
+
+        :type: :class:`~nanome.util.enums.RibbonMode`
+        """
         return self._ribbon_mode
     @ribbon_mode.setter
     def ribbon_mode(self, value):
         self._ribbon_mode = value
-    
+
     @property
     def ribbon_color(self):
+        """
+        | Color of the ribbon residue
+
+        :type: :class:`~nanome.util.Color`
+        """
         return self._ribbon_color
     @ribbon_color.setter
     def ribbon_color(self, value):
@@ -94,6 +146,11 @@ class Residue(_Residue, Base):
 
     @property
     def labeled(self):
+        """
+        | Represents if the residue has a label or not. If it does, show the label.
+
+        :type: :class:`bool`
+        """
         return self._labeled
     @labeled.setter
     def labeled(self, value):
@@ -101,6 +158,11 @@ class Residue(_Residue, Base):
 
     @property
     def label_text(self):
+        """
+        | Represents the text that would show up if residue is labeled.
+
+        :type: :class:`str`
+        """
         return self._label_text
     @label_text.setter
     def label_text(self, value):
@@ -114,16 +176,21 @@ class Residue(_Residue, Base):
     @type.setter
     def type(self, value):
         self._type = value
-    
+
     @property
     def serial(self):
         return self._serial
     @serial.setter
     def serial(self, value):
         self._serial = value
-    
+
     @property
     def name(self):
+        """
+        | Represents the name of the residue
+
+        :type: :class:`str`
+        """
         return self._name
     @name.setter
     def name(self, value):
@@ -133,6 +200,11 @@ class Residue(_Residue, Base):
 
     @property
     def secondary_structure(self):
+        """
+        | The secondary structure of the residue
+
+        :type: :class:`~nanome.util.enums.SecondaryStructure`
+        """
         return self._secondary_structure
     @secondary_structure.setter
     def secondary_structure(self, value):
@@ -160,21 +232,21 @@ class Residue(_Residue, Base):
         @ribboned.setter
         def ribboned(self, value):
             self.parent.ribboned = value
-        
+
         @property
         def ribbon_size(self):
             return self.parent.ribbon_size
         @ribbon_size.setter
         def ribbon_size(self, value):
             self.parent.ribbon_size = value
-        
+
         @property
         def ribbon_mode(self):
             return self.parent.ribbon_mode
         @ribbon_mode.setter
         def ribbon_mode(self, value):
             self.parent.ribbon_mode = value
-        
+
         @property
         def ribbon_color(self):
             return self.parent.ribbon_color
@@ -206,14 +278,14 @@ class Residue(_Residue, Base):
         @type.setter
         def type(self, value):
             self.parent.type = value
-        
+
         @property
         def serial(self):
             return self.parent.serial
         @serial.setter
         def serial(self, value):
             self.parent.serial = value
-        
+
         @property
         def name(self):
             return self.parent.name

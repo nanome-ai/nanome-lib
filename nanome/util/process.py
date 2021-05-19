@@ -1,4 +1,7 @@
 class Process():
+    """
+    | A command-line process wrapper.
+    """
     _manager = None
 
     class _ProcessRequest():
@@ -27,6 +30,11 @@ class Process():
 
     @property
     def executable_path(self):
+        """
+        | The path to the executable to be run.
+
+        :type: :class:`str`
+        """
         return self.__request.executable_path
 
     @executable_path.setter
@@ -35,6 +43,11 @@ class Process():
 
     @property
     def args(self):
+        """
+        | A list of arguments to pass to the executable.
+
+        :type: :class:`list` <:class:`str`>
+        """
         return self.__request.args
 
     @args.setter
@@ -43,6 +56,11 @@ class Process():
 
     @property
     def cwd_path(self):
+        """
+        | The working directory path where the process will be/was executed.
+
+        :type: :class:`str`
+        """
         return self.__request.cwd_path
 
     @cwd_path.setter
@@ -51,6 +69,9 @@ class Process():
 
     @property
     def output_text(self):
+        """
+        | Whether or not the process will produce text output.
+        """
         return self.__request.encoding == "utf-8"
 
     @output_text.setter
@@ -69,7 +90,13 @@ class Process():
         self.__request.id = value
 
     def start(self):
+        """
+        | Starts the process.
+        """
         Process._manager.start_process(self, self.__request)
 
     def stop(self):
+        """
+        | Stops the process.
+        """
         Process._manager.stop_process(self)
