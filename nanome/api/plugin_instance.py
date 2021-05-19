@@ -258,7 +258,7 @@ class PluginInstance(_PluginInstance):
 
     def request_menu_transform(self, index, callback=None):
         """
-        | Requests spacial information of the plugin menu (position, rotation, scale)
+        | Requests spatial information of the plugin menu (position, rotation, scale)
 
         :param index: Index of the menu you wish to read
         :type index: int
