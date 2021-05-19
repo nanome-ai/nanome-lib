@@ -24,7 +24,7 @@ class Shape(object):
 
         :rtype: :class:`~nanome.util.enums.ShapeType`
         """
-        return self.__shape_type
+        return self._shape_type
 
     @property
     def color(self):
@@ -33,7 +33,7 @@ class Shape(object):
 
         :rtype: :class:`~nanome.util.Color`
         """
-        return self.__color
+        return self._color
     @color.setter
     def color(self, value):
         """
