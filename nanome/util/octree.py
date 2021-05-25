@@ -151,7 +151,7 @@ class Octree:
         def print_out(self, depth):
             if len(self.here) > 0 or self.branches is not None:
                 print(depth * ' ' + "Depth:", str(depth), "center:", str(self.position), "size:", str(self.h_size), "entries:", str(len(self.here)))
-                if(self.branches is not None):
+                if self.branches is not None:
                     for branch in self.branches:
                         branch.print_out(depth + 1)
 
