@@ -2,10 +2,12 @@ from nanome._internal._structure._molecule import _Molecule
 from nanome.util import Logs
 from . import Base
 
+
 class Molecule(_Molecule, Base):
     """
     | Represents a molecule. Contains chains.
     """
+
     def __init__(self):
         super(Molecule, self).__init__()
         self._molecular = Molecule.Molecular(self)
@@ -30,7 +32,7 @@ class Molecule(_Molecule, Base):
         chain.index = -1
         self._remove_chain(chain)
 
-    #region Generators:
+    # region Generators:
     @property
     def chains(self):
         """
@@ -73,18 +75,18 @@ class Molecule(_Molecule, Base):
         for residue in self.residues:
             for bond in residue.bonds:
                 yield bond
-    #endregion
+    # endregion
 
-    #region connections
+    # region connections
     @property
     def complex(self):
         """
         | Complex that the molecule belongs to
         """
         return self._complex
-    #endregion
+    # endregion
 
-    #region all fields
+    # region all fields
     @property
     def name(self):
         """
@@ -93,6 +95,7 @@ class Molecule(_Molecule, Base):
         :type: :class:`str`
         """
         return self._name
+
     @name.setter
     def name(self, value):
         if type(value) is not str:
@@ -112,9 +115,9 @@ class Molecule(_Molecule, Base):
     @associated.setter
     def associated(self, value):
         self._associated = value
-    #endregion
+    # endregion
 
-    #region conformer stuff
+    # region conformer stuff
     @property
     def names(self):
         return self._names
@@ -158,11 +161,11 @@ class Molecule(_Molecule, Base):
     def delete_conformer(self, index):
         self._delete_conformer(index)
 
-    def copy_conformer(self, src, index= None):
+    def copy_conformer(self, src, index=None):
         self._copy_conformer(src, index)
-    #endregion
+    # endregion
 
-    #region deprecated
+    # region deprecated
     @property
     @Logs.deprecated()
     def molecular(self):
@@ -175,9 +178,11 @@ class Molecule(_Molecule, Base):
         @property
         def name(self):
             return self.parent.name
+
         @name.setter
         def name(self, value):
             self.parent.name = value
-    #endregion
+    # endregion
+
 
 _Molecule._create = Molecule

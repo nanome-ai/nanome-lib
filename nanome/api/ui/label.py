@@ -1,7 +1,7 @@
 import nanome
 from nanome._internal._ui import _Label
-from nanome.util.color import Color
 from . import UIBase
+
 
 class Label(_Label, UIBase):
     """
@@ -10,11 +10,12 @@ class Label(_Label, UIBase):
     HorizAlignOptions = nanome.util.enums.HorizAlignOptions
     VertAlignOptions = nanome.util.enums.VertAlignOptions
 
-    def __init__(self, text = None):
+    def __init__(self, text=None):
         _Label.__init__(self)
         UIBase.__init__(self)
-        if text != None:
+        if text is not None:
             self.text_value = text
+
     @property
     def text_value(self):
         """
@@ -23,6 +24,7 @@ class Label(_Label, UIBase):
         :type: :class:`str`
         """
         return self._text_value
+
     @text_value.setter
     def text_value(self, value):
         if type(value) is not str:
@@ -37,6 +39,7 @@ class Label(_Label, UIBase):
         :type: :class:`~nanome.util.enums.VertAlignOptions`
         """
         return self._text_vertical_align
+
     @text_vertical_align.setter
     def text_vertical_align(self, value):
         self._text_vertical_align = value
@@ -49,6 +52,7 @@ class Label(_Label, UIBase):
         :type: :class:`~nanome.util.enums.HorizAlignOptions`
         """
         return self._text_horizontal_align
+
     @text_horizontal_align.setter
     def text_horizontal_align(self, value):
         self._text_horizontal_align = value
@@ -61,6 +65,7 @@ class Label(_Label, UIBase):
         :type: :class:`bool`
         """
         return self._text_auto_size
+
     @text_auto_size.setter
     def text_auto_size(self, value):
         self._text_auto_size = value
@@ -74,6 +79,7 @@ class Label(_Label, UIBase):
         :type: :class:`float`
         """
         return self._text_max_size
+
     @text_max_size.setter
     def text_max_size(self, value):
         self._text_max_size = value
@@ -87,6 +93,7 @@ class Label(_Label, UIBase):
         :type: :class:`float`
         """
         return self._text_min_size
+
     @text_min_size.setter
     def text_min_size(self, value):
         self._text_min_size = value
@@ -99,6 +106,7 @@ class Label(_Label, UIBase):
         :type: :class:`float`
         """
         return self._text_size
+
     @text_size.setter
     def text_size(self, value):
         self._text_size = value
@@ -111,6 +119,7 @@ class Label(_Label, UIBase):
         :type: :class:`~nanome.util.Color`
         """
         return self._text_color
+
     @text_color.setter
     def text_color(self, value):
         self._text_color = value
@@ -123,6 +132,7 @@ class Label(_Label, UIBase):
         :type: :class:`bool`
         """
         return self._text_bold
+
     @text_bold.setter
     def text_bold(self, value):
         self._text_bold = value
@@ -135,6 +145,7 @@ class Label(_Label, UIBase):
         :type: :class:`bool`
         """
         return self._text_italic
+
     @text_italic.setter
     def text_italic(self, value):
         self._text_italic = value
@@ -147,6 +158,7 @@ class Label(_Label, UIBase):
         :type: :class:`bool`
         """
         return self._text_underlined
+
     @text_underlined.setter
     def text_underlined(self, value):
         self._text_underlined = value

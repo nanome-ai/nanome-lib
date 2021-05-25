@@ -1,12 +1,14 @@
 from nanome._internal._ui import _Menu
 from .io import MenuIO
 
+
 class Menu(_Menu):
     """
     | Represents a menu for a plugin
     """
     io = MenuIO()
-    def __init__(self, index = 0, title = "title"):
+
+    def __init__(self, index=0, title="title"):
         _Menu.__init__(self, index, title)
         self.io = MenuIO(self)
 
@@ -19,7 +21,7 @@ class Menu(_Menu):
         """
         self._closed_callback = func
 
-    #region properties
+    # region properties
     @property
     def enabled(self):
         """
@@ -114,7 +116,7 @@ class Menu(_Menu):
     @index.setter
     def index(self, value):
         self._index = value
-    #endregion
+    # endregion
 
     def find_content(self, content_id):
         """
@@ -144,6 +146,7 @@ class Menu(_Menu):
         :rtype: :class:`list` <:class:`~nanome.ui.LayoutNode`>
         """
         return self._get_all_nodes()
+
 
 Menu.io._setup_addon(Menu)
 _Menu._create = Menu

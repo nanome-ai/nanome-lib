@@ -2,6 +2,7 @@ import nanome
 from nanome._internal._addon import _Addon
 from nanome._internal._structure._io import _pdb, _sdf, _mmcif
 
+
 class ComplexIO(_Addon):
     PDBSaveOptions = nanome.util.complex_save_options.PDBSaveOptions
     SDFSaveOptions = nanome.util.complex_save_options.SDFSaveOptions
@@ -10,7 +11,7 @@ class ComplexIO(_Addon):
     def __init__(self, base_object=None):
         _Addon.__init__(self, base_object)
 
-    def to_pdb(self, path, options = None):
+    def to_pdb(self, path, options=None):
         """
         | Saves the complex into a .pdb file
 
@@ -41,7 +42,7 @@ class ComplexIO(_Addon):
         """
         return self.__from_file(kwargs, _pdb)
 
-    def to_sdf(self, path, options = None):
+    def to_sdf(self, path, options=None):
         """
         | Saves the complex into a .sdf file
 
@@ -72,7 +73,7 @@ class ComplexIO(_Addon):
         """
         return self.__from_file(kwargs, _sdf)
 
-    def to_mmcif(self, path, options = None):
+    def to_mmcif(self, path, options=None):
         """
         | Saves the complex into a .cif file
 

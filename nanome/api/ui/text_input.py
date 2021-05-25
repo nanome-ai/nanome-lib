@@ -2,6 +2,7 @@ import nanome
 from nanome._internal._ui import _TextInput
 from . import UIBase
 
+
 class TextInput(_TextInput, UIBase):
     """
     | Represents a text input, where the user can input text
@@ -20,6 +21,7 @@ class TextInput(_TextInput, UIBase):
         :type: :class:`int`
         """
         return self._max_length
+
     @max_length.setter
     def max_length(self, value):
         self._max_length = value
@@ -32,6 +34,7 @@ class TextInput(_TextInput, UIBase):
         :type: :class:`str`
         """
         return self._placeholder_text
+
     @placeholder_text.setter
     def placeholder_text(self, value):
         if type(value) is not str:
@@ -46,6 +49,7 @@ class TextInput(_TextInput, UIBase):
         :type: :class:`str`
         """
         return self._input_text
+
     @input_text.setter
     def input_text(self, value):
         if type(value) is not str:
@@ -60,6 +64,7 @@ class TextInput(_TextInput, UIBase):
         :type: :class:`~nanome.util.Color`
         """
         return self._placeholder_text_color
+
     @placeholder_text_color.setter
     def placeholder_text_color(self, value):
         self._placeholder_text_color = value
@@ -72,6 +77,7 @@ class TextInput(_TextInput, UIBase):
         :type: :class:`~nanome.util.Color`
         """
         return self._text_color
+
     @text_color.setter
     def text_color(self, value):
         self._text_color = value
@@ -84,6 +90,7 @@ class TextInput(_TextInput, UIBase):
         :type: :class:`~nanome.util.Color`
         """
         return self._background_color
+
     @background_color.setter
     def background_color(self, value):
         self._background_color = value
@@ -96,6 +103,7 @@ class TextInput(_TextInput, UIBase):
         :type: :class:`float`
         """
         return self._text_size
+
     @text_size.setter
     def text_size(self, value):
         self._text_size = value
@@ -108,6 +116,7 @@ class TextInput(_TextInput, UIBase):
         :type: :class:`~nanome.util.enums.HorizAlignOptions`
         """
         return self._text_horizontal_align
+
     @text_horizontal_align.setter
     def text_horizontal_align(self, value):
         self._text_horizontal_align = value
@@ -120,6 +129,7 @@ class TextInput(_TextInput, UIBase):
         :type: :class:`float`
         """
         return self._padding_left
+
     @padding_left.setter
     def padding_left(self, value):
         self._padding_left = value
@@ -132,6 +142,7 @@ class TextInput(_TextInput, UIBase):
         :type: :class:`float`
         """
         return self._padding_right
+
     @padding_right.setter
     def padding_right(self, value):
         self._padding_right = value
@@ -144,6 +155,7 @@ class TextInput(_TextInput, UIBase):
         :type: :class:`float`
         """
         return self._padding_top
+
     @padding_top.setter
     def padding_top(self, value):
         self._padding_top = value
@@ -156,6 +168,7 @@ class TextInput(_TextInput, UIBase):
         :type: :class:`float`
         """
         return self._padding_bottom
+
     @padding_bottom.setter
     def padding_bottom(self, value):
         self._padding_bottom = value
@@ -207,5 +220,6 @@ class TextInput(_TextInput, UIBase):
         :type text: method (:class:`~nanome.ui.TextInput`) -> None
         """
         self._submitted_callback = func
+
 
 _TextInput._create = TextInput

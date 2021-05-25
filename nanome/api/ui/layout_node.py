@@ -3,6 +3,7 @@ from nanome._internal._ui import _LayoutNode
 from nanome.api.ui import Button, Slider, UIList, Mesh, Label, TextInput, Image, LoadingBar, Dropdown
 from .io import LayoutNodeIO
 
+
 class LayoutNode(_LayoutNode):
     """
     | Class for hierarchical UI objects representing part of a Nanome menu.
@@ -17,14 +18,15 @@ class LayoutNode(_LayoutNode):
     LayoutTypes = nanome.util.enums.LayoutTypes
 
     io = LayoutNodeIO()
-    def __init__(self, name = "node"):
+
+    def __init__(self, name="node"):
         _LayoutNode.__init__(self, name)
         self.io = LayoutNodeIO(self)
 
     def clone(self):
         return self._clone()
 
-    #region properties.
+    # region properties.
     @property
     def enabled(self):
         """
@@ -153,9 +155,10 @@ class LayoutNode(_LayoutNode):
     @parent.setter
     def parent(self, value):
         self._parent = value
-    #endregion
-    #region API functions
-    def find_node(self, name, recursively = True):
+    # endregion
+    # region API functions
+
+    def find_node(self, name, recursively=True):
         # type: (str, bool) -> LayoutNode
         """
         | Checks child nodes for a node of the matching name.
@@ -172,12 +175,12 @@ class LayoutNode(_LayoutNode):
                 res = child
             elif recursively:
                 res = child.find_node(name, True)
-            if res != None:
+            if res is not None:
                 break
         return res
 
     def find_ancestor(self, name):
-        if (self._parent != None):
+        if (self._parent is not None):
             if (self._parent.name == name):
                 return self._parent
             return self._parent.find_ancestor(name)
@@ -204,20 +207,20 @@ class LayoutNode(_LayoutNode):
     def clear_children(self):
         self._clear_children()
 
-    #endregion
-    #region API Shortcuts
+    # endregion
+    # region API Shortcuts
 
-    def create_child_node(self, name = ""):
+    def create_child_node(self, name=""):
         child = LayoutNode(name)
         self.add_child(child)
         return child
 
     def set_padding(self, left=None, right=None, top=None, down=None):
         self.padding = (
-            left if left != None else self.padding[0],
-            right if right != None else self.padding[1],
-            top if top != None else self.padding[2],
-            down if down != None else self.padding[3]
+            left if left is not None else self.padding[0],
+            right if right is not None else self.padding[1],
+            top if top is not None else self.padding[2],
+            down if down is not None else self.padding[3]
         )
 
     def set_size_ratio(self, size):
@@ -230,15 +233,16 @@ class LayoutNode(_LayoutNode):
 
     def set_size_expand(self):
         self.sizing_type = _LayoutNode.SizingTypes.expand
-    #endregion
-    #region Content adders
-    def add_new_button(self, text = None):
+    # endregion
+    # region Content adders
+
+    def add_new_button(self, text=None):
         # type: (str) -> Button
         button = Button(text=text)
         self.set_content(button)
         return button
 
-    def add_new_toggle_switch(self, text = None):
+    def add_new_toggle_switch(self, text=None):
         # type: (str) -> Button
         button = Button(text=text)
         button.switch.active = True
@@ -249,20 +253,20 @@ class LayoutNode(_LayoutNode):
         self.set_content(button)
         return button
 
-    def add_new_label(self, text = None):
+    def add_new_label(self, text=None):
         # type: (str) -> Label
         label = Label(text=text)
         self.set_content(label)
         return label
 
-    def add_new_text_input(self, placeholder_text = ""):
+    def add_new_text_input(self, placeholder_text=""):
         # type: () -> TextInput
         text_input = TextInput()
         text_input.placeholder_text = placeholder_text
         self.set_content(text_input)
         return text_input
 
-    def add_new_slider(self, min_value = 0, max_value = 10, current_value = 5):
+    def add_new_slider(self, min_value=0, max_value=10, current_value=5):
         # type: () -> Slider
         slider = Slider(min_value, max_value, current_value)
         self.set_content(slider)
@@ -274,15 +278,15 @@ class LayoutNode(_LayoutNode):
         self.set_content(mesh)
         return mesh
 
-    def add_new_image(self, file_path = ""):
+    def add_new_image(self, file_path=""):
         image = Image(file_path)
         self.set_content(image)
         return image
 
     def add_new_loading_bar(self):
-        loadingBar = LoadingBar()
-        self.set_content(loadingBar)
-        return loadingBar
+        loading_bar = LoadingBar()
+        self.set_content(loading_bar)
+        return loading_bar
 
     def add_new_list(self):
         # type: () -> UIList
@@ -295,6 +299,7 @@ class LayoutNode(_LayoutNode):
         dropdown_ = Dropdown()
         self.set_content(dropdown_)
         return dropdown_
-    #endregion
+
+    # endregion
 LayoutNode.io._setup_addon(LayoutNode)
 _LayoutNode._create = LayoutNode

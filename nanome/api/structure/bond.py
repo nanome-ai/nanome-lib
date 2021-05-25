@@ -14,7 +14,7 @@ class Bond(_Bond, Base):
         super(Bond, self).__init__()
         self._molecular = Bond.Molecular(self)
 
-    #region connections
+    # region connections
     @property
     def atom1(self):
         """
@@ -68,9 +68,9 @@ class Bond(_Bond, Base):
         | Complex that the bond is part of
         """
         return self._complex
-    #endregion
+    # endregion
 
-    #region all fields
+    # region all fields
     @property
     def kind(self):
         """
@@ -96,9 +96,9 @@ class Bond(_Bond, Base):
     @exists.setter
     def exists(self, value):
         self._exists = value
-    #endregion
+    # endregion
 
-    #region conformer stuff
+    # region conformer stuff
     @property
     def current_conformer(self):
         return self._current_conformer
@@ -113,7 +113,7 @@ class Bond(_Bond, Base):
 
     @kinds.setter
     def kinds(self, value):
-        if self.molecule != None:
+        if self.molecule is not None:
             if len(value) != self.conformer_count:
                 raise ValueError("Length of kinds must match the conformer count of the parent molecule.")
         self._kinds = value
@@ -124,13 +124,13 @@ class Bond(_Bond, Base):
 
     @in_conformer.setter
     def in_conformer(self, value):
-        if self.molecule != None:
+        if self.molecule is not None:
             if len(value) != self.conformer_count:
                 raise ValueError("Length of in_conformer must match the conformer count of the parent molecule.")
         self._in_conformer = value
-    #endregion
+    # endregion
 
-    #region deprecated
+    # region deprecated
     @property
     @Logs.deprecated()
     def molecular(self):
@@ -147,5 +147,6 @@ class Bond(_Bond, Base):
         @kind.setter
         def kind(self, value):
             self.parent.kind = value
-    #endregion
+
+    # endregion
 _Bond._create = Bond

@@ -1,4 +1,3 @@
-from . import _UIBase
 
 class _DropdownItem():
     @classmethod
