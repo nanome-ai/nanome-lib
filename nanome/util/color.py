@@ -15,7 +15,7 @@ class Color(object):
     """
 
     def __init__(self, r=0, g=0, b=0, a=255, whole_num=None):
-        if (whole_num is None):
+        if (whole_num is not None):
             self.set_color_int(whole_num)
         else:
             self.set_color_rgb(r, g, b, a)
