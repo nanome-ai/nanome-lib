@@ -1,5 +1,6 @@
 from nanome._internal._network._commands._callbacks._commands_enums import _Messages
 
+
 class IntegrationRequest():
     def __init__(self, request_id, type, args, network):
         self.__request_id = request_id

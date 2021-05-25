@@ -1,5 +1,6 @@
 from nanome.util import Logs
 
+
 class Integration():
     def __init__(self):
         self.hydrogen_add = None
@@ -15,7 +16,7 @@ class Integration():
 
     def _call(self, name, request):
         callback = getattr(self, name, None)
-        if callback == None:
+        if callback is None:
             Logs.warning("Integration", name, "called but not implemented by the plugin")
             return
         callback(request)

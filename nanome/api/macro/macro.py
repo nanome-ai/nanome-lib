@@ -1,5 +1,5 @@
-import nanome
 from nanome._internal._macro._macro import _Macro
+
 
 class Macro(_Macro):
     def __init__(self, title="", logic=""):
@@ -47,5 +47,6 @@ class Macro(_Macro):
     @classmethod
     def get_live(cls, callback=None):
         return cls._get_live(callback)
+
 
 _Macro._create = Macro

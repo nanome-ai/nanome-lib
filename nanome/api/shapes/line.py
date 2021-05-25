@@ -40,4 +40,5 @@ class Line(_Line, Shape):
     def dash_distance(self, value):
         self._dash_distance = value
 
+
 _Line._create = Line
