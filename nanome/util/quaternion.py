@@ -1,10 +1,12 @@
 import math
-#placeholder quaternion
+# placeholder quaternion
+
 
 class Quaternion(object):
     """
     | A vector that holds 4 values. Used for rotation.
     """
+
     def __init__(self, x=0, y=0, z=0, w=1):
         self._x = float(x)
         self._y = float(y)
@@ -26,7 +28,7 @@ class Quaternion(object):
         :return: A copy of this Quaternion.
         :rtype: :class:`~nanome.util.Quaternion`
         """
-        return Quaternion(self.x,self.y,self.z,self.w)
+        return Quaternion(self.x, self.y, self.z, self.w)
 
     @property
     def x(self):
@@ -91,14 +93,14 @@ class Quaternion(object):
         return Quaternion(value.x, -value.y, -value.z, value.w)
 
     def __mul__(self, other):
-        q =self
+        q = self
         if isinstance(other, Quaternion):
             r = other
             w = r.w * q.w - r.x * q.x - r.y * q.y - r.z * q.z
             x = r.w * q.x + r.x * q.w - r.y * q.z + r.z * q.y
             y = r.w * q.y + r.x * q.z + r.y * q.w - r.z * q.x
             z = r.w * q.z - r.x * q.y + r.y * q.x + r.z * q.w
-            return Quaternion(x,y,z,w)
+            return Quaternion(x, y, z, w)
         elif isinstance(other, float) or isinstance(other, int):
             n = other
             return Quaternion(q.x * n, q.y * n, q.z * n, q.w * n)
@@ -116,9 +118,10 @@ class Quaternion(object):
         """
         return self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
 
-    EPS = 1*(10**-6)
+    EPS = 1 * (10**-6)
+
     def equals(self, other):
-        return abs(self.dot(other)) > 1-Quaternion.EPS
+        return abs(self.dot(other)) > 1 - Quaternion.EPS
 
     def rotate_vector(self, point):
         """
@@ -138,7 +141,7 @@ class Quaternion(object):
         point.z = result.z
         return point
 
-    #algorithm credit https://d3cw3dd2w32x2b.cloudfront.net/wp-content/uploads/2015/01/matrix-to-quat.pdf
+    # algorithm credit https://d3cw3dd2w32x2b.cloudfront.net/wp-content/uploads/2015/01/matrix-to-quat.pdf
     @classmethod
     def from_matrix(cls, matrix):
         """Creates a Quaternion from a 4x4 affine transformation matrix.

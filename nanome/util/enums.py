@@ -7,7 +7,6 @@ except:
         pass
 import sys
 
-#TODO normalize styling
 
 class AtomRenderingMode(IntEnum):
     """
@@ -22,6 +21,7 @@ class AtomRenderingMode(IntEnum):
     BFactor = 5
     Adaptive = 6
 
+
 class Kind(IntEnum):
     """
     | Bond types.
@@ -33,6 +33,7 @@ class Kind(IntEnum):
     CovalentTriple = 3
     Aromatic = 4
 
+
 class RibbonMode(IntEnum):
     """
     | Ribbon display modes.
@@ -41,6 +42,7 @@ class RibbonMode(IntEnum):
     SecondaryStructure = 0
     AdaptiveTube = 1
     Coil = 2
+
 
 class SecondaryStructure(IntEnum):
     """
@@ -52,6 +54,7 @@ class SecondaryStructure(IntEnum):
     Sheet = 2
     Helix = 3
 
+
 class PaddingTypes(IntEnum):
     """
     | UI padding types.
@@ -60,6 +63,7 @@ class PaddingTypes(IntEnum):
     fixed = 0
     ratio = 1
 
+
 class PluginListButtonType(IntEnum):
     """
     | Buttons on the plugin list, modifiable by the plugin itself.
@@ -67,6 +71,7 @@ class PluginListButtonType(IntEnum):
     """
     run = 0
     advanced_settings = 1
+
 
 class SizingTypes(IntEnum):
     """
@@ -77,6 +82,7 @@ class SizingTypes(IntEnum):
     fixed = 1
     ratio = 2
 
+
 class LayoutTypes(IntEnum):
     """
     | Orientation modes for Layout Nodes.
@@ -84,6 +90,7 @@ class LayoutTypes(IntEnum):
     """
     vertical = 0
     horizontal = 1
+
 
 class ScalingOptions(IntEnum):
     """
@@ -93,6 +100,7 @@ class ScalingOptions(IntEnum):
     stretch = 0
     fill = 1
     fit = 2
+
 
 class NotificationTypes(IntEnum):
     """
@@ -104,6 +112,7 @@ class NotificationTypes(IntEnum):
     warning = 2
     error = 3
 
+
 class HorizAlignOptions(IntEnum):
     """
     | Horizontal alignment modes for text.
@@ -113,6 +122,7 @@ class HorizAlignOptions(IntEnum):
     Middle = 1
     Right = 2
 
+
 class VertAlignOptions(IntEnum):
     """
     | Vertical alignment modes for text.
@@ -121,6 +131,7 @@ class VertAlignOptions(IntEnum):
     Top = 0
     Middle = 1
     Bottom = 2
+
 
 class ToolTipPositioning(IntEnum):
     """
@@ -137,6 +148,7 @@ class ToolTipPositioning(IntEnum):
     right = 7
     center = 8
 
+
 class StreamType(IntEnum):
     """
     | Object attributes and sets of attributes that can be streamed to Nanome.
@@ -151,6 +163,7 @@ class StreamType(IntEnum):
     shape_color = 6
     sphere_shape_radius = 7
 
+
 class StreamDataType(IntEnum):
     """
     | Stream datatypes.
@@ -160,6 +173,7 @@ class StreamDataType(IntEnum):
     byte = 1
     string = 2
 
+
 class StreamDirection(IntEnum):
     """
     | Stream directions (reading and writing).
@@ -168,6 +182,7 @@ class StreamDirection(IntEnum):
     writing = 0
     reading = 1
 
+
 class LoadFileErrorCode(IntEnum):
     """
     | Errors when loading files into Nanome.
@@ -175,6 +190,7 @@ class LoadFileErrorCode(IntEnum):
     """
     no_error = 0
     loading_failed = 1
+
 
 class VolumeType(IntEnum):
     """
@@ -187,6 +203,7 @@ class VolumeType(IntEnum):
     cryo_em = 3
     electrostatic = 4
 
+
 class VolumeVisualStyle(IntEnum):
     """
     | Ways that a complex's volume can be displayed.
@@ -195,6 +212,7 @@ class VolumeVisualStyle(IntEnum):
     Mesh = 0
     FlatSurface = 1
     SmoothSurface = 2
+
 
 class ExportFormats(IntEnum):
     """
@@ -207,6 +225,7 @@ class ExportFormats(IntEnum):
     MMCIF = 3
     SMILES = 4
 
+
 class ShapeType(IntEnum):
     """
     | Types of shapes that can be created within Nanome.
@@ -215,6 +234,7 @@ class ShapeType(IntEnum):
     Sphere = 0
     Line = 1
     Label = 2
+
 
 class ShapeAnchorType(IntEnum):
     """
@@ -225,12 +245,13 @@ class ShapeAnchorType(IntEnum):
     Complex = 1
     Atom = 2
 
+
 class ColorScheme(IntEnum):
     """
     | Color schemes for all structure representations.
     | To be used with plugin_instance.apply_color_scheme
     """
-    #None = 0 this one is on nanome but does nothing
+    # None = 0 this one is on nanome but does nothing
     Residue = 1
     Occupancy = 2
     BFactor = 3
@@ -246,6 +267,7 @@ class ColorScheme(IntEnum):
     Kabat = 13
     Chothia = 14
 
+
 class ColorSchemeTarget(IntEnum):
     """
     | Structure representations.
@@ -255,6 +277,7 @@ class ColorSchemeTarget(IntEnum):
     Ribbon = 1
     Surface = 2
     All = 3
+
 
 class SkyBoxes(IntEnum):
     """
@@ -269,17 +292,19 @@ class SkyBoxes(IntEnum):
     White = 4
     Graydient = 5
 
+
 class _CommandEnum(IntEnum):
-    if sys.version_info >= (3, 6): # Tmp hack
+    if sys.version_info >= (3, 6):  # Tmp hack
         # Override for auto()
         def _generate_next_value_(name, start, count, last_values):
             return IntEnum._generate_next_value_(name, 0, count, last_values)
     else:
         pass
 
+
 class Integrations(_CommandEnum):
     # Tmp hack
-    reset_auto() #Not an enum
+    reset_auto()  # Not an enum
 
     hydrogens = auto()
     structure_prep = auto()
@@ -290,8 +315,9 @@ class Integrations(_CommandEnum):
     generate_molecule_image = auto()
     import_file = auto()
 
+
 class Permissions(_CommandEnum):
     # Tmp hack
-    reset_auto() #Not an enum
+    reset_auto()  # Not an enum
 
     local_files_access = auto()

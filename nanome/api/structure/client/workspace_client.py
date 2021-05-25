@@ -3,6 +3,7 @@ from nanome._internal._addon import _Addon
 from nanome._internal._network import _ProcessNetwork
 from nanome._internal._network._commands._callbacks import _Messages
 
+
 class WorkspaceClient(_Addon):
     def __init__(self, base_object=None):
         _Addon.__init__(self, base_object)

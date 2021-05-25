@@ -13,11 +13,12 @@ class Color(object):
     :param whole_num: Optional way to input color. The int or hex form of the color. e.g. 0x8000FFFF
     :type whole_num: :class:`int` or hex
     """
-    def __init__(self, r=0, g=0, b=0, a=255, whole_num = None):
-        if (whole_num != None):
+
+    def __init__(self, r=0, g=0, b=0, a=255, whole_num=None):
+        if (whole_num is None):
             self.set_color_int(whole_num)
         else:
-            self.set_color_rgb(r,g,b,a)
+            self.set_color_rgb(r, g, b, a)
 
     def set_color_int(self, num):
         """
@@ -62,8 +63,8 @@ class Color(object):
         :param value: Int value of the color
         :type value: :class:`int`
         """
-        if (value < 0): #convert to uint
-            value += 4294967295 #max int
+        if (value < 0):  # convert to uint
+            value += 4294967295  # max int
         value = int(value)
         color = Color(whole_num=value)
         return color
@@ -179,14 +180,14 @@ class Color(object):
         value = min(max(int(value), 0), 255)
         self._color = 0xFFFFFF00 & self._color | value
 
-    #functions
+    # functions
     def copy(self):
         """
         | Create a new color from this one.
 
         :rtype: :class:`~nanome.util.Color`
         """
-        return Color(whole_num = self._color)
+        return Color(whole_num=self._color)
 
     def to_string_hex(self):
         """

@@ -8,12 +8,14 @@ class PDBSaveOptions(object):
     | - heterogen bonds
     | - only selected atoms
     """
+
     def __init__(self):
         self.write_hydrogens = True
         self.write_ters = True
         self.write_bonds = False
         self.write_het_bonds = True
         self.only_save_these_atoms = None
+
 
 class SDFSaveOptions(object):
     """
@@ -22,9 +24,11 @@ class SDFSaveOptions(object):
     | - all bonds
     | - heterogen bonds
     """
+
     def __init__(self):
         self.write_all_bonds = True
         self.write_het_bonds = True
+
 
 class MMCIFSaveOptions(object):
     """
@@ -33,6 +37,7 @@ class MMCIFSaveOptions(object):
     | - hydrogens
     | - only selected atoms
     """
+
     def __init__(self):
         self.write_hydrogens = True
         self.only_save_these_atoms = None

@@ -1,9 +1,11 @@
 import math
 
+
 class Vector3(object):
     """
     | A vector that holds 3 values. Used for position and scale.
     """
+
     def __init__(self, x=0, y=0, z=0):
         self._positions = [float(x), float(y), float(z)]
 
@@ -84,6 +86,7 @@ class Vector3(object):
         :type: :class:`float`
         """
         return self._positions[0]
+
     @x.setter
     def x(self, value):
         self._positions[0] = float(value)
@@ -96,6 +99,7 @@ class Vector3(object):
         :type: :class:`float`
         """
         return self._positions[1]
+
     @y.setter
     def y(self, value):
         self._positions[1] = float(value)
@@ -108,6 +112,7 @@ class Vector3(object):
         :type: :class:`float`
         """
         return self._positions[2]
+
     @z.setter
     def z(self, value):
         self._positions[2] = float(value)
