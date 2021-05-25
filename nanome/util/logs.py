@@ -113,7 +113,7 @@ class Logs(object):
             def wrapper(*args, **kwargs):
                 if not wrapper.used:
                     warning = "Function " + func.__name__ + " is deprecated. "
-                    if (new_func is not None):
+                    if new_func is not None:
                         warning += "Try using " + new_func + " instead. "
                     warning += msg
                     Logs.warning(warning)

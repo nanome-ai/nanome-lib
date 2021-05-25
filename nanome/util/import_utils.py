@@ -13,7 +13,7 @@ class ImportUtils(object):
         # type: (str) -> bool
         if sys.version_info >= (3, 1) or sys.version_info == (2, 7):
             spec = util.find_spec(lib_name)
-            return spec is None
+            return spec is not None
         else:
             try:
                 __import__(spec)
