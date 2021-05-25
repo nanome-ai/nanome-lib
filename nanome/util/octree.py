@@ -21,7 +21,7 @@ class Octree:
         if data in self._knowns:
             node = self._knowns[data]
             del self._knowns[data]
-            if (data in node.here):
+            if data in node.here:
                 node.here.remove(data)
             return True
         else:
@@ -149,7 +149,7 @@ class Octree:
             return result
 
         def print_out(self, depth):
-            if (len(self.here) > 0 or self.branches is not None):
+            if len(self.here) > 0 or self.branches is not None:
                 print(depth * ' ' + "Depth:", str(depth), "center:", str(self.position), "size:", str(self.h_size), "entries:", str(len(self.here)))
                 if(self.branches is not None):
                     for branch in self.branches:
@@ -157,8 +157,8 @@ class Octree:
 
         def near(self, pos, radiusSqr, near_objs, max_result_nb=None):
             # sqr comparison to avoid root
-            if (Octree._OctNode._sqr_distance(pos, self.position) <= self.sqrRadius + radiusSqr):
-                if (self.branches is not None):
+            if Octree._OctNode._sqr_distance(pos, self.position) <= self.sqrRadius + radiusSqr:
+                if self.branches is not None:
                     for branch in self.branches:
                         max_result_nb = branch.near(pos, radiusSqr, near_objs, max_result_nb)
                         # if a child branch got the max nb of result, return
@@ -166,7 +166,7 @@ class Octree:
                             return max_result_nb
                 else:
                     for entry in self.here:
-                        if (Octree._OctNode._sqr_distance(pos, entry.pos) < radiusSqr):
+                        if Octree._OctNode._sqr_distance(pos, entry.pos) < radiusSqr:
                             near_objs.append(entry.data)
                             # if this branch got the max nb of result, return
                             if max_result_nb is not None:
