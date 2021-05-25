@@ -32,14 +32,16 @@ config_items = [
     }
 ]
 
+
 def parse_value(str, parser):
-    if parser == None:
+    if parser is None:
         return str
     try:
         return parser(str)
     except:
         Logs.error("Wrong value:", str, "\nExpected:", parser)
         sys.exit(1)
+
 
 def interactive_mode():
     Logs.message("Setup utility for Nanome Plugins global configuration")
@@ -55,12 +57,14 @@ def interactive_mode():
         value = parse_value(str, c['parse_method'])
         config.set(c['key'], value)
 
+
 def display_help():
     Logs.message("The following arguments are available for Nanome Plugins global configuration")
     for i in range(len(config_items)):
         c = config_items[i]
         Logs.message(c['arg_key'], c['name'], '-', c['description'])
     Logs.message("\nOr run without arguments for interactive mode")
+
 
 def parse_args():
     for i in range(1, len(sys.argv)):
@@ -75,7 +79,7 @@ def parse_args():
             if config_items[j]['arg_key'] == sys.argv[i]:
                 c = config_items[j]
                 break
-        if c == None:
+        if c is None:
             Logs.error('Unrecognized argument:', sys.argv[i])
             sys.exit(1)
 
@@ -86,11 +90,13 @@ def parse_args():
         value = parse_value(sys.argv[i + 1], c['parse_method'])
         config.set(c['key'], value)
 
+
 def main():
     if (len(sys.argv) == 1):
         interactive_mode()
     else:
         parse_args()
+
 
 if __name__ == "__main__":
     main()

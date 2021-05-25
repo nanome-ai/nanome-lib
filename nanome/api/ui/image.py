@@ -1,7 +1,7 @@
 import nanome
 from . import UIBase
-from nanome.util.color import Color
 from nanome._internal._ui import _Image
+
 
 class Image(_Image, UIBase):
     """
@@ -9,7 +9,7 @@ class Image(_Image, UIBase):
     """
     ScalingOptions = nanome.util.enums.ScalingOptions
 
-    def __init__(self, file_path = ""):
+    def __init__(self, file_path=""):
         _Image.__init__(self)
         UIBase.__init__(self)
         self._file_path = file_path
@@ -22,6 +22,7 @@ class Image(_Image, UIBase):
         :type: :class:`~nanome.ui.Color`
         """
         return self._color
+
     @color.setter
     def color(self, value):
         self._color = value
@@ -79,4 +80,6 @@ class Image(_Image, UIBase):
         :type func: method (:class:`~nanome.ui.Image`, :class:`int`, :class:`int`) -> None
         """
         _Image._register_released_callback(self, func)
+
+
 _Image._create = Image

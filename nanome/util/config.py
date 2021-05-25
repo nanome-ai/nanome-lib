@@ -11,11 +11,12 @@ default_json_string = """{
 
 default_json = json.loads(default_json_string)
 
+
 def _setup_file():
     s = "/"
 
     home = os.getenv('APPDATA')
-    if home == None:
+    if home is None:
         home = os.getenv('HOME')
     directory = home + s + ".nanome_lib"
     config = directory + s + "config.txt"
@@ -33,9 +34,11 @@ def _setup_file():
             return False
     return config
 
+
 def _setup_clean_config(config_path):
     with open(config_path, "w") as file:
         json.dump(default_json, file)
+
 
 def fetch(key):
     """
@@ -61,6 +64,7 @@ def fetch(key):
     else:
         return default_json[key]
 
+
 def set(key, value):
     """
     | Set a configuration entry in your nanome configuration.
@@ -80,5 +84,6 @@ def set(key, value):
             json.dump(config_json, file)
             return True
     return False
+
 
 config_path = _setup_file()

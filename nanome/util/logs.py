@@ -1,10 +1,11 @@
 import sys
 import functools
+from .enum import IntEnum, auto
 if sys.version_info >= (3, 0):
     from ._logs_3 import _print
 else:
     from ._logs_2 import _print
-from .enum import IntEnum, auto
+
 
 class Logs(object):
     """
@@ -45,7 +46,7 @@ class Logs(object):
         for arg in args:
             arr.append(str(arg))
         msg = col_type['msg'] + ' '.join(arr)
-        if cls.__pipe != None:
+        if cls.__pipe is not None:
             from nanome._internal._util import _DataType, _ProcData
             to_send = _ProcData()
             to_send._type = _DataType.log
@@ -94,10 +95,10 @@ class Logs(object):
         :param args: Variable length argument list
         :type args: Anything printable
         """
-        if cls.__verbose == None:
+        if cls.__verbose is None:
             Logs.warning("Debug used before plugin start.")
             cls._print(cls._print_type['debug'], *args)
-        elif cls.__verbose == True:
+        elif cls.__verbose is True:
             cls._print(cls._print_type['debug'], *args)
 
     @classmethod
@@ -106,20 +107,21 @@ class Logs(object):
             cls._is_windows_cmd = True
 
     @staticmethod
-    def deprecated (new_func = None, msg = ""):
+    def deprecated(new_func=None, msg=""):
         def deprecated_decorator(func):
             @functools.wraps(func)
             def wrapper(*args, **kwargs):
                 if not wrapper.used:
                     warning = "Function " + func.__name__ + " is deprecated. "
-                    if (new_func != None):
+                    if new_func is not None:
                         warning += "Try using " + new_func + " instead. "
                     warning += msg
                     Logs.warning(warning)
                     wrapper.used = True
                 return func(*args, **kwargs)
-            wrapper.used = False            
+            wrapper.used = False
             return wrapper
         return deprecated_decorator
+
 
 Logs._init()

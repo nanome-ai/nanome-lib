@@ -1,5 +1,6 @@
 from nanome._internal._shapes._anchor import _Anchor
 
+
 class Anchor(_Anchor):
     def __init__(self):
         _Anchor.__init__(self)
@@ -43,4 +44,6 @@ class Anchor(_Anchor):
     @anchor_type.setter
     def anchor_type(self, value):
         self._anchor_type = value
+
+
 _Anchor._create = Anchor

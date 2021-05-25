@@ -1,11 +1,12 @@
-from nanome.util.color import Color
 from nanome._internal._ui import _DropdownItem
+
 
 class DropdownItem(_DropdownItem):
     """
     | Represents a dropdown item in a dropdown menu
     """
-    def __init__(self, name = "item"):
+
+    def __init__(self, name="item"):
         _DropdownItem.__init__(self)
         self.name = name
 
@@ -19,6 +20,7 @@ class DropdownItem(_DropdownItem):
         :type: :class:`str`
         """
         return self._name
+
     @name.setter
     def name(self, value):
         self._name = value
@@ -32,6 +34,7 @@ class DropdownItem(_DropdownItem):
         :type: :class:`bool`
         """
         return self._close_on_selected
+
     @close_on_selected.setter
     def close_on_selected(self, value):
         self._close_on_selected = value
@@ -46,6 +49,7 @@ class DropdownItem(_DropdownItem):
         :type: :class:`bool`
         """
         return self._selected
+
     @selected.setter
     def selected(self, value):
         self._selected = value
@@ -57,5 +61,6 @@ class DropdownItem(_DropdownItem):
         :type: :class:`~nanome.ui.DropdownItem`
         """
         return self._clone()
+
 
 _DropdownItem._create = DropdownItem

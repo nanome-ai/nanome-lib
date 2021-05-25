@@ -1,5 +1,7 @@
 from nanome._internal._network._commands._callbacks import _Messages
 import nanome
+from nanome.util import Logs
+
 
 class Stream(object):
     """
@@ -24,16 +26,17 @@ class Stream(object):
         self.__warning_displayed = False
         Stream._streams[id] = self
 
-    def update(self, data, done_callback = None):
+    def update(self, data, done_callback=None):
         """
         | Send data to the stream, updating all its atoms
 
         :param data: List of data to send. i.e, for position stream: x, y, z, x, y, z, etc. (atom 1, atom 2, etc.)
         :type data: list of :class:`float` for position and scale streams, list of :class:`byte` for color streams
         """
-        id = self.__network._send(_Messages.stream_feed, (self.__id, data, self.__data_type), done_callback != None)
-        if done_callback == None:
-            done_callback = lambda : None
+        id = self.__network._send(_Messages.stream_feed, (self.__id, data, self.__data_type), done_callback is not None)
+        if done_callback is None:
+            def done_callback():
+                return None
         nanome.PluginInstance._save_callback(id, done_callback)
 
     def set_on_interrupt_callback(self, callback):
@@ -60,7 +63,7 @@ class Stream(object):
         del Stream._streams[self.__id]
 
     def _update_received(self, data):
-        if self.__update_received == None:
+        if self.__update_received is None:
             if not self.__warning_displayed:
                 Logs.warning("Received an update for a stream without received callback. Please call set_update_received_callback on stream creation")
                 self.__warning_displayed = True

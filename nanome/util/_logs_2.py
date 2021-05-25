@@ -1,5 +1,6 @@
 import sys
 
+
 def _print(cls, col_type, args):
     if cls._is_windows_cmd:
         print col_type['msg'],

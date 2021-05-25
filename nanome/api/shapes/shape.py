@@ -1,5 +1,6 @@
 from nanome._internal._shapes._shape import _Shape
 
+
 class Shape(_Shape):
     """
     | Base class of a shape. Used in self.create_shape(shape_type) in plugins.
@@ -7,6 +8,7 @@ class Shape(_Shape):
     :param shape_type: Enumerator representing the shape_type to create
     :type shape_type: :class:`~nanome.util.enums.ShapeType`
     """
+
     def __init__(self, shape_type):
         _Shape.__init__(self, shape_type)
 
@@ -35,6 +37,7 @@ class Shape(_Shape):
         :type value: :class:`~nanome.util.Color`
         """
         return self._color
+
     @color.setter
     def color(self, value):
         self._color = value
@@ -48,6 +51,7 @@ class Shape(_Shape):
         :type value: list of :class:`~nanome.shapes.Anchor`
         """
         return self._anchors
+
     @anchors.setter
     def anchors(self, value):
         self._anchors = value
@@ -63,4 +67,6 @@ class Shape(_Shape):
         | Remove the shape from the Nanome App and destroy it.
         """
         self._destroy()
+
+
 _Shape._create = Shape

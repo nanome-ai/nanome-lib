@@ -3,11 +3,12 @@ class Octree:
     | Tree containing inserted objects and their positions.
     | Commonly used to get neighboring objects.
     """
+
     def __init__(self, world_size=5000, max_per_node=8):
         self._max_objects = max_per_node
         self._world_size = world_size
-        #internally we use half sizes because they are faster.
-        self._root = Octree._OctNode((0,0,0), world_size/2)
+        # internally we use half sizes because they are faster.
+        self._root = Octree._OctNode((0, 0, 0), world_size / 2)
         self._knowns = {}
 
     def remove(self, data):
@@ -20,7 +21,7 @@ class Octree:
         if data in self._knowns:
             node = self._knowns[data]
             del self._knowns[data]
-            if (data in node.here):
+            if data in node.here:
                 node.here.remove(data)
             return True
         else:
@@ -55,7 +56,7 @@ class Octree:
             Logs.error("Maximum recursion depth reached. Make sure you don't add more than the max_objects number of objects with the exact same position.")
             raise
 
-    def get_near(self, pos, radius, max_result_nb = None):
+    def get_near(self, pos, radius, max_result_nb=None):
         """
         | Get nodes within the octree neighboring a position.
 
@@ -70,7 +71,7 @@ class Octree:
         self.get_near_append(pos, radius, near_objs, max_result_nb)
         return near_objs
 
-    def get_near_append(self, pos, radius, out_list, max_result_nb = None):
+    def get_near_append(self, pos, radius, out_list, max_result_nb=None):
         """
         | Functions like get_near, but with an externally controlled list.
 
@@ -83,7 +84,7 @@ class Octree:
         :param max_result_nb: Maximum number of neighbors to return
         :type max_result_nb: :class:`int`
         """
-        self._root.near(pos, radius*radius, out_list, max_result_nb)
+        self._root.near(pos, radius * radius, out_list, max_result_nb)
         return out_list
 
     def print_out(self):
@@ -103,16 +104,16 @@ class Octree:
         def __init__(self, position, h_size):
             self.position = position
             self.h_size = h_size
-            #overestimation to prevent misses.
-            self.sqrRadius = h_size*h_size*3
+            # overestimation to prevent misses.
+            self.sqrRadius = h_size * h_size * 3
             self.branches = None
             self.here = []
 
         def add(self, tree, entry):
-            if self.branches == None and len(self.here) < tree._max_objects:
+            if self.branches is None and len(self.here) < tree._max_objects:
                 self._add_here(tree, entry)
                 return
-            if self.branches == None:
+            if self.branches is None:
                 self._subdivide(tree)
             self.branches[self._findBranch(entry.pos)].add(tree, entry)
 
@@ -121,19 +122,19 @@ class Octree:
             tree._knowns[entry.data] = self
 
         def _subdivide(self, tree):
-            q_size = self.h_size/2
-            p = self.position #parent position
-            o = q_size #offset
+            q_size = self.h_size / 2
+            p = self.position  # parent position
+            o = q_size  # offset
             OctNode = Octree._OctNode
-            self.branches = [OctNode((p[0]-o,p[1]-o,p[2]-o), q_size),#---
-                             OctNode((p[0]+o,p[1]-o,p[2]-o), q_size),#+--
-                             OctNode((p[0]-o,p[1]+o,p[2]-o), q_size),#-+-
-                             OctNode((p[0]+o,p[1]+o,p[2]-o), q_size),#++-
-                             OctNode((p[0]-o,p[1]-o,p[2]+o), q_size),#--+
-                             OctNode((p[0]+o,p[1]-o,p[2]+o), q_size),#+-+
-                             OctNode((p[0]-o,p[1]+o,p[2]+o), q_size),#-++
-                             OctNode((p[0]+o,p[1]+o,p[2]+o), q_size)]#+++
-            #move children down
+            self.branches = [OctNode((p[0] - o, p[1] - o, p[2] - o), q_size),  # ---
+                             OctNode((p[0] + o, p[1] - o, p[2] - o), q_size),  # +--
+                             OctNode((p[0] - o, p[1] + o, p[2] - o), q_size),  # -+-
+                             OctNode((p[0] + o, p[1] + o, p[2] - o), q_size),  # ++-
+                             OctNode((p[0] - o, p[1] - o, p[2] + o), q_size),  # --+
+                             OctNode((p[0] + o, p[1] - o, p[2] + o), q_size),  # +-+
+                             OctNode((p[0] - o, p[1] + o, p[2] + o), q_size),  # -++
+                             OctNode((p[0] + o, p[1] + o, p[2] + o), q_size)]  # +++
+            # move children down
             while(len(self.here) > 0):
                 entry = self.here[-1]
                 del self.here[-1]
@@ -148,37 +149,36 @@ class Octree:
             return result
 
         def print_out(self, depth):
-            if (len(self.here) > 0 or self.branches != None):
-                print(depth*' ' + "Depth:", str(depth), "center:", str(self.position), "size:", str(self.h_size), "entries:", str(len(self.here)))
-                if( self.branches != None):
+            if len(self.here) > 0 or self.branches is not None:
+                print(depth * ' ' + "Depth:", str(depth), "center:", str(self.position), "size:", str(self.h_size), "entries:", str(len(self.here)))
+                if self.branches is not None:
                     for branch in self.branches:
-                        branch.print_out(depth+1)
+                        branch.print_out(depth + 1)
 
-        def near(self, pos, radiusSqr, near_objs, max_result_nb = None):
-            #sqr comparison to avoid root
-            if (Octree._OctNode._sqr_distance(pos, self.position) <= self.sqrRadius + radiusSqr):
-                if (self.branches != None):
+        def near(self, pos, radiusSqr, near_objs, max_result_nb=None):
+            # sqr comparison to avoid root
+            if Octree._OctNode._sqr_distance(pos, self.position) <= self.sqrRadius + radiusSqr:
+                if self.branches is not None:
                     for branch in self.branches:
                         max_result_nb = branch.near(pos, radiusSqr, near_objs, max_result_nb)
                         # if a child branch got the max nb of result, return
-                        if max_result_nb != None and max_result_nb <= 0:
+                        if max_result_nb is not None and max_result_nb <= 0:
                             return max_result_nb
                 else:
                     for entry in self.here:
-                        if (Octree._OctNode._sqr_distance(pos, entry.pos) < radiusSqr):
+                        if Octree._OctNode._sqr_distance(pos, entry.pos) < radiusSqr:
                             near_objs.append(entry.data)
                             # if this branch got the max nb of result, return
-                            if max_result_nb != None:
+                            if max_result_nb is not None:
                                 max_result_nb -= 1
                                 if max_result_nb <= 0:
                                     return max_result_nb
 
                 return max_result_nb
 
-
         @staticmethod
         def _sqr_distance(pos1, pos2):
-            x = pos1[0]-pos2[0]
-            y = pos1[1]-pos2[1]
-            z = pos1[2]-pos2[2]
-            return x*x+y*y+z*z
+            x = pos1[0] - pos2[0]
+            y = pos1[1] - pos2[1]
+            z = pos1[2] - pos2[2]
+            return x * x + y * y + z * z

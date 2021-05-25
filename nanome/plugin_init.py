@@ -11,6 +11,7 @@ USAGE = '\n' + sys.argv[0].split('/')[-1] + """ <folder>
     <folder> - name of plugin folder to be created
 """
 
+
 def main():
     if len(sys.argv) != 2:
         print(USAGE)
@@ -44,7 +45,8 @@ def main():
         z.extractall(path)
 
     for root, dirs, files in os.walk(path):
-        if '.git' in root: continue
+        if '.git' in root:
+            continue
         for file in files:
             file_path = os.path.join(root, file)
             with open(file_path, 'r', encoding='utf-8', newline='') as f:
@@ -61,6 +63,7 @@ def main():
     os.rename(os.path.join(path, 'nanome_plugin', 'Plugin.py'), plugin_path)
     folder_path = os.path.join(path, fields['folder'])
     os.rename(os.path.join(path, 'nanome_plugin'), folder_path)
+
 
 if __name__ == '__main__':
     main()

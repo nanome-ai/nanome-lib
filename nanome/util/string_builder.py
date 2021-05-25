@@ -2,8 +2,9 @@ class StringBuilder:
     """
     | A class to build strings from lists of strings. This class is used internally.
     """
+
     def __init__(self):
-        self.los =[]
+        self.los = []
 
     def append(self, s):
         """
@@ -21,7 +22,7 @@ class StringBuilder:
         """
         self.los.append(s)
 
-    def to_string(self, joiner = ""):
+    def to_string(self, joiner=""):
         """
         | Return a string joined with joiner from this StringBuilder's list of strings.
 

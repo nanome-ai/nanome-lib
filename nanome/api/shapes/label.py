@@ -32,4 +32,5 @@ class Label(_Label, Shape):
     def font_size(self, value):
         self._font_size = value
 
+
 _Label._create = Label

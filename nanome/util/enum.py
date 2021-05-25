@@ -1,54 +1,56 @@
 import sys
 
+
 @classmethod
 def safe_cast(cls, value):
     try:
         return cls(value)
     except ValueError:
-        if cls.cast_failed_warning == False:
+        if cls.cast_failed_warning is False:
             cls.cast_failed_warning = True
             from . import Logs
             Logs.warning("Invalid value", value, "for enum", cls.__name__, ". Library might outdated.")
         return list(cls)[0]
 
+
 if sys.version_info >= (3, 4):
     from enum import Enum, IntEnum
 else:
 
-# Python 2 Enum Classes
+    # Python 2 Enum Classes
 
-# Copyright (c) 2013, Ethan Furman.
-# All rights reserved.
+    # Copyright (c) 2013, Ethan Furman.
+    # All rights reserved.
 
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
+    # Redistribution and use in source and binary forms, with or without
+    # modification, are permitted provided that the following conditions
+    # are met:
 
-#     Redistributions of source code must retain the above
-#     copyright notice, this list of conditions and the
-#     following disclaimer.
+    #     Redistributions of source code must retain the above
+    #     copyright notice, this list of conditions and the
+    #     following disclaimer.
 
-#     Redistributions in binary form must reproduce the above
-#     copyright notice, this list of conditions and the following
-#     disclaimer in the documentation and/or other materials
-#     provided with the distribution.
+    #     Redistributions in binary form must reproduce the above
+    #     copyright notice, this list of conditions and the following
+    #     disclaimer in the documentation and/or other materials
+    #     provided with the distribution.
 
-#     Neither the name Ethan Furman nor the names of any
-#     contributors may be used to endorse or promote products
-#     derived from this software without specific prior written
-#     permission.
+    #     Neither the name Ethan Furman nor the names of any
+    #     contributors may be used to endorse or promote products
+    #     derived from this software without specific prior written
+    #     permission.
 
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
-# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-# POSSIBILITY OF SUCH DAMAGE.
+    # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    # AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    # IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    # ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+    # LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    # CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    # SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    # INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    # POSSIBILITY OF SUCH DAMAGE.
 
     """Python Enumerations"""
 
@@ -92,6 +94,7 @@ else:
         class's __getattr__ method; this is done by raising AttributeError.
 
         """
+
         def __init__(self, fget=None):
             self.fget = fget
 
@@ -106,14 +109,12 @@ else:
         def __delete__(self, instance):
             raise AttributeError("can't delete attribute")
 
-
     def _is_descriptor(obj):
         """Returns True if obj is a descriptor, False otherwise."""
         return (
-                hasattr(obj, '__get__') or
-                hasattr(obj, '__set__') or
-                hasattr(obj, '__delete__'))
-
+            hasattr(obj, '__get__') or
+            hasattr(obj, '__set__') or
+            hasattr(obj, '__delete__'))
 
     def _is_dunder(name):
         """Returns True if a __dunder__ name, False otherwise."""
@@ -122,7 +123,6 @@ else:
                 name[-3:-2] != '_' and
                 len(name) > 4)
 
-
     def _is_sunder(name):
         """Returns True if a _sunder_ name, False otherwise."""
         return (name[0] == name[-1] == '_' and
@@ -130,14 +130,13 @@ else:
                 name[-2:-1] != '_' and
                 len(name) > 2)
 
-
     def _make_class_unpicklable(cls):
         """Make the given class un-picklable."""
+
         def _break_on_call_reduce(self, protocol=None):
             raise TypeError('%r cannot be pickled' % self)
         cls.__reduce_ex__ = _break_on_call_reduce
         cls.__module__ = '<unknown>'
-
 
     class _EnumDict(dict):
         """Track enum member order and ensure member names are not reused.
@@ -146,6 +145,7 @@ else:
         enumeration member names.
 
         """
+
         def __init__(self):
             super(_EnumDict, self).__init__()
             self._member_names = []
@@ -185,12 +185,10 @@ else:
                 self._member_names.append(key)
             super(_EnumDict, self).__setitem__(key, value)
 
-
     # Dummy value for Enum as EnumMeta explicity checks for it, but of course until
     # EnumMeta finishes running the first time the Enum class doesn't exist.  This
     # is also why there are checks in EnumMeta like `if Enum is not None`
     Enum = None
-
 
     class EnumMeta(type):
         """Metaclass for Enum"""
@@ -211,7 +209,7 @@ else:
 
             member_type, first_enum = metacls._get_mixins_(bases)
             __new__, save_new, use_args = metacls._find_new_(classdict, member_type,
-                                                            first_enum)
+                                                             first_enum)
             # save enum items into separate mapping so they don't get baked into
             # the new class
             members = dict((k, classdict[k]) for k in classdict._member_names)
@@ -305,7 +303,6 @@ else:
                 except TypeError:
                     pass
 
-
             # If a custom type is mixed into the Enum, and it does not know how
             # to pickle itself, pickle.dumps will succeed but pickle.loads will
             # fail.  Rather than have the error show up later and possibly far
@@ -320,11 +317,10 @@ else:
             if '__reduce_ex__' not in classdict:
                 if member_type is not object:
                     methods = ('__getnewargs_ex__', '__getnewargs__',
-                            '__reduce_ex__', '__reduce__')
+                               '__reduce_ex__', '__reduce__')
                     if not any(m in member_type.__dict__ for m in methods):
                         _make_class_unpicklable(enum_class)
                         unpicklable = True
-
 
             # double check that repr and friends are not the mixin's or various
             # things break (such as pickle)
@@ -355,7 +351,7 @@ else:
                             '__eq__',
                             '__ne__',
                             '__hash__',
-                            ):
+                    ):
                         setattr(enum_class, method, getattr(int, method))
 
             # replace any other __new__ with our own (as long as Enum is not None,
@@ -403,7 +399,7 @@ else:
             # (see issue19025).
             if attr in cls._member_map_:
                 raise AttributeError(
-                        "%s: cannot delete Enum member." % cls.__name__)
+                    "%s: cannot delete Enum member." % cls.__name__)
             super(EnumMeta, cls).__delattr__(attr)
 
         def __dir__(self):
@@ -497,7 +493,7 @@ else:
             if isinstance(names, basestring):
                 names = names.replace(',', ' ').split()
             if isinstance(names, (tuple, list)) and isinstance(names[0], basestring):
-                names = [(e, i+start) for (i, e) in enumerate(names)]
+                names = [(e, i + start) for (i, e) in enumerate(names)]
 
             # Here, names is either an iterable of (name, value) or a mapping.
             item = None  # in case names is empty
@@ -538,20 +534,19 @@ else:
             if not bases or Enum is None:
                 return object, Enum
 
-
             # double check that we are not subclassing a class with existing
             # enumeration members; while we're at it, see if any other data
             # type has been mixed in so we can use the correct __new__
             member_type = first_enum = None
             for base in bases:
-                if  (base is not Enum and
+                if (base is not Enum and
                         issubclass(base, Enum) and
                         base._member_names_):
                     raise TypeError("Cannot extend enumerations")
             # base is now the last base in bases
             if not issubclass(base, Enum):
                 raise TypeError("new enumerations must be created as "
-                        "`ClassName([mixin_type,] enum_type)`")
+                                "`ClassName([mixin_type,] enum_type)`")
 
             # get correct mix-in type (either mix-in type of Enum subclass, or
             # first base if last base is Enum)
@@ -609,7 +604,7 @@ else:
                                 N__new__,
                                 O__new__,
                                 E__new__,
-                                ]:
+                        ]:
                             if method == '__member_new__':
                                 classdict['__new__'] = target
                                 return None, False, True
@@ -660,7 +655,7 @@ else:
                                     None.__new__,
                                     object.__new__,
                                     Enum.__new__,
-                                    ):
+                            ):
                                 __new__ = target
                                 break
                         if __new__ is not None:
@@ -678,7 +673,6 @@ else:
 
                 return __new__, save_new, use_args
 
-
     ########################################################
     # In order to support Python 2 and 3 with a single
     # codebase we have to create the Enum methods separately
@@ -695,7 +689,7 @@ else:
         if type(value) is cls:
             # For lookups like Color(Color.red)
             value = value.value
-            #return value
+            # return value
         # by-value search for a matching enum member
         # see if it's in the reverse mapping (for hashable values)
         try:
@@ -712,7 +706,7 @@ else:
 
     def __repr__(self):
         return "<%s.%s: %r>" % (
-                self.__class__.__name__, self._name_, self._value_)
+            self.__class__.__name__, self._name_, self._value_)
     temp_enum_dict['__repr__'] = __repr__
     del __repr__
 
@@ -724,11 +718,11 @@ else:
     if pyver >= 3.0:
         def __dir__(self):
             added_behavior = [
-                    m
-                    for cls in self.__class__.mro()
-                    for m in cls.__dict__
-                    if m[0] != '_' and m not in self._member_map_
-                    ]
+                m
+                for cls in self.__class__.mro()
+                for m in cls.__dict__
+                if m[0] != '_' and m not in self._member_map_
+            ]
             return (['__class__', '__doc__', '__module__', ] + added_behavior)
         temp_enum_dict['__dir__'] = __dir__
         del __dir__
@@ -749,7 +743,6 @@ else:
         return cls.__format__(val, format_spec)
     temp_enum_dict['__format__'] = __format__
     del __format__
-
 
     ####################################
     # Python's less than 2.6 use __cmp__
@@ -787,7 +780,6 @@ else:
             raise TypeError("unorderable types: %s() > %s()" % (self.__class__.__name__, other.__class__.__name__))
         temp_enum_dict['__gt__'] = __gt__
         del __gt__
-
 
     def __eq__(self, other):
         if type(other) is self.__class__:
@@ -876,17 +868,18 @@ else:
                 duplicates.append((name, member.name))
         if duplicates:
             duplicate_names = ', '.join(
-                    ["%s -> %s" % (alias, name) for (alias, name) in duplicates]
-                    )
+                ["%s -> %s" % (alias, name) for (alias, name) in duplicates]
+            )
             raise ValueError('duplicate names found in %r: %s' %
-                    (enumeration, duplicate_names)
-                    )
+                             (enumeration, duplicate_names)
+                             )
         return enumeration
 
 if sys.version_info >= (3, 6):
     from enum import auto
 else:
     __enum_auto_value = 0
+
     def auto():
         global __enum_auto_value
         result = __enum_auto_value

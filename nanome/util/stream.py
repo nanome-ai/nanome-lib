@@ -1,5 +1,6 @@
 from .enum import IntEnum
 
+
 class StreamCreationError(IntEnum):
     """
     | Errors possible during stream creation.
@@ -7,6 +8,7 @@ class StreamCreationError(IntEnum):
     NoError = 0
     AtomNotFound = 1
     UnsupportedStream = 2
+
 
 class StreamInterruptReason(IntEnum):
     """
