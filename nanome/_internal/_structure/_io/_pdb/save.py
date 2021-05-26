@@ -43,16 +43,17 @@ def to_file(path, complex, options = None):
                 saved_atom_constraint = options.only_save_these_atoms
                 for atom in residue._atoms:
                     if saved_atom_constraint is None or atom in saved_atom_constraint:
-                        if options.write_hydrogens or atom.symbol != "H":
-                            serial_by_atom[atom] = atom_serial
-                            lines.append(atom_to_string(atom_serial, atom, residue, chain))
-                            saved_atom =  Results.SavedAtom()
-                            saved_atom.serial = atom_serial
-                            saved_atom.atom = atom
-                            saved_atom.position = atom._position
-                            saved_atom.model_number = model_number
-                            result.saved_atoms.append(saved_atom)
-                            atom_serial += 1
+                        if options.write_het_atoms or atom.is_het is False:
+                            if options.write_hydrogens or atom.symbol != "H":
+                                serial_by_atom[atom] = atom_serial
+                                lines.append(atom_to_string(atom_serial, atom, residue, chain))
+                                saved_atom =  Results.SavedAtom()
+                                saved_atom.serial = atom_serial
+                                saved_atom.atom = atom
+                                saved_atom.position = atom._position
+                                saved_atom.model_number = model_number
+                                result.saved_atoms.append(saved_atom)
+                                atom_serial += 1
             if options.write_ters:
                lines.append(ter_to_string(atom_serial))
                atom_serial += 1
