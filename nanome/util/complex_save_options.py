@@ -14,6 +14,7 @@ class PDBSaveOptions(object):
         self.write_ters = True
         self.write_bonds = False
         self.write_het_bonds = True
+        self.write_het_bonds = True
         self.only_save_these_atoms = None
 
 
