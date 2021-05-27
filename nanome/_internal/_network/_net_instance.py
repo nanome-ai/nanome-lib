@@ -77,6 +77,9 @@ class _NetInstance(object):
             Logs.error(traceback.format_exc())
             return False
         else:
+            if len(data) == 0:
+                Logs.message("Connection shutdown requested")
+                return False
             self._received_data(data)
         return True
 
