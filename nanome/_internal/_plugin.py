@@ -98,20 +98,24 @@ class _Plugin(object):
     def _on_packet_received(self, packet):
         if packet.packet_type == Network._Packet.packet_type_message_to_plugin:
             session_id = packet.session_id
+
+            # Always look if we're trying to register a session
+            #   Fix 5/27/2021 - Jeremie: We need to always check for session registration in order to fix timeout issues
+            #   When NTS forces disconnection because of plugin list change, session_id still exists in self._sessions,
+            #   even though it was disconnected for Nanome
+            if _Plugin.__serializer.try_register_session(packet.payload) == True:
+                received_version_table, _, _ = _Plugin.__serializer.deserialize_command(packet.payload, None)
+                version_table = _TypeSerializer.get_best_version_table(received_version_table)
+                self.__on_client_connection(session_id, version_table)
+                return
+
             if session_id in self._sessions:
                 # packet.decompress()
                 self._sessions[session_id]._on_packet_received(packet.payload)
                 return
 
-            # If we don't know this session_id, try to register it first
-            if _Plugin.__serializer.try_register_session(packet.payload) == True:
-                received_version_table, _, _ = _Plugin.__serializer.deserialize_command(packet.payload, None)
-                version_table = _TypeSerializer.get_best_version_table(received_version_table)
-                self.__on_client_connection(session_id, version_table)
-
             # Doesn't register? It's an error
-            else:
-                Logs.warning("Received a command from an unregistered session", session_id)
+            Logs.warning("Received a command from an unregistered session", session_id)
 
         elif packet.packet_type == Network._Packet.packet_type_plugin_connection:
             _Plugin._plugin_id = packet.plugin_id
@@ -295,6 +299,9 @@ class _Plugin(object):
         sys.exit(0)
 
     def __on_client_connection(self, session_id, version_table):
+        if session_id in self._sessions: # If session_id already exists, close it first ()
+            Logs.message("Closing session ID", session_id, "because a new session connected with the same ID")
+            self._sessions[session_id].signal_and_close_pipes()
         main_conn_net, process_conn_net = Pipe()
         main_conn_proc, process_conn_proc = Pipe()
         session = Network._Session(session_id, self._network, self._process_manager, self._logs_manager, main_conn_net, main_conn_proc)
