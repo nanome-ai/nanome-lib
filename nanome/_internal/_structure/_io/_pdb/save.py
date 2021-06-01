@@ -33,7 +33,7 @@ def to_file(path, complex, options = None):
     model_number = 1
     saved_atom_constraint = options.only_save_these_atoms
     atoms_to_ignore = set()
-    if not saved_atom_constraint in None:
+    if not saved_atom_constraint is None:
         for a in saved_atom_constraint:
             atoms_to_ignore.add(a.index)
     for molecule in complex._molecules:
