@@ -32,10 +32,10 @@ def to_file(path, complex, options = None):
     lines.append(line)
     model_number = 1
     saved_atom_constraint = options.only_save_these_atoms
-    atoms_to_ignore = set()
+    atoms_to_keep = set()
     if not saved_atom_constraint is None:
         for a in saved_atom_constraint:
-            atoms_to_ignore.add(a.index)
+            atoms_to_keep.add(a.index)
     for molecule in complex._molecules:
         atom_serial = 1
         lines.append(start_model(model_number))
@@ -46,7 +46,7 @@ def to_file(path, complex, options = None):
         for chain in chains:
             for residue in chain._residues:
                 for atom in residue._atoms:
-                    if atom.index in atoms_to_ignore:
+                    if len(atoms_to_keep) == 0 or atom.index in atoms_to_keep:
                         if options.write_het_atoms or atom.is_het is False:
                             if options.write_hydrogens or atom.symbol != "H":
                                 serial_by_atom[atom] = atom_serial
