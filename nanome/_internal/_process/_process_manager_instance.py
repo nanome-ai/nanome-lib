@@ -39,7 +39,10 @@ class _ProcessManagerInstance():
         elif type == _ProcessManager._DataType.starting:
             self.__processes[data[1]].on_start()
         elif type == _ProcessManager._DataType.done:
-            self.__processes[data[1]].on_done(data[2])
+            process = self.__processes[data[1]]
+            process.on_done(data[2])
+            if process._future is not None:
+                process._future.set_result(data[2])
         elif type == _ProcessManager._DataType.error:
             self.__processes[data[1]].on_error(data[2])
         elif type == _ProcessManager._DataType.output:
