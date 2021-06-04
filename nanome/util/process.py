@@ -1,3 +1,10 @@
+import nanome
+
+try:
+    import asyncio
+except ImportError:
+    asyncio = False
+
 class Process():
     """
     | A command-line process wrapper.
@@ -19,6 +26,7 @@ class Process():
         self.on_done = lambda _: None
         self.on_error = lambda _: None
         self.on_output = lambda _: None
+        self._future = None
         self.__request = Process._ProcessRequest()
 
         if executable_path is not None:
@@ -93,7 +101,14 @@ class Process():
         """
         | Starts the process.
         """
+
+        if asyncio and nanome.PluginInstance._instance.is_async:
+            loop = asyncio.get_event_loop()
+            future = loop.create_future()
+            self._future = future
+
         Process._manager.start_process(self, self.__request)
+        return self._future
 
     def stop(self):
         """
