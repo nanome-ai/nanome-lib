@@ -25,6 +25,7 @@ class _Atom(_Base):
         self._bfactor = 0.0
         self._acceptor = False
         self._donor = False
+        self._polar_hydrogen = False
         #Rendering
         #API
         self._selected = False
@@ -155,6 +156,7 @@ class _Atom(_Base):
         atom._bfactor = self._bfactor
         atom._acceptor = self._acceptor
         atom._donor = self._donor
+        atom._polar_hydrogen = self._polar_hydrogen
         atom._formal_charge = self._formal_charge
         atom._partial_charge = self._partial_charge
         #Rendering
