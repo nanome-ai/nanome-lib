@@ -13,18 +13,19 @@ def structure(content):
     complex = _Complex._create()
     complex._remarks = content._remarks
     for i in range(num_molecules):
-        molecule = structure_molecule(atoms_by_molecule[i], content.compnds)
+        molecule = structure_molecule(atoms_by_molecule[i], content.conects)
         molecule._name = str(i)
         complex._add_molecule(molecule)
     # Done
     return complex._convert_to_conformers()
-        
-         
-def structure_molecule(atoms, compnds):
+
+
+def structure_molecule(atoms, conects):
     # All structured infos
     all_residues = {} #<string, Residue>
     all_chains = {} #<string, Chain>
     all_atoms = {} #<string, Atom>
+    conect_lookup = {} #<int, Atom>
     # Read all atoms
     for ratom in atoms:
         atom = _Atom._create()
@@ -57,6 +58,18 @@ def structure_molecule(atoms, compnds):
                 all_chains[chain_id]._add_residue(residue)
             all_residues[residue_id]._add_atom(atom)
             all_atoms[atom_id] = atom
+        conect_lookup[atom._serial] = atom
+    for conect_list in conects.values():
+        serials = conect_list[-1].atoms_serial_numbers
+        atom1, atom2 = [conect_lookup[i] for i in list(serials)]
+        bond = _Bond()
+        bond._atom1 = atom1
+        bond._atom2 = atom2
+        bond._kind = list(_Bond.Kind)[len(conect_list)]
+        atom1.residue.add_bond(bond)
+        if atom1._residue != atom2.residue:
+            atom2.residue.add_bond(bond)
+
     # Final molecule
     molecule = _Molecule._create()
     # Assemble molecule contents

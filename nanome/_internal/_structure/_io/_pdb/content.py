@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 class Content(object):
     def __init__(self):
         self.raw = []
@@ -12,6 +14,7 @@ class Content(object):
         self.sheets = []
         self.ters = []
         self.atoms = []
+        self.conects = defaultdict(lambda: [])
         self.model_count = 0
 
     class Record(object):
@@ -90,6 +93,11 @@ class Content(object):
             self.element_symbol = ""
             self.formal_charge = 0
             self.is_het_atom = False
+    
+    class ConectRecord(Record):
+        def __init__(self):
+            self.atoms_serial_numbers = frozenset()
+            self.order = 0
     class TerRecord(Record):
         def __init__(self):
             self.atom_serial_number = 0

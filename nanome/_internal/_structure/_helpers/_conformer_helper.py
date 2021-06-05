@@ -123,7 +123,7 @@ def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Dat
                 new_bonds[hash_bond] = new_bond
             # Update current conformer
             new_bond._in_conformer[molecule_index] = True
-            new_bond._kinds[molecule_index] = bond.kind
+            new_bond._kinds[molecule_index] = bond._kind
             # Count bonds
             bond_total_count+=1
 

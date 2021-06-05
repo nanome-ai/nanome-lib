@@ -1,6 +1,5 @@
 from nanome.util import Logs
 from .content import Content
-import re
 import traceback
 
 def parse_lines(lines):
@@ -53,6 +52,9 @@ def _parse_lines(lines):
                     if (not rec.residue_name == "SOL"):
                         content.records.append(rec)
                         content.atoms.append(rec)
+            if record_type == "CONECT":
+                rec = record_conect(line, line_counter)
+                content.conects[rec.atoms_serial_numbers].append(rec)
             if (record_type == "COMPND"):
                 try:
                     rec = record_compnd(line, line_counter)
@@ -139,6 +141,16 @@ def record_atom(line, line_number):
     # Done
     return record
 
+def record_conect(line, line_number):
+    # Record object
+    record = Content.ConectRecord()
+    if not record.atoms_serial_numbers:
+        record.atoms_serial_numbers |= {record_chunk_int(line, 7, 11), record_chunk_int(line, 12, 16)}
+    # Extra infos
+    record.type = "CONECT"
+    record.line_number = line_number
+    # Done
+    return record
 
 def record_het_atom(line, line_number):
     # Record object
