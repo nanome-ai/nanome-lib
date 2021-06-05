@@ -321,6 +321,14 @@ class Atom(_Atom, Base):
     @donor.setter
     def donor(self, value):
         self._donor = value
+
+    @property
+    def polar_hydrogen(self):
+        return self._polar_hydrogen
+
+    @polar_hydrogen.setter
+    def polar_hydrogen(self, value):
+        self._polar_hydrogen = value
     # endregion
 
     # region conformer stuff
