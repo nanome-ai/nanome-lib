@@ -1,3 +1,4 @@
+from nanome.util.logs import Logs
 from nanome._internal._util._serializers import _TypeSerializer, _UnityPositionSerializer, _ColorSerializer, _UnityRotationSerializer
 from nanome._internal._shapes._serialization import _SphereSerializer, _ShapeSerializer, _LineSerializer, _LabelSerializer
 from nanome.util.enums import ShapeType
@@ -14,7 +15,7 @@ class _SetShape(_TypeSerializer):
         self._shape = _ShapeSerializer()
 
     def version(self):
-        return 1
+        return 2
 
     def name(self):
         return "SetShape"
@@ -34,8 +35,27 @@ class _SetShape(_TypeSerializer):
             context.write_using_serializer(self._position, value.position)
             context.write_using_serializer(self._rotation, Quaternion())
             context.write_using_serializer(self._color, value.color)
-        else:
+        elif version == 1:
+            if isinstance(value, list):
+                Logs.warning("SetShape: Using a list of shapes with an old version of Nanome")
+                return
             context.write_using_serializer(self._shape, value)
+        elif version == 2:
+            if isinstance(value, list):
+                context.write_byte(1)
+                for shape in value:
+                    context.write_using_serializer(self._shape, shape)
+            else:
+                context.write_byte(0)
+                context.write_using_serializer(self._shape, value)
 
     def deserialize(self, version, context):
-        return (context.read_int(), context.read_bool())
+        if version < 2:
+            return (context.read_int(), context.read_bool())
+        else:
+            if context.read_byte() == 0:
+                return (context.read_int(), context.read_bool())
+            else:
+                indices_arr = context.read_int_array()
+                success_arr = context.read_byte_array()
+                return (indices_arr, success_arr)
