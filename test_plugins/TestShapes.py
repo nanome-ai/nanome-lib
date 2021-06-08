@@ -2,7 +2,7 @@ from nanome.util.vector3 import Vector3
 import nanome
 import random
 import itertools
-from nanome.api.shapes import Sphere, Line, Anchor, Label
+from nanome.api.shapes import Shape, Sphere, Line, Anchor, Label
 
 # Config
 
@@ -111,7 +111,7 @@ class TestShapes(nanome.PluginInstance):
                 def done(success):
                     cls.spheres.append(spheres[0])
                     cls.spheres.append(spheres[1])
-                nanome.api.Shape.upload_several(spheres, done)
+                Shape.upload_multiple(spheres, done)
 
             cls.parent.request_workspace(received)
 

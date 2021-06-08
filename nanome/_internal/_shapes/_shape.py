@@ -1,5 +1,3 @@
-import itertools
-
 import nanome
 from nanome.util import Color, Logs
 
@@ -26,10 +24,10 @@ class _Shape(object):
         nanome.PluginInstance._save_callback(id, set_callback)
 
     @classmethod
-    def _upload_multiple(self, shapes, done_callback=None):
+    def _upload_multiple(cls, shapes, done_callback=None):
         def set_callback(indices, results):
             error = False
-            for index, shape in itertools.izip(indices, shapes):
+            for index, shape in zip(indices, shapes):
                 if shape._index != -1 and index != shape._index:
                     error = True
                 shape._index = index
@@ -38,7 +36,7 @@ class _Shape(object):
             if done_callback != None:
                 done_callback(results)
 
-        id = nanome._internal._network._ProcessNetwork._instance._send(nanome._internal._network._commands._callbacks._Messages.set_shape, self, True)
+        id = nanome._internal._network._ProcessNetwork._instance._send(nanome._internal._network._commands._callbacks._Messages.set_shape, shapes, True)
         nanome.PluginInstance._save_callback(id, set_callback)
 
     def _destroy(self):
