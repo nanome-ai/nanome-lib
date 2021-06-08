@@ -26,6 +26,9 @@ class _Shape(object):
     @classmethod
     def _upload_multiple(cls, shapes, done_callback=None):
         def set_callback(indices, results):
+            if not isinstance(indices, list):
+                indices = [indices]
+                results = [results]
             error = False
             for index, shape in zip(indices, shapes):
                 if shape._index != -1 and index != shape._index:
