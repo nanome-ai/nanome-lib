@@ -43,20 +43,12 @@ class _SetShape(_TypeSerializer):
                 return
             context.write_using_serializer(self._shape, value)
         elif version == 2:
-            if isinstance(value, list):
-                context.write_byte(1)
-                context.write_using_serializer(self._shape_array, value)
-            else:
-                context.write_byte(0)
-                context.write_using_serializer(self._shape, value)
+            context.write_using_serializer(self._shape_array, value)
 
     def deserialize(self, version, context):
         if version < 2:
             return (context.read_int(), context.read_bool())
         else:
-            if context.read_byte() == 0:
-                return (context.read_int(), context.read_bool())
-            else:
-                indices_arr = context.read_int_array()
-                success_arr = context.read_byte_array()
-                return (indices_arr, success_arr)
+            indices_arr = context.read_int_array()
+            success_arr = context.read_byte_array()
+            return (indices_arr, success_arr)
