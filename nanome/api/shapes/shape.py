@@ -60,14 +60,14 @@ class Shape(_Shape):
         """
         | Upload the shape to the Nanome App
         """
-        self._upload(done_callback)
+        return self._upload(done_callback)
 
     @classmethod
     def upload_multiple(cls, shapes, done_callback=None):
         """
         | Upload the shape to the Nanome App
         """
-        _Shape._upload_multiple(shapes, done_callback)
+        return _Shape._upload_multiple(shapes, done_callback)
 
     def destroy(self):
         """
