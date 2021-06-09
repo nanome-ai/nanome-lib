@@ -2,7 +2,7 @@ from nanome.util.vector3 import Vector3
 import nanome
 import random
 import itertools
-from nanome.api.shapes import Sphere, Line, Anchor, Label
+from nanome.api.shapes import Shape, Sphere, Line, Anchor, Label
 
 # Config
 
@@ -98,14 +98,20 @@ class TestShapes(nanome.PluginInstance):
                 else:
                     c = random.randrange(0, len(workspace.complexes) - 1)
 
-                sphere = cls.create_random_sphere()
-                anchor = sphere.anchors[0]
+                spheres = []
+                spheres.append(cls.create_random_sphere())
+                anchor = spheres[0].anchors[0]
+                anchor.anchor_type = nanome.util.enums.ShapeAnchorType.Complex
+                anchor.target = workspace.complexes[c].index
+                spheres.append(cls.create_random_sphere())
+                anchor = spheres[1].anchors[0]
                 anchor.anchor_type = nanome.util.enums.ShapeAnchorType.Complex
                 anchor.target = workspace.complexes[c].index
 
                 def done(success):
-                    cls.spheres.append(sphere)
-                sphere.upload(done)
+                    cls.spheres.append(spheres[0])
+                    cls.spheres.append(spheres[1])
+                Shape.upload_multiple(spheres, done)
 
             cls.parent.request_workspace(received)
 

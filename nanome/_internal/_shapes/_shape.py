@@ -23,5 +23,24 @@ class _Shape(object):
         id = nanome._internal._network._ProcessNetwork._instance._send(nanome._internal._network._commands._callbacks._Messages.set_shape, self, True)
         nanome.PluginInstance._save_callback(id, set_callback)
 
+    @classmethod
+    def _upload_multiple(cls, shapes, done_callback=None):
+        def set_callback(indices, results):
+            if not isinstance(indices, list):
+                indices = [indices]
+                results = [results]
+            error = False
+            for index, shape in zip(indices, shapes):
+                if shape._index != -1 and index != shape._index:
+                    error = True
+                shape._index = index
+            if error:
+                Logs.error("SetShapeCallback received for the wrong shape")
+            if done_callback != None:
+                done_callback(results)
+
+        id = nanome._internal._network._ProcessNetwork._instance._send(nanome._internal._network._commands._callbacks._Messages.set_shape, shapes, True)
+        nanome.PluginInstance._save_callback(id, set_callback)
+
     def _destroy(self):
         nanome._internal._network._ProcessNetwork._instance._send(nanome._internal._network._commands._callbacks._Messages.delete_shape, self._index, False)
