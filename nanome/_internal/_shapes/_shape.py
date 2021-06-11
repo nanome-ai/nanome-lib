@@ -24,7 +24,7 @@ class _Shape(object):
 
         id = nanome._internal._network._ProcessNetwork._instance._send(nanome._internal._network._commands._callbacks._Messages.set_shape, [self], True)
         result = nanome.PluginInstance._save_callback(id, set_callback if done_callback else None)
-        if done_callback is None and nanome.PluginInstance.is_async:
+        if done_callback is None and nanome.PluginInstance._instance.is_async:
             result.real_set_result = result.set_result
             result.set_result = lambda args: set_callback(*args)
             done_callback = lambda *args: result.real_set_result(args)
@@ -45,7 +45,7 @@ class _Shape(object):
 
         id = nanome._internal._network._ProcessNetwork._instance._send(nanome._internal._network._commands._callbacks._Messages.set_shape, shapes, True)
         result = nanome.PluginInstance._save_callback(id, set_callback if done_callback else None)
-        if done_callback is None and nanome.PluginInstance.is_async:
+        if done_callback is None and nanome.PluginInstance._instance.is_async:
             result.real_set_result = result.set_result
             result.set_result = lambda args: set_callback(*args)
             done_callback = lambda *args: result.real_set_result(args)
