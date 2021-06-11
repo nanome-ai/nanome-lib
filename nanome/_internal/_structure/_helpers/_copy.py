@@ -1,8 +1,8 @@
 def _deep_copy_complex(complex):
     return __deep_copy_complex(complex, {})
 
-def _deep_copy_molecule(molecule, conformer_number = None):
-    return __deep_copy_molecule(molecule, {}, conformer_number)
+def _deep_copy_molecule(molecule, conformer_number = None, old_to_new_atoms = None):
+    return __deep_copy_molecule(molecule, {}, conformer_number, old_to_new_atoms)
 
 def _deep_copy_chain(chain, conformer_number = None):
     return __deep_copy_chain(chain, {}, conformer_number)
@@ -20,10 +20,10 @@ def __deep_copy_complex(complex, bond_set):
     new_complex._set_molecules(new_molecules)
     return new_complex
 
-def __deep_copy_molecule(molecule, bond_set, conformer_number):
+def __deep_copy_molecule(molecule, bond_set, conformer_number, old_to_new_atoms = None):
     new_chains = None
     for chain in molecule._chains:
-        new_chain = __deep_copy_chain(chain, bond_set, conformer_number)
+        new_chain = __deep_copy_chain(chain, bond_set, conformer_number, old_to_new_atoms)
         if new_chain != None:
             new_chains = __list_with(new_chains, new_chain)
     if new_chains != None:
@@ -32,10 +32,10 @@ def __deep_copy_molecule(molecule, bond_set, conformer_number):
         return new_molecule
     return molecule._shallow_copy(conformer_number)
 
-def __deep_copy_chain(chain, bond_set, conformer_number):
+def __deep_copy_chain(chain, bond_set, conformer_number, old_to_new_atoms = None):
     new_residues = None
     for residue in chain._residues:
-        new_residue = __deep_copy_residue(residue, bond_set, conformer_number)
+        new_residue = __deep_copy_residue(residue, bond_set, conformer_number, old_to_new_atoms)
         if new_residue != None:
             new_residues = __list_with(new_residues, new_residue)
     if new_residues != None:
@@ -46,7 +46,7 @@ def __deep_copy_chain(chain, bond_set, conformer_number):
         return chain._shallow_copy(conformer_number)
     return None
 
-def __deep_copy_residue(residue, bond_set, conformer_number):
+def __deep_copy_residue(residue, bond_set, conformer_number, old_to_new_atoms = None):
     new_bonds = None
     new_atoms = None
     for bond in residue._bonds:
@@ -57,6 +57,8 @@ def __deep_copy_residue(residue, bond_set, conformer_number):
         if conformer_number is None or atom._in_conformer[conformer_number]:
             new_atom = atom._shallow_copy(conformer_number)
             new_atoms = __list_with(new_atoms, new_atom)
+            if old_to_new_atoms is not None:
+                old_to_new_atoms[atom] = new_atom
         for bond in atom._bonds:
             if conformer_number is None or bond._in_conformer[conformer_number]:
                 new_bond = __no_dup_copy_bond(bond, bond_set, conformer_number)

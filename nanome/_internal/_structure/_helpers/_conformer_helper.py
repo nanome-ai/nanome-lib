@@ -6,12 +6,12 @@ s_ConformersAlways = False #Nanome.Core.Config.getBool("mol-conformers-always", 
 def _get_hash_code(string):
     return hash(string)
 
-def convert_to_frames(complex): #Data.Complex -> Data.Complex
+def convert_to_frames(complex, old_to_new_atoms = None): #Data.Complex -> Data.Complex
     new_complex = complex._shallow_copy()
     for molecule in complex._molecules:
         count = molecule._conformer_count
         for i in range(count):
-            new_complex.add_molecule(molecule._deep_copy(i))
+            new_complex.add_molecule(molecule._deep_copy(i, old_to_new_atoms))
     return new_complex
 
 def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Data.Complex

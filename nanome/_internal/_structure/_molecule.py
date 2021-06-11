@@ -154,5 +154,5 @@ class _Molecule(_Base):
             molecule._current_conformer = 0
         return molecule
 
-    def _deep_copy(self, conformer_number = None):
-        return _helpers._copy._deep_copy_molecule(self, conformer_number)
+    def _deep_copy(self, conformer_number = None, old_to_new_atoms = None):
+        return _helpers._copy._deep_copy_molecule(self, conformer_number, old_to_new_atoms)
