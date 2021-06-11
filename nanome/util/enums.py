@@ -315,6 +315,7 @@ class Integrations(_CommandEnum):
     generate_molecule_image = auto()
     import_file = auto()
     analysis = auto()
+    interactions = auto()
 
 
 class Permissions(_CommandEnum):
