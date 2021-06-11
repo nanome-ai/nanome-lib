@@ -47,11 +47,12 @@ class _PluginInstance(object):
             del futures[id]
             return
 
-        try:
-            callbacks[id](*args)
-            del callbacks[id]
-        except KeyError:
+        if id not in callbacks:
             Logs.warning('Received an unknown callback id:', id)
+            return
+
+        callbacks[id](*args)
+        del callbacks[id]
 
     @classmethod
     def _hook_complex_updated(cls, index, callback):
