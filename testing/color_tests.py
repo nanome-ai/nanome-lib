@@ -4,6 +4,8 @@ import unittest
 
 
 def run(counter):
+    # Manually call all the things TestCases should do automatically, so that it
+    # plays nice with our existing unittests
     testcase = TestColorProperties()
     testcase.setUp()
     run_test(testcase.test_rgb, counter)
