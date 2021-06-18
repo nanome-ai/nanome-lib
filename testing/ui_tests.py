@@ -2,7 +2,9 @@ import nanome
 # from nanome import UI
 import nanome.api.ui as UI
 # from nanome.serialization.commands import ReceiveMenu, UpdateMenu
-from testing.utilities import assert_equal, rand_string, create_test
+from nanome._internal._ui._serialization import _LayoutNodeSerializer, _UIBaseSerializer
+from testing.utilities import (
+    alter_object, assert_equal, rand_string, create_test, test_serializer, TestOptions)
 import unittest
 
 
@@ -303,30 +305,33 @@ class UITestCase(unittest.TestCase):
         check_property(tooltip, "positioning_origin")
 
     def test_button(self):
-        fn = create_test("button_test", test_serializer, (_UIBaseSerializer(), CreateButton(), options))
-        breakpoint()
-        ...
+        fn = create_test("button_test", test_serializer, (_UIBaseSerializer(), create_button()))
+        fn()
 
-    # def run(counter):
-    #     options = TestOptions(ignore_vars=["_name", "icon", "_icon"])
-    #     run_test(create_test("mesh_test", test_serializer, (_UIBaseSerializer(), CreateMesh(), options)), counter)
-    #     run_test(create_test("slider_test", test_serializer, (_UIBaseSerializer(), CreateSlider(), options)), counter)
-    #     run_test(create_test("text_input_test", test_serializer, (_UIBaseSerializer(), CreateTextInput(), options)), counter)
-    #     run_test(create_test("label_test", test_serializer, (_UIBaseSerializer(), CreateLabel(), options)), counter)
-    #     run_test(create_test("list_and_clone_test", test_serializer, (_UIBaseSerializer(), CreateList(), options)), counter)
-    #     test_node = CreateLayoutNode()
-    #     test_node._child_ids = []
-    #     test_node._content_id = None
-    #     run_test(create_test("layout_test", test_serializer, (_LayoutNodeSerializer(), test_node)), counter)
+    def test_mesh(self):
+        fn = create_test("mesh_test", test_serializer, (_UIBaseSerializer(), create_mesh()))
+        fn()
 
-    # def test_menu_serialization(self):
-    #     obj_to_test = create_menu()
-    #     serializer = UpdateMenu()
-    #     deserializer = ReceiveMenu()
-    #     context_s = ContextSerialization()
-    #     serializer.serialize(obj_to_test, context_s)
-    #     context_d = ContextDeserialization(context_s.to_array())
-    #     result = deserializer.deserialize(context_d)
-    #     import nanome.core
-    #     import nanome.api.menu
-    #     nanome.api.menu.receive_menu(FakeNetwork(obj_to_test), result)
+    def test_slider(self):
+        fn = create_test("slider_test", test_serializer, (_UIBaseSerializer(), create_slider()))
+        fn()
+
+    def test_text_input(self):
+        fn = create_test("text_input_test", test_serializer, (_UIBaseSerializer(), create_text_input()))
+        fn()
+
+    def test_label(self):
+        fn = create_test("label_test", test_serializer, (_UIBaseSerializer(), create_label()))
+        fn()
+
+    def test_list_and_clone(self):
+        options = TestOptions(ignore_vars=["_name", "icon", "_icon"])
+        fn = create_test("list_and_clone_test", test_serializer, (_UIBaseSerializer(), create_list(), options))
+        fn()
+
+    def test_layout(self):
+        test_node = create_layout_node()
+        test_node._child_ids = []
+        test_node._content_id = None
+        fn = create_test("layout_test", test_serializer, (_LayoutNodeSerializer(), test_node))
+        fn()

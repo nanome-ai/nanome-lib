@@ -1,5 +1,5 @@
 import unittest
-from nanome.utils import Logs
+from nanome.util import Logs
 
 test_directory = 'testing/'
 file_pattern = '*_tests.py'

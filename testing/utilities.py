@@ -197,6 +197,15 @@ def previously_altered(value, seen_cache):
     return False
 
 
+def test_serializer(serializer, obj_to_test, options=None):
+    from nanome._internal._network._serialization._context import _ContextDeserialization, _ContextSerialization
+    context_s = _ContextSerialization(plugin_id=random.randint(0, 0xFFFFFFFF), version_table=FakeVersionTable())
+    serializer.serialize(serializer.version(), obj_to_test, context_s)
+    context_d = _ContextDeserialization(context_s.to_array(), FakeVersionTable())
+    result = serializer.deserialize(serializer.version(), context_d)
+    assert_equal(obj_to_test, result, options)
+
+
 class FakeVersionTable(object):
     def __getitem__(self, key):
         return 2 ^ 32
