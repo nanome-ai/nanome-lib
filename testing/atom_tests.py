@@ -32,22 +32,18 @@ def compare_atom_positions(complex1, complex2):
         assert_equal(atom1, atom2, options)
 
 
-# testing serializers
-test_workspace = None
-
-
-def prep_timer_test():
-    # input_dir = test_assets + ("/sdf/Structure3D_CID_243.sdf") #withbonds
+def build_test_workspace():
+    # input_dir = test_assets + ("/sdf/Structure3D_CID_243.sdf") # withbonds
     input_dir = test_assets + ("/sdf/Thrombin_100cmpds (1).sdf")  # withbonds
-    # input_dir = test_assets + ("/pdb/1fsv.pdb") #smallboy
-    # input_dir = test_assets + ("/pdb/1a9l.pdb") #bigboy
+    # input_dir = test_assets + ("/pdb/1fsv.pdb") # smallboy
+    # input_dir = test_assets + ("/pdb/1a9l.pdb") # bigboy
     complex1 = struct.Complex.io.from_sdf(path=input_dir)
     complex2 = complex1._deep_copy()
     complex3 = complex1._deep_copy()
     complex4 = complex1._deep_copy()
-    global test_workspace
     test_workspace = create_workspace()
     test_workspace.complexes = [complex1, complex2, complex3, complex4]
+    return test_workspace
 
 
 def count_structures(complex):
@@ -62,21 +58,6 @@ def count_structures(complex):
     print("bond_counter:", bond_counter)
     print("atom_counter:", atom_counter)
     return molecule_counter, chain_counter, residue_counter, bond_counter, atom_counter
-
-
-def time_test_serializer():
-    # create test data
-    workspace1 = test_workspace
-    # create serializers
-    update_workspace = _UpdateWorkspace()
-    receive_workspace = _ReceiveWorkspace()
-
-    context_s = _ContextSerialization(plugin_id=random.randint(0, 0xFFFFFFFF))
-    update_workspace.serialize(update_workspace.version, workspace1, context_s)
-
-    # deserialize stuff
-    context_d = _ContextDeserialization(context_s.to_array())
-    receive_workspace.deserialize(update_workspace.version, context_d)
 
 
 def create_atom():
@@ -268,16 +249,14 @@ class AtomTestCase(unittest.TestCase):
         assert_equal(m_inv * atom_global_pos, atom.position)
 
     def test_serializer_timed(self):
-        """Wrapper that runs test and determines whether it was fast enough."""
-        prep_timer_test()
         maximum_time = 1
         timed = True
-        test_function = self.time_test_serializers
+        test_function = self.timed_test_serializers
 
         try:
             start_time = time.process_time_ns()
         except AttributeError:
-            Logs.debug("No timer module. Defaulting to untimed test")
+            # Logs.debug("No timer module. Defaulting to untimed test")
             timed = False
             maximum_time = -1
         try:
@@ -297,8 +276,7 @@ class AtomTestCase(unittest.TestCase):
                 Logs.error(message)
                 raise AssertionError(message)
 
-    def time_test_serializers(self):
-        # create test data
+    def timed_test_serializers(self):
         # create test data
         workspace1 = create_workspace()
         # create serializers
