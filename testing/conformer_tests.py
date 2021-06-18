@@ -212,7 +212,6 @@ class ConformerTestCase(unittest.TestCase):
         molecule.delete_conformer(1)
         molecule.delete_conformer(0)
 
-    @unittest.skip
     def test_error_conditions(self):
         sample_kinds = [nanome.util.enums.Kind.CovalentSingle, nanome.util.enums.Kind.CovalentDouble, nanome.util.enums.Kind.CovalentTriple]
         sample_positions = [Vector3(0, 0, 0), Vector3(1, 1, 1), Vector3(2, 2, 2)]
@@ -307,7 +306,6 @@ class ConformerTestCase(unittest.TestCase):
             failed = True
         assert(failed)
 
-    @unittest.skip
     def test_wholistic(self):
         original = create_mixed_tree()
         unique_names(original)
@@ -324,7 +322,6 @@ class ConformerTestCase(unittest.TestCase):
             total_bonds2 += len(res2._bonds)
         assert(total_bonds1 == total_bonds2)
 
-    @unittest.skip
     def test_to_conformer(self):
         molecule_count = 5
         original = create_conformer_tree(molecule_count)
