@@ -1,7 +1,7 @@
 import os
 
 from nanome.api import structure as struct
-from testing.utilities import *
+from testing.utilities import assert_equal, assert_not_equal, TestOptions
 
 import unittest
 
@@ -9,14 +9,6 @@ import unittest
 test_assets = os.getcwd() + ("/testing/test_assets")
 test_output_dir = os.getcwd() + ("/testing/test_outputs")
 options = TestOptions(ignore_vars=["_serial", "_unique_identifier", "_remarks", "_associateds", "_positions"])
-
-
-def run(counter):
-    run_test(test_1fsv, counter)
-    run_test(test_tebgit, counter)
-    # run_test(test_1fsv, counter)
-    # run_test(test_1fsv, counter)
-    # run_test(test_1fsv, counter)
 
 
 def count_structures(complex):

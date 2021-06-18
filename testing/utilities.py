@@ -1,6 +1,5 @@
 from nanome.util import Logs, Color
 import time
-import traceback
 import os
 import random
 import shutil
@@ -198,82 +197,9 @@ def previously_altered(value, seen_cache):
     return False
 
 
-class TestCounter():
-    def __init__(self):
-        self.passed = 0
-        self.total = 0
-
-
-def run_test_group(test, options=TestOptions()):
-    Logs.debug("runnning test group", test.__name__)
-    counter = TestCounter()
-    test.run(counter)
-    Logs.debug("tests passed: ", str(counter.passed) + "/" + str(counter.total))
-    if (counter.passed < counter.total):
-        return False
-    else:
-        return True
-
-
-def run_test(test, counter):
-    try:
-        Logs.debug("\trunning test", test.__name__)
-        counter.total += 1
-        test()
-    except Exception:
-        Logs.error("\ttest failed.")
-        print(traceback.format_exc())
-    else:
-        counter.passed += 1
-
-
-def run_timed_test(test, counter, loop_count=1, maximum_time=-1.0):
-    Logs.debug("\trunning test", test.__name__)
-    counter.total += 1
-    timed = True
-    try:
-        start_time = time.process_time_ns()
-    except AttributeError:
-        Logs.debug("No timer module. Defaulting to untimed test")
-        timed = False
-        maximum_time = -1
-    try:
-        if (timed):
-            for _ in range(loop_count):
-                test()
-            result_time = (time.process_time_ns() - start_time) / 1000000000.0
-            Logs.debug("\texecuted in", result_time, "seconds.", result_time / loop_count, "seconds per test.", "Reference time:", maximum_time, "seconds")
-        else:
-            test()
-    except Exception as e:
-        Logs.error("\ttest failed.")
-        Logs.error(e)
-    else:
-        if maximum_time >= 0.0 and result_time > maximum_time:
-            Logs.error("\ttest successful but too slow")
-        else:
-            counter.passed += 1
-
-
 class FakeVersionTable(object):
     def __getitem__(self, key):
         return 2 ^ 32
-
-
-def test_serializer(serializer, obj_to_test, options=None):
-    from nanome._internal._network._serialization._context import _ContextDeserialization, _ContextSerialization
-    context_s = _ContextSerialization(plugin_id=random.randint(0, 0xFFFFFFFF), version_table=FakeVersionTable())
-    serializer.serialize(serializer.version(), obj_to_test, context_s)
-    context_d = _ContextDeserialization(context_s.to_array(), FakeVersionTable())
-    result = serializer.deserialize(serializer.version(), context_d)
-    assert_equal(obj_to_test, result, options)
-
-
-def create_test(name, func, args):
-    def test():
-        return func(*args)
-    test.__name__ = name
-    return test
 
 
 def create_full_tree(height):
@@ -316,40 +242,6 @@ def create_full_tree(height):
             molecule.name = "molecule" + str(i)
             complex.add_molecule(molecule)
         return complex
-
-
-def print_tree(structure):
-    print(print_tree_helper(structure, 0))
-
-
-def print_tree_helper(structure, tabs):
-    from nanome import structure as struct
-    line = "| " * tabs
-    children = None
-    if isinstance(structure, struct.Complex):
-        line += "Complex: "
-        children = structure.molecules
-    elif isinstance(structure, struct.Molecule):
-        line += "Molecule: "
-        children = structure.chains
-    elif isinstance(structure, struct.Chain):
-        line += "Chain: "
-        children = structure.residues
-    elif isinstance(structure, struct.Residue):
-        line += "Residue: " + structure.name
-        line += "\n" + "| " * (tabs + 1) + "Atoms: "
-        for atom in structure.atoms:
-            line += atom.name + ", "
-        line += "\n" + "| " * (tabs + 1) + "Bonds: "
-        for bond in structure.bonds:
-            # line += bond.atom1.name + "->" + bond.atom2.name + ", "
-            line += str(bond._parent._name) + ", "
-            # line += str(bond._parent._serial-1) + ", "
-        return line + "\n"
-    line += structure.name + "\n"
-    for i in children:
-        line += print_tree_helper(i, tabs + 1)
-    return line + "\n"
 
 
 def create_molecule():

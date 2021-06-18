@@ -2,9 +2,8 @@ import nanome
 # from nanome import UI
 import nanome.api.ui as UI
 # from nanome.serialization.commands import ReceiveMenu, UpdateMenu
-from testing.utilities import *
+from testing.utilities import assert_equal, rand_string
 import unittest
-
 # testing structures
 
 
@@ -12,44 +11,44 @@ def prefab_button_pressed_callback(btn):
     pass
 
 
-def CreateMenu():
+def create_menu():
     value = UI.Menu()
     value = alter_object(value)
     value.root.name = "node"
     return value
 
 
-def CreateButton():
+def create_button():
     value = UI.Button()
     value = alter_object(value)
     return value
 
 
-def CreateMesh():
+def create_mesh():
     value = UI.Mesh()
     value = alter_object(value)
     return value
 
 
-def CreateSlider():
+def create_slider():
     value = UI.Slider()
     value = alter_object(value)
     return value
 
 
-def CreateTextInput():
+def create_text_input():
     value = UI.TextInput()
     value = alter_object(value)
     return value
 
 
-def CreateLabel():
+def create_label():
     value = UI.Label()
     value = alter_object(value)
     return value
 
 
-def CreateList():
+def create_list():
     prefab = nanome.ui.LayoutNode()
     prefab.layout_orientation = nanome.ui.LayoutNode.LayoutTypes.vertical
     child1 = nanome.ui.LayoutNode()
@@ -62,14 +61,14 @@ def CreateList():
     child2.forward_dist = .01
     prefab.add_child(child1)
     prefab.add_child(child2)
-    prefabLabel = nanome.ui.Label()
-    prefabLabel.text_value = "Molecule Label"
-    prefabButton = nanome.ui.Button()
-    prefabButton.text.active = True
-    prefabButton.text.value.set_all("Molecule Button")
-    prefabButton.register_pressed_callback(prefab_button_pressed_callback)
-    child1.set_content(prefabLabel)
-    child2.set_content(prefabButton)
+    prefab_label = nanome.ui.Label()
+    prefab_label.text_value = "Molecule Label"
+    prefab_button = nanome.ui.Button()
+    prefab_button.text.active = True
+    prefab_button.text.value.set_all("Molecule Button")
+    prefab_button.register_pressed_callback(prefab_button_pressed_callback)
+    child1.set_content(prefab_label)
+    child2.set_content(prefab_button)
 
     list_content = []
     for _ in range(0, 10):
@@ -84,7 +83,7 @@ def CreateList():
     return list
 
 
-def CreateLayoutNode():
+def create_layout_node():
     value = UI.LayoutNode()
     value = alter_object(value)
     value.name = "node"
@@ -100,18 +99,6 @@ class FakeNetwork():
         assert(self.original != menu)
         assert_equal(self.original, menu)
 
-# def test_menu_serialization():
-#     obj_to_test = CreateMenu()
-#     serializer = UpdateMenu()
-#     deserializer = ReceiveMenu()
-#     context_s = ContextSerialization()
-#     serializer.serialize(obj_to_test, context_s)
-#     context_d = ContextDeserialization(context_s.to_array())
-#     result = deserializer.deserialize(context_d)
-#     import nanome.core
-#     import nanome.api.menu
-#     nanome.api.menu.receive_menu(FakeNetwork(obj_to_test), result)
-
 
 def check_multi(multi):
     check_property(multi, "idle")
@@ -125,7 +112,7 @@ def check_multi(multi):
 def check_property(obj, property_name):
     v = rand_string()
     prop = get_property(obj, property_name)
-    x = prop.fget()
+    prop.fget()
     prop.fset(v)
     assert(prop.fget() == v)
 
@@ -233,24 +220,6 @@ def test_multi_var(multi, obj, base):
     restore_warning()
 # endregion
 
-# def run(counter):
-#     options = TestOptions(ignore_vars=["_name", "icon", "_icon"])
-#     run_test(test_ui, counter)
-#     run_test(button_api_test, counter)
-#     run_test(test_deprecated_button, counter)
-#     run_test(create_test("button_test", test_serializer, (_UIBaseSerializer(), CreateButton(), options)), counter)
-#     run_test(create_test("mesh_test", test_serializer, (_UIBaseSerializer(), CreateMesh(), options)), counter)
-#     run_test(create_test("slider_test", test_serializer, (_UIBaseSerializer(), CreateSlider(), options)), counter)
-#     run_test(create_test("text_input_test", test_serializer, (_UIBaseSerializer(), CreateTextInput(), options)), counter)
-#     run_test(create_test("label_test", test_serializer, (_UIBaseSerializer(), CreateLabel(), options)), counter)
-#     run_test(create_test("list_and_clone_test", test_serializer, (_UIBaseSerializer(), CreateList(), options)), counter)
-#     test_node = CreateLayoutNode()
-#     test_node._child_ids = []
-#     test_node._content_id = None
-#     run_test(create_test("layout_test", test_serializer, (_LayoutNodeSerializer(), test_node)), counter)
-
-    # run_test(test_menu_serialization, counter)
-
 
 class UITestCase(unittest.TestCase):
 
@@ -333,3 +302,15 @@ class UITestCase(unittest.TestCase):
         check_property(tooltip, "bounds")
         check_property(tooltip, "positioning_target")
         check_property(tooltip, "positioning_origin")
+
+    # def test_menu_serialization(self):
+    #     obj_to_test = create_menu()
+    #     serializer = UpdateMenu()
+    #     deserializer = ReceiveMenu()
+    #     context_s = ContextSerialization()
+    #     serializer.serialize(obj_to_test, context_s)
+    #     context_d = ContextDeserialization(context_s.to_array())
+    #     result = deserializer.deserialize(context_d)
+    #     import nanome.core
+    #     import nanome.api.menu
+    #     nanome.api.menu.receive_menu(FakeNetwork(obj_to_test), result)

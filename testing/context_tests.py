@@ -1,13 +1,7 @@
 import struct
 import random
-from testing.utilities import *
 from nanome._internal._network import _Data
 import unittest
-
-
-# def run(counter):
-#     run_test(primitive_tests, counter)
-#     run_test(array_tests, counter)
 
 
 def rand_int():

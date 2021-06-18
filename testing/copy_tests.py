@@ -1,7 +1,7 @@
 import os
 
 from nanome.api import structure as struct
-from testing.utilities import *
+from testing.utilities import alter_object, assert_equal, create_full_tree, TestOptions
 
 import unittest
 

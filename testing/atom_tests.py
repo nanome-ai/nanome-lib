@@ -270,7 +270,6 @@ class AtomTestCase(unittest.TestCase):
     def test_serializer_timed(self):
         """Wrapper that runs test and determines whether it was fast enough."""
         prep_timer_test()
-        # run_timed_test(self.time_test_serializers, counter, 1, 10)  # normally 2.9
         maximum_time = 1
         timed = True
         test_function = self.time_test_serializers
