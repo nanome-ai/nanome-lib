@@ -2,7 +2,7 @@ import nanome
 import os
 
 from nanome.api import structure as struct
-from testing.utilities import *
+from testing.utilities import assert_equal, assert_not_equal, TestOptions
 
 from nanome.util import Logs
 import unittest
@@ -10,24 +10,6 @@ import unittest
 test_assets = os.getcwd() + ("/testing/test_assets")
 test_output_dir = os.getcwd() + ("/testing/test_outputs")
 options = TestOptions(ignore_vars=["_unique_identifier", "_remarks", "_associateds"])
-
-
-def read_all_ways():
-    input_dir = test_assets + ("/sdf/small_thrombin.sdf")
-    # read path
-    complex1 = struct.Complex.io.from_sdf(path=input_dir)
-    with open(input_dir) as f:
-        complex2 = struct.Complex.io.from_sdf(file=f)
-    with open(input_dir) as f:
-        as_string = f.read()
-    with open(input_dir) as f:
-        as_lines = f.readlines()
-    complex3 = struct.Complex.io.from_sdf(string=as_string)
-    complex4 = struct.Complex.io.from_sdf(lines=as_lines)
-    assert(complex1 is not None)
-    assert(complex2 is not None)
-    assert(complex3 is not None)
-    assert(complex4 is not None)
 
 
 i = 0
@@ -123,3 +105,20 @@ class SDFTestCase(unittest.TestCase):
 
         check_facts(complex1, 3, 3, 3, 237, 228)
         check_facts(complex2, 3, 3, 3, 237, 228)
+
+    def test_read_all_ways(self):
+        input_dir = test_assets + ("/sdf/small_thrombin.sdf")
+        # read path
+        complex1 = struct.Complex.io.from_sdf(path=input_dir)
+        with open(input_dir) as f:
+            complex2 = struct.Complex.io.from_sdf(file=f)
+        with open(input_dir) as f:
+            as_string = f.read()
+        with open(input_dir) as f:
+            as_lines = f.readlines()
+        complex3 = struct.Complex.io.from_sdf(string=as_string)
+        complex4 = struct.Complex.io.from_sdf(lines=as_lines)
+        assert(complex1 is not None)
+        assert(complex2 is not None)
+        assert(complex3 is not None)
+        assert(complex4 is not None)
