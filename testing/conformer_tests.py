@@ -19,13 +19,6 @@ def alter_object(x):
     return x
 
 
-# def run(counter):
-#     run_test(test_conformer_API, counter)
-#     run_test(test_to_conformer, counter)
-#     run_test(test_wholistic, counter)
-#     run_test(test_error_conditions, counter)
-
-
 def get_bond_hash(bond):  # StringBuilder, Data.Bond, int, int -> int
     line = ""
     line += (bond._atom1.name)

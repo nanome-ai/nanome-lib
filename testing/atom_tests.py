@@ -1,6 +1,5 @@
 import os
 import random
-import unittest
 
 from nanome.util import Color
 from nanome.util import Vector3
@@ -12,10 +11,63 @@ from nanome._internal._network._serialization._context import _ContextDeserializ
 from nanome._internal._network._commands._serialization import _UpdateWorkspace, _ReceiveWorkspace
 from testing.utilities import *
 
+import unittest
 
 test_assets = os.getcwd() + ("/testing/test_assets")
 test_output_dir = os.getcwd() + ("/testing/test_outputs")
 options = TestOptions(ignore_vars=["_unique_identifier", "_remarks", "_associateds", "_parent"])
+
+
+def flip_x_positions(complex):
+    for molecule in complex.molecules:
+        for chain in molecule.chains:
+            for residue in chain.residues:
+                for atom in residue.atoms:
+                    atom.position.x = -atom.position.x
+    return complex
+
+
+def compare_atom_positions(complex1, complex2):
+    a1 = complex1.atoms
+    a2 = complex2.atoms
+    for atom1, atom2 in zip(a1, a2):
+        assert(atom1.position.equals(atom2.position))
+        assert_equal(atom1, atom2, options)
+
+# Testing save load
+# PDB
+
+
+def test_pdb():
+    input_dir = test_assets + ("/pdb/1fsv.pdb")
+    output_dir = test_output_dir + ("/testOutput.pdb")
+
+    complex1 = struct.Complex.io.from_pdb(path=input_dir)
+    complex1.io.to_pdb(output_dir)
+
+    complex2 = struct.Complex.io.from_pdb(path=input_dir)
+
+    compare_atom_positions(complex1, complex2)
+    assert_equal(complex1, complex2, options)
+    assert_not_equal(complex2, struct.Complex(), options)
+
+
+# testing serializers
+test_workspace = None
+
+
+def prep_timer_test():
+    # input_dir = test_assets + ("/sdf/Structure3D_CID_243.sdf") #withbonds
+    input_dir = test_assets + ("/sdf/Thrombin_100cmpds (1).sdf")  # withbonds
+    # input_dir = test_assets + ("/pdb/1fsv.pdb") #smallboy
+    # input_dir = test_assets + ("/pdb/1a9l.pdb") #bigboy
+    complex1 = struct.Complex.io.from_sdf(path=input_dir)
+    complex2 = complex1._deep_copy()
+    complex3 = complex1._deep_copy()
+    complex4 = complex1._deep_copy()
+    global test_workspace
+    test_workspace = create_workspace()
+    test_workspace.complexes = [complex1, complex2, complex3, complex4]
 
 
 def count_structures(complex):
@@ -44,7 +96,7 @@ def time_test_serializer():
 
     # deserialize stuff
     context_d = _ContextDeserialization(context_s.to_array())
-    receive_workspace.deserialize(update_workspace.version, context_d)
+    workspace2 = receive_workspace.deserialize(update_workspace.version, context_d)
 
 
 def create_atom():
@@ -130,81 +182,111 @@ def create_workspace():
     return workspace
 
 
-# testing structures
-def test_structures():
-    create_atom()
-    create_bond()
-    create_residue()
-    create_chain()
-    create_molecule()
+def assert_parents(atom, bond, residue, chain, molecule, complex):
+    assert(bond.residue == residue)
+    assert(bond.chain == chain)
+    assert(bond.molecule == molecule)
+    assert(bond.complex == complex)
+
+    assert(atom.residue == residue)
+    assert(atom.chain == chain)
+    assert(atom.molecule == molecule)
+    assert(atom.complex == complex)
+
+    assert(residue.chain == chain)
+    assert(residue.molecule == molecule)
+    assert(residue.complex == complex)
+
+    assert(chain.molecule == molecule)
+    assert(chain.complex == complex)
+
+    assert(molecule.complex == complex)
 
 
-def flip_x_positions(complex):
-    for molecule in complex.molecules:
-        for chain in molecule.chains:
-            for residue in chain.residues:
-                for atom in residue.atoms:
-                    atom.position.x = -atom.position.x
-    return complex
+def assert_no_parents(atom, bond, residue, chain, molecule, complex):
+    assert(bond.residue is not None)
+    assert(bond.chain is not None)
+    assert(bond.molecule is not None)
+    assert(bond.complex is not None)
 
+    assert(atom.residue is not None)
+    assert(atom.chain is not None)
+    assert(atom.molecule is not None)
+    assert(atom.complex is not None)
 
-def compare_atom_positions(complex1, complex2):
-    a1 = complex1.atoms
-    a2 = complex2.atoms
-    for atom1, atom2 in zip(a1, a2):
-        assert(atom1.position.equals(atom2.position))
-        assert_equal(atom1, atom2, options)
+    assert(residue.chain is not None)
+    assert(residue.molecule is not None)
+    assert(residue.complex is not None)
+
+    assert(chain.molecule is not None)
+    assert(chain.complex is not None)
+
+    assert(molecule.complex is not None)
 
 
 class AtomTestCase(unittest.TestCase):
 
-    def test_equality(self):
-        assert_equal(create_atom(), create_atom(), options)
-        assert_equal(create_bond(), create_bond(), options)
-        assert_equal(create_residue(), create_residue(), options)
-        assert_equal(create_chain(), create_chain(), options)
-        assert_equal(create_molecule(), create_molecule(), options)
-        assert_equal(create_complex(), create_complex(), options)
-        assert_equal(create_workspace(), create_workspace(), options)
+    def test_parent_pointers(self):
+        atom = struct.Atom()
+        bond = struct.Bond()
+        residue = struct.Residue()
+        chain = struct.Chain()
+        molecule = struct.Molecule()
+        complex = struct.Complex()
 
-        assert_not_equal(create_atom(), struct.Atom(), options)
-        assert_not_equal(create_bond(), struct.Bond(), options)
-        assert_not_equal(create_residue(), struct.Residue(), options)
-        assert_not_equal(create_chain(), struct.Chain(), options)
-        assert_not_equal(create_molecule(), struct.Molecule(), options)
-        assert_not_equal(create_complex(), struct.Complex(), options)
-        assert_not_equal(create_workspace(), struct.Workspace(), options)
+        assert_no_parents(atom, bond, residue, chain, molecule, complex)
 
-    # Testing save load
-    # PDB
-    def test_pdb(self):
-        input_dir = test_assets + ("/pdb/1fsv.pdb")
-        output_dir = test_output_dir + ("/testOutput.pdb")
+        complex.add_molecule(molecule)
+        molecule.add_chain(chain)
+        chain.add_residue(residue)
+        residue.add_atom(atom)
+        residue.add_bond(bond)
 
-        complex1 = struct.Complex.io.from_pdb(path=input_dir)
-        complex1.io.to_pdb(output_dir)
+        assert_parents(atom, bond, residue, chain, molecule, complex)
 
-        complex2 = struct.Complex.io.from_pdb(path=input_dir)
+        complex.remove_molecule(molecule)
+        molecule.remove_chain(chain)
+        chain.remove_residue(residue)
+        residue.remove_atom(atom)
+        residue.remove_bond(bond)
 
-        compare_atom_positions(complex1, complex2)
-        assert_equal(complex1, complex2, options)
-        assert_not_equal(complex2, struct.Complex(), options)
+        assert_no_parents(atom, bond, residue, chain, molecule, complex)
 
-    # testing serializers
-    test_workspace = None
+    def test_matrices(self):
+        a = Matrix(3, 4)
+        b = Matrix(4, 3)
+        v = Matrix(4, 1)
+        v[0][0] = 12.5
+        v[1][0] = 9.36
+        v[2][0] = 24.1
+        v[3][0] = 1.0
+        result_mul = Matrix(3, 3)
+        result_mul[0] = [42, 48, 54]
+        result_mul[1] = [114, 136, 158]
+        result_mul[2] = [186, 224, 262]
+        result_mul_v = Matrix(3, 1)
+        result_mul_v[0][0] = 60.56
+        result_mul_v[1][0] = 248.4
+        result_mul_v[2][0] = 436.24
 
-    def prep_timer_test():
-        # input_dir = test_assets + ("/sdf/Structure3D_CID_243.sdf") #withbonds
-        input_dir = test_assets + ("/sdf/Thrombin_100cmpds (1).sdf")  # withbonds
-        # input_dir = test_assets + ("/pdb/1fsv.pdb") #smallboy
-        # input_dir = test_assets + ("/pdb/1a9l.pdb") #bigboy
-        complex1 = struct.Complex.io.from_sdf(path=input_dir)
-        complex2 = complex1._deep_copy()
-        complex3 = complex1._deep_copy()
-        complex4 = complex1._deep_copy()
-        global test_workspace
-        test_workspace = create_workspace()
-        test_workspace.complexes = [complex1, complex2, complex3, complex4]
+        for i in range(12):
+            a[int(i / 4)][int(i % 4)] = i
+            b[int(i / 3)][int(i % 3)] = i
+
+        assert_equal(a * b, result_mul)
+        assert_equal(a * v, result_mul_v)
+
+        res_atom_global_pos = Vector3(-20.33947, 0.1491127, -9.878754)
+        complex = struct.Complex()
+        atom = struct.Atom()
+        atom.position.set(7.2, 2.6, -21.56)
+        complex.position.set(-3.197371, -2.314157, 5.071643)
+        complex.rotation.set(0.09196287, 0.4834483, 0.3486853, 0.797646)
+        m = complex.get_complex_to_workspace_matrix()
+        m_inv = complex.get_workspace_to_complex_matrix()
+        atom_global_pos = m * atom.position
+        assert_equal(atom_global_pos, res_atom_global_pos)
+        assert_equal(m_inv * atom_global_pos, atom.position)
 
     def test_serializers(self):
         # create test data
@@ -224,6 +306,7 @@ class AtomTestCase(unittest.TestCase):
 
     def test_iterators(self):
         input_dir = test_assets + ("/sdf/Thrombin_100cmpds (1).sdf")
+        output_dir = test_output_dir + ("/testOutput.sdf")
 
         # complex level
         complex = struct.Complex.io.from_sdf(path=input_dir)
@@ -276,105 +359,26 @@ class AtomTestCase(unittest.TestCase):
                 b = True
         assert(b)
 
-    def test_matrices(self):
-        a = Matrix(3, 4)
-        b = Matrix(4, 3)
-        v = Matrix(4, 1)
-        v[0][0] = 12.5
-        v[1][0] = 9.36
-        v[2][0] = 24.1
-        v[3][0] = 1.0
-        result_mul = Matrix(3, 3)
-        result_mul[0] = [42, 48, 54]
-        result_mul[1] = [114, 136, 158]
-        result_mul[2] = [186, 224, 262]
-        result_mul_v = Matrix(3, 1)
-        result_mul_v[0][0] = 60.56
-        result_mul_v[1][0] = 248.4
-        result_mul_v[2][0] = 436.24
+    def test_equality(self):
+        assert_equal(create_atom(), create_atom(), options)
+        assert_equal(create_bond(), create_bond(), options)
+        assert_equal(create_residue(), create_residue(), options)
+        assert_equal(create_chain(), create_chain(), options)
+        assert_equal(create_molecule(), create_molecule(), options)
+        assert_equal(create_complex(), create_complex(), options)
+        assert_equal(create_workspace(), create_workspace(), options)
 
-        for i in range(12):
-            a[int(i / 4)][int(i % 4)] = i
-            b[int(i / 3)][int(i % 3)] = i
+        assert_not_equal(create_atom(), struct.Atom(), options)
+        assert_not_equal(create_bond(), struct.Bond(), options)
+        assert_not_equal(create_residue(), struct.Residue(), options)
+        assert_not_equal(create_chain(), struct.Chain(), options)
+        assert_not_equal(create_molecule(), struct.Molecule(), options)
+        assert_not_equal(create_complex(), struct.Complex(), options)
+        assert_not_equal(create_workspace(), struct.Workspace(), options)
 
-        assert_equal(a * b, result_mul)
-        assert_equal(a * v, result_mul_v)
-
-        res_atom_global_pos = Vector3(-20.33947, 0.1491127, -9.878754)
-        complex = struct.Complex()
-        atom = struct.Atom()
-        atom.position.set(7.2, 2.6, -21.56)
-        complex.position.set(-3.197371, -2.314157, 5.071643)
-        complex.rotation.set(0.09196287, 0.4834483, 0.3486853, 0.797646)
-        m = complex.get_complex_to_workspace_matrix()
-        m_inv = complex.get_workspace_to_complex_matrix()
-        atom_global_pos = m * atom.position
-        assert_equal(atom_global_pos, res_atom_global_pos)
-        assert_equal(m_inv * atom_global_pos, atom.position)
-
-    def assert_parents(self, atom, bond, residue, chain, molecule, complex):
-        assert(bond.residue == residue)
-        assert(bond.chain == chain)
-        assert(bond.molecule == molecule)
-        assert(bond.complex == complex)
-
-        assert(atom.residue == residue)
-        assert(atom.chain == chain)
-        assert(atom.molecule == molecule)
-        assert(atom.complex == complex)
-
-        assert(residue.chain == chain)
-        assert(residue.molecule == molecule)
-        assert(residue.complex == complex)
-
-        assert(chain.molecule == molecule)
-        assert(chain.complex == complex)
-
-        assert(molecule.complex == complex)
-
-    @staticmethod
-    def assert_no_parents(atom, bond, residue, chain, molecule, complex):
-        assert(bond.residue is not None)
-        assert(bond.chain is not None)
-        assert(bond.molecule is not None)
-        assert(bond.complex is not None)
-
-        assert(atom.residue is not None)
-        assert(atom.chain is not None)
-        assert(atom.molecule is not None)
-        assert(atom.complex is not None)
-
-        assert(residue.chain is not None)
-        assert(residue.molecule is not None)
-        assert(residue.complex is not None)
-
-        assert(chain.molecule is not None)
-        assert(chain.complex is not None)
-
-        assert(molecule.complex is not None)
-
-    def test_parent_pointers(self):
-        atom = struct.Atom()
-        bond = struct.Bond()
-        residue = struct.Residue()
-        chain = struct.Chain()
-        molecule = struct.Molecule()
-        complex = struct.Complex()
-
-        self.assert_no_parents(atom, bond, residue, chain, molecule, complex)
-
-        complex.add_molecule(molecule)
-        molecule.add_chain(chain)
-        chain.add_residue(residue)
-        residue.add_atom(atom)
-        residue.add_bond(bond)
-
-        assert_parents(atom, bond, residue, chain, molecule, complex)
-
-        complex.remove_molecule(molecule)
-        molecule.remove_chain(chain)
-        chain.remove_residue(residue)
-        residue.remove_atom(atom)
-        residue.remove_bond(bond)
-
-        self.assert_no_parents(atom, bond, residue, chain, molecule, complex)
+    def test_structures(self):
+        create_atom()
+        create_bond()
+        create_residue()
+        create_chain()
+        create_molecule()
