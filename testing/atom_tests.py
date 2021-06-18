@@ -1,17 +1,14 @@
 import os
 import random
+import time
 
-from nanome.util import Color
-from nanome.util import Vector3
-from nanome.util import Quaternion
-from nanome.util import Matrix
-
+from nanome.util import Color, Logs, Matrix, Quaternion, Vector3
 from nanome.api import structure as struct
 from nanome._internal._network._serialization._context import _ContextDeserialization, _ContextSerialization
 from nanome._internal._network._commands._serialization import _UpdateWorkspace, _ReceiveWorkspace
-from testing.utilities import (
-    assert_equal, assert_not_equal, run_timed_test, TestOptions, TestCounter)
+from testing.utilities import assert_equal, assert_not_equal, TestOptions
 import unittest
+
 
 test_assets = os.getcwd() + ("/testing/test_assets")
 test_output_dir = os.getcwd() + ("/testing/test_outputs")
@@ -33,23 +30,6 @@ def compare_atom_positions(complex1, complex2):
     for atom1, atom2 in zip(a1, a2):
         assert(atom1.position.equals(atom2.position))
         assert_equal(atom1, atom2, options)
-
-# Testing save load
-# PDB
-
-
-def test_pdb():
-    input_dir = test_assets + ("/pdb/1fsv.pdb")
-    output_dir = test_output_dir + ("/testOutput.pdb")
-
-    complex1 = struct.Complex.io.from_pdb(path=input_dir)
-    complex1.io.to_pdb(output_dir)
-
-    complex2 = struct.Complex.io.from_pdb(path=input_dir)
-
-    compare_atom_positions(complex1, complex2)
-    assert_equal(complex1, complex2, options)
-    assert_not_equal(complex2, struct.Complex(), options)
 
 
 # testing serializers
@@ -287,10 +267,36 @@ class AtomTestCase(unittest.TestCase):
         assert_equal(atom_global_pos, res_atom_global_pos)
         assert_equal(m_inv * atom_global_pos, atom.position)
 
-    def test_time_serializer(self):
-        counter = TestCounter()
+    def test_serializer_timed(self):
+        """Wrapper that runs test and determines whether it was fast enough."""
         prep_timer_test()
-        run_timed_test(self.time_test_serializers, counter, 1, 10)  # normally 2.9
+        # run_timed_test(self.time_test_serializers, counter, 1, 10)  # normally 2.9
+        maximum_time = 1
+        timed = True
+        test_function = self.time_test_serializers
+
+        try:
+            start_time = time.process_time_ns()
+        except AttributeError:
+            Logs.debug("No timer module. Defaulting to untimed test")
+            timed = False
+            maximum_time = -1
+        try:
+            if timed:
+                test_function()
+                result_time = (time.process_time_ns() - start_time) / 1000000000.0
+                # Logs.debug("\texecuted in", result_time, "seconds.", result_time, "seconds per test.", "Reference time:", maximum_time, "seconds")
+            else:
+                test_function()
+
+        except Exception as e:
+            Logs.error(e)
+            raise e
+        else:
+            if maximum_time >= 0.0 and result_time > maximum_time:
+                message = "\ttest successful but too slow"
+                Logs.error(message)
+                raise AssertionError(message)
 
     def time_test_serializers(self):
         # create test data
@@ -301,11 +307,11 @@ class AtomTestCase(unittest.TestCase):
         receive_workspace = _ReceiveWorkspace()
 
         context_s = _ContextSerialization(plugin_id=random.randint(0, 0xFFFFFFFF))
-        update_workspace.serialize(workspace1, context_s)
+        update_workspace.serialize(0, workspace1, context_s)
 
         # deserialize stuff
         context_d = _ContextDeserialization(context_s.to_array())
-        workspace2 = receive_workspace.deserialize(context_d)
+        workspace2 = receive_workspace.deserialize(0, context_d)
         assert_equal(workspace1, workspace2, options)
 
     def test_iterators(self):
@@ -385,3 +391,17 @@ class AtomTestCase(unittest.TestCase):
         create_residue()
         create_chain()
         create_molecule()
+
+    def test_pdb(self):
+        # Testing save load PDB
+        input_dir = test_assets + ("/pdb/1fsv.pdb")
+        output_dir = test_output_dir + ("/testOutput.pdb")
+
+        complex1 = struct.Complex.io.from_pdb(path=input_dir)
+        complex1.io.to_pdb(output_dir)
+
+        complex2 = struct.Complex.io.from_pdb(path=input_dir)
+
+        compare_atom_positions(complex1, complex2)
+        assert_equal(complex1, complex2, options)
+        assert_not_equal(complex2, struct.Complex(), options)
