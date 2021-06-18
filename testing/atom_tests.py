@@ -9,8 +9,8 @@ from nanome.util import Matrix
 from nanome.api import structure as struct
 from nanome._internal._network._serialization._context import _ContextDeserialization, _ContextSerialization
 from nanome._internal._network._commands._serialization import _UpdateWorkspace, _ReceiveWorkspace
-from testing.utilities import *
-
+from testing.utilities import (
+    assert_equal, assert_not_equal, run_timed_test, TestOptions, TestCounter)
 import unittest
 
 test_assets = os.getcwd() + ("/testing/test_assets")
@@ -96,7 +96,7 @@ def time_test_serializer():
 
     # deserialize stuff
     context_d = _ContextDeserialization(context_s.to_array())
-    workspace2 = receive_workspace.deserialize(update_workspace.version, context_d)
+    receive_workspace.deserialize(update_workspace.version, context_d)
 
 
 def create_atom():
@@ -204,24 +204,24 @@ def assert_parents(atom, bond, residue, chain, molecule, complex):
 
 
 def assert_no_parents(atom, bond, residue, chain, molecule, complex):
-    assert(bond.residue is not None)
-    assert(bond.chain is not None)
-    assert(bond.molecule is not None)
-    assert(bond.complex is not None)
+    assert(bond.residue is None)
+    assert(bond.chain is None)
+    assert(bond.molecule is None)
+    assert(bond.complex is None)
 
-    assert(atom.residue is not None)
-    assert(atom.chain is not None)
-    assert(atom.molecule is not None)
-    assert(atom.complex is not None)
+    assert(atom.residue is None)
+    assert(atom.chain is None)
+    assert(atom.molecule is None)
+    assert(atom.complex is None)
 
-    assert(residue.chain is not None)
-    assert(residue.molecule is not None)
-    assert(residue.complex is not None)
+    assert(residue.chain is None)
+    assert(residue.molecule is None)
+    assert(residue.complex is None)
 
-    assert(chain.molecule is not None)
-    assert(chain.complex is not None)
+    assert(chain.molecule is None)
+    assert(chain.complex is None)
 
-    assert(molecule.complex is not None)
+    assert(molecule.complex is None)
 
 
 class AtomTestCase(unittest.TestCase):
@@ -233,7 +233,6 @@ class AtomTestCase(unittest.TestCase):
         chain = struct.Chain()
         molecule = struct.Molecule()
         complex = struct.Complex()
-
         assert_no_parents(atom, bond, residue, chain, molecule, complex)
 
         complex.add_molecule(molecule)
@@ -288,7 +287,12 @@ class AtomTestCase(unittest.TestCase):
         assert_equal(atom_global_pos, res_atom_global_pos)
         assert_equal(m_inv * atom_global_pos, atom.position)
 
-    def test_serializers(self):
+    def test_time_serializer(self):
+        counter = TestCounter()
+        prep_timer_test()
+        run_timed_test(self.time_test_serializers, counter, 1, 10)  # normally 2.9
+
+    def time_test_serializers(self):
         # create test data
         # create test data
         workspace1 = create_workspace()
@@ -306,7 +310,6 @@ class AtomTestCase(unittest.TestCase):
 
     def test_iterators(self):
         input_dir = test_assets + ("/sdf/Thrombin_100cmpds (1).sdf")
-        output_dir = test_output_dir + ("/testOutput.sdf")
 
         # complex level
         complex = struct.Complex.io.from_sdf(path=input_dir)
