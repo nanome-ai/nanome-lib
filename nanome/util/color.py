@@ -196,3 +196,11 @@ class Color(object):
         :rtype: class:`str`
         """
         return hex(self._color)
+
+    @property
+    def rgb(self):
+        return (self.r, self.g, self.b)
+
+    @property
+    def rgba(self):
+        return (self.r, self.g, self.b, self.a)
