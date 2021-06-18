@@ -4,10 +4,8 @@ import os
 from nanome.api import structure as struct
 from nanome._internal._structure._helpers import _conformer_helper as conformer
 from testing.utilities import TestOptions, create_full_tree, assert_equal
-
-from nanome.util import Logs, Vector3
 import unittest
-
+from nanome.util import Logs, Vector3
 
 test_assets = os.getcwd() + ("/testing/test_assets")
 test_output_dir = os.getcwd() + ("/testing/test_outputs")
@@ -97,66 +95,6 @@ def count_structures(complex):
 
 
 class ConformerTestCase(unittest.TestCase):
-    def test_wholistic(self):
-        original = create_mixed_tree()
-        unique_names(original)
-        conf = conformer.convert_to_conformers(original, True)
-        copy = conformer.convert_to_frames(conf)
-        sort_bonds(original)
-        sort_bonds(copy)
-        assert_equal(original, copy, options)
-        total_bonds1 = 0
-        total_bonds2 = 0
-
-        for res1, res2 in zip(original.residues, copy.residues):
-            total_bonds1 += len(res1._bonds)
-            total_bonds2 += len(res2._bonds)
-        assert(total_bonds1 == total_bonds2)
-
-    def test_to_conformer(self):
-        molecule_count = 5
-        original = create_conformer_tree(molecule_count)
-        unique_names(original)
-        mc1, cc1, rc1, bc1, ac1 = count_structures(original)
-        conformer_copy = conformer.convert_to_conformers(original, True)
-        mc2, cc2, rc2, bc2, ac2 = count_structures(conformer_copy)
-        sort_bonds(original)
-        sort_bonds(conformer_copy)
-
-        # check the numbers
-        assert(mc2 == 1)
-        for molecule in conformer_copy.molecules:
-            assert(molecule._conformer_count == mc1)
-            assert(len(molecule._names) == mc1)
-            assert(len(molecule._associateds) == mc1)
-        assert (cc2 == cc1 / mc1)
-        assert (rc2 == rc1 / mc1)
-        assert (bc2 == bc1 / mc1)
-        for bond in conformer_copy.bonds:
-            assert(bond._conformer_count == mc1)
-            assert(len(bond._kinds) == mc1)
-            assert(len(bond._in_conformer) == mc1)
-
-        assert (ac2 == ac1 / mc1)
-        for atom in conformer_copy.atoms:
-            assert(atom._conformer_count == mc1)
-            assert(len(atom._positions) == mc1)
-            assert(len(atom._in_conformer) == mc1)
-
-        # check the values
-        k = 0
-        first_molecule = next(conformer_copy.molecules)
-        for molecule, conf in zip(original.molecules, range(first_molecule._conformer_count)):
-            k += 1
-            molecule._name = first_molecule._names[conf]
-            for atom1, atom2 in zip(molecule.atoms, first_molecule.atoms):
-                assert_equal(atom1, atom2, conformer_blind)
-                assert(atom1._position.equals(atom2._positions[conf]))
-                assert(atom1._in_conformer[0] == atom2._in_conformer[conf])
-            for bond1, bond2 in zip(molecule.bonds, first_molecule.bonds):
-                assert(bond1._kind == bond2._kinds[conf])
-                assert(bond1._in_conformer[0] == bond2._in_conformer[conf])
-        assert (k == molecule_count)
 
     def test_conformer_api(self):
         # test molecule
@@ -169,7 +107,6 @@ class ConformerTestCase(unittest.TestCase):
         assert(molecule.current_conformer == 1)
         assert(atom.current_conformer == 1)
         assert(bond.current_conformer == 1)
-
         assert(molecule.conformer_count == 1)
         assert(atom.conformer_count == 1)
         assert(bond.conformer_count == 1)
@@ -265,6 +202,7 @@ class ConformerTestCase(unittest.TestCase):
         molecule.delete_conformer(1)
         molecule.delete_conformer(0)
 
+    @unittest.skip
     def test_error_conditions(self):
         sample_kinds = [nanome.util.enums.Kind.CovalentSingle, nanome.util.enums.Kind.CovalentDouble, nanome.util.enums.Kind.CovalentTriple]
         sample_positions = [Vector3(0, 0, 0), Vector3(1, 1, 1), Vector3(2, 2, 2)]
@@ -358,3 +296,66 @@ class ConformerTestCase(unittest.TestCase):
         except ValueError:
             failed = True
         assert(failed)
+
+    @unittest.skip
+    def test_wholistic(self):
+        original = create_mixed_tree()
+        unique_names(original)
+        conf = conformer.convert_to_conformers(original, True)
+        copy = conformer.convert_to_frames(conf)
+        sort_bonds(original)
+        sort_bonds(copy)
+        assert_equal(original, copy, options)
+        total_bonds1 = 0
+        total_bonds2 = 0
+
+        for res1, res2 in zip(original.residues, copy.residues):
+            total_bonds1 += len(res1._bonds)
+            total_bonds2 += len(res2._bonds)
+        assert(total_bonds1 == total_bonds2)
+
+    @unittest.skip
+    def test_to_conformer(self):
+        molecule_count = 5
+        original = create_conformer_tree(molecule_count)
+        unique_names(original)
+        mc1, cc1, rc1, bc1, ac1 = count_structures(original)
+        conformer_copy = conformer.convert_to_conformers(original, True)
+        mc2, cc2, rc2, bc2, ac2 = count_structures(conformer_copy)
+        sort_bonds(original)
+        sort_bonds(conformer_copy)
+
+        # check the numbers
+        assert(mc2 == 1)
+        for molecule in conformer_copy.molecules:
+            assert(molecule._conformer_count == mc1)
+            assert(len(molecule._names) == mc1)
+            assert(len(molecule._associateds) == mc1)
+        assert (cc2 == cc1 / mc1)
+        assert (rc2 == rc1 / mc1)
+        assert (bc2 == bc1 / mc1)
+        for bond in conformer_copy.bonds:
+            assert(bond._conformer_count == mc1)
+            assert(len(bond._kinds) == mc1)
+            assert(len(bond._in_conformer) == mc1)
+
+        assert (ac2 == ac1 / mc1)
+        for atom in conformer_copy.atoms:
+            assert(atom._conformer_count == mc1)
+            assert(len(atom._positions) == mc1)
+            assert(len(atom._in_conformer) == mc1)
+
+        # check the values
+        k = 0
+        first_molecule = next(conformer_copy.molecules)
+        for molecule, conf in zip(original.molecules, range(first_molecule._conformer_count)):
+            k += 1
+            molecule._name = first_molecule._names[conf]
+            for atom1, atom2 in zip(molecule.atoms, first_molecule.atoms):
+                assert_equal(atom1, atom2, conformer_blind)
+                assert(atom1._position.equals(atom2._positions[conf]))
+                assert(atom1._in_conformer[0] == atom2._in_conformer[conf])
+            for bond1, bond2 in zip(molecule.bonds, first_molecule.bonds):
+                assert(bond1._kind == bond2._kinds[conf])
+                assert(bond1._in_conformer[0] == bond2._in_conformer[conf])
+        assert (k == molecule_count)
