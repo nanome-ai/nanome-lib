@@ -94,10 +94,20 @@ def count_structures(complex):
     Logs.debug("atom_counter:", atom_counter)
 
 
+def deep_copy_tester(height):
+    """This is required for Conformer Tests to work when run in isolation."""
+    original = create_full_tree(height)
+    alter_object(original)
+    copy = original._deep_copy()
+    assert_equal(original, copy, options)
+
+
 class ConformerTestCase(unittest.TestCase):
 
     def test_conformer_api(self):
         # test molecule
+        deep_copy_tester(4)
+
         test = create_frames(1)[0]
         # conformer_count
         molecule = test._deep_copy()

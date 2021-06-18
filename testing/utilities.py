@@ -156,12 +156,6 @@ def alter_object(target, seen_cache={}):
         return target
     obj_dict = target.__dict__
     for key, var in obj_dict.items():
-        if key == '_Molecule__conformer_count':
-            breakpoint()
-        # if target.conformer_count == 2:
-        #     breakpoint()
-        else:
-            print(key, var)
         obj_dict[key] = alter_value(var, seen_cache)
     return target
 
@@ -308,7 +302,6 @@ def create_full_tree(height):
         return chain
     if height == 4:
         molecule = alter_object(create_molecule())
-        # breakpoint()
         for i in range(3):
             chain = create_full_tree(height - 1)
             chain.name = "chain" + str(i)
