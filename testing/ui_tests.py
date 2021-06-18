@@ -2,9 +2,8 @@ import nanome
 # from nanome import UI
 import nanome.api.ui as UI
 # from nanome.serialization.commands import ReceiveMenu, UpdateMenu
-from testing.utilities import assert_equal, rand_string
+from testing.utilities import assert_equal, rand_string, create_test
 import unittest
-# testing structures
 
 
 def prefab_button_pressed_callback(btn):
@@ -302,6 +301,23 @@ class UITestCase(unittest.TestCase):
         check_property(tooltip, "bounds")
         check_property(tooltip, "positioning_target")
         check_property(tooltip, "positioning_origin")
+
+    def test_button(self):
+        fn = create_test("button_test", test_serializer, (_UIBaseSerializer(), CreateButton(), options))
+        breakpoint()
+        ...
+
+    # def run(counter):
+    #     options = TestOptions(ignore_vars=["_name", "icon", "_icon"])
+    #     run_test(create_test("mesh_test", test_serializer, (_UIBaseSerializer(), CreateMesh(), options)), counter)
+    #     run_test(create_test("slider_test", test_serializer, (_UIBaseSerializer(), CreateSlider(), options)), counter)
+    #     run_test(create_test("text_input_test", test_serializer, (_UIBaseSerializer(), CreateTextInput(), options)), counter)
+    #     run_test(create_test("label_test", test_serializer, (_UIBaseSerializer(), CreateLabel(), options)), counter)
+    #     run_test(create_test("list_and_clone_test", test_serializer, (_UIBaseSerializer(), CreateList(), options)), counter)
+    #     test_node = CreateLayoutNode()
+    #     test_node._child_ids = []
+    #     test_node._content_id = None
+    #     run_test(create_test("layout_test", test_serializer, (_LayoutNodeSerializer(), test_node)), counter)
 
     # def test_menu_serialization(self):
     #     obj_to_test = create_menu()

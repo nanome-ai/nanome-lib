@@ -202,6 +202,13 @@ class FakeVersionTable(object):
         return 2 ^ 32
 
 
+def create_test(name, func, args):
+    def test():
+        return func(*args)
+    test.__name__ = name
+    return test
+
+
 def create_full_tree(height):
     from nanome import structure as struct
     if height == 1:
