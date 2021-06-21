@@ -21,10 +21,22 @@ Options = nanome.util.complex_save_options.PDBSaveOptions
 
 def to_file(path, complex, options = None):
     # type: (str, _Complex, Options) -> Results
-    complex = complex._convert_to_frames()
     result = Results()
     if options is None:
         options = Options()
+
+    saved_atom_constraint = options.only_save_these_atoms
+    old_to_new_atom = None
+    if saved_atom_constraint is not None:
+        old_to_new_atom = {}
+    complex = complex._convert_to_frames(old_to_new_atom)
+    if saved_atom_constraint is not None:
+        new_constraint = []
+        for atom in saved_atom_constraint:
+            if atom in old_to_new_atom:
+                new_constraint.append(old_to_new_atom[atom])
+        saved_atom_constraint = new_constraint
+
     serial_by_atom =  {} #<Atom, int>
     lines =  []
     line = pad_right(10, "NUMMDL")
@@ -40,7 +52,6 @@ def to_file(path, complex, options = None):
             return None
         for chain in chains:
             for residue in chain._residues:
-                saved_atom_constraint = options.only_save_these_atoms
                 for atom in residue._atoms:
                     if saved_atom_constraint is None or atom in saved_atom_constraint:
                         if options.write_het_atoms or atom.is_het is False:

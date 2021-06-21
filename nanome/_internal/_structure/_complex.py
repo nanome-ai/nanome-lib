@@ -106,8 +106,8 @@ class _Complex(_Base):
         result = _helpers._conformer_helper.convert_to_conformers(self, None)
         return result
 
-    def _convert_to_frames(self):
-        result = _helpers._conformer_helper.convert_to_frames(self)
+    def _convert_to_frames(self, old_to_new_atoms = None):
+        result = _helpers._conformer_helper.convert_to_frames(self, old_to_new_atoms)
         return result
 
     def __copy_received_complex(self, new_complex):
