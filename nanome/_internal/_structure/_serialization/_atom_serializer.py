@@ -67,7 +67,8 @@ class _AtomSerializer(_TypeSerializer):
         context.write_float(value._bfactor)
         context.write_bool(value._acceptor)
         context.write_bool(value._donor)
-        if (version >= 6):
+
+        if version >= 6:
             context.write_bool(value._polar_hydrogen)
 
         if version == 4:
@@ -129,6 +130,9 @@ class _AtomSerializer(_TypeSerializer):
         atom._acceptor = context.read_bool()
         atom._donor = context.read_bool()
 
+        if version >= 6:
+            atom._polar_hydrogen = context.read_bool()
+
         if version == 4:
             atom._atom_type["IDATM"] = context.read_using_serializer(
                 self.string)
@@ -139,8 +143,5 @@ class _AtomSerializer(_TypeSerializer):
         if version >= 5:
             atom._partial_charge = context.read_float()
             atom._atom_type = context.read_using_serializer(self.dict)
-
-        if (version >= 6):
-            atom._polar_hydrogen = context.read_bool()
 
         return atom
