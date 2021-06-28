@@ -243,20 +243,22 @@ class _Plugin(object):
                     if elapsed >= reconnect_wait:
                         Logs.message("Trying to reconnect...")
                         if self.__connect() == False:
+                            if self.__reconnect_attempt == 3:
+                                self.__disconnect()
                             continue
                     else:
                         time.sleep(reconnect_wait - elapsed)
                         continue
                 if self._network.receive() == False:
                     self.__connected = False
-                    self.__disconnect()
+                    self.__disconnection_time = timer()
                     self._network.disconnect()
                     continue
 
                 if self.__waiting_keep_alive:
                     if now - self.__last_keep_alive >= KEEP_ALIVE_TIMEOUT:
                         self.__connected = False
-                        self.__disconnect()
+                        self.__disconnection_time = timer()
                         continue
                 elif now - self.__last_keep_alive >= KEEP_ALIVE_TIME_INTERVAL and _Plugin._plugin_id >= 0:
                     self.__last_keep_alive = now
@@ -284,7 +286,6 @@ class _Plugin(object):
             to_remove.append(id)
         for id in to_remove:
             del self._sessions[id]
-        self.__disconnection_time = timer()
 
     def __on_termination_signal(self, signum, frame):
         self.__exit()
