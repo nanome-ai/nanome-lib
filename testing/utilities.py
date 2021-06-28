@@ -1,43 +1,48 @@
 from nanome.util import Logs, Color
 import time
-import traceback
 import os
 import random
 import shutil
 
+
 class TestOptions():
-    def __init__(self, ignore_vars = [], accurate_floats = False, print_float_warnings = False):
+    def __init__(self, ignore_vars=[], accurate_floats=False, print_float_warnings=False):
         self.ignore_vars = ignore_vars
         self.accurate_floats = accurate_floats
         self.print_float_warnings = print_float_warnings
 
+
 def get_test_assets():
     return os.getcwd() + ("\\testing\\test_assets\\")
 
-def assert_equal(first, second, options = None):
-    if (options == None):
+
+def assert_equal(first, second, options=None):
+    if (options is None):
         options = TestOptions()
     val, path = verbose_equals(first, second, options)
     if (not val):
         Logs.debug("PATH:")
-        Logs.debug("_"*80)
+        Logs.debug("_" * 80)
         for layer in path:
             Logs.debug(layer)
-            Logs.debug("_"*80)
+            Logs.debug("_" * 80)
         raise AssertionError
 
-def assert_not_equal(first, second, options = TestOptions()):
+
+def assert_not_equal(first, second, options=TestOptions()):
     val, path = verbose_equals(first, second, options)
     if (val):
         Logs.debug("All variables equal")
         raise AssertionError
 
-def verbose_equals(first, second, options = TestOptions()):
+
+def verbose_equals(first, second, options=TestOptions()):
     return compare_values(first, second, {}, options)
 
+
 def previously_evaluated(first, second, seen_cache):
-    #prevents infinite recursion by caching the results of things already seen. 
-    #values in cache have already been evaluated or are currently being evaluated.
+    # prevents infinite recursion by caching the results of things already seen.
+    # values in cache have already been evaluated or are currently being evaluated.
     if first in seen_cache:
         if second in seen_cache[first]:
             return True
@@ -53,10 +58,10 @@ def previously_evaluated(first, second, seen_cache):
     return False
 
 
-def compare_values(first, second, seen_cache, options = TestOptions()):
+def compare_values(first, second, seen_cache, options=TestOptions()):
     if first == second:
         return True, []
-    #split by type to determing how to compare.
+    # split by type to determing how to compare.
     curr_type = ("type: " + str(first.__class__))
     if not isinstance(second, first.__class__):
         output = [("DeepEqualsError:")]
@@ -85,7 +90,7 @@ def compare_values(first, second, seen_cache, options = TestOptions()):
             elif first != second:
                 diff = True
             if diff:
-                output = [("DeepEqualsError: " +  str(first.__class__))]
+                output = [("DeepEqualsError: " + str(first.__class__))]
                 output[0] += ("\nfirst val: " + str(first))
                 output[0] += ("\nsecond val: " + str(second))
                 return False, output
@@ -95,13 +100,14 @@ def compare_values(first, second, seen_cache, options = TestOptions()):
             try:
                 if previously_evaluated(first, second, seen_cache):
                     return True, []
-            except TypeError: # If type is unhashable
+            except TypeError:  # If type is unhashable
                 pass
             result, output = compare_values(first_dict, second_dict, seen_cache, options)
             output.insert(0, curr_type)
             return result, output
 
-def compare_lists(first, second, seen_cache, options = TestOptions()):
+
+def compare_lists(first, second, seen_cache, options=TestOptions()):
     first_len = len(first)
     if first_len != len(second):
         output = [("Lists different lengths")]
@@ -112,26 +118,27 @@ def compare_lists(first, second, seen_cache, options = TestOptions()):
     else:
         for i in range(first_len):
             result, output = compare_values(first[i], second[i], seen_cache, options)
-            if result == False:
+            if result is False:
                 return False, output
     return True, []
 
-def compare_dicts(first, second, seen_cache, options = TestOptions()):
+
+def compare_dicts(first, second, seen_cache, options=TestOptions()):
     for key in second:
         if isinstance(key, str):
             if key in options.ignore_vars:
                 continue
-        if (not key in first):
+        if (key not in first):
             output = [("DeepEqualsError: " + str(first.__class__))]
-            output[0] += ("\nkey "+ str(key) + " not in first object")
+            output[0] += ("\nkey " + str(key) + " not in first object")
             return False, output
     for key in first:
         if isinstance(key, str):
             if key in options.ignore_vars:
                 continue
-        if (not key in second):
+        if (key not in second):
             output = [("DeepEqualsError: " + str(first.__class__))]
-            output[0] += ("\nkey " +  str(key) + " not in second object")
+            output[0] += ("\nkey " + str(key) + " not in second object")
             return False, output
         else:
             result, output = compare_values(first[key], second[key], seen_cache, options)
@@ -142,7 +149,8 @@ def compare_dicts(first, second, seen_cache, options = TestOptions()):
                 return False, output
     return True, []
 
-def alter_object(target, seen_cache = {}):
+
+def alter_object(target, seen_cache={}):
     if previously_altered(target, seen_cache):
         return target
     obj_dict = target.__dict__
@@ -150,13 +158,14 @@ def alter_object(target, seen_cache = {}):
         obj_dict[key] = alter_value(var, seen_cache)
     return target
 
-def alter_value(value, seen_cache = {}):
+
+def alter_value(value, seen_cache={}):
     if isinstance(value, list):
         for i in range(len(value)):
             value[i] = alter_value(value[i], seen_cache)
         return value
     elif isinstance(value, dict):
-        for key,var in value.items():
+        for key, var in value.items():
             value[key] = alter_value(var, seen_cache)
         return value
     else:
@@ -177,71 +186,16 @@ def alter_value(value, seen_cache = {}):
             else:
                 return value
 
+
 def previously_altered(value, seen_cache):
-    #prevents infinite recursion by caching the results of things already seen. 
-    #values in cache have already been evaluated or are currently being evaluated.
+    # prevents infinite recursion by caching the results of things already seen.
+    # values in cache have already been evaluated or are currently being evaluated.
     if value in seen_cache:
         return True
     else:
         seen_cache[value] = True
     return False
 
-class TestCounter():
-    def __init__(self):
-        self.passed = 0 
-        self.total = 0 
-
-def run_test_group(test, options = TestOptions()):
-    Logs.debug("runnning test group", test.__name__)
-    counter = TestCounter()
-    test.run(counter)
-    Logs.debug("tests passed: ", str(counter.passed)+"/"+str(counter.total))
-    if (counter.passed < counter.total):
-        return False
-    else:
-        return True
-
-def run_test(test, counter):
-    try:
-        Logs.debug("\trunning test", test.__name__)
-        counter.total += 1
-        test()
-    except Exception as err:
-        Logs.error("\ttest failed.")
-        print(traceback.format_exc())
-    else:
-        counter.passed += 1
-
-def run_timed_test(test, counter, loop_count = 1, maximum_time = -1.0):
-    Logs.debug("\trunning test", test.__name__)
-    counter.total += 1    
-    timed = True
-    try:
-        start_time = time.process_time_ns()
-    except AttributeError:
-        Logs.debug("No timer module. Defaulting to untimed test")
-        timed = False
-        maximum_time = -1
-    try:
-        if (timed):
-            for _ in range(loop_count):
-                test()
-            result_time = (time.process_time_ns() - start_time) / 1000000000.0
-            Logs.debug("\texecuted in", result_time, "seconds.", result_time/loop_count, "seconds per test.", "Reference time:", maximum_time, "seconds")
-        else:
-            test()
-    except Exception as e:
-        Logs.error("\ttest failed.")
-        Logs.error(e)
-    else:
-        if maximum_time >= 0.0 and result_time > maximum_time:
-            Logs.error("\ttest successful but too slow")
-        else:
-            counter.passed += 1
-
-class FakeVersionTable(object):
-    def __getitem__(self, key):
-        return 2^32
 
 def test_serializer(serializer, obj_to_test, options=None):
     from nanome._internal._network._serialization._context import _ContextDeserialization, _ContextSerialization
@@ -251,10 +205,18 @@ def test_serializer(serializer, obj_to_test, options=None):
     result = serializer.deserialize(serializer.version(), context_d)
     assert_equal(obj_to_test, result, options)
 
+
+class FakeVersionTable(object):
+    def __getitem__(self, key):
+        return 2 ^ 32
+
+
 def create_test(name, func, args):
-    test = lambda: func(*args)
+    def test():
+        return func(*args)
     test.__name__ = name
     return test
+
 
 def create_full_tree(height):
     from nanome import structure as struct
@@ -264,7 +226,7 @@ def create_full_tree(height):
     if height == 2:
         residue = alter_object(struct.Residue())
         for i in range(3):
-            atom = create_full_tree(height-1)
+            atom = create_full_tree(height - 1)
             atom.name = "atom" + str(i)
             residue.add_atom(atom)
         bond_atoms(residue._atoms[0], residue._atoms[1])
@@ -273,9 +235,9 @@ def create_full_tree(height):
     if height == 3:
         chain = alter_object(struct.Chain())
         for i in range(3):
-            residue = create_full_tree(height-1)
+            residue = create_full_tree(height - 1)
             residue.name = "residue" + str(i)
-            residue.serial = i+1
+            residue.serial = i + 1
             chain.add_residue(residue)
         bond_atoms(chain._residues[0]._atoms[0], chain._residues[1]._atoms[1])
         bond_atoms(chain._residues[0]._atoms[1], chain._residues[1]._atoms[2])
@@ -283,7 +245,7 @@ def create_full_tree(height):
     if height == 4:
         molecule = alter_object(create_molecule())
         for i in range(3):
-            chain = create_full_tree(height-1)
+            chain = create_full_tree(height - 1)
             chain.name = "chain" + str(i)
             molecule.add_chain(chain)
         bond_atoms(molecule._chains[0]._residues[0]._atoms[0], molecule._chains[1]._residues[1]._atoms[1])
@@ -292,66 +254,37 @@ def create_full_tree(height):
     if height == 5:
         complex = alter_object(create_complex())
         for i in range(3):
-            molecule = create_full_tree(height-1)
+            molecule = create_full_tree(height - 1)
             molecule.name = "molecule" + str(i)
             complex.add_molecule(molecule)
         return complex
 
-def print_tree(structure):
-    print(print_tree_helper(structure, 0))
-
-def print_tree_helper(structure, tabs):
-    from nanome import structure as struct
-    line = "| "*tabs
-    children = None
-    if isinstance(structure, struct.Complex):
-        line += "Complex: "
-        children = structure.molecules
-    elif isinstance(structure, struct.Molecule):
-        line += "Molecule: "
-        children = structure.chains
-    elif isinstance(structure, struct.Chain):
-        line += "Chain: "
-        children = structure.residues
-    elif isinstance(structure, struct.Residue):
-        line += "Residue: " + structure.name
-        line += "\n" + "| "*(tabs+1) + "Atoms: "
-        for atom in structure.atoms:
-            line += atom.name + ", "
-        line += "\n" + "| "*(tabs+1) + "Bonds: "        
-        for bond in structure.bonds:
-            # line += bond.atom1.name + "->" + bond.atom2.name + ", "
-            line += str(bond._parent._name) + ", "
-            # line += str(bond._parent._serial-1) + ", "
-        return line + "\n"
-    line += structure.name + "\n"
-    for i in children:
-        line += print_tree_helper(i, tabs+1)
-    return line + "\n"
 
 def create_molecule():
     from nanome import structure as struct
     molecule = struct.Molecule()
     molecule._associateds = [
         {
-            "key1" : "value1",
-            "key2" : "value2",
-            "key3" : "value3",
-            "key4" : "value4",
+            "key1": "value1",
+            "key2": "value2",
+            "key3": "value3",
+            "key4": "value4",
         }
     ]
     return molecule
+
 
 def create_complex():
     from nanome import structure as struct
     complex = struct.Complex()
     complex._remarks = {
-            "key1" : "value1",
-            "key2" : "value2",
-            "key3" : "value3",
-            "key4" : "value4",
-        }
+        "key1": "value1",
+        "key2": "value2",
+        "key3": "value3",
+        "key4": "value4",
+    }
     return complex
+
 
 def bond_atoms(atom1, atom2):
     from nanome import structure as struct
@@ -361,42 +294,51 @@ def bond_atoms(atom1, atom2):
     atom1.residue._add_bond(bond)
     return alter_object(bond)
 
-def rand_int(min = -0x7FFFFFFF, max = 0x7FFFFFFF):
+
+def rand_int(min=-0x7FFFFFFF, max=0x7FFFFFFF):
     return random.randint(min, max)
 
-def rand_float(min = -340282346638528859811704183484516925440, max = 340282346638528859811704183484516925440):
+
+def rand_float(min=-340282346638528859811704183484516925440, max=340282346638528859811704183484516925440):
     import struct
     dbl = random.uniform(min, max)
     flt = struct.unpack('f', struct.pack('f', dbl))[0]
     return flt
 
-def rand_positive_long(min = 0x7FFFFFFF, max = 0x7FFFFFFFFFFFFFFF):
+
+def rand_positive_long(min=0x7FFFFFFF, max=0x7FFFFFFFFFFFFFFF):
     return random.randint(min, max)
 
-def rand_negative_long(min = -0x7FFFFFFFFFFFFFFF, max = -0x7FFFFFFF):
+
+def rand_negative_long(min=-0x7FFFFFFFFFFFFFFF, max=-0x7FFFFFFF):
     return random.randint(min, max)
 
-def rand_uint(min = 0x00000000, max = 0xFFFFFFFF):
+
+def rand_uint(min=0x00000000, max=0xFFFFFFFF):
     return random.randint(min, max)
 
-def rand_byte(min = 0x00, max = 0xFF):
+
+def rand_byte(min=0x00, max=0xFF):
     return random.randint(min, max)
+
 
 def rand_string():
     return str(rand_int())
 
+
 def rand_color():
-    return Color(whole_num = rand_int())
+    return Color(whole_num=rand_int())
+
 
 class Counter():
     def __init__(self):
         self.count = 0
 
     def increment(self):
-        self.count+=1
+        self.count += 1
 
     def decrement(self):
-        self.count-=1
+        self.count -= 1
 
     def read(self):
         return self.count
@@ -406,6 +348,7 @@ class Counter():
 
     def to_string(self):
         return "counter(" + self.count + ")"
+
 
 class DebugTimer():
 
@@ -483,18 +426,18 @@ class DebugTimer():
             if self._parent and self.show_once:
                 self._parent.hide[self.name] = True
             elapsed = self.elapsed_time
-            percent = elapsed/total_time * 100
+            percent = elapsed / total_time * 100
             process_total = DebugTimer.process_totals[self.name]
             line = self._get_line(line_counter.read(), self.name, elapsed, percent, process_total, self.note, depth)
             line_counter.increment()
             lines.append(line)
             for child in self._children:
-                child._summary(depth+1, total_time, lines, line_counter)
+                child._summary(depth + 1, total_time, lines, line_counter)
 
         @classmethod
-        def _get_line (cls, line_number, name, elapsed, percent, process_total, note, depth):
+        def _get_line(cls, line_number, name, elapsed, percent, process_total, note, depth):
             _line_number = cls._format_block(line_number, 4, False)
-            _tab = "--"*depth
+            _tab = "--" * depth
             _name = name
             _elapsed = cls._format_block(elapsed, DebugTimer._elapsed_space)
             _percent = cls._format_block(percent, DebugTimer._percent_space)
@@ -503,12 +446,12 @@ class DebugTimer():
             left = "%s|%s|%s" % (_line_number, _tab, _name)
             right = "%s|%s|%s|%s\n" % (_elapsed, _percent, _process_total, _note)
             width = shutil.get_terminal_size().columns
-            space = width-len(left)-len(right)
-            line = left + ("-"*space) + right
+            space = width - len(left) - len(right)
+            line = left + ("-" * space) + right
             return line
 
         @classmethod
-        def _format_block(cls, text, size, adjust_left = True):
+        def _format_block(cls, text, size, adjust_left=True):
             buff = cls._left_buffer if adjust_left else cls._right_buffer
             if isinstance(text, float):
                 text = str(round(text, 5))
@@ -517,7 +460,7 @@ class DebugTimer():
             return buff(str(text), size)[:size]
 
         @staticmethod
-        def _right_buffer(text, length = 8):
+        def _right_buffer(text, length=8):
             text = str(text)
             diff = length - len(text)
             if diff > 0:
@@ -525,7 +468,7 @@ class DebugTimer():
             return text
 
         @staticmethod
-        def _left_buffer(text, length = 8):
+        def _left_buffer(text, length=8):
             text = str(text)
             diff = length - len(text)
             if diff > 0:
@@ -542,7 +485,8 @@ class DebugTimer():
     @classmethod
     def _get_time(cls):
         # return time.clock()
-        # return int(time.clock() * cls.nano) 
+        # return int(time.clock() * cls.nano)
         return time.clock() * cls.milli
+
 
 DebugTimer._start()

@@ -1,14 +1,8 @@
 from nanome.util import Color
-from testing.utilities import run_test
+import unittest
 
 
-def run(counter):
-    testcase = TestColorProperties()
-    run_test(testcase.test_rgb, counter)
-    run_test(testcase.test_rgba, counter)
-
-
-class TestColorProperties:
+class TestColorProperties(unittest.TestCase):
 
     def test_rgb(self):
         color = Color.Black()
