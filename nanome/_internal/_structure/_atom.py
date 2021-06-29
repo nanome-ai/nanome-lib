@@ -32,13 +32,13 @@ class _Atom(_Base):
         self._atom_mode = _Atom.AtomRenderingMode.BallStick
         self._labeled = False
         self._label_text = ""
-        self._atom_rendering = True
         self._atom_color = Color.Clear()
         self._atom_scale = 0.5
         self._surface_rendering = False
         self._surface_color = Color.Clear()
         self._surface_opacity = 1.0
         #No API
+        self._display_mode = 0xFFFFFFFF
         self._hydrogened = True
         self._watered = True
         self._het_atomed = True
@@ -52,6 +52,17 @@ class _Atom(_Base):
         self._parent = None
         _Atom._atom_count += 1
     
+    @property
+    def _atom_rendering(self):
+        return self._display_mode | 1
+
+    @_atom_rendering.setter
+    def _atom_rendering(self, value):
+        if value:
+            self._display_mode |= 1
+        else:
+            self._display_mode &= 0xFFFFFFFE
+
     #region connections
     @property
     def _residue(self):
@@ -165,13 +176,13 @@ class _Atom(_Base):
         atom._atom_mode = self._atom_mode
         atom._labeled = self._labeled
         atom._label_text = self._label_text
-        atom._atom_rendering = self._atom_rendering
         atom._atom_color = self._atom_color.copy()
         atom._atom_scale = self._atom_scale
         atom._surface_rendering = self._surface_rendering
         atom._surface_color = self._surface_color.copy()
         atom._surface_opacity = self._surface_opacity
         #No API
+        self._display_mode = self._display_mode
         atom._hydrogened = self._hydrogened
         atom._watered = self._watered
         atom._het_atomed = self._het_atomed

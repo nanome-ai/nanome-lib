@@ -60,7 +60,10 @@ class Atom(_Atom, Base):
 
         :type: :class:`bool`
         """
-        self._atom_rendering = value
+        if value:
+            self._display_mode = 0xFFFFFFFF
+        else:
+            self._display_mode = 0x00000000
         self._hydrogened = value
         self._watered = value
         self._hetatomed = value
@@ -380,10 +383,13 @@ class Atom(_Atom, Base):
             self._parent = parent
 
         def set_visible(self, value):
-            self._parent.atom_rendering = value
-            self._parent.hydrogened = value
-            self._parent.watered = value
-            self._parent.hetatomed = value
+            if value:
+                self._parent._display_mode = 0xFFFFFFFF
+            else:
+                self._parent._display_mode = 0x00000000
+            self._parent._hydrogened = value
+            self._parent._watered = value
+            self._parent._hetatomed = value
 
         @property
         def selected(self):
