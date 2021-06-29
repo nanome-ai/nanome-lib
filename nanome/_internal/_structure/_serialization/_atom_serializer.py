@@ -22,7 +22,8 @@ class _AtomSerializer(_TypeSerializer):
         # Version 4 corresponds to Nanome release 1.16
         # Version 5 corresponds to Nanome release 1.19
         # Version 6 corresponds to Nanome release 1.22
-        return 6
+        # Version 7 corresponds to Nanome release 1.22
+        return 7
 
     def name(self):
         return "Atom"
@@ -34,7 +35,8 @@ class _AtomSerializer(_TypeSerializer):
         context.write_bool(value._labeled)
         if version >= 1:
             context.write_using_serializer(self.string, value._label_text)
-        context.write_bool(value._atom_rendering)
+        if version <= 6:
+            context.write_bool(value._atom_rendering)
         context.write_using_serializer(self.color, value._atom_color)
         if version >= 2:
             context.write_float(value._atom_scale)
@@ -42,9 +44,10 @@ class _AtomSerializer(_TypeSerializer):
         context.write_using_serializer(self.color, value._surface_color)
         context.write_float(value._surface_opacity)
 
-        context.write_bool(value._hydrogened)
-        context.write_bool(value._watered)
-        context.write_bool(value._het_atomed)
+        if version <= 6:
+            context.write_bool(value._hydrogened)
+            context.write_bool(value._watered)
+            context.write_bool(value._het_atomed)
         context.write_bool(value._het_surfaced)
         context.write_using_serializer(self.string, value._symbol)
         context.write_int(value._serial)
@@ -85,6 +88,9 @@ class _AtomSerializer(_TypeSerializer):
             context.write_float(value._partial_charge)
             context.write_using_serializer(self.dict, value._atom_type)
 
+        if version >= 7:
+            context.write_int(value._display_mode)
+
     def deserialize(self, version, context):
         # type: (_Atom, _ContextDeserialization) -> _Atom
         atom = _Atom._create()
@@ -96,7 +102,8 @@ class _AtomSerializer(_TypeSerializer):
         atom._labeled = context.read_bool()
         if version >= 1:
             atom._label_text = context.read_using_serializer(self.string)
-        atom._atom_rendering = context.read_bool()
+        if version <= 6:
+            atom._atom_rendering = context.read_bool()
         atom._atom_color = context.read_using_serializer(self.color)
         if version >= 2:
             atom._atom_scale = context.read_float()
@@ -104,9 +111,10 @@ class _AtomSerializer(_TypeSerializer):
         atom._surface_color = context.read_using_serializer(self.color)
         atom._surface_opacity = context.read_float()
 
-        atom._hydrogened = context.read_bool()
-        atom._watered = context.read_bool()
-        atom._het_atomed = context.read_bool()
+        if version <= 6:
+            atom._hydrogened = context.read_bool()
+            atom._watered = context.read_bool()
+            atom._het_atomed = context.read_bool()
         atom._het_surfaced = context.read_bool()
 
         atom._symbol = context.read_using_serializer(self.string)
@@ -143,5 +151,8 @@ class _AtomSerializer(_TypeSerializer):
         if version >= 5:
             atom._partial_charge = context.read_float()
             atom._atom_type = context.read_using_serializer(self.dict)
+
+        if version >= 7:
+            atom._display_mode = context.read_int()
 
         return atom
