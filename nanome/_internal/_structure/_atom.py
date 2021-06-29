@@ -54,7 +54,7 @@ class _Atom(_Base):
     
     @property
     def _atom_rendering(self):
-        return self._display_mode | 1
+        return self._display_mode & 1
 
     @_atom_rendering.setter
     def _atom_rendering(self, value):

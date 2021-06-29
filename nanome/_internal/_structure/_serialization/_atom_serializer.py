@@ -89,7 +89,7 @@ class _AtomSerializer(_TypeSerializer):
             context.write_using_serializer(self.dict, value._atom_type)
 
         if version >= 7:
-            context.WriteInt(value._display_mode)
+            context.write_int(value._display_mode)
 
     def deserialize(self, version, context):
         # type: (_Atom, _ContextDeserialization) -> _Atom
