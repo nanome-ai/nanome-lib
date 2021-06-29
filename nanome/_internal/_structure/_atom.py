@@ -182,7 +182,7 @@ class _Atom(_Base):
         atom._surface_color = self._surface_color.copy()
         atom._surface_opacity = self._surface_opacity
         #No API
-        self._display_mode = self._display_mode
+        atom._display_mode = self._display_mode
         atom._hydrogened = self._hydrogened
         atom._watered = self._watered
         atom._het_atomed = self._het_atomed
