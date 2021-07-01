@@ -50,7 +50,7 @@ class _SetShape(_TypeSerializer):
 
     def deserialize(self, version, context):
         if version < 2:
-            return (context.read_int(), context.read_bool())
+            return ([context.read_int()], [context.read_bool()])
         else:
             indices_arr = context.read_int_array()
             success_arr = context.read_byte_array()
