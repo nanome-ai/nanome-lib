@@ -24,24 +24,27 @@ class _SetShape(_TypeSerializer):
 
     def serialize(self, version, value, context):
         if version == 0:
-            context.write_byte(int(value.shape_type))
-            if value.shape_type == ShapeType.Sphere:
-                context.write_using_serializer(self._sphere, value)
-            if value.shape_type == ShapeType.Line:
-                context.write_using_serializer(self._line, value)
-            if value.shape_type == ShapeType.Label:
-                context.write_using_serializer(self._label, value)
-            context.write_int(value.index)
-            context.write_long(value.target)
-            context.write_byte(int(value.anchor))
-            context.write_using_serializer(self._position, value.position)
-            context.write_using_serializer(self._rotation, Quaternion())
-            context.write_using_serializer(self._color, value.color)
-        elif version == 1:
-            if isinstance(value, list):
+            if len(value) > 1:
                 Logs.warning("SetShape: Using a list of shapes with an old version of Nanome")
-                return
-            context.write_using_serializer(self._shape, value)
+            first_elem = value[0]
+            context.write_byte(int(first_elem.shape_type))
+            if first_elem.shape_type == ShapeType.Sphere:
+                context.write_using_serializer(self._sphere, first_elem)
+            if first_elem.shape_type == ShapeType.Line:
+                context.write_using_serializer(self._line, first_elem)
+            if first_elem.shape_type == ShapeType.Label:
+                context.write_using_serializer(self._label, first_elem)
+            context.write_int(first_elem.index)
+            context.write_long(first_elem.target)
+            context.write_byte(int(first_elem.anchor))
+            context.write_using_serializer(self._position, first_elem.position)
+            context.write_using_serializer(self._rotation, Quaternion())
+            context.write_using_serializer(self._color, first_elem.color)
+        elif version == 1:
+            if len(value) > 1:
+                Logs.warning("SetShape: Using a list of shapes with an old version of Nanome")
+            first_elem = value[0]
+            context.write_using_serializer(self._shape, first_elem)
         elif version == 2:
             context.write_using_serializer(self._shape_array, value)
 
