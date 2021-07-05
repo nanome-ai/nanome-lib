@@ -55,10 +55,11 @@ class _NetInstance(object):
                 Logs.error("Connection has been forcibly closed by the server")
                 raise
             except ssl.SSLError:
-                pass
+                raise
             except socket.error as e:
                 if e.errno == errno.EWOULDBLOCK or e.errno == errno.EAGAIN:
                     pass
+                raise
 
     def disconnect(self):
         self._connection.close()
