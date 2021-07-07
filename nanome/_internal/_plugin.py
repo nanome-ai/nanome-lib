@@ -225,6 +225,8 @@ class _Plugin(object):
             self.__connected = True
             self.__reconnect_attempt = 0
             self.__last_keep_alive = timer()
+            for session in self._sessions.values():
+                session._net_plugin = self._network
             return True
         else:
             self.__disconnection_time = timer()
