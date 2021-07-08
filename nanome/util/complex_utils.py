@@ -1,4 +1,3 @@
-from nanome.api.structure import Complex
 
 
 class ComplexUtils:
@@ -6,6 +5,7 @@ class ComplexUtils:
 
     @staticmethod
     def align_to(complex, reference_complex):
+        """Set complex position and rotation relative to reference_complex."""
         m = complex.get_complex_to_workspace_matrix()
         for atom in complex.atoms:
             atom.position = m * atom.position
@@ -20,6 +20,7 @@ class ComplexUtils:
     @staticmethod
     def combine_ligands(receptor, ligands):
         """Align ligand Complexes to receptor, and combine into one Complex."""
+        from nanome.api.structure import Complex
         combined_ligands = Complex()
         combined_ligands.names = []
         for ligand in ligands:

@@ -3,7 +3,7 @@ import unittest
 import pickle
 
 from nanome.api.structure import Complex
-from nanome.util.complex_utils import ComplexUtils
+from nanome.util import ComplexUtils
 
 
 BASE_DIR = os.path.join(os.path.dirname(__file__))
