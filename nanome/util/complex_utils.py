@@ -47,7 +47,7 @@ class ComplexUtils:
     def reset_transform(complex):
         # Must be used in conjuntion with `align_to`
         # to set the old_position and old_rotation values.
-        if True or hasattr(complex, 'old_position'):
+        if hasattr(complex, 'old_position'):
             complex.position = complex.old_position
-        if True or hasattr(complex, 'old_rotation'):
+        if hasattr(complex, 'old_rotation'):
             complex.rotation = complex.old_rotation
