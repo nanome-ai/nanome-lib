@@ -18,10 +18,6 @@ class ComplexUtilsTestCase(unittest.TestCase):
         with open(f'{BASE_DIR}/test_assets/pickles/1fsv.pickle', 'rb') as f:
             self.complex2 = pickle.load(f)
 
-    def test_pickle_complexes(self):
-        assert isinstance(self.complex1, Complex)
-        assert isinstance(self.complex2, Complex)
-
     def test_align_to(self):
         ComplexUtils.align_to(self.complex1, self.complex2)
 
