@@ -1,5 +1,6 @@
 import os
 import unittest
+import pickle
 
 from nanome.api.structure import Complex
 from nanome.util.complex_utils import ComplexUtils
@@ -8,19 +9,21 @@ from nanome.util.complex_utils import ComplexUtils
 BASE_DIR = os.path.join(os.path.dirname(__file__))
 
 
-class CopmlexUtilsTestCase(unittest.TestCase):
+class ComplexUtilsTestCase(unittest.TestCase):
     def setUp(self):
         super().setUp()
-        self.complex1 = Complex.io.from_pdb(path=f'{BASE_DIR}/test_assets/pdb/1a9l.pdb')
-        self.complex2 = Complex.io.from_pdb(path=f'{BASE_DIR}/test_assets/pdb/1fsv.pdb')
+        with open(f'{BASE_DIR}/test_assets/pickles/1a9l.pickle', 'rb') as f:
+            self.complex1 = pickle.load(f)
 
-    def test_setup(self):
+        with open(f'{BASE_DIR}/test_assets/pickles/1fsv.pickle', 'rb') as f:
+            self.complex2 = pickle.load(f)
+
+    def test_pickle_complexes(self):
         assert isinstance(self.complex1, Complex)
         assert isinstance(self.complex2, Complex)
 
     def test_align_to(self):
         ComplexUtils.align_to(self.complex1, self.complex2)
-        pass 
 
     def test_combine_ligands(self):
         complex1_mol_count = len(list(self.complex1.molecules))
