@@ -20,9 +20,15 @@ class CopmlexUtilsTestCase(unittest.TestCase):
 
     def test_align_to(self):
         ComplexUtils.align_to(self.complex1, self.complex2)
+        pass 
 
     def test_combine_ligands(self):
-        ComplexUtils.combine_ligands(self.complex1, [self.complex2])
+        complex1_mol_count = len(list(self.complex1.molecules))
+        complex2_mol_count = len(list(self.complex2.molecules))
+        
+        combined_ligands = ComplexUtils.combine_ligands(self.complex1, [self.complex1, self.complex2])
+        combined_ligands_mol_count = len(list(combined_ligands.molecules))
+        self.assertEqual(combined_ligands_mol_count, complex1_mol_count + complex2_mol_count)
 
     def test_convert_to_conformers(self):
         ComplexUtils.convert_to_conformers([self.complex1])

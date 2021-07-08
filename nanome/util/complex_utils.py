@@ -19,6 +19,7 @@ class ComplexUtils:
 
     @staticmethod
     def combine_ligands(receptor, ligands):
+        """Align ligand Complexes to receptor, and combine into one Complex."""
         combined_ligands = Complex()
         combined_ligands.names = []
         for ligand in ligands:
