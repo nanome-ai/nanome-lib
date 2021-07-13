@@ -65,7 +65,7 @@ class Shape(_Shape):
     @classmethod
     def upload_multiple(cls, shapes, done_callback=None):
         """
-        | Upload the shape to the Nanome App
+        | Upload multiple shapes to the Nanome App
         """
         return _Shape._upload_multiple(shapes, done_callback)
 
@@ -74,6 +74,13 @@ class Shape(_Shape):
         | Remove the shape from the Nanome App and destroy it.
         """
         self._destroy()
+
+    @classmethod
+    def destroy_multiple(cls, shapes, done_callback=None):
+        """
+        | Remove multiple shapes from the Nanome App and destroy them.
+        """
+        _Shape._destroy_multiple(shapes)
 
 
 _Shape._create = Shape

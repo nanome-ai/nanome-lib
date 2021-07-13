@@ -158,8 +158,7 @@ class TestShapes(nanome.PluginInstance):
         def delete_last(cls, button):
             if len(cls.spheres) == 0:
                 return
-            shape = cls.spheres.pop()
-            shape.destroy()
+            Shape.destroy_multiple(cls.spheres)
 
         @classmethod
         def create_random_sphere(cls):

@@ -52,4 +52,9 @@ class _Shape(object):
         return result
 
     def _destroy(self):
-        nanome._internal._network._ProcessNetwork._instance._send(nanome._internal._network._commands._callbacks._Messages.delete_shape, self._index, False)
+        nanome._internal._network._ProcessNetwork._instance._send(nanome._internal._network._commands._callbacks._Messages.delete_shape, [self._index], False)
+
+    @classmethod
+    def _destroy_multiple(cls, shapes):
+        indices = [x._index for x in shapes]
+        nanome._internal._network._ProcessNetwork._instance._send(nanome._internal._network._commands._callbacks._Messages.delete_shape, indices, False)
