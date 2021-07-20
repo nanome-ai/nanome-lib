@@ -1,6 +1,7 @@
 import nanome
 from nanome.util import Color, Logs
 
+
 class _Shape(object):
     def __init__(self, shape_type):
         self._index = -1
@@ -18,6 +19,7 @@ class _Shape(object):
             result = results[0]
             if self._index != -1 and index != self._index:
                 Logs.error("SetShapeCallback received for the wrong shape")
+
             self._index = index
             if done_callback is not None:
                 done_callback(result)
@@ -39,7 +41,10 @@ class _Shape(object):
                     error = True
                 shape._index = index
             if error:
-                Logs.error("SetShapeCallback received for the wrong shape")
+                msg = "SetShapeCallback received for the wrong shape"
+                Logs.error(msg)
+                raise TypeError(msg)
+
             if done_callback is not None:
                 done_callback(results)
 

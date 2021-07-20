@@ -1,4 +1,5 @@
 from nanome._internal._shapes._shape import _Shape
+from nanome.util import Logs
 
 
 class Shape(_Shape):
@@ -67,7 +68,15 @@ class Shape(_Shape):
         """
         | Upload multiple shapes to the Nanome App
         """
-        return _Shape._upload_multiple(shapes, done_callback)
+        updated_shapes = []
+        try:
+            updated_shapes = _Shape._upload_multiple(shapes, done_callback)
+        except TypeError:
+            # If upload multiple fails, try uploading each individual shape.
+            Logs.warning('upload_multiple() failed, attempting upload each.')
+            for shape in shapes:
+                new_shape = shape.upload()
+                updated_shapes.append(new_shape)
 
     def destroy(self):
         """
