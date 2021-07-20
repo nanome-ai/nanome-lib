@@ -41,9 +41,7 @@ class _Shape(object):
                     error = True
                 shape._index = index
             if error:
-                msg = "SetShapeCallback received for the wrong shape"
-                Logs.error(msg)
-                raise TypeError(msg)
+                Logs.error("SetShapeCallback received for the wrong shape")
 
             if done_callback is not None:
                 done_callback(results)
