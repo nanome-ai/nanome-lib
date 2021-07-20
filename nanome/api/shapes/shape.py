@@ -73,10 +73,11 @@ class Shape(_Shape):
             updated_shapes = _Shape._upload_multiple(shapes, done_callback)
         except TypeError:
             # If upload multiple fails, try uploading each individual shape.
-            Logs.warning('upload_multiple() failed, attempting upload each.')
+            Logs.warning('upload_multiple() failed, attempting to upload one at a time.')
             for shape in shapes:
                 new_shape = shape.upload()
-                updated_shapes.append(new_shape)
+                updated_shapes.append(shape)
+        return updated_shapes
 
     def destroy(self):
         """
