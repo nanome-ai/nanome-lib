@@ -116,8 +116,8 @@ class Shape(_Shape):
             # Done as a fallback for older versions of Nanome that don't support
             # destroy_multiple yet
             Logs.warning('destroy_multiple() failed, attempting to destroy one at a time.')
-            for i in range(0, len(shapes)):
-                shapes[i].destroy()
+            for shape in shapes:
+                shape.destroy()
 
 
 _Shape._create = Shape
