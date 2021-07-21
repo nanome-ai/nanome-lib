@@ -76,7 +76,8 @@ class Shape(_Shape):
             # upload_multiple yet
             Logs.warning('upload_multiple() failed, attempting to upload one at a time.')
 
-            def upload_callback(self, result):
+            results = []
+            def upload_callback(result):
                 results.append(result)
                 if len(results) == len(shapes):
                     done_callback(results)
