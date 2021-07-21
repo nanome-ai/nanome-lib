@@ -96,7 +96,15 @@ class Shape(_Shape):
         """
         | Remove multiple shapes from the Nanome App and destroy them.
         """
-        _Shape._destroy_multiple(shapes)
+        try:
+            _Shape._destroy_multiple(shapes, done_callback)
+        except TypeError:
+            # If destroy multiple fails, upload each one at a time.
+            # Done as a fallback for older versions of Nanome that don't support
+            # destroy_multiple yet
+            Logs.warning('destroy_multiple() failed, attempting to destroy one at a time.')
+            for i in range(0, len(shapes)):
+                shapes[i].destroy()
 
 
 _Shape._create = Shape
