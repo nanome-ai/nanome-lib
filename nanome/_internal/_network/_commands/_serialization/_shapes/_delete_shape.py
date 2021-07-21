@@ -1,6 +1,7 @@
 from nanome._internal._util._serializers import _TypeSerializer
 from nanome.util.logs import Logs
 
+
 class _DeleteShape(_TypeSerializer):
     def __init__(self):
         pass
@@ -14,7 +15,9 @@ class _DeleteShape(_TypeSerializer):
     def serialize(self, version, value, context):
         if version == 0:
             if len(value) > 1:
-                Logs.warning("SetShape: Using a list of shapes with an old version of Nanome")
+                msg = "SetShape: Using a list of shapes with an old version of Nanome"
+                Logs.warning(msg)
+                raise TypeError(msg)
             context.write_int(value[0])
         elif version == 1:
             context.write_int_array(value)

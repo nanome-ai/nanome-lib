@@ -4,6 +4,7 @@ from nanome._internal._shapes._serialization import _SphereSerializer, _ShapeSer
 from nanome.util.enums import ShapeType
 from nanome.util import Quaternion
 
+
 class _SetShape(_TypeSerializer):
     def __init__(self):
         self._position = _UnityPositionSerializer()
@@ -25,7 +26,9 @@ class _SetShape(_TypeSerializer):
     def serialize(self, version, value, context):
         if version == 0:
             if len(value) > 1:
-                Logs.warning("SetShape: Using a list of shapes with an old version of Nanome")
+                msg = "SetShape: Using a list of shapes with an old version of Nanome"
+                Logs.warning(msg)
+                raise TypeError(msg)
             first_elem = value[0]
             context.write_byte(int(first_elem.shape_type))
             if first_elem.shape_type == ShapeType.Sphere:
@@ -42,7 +45,9 @@ class _SetShape(_TypeSerializer):
             context.write_using_serializer(self._color, first_elem.color)
         elif version == 1:
             if len(value) > 1:
-                Logs.warning("SetShape: Using a list of shapes with an old version of Nanome")
+                msg = "SetShape: Using a list of shapes with an old version of Nanome"
+                Logs.warning(msg)
+                raise TypeError(msg)
             first_elem = value[0]
             context.write_using_serializer(self._shape, first_elem)
         elif version == 2:

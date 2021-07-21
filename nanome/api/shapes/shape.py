@@ -1,4 +1,11 @@
+import nanome
 from nanome._internal._shapes._shape import _Shape
+from nanome.util import Logs
+
+try:
+    import asyncio
+except ImportError:
+    asyncio = False
 
 
 class Shape(_Shape):
@@ -67,7 +74,32 @@ class Shape(_Shape):
         """
         | Upload multiple shapes to the Nanome App
         """
-        return _Shape._upload_multiple(shapes, done_callback)
+        try:
+            return _Shape._upload_multiple(shapes, done_callback)
+        except TypeError:
+            # If upload multiple fails, upload each one at a time.
+            # Done as a fallback for older versions of Nanome that don't support
+            # upload_multiple yet
+            Logs.warning('upload_multiple() failed, attempting to upload one at a time.')
+
+            # Make sure fallback works for async calls
+            future = None
+            if done_callback is None and nanome.PluginInstance._instance.is_async:
+                loop = asyncio.get_event_loop()
+                future = loop.create_future()
+                done_callback = lambda *args: future.set_result(args)
+
+            results = []
+
+            def upload_callback(result):
+                results.append(result)
+                if len(results) == len(shapes):
+                    done_callback(results)
+
+            for shape in shapes:
+                shape.upload(upload_callback if done_callback else None)
+
+            return future
 
     def destroy(self):
         """
@@ -80,7 +112,15 @@ class Shape(_Shape):
         """
         | Remove multiple shapes from the Nanome App and destroy them.
         """
-        _Shape._destroy_multiple(shapes)
+        try:
+            _Shape._destroy_multiple(shapes)
+        except TypeError:
+            # If destroy multiple fails, upload each one at a time.
+            # Done as a fallback for older versions of Nanome that don't support
+            # destroy_multiple yet
+            Logs.warning('destroy_multiple() failed, attempting to destroy one at a time.')
+            for shape in shapes:
+                shape.destroy()
 
 
 _Shape._create = Shape
