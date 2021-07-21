@@ -1,6 +1,11 @@
+import nanome
 from nanome._internal._shapes._shape import _Shape
 from nanome.util import Logs
 
+try:
+    import asyncio
+except ImportError:
+    asyncio = False
 
 class Shape(_Shape):
     """
@@ -76,14 +81,22 @@ class Shape(_Shape):
             # upload_multiple yet
             Logs.warning('upload_multiple() failed, attempting to upload one at a time.')
 
+            future = None
+            if done_callback is None and nanome.PluginInstance._instance.is_async:
+                loop = asyncio.get_event_loop()
+                future = loop.create_future()
+                done_callback = lambda *args: future.set_result(args)
+
             results = []
             def upload_callback(result):
                 results.append(result)
                 if len(results) == len(shapes):
                     done_callback(results)
 
-            for i in range(0, len(shapes)):
-                shapes[i].upload(upload_callback)
+            for shape in shapes:
+                shape.upload(upload_callback if done_callback else None)
+
+            return future
 
     def destroy(self):
         """
