@@ -7,6 +7,7 @@ try:
 except ImportError:
     asyncio = False
 
+
 class Shape(_Shape):
     """
     | Base class of a shape. Used in self.create_shape(shape_type) in plugins.
@@ -81,6 +82,7 @@ class Shape(_Shape):
             # upload_multiple yet
             Logs.warning('upload_multiple() failed, attempting to upload one at a time.')
 
+            # Make sure fallback works for async calls
             future = None
             if done_callback is None and nanome.PluginInstance._instance.is_async:
                 loop = asyncio.get_event_loop()
@@ -88,6 +90,7 @@ class Shape(_Shape):
                 done_callback = lambda *args: future.set_result(args)
 
             results = []
+
             def upload_callback(result):
                 results.append(result)
                 if len(results) == len(shapes):
