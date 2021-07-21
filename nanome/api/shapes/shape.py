@@ -72,6 +72,8 @@ class Shape(_Shape):
             _Shape._upload_multiple(shapes, done_callback)
         except TypeError:
             # If upload multiple fails, upload each one at a time.
+            # Done as a fallback for older versions of Nanome that don't support
+            # upload_multiple yet
             Logs.warning('upload_multiple() failed, attempting to upload one at a time.')
             for i in range(0, len(shapes)):
                 shapes[i].upload(done_callback)
