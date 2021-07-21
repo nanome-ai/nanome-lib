@@ -69,14 +69,18 @@ class Shape(_Shape):
         | Upload multiple shapes to the Nanome App
         """
         try:
-            _Shape._upload_multiple(shapes, done_callback)
+            return _Shape._upload_multiple(shapes, done_callback)
         except TypeError:
             # If upload multiple fails, upload each one at a time.
             # Done as a fallback for older versions of Nanome that don't support
             # upload_multiple yet
             Logs.warning('upload_multiple() failed, attempting to upload one at a time.')
             for i in range(0, len(shapes)):
-                shapes[i].upload(done_callback)
+                if i == len(shapes) - 1:
+                    # Only return callback on last shape.
+                    return shapes[i].upload(done_callback)
+                else:
+                    shapes[i].upload()
 
     def destroy(self):
         """
