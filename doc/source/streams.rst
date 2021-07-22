@@ -1,16 +1,36 @@
+###########
 Streams API
-===========
+###########
 
-Nanome provides **writing_streams** for updating complexes and objects in real-time
-(**reading_streams** will be coming soon)
+| Nanome provides **writing_streams** for updating Structures and Shapes in real-time
+| (**reading_streams** will be coming soon)
 
 
-What a stream does is map a list of structure indices to 
-Object attributes and sets of attributes that can be streamed to Nanome.
+*******************
+How to use a Stream
+*******************
 
-Stream Types
-^^^^^^^^^^^^
-| **StreamType.color**
+| Instantiate by passing Pass list of structure indices, and stream type.
+| :code:`stream, error = await self.create_writing_stream(indices, stream_type)`
+| 	- StreamTypes enumerated in ``~nanome.utils.enums.StreamType``
+
+| To write to a stream, create a list with all data to send to the stream.
+| :code:`stream.update(stream_data)`
+|	- If updating multiple objects, stream data is still a flat list of values. ``[x1, y1, z1, x2, y2, z2]``
+|	- Each StreamType expects a different data format. See below for details.
+
+
+***********
+StreamTypes
+***********
+| The top row of each table represents a structure index passed to the stream.
+| The bottom rows represent the expected data format to be sent to the stream for each index
+
+| Note that it is important to keep the stream data the correct length, otherwise it  becomes misaligned, and will return the wrong results.
+
+
+StreamType.color
+================
 | Sets the color for each atom in stream.
 
 +-----------+-----------+
@@ -20,10 +40,12 @@ Stream Types
 +---+---+---+---+---+---+
 
 
-| **StreamType.complex_position_rotation**
+StreamType.complex_position_rotation
+======================================
 | Sets the position for each complex in stream.
 
 | Stream updates take x,y,z values from postition Vector3, and x,y,z,w from rotation Quaternion
+
 +----------------------------------+----------------------------------+
 | c1                               | c2                               |
 +----+----+----+----+----+----+----+----+----+----+----+----+----+----+
@@ -31,7 +53,8 @@ Stream Types
 +----+----+----+----+----+----+----+----+----+----+----+----+----+----+
 
 
-| **StreamType.label**
+StreamType.label
+======================================
 | Set text for label on each atom in stream.
 
 +-----+-----+
@@ -41,7 +64,9 @@ Stream Types
 +-----+-----+
 
 
-| **StreamType.position**
+
+StreamType.position
+======================================
 | Set position for each atom in stream.
 
 +-----------+-----------+
@@ -50,7 +75,10 @@ Stream Types
 | x | y | z | x | y | z |
 +---+---+---+---+---+---+
 
-| **StreamType.scale**
+
+
+StreamType.scale
+======================================
 | Changes the scale of each atom in stream
 
 +-------+-------+
@@ -61,7 +89,8 @@ Stream Types
 
 
 
-| **StreamType.shape_color**
+StreamType.shape_color
+======================================
 | Sets color of Shape object using RGBA values
 
 +---------------+---------------+
@@ -71,7 +100,9 @@ Stream Types
 +---+---+---+---+---+---+---+---+
 
 
-| **shape_position**
+
+shape_position
+======================================
 | Set position of center of shape.
 
 +-----------+-----------+
@@ -81,7 +112,9 @@ Stream Types
 +---+---+---+---+---+---+
 
 
-| **sphere_shape_radius**
+
+sphere_shape_radius
+======================================
 | Set radius of sphere shape.
 
 +-------+-------+
@@ -90,10 +123,14 @@ Stream Types
 | float | float |
 +-------+-------+
 
+
+*******************
+Example Plugin
+*******************
 .. code-block:: python
 
 	NAME = "Color Stream Test"
-	DESCRIPTION = "Make your atoms color cycle through the rainbow."
+	DESCRIPTION = "Cycle atom colors through the rainbow."
 	CATEGORY = "Test"
 	HAS_ADVANCED_OPTIONS = False
 
