@@ -101,7 +101,8 @@ StreamType.shape_color
 
 
 
-shape_position
+StreamType.shape_position
+
 ==============
 | Set position of center of shape.
 
@@ -174,4 +175,3 @@ Example Plugin
 	            color_index = (color_index + 1) % len(roygbiv)
 
 	nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, StreamTest)
-
