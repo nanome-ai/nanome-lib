@@ -5,5 +5,6 @@ When importing nanome, the "api" module is flattened, meaning that plugin_instan
 
 .. toctree::
    :titlesonly:
+   :maxdepth: 1
 
    modules

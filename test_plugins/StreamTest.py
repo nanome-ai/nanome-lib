@@ -71,9 +71,9 @@ class StreamTest(nanome.PluginInstance):
                 atom.atom_mode = nanome.api.structure.Atom.AtomRenderingMode.Point
 
         def workspace_ready():
-            self.create_atom_stream(indices, nanome.api.streams.Stream.Type.label, self.on_stream_position_creation)
-            self.create_atom_stream(indices, nanome.api.streams.Stream.Type.color, self.on_stream_color_creation)
-            self.create_atom_stream(indices, nanome.api.streams.Stream.Type.scale, self.on_stream_scale_creation)
+            self.create_writing_stream(indices, nanome.api.streams.Stream.Type.label, self.on_stream_position_creation)
+            self.create_writing_stream(indices, nanome.api.streams.Stream.Type.color, self.on_stream_color_creation)
+            self.create_writing_stream(indices, nanome.api.streams.Stream.Type.scale, self.on_stream_scale_creation)
             self.create_writing_stream(complex_indices, nanome.api.streams.Stream.Type.complex_position_rotation, self.on_stream_complex_creation)
 
         self.update_structures_deep(list(map(lambda complex : complex, workspace.complexes)), workspace_ready)
