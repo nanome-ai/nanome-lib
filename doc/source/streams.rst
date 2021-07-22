@@ -10,7 +10,8 @@ Streams API
 How to use a Stream
 *******************
 
-| Instantiate by passing Pass list of structure indices, and stream type.
+| Instantiate by passing a list of structure indices, and stream type.
+
 | :code:`stream, error = await self.create_writing_stream(indices, stream_type)`
 | 	- StreamTypes enumerated in ``~nanome.utils.enums.StreamType``
 
