@@ -4,23 +4,43 @@ Streams API
 Nanome provides **writing_streams** for updating complexes and objects in real-time
 (**reading_streams** will be coming soon)
 
-StreamTypes: :attr:`~nanome.util.enums.StreamType`
 
+What a stream does is map a list of structure indices to 
 Object attributes and sets of attributes that can be streamed to Nanome.
 
-- **color**
-- **complex_position_rotation**
-- **label**
-- **position**
-- **scale**
-- **shape_color**
-- **shape_position**
-- **sphere_shape_radius**
+Stream Types
+^^^^^^^^^^^^
+| **StreamType.color**
+| Sets the color for each atom in stream.
+
++-----------+-----------+
+| a1        |     a2    |
++---+---+---+---+---+---+
+| r | g | b | r | g | b |
++---+---+---+---+---+---+
+
+
+| **StreamType.complex_position_rotation**
+| Sets the position for each complex in stream.
+
++-----------+-----------+
+| c1        |     c2    |
++---+---+---+---+---+---+
+| x | y | z | x | y | z |
++---+---+---+---+---+---+
+
+
+| **label**
+| **position**
+| **scale**
+| **shape_color**
+| **shape_position**
+| **sphere_shape_radius**
 
 .. code-block:: python
 
-	NAME = "Color Changer Test"
-	DESCRIPTION = "Simple test for color streams"
+	NAME = "Color Stream Test"
+	DESCRIPTION = "Make your atoms color cycle through the rainbow."
 	CATEGORY = "Test"
 	HAS_ADVANCED_OPTIONS = False
 

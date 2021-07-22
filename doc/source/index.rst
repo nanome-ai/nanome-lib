@@ -9,11 +9,12 @@ Table of Contents
 .. toctree::
    :maxdepth: 1
 
-   general
+   architecture
    basics
    workspace
    ui
    file
+   streams
    notification
    api
    
