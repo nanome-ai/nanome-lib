@@ -115,7 +115,8 @@ StreamType.shape_position
 
 
 
-sphere_shape_radius
+StreamType.sphere_shape_radius
+
 ===================
 | Set radius of sphere shape.
 
