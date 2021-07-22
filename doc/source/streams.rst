@@ -54,7 +54,7 @@ StreamType.complex_position_rotation
 
 
 StreamType.label
-======================================
+================
 | Set text for label on each atom in stream.
 
 +-----+-----+
@@ -66,7 +66,7 @@ StreamType.label
 
 
 StreamType.position
-======================================
+===================
 | Set position for each atom in stream.
 
 +-----------+-----------+
@@ -78,7 +78,7 @@ StreamType.position
 
 
 StreamType.scale
-======================================
+================
 | Changes the scale of each atom in stream
 
 +-------+-------+
@@ -90,7 +90,7 @@ StreamType.scale
 
 
 StreamType.shape_color
-======================================
+======================
 | Sets color of Shape object using RGBA values
 
 +---------------+---------------+
@@ -102,7 +102,7 @@ StreamType.shape_color
 
 
 shape_position
-======================================
+==============
 | Set position of center of shape.
 
 +-----------+-----------+
@@ -114,7 +114,7 @@ shape_position
 
 
 sphere_shape_radius
-======================================
+===================
 | Set radius of sphere shape.
 
 +-------+-------+
@@ -124,9 +124,9 @@ sphere_shape_radius
 +-------+-------+
 
 
-*******************
+**************
 Example Plugin
-*******************
+**************
 .. code-block:: python
 
 	NAME = "Color Stream Test"
