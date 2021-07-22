@@ -23,19 +23,72 @@ Stream Types
 | **StreamType.complex_position_rotation**
 | Sets the position for each complex in stream.
 
+| Stream updates take x,y,z values from postition Vector3, and x,y,z,w from rotation Quaternion
++----------------------------------+----------------------------------+
+| c1                               | c2                               |
++----+----+----+----+----+----+----+----+----+----+----+----+----+----+
+| px | py | pz | rx | ry | rz | rw | px | py | pz | rx | ry | rz | rw |
++----+----+----+----+----+----+----+----+----+----+----+----+----+----+
+
+
+| **StreamType.label**
+| Set text for label on each atom in stream.
+
++-----+-----+
+| a1  |  a2 |
++-----+-----+
+| str | str |
++-----+-----+
+
+
+| **StreamType.position**
+| Set position for each atom in stream.
+
 +-----------+-----------+
-| c1        |     c2    |
+| a1        |     a2    |
++---+---+---+---+---+---+
+| x | y | z | x | y | z |
++---+---+---+---+---+---+
+
+| **StreamType.scale**
+| Changes the scale of each atom in stream
+
++-------+-------+
+| a1    |   a2  |
++-------+-------+
+| float | float |
++-------+-------+
+
+
+
+| **StreamType.shape_color**
+| Sets color of Shape object using RGBA values
+
++---------------+---------------+
+| s1            | s2            |
++---+---+---+---+---+---+---+---+
+| r | g | b | a | r | g | b | a |
++---+---+---+---+---+---+---+---+
+
+
+| **shape_position**
+| Set position of center of shape.
+
++-----------+-----------+
+| s1        |     s2    |
 +---+---+---+---+---+---+
 | x | y | z | x | y | z |
 +---+---+---+---+---+---+
 
 
-| **label**
-| **position**
-| **scale**
-| **shape_color**
-| **shape_position**
 | **sphere_shape_radius**
+| Set radius of sphere shape.
+
++-------+-------+
+| s1    |   s2  |
++-------+-------+
+| float | float |
++-------+-------+
 
 .. code-block:: python
 
