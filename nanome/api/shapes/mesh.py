@@ -12,19 +12,61 @@ class Mesh(_Mesh, Shape):
         Shape.__init__(self, ShapeType.Mesh)
         _Mesh.__init__(self)
 
-    # @property
-    # def radius(self):
-    #     """
-    #     | Radius of the sphere
+    @property
+    def vertices(self):
+        """
+        | Vertices of the mesh, 3 float per vertex
 
-    #     :param value: Radius of the sphere
-    #     :type value: float
-    #     """
-    #     return self._radius
+        :param value: Vertices of the mesh
+        :type value: Array of float
+        """
+        return self._vertices
 
-    # @radius.setter
-    # def radius(self, value):
-    #     self._radius = value
+    @vertices.setter
+    def vertices(self, value):
+        self._vertices = value
+
+    @property
+    def normals(self):
+        """
+        | Normals for each vertex, 3 float per normal
+
+        :param value: Normals of the mesh
+        :type value: Array of float
+        """
+        return self._normals
+
+    @normals.setter
+    def normals(self, value):
+        self._normals = value
+
+    @property
+    def triangles(self):
+        """
+        | Triangles of the mesh, 3 int per triangle
+
+        :param value: Triangles of the mesh
+        :type value: Array of int
+        """
+        return self._triangles
+
+    @triangles.setter
+    def triangles(self, value):
+        self._triangles = value
+
+    @property
+    def colors(self):
+        """
+        | Colors of the mesh, 3 float per vertex
+
+        :param value: Colors of the mesh
+        :type value: Array of float
+        """
+        return self._colors
+
+    @colors.setter
+    def colors(self, value):
+        self._colors = value
 
 
 _Mesh._create = Mesh
