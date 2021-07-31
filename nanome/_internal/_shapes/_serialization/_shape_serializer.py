@@ -1,5 +1,5 @@
 from nanome._internal._util._serializers import _TypeSerializer, _UnityPositionSerializer, _ColorSerializer, _ArraySerializer
-from nanome._internal._shapes._serialization import _SphereSerializer, _AnchorSerializer, _LineSerializer, _LabelSerializer
+from nanome._internal._shapes._serialization import _SphereSerializer, _AnchorSerializer, _LineSerializer, _LabelSerializer, _MeshSerializer
 
 from nanome.util.enums import ShapeType
 
@@ -11,6 +11,7 @@ class _ShapeSerializer(_TypeSerializer):
         self._sphere = _SphereSerializer()
         self._line = _LineSerializer()
         self._label = _LabelSerializer()
+        self._mesh = _MeshSerializer()
         self._anchor_array = _ArraySerializer()
         self._anchor_array.set_type(_AnchorSerializer())
 
@@ -28,6 +29,8 @@ class _ShapeSerializer(_TypeSerializer):
             context.write_using_serializer(self._line, value)
         elif value.shape_type == ShapeType.Label:
             context.write_using_serializer(self._label, value)
+        elif value.shape_type == ShapeType.Mesh:
+            context.write_using_serializer(self._mesh, value)
         context.write_int(value._index)
         context.write_using_serializer(self._anchor_array, value._anchors)
         context.write_using_serializer(self._color, value._color)
@@ -41,6 +44,8 @@ class _ShapeSerializer(_TypeSerializer):
             result = context.read_using_serializer(self._line)
         elif shapeType == ShapeType.Label:
             result = context.read_using_serializer(self._label)
+        elif shapeType == ShapeType.Mesh:
+            result = context.read_using_serializer(self._mesh)
         result._index = context.read_int()
         result._anchors = context.read_using_serializer(self._anchor_array)
         result._color = context.read_using_serializer(self._color)

@@ -234,6 +234,7 @@ class ShapeType(IntEnum):
     Sphere = 0
     Line = 1
     Label = 2
+    Mesh = 3
 
 
 class ShapeAnchorType(IntEnum):
