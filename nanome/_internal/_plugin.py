@@ -5,6 +5,7 @@ from nanome._internal._network._commands._callbacks._commands_enums import _Hash
 from nanome._internal._network._serialization._serializer import Serializer
 from nanome._internal._util._serializers import _TypeSerializer
 from nanome.util.logs import Logs
+from nanome.util import config
 
 from multiprocessing import Process, Pipe, current_process
 from timeit import default_timer as timer
@@ -37,11 +38,11 @@ class _Plugin(object):
         rtype: argsparser: args parser
         """
         parser = argparse.ArgumentParser(description='Parse Arguments to set up Nanome Plugin')
-        parser.add_argument('-a', '--host', help='connects to NTS at the specified IP address', required=True)
-        parser.add_argument('-p', '--port', type=int, help='connects to NTS at the specified port', required=True)
+        parser.add_argument('-a', '--host', help='connects to NTS at the specified IP address', default=config.fetch('host'))
+        parser.add_argument('-p', '--port', type=int, help='connects to NTS at the specified port', default=config.fetch('port'))
         parser.add_argument('-r', '--auto-reload', action='store_true', help='Restart plugin automatically if a .py or .json file in current directory changes')
         parser.add_argument('-v', '--verbose', action='store_true', help='enable verbose mode, to display Logs.debug')
-        parser.add_argument('-n', '--name', nargs='+', help='Name to display for this plugin in Nanome')
+        parser.add_argument('-n', '--name', nargs='+', help='Name to display for this plugin in Nanome', default=list())
         parser.add_argument('-k', '--keyfile', default='', help='Specifies a key file or key string to use to connect to NTS')
         parser.add_argument('-i', '--ignore', help='To use with auto-reload. All paths matching this pattern will be ignored, use commas to specify several. Supports */?/[seq]/[!seq]')
         return parser
