@@ -33,8 +33,7 @@ class _Plugin(object):
 
     def create_parser(self):
         """Create command line parser For Plugin.
-
-        Some of these flags are passed down into the Plugin, and processed internally.
+        
         rtype: argsparser: args parser
         """
         parser = argparse.ArgumentParser(description='Parse Arguments to set up Nanome Plugin')
