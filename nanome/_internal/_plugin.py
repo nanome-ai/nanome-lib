@@ -9,7 +9,6 @@ from nanome.util import config
 
 from multiprocessing import Process, Pipe, current_process
 from timeit import default_timer as timer
-import argparse
 import sys
 import json
 import cProfile
@@ -31,39 +30,6 @@ class _Plugin(object):
     __serializer = Serializer()
     _plugin_id = -1
     _custom_data = None
-
-    def create_parser(self):
-        """Create command line parser For Plugin.
-        
-        rtype: argsparser: args parser
-        """
-        parser = argparse.ArgumentParser(description='Parse Arguments to set up Nanome Plugin')
-        parser.add_argument('-a', '--host', help='connects to NTS at the specified IP address', default=config.fetch('host'))
-        parser.add_argument('-p', '--port', type=int, help='connects to NTS at the specified port', default=config.fetch('port'))
-        parser.add_argument('-r', '--auto-reload', action='store_true', help='Restart plugin automatically if a .py or .json file in current directory changes')
-        parser.add_argument('-v', '--verbose', action='store_true', help='enable verbose mode, to display Logs.debug')
-        parser.add_argument('-n', '--name', nargs='+', help='Name to display for this plugin in Nanome', default=list())
-        parser.add_argument('-k', '--keyfile', default='', help='Specifies a key file or key string to use to connect to NTS')
-        parser.add_argument('-i', '--ignore', help='To use with auto-reload. All paths matching this pattern will be ignored, use commas to specify several. Supports */?/[seq]/[!seq]')
-        return parser
-
-    def __parse_args(self):
-        parser = self.create_parser()
-        args = parser.parse_args()
-
-        self.__host = args.host
-        self.__port = int(args.port)
-        self.__key = args.keyfile
-        self._description['name'] = ' '.join(args.name)
-        self.__has_autoreload = args.auto_reload
-
-        is_verbose = args.verbose
-        self.__has_verbose = is_verbose
-        Logs._set_verbose(is_verbose)
-
-        if args.ignore:
-            split = args.ignore.split(",")
-            self.__to_ignore.extend(split)
 
     def __read_key(self):
         # check if arg is key data

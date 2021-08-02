@@ -1,3 +1,5 @@
+import argparse
+
 from . import _DefaultPlugin
 from nanome._internal import _Plugin
 from nanome._internal._process import _ProcessManager
@@ -19,6 +21,22 @@ class Plugin(_Plugin):
     :param has_advanced: If true, plugin will display an "Advanced Settings" button
     :type has_advanced: :class:`bool`
     """
+    
+    def create_parser(self):
+        """Command Line Interface for Plugins.
+        
+        rtype: argsparser: args parser
+        """
+        parser = argparse.ArgumentParser(description='Parse Arguments to set up Nanome Plugin')
+        parser.add_argument('-a', '--host', help='connects to NTS at the specified IP address')
+        parser.add_argument('-p', '--port', type=int, help='connects to NTS at the specified port')
+        parser.add_argument('-r', '--auto-reload', action='store_true', help='Restart plugin automatically if a .py or .json file in current directory changes')
+        parser.add_argument('-v', '--verbose', action='store_true', help='enable verbose mode, to display Logs.debug')
+        parser.add_argument('-n', '--name', nargs='+', help='Name to display for this plugin in Nanome', default=list())
+        parser.add_argument('-k', '--keyfile', default='', help='Specifies a key file or key string to use to connect to NTS')
+        parser.add_argument('-i', '--ignore', help='To use with auto-reload. All paths matching this pattern will be ignored, use commas to specify several. Supports */?/[seq]/[!seq]')
+        return parser
+
     @classmethod
     def setup(cls, name, description, tags, has_advanced, plugin_class, host="config", port="config", key="config", permissions=[], integrations=[]):
         if not _Plugin._is_process():
@@ -51,24 +69,38 @@ class Plugin(_Plugin):
         :type host: str
         :type port: int
         """
-        if (host == "config"):
-            self.__host = config.fetch("host")
-        else:
-            self.__host = host
-        if (port == "config"):
-            self.__port = config.fetch("port")
-        else:
-            self.__port = port
-        if (key == "config"):
-            self.__key = config.fetch("key")
-        else:
-            self.__key = key
-        self.__parse_args()
+        default_host = config.fetch('host') if host == 'config' else host
+        default_port = config.fetch('port') if port == 'config' else port
+        default_key = config.fetch('key') if key == 'config' else key
+
+        self._parse_args(default_host=default_host, default_port=default_port, default_key=default_key)
         Logs.debug("Start plugin")
         if self.__has_autoreload:
             self.__autoreload()
         else:
             self.__run()
+
+    def _parse_args(self, default_host='', default_port='', default_key=''):
+        """Parse command line args and set internal variables."""
+        parser = self.create_parser()
+        args = parser.parse_args()
+
+        self.__host = args.host or default_host
+        self.__port = args.port or default_port
+        self.__key = args.keyfile or default_key
+        self.__has_autoreload = args.auto_reload
+        
+        # Often times the name is set during the class Instantiation
+        if not self._description.get('name') and args.name: 
+            self._description['name'] = ' '.join(args.name)
+        
+        is_verbose = args.verbose
+        self.__has_verbose = is_verbose
+        Logs._set_verbose(is_verbose)
+
+        if args.ignore:
+            split = args.ignore.split(",")
+            self.__to_ignore.extend(split)
 
     def set_plugin_class(self, plugin_class):
         """
