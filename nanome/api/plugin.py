@@ -204,7 +204,6 @@ class Plugin(_Plugin):
     def __init__(self, name, description, tags=[], has_advanced=False, permissions=[], integrations=[]):
         super(Plugin, self).__init__(name, description, tags, has_advanced, permissions, integrations)
         self._plugin_class = _DefaultPlugin
-        self.name = ''
         self.host = ''
         self.port = ''
         self.key = ''
