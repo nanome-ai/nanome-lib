@@ -21,10 +21,10 @@ class Plugin(_Plugin):
     :param has_advanced: If true, plugin will display an "Advanced Settings" button
     :type has_advanced: :class:`bool`
     """
-    
+
     def create_parser(self):
         """Command Line Interface for Plugins.
-        
+
         rtype: argsparser: args parser
         """
         parser = argparse.ArgumentParser(description='Parse Arguments to set up Nanome Plugin')
@@ -80,27 +80,92 @@ class Plugin(_Plugin):
         else:
             self.__run()
 
+    @property
+    def host(self):
+        """NTS host."""
+        return self.__host
+
+    @host.setter
+    def host(self, value):
+        self.__host = value
+
+    @property
+    def port(self):
+        """NTS port."""
+        return self.__port
+
+    @port.setter
+    def port(self, value):
+        self.__port = value
+
+    @property
+    def key(self):
+        """Security Key for NTS"""
+        return self.__key
+
+    @key.setter
+    def key(self, value):
+        self.__key = value
+
+    @property
+    def autoreload(self):
+        """Boolean for whether the plugin reloads on python or json file change."""
+        return self.__has_autoreload
+
+    @autoreload.setter
+    def autoreload(self, value):
+        self.__has_autoreload = value
+
+    @property
+    def name(self):
+        """Name of plugin on the stacks list."""
+        return self._description.get('name')
+
+    @name.setter
+    def name(self, value):
+        self._description['name'] = value
+
+    @property
+    def verbose(self):
+        """Boolean for whether to print verbose Logs."""
+        return self.__has_verbose
+
+    @verbose.setter
+    def verbose(self, value):
+        self.__has_verbose = value
+
+    @property
+    def ignore_files(self):
+        """List of path regexes to be ignored during autoreload."""
+        if not hasattr(self, '__to_ignore'):
+            self.__to_ignore = []
+        return self.__to_ignore
+
+    @ignore_files.setter
+    def ignore_files(self, value):
+        self.__to_ignore = value
+
     def _parse_args(self, default_host='', default_port='', default_key=''):
         """Parse command line args and set internal variables."""
         parser = self.create_parser()
         args = parser.parse_args()
 
-        self.__host = args.host or default_host
-        self.__port = args.port or default_port
-        self.__key = args.keyfile or default_key
-        self.__has_autoreload = args.auto_reload
-        
+        self.host = args.host or default_host
+        self.port = args.port or default_port
+        self.key = args.keyfile or default_key
+        self.autoreload = args.auto_reload
+
         # Often times the name is set during the class Instantiation
-        if not self._description.get('name') and args.name: 
-            self._description['name'] = ' '.join(args.name)
-        
+        if not self.name and args.name:
+            self.name = ' '.join(args.name)
+
         is_verbose = args.verbose
-        self.__has_verbose = is_verbose
+        self.verbose = is_verbose
         Logs._set_verbose(is_verbose)
 
         if args.ignore:
             split = args.ignore.split(",")
-            self.__to_ignore.extend(split)
+            self.ignore_files.extend(split)
 
     def set_plugin_class(self, plugin_class):
         """
@@ -139,3 +204,10 @@ class Plugin(_Plugin):
     def __init__(self, name, description, tags=[], has_advanced=False, permissions=[], integrations=[]):
         super(Plugin, self).__init__(name, description, tags, has_advanced, permissions, integrations)
         self._plugin_class = _DefaultPlugin
+        self.name = ''
+        self.host = ''
+        self.port = ''
+        self.key = ''
+        self.ignore_files = []
+        self.autoreload = False
+        self.verbose = False
