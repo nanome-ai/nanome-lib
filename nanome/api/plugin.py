@@ -34,7 +34,7 @@ class Plugin(_Plugin):
         parser.add_argument('-v', '--verbose', action='store_true', help='enable verbose mode, to display Logs.debug')
         parser.add_argument('-n', '--name', nargs='+', help='Name to display for this plugin in Nanome', default=list())
         parser.add_argument('-k', '--keyfile', default='', help='Specifies a key file or key string to use to connect to NTS')
-        parser.add_argument('-i', '--ignore', help='To use with auto-reload. All paths matching this pattern will be ignored, use commas to specify several. Supports */?/[seq]/[!seq]')
+        parser.add_argument('-i', '--ignore', help='To use with auto-reload. All paths matching this pattern will be ignored, use commas to specify several. Supports */?/[seq]/[!seq]', default='')
         return parser
 
     @classmethod
@@ -80,19 +80,18 @@ class Plugin(_Plugin):
         self.host = args.host or default_host
         self.port = args.port or default_port
         self.key = args.keyfile or default_key
-        self.autoreload = args.auto_reload
+        self.has_autoreload = args.auto_reload
 
-        # Name can be set during the class instantiation without cli flag.
-        if not self.name and args.name:
-            self.name = ' '.join(args.name)
-
-        is_verbose = args.verbose
-        self.verbose = is_verbose
-        Logs._set_verbose(is_verbose)
+        self.verbose = args.verbose
+        Logs._set_verbose(self.verbose)
 
         if args.ignore:
-            split = args.ignore.split(",")
-            self.to_ignore.extend(split)
+            to_ignore = args.ignore.split(",")
+            self.to_ignore.extend(to_ignore)
+
+        # Name can be set during the class instantiation without cli flag.
+        if args.name and not self.name:
+            self.name = ' '.join(args.name)
 
         Logs.debug("Start plugin")
         if self.__has_autoreload:
@@ -162,9 +161,6 @@ class Plugin(_Plugin):
     @to_ignore.setter
     def to_ignore(self, value):
         self.__to_ignore = value
-
-    def _parse_args(self, default_host='', default_port='', default_key=''):
-        pass
 
     def set_plugin_class(self, plugin_class):
         """
