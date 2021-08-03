@@ -72,8 +72,28 @@ class Plugin(_Plugin):
         default_host = config.fetch('host') if host == 'config' else host
         default_port = config.fetch('port') if port == 'config' else port
         default_key = config.fetch('key') if key == 'config' else key
+        
+        # Parse command line args and set internal variables.
+        parser = self.create_parser()
+        args = parser.parse_args()
 
-        self._parse_args(default_host=default_host, default_port=default_port, default_key=default_key)
+        self.host = args.host or default_host
+        self.port = args.port or default_port
+        self.key = args.keyfile or default_key
+        self.autoreload = args.auto_reload
+
+        # Name can be set during the class instantiation without cli flag.
+        if not self.name and args.name:
+            self.name = ' '.join(args.name)
+
+        is_verbose = args.verbose
+        self.verbose = is_verbose
+        Logs._set_verbose(is_verbose)
+
+        if args.ignore:
+            split = args.ignore.split(",")
+            self.to_ignore.extend(split)
+
         Logs.debug("Start plugin")
         if self.__has_autoreload:
             self.__autoreload()
@@ -144,26 +164,7 @@ class Plugin(_Plugin):
         self.__to_ignore = value
 
     def _parse_args(self, default_host='', default_port='', default_key=''):
-        """Parse command line args and set internal variables."""
-        parser = self.create_parser()
-        args = parser.parse_args()
-
-        self.host = args.host or default_host
-        self.port = args.port or default_port
-        self.key = args.keyfile or default_key
-        self.autoreload = args.auto_reload
-
-        # Name is set during the class instantiation.
-        if not self.name and args.name:
-            self.name = ' '.join(args.name)
-
-        is_verbose = args.verbose
-        self.verbose = is_verbose
-        Logs._set_verbose(is_verbose)
-
-        if args.ignore:
-            split = args.ignore.split(",")
-            self.to_ignore.extend(split)
+        pass
 
     def set_plugin_class(self, plugin_class):
         """
