@@ -72,7 +72,7 @@ class Plugin(_Plugin):
         default_host = config.fetch('host') if host == 'config' else host
         default_port = config.fetch('port') if port == 'config' else port
         default_key = config.fetch('key') if key == 'config' else key
-        
+
         # Parse command line args and set internal variables.
         parser = self.create_parser()
         args = parser.parse_args()
