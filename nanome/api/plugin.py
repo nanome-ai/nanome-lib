@@ -100,7 +100,7 @@ class Plugin(_Plugin):
 
     @property
     def key(self):
-        """Security Key for NTS"""
+        """Specifies a key file or key string to use to connect to NTS."""
         return self.__key
 
     @key.setter
@@ -108,12 +108,12 @@ class Plugin(_Plugin):
         self.__key = value
 
     @property
-    def autoreload(self):
+    def has_autoreload(self):
         """Boolean for whether the plugin reloads on python or json file change."""
         return self.__has_autoreload
 
-    @autoreload.setter
-    def autoreload(self, value):
+    @has_autoreload.setter
+    def has_autoreload(self, value):
         self.__has_autoreload = value
 
     @property
@@ -126,23 +126,21 @@ class Plugin(_Plugin):
         self._description['name'] = value
 
     @property
-    def verbose(self):
+    def has_verbose(self):
         """Boolean for whether to print verbose Logs."""
         return self.__has_verbose
 
-    @verbose.setter
-    def verbose(self, value):
+    @has_verbose.setter
+    def has_verbose(self, value):
         self.__has_verbose = value
 
     @property
-    def ignore_files(self):
+    def to_ignore(self):
         """List of path regexes to be ignored during autoreload."""
-        if not hasattr(self, '__to_ignore'):
-            self.__to_ignore = []
         return self.__to_ignore
 
-    @ignore_files.setter
-    def ignore_files(self, value):
+    @to_ignore.setter
+    def to_ignore(self, value):
         self.__to_ignore = value
 
     def _parse_args(self, default_host='', default_port='', default_key=''):
@@ -155,7 +153,7 @@ class Plugin(_Plugin):
         self.key = args.keyfile or default_key
         self.autoreload = args.auto_reload
 
-        # Often times the name is set during the class Instantiation
+        # Name is set during the class instantiation.
         if not self.name and args.name:
             self.name = ' '.join(args.name)
 
@@ -165,7 +163,7 @@ class Plugin(_Plugin):
 
         if args.ignore:
             split = args.ignore.split(",")
-            self.ignore_files.extend(split)
+            self.to_ignore.extend(split)
 
     def set_plugin_class(self, plugin_class):
         """
@@ -207,6 +205,6 @@ class Plugin(_Plugin):
         self.host = ''
         self.port = ''
         self.key = ''
-        self.ignore_files = []
-        self.autoreload = False
-        self.verbose = False
+        self.to_ignore = []
+        self.has_autoreload = False
+        self.is_verbose = False
