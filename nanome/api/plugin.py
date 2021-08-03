@@ -94,7 +94,7 @@ class Plugin(_Plugin):
             self.name = ' '.join(args.name)
 
         Logs.debug("Start plugin")
-        if self.__has_autoreload:
+        if self.has_autoreload:
             self.__autoreload()
         else:
             self.__run()
