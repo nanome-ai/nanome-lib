@@ -2,13 +2,11 @@
 Architecture
 ############
 
-The overall architecture of this plugin system is designed to enable plugin creators to iterate fast and efficiently when developing, improving, or debugging a plugin for Nanome.
-
 If you have any feedback or question, don't hesitate to contact us or to directly contribute to our `Github <https://github.com/nanome-ai>`_
 
-
+************
 How it works
-^^^^^^^^^^^^
+************
 
 Here is a simple way to represent the Plugin System architecture:
 
@@ -58,8 +56,9 @@ NB: A plugin cannot talk to a Nanome session/user before being connected to it.
 NB2: Communications are encrypted from Nanome to NTS and from NTS to Plugins
 
 
+**********************
 Development iterations
-^^^^^^^^^^^^^^^^^^^^^^
+**********************
 
 As a result of this flexible architecture, no need to restart Nanome if your plugin crashes, or if you need to improve it:
 
