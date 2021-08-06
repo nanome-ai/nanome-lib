@@ -19,81 +19,36 @@ Upon installation, nanome-lib adds two command line functions to your PATH.
 * `nanome-setup-plugins`: Sets default system wide configs for your plugin. See `Arguments` section for config options
 * `nanome-plugin-init`: Asks for plugin name and description, and sets up boilerplate code to quickly get started.
 
-
-Server
-^^^^^^
-
-A Nanome Transport Server (NTS) is required to run your plugins and connect them to Nanome.
-A public server will be available in the near future. If you need a NTS, please contact us.
-
-Running Your First Plugin
-^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Starting a plugin is fairly easy. Copy this snippet into a file HelloNanomePlugin.py:
-
-.. code-block:: python
-
-  import nanome
-  from nanome.api import Plugin, PluginInstance
-  from nanome.util import Logs
-
-  class HelloNanomePlugin(PluginInstance):
-      """Get most basic plugin running."""
-      
-      def on_run(self):
-          message = "Hello Nanome!"
-          self.send_notification(nanome.util.enums.NotificationTypes.success, message)
-          Logs.message(message)
-
-  if __name__ == '__main__':
-    # Information describing the plugin
-    name = 'Hello Nanome'
-    description = "Send a notification that says `Hello Nanome`"
-    category = 'Demo'
-    has_advanced = False  # Whether the plugin has advanced settings menu.
-
-    # Create Plugin, and attach specific PluginInstance to it.
-    plugin = Plugin.setup(name, description, category, has_advanced, HelloNanomePlugin)
-
-.. code-block:: bash
-
-    $ python HelloNanomePlugin.py -a <NTS_HOST> -p <NTS_PORT> *<args>
-
-To choose the IP address and the port of your server, you have two options:
-
-Short term, testing: **Using arguments**
-
-  .. code-block:: bash
-
-    $ python RemoveHydrogens.py -a 123.456.789.0 -p 4567
-
-Long term, for production: **Changing the script** (call to plugin.run, last line of the example script above)
-
-  .. code-block:: python
-
-    plugin.run('123.456.789.0', 4567)
-
-Arguments
-^^^^^^^^^
-
-When starting a plugin, a few optional arguments are available:
-
-* -h: Displays available arguments
-* -a [IP]: Specifies NTS address
-* -p [PORT]: Specifies NTS port
-* -k [FILE]: Specifies a key file to use (if NTS is protected by key)
-* -v: Enables verbose mode, to display :func:`~nanome.util.logs.Logs.debug` messages
-* -r: Enables Live Reload
-
 On the VR Side
 ^^^^^^^^^^^^^^
+
+Please contact sales@nanome.ai to enable your account to use Plugins. 
+
+After the Nanome team has configured your account to use Plugins and has provided the target server location and port (NTS DNS and Port, e.g. organization.nanome.ai 8888), log into Nanome, create a room, and click on the purple "Stacks" button to the left of the Entry list. You should see an empty list or a list of plugins. If you see "Not connected to NTS", please contact support@nanome.ai or your dedicated Account Manager.
+
+*Editing the Config File*
+
+First, you want to locate the Config file (nanome-config.ini) of the Nanome Application in the builds folder.
+If you downloaded Nanome through the Oculus store, it will be available here:
+
+C:\\Program Files\\Oculus\\Software\\Software\\nanome-nanome\\Build
+
+Open the nanome-config.ini file in a text editor and scroll down to the section named ‘ Nanome plugin server config’ and change to the following:
+
+Plugin-server-addr = 127.0.0.1
+
+Plugin-server-port = 8888
+
+Now, we want to check to make sure that the Plugin Server is connected. Go ahead and launch Nanome, then log in using your credentials. Create a room and Start in 2D and click on the Plugins Icon on the bottom of the Entry Menu.
+
+You should see that the NTS is connected and there are no current running plugins. If it says that “No NTS is connected”, that means it is unable to see the Plugin server and it is entered incorrectly on the Config file or in the Admin settings for home.nanome.ai. It could also be blocked by firewall.
 
 In order to connect Nanome (VR) to your server, make sure that its configuration file (nanome-config.ini, located in its installation directory) contains the following:
 
   .. code-block:: none
 
-    plugin-server-addr				= 127.0.0.1     # Use the correct address for your server
-    plugin-server-port				= 8888          # Use the correct port for your server
+    plugin-server-addr = 127.0.0.1  # Use the correct address for your server
+    plugin-server-port = 8888  # Use the correct port for your server
 
 Our Plugins
 ^^^^^^^^^^^
