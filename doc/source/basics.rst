@@ -17,6 +17,7 @@ There's 3 main classes we need to be concerned with right now.
     * ``PluginInstance``: Collections of hooks and actions to interact with your Nanome Session
     * ``AsyncPluginInstance``: Same as PluginInstance, but allows use of Python asyncio syntax (requires Python >= 3.7)
 
+Note that all future plugins built by Nanome will use AsyncPluginInstance, and we advise you do the same. 
 
 *************************
 Running Your First Plugin
@@ -67,6 +68,75 @@ When starting a plugin, a few optional arguments are available:
 * -k [FILE]: Specifies a key file to use (if NTS is protected by key)
 * -v: Enables verbose mode, to display :func:`~nanome.util.logs.Logs.debug` messages
 * -r: Enables Live Reload
+
+
+****************
+Asyncio Support
+****************
+Plugins use asynchronous callback functions for communicating with Nanome.
+
+A recent update to nanome-lib includes support for Python's asyncio Library.
+If you are running >= Python 3.7, we recommend asyncio for more Pythonic callback handling.
+
+Key Points:
+    * For asyncio enabled plugins, use nanome.AsyncPluginInstance as the base class for your PluginInstance.
+    * ``@async_callback`` decorator must be used on async functions for internal callbacks (ui callbacks, plugin lifecycle callbacks.) Not needed in async calls called by other async calls. (async in async).
+
+
+Example of using callback functions to manipulate a Complex.
+
+.. code-block:: python
+
+    import nanome
+    from nanome.util import Logs
+
+    class ComplexMoverPlugin(nanome.PluginInstance):
+        """Move complex's position by 1 unit, using callback functions."""
+
+        def on_run(self):
+            self.request_complex_list(self.on_shallow_complexes_received)
+            
+        def on_shallow_complexes_received(self, shallow_complex_list):
+            index = shallow_complex_list[0].index
+            self.request_complexes([index], self.move_complex_position)
+        
+        def move_complex_position(self, deep_complexes):
+            complex = deep[0]
+            complex.position.x += 1
+            self.update_structures_deep([complex], self.on_complex_updated)
+        
+        def on_complex_updated(self, updated_structures):
+            Logs.message('done')
+
+
+Here is the same operation performed utilizing asyncio
+
+.. code-block:: python
+
+    import nanome
+    from nanome.util import async_callback, Logs
+
+    class AsyncTest(nanome.AsyncPluginInstance):
+        """Move complex's position by 1 unit, using asyncio."""
+
+        @async_callback
+        async def on_run(self):
+            shallow = await self.request_complex_list()
+            index = shallow[0].index
+
+            deep = await self.request_complexes([index])
+            complex = deep[0]
+            complex.position.x += 1
+
+            await self.update_structures_deep([complex])
+            Logs.message('done')
+
+    if __name__ = '__main__':
+        NAME = "Async Test"
+        DESCRIPTION = "Tests async/await in plugins."
+        CATEGORY = "testing"
+        HAS_ADVANCED_OPTIONS = False
+        nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, AsyncTest)
 
 
 *******************
