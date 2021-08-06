@@ -12,15 +12,10 @@ Through this API, users can link up external computational such as molecular dyn
 
 There's 3 main classes we need to be concerned with right now.
 
-    * **Plugin**: Handles Connections to NTS/ Low level packet stuff
-    * **PluginInstance**: Collections of hooks and actions to interact with your Nanome Session
-    * **AsyncPluginInstance**: Same as PluginInstance, but allows use of Python asyncio syntax (requires Python >= 3.7)
+    * ``Plugin``: Handles Connections to NTS/ Low level packet stuff
+    * ``PluginInstance``: Collections of hooks and actions to interact with your Nanome Session
+    * ``AsyncPluginInstance``: Same as PluginInstance, but allows use of Python asyncio syntax (requires Python >= 3.7)
 
-NTS
-^^^^^^
-
-A Nanome Transport Server (NTS) is required to run your plugins and connect them to Nanome.
-A public server will be available in the near future. If you need a NTS, please contact us.
 
 Running Your First Plugin
 ^^^^^^^^^^^^^^^^^^^^^^^^^
