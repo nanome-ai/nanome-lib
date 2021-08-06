@@ -10,7 +10,7 @@ Table of Contents
 
    architecture
    installation
-   basics
+   plugins
    workspace
    ui
    file

@@ -1,15 +1,14 @@
-######
-Basics
-######
+##########
+Plugin API
+##########
 
 *****************
 What is a Plugin?
 *****************
 
-The Nanome Plugin API provides a way to interface and integrate external software with Nanome’s molecular modeling VR software.
+Nanome Plugins provides a way to interface and integrate external software with Nanome’s molecular modeling VR software.
 
 Through this API, users can link up external computational such as molecular dynamics, docking software, and link custom databases.
-
 
 There's 3 main classes we need to be concerned with right now.
 
@@ -18,6 +17,19 @@ There's 3 main classes we need to be concerned with right now.
     * ``AsyncPluginInstance``: Same as PluginInstance, but allows use of Python asyncio syntax (requires Python >= 3.7)
 
 Note that all future plugins built by Nanome will use AsyncPluginInstance, and we advise you do the same. 
+
+
+Arguments
+=========
+
+When starting a plugin, a few optional arguments are available:
+
+* ``-h``: Displays available arguments
+* ``-a [IP]``: Specifies NTS domain or ip address
+* ``-p [PORT]``: Specifies NTS port
+* ``-k [FILE]``: Specifies a key file to use (if NTS is protected by key)
+* ``-v``: Enables verbose mode, to display :func:`~nanome.util.logs.Logs.debug` messages
+* ``-r``: Enables Live Reload
 
 *************************
 Running Your First Plugin
@@ -57,26 +69,14 @@ To start the plugin, call HelloNanomePlugin.py and pass in arguments
     $ python HelloNanomePlugin.py -a <NTS_HOST> -p <NTS_PORT> <ARGS>
 
 
-Arguments
-=========
-
-When starting a plugin, a few optional arguments are available:
-
-* -h: Displays available arguments
-* -a [IP]: Specifies NTS domain or ip address
-* -p [PORT]: Specifies NTS port
-* -k [FILE]: Specifies a key file to use (if NTS is protected by key)
-* -v: Enables verbose mode, to display :func:`~nanome.util.logs.Logs.debug` messages
-* -r: Enables Live Reload
-
-
 ****************
 Asyncio Support
 ****************
+
 Plugins use asynchronous callback functions for communicating with Nanome.
 
 A recent update to nanome-lib includes support for Python's asyncio Library.
-If you are running >= Python 3.7, we recommend asyncio for more Pythonic callback handling.
+If you are running >= Python 3.7, we recommend inheriting from ``AsyncPluginInstance`` for more Pythonic callback handling.
 
 Key Points:
     * For asyncio enabled plugins, use nanome.AsyncPluginInstance as the base class for your PluginInstance.
@@ -130,13 +130,6 @@ Here is the same operation performed utilizing asyncio
 
             await self.update_structures_deep([complex])
             Logs.message('done')
-
-    if __name__ = '__main__':
-        NAME = "Async Test"
-        DESCRIPTION = "Tests async/await in plugins."
-        CATEGORY = "testing"
-        HAS_ADVANCED_OPTIONS = False
-        nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, AsyncTest)
 
 
 *******************
