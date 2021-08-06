@@ -47,8 +47,8 @@ Open the nanome-config.ini file in a text editor and scroll down to the section 
 
 .. code-block:: none
 
-  plugin-server-addr = <YOUR NTS HOST>  # Use the correct address for your NTS
-  plugin-server-port = <YOUR NTS PORT>  # Use the correct port for your NTS
+  plugin-server-addr = <YOUR NTS HOST>
+  plugin-server-port = <YOUR NTS PORT>
 
 
 You should see that the NTS is connected and there are no current running plugins. If it says that “No NTS is connected”, that means the credentials are entered incorrectly, or it may be blocked by a firewall.

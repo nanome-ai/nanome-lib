@@ -1,9 +1,10 @@
+######
 Basics
-======
+######
 
-
+*****************
 What is a Plugin?
-^^^^^^^^^^^^^^^^^
+*****************
 
 The Nanome Plugin API provides a way to interface and integrate external software with Nanome’s molecular modeling VR software.
 
@@ -17,8 +18,9 @@ There's 3 main classes we need to be concerned with right now.
     * ``AsyncPluginInstance``: Same as PluginInstance, but allows use of Python asyncio syntax (requires Python >= 3.7)
 
 
+*************************
 Running Your First Plugin
-^^^^^^^^^^^^^^^^^^^^^^^^^
+*************************
 
 Starting a plugin is fairly easy. Copy this snippet into a file HelloNanomePlugin.py:
 
@@ -55,7 +57,7 @@ To start the plugin, call HelloNanomePlugin.py and pass in arguments
 
 
 Arguments
-^^^^^^^^^
+=========
 
 When starting a plugin, a few optional arguments are available:
 
@@ -66,69 +68,68 @@ When starting a plugin, a few optional arguments are available:
 * -v: Enables verbose mode, to display :func:`~nanome.util.logs.Logs.debug` messages
 * -r: Enables Live Reload
 
-Entry points
-^^^^^^^^^^^^
 
-Overriding these functions in your plugin will give you several entry points:
+*******************
+Plugin Instance API
+*******************
+The following is a summary of the functions available to a PluginInstance object
 
-.. code-block:: python
+Event Handlers
+==============
 
-    def start(self):
-        """
-        | Called when user "Activates" the plugin
-        """
-        pass
+* ``start``: Called when user “Activates” the plugin
+* ``update``: Called when when instance updates (multiple times per second)
+* ``on_run``: Called when user presses "Run"
+* ``on_stop``: Called when user disconnects or plugin crashes
+* ``on_advanced_settings``: Called when user presses "Advanced Settings"
+* ``on_complex_added``: Called whenever a complex is added to the workspace.
+* ``on_complex_removed``: Called whenever a complex is removed from the workspace.
+* ``on_presenter_changed``: Called when room's presenter changes.
 
-    def update(self):
-        """
-        | Called when instance updates (multiple times per second)
-        """
-        pass
+Spatial Actions
+===============
 
-    def on_run(self):
-        """
-        | Called when user presses "Run"
-        """
-        pass
+* ``zoom_on_structures``: Repositions and resizes the workspace such that the provided structure(s) will be in the center of the users view.
+* ``center_on_structures``: Repositions the workspace such that the provided structure(s) will be in the center of the world.
+* ``request_presenter_info``: Requests presenter account info (unique ID, name, email)
+* ``request_controller_transforms``: Requests presenter controller info (head position, head rotation, left controller position, left controller rotation, right controller position, right controller rotation)
 
-    def on_stop(self):
-        """
-        | Called when user disconnects or plugin crashes
-        """
-        pass
+IO/Streaming
+============
 
-    def on_advanced_settings(self):
-        """
-        | Called when user presses "Advanced Settings"
-        """
-        pass
+* ``save_files``: Save files on the machine running Nanome, and returns result
+* ``create_writing_stream``: Create a stream allowing to continuously update properties of many objects
+* ``create_reading_stream``: Create a stream allowing to continuously receive properties of many objects
+* ``open_url``: Opens a URL in Nanome's computer browser
+* ``send_files_to_load``: Send file(s) to Nanome to load directly using Nanome's importers.
+* ``request_export``: Request a file export using Nanome exporters
+* ``set_plugin_list_button``: Set text and/or usable state of the buttons on the plugin connection menu in Nanome
 
-    def on_complex_added(self):
-        """
-        | Called whenever a complex is added to the workspace.
-        """
-        pass
+Workspace API Actions
+==========================
 
-    def on_complex_removed(self):
-        """
-        | Called whenever a complex is removed from the workspace.
-        """
-        pass
+* ``request_workspace``: Request the entire workspace, in deep mode
+* ``add_to_workspace``: Add a list of complexes to the current workspace
+* ``request_complex_list``: Request the list of all complexes in the workspace, in shallow mode
+* ``request_complexes``: Requests a list of complexes by their indices
+* ``update_workspace``: Replace the current workspace in the scene by the workspace in parameter
+* ``send_notification``: Send a notification to the user
+* ``update_structures_deep``: Update the specific molecular structures in the scene to match the structures in parameter.
+* ``update_structures_shallow``: Update the specific molecular structures in the scene to match the structures in parameter
+* ``apply_color_scheme``: Apply a color scheme to selected atoms.
 
-    def on_presenter_change(self):
-        """
-        | Called when room's presenter changes.
-        """
-        pass
+Menus/Stacks
+============
 
-    def on_advanced_settings(self):
-        """
-        | Called when user presses "Advanced Settings"
-        """
-        pass
+* ``update_menu``: Update the menu in Nanome
+* ``update_content``: Update specific UI elements (button, slider, list...)
+* ``update_node``: Updates layout nodes and their children
+* ``set_menu_transform``: Update the position, scale, and rotation of the menu
+* ``request_menu_transform``: Requests spacial information of the plugin menu (position, rotation, scale)
 
-    def on_presenter_change(self):
-        """
-        | Called when room's presenter changes.
-        """
-        pass
+Calculations
+============
+
+* ``add_bonds``: Calculate bonds
+* ``add_dssp``: Use DSSP to calculate secondary structures
+* ``add_volume``: ???

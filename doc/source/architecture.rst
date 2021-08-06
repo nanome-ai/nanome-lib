@@ -1,5 +1,6 @@
+############
 Architecture
-============
+############
 
 The overall architecture of this plugin system is designed to enable plugin creators to iterate fast and efficiently when developing, improving, or debugging a plugin for Nanome.
 
