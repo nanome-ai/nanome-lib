@@ -35,9 +35,10 @@ C:\\Program Files\\Oculus\\Software\\Software\\nanome-nanome\\Build
 
 Open the nanome-config.ini file in a text editor and scroll down to the section named ‘ Nanome plugin server config’ and change to the following:
 
-Plugin-server-addr = 127.0.0.1
+  .. code-block:: none
 
-Plugin-server-port = 8888
+    plugin-server-addr = 127.0.0.1  # Use the correct address for your NTS
+    plugin-server-port = 8888  # Use the correct port for your NTS
 
 Now, we want to check to make sure that the Plugin Server is connected. Go ahead and launch Nanome, then log in using your credentials. Create a room and Start in 2D and click on the Plugins Icon on the bottom of the Entry Menu.
 
@@ -45,10 +46,6 @@ You should see that the NTS is connected and there are no current running plugin
 
 In order to connect Nanome (VR) to your server, make sure that its configuration file (nanome-config.ini, located in its installation directory) contains the following:
 
-  .. code-block:: none
-
-    plugin-server-addr = 127.0.0.1  # Use the correct address for your server
-    plugin-server-port = 8888  # Use the correct port for your server
 
 Our Plugins
 ^^^^^^^^^^^

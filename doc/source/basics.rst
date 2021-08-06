@@ -14,7 +14,7 @@ There's 3 main classes we need to be concerned with right now.
 
     * **Plugin**: Handles Connections to NTS/ Low level packet stuff
     * **PluginInstance**: Collections of hooks and actions to interact with your Nanome Session
-    * **AsyncPluginInstance**: Same as PluginInstance, but allows use of Python asyncio syntax (requirez Python >=3.7)
+    * **AsyncPluginInstance**: Same as PluginInstance, but allows use of Python asyncio syntax (requires Python >= 3.7)
 
 NTS
 ^^^^^^
