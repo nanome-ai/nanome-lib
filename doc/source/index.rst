@@ -10,6 +10,7 @@ Table of Contents
    :maxdepth: 1
 
    architecture
+   installation
    basics
    workspace
    ui
@@ -89,7 +90,3 @@ Development
 
 In order to prepare your development environment and create your own first plugins, follow this link:
 
-.. toctree::
-   :maxdepth: 1
-
-   installation
