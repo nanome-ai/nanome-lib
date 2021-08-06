@@ -14,6 +14,12 @@ Or, to upgrade your current installation:
 
     $ pip install nanome --upgrade
 
+Upon installation, nanome-lib adds two command line functions to your PATH.
+
+* `nanome-setup-plugins`: Sets default system wide configs for your plugin. See `Arguments` section for config options
+* `nanome-plugin-init`: Asks for plugin name and description, and sets up boilerplate code to quickly get started.
+
+
 Server
 ^^^^^^
 
@@ -23,17 +29,35 @@ A public server will be available in the near future. If you need a NTS, please 
 Running Your First Plugin
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Starting a plugin is fairly easy. If you copy-pasted the example plugin on the home page, in a file named "RemoveHydrogens.py", you can start your plugin like this:
+Starting a plugin is fairly easy. Copy this snippet into a file HelloNanomePlugin.py:
+
+.. code-block:: python
+
+  import nanome
+  from nanome.api import Plugin, PluginInstance
+  from nanome.util import Logs
+
+  class HelloNanomePlugin(PluginInstance):
+      """Get most basic plugin running."""
+      
+      def on_run(self):
+          message = "Hello Nanome!"
+          self.send_notification(nanome.util.enums.NotificationTypes.success, message)
+          Logs.message(message)
+
+  if __name__ == '__main__':
+    # Information describing the plugin
+    name = 'Hello Nanome'
+    description = "Send a notification that says `Hello Nanome`"
+    category = 'Demo'
+    has_advanced = False  # Whether the plugin has advanced settings menu.
+
+    # Create Plugin, and attach specific PluginInstance to it.
+    plugin = Plugin.setup(name, description, category, has_advanced, HelloNanomePlugin)
 
 .. code-block:: bash
 
-    $ python RemoveHydrogens.py
-
-Or on Linux (python 3 is still preferred when available):
-
-.. code-block:: bash
-
-    $ python3 RemoveHydrogens.py
+    $ python HelloNanomePlugin.py -a <NTS_HOST> -p <NTS_PORT> *<args>
 
 To choose the IP address and the port of your server, you have two options:
 
@@ -76,18 +100,4 @@ Our Plugins
 
 We have a growing list of plugins available on our `Github <https://github.com/nanome-ai>`_ (all repositories starting with "plugin-")
 
-In order to install them, you have 2 possibilities: Use pip or manually download them from github.
-
-Using pip
----------
-
-This is the easiest way.
-For instance, to install and run URLLoader, simply use:
-
-.. code-block:: bash
-
-  $ pip install nanome-loaders
-  $ nanome-url-loader -a address_of_your_nts
-
-And it will be up and running
 Please refer to each individual repository README for more information about our plugins
