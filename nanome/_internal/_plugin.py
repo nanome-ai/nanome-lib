@@ -152,7 +152,10 @@ class _Plugin(object):
         _Plugin.instance = self
         self._description['auth'] = self.__read_key()
         self._process_manager = _ProcessManager()
-        self._logs_manager = _LogsManager(self._plugin_class.__name__ + ".log")
+        if self.__no_logs:
+            self._logs_manager = None
+        else:
+            self._logs_manager = _LogsManager(self._plugin_class.__name__ + ".log")
         self.__reconnect_attempt = 0
         self.__connect()
         self.__loop()
@@ -224,7 +227,8 @@ class _Plugin(object):
                     self._sessions[id]._send_disconnection_message(_Plugin._plugin_id)
                     del self._sessions[id]
                 self._process_manager._update()
-                self._logs_manager._update()
+                if self._logs_manager:
+                    self._logs_manager._update()
         except KeyboardInterrupt:
             self.__exit()
 

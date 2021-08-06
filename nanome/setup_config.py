@@ -29,6 +29,13 @@ config_items = [
         'description': 'Path that can be used by all plugins to write files (e.g: Uploaded files for Web Loader). "~" will expand to User Folder',
         'parse_method': None,
         'key': 'plugin_files_path',
+    },
+    {
+        'arg_key': '-nl',
+        'name': 'No Logs',
+        'description': 'Disable .log file writing',
+        'parse_method': bool,
+        'key': 'no_logs',
     }
 ]
 
@@ -36,6 +43,8 @@ config_items = [
 def parse_value(str, parser):
     if parser is None:
         return str
+    if parser is bool:
+        return str.lower() == 'true' or str == '1'
     try:
         return parser(str)
     except:
@@ -73,7 +82,7 @@ def parse_args():
             display_help()
             return
 
-    for i in range(1, len(sys.argv), 2):
+    for i in range(1, len(sys.argv)):
         c = None
         for j in range(len(config_items)):
             if config_items[j]['arg_key'] == sys.argv[i]:
@@ -83,13 +92,17 @@ def parse_args():
             Logs.error('Unrecognized argument:', sys.argv[i])
             sys.exit(1)
 
-        if i + 1 >= len(sys.argv):
-            Logs.error('Wrong number of argument, each option should have a value following it')
-            sys.exit(1)
+        if c['parse_method'] is bool:
+            value = True
+        else:
+            if i + 1 >= len(sys.argv):
+                Logs.error('Wrong number of argument, each option should have a value following it')
+                sys.exit(1)
 
-        value = parse_value(sys.argv[i + 1], c['parse_method'])
+            value = parse_value(sys.argv[i + 1], c['parse_method'])
+            i += 1
+
         config.set(c['key'], value)
-
 
 def main():
     if (len(sys.argv) == 1):
