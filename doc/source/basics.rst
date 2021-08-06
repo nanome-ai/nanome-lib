@@ -51,23 +51,13 @@ Starting a plugin is fairly easy. Copy this snippet into a file HelloNanomePlugi
     # Create Plugin, and attach specific PluginInstance to it.
     plugin = Plugin.setup(name, description, category, has_advanced, HelloNanomePlugin)
 
+
+To start the plugin, call HelloNanomePlugin.py and pass in arguments
+
 .. code-block:: bash
 
-    $ python HelloNanomePlugin.py -a <NTS_HOST> -p <NTS_PORT> *<args>
+    $ python HelloNanomePlugin.py -a <NTS_HOST> -p <NTS_PORT> <ARGS>
 
-To choose the IP address and the port of your server, you have two options:
-
-Short term, testing: **Using arguments**
-
-  .. code-block:: bash
-
-    $ python RemoveHydrogens.py -a 123.456.789.0 -p 4567
-
-Long term, for production: **Changing the script** (call to plugin.run, last line of the example script above)
-
-  .. code-block:: python
-
-    plugin.run('123.456.789.0', 4567)
 
 Arguments
 ^^^^^^^^^
@@ -75,7 +65,7 @@ Arguments
 When starting a plugin, a few optional arguments are available:
 
 * -h: Displays available arguments
-* -a [IP]: Specifies NTS address
+* -a [IP]: Specifies NTS domain or ip address
 * -p [PORT]: Specifies NTS port
 * -k [FILE]: Specifies a key file to use (if NTS is protected by key)
 * -v: Enables verbose mode, to display :func:`~nanome.util.logs.Logs.debug` messages
