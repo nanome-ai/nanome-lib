@@ -3,73 +3,50 @@ import sys
 
 from nanome.util import config, Logs
 
-config_items = [
-    {
-        'arg_key': '-a',
-        'name': 'NTS Address',
-        'description': 'Plugin server address',
-        'parse_method': None,
-        'key': 'host',
-    },
-    {
-        'arg_key': '-p',
-        'name': 'NTS Port',
-        'description': 'Plugin server port',
-        'key': 'port',
-    },
-    {
-        'arg_key': '-k',
-        'name': 'Key File',
-        'description': 'Plugin authentication key file or string',
-        'key': 'key',
-    },
-    {
-        'arg_key': '-f',
-        'name': 'Files Path',
-        'description': 'Path that can be used by all plugins to write files (e.g: Uploaded files for Web Loader). "~" will expand to User Folder',
-        'key': 'plugin_files_path',
-    },
-    {
-        'arg_key': '--write-log-file',
-        'name': 'Write Logs',
-        'description': 'Enable .log file writing',
-        'key': 'write_log_file'
-    }
-]
-
 
 def create_parser():
-    """Command Line Interface for Plugins.
+    """Arguments used to set global config values.
 
     rtype: argsparser: args parser
     """
     parser = argparse.ArgumentParser(description='Set global default values for Plugin configs. Run without arguments for interactive mode')
-    parser.add_argument('-a', '--host', help='connects to NTS at the specified IP address')
-    parser.add_argument('-p', '--port', type=int, help='connects to NTS at the specified port')
-    parser.add_argument('-k', '--keyfile', help='Specifies a key file or key string to use to connect to NTS')
-    parser.add_argument('--write-log-file', default=False, type=lambda x: (str(x).lower() == 'true'))
+    parser.add_argument('-a', '--host', dest='host' help='Plugin server address')
+    parser.add_argument('-p', '--port', type=int, dest='port', help='Plugin server port')
+    parser.add_argument('-k', '--key', dest='key', help='Plugin authentication key file or string')
+    parser.add_argument(
+        '-f', '--files_path',
+        dest='plugin_files_path',
+        help='Path that can be used by all plugins to write files (e.g: Uploaded files for Web Loader). "~" will expand to User Folder')
+    parser.add_argument(
+        '--write-log-file',
+        default=False,
+        type=lambda x: (str(x).lower() == 'true'),
+        help='Enable or disable .log file writing')
     return parser
 
 
 def interactive_mode():
+    """Set config values one by one using input from the user."""
     Logs.message("Setup utility for Nanome Plugins global configuration. run without arguments for interactive mode.")
 
     parser = create_parser()
-    for conf in config_items:
+    for argument in parser._actions:
+        config_key = argument.dest
+        if config_key == 'help':
+            continue
+
         Logs.message("==============================")
-        Logs.message(conf['name'] + " (" + conf['description'] + ")")
-        Logs.message("Current Value:", config.fetch(conf['key']))
+        Logs.message(config_key + " (" + argument.help + ")")
+        Logs.message("Current Value:", config.fetch(config_key))
         user_input = input("New Value (leave empty if unchanged): ")
         user_input = user_input.strip()
         if user_input == '':
             continue
-
-        # conf_key = conf['key']
-        parser.parse_args([conf['arg_key'], user_input])
-        config.set(conf['key'], user_input)
-
+        parser.parse_args([argument.option_strings[0], user_input])
+        config.set(config_key, user_input)
 
 def parse_args():
+    """Parse command line args and set config values."""
     parser = create_parser()
     arguments = sys.argv[1:]
     args = parser.parse_args(arguments)
