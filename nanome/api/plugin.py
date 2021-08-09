@@ -59,7 +59,7 @@ class Plugin(_Plugin):
     def set_maximum_processes_count(max_process_nb):
         _ProcessManager._max_process_count = max_process_nb
 
-    def run(self, host = "config", port = "config", key = "config", no_logs = "config"):
+    def run(self, host="config", port="config", key="config", no_logs="config"):
         """
         | Starts the plugin by connecting to the server specified.
         | If arguments (-a, -p) are given when starting plugin, host/port will be ignored.
