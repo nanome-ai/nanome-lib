@@ -5,7 +5,6 @@ from nanome._internal._network._commands._callbacks._commands_enums import _Hash
 from nanome._internal._network._serialization._serializer import Serializer
 from nanome._internal._util._serializers import _TypeSerializer
 from nanome.util.logs import Logs
-from nanome.util import config
 
 from multiprocessing import Process, Pipe, current_process
 from timeit import default_timer as timer
