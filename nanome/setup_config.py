@@ -31,11 +31,11 @@ config_items = [
         'key': 'plugin_files_path',
     },
     {
-        'arg_key': '-nl',
+        'arg_key': '--no-log-file',
         'name': 'No Logs',
         'description': 'Disable .log file writing',
         'parse_method': bool,
-        'key': 'no_logs',
+        'key': 'no_log_file',
     }
 ]
 
