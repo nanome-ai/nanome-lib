@@ -1,5 +1,7 @@
-from nanome.util import config, Logs
+import argparse
 import sys
+
+from nanome.util import config, Logs
 
 config_items = [
     {
@@ -13,96 +15,69 @@ config_items = [
         'arg_key': '-p',
         'name': 'NTS Port',
         'description': 'Plugin server port',
-        'parse_method': int,
         'key': 'port',
     },
     {
         'arg_key': '-k',
         'name': 'Key File',
         'description': 'Plugin authentication key file or string',
-        'parse_method': None,
         'key': 'key',
     },
     {
         'arg_key': '-f',
         'name': 'Files Path',
         'description': 'Path that can be used by all plugins to write files (e.g: Uploaded files for Web Loader). "~" will expand to User Folder',
-        'parse_method': None,
         'key': 'plugin_files_path',
     },
     {
         'arg_key': '--write-log-file',
         'name': 'Write Logs',
         'description': 'Enable .log file writing',
-        'parse_method': bool,
         'key': 'write_log_file'
     }
 ]
 
 
-def parse_value(str, parser):
-    if parser is None:
-        return str
-    if parser is bool:
-        return str.lower() == 'true' or str == '1'
-    try:
-        return parser(str)
-    except:
-        Logs.error("Wrong value:", str, "\nExpected:", parser)
-        sys.exit(1)
+def create_parser():
+    """Command Line Interface for Plugins.
+
+    rtype: argsparser: args parser
+    """
+    parser = argparse.ArgumentParser(description='Set global default values for Plugin configs. Run without arguments for interactive mode')
+    parser.add_argument('-a', '--host', help='connects to NTS at the specified IP address')
+    parser.add_argument('-p', '--port', type=int, help='connects to NTS at the specified port')
+    parser.add_argument('-k', '--keyfile', help='Specifies a key file or key string to use to connect to NTS')
+    parser.add_argument('--write-log-file', default=False, type=lambda x: (str(x).lower() == 'true'))
+    return parser
 
 
 def interactive_mode():
-    Logs.message("Setup utility for Nanome Plugins global configuration")
-    for i in range(len(config_items)):
-        c = config_items[i]
+    Logs.message("Setup utility for Nanome Plugins global configuration. run without arguments for interactive mode.")
+
+    parser = create_parser()
+    for conf in config_items:
         Logs.message("==============================")
-        Logs.message(c['name'] + " (" + c['description'] + ")")
-        Logs.message("Current Value:", config.fetch(c['key']))
-        str = input("New Value (leave empty if unchanged): ")
-        str = str.strip()
-        if str == '':
+        Logs.message(conf['name'] + " (" + conf['description'] + ")")
+        Logs.message("Current Value:", config.fetch(conf['key']))
+        user_input = input("New Value (leave empty if unchanged): ")
+        user_input = user_input.strip()
+        if user_input == '':
             continue
-        value = parse_value(str, c['parse_method'])
-        config.set(c['key'], value)
 
-
-def display_help():
-    Logs.message("The following arguments are available for Nanome Plugins global configuration")
-    for i in range(len(config_items)):
-        c = config_items[i]
-        Logs.message(c['arg_key'], c['name'], '-', c['description'])
-    Logs.message("\nOr run without arguments for interactive mode")
+        # conf_key = conf['key']
+        parser.parse_args([conf['arg_key'], user_input])
+        config.set(conf['key'], user_input)
 
 
 def parse_args():
-    for i in range(1, len(sys.argv)):
-        arg = sys.argv[i]
-        if arg == '-h' or arg == 'help' or arg == '--help':
-            display_help()
-            return
-
-    for i in range(1, len(sys.argv)):
-        c = None
-        for j in range(len(config_items)):
-            if config_items[j]['arg_key'] == sys.argv[i]:
-                c = config_items[j]
-                break
-        if c is None:
-            Logs.error('Unrecognized argument:', sys.argv[i])
-            sys.exit(1)
-
-        if c['parse_method'] is bool:
-            value = True
-        else:
-            if i + 1 >= len(sys.argv):
-                Logs.error('Wrong number of argument, each option should have a value following it')
-                sys.exit(1)
-
-            value = parse_value(sys.argv[i + 1], c['parse_method'])
-            i += 1
-
-        config.set(c['key'], value)
+    parser = create_parser()
+    arguments = sys.argv[1:]
+    args = parser.parse_args(arguments)
+    for key in args.__dict__:
+        value = getattr(args, key)
+        if value is not None:
+            print(f'Setting {key} to {value}')
+            config.set(key, value)
 
 
 def main():
