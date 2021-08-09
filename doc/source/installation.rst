@@ -9,8 +9,10 @@ A public server will be available in the near future. If you need an NTS, please
 Install nanome-lib
 ******************
 
-In order to install the Nanome Plugin API, you need a supported version of Python.
-Then, use python's package manager, pip, to install nanome:
+``nanome-lib`` is our Python package containing the Api for interacting programmatically with nanome.
+
+To install nanome-lib, you need a supported version of Python. We recommend Python >= 3.7, although Python 2.7 can still be used.
+Install using pip:
 
 .. code-block:: bash
 
@@ -18,7 +20,7 @@ Then, use python's package manager, pip, to install nanome:
 
 Upon installation, nanome-lib adds two useful command line functions to your PATH.
 
-* ``nanome-setup-plugins``: Sets default system wide configs for your plugin. See `Arguments` section for configurable arguments
+* ``nanome-setup-plugins``: Sets default system wide configs for your plugin. See `Arguments` section for configurable values
 * ``nanome-plugin-init``: Asks for plugin name and description, and sets up boilerplate code to quickly get started.
 
 ***************
