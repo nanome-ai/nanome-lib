@@ -27,7 +27,7 @@ class Plugin(_Plugin):
 
         rtype: argsparser: args parser
         """
-        parser = argparse.ArgumentParser(description='Parse Arguments to set up Nanome Plugin')
+        parser = argparse.ArgumentParser(description='Starts a Nanome Plugin.')
         parser.add_argument('-a', '--host', help='connects to NTS at the specified IP address')
         parser.add_argument('-p', '--port', type=int, help='connects to NTS at the specified port')
         parser.add_argument('-r', '--auto-reload', action='store_true', help='Restart plugin automatically if a .py or .json file in current directory changes')
