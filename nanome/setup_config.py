@@ -50,10 +50,8 @@ def parse_args():
     parser = create_parser()
     arguments = sys.argv[1:]
     args = parser.parse_args(arguments)
-    for key in args.__dict__:
-        value = getattr(args, key)
+    for key, value in args.__dict__.items():
         if value is not None:
-            print(f'Setting {key} to {value}')
             config.set(key, value)
 
 
