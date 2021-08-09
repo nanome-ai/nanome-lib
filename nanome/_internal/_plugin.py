@@ -152,7 +152,7 @@ class _Plugin(object):
         _Plugin.instance = self
         self._description['auth'] = self.__read_key()
         self._process_manager = _ProcessManager()
-        if self.__no_logs:
+        if self.__no_log_file:
             self._logs_manager = None
         else:
             self._logs_manager = _LogsManager(self._plugin_class.__name__ + ".log")

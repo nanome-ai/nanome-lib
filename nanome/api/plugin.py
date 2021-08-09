@@ -35,6 +35,7 @@ class Plugin(_Plugin):
         parser.add_argument('-n', '--name', help='Name to display for this plugin in Nanome', default='')
         parser.add_argument('-k', '--keyfile', default='', help='Specifies a key file or key string to use to connect to NTS')
         parser.add_argument('-i', '--ignore', help='To use with auto-reload. All paths matching this pattern will be ignored, use commas to specify several. Supports */?/[seq]/[!seq]', default='')
+        parser.add_argument('--no-log-file', action='store_true', help='disables .log file')
         return parser
 
     @classmethod
@@ -82,6 +83,7 @@ class Plugin(_Plugin):
         self.__key = args.keyfile or default_key
         self.__has_autoreload = args.auto_reload
         self.__has_verbose = args.verbose
+        self.__no_log_file = args.no_log_file
         Logs._set_verbose(args.verbose)
 
         if args.ignore:
