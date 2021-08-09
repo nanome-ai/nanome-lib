@@ -90,7 +90,7 @@ class Plugin(_Plugin):
             self.__to_ignore.extend(to_ignore)
 
         # Name can be set during the class instantiation without cli arg.
-        if args.name and not self._description.get('name', None):
+        if args.name:
             self._description['name'] = args.name
 
         Logs.debug("Start plugin")
