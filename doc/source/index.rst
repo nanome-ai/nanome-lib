@@ -43,3 +43,4 @@ The Nanome Virtual Reality Software can be acquired directly from Nanome or in a
  * Viveport: https://www.viveport.com/apps/0a467f78-2ed2-43eb-ada8-9d677d5acf54
  * Steam: https://store.steampowered.com/app/493430/Nanome/
  * Direct Download: https://nanome.ai/setup
+ * Sidequest: https://sidequestvr.com/app/333/nanome
