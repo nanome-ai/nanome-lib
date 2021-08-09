@@ -10,7 +10,7 @@ def create_parser():
     rtype: argsparser: args parser
     """
     parser = argparse.ArgumentParser(description='Set global default values for Plugin configs. Run without arguments for interactive mode')
-    parser.add_argument('-a', '--host', dest='host' help='Plugin server address')
+    parser.add_argument('-a', '--host', dest='host', help='Plugin server address')
     parser.add_argument('-p', '--port', type=int, dest='port', help='Plugin server port')
     parser.add_argument('-k', '--key', dest='key', help='Plugin authentication key file or string')
     parser.add_argument(
