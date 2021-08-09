@@ -58,15 +58,26 @@ Starting a plugin is fairly easy. Copy this snippet into a file HelloNanomePlugi
     category = 'Demo'
     has_advanced = False  # Whether the plugin has advanced settings menu.
 
-    # Create Plugin, and attach specific PluginInstance to it.
+    # Start Plugin server using NTS settings passed as command line args
     plugin = Plugin.setup(name, description, category, has_advanced, HelloNanomePlugin)
-
 
 To start the plugin, call HelloNanomePlugin.py and pass in arguments
 
 .. code-block:: bash
 
     $ python HelloNanomePlugin.py -a <NTS_HOST> -p <NTS_PORT> <ARGS>
+
+
+You can also start the server and specify NTS settings without cli args using ``run()``
+
+.. code-block:: python
+
+    host = 'foobar.example.com'
+    port = 5555
+    key = 'security-key'
+    plugin = Plugin(name, description, category, has_advanced)
+    plugin.set_plugin_class(HelloNanomePlugin)
+    plugin.run(host=host, port=port, key=key)
 
 
 ****************
