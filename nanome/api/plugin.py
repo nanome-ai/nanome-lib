@@ -81,7 +81,6 @@ class Plugin(_Plugin):
         self.__port = args.port or default_port
         self.__key = args.keyfile or default_key
         self.__has_autoreload = args.auto_reload
-
         self.__has_verbose = args.verbose
         Logs._set_verbose(args.verbose)
 
