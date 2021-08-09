@@ -77,90 +77,27 @@ class Plugin(_Plugin):
         parser = self.create_parser()
         args = parser.parse_args()
 
-        self.host = args.host or default_host
-        self.port = args.port or default_port
-        self.key = args.keyfile or default_key
-        self.has_autoreload = args.auto_reload
+        self.__host = args.host or default_host
+        self.__port = args.port or default_port
+        self.__key = args.keyfile or default_key
+        self.__has_autoreload = args.auto_reload
 
-        self.verbose = args.verbose
+        self.__has_verbose = args.verbose
         Logs._set_verbose(self.verbose)
 
-        if args.ignore:
+        if args.__to_ignore:
             to_ignore = args.ignore.split(",")
-            self.to_ignore.extend(to_ignore)
+            self.__to_ignore.extend(to_ignore)
 
-        # Name can be set during the class instantiation without cli flag.
-        if args.name and not self.name:
-            self.name = args.name
+        # Name can be set during the class instantiation without cli arg.
+        if args.name and not self._description.get('name', None):
+            self._description['name'] = args.name
 
         Logs.debug("Start plugin")
-        if self.has_autoreload:
+        if self.__has_autoreload:
             self.__autoreload()
         else:
             self.__run()
-
-    @property
-    def host(self):
-        """NTS host."""
-        return self.__host
-
-    @host.setter
-    def host(self, value):
-        self.__host = value
-
-    @property
-    def port(self):
-        """NTS port."""
-        return self.__port
-
-    @port.setter
-    def port(self, value):
-        self.__port = value
-
-    @property
-    def key(self):
-        """Specifies a key file or key string to use to connect to NTS."""
-        return self.__key
-
-    @key.setter
-    def key(self, value):
-        self.__key = value
-
-    @property
-    def has_autoreload(self):
-        """Boolean for whether the plugin reloads on python or json file change."""
-        return self.__has_autoreload
-
-    @has_autoreload.setter
-    def has_autoreload(self, value):
-        self.__has_autoreload = value
-
-    @property
-    def name(self):
-        """Name of plugin on the stacks list."""
-        return self._description.get('name')
-
-    @name.setter
-    def name(self, value):
-        self._description['name'] = value
-
-    @property
-    def has_verbose(self):
-        """Boolean for whether to print verbose Logs."""
-        return self.__has_verbose
-
-    @has_verbose.setter
-    def has_verbose(self, value):
-        self.__has_verbose = value
-
-    @property
-    def to_ignore(self):
-        """List of path regexes to be ignored during autoreload."""
-        return self.__to_ignore
-
-    @to_ignore.setter
-    def to_ignore(self, value):
-        self.__to_ignore = value
 
     def set_plugin_class(self, plugin_class):
         """
@@ -199,9 +136,3 @@ class Plugin(_Plugin):
     def __init__(self, name, description, tags=[], has_advanced=False, permissions=[], integrations=[]):
         super(Plugin, self).__init__(name, description, tags, has_advanced, permissions, integrations)
         self._plugin_class = _DefaultPlugin
-        self.host = ''
-        self.port = ''
-        self.key = ''
-        self.to_ignore = []
-        self.has_autoreload = False
-        self.is_verbose = False
