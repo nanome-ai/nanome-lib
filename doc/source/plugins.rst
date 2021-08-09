@@ -188,22 +188,22 @@ Workspace API Actions
 * ``request_complexes``: Requests a list of complexes by their indices
 * ``update_workspace``: Replace the current workspace in the scene by the workspace in parameter
 * ``send_notification``: Send a notification to the user
-* ``update_structures_deep``: Update the specific molecular structures in the scene to match the structures in parameter.
-* ``update_structures_shallow``: Update the specific molecular structures in the scene to match the structures in parameter
+* ``update_structures_deep``: Update the specific molecular structures in the scene to match the structures in parameter. Shallow indicates that only top level attributes will be updated, but nested structures will not
+* ``update_structures_shallow``: Update the specific molecular structures in the scene to match the structures in parameter. Deep indicates that all nested attributes will be updated.
 * ``apply_color_scheme``: Apply a color scheme to selected atoms.
 
 Menus/Stacks
 ============
 
 * ``update_menu``: Update the menu in Nanome
-* ``update_content``: Update specific UI elements (button, slider, list...)
 * ``update_node``: Updates layout nodes and their children
-* ``set_menu_transform``: Update the position, scale, and rotation of the menu
-* ``request_menu_transform``: Requests spacial information of the plugin menu (position, rotation, scale)
+* ``update_content``: Update specific UI elements (button, slider, list...)
+* ``set_menu_transform``: Update the position, scale, and rotation of a menu
+* ``request_menu_transform``: Requests spacial information of a plugin menu (position, rotation, scale)
 
 Calculations
 ============
 
 * ``add_bonds``: Calculate bonds
 * ``add_dssp``: Use DSSP to calculate secondary structures
-* ``add_volume``: ???
+* ``add_volume``: Add volumetric data such as electrostatic potential maps
