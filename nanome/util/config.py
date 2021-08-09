@@ -7,7 +7,7 @@ default_json_string = """{
     "port":8888,
     "key":"nts_key",
     "plugin_files_path":"~/Documents/nanome-plugins",
-    "no_log_file":false
+    "write_log_file":true
 }"""
 
 default_json = json.loads(default_json_string)
@@ -49,7 +49,7 @@ def fetch(key):
     |  port - your NTS server port
     |  key - your NTS key file or string
     |  plugin_files_path - where your plugins will store files
-    |  no_log_file - if this is True, plugin will not write .log file
+    |  write_log_file - if this is True, plugin will write Logs a local .log file
 
     :param key: The key of the config value to fetch
     :type key: :class:`str`

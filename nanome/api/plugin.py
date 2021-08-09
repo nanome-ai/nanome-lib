@@ -59,7 +59,7 @@ class Plugin(_Plugin):
     def set_maximum_processes_count(max_process_nb):
         _ProcessManager._max_process_count = max_process_nb
 
-    def run(self, host="config", port="config", key="config", no_logs="config"):
+    def run(self, host="config", port="config", key="config", write_log_file="config"):
         """
         | Starts the plugin by connecting to the server specified.
         | If arguments (-a, -p) are given when starting plugin, host/port will be ignored.
@@ -73,6 +73,7 @@ class Plugin(_Plugin):
         default_host = config.fetch('host') if host == 'config' else host
         default_port = config.fetch('port') if port == 'config' else port
         default_key = config.fetch('key') if key == 'config' else key
+        default_write_log_file = config.fetch('write_log_file') if write_log_file == 'config' else write_log_file
 
         # Parse command line args and set internal variables.
         parser = self.create_parser()
@@ -81,9 +82,10 @@ class Plugin(_Plugin):
         self.__host = args.host or default_host
         self.__port = args.port or default_port
         self.__key = args.keyfile or default_key
+        self.__write_log_file = not arg.no_log_file and default_write_log_file
+
         self.__has_autoreload = args.auto_reload
         self.__has_verbose = args.verbose
-        self.__no_log_file = args.no_log_file
         Logs._set_verbose(args.verbose)
 
         if args.ignore:

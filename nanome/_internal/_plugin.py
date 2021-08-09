@@ -152,10 +152,10 @@ class _Plugin(object):
         _Plugin.instance = self
         self._description['auth'] = self.__read_key()
         self._process_manager = _ProcessManager()
-        if self.__no_log_file:
-            self._logs_manager = None
-        else:
+        if self.__write_log_file:
             self._logs_manager = _LogsManager(self._plugin_class.__name__ + ".log")
+        else:
+            self._logs_manager = None
         self.__reconnect_attempt = 0
         self.__connect()
         self.__loop()

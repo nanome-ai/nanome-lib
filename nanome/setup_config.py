@@ -31,11 +31,11 @@ config_items = [
         'key': 'plugin_files_path',
     },
     {
-        'arg_key': '--no-log-file',
-        'name': 'No Logs',
-        'description': 'Disable .log file writing',
+        'arg_key': '--write-log-file',
+        'name': 'Write Logs',
+        'description': 'Enable .log file writing',
         'parse_method': bool,
-        'key': 'no_log_file',
+        'key': 'write_log_file'
     }
 ]
 
@@ -103,6 +103,7 @@ def parse_args():
             i += 1
 
         config.set(c['key'], value)
+
 
 def main():
     if (len(sys.argv) == 1):
