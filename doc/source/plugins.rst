@@ -108,6 +108,7 @@ Example of using callback functions to manipulate a Complex.
             self.request_complex_list(self.on_shallow_complexes_received)
             
         def on_shallow_complexes_received(self, shallow_complex_list):
+            # Once we have the shallow complex, use index to get deep complex, and pass to callback.
             index = shallow_complex_list[0].index
             self.request_complexes([index], self.move_complex_position)
         
@@ -180,7 +181,7 @@ IO/Streaming
 * ``set_plugin_list_button``: Set text and/or usable state of the buttons on the plugin connection menu in Nanome
 
 Workspace API Actions
-==========================
+=====================
 
 * ``request_workspace``: Request the entire workspace, in deep mode
 * ``add_to_workspace``: Add a list of complexes to the current workspace
