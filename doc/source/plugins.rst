@@ -189,8 +189,8 @@ Workspace API Actions
 * ``request_complexes``: Requests a list of complexes by their indices
 * ``update_workspace``: Replace the current workspace in the scene by the workspace in parameter
 * ``send_notification``: Send a notification to the user
-* ``update_structures_deep``: Update the specific molecular structures in the scene to match the structures in parameter. Shallow indicates that only top level attributes will be updated, but nested structures will not
-* ``update_structures_shallow``: Update the specific molecular structures in the scene to match the structures in parameter. Deep indicates that all nested attributes will be updated.
+* ``update_structures_deep``: Update the specific molecular structures in the scene to match the structures in parameter. Deep indicates that all nested attributes will be updated.
+* ``update_structures_shallow``: Update the specific molecular structures in the scene to match the structures in parameter. Shallow indicates that only top level attributes will be updated, but nested structures will not.
 * ``apply_color_scheme``: Apply a color scheme to selected atoms.
 
 Menus/Stacks
