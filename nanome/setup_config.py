@@ -9,25 +9,36 @@ def create_parser():
 
     rtype: argsparser: args parser
     """
-    parser = argparse.ArgumentParser(description='Set global default values for Plugin configs. Run without arguments for interactive mode')
+    parser = argparse.ArgumentParser(
+        description=(
+            'Set global default values for Plugin configs. '
+            'Run without arguments for interactive mode'
+        )
+    )
     parser.add_argument('-a', '--host', dest='host', help='Plugin server address')
     parser.add_argument('-p', '--port', type=int, dest='port', help='Plugin server port')
     parser.add_argument('-k', '--key', dest='key', help='Plugin authentication key file or string')
     parser.add_argument(
         '-f', '--files_path',
         dest='plugin_files_path',
-        help='Path that can be used by all plugins to write files (e.g: Uploaded files for Web Loader). "~" will expand to User Folder')
+        help=(
+            'Path that can be used by all plugins to write files '
+            '(e.g: Uploaded files for Web Loader). "~" will expand to User Folder'
+        )
+    )
     parser.add_argument(
         '--write-log-file',
         default=False,
-        type=lambda x: (str(x).lower() == 'true'),
+        type=lambda x: (str(x).lower() in ['true', 'yes', '1']),
         help='Enable or disable .log file writing')
     return parser
 
 
 def interactive_mode():
     """Set config values one by one using input from the user."""
-    Logs.message("Setup utility for Nanome Plugins global configuration. run without arguments for interactive mode.")
+    Logs.message(
+        "Setup utility for Nanome Plugins global configuration. "
+        "run without arguments for interactive mode.")
 
     parser = create_parser()
     for argument in parser._actions:
@@ -44,6 +55,7 @@ def interactive_mode():
             continue
         parser.parse_args([argument.option_strings[0], user_input])
         config.set(config_key, user_input)
+
 
 def parse_args():
     """Parse command line args and set config values."""
