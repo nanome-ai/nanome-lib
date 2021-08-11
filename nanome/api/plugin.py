@@ -22,7 +22,8 @@ class Plugin(_Plugin):
     :type has_advanced: :class:`bool`
     """
 
-    def create_parser(self):
+    @staticmethod
+    def create_parser():
         """Command Line Interface for Plugins.
 
         rtype: argsparser: args parser
@@ -87,7 +88,7 @@ class Plugin(_Plugin):
             self.__write_log_file = args.write_log_file
         else:
             self.__write_log_file = default_write_log_file
- 
+
         self.__has_autoreload = args.auto_reload
         self.__has_verbose = args.verbose
         Logs._set_verbose(args.verbose)
