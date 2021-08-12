@@ -297,7 +297,7 @@ class Complex(_Complex, Base):
             complex.position = target_complex.position.get_copy()
             complex.rotation = target_complex.rotation.get_copy()
 
-    # region depricated
+    # region deprecated
     @current_frame.setter
     @Logs.deprecated()
     def current_frame(self, value):

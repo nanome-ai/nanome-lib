@@ -7,6 +7,14 @@ except:
         pass
 import sys
 
+class SubstructureType(IntEnum):
+    """
+    | 
+    """
+    Unkown = 0
+    Protein = 1
+    Ligand = 2
+    Solvent = 3
 
 class AtomRenderingMode(IntEnum):
     """
