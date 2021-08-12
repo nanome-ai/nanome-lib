@@ -348,7 +348,7 @@ class PluginInstance(_PluginInstance):
         url = url.strip()
         if '://' not in url:
             url = 'http://' + url
-        self._network._send(_Messages.open_url, (url, desktopBrowser), False)
+        self._network._send(_Messages.open_url, (url, desktop_browser), False)
 
     def request_presenter_info(self, callback=None):
         """
