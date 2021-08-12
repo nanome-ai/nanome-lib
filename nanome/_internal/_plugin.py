@@ -5,7 +5,6 @@ from nanome._internal._network._commands._callbacks._commands_enums import _Hash
 from nanome._internal._network._serialization._serializer import Serializer
 from nanome._internal._util._serializers import _TypeSerializer
 from nanome.util.logs import Logs
-from nanome.util import config
 
 from multiprocessing import Process, Pipe, current_process
 from timeit import default_timer as timer
@@ -24,65 +23,12 @@ KEEP_ALIVE_TIME_INTERVAL = 60.0
 KEEP_ALIVE_TIMEOUT = 15.0
 
 __metaclass__ = type
+
+
 class _Plugin(object):
     __serializer = Serializer()
     _plugin_id = -1
     _custom_data = None
-
-    def __parse_args(self):
-        Logs._set_verbose(False)
-        for i in range(1, len(sys.argv)):
-            if sys.argv[i] == "-h":
-                Logs.message("Usage:", sys.argv[1],"[-h] [-a ADDRESS] [-p PORT]")
-                Logs.message(" -h                   display this help")
-                Logs.message(" -a                   connects to a NTS at the specified IP address")
-                Logs.message(" -p                   connects to a NTS at the specified port")
-                Logs.message(" -k                   specifies a key file or key string to use to connect to NTS")
-                Logs.message(" -n                   name to display for this plugin in Nanome")
-                Logs.message(" -v                   enable verbose mode, to display Logs.debug")
-                Logs.message(" -r, --auto-reload    restart plugin automatically if a .py or .json file in current directory changes")
-                Logs.message(" --ignore             to use with auto-reload. All paths matching this pattern will be ignored, " \
-                    "use commas to specify several. Supports */?/[seq]/[!seq]")
-                sys.exit(0)
-            elif sys.argv[i] == "-a":
-                if i >= len(sys.argv):
-                    Logs.error("Error: -a requires an argument")
-                    sys.exit(1)
-                self.__host = sys.argv[i + 1]
-                i += 1
-            elif sys.argv[i] == "-p":
-                if i >= len(sys.argv):
-                    Logs.error("Error: -p requires an argument")
-                    sys.exit(1)
-                try:
-                    self.__port = int(sys.argv[i + 1])
-                except ValueError:
-                    Logs.error("Error: -p argument has to be an integer")
-                    sys.exit(1)
-                i += 1
-            elif sys.argv[i] == "-k":
-                if i >= len(sys.argv):
-                    Logs.error("Error: -k requires an argument")
-                    sys.exit(1)
-                self.__key = sys.argv[i + 1]
-                i += 1
-            elif sys.argv[i] == "-n":
-                if i >= len(sys.argv):
-                    Logs.error("Error: -n requires an argument")
-                    sys.exit(1)
-                self._description['name'] = sys.argv[i + 1]
-                i += 1
-            elif sys.argv[i] == "-v":
-                self.__has_verbose = True
-                Logs._set_verbose(True)
-            elif sys.argv[i] == "-r" or sys.argv[i] == "--auto-reload":
-                self.__has_autoreload = True
-            elif sys.argv[i] == "--ignore":
-                if i >= len(sys.argv):
-                    Logs.error("Error: --ignore requires an argument")
-                    sys.exit(1)
-                split = sys.argv[i + 1].split(",")
-                self.__to_ignore.extend(split)
 
     def __read_key(self):
         # check if arg is key data
@@ -103,7 +49,7 @@ class _Plugin(object):
             #   Fix 5/27/2021 - Jeremie: We need to always check for session registration in order to fix timeout issues
             #   When NTS forces disconnection because of plugin list change, session_id still exists in self._sessions,
             #   even though it was disconnected for Nanome
-            if _Plugin.__serializer.try_register_session(packet.payload) == True:
+            if _Plugin.__serializer.try_register_session(packet.payload) is True:
                 received_version_table, _, _ = _Plugin.__serializer.deserialize_command(packet.payload, None)
                 version_table = _TypeSerializer.get_best_version_table(received_version_table)
                 self.__on_client_connection(session_id, version_table)
@@ -123,7 +69,7 @@ class _Plugin(object):
 
         elif packet.packet_type == Network._Packet.packet_type_plugin_disconnection:
             if _Plugin._plugin_id == -1:
-                if self._description['auth'] == None:
+                if self._description['auth'] is None:
                     Logs.error("Connection refused by NTS. Are you missing a security key file?")
                 else:
                     Logs.error("Connection refused by NTS. Your security key file might be invalid")
@@ -157,17 +103,17 @@ class _Plugin(object):
                 for pattern in self.__to_ignore:
                     if fnmatch.fnmatch(file_path, pattern):
                         matched = True
-                if matched == False:
+                if matched is False:
                     found_file = True
                     yield os.stat(file_path).st_mtime
-        if found_file == False:
+        if found_file is False:
             yield 0.0
 
     def __autoreload(self):
         wait = 3
 
         if os.name == "nt":
-            sub_kwargs = { 'creationflags': subprocess.CREATE_NEW_PROCESS_GROUP }
+            sub_kwargs = {'creationflags': subprocess.CREATE_NEW_PROCESS_GROUP}
             break_signal = signal.CTRL_BREAK_EVENT
         else:
             sub_kwargs = {}
@@ -201,12 +147,15 @@ class _Plugin(object):
             signal.signal(signal.SIGBREAK, self.__on_termination_signal)
         else:
             signal.signal(signal.SIGTERM, self.__on_termination_signal)
-        if self._pre_run != None:
+        if self._pre_run is not None:
             self._pre_run()
         _Plugin.instance = self
         self._description['auth'] = self.__read_key()
         self._process_manager = _ProcessManager()
-        self._logs_manager = _LogsManager(self._plugin_class.__name__ + ".log")
+        if self.__write_log_file:
+            self._logs_manager = _LogsManager(self._plugin_class.__name__ + ".log")
+        else:
+            self._logs_manager = None
         self.__reconnect_attempt = 0
         self.__connect()
         self.__loop()
@@ -239,19 +188,19 @@ class _Plugin(object):
             while True:
                 now = timer()
 
-                if self.__connected == False:
+                if self.__connected is False:
                     reconnect_wait = min(2 ** self.__reconnect_attempt, MAX_RECONNECT_WAIT)
                     elapsed = now - self.__disconnection_time
                     if elapsed >= reconnect_wait:
                         Logs.message("Trying to reconnect...")
-                        if self.__connect() == False:
+                        if self.__connect() is False:
                             if self.__reconnect_attempt == 3:
                                 self.__disconnect()
                             continue
                     else:
                         time.sleep(reconnect_wait - elapsed)
                         continue
-                if self._network.receive() == False:
+                if self._network.receive() is False:
                     self.__connected = False
                     self.__disconnection_time = timer()
                     self._network.disconnect()
@@ -271,14 +220,15 @@ class _Plugin(object):
 
                 del to_remove[:]
                 for id, session in self._sessions.items():
-                    if session._read_from_plugin() == False:
+                    if session._read_from_plugin() is False:
                         session.close_pipes()
                         to_remove.append(id)
                 for id in to_remove:
                     self._sessions[id]._send_disconnection_message(_Plugin._plugin_id)
                     del self._sessions[id]
                 self._process_manager._update()
-                self._logs_manager._update()
+                if self._logs_manager:
+                    self._logs_manager._update()
         except KeyboardInterrupt:
             self.__exit()
 
@@ -297,12 +247,12 @@ class _Plugin(object):
         for session in _Plugin.instance._sessions.values():
             session.signal_and_close_pipes()
             session.plugin_process.join()
-        if self._post_run != None:
+        if self._post_run is not None:
             self._post_run()
         sys.exit(0)
 
     def __on_client_connection(self, session_id, version_table):
-        if session_id in self._sessions: # If session_id already exists, close it first ()
+        if session_id in self._sessions:  # If session_id already exists, close it first ()
             Logs.message("Closing session ID", session_id, "because a new session connected with the same ID")
             self._sessions[session_id].signal_and_close_pipes()
         main_conn_net, process_conn_net = Pipe()
@@ -323,8 +273,7 @@ class _Plugin(object):
     def _launch_plugin_profile(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
         cProfile.runctx('_Plugin._launch_plugin(plugin_class, session_id, pipe_net, pipe_proc, serializer, '
                         'plugin_id, version_table, original_version_table, verbose, custom_data,'
-                        'permissions)'
-                        , globals(), locals(), 'profile.out')
+                        'permissions)', globals(), locals(), 'profile.out')
 
     @classmethod
     def _launch_plugin(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
