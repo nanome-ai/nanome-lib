@@ -338,7 +338,7 @@ class PluginInstance(_PluginInstance):
         id = self._network._send(_Messages.add_volume, (complex, complex_to_align_index, volume, properties), expects_response)
         return self._save_callback(id, callback)
 
-    def open_url(self, url, desktopBrowser=False):
+    def open_url(self, url, desktop_browser=False):
         """
         | Opens a URL alongside the Nanome session in the default web browser.
 
