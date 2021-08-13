@@ -1,3 +1,4 @@
+import argparse
 import datetime
 import os
 import re
@@ -6,18 +7,14 @@ import zipfile
 
 TEMPLATE_ZIP = os.path.join(os.path.dirname(__file__), 'plugin-template.zip')
 
-USAGE = '\n' + sys.argv[0].split('/')[-1] + """ <folder>
-
-    <folder> - name of plugin folder to be created
-"""
+parser = argparse.ArgumentParser(description='Create a plugin')
+parser.add_argument('folder', help='Name of plugin folder to be created.')
 
 
 def main():
-    if len(sys.argv) != 2:
-        print(USAGE)
-        sys.exit(1)
+    args = parser.parse_args()
+    path = args.folder
 
-    path = sys.argv[1]
     fields = {
         'name': 'Example Plugin',
         'description': 'A Nanome Plugin',

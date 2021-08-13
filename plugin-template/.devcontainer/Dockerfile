@@ -41,7 +41,7 @@ COPY .bashrc.sh /tmp/.bashrc
 RUN cat /tmp/.bashrc >> ~/.bashrc
 
 # Install nanome-lib
-RUN pip install nanome
+RUN pip install nanome autopep8
 
 ENTRYPOINT [ "/usr/local/share/docker-init.sh" ]
 CMD [ "sleep", "infinity" ]
