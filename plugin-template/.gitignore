@@ -1,6 +1,7 @@
 __pycache__
 /.vscode/*
 !/.vscode/launch.json
+!/.vscode/tasks.json
 /docker/.cachebust
 /docker/redeploy.sh
 *.log
