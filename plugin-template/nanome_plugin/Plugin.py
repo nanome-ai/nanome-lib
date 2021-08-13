@@ -1,4 +1,4 @@
-from nanome import Plugin
+import nanome
 from nanome.api.ui import Menu
 from nanome.util import Logs
 
@@ -21,7 +21,7 @@ class {{class}}(nanome.PluginInstance):
         self.update_menu(self.menu)
 
 def main():
-    plugin = Plugin('{{name}}', '{{description}}', '{{category}}', False)
+    plugin = nanome.Plugin('{{name}}', '{{description}}', '{{category}}', False)
     plugin.set_plugin_class({{class}})
     plugin.run()
 
