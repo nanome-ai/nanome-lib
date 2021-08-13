@@ -23,7 +23,6 @@
 
   // Set *default* container specific settings.json values on container create.
   "settings": {
-    "python.languageServer": "Pylance",
     "python.analysis.extraPaths": ["/opt/conda/lib/python3.7/site-packages"],
     "python.formatting.autopep8Path": "/opt/conda/bin/autopep8"
   },
