@@ -42,7 +42,7 @@ class SubstructuresPlugin(nanome.PluginInstance):
                 unique[s] = 0
         for s in unique.keys():
             name, length, type = s
-            print (name, length, type, unique[s])
+            print(name, length, type, unique[s])
 
     def on_ligands(self, subs):
         print("on_ligands")
@@ -85,7 +85,7 @@ class SubstructuresPlugin(nanome.PluginInstance):
                 unique[s] = 0
         for s in unique.keys():
             name, length, type = s
-            print (name, length, type, unique[s])
+            print(name, length, type, unique[s])
 
     def on_substructures(self, subs):
         print("on_substructures")
@@ -98,7 +98,7 @@ class SubstructuresPlugin(nanome.PluginInstance):
                 unique[s] = 0
         for s in unique.keys():
             name, length, type = s
-            print (name, length, type, unique[s])
+            print(name, length, type, unique[s])
 
     def __init__(self):
         pass
