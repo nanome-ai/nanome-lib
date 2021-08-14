@@ -1,3 +1,4 @@
+from nanome.util.vector3 import Vector3
 from nanome.api.structure import molecule
 import nanome
 import sys
@@ -55,6 +56,23 @@ class SubstructuresPlugin(nanome.PluginInstance):
         for s in unique.keys():
             name, length, type = s
             print (name, length, type, unique[s])
+
+        if (len (subs) == 0):
+            return
+        
+        molecule = next(subs[0].residues).molecule
+
+        all_res = []
+        for sub in subs:
+            for res in sub.residues:
+                all_res.append(res)
+                for atom in res.atoms:
+                    atom.position = atom.position * 1.1
+
+        for residue in molecule.residues:
+            assert(residue in all_res)
+
+        self.update_structures_deep(all_res)
 
     def on_solvents(self, subs):
         print("on_solvents")
