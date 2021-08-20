@@ -69,7 +69,7 @@ class Residue(_Residue, Base):
     @property
     def atoms(self):
         """
-        | The list of atoms within this complex
+        | The list of atoms within this residue
         """
         for atom in self._atoms:
             yield atom
@@ -77,7 +77,7 @@ class Residue(_Residue, Base):
     @property
     def bonds(self):
         """
-        | The list of bonds within this complex
+        | The list of bonds within this residue
         """
         for bond in self._bonds:
             yield bond

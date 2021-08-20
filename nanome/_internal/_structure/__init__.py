@@ -10,6 +10,7 @@ from ._chain import _Chain
 from ._molecule import _Molecule
 from ._complex import _Complex
 from ._workspace import _Workspace
+from ._substructure import _Substructure
 
 from . import _io
 from . import _serialization
