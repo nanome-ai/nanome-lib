@@ -57,7 +57,7 @@ class Mesh(_Mesh, Shape):
     @property
     def colors(self):
         """
-        | Colors of the mesh, 3 float per vertex
+        | Colors of the mesh, 4 float per vertex
 
         :param value: Colors of the mesh
         :type value: Array of float
@@ -68,5 +68,18 @@ class Mesh(_Mesh, Shape):
     def colors(self, value):
         self._colors = value
 
+    @property
+    def uv(self):
+        """
+        | UV of the mesh, 2 float per vertex
+
+        :param value: UV of the mesh
+        :type value: Array of float
+        """
+        return self._uv
+
+    @uv.setter
+    def uv(self, value):
+        self._uv = value
 
 _Mesh._create = Mesh

@@ -11,6 +11,7 @@ class _Mesh(_Shape):
         self._normals = []
         self._colors = []
         self._triangles = []
+        self._uv = []
 
     @classmethod
     def _create(cls):

@@ -16,6 +16,7 @@ class _MeshSerializer(_TypeSerializer):
         context.write_float_array(value.normals)
         context.write_float_array(value.colors)
         context.write_int_array(value.triangles)
+        context.write_float_array(value.uv)
 
     def deserialize(self, version, context):
         result = _Mesh._create()
@@ -23,4 +24,5 @@ class _MeshSerializer(_TypeSerializer):
         result.normals = context.read_float_array()
         result.colors = context.read_float_array()
         result.triangles = context.read_int_array()
+        result.uv = context.read_float_array()
         return result
