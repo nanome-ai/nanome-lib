@@ -1,0 +1,11 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "autopep8 current file",
+      "type": "process",
+      "command": "${config:python.formatting.autopep8Path}",
+      "args": [ "--ignore", "E501", "--in-place", "${file}"]
+    }
+  ]
+}

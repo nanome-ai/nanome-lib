@@ -104,6 +104,7 @@ add_command(CommandCallbacks._Commands.bonds_add_done, CommandSerializers._AddBo
 add_command(CommandCallbacks._Commands.complex_updated, CommandSerializers._ComplexUpdated(), CommandCallbacks._complex_updated)
 add_command(CommandCallbacks._Commands.selection_changed, CommandSerializers._SelectionChanged(), CommandCallbacks._selection_changed)
 add_command(CommandCallbacks._Commands.compute_hbonds_done, CommandSerializers._ComputeHBonds(), CommandCallbacks._simple_callback_no_arg)
+add_command(CommandCallbacks._Commands.substructure_response, CommandSerializers._RequestSubstructure(), CommandCallbacks._simple_callback_arg)
 
 # Volume
 add_command(CommandCallbacks._Commands.add_volume_done, CommandSerializers._AddVolumeDone(), CommandCallbacks._simple_callback_no_arg)
@@ -185,6 +186,7 @@ add_message(CommandCallbacks._Messages.structures_center, CommandSerializers._Po
 add_message(CommandCallbacks._Messages.hook_complex_updated, CommandSerializers._ComplexUpdatedHook())
 add_message(CommandCallbacks._Messages.hook_selection_changed, CommandSerializers._SelectionChangedHook())
 add_message(CommandCallbacks._Messages.compute_hbonds, CommandSerializers._ComputeHBonds())
+add_message(CommandCallbacks._Messages.substructure_request, CommandSerializers._RequestSubstructure())
 
 # volume
 add_message(CommandCallbacks._Messages.add_volume, CommandSerializers._AddVolume())

@@ -23,8 +23,10 @@
 
   // Set *default* container specific settings.json values on container create.
   "settings": {
-    "terminal.integrated.shell.linux": "/bin/bash"
+    "python.analysis.extraPaths": ["/opt/conda/lib/python3.7/site-packages"],
+    "python.formatting.autopep8Path": "/opt/conda/bin/autopep8"
   },
+
 
   // Add the IDs of extensions you want installed when the container is created.
   "extensions": [
