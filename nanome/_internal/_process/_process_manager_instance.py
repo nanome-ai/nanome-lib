@@ -10,7 +10,6 @@ class _ProcessManagerInstance():
         Process._manager = self
         self.__pending_start = deque()
         self.__processes = dict()
-        self.__futures = dict()
 
     def _close(self):
         self.__pipe.close()
