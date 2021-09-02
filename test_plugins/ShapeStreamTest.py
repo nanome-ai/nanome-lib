@@ -3,6 +3,9 @@ import nanome
 import nanome.api.shapes as shapes
 from nanome.util import Logs
 
+import open3d as o3d
+import numpy as np
+
 # Config
 
 NAME = "Shape Stream Test"
@@ -22,8 +25,6 @@ class ShapeStreamTest(nanome.PluginInstance):
         self.__scales = []
 
         self.__shapes = []
-        self.__spheres = []
-        self.__lines = []
         self.__running = False
         self.__streams_created = False
         self.__stream_count = 0
@@ -33,6 +34,7 @@ class ShapeStreamTest(nanome.PluginInstance):
         if self.__running == False:
             self.make_sphere()
             self.make_line()
+            self.make_mesh()
             self.make_sphere()
             for shape in self.__shapes:
                 shape.upload(self.make_callback(shape))
@@ -138,6 +140,28 @@ class ShapeStreamTest(nanome.PluginInstance):
         line.color = nanome.util.Color(255, 0, 0, 255)
         self.__shapes.append(line)
         return line
+
+    def make_mesh(self):
+        mesh = shapes.Mesh()
+        mesh.colors = []
+        mesh.uv = []
+
+        filename = "objs/bananome.obj"
+        o3dmesh = o3d.io.read_triangle_mesh(filename)
+        if not o3dmesh.has_vertex_normals():            
+            o3dmesh.compute_vertex_normals()
+        if o3dmesh.has_vertex_colors():
+            mesh.colors = np.asarray(o3dmesh.vertex_colors).flatten()
+        if o3dmesh.has_triangle_uvs():
+            mesh.uv = np.asarray(o3dmesh.triangle_uvs).flatten()
+
+        mesh.vertices = np.asarray(o3dmesh.vertices).flatten()
+        mesh.normals = np.asarray(o3dmesh.normals).flatten()
+        mesh.triangles = np.asarray(o3dmesh.triangles).flatten()
+        mesh.anchors[0].position = nanome.util.Vector3(0, 0, 0)
+        mesh.color = nanome.util.Color(255, 0, 0, 255)
+        self.__shapes.append(mesh)
+        return mesh
 
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, ShapeStreamTest)
