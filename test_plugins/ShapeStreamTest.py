@@ -156,7 +156,7 @@ class ShapeStreamTest(nanome.PluginInstance):
             mesh.uv = np.asarray(o3dmesh.triangle_uvs).flatten()
 
         mesh.vertices = np.asarray(o3dmesh.vertices).flatten()
-        mesh.normals = np.asarray(o3dmesh.normals).flatten()
+        mesh.normals = np.asarray(o3dmesh.vertex_normals).flatten()
         mesh.triangles = np.asarray(o3dmesh.triangles).flatten()
         mesh.anchors[0].position = nanome.util.Vector3(0, 0, 0)
         mesh.color = nanome.util.Color(255, 0, 0, 255)
