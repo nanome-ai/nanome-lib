@@ -78,7 +78,7 @@ class Plugin(_Plugin):
 
         # Parse command line args and set internal variables.
         parser = self.create_parser()
-        args = parser.parse_args()
+        args, _ = parser.parse_known_args()
 
         self.__host = args.host or default_host
         self.__port = args.port or default_port
