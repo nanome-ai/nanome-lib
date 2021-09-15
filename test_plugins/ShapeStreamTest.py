@@ -160,6 +160,11 @@ class ShapeStreamTest(nanome.PluginInstance):
         mesh.triangles = np.asarray(o3dmesh.triangles).flatten()
         mesh.anchors[0].position = nanome.util.Vector3(0, 0, 0)
         mesh.color = nanome.util.Color(255, 0, 0, 255)
+        #Fill colors and UVs if empty
+        if len(mesh.uv) == 0:
+            mesh.uv = np.repeat([0.0, 0.0], len(mesh.vertices) / 3)
+        if len(mesh.colors) == 0:
+            mesh.colors = np.repeat([1.0, 1.0, 1.0, 1.0], len(mesh.vertices) / 3)
         self.__shapes.append(mesh)
         return mesh
 
