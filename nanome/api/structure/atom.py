@@ -335,11 +335,11 @@ class Atom(_Atom, Base):
 
     @property
     def vdw_radius(self):
-    """
-    | VDW radius of the atom in Angstrom
+        """
+        | VDW radius of the atom in Angstrom
 
-    :type: :class:`float`
-    """
+        :type: :class:`float`
+        """
         return self._vdw_radius
 
     @vdw_radius.setter
