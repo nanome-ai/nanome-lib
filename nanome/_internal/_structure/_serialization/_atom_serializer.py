@@ -23,7 +23,8 @@ class _AtomSerializer(_TypeSerializer):
         # Version 5 corresponds to Nanome release 1.19
         # Version 6 corresponds to Nanome release 1.22
         # Version 7 corresponds to Nanome release 1.22
-        return 7
+        # Version 8 corresponds to Nanome release 1.23
+        return 8
 
     def name(self):
         return "Atom"
@@ -91,6 +92,9 @@ class _AtomSerializer(_TypeSerializer):
         if version >= 7:
             context.write_uint(value._display_mode)
 
+        if version >= 8:
+            context.write_float(value._vdw_radius)
+
     def deserialize(self, version, context):
         # type: (_Atom, _ContextDeserialization) -> _Atom
         atom = _Atom._create()
@@ -154,5 +158,8 @@ class _AtomSerializer(_TypeSerializer):
 
         if version >= 7:
             atom._display_mode = context.read_uint()
+
+        if version >= 8:
+            atom._vdw_radius = context.read_float()
 
         return atom

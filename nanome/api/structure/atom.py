@@ -332,6 +332,20 @@ class Atom(_Atom, Base):
     @polar_hydrogen.setter
     def polar_hydrogen(self, value):
         self._polar_hydrogen = value
+
+    @property
+    def vdw_radius(self):
+    """
+    | VDW radius of the atom in Angstrom
+
+    :type: :class:`float`
+    """
+        return self._vdw_radius
+
+    @vdw_radius.setter
+    def vdw_radius(self, value):
+        self._vdw_radius = value
+
     # endregion
 
     # region conformer stuff

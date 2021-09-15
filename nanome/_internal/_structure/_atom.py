@@ -20,6 +20,7 @@ class _Atom(_Base):
         self._atom_type = {}
         self._formal_charge = 0
         self._partial_charge = 0.0
+        self._vdw_radius = 0.0
         #No API
         self._occupancy = 0.0
         self._bfactor = 0.0
@@ -170,6 +171,7 @@ class _Atom(_Base):
         atom._polar_hydrogen = self._polar_hydrogen
         atom._formal_charge = self._formal_charge
         atom._partial_charge = self._partial_charge
+        atom._vdw_radius = self._vdw_radius
         #Rendering
         #API
         atom._selected = self._selected
