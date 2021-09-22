@@ -8,7 +8,7 @@ class _Atom(_Base):
 
     @classmethod
     def _create(cls):
-        _fillAtomTable()
+        _fill_atom_table()
         return cls()
 
     _atom_count = 0
@@ -118,7 +118,7 @@ class _Atom(_Base):
     @property
     def _vdw_radius(self):
         if len(_Atom._vdw_radii) < 1:
-            _Atom._fillAtomTable()
+            _Atom._fill_atom_table()
         if self._symbol in _Atom._vdw_radii:
             return _Atom._vdw_radii[self._symbol]
         #unknown type
@@ -209,7 +209,7 @@ class _Atom(_Base):
 
 
     @classmethod
-    def _fillAtomTable(cls):
+    def _fill_atom_table(cls):
         #From NanomeAtomTable.csv
         cls._vdw_radii = {}
         cls._vdw_radii["H"] = 1.1
