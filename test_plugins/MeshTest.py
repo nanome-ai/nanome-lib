@@ -1,7 +1,3 @@
-import sys
-
-sys.path.insert(0, "D:/Dev/nanome-lib-fork/")
-
 from nanome.util.vector3 import Vector3
 import nanome
 import nanome.api.shapes as shapes
