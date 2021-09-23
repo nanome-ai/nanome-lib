@@ -17,7 +17,8 @@ class _ResidueSerializer(_TypeSerializer):
 
     def version(self):
         #Version 0 corresponds to Nanome release 1.10
-        return 1
+        #Version 2 corresponds to Nanome release 1.23
+        return 2
 
     def name(self):
         return "Residue"
@@ -48,6 +49,9 @@ class _ResidueSerializer(_TypeSerializer):
         context.write_using_serializer(self.string, value._name)
         context.write_int(value._secondary_structure.value)
 
+        if (version >= 2):
+            context.write_using_serializer(self.string, value._ignored_alt_locs)
+
     def deserialize(self, version, context):
         residue = _Residue._create()
         residue._index = context.read_long()
@@ -69,4 +73,8 @@ class _ResidueSerializer(_TypeSerializer):
         residue._serial = context.read_int()
         residue._name = context.read_using_serializer(self.string)
         residue._secondary_structure = _Residue.SecondaryStructure.safe_cast(context.read_int())
+
+        if (version >= 2):
+            residue._ignored_alt_locs = context.read_using_serializer(self.string)
+
         return residue

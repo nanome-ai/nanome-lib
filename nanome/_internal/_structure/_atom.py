@@ -20,12 +20,12 @@ class _Atom(_Base):
         self._atom_type = {}
         self._formal_charge = 0
         self._partial_charge = 0.0
-        #No API
         self._occupancy = 0.0
         self._bfactor = 0.0
         self._acceptor = False
         self._donor = False
         self._polar_hydrogen = False
+        self._alt_loc = ""
         #Rendering
         #API
         self._selected = False

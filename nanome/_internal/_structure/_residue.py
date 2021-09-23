@@ -25,6 +25,7 @@ class _Residue(_Base):
         self._ribbon_color = Color.Clear()
         self._labeled = False
         self._label_text = ""
+        self._ignored_alt_locs = ""
         #connections
         self._atoms = []
         self._bonds = []
