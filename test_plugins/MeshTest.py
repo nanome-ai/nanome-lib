@@ -1,6 +1,6 @@
 from nanome.util.vector3 import Vector3
 import nanome
-from nanome.api.shapes import shapes
+from nanome.api import shapes
 from nanome.util import Logs
 
 import open3d as o3d
