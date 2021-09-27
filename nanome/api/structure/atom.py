@@ -336,7 +336,7 @@ class Atom(_Atom, Base):
     @property
     def alt_loc(self):
         """
-        | String identifier of the alternate location.
+        | String of length 1. Identifier of the alternate location.
 
         :type: :class:`str`
         """
@@ -344,7 +344,7 @@ class Atom(_Atom, Base):
 
     @alt_loc.setter
     def alt_loc(self, value):
-        self._alt_loc = value
+        self._alt_loc = value[0]
     # endregion
 
     # region conformer stuff

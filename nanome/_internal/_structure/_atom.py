@@ -25,7 +25,7 @@ class _Atom(_Base):
         self._acceptor = False
         self._donor = False
         self._polar_hydrogen = False
-        self._alt_loc = ""
+        self._alt_loc = "."
         #Rendering
         #API
         self._selected = False
