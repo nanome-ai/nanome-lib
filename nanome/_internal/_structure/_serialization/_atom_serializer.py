@@ -1,4 +1,4 @@
-from nanome._internal._util._serializers import _StringSerializer, _ColorSerializer, _Vector3Serializer, _ArraySerializer, _BoolSerializer, _DictionarySerializer
+from nanome._internal._util._serializers import _StringSerializer, _CharSerializer, _ColorSerializer, _Vector3Serializer, _ArraySerializer, _BoolSerializer, _DictionarySerializer
 from .. import _Atom
 from nanome._internal._util._serializers import _TypeSerializer
 from nanome.util import Logs
@@ -8,6 +8,7 @@ class _AtomSerializer(_TypeSerializer):
     def __init__(self):
         self.color = _ColorSerializer()
         self.string = _StringSerializer()
+        self.char = _CharSerializer()
         self.vector = _Vector3Serializer()
         self.array = _ArraySerializer()
         self.bool = _BoolSerializer()
@@ -93,7 +94,7 @@ class _AtomSerializer(_TypeSerializer):
             context.write_uint(value._display_mode)
 
         if version >= 8:
-            context.write_using_serializer(self.string, value._alt_loc)
+            context.write_using_serializer(self.char, value._alt_loc)
 
     def deserialize(self, version, context):
         # type: (_Atom, _ContextDeserialization) -> _Atom
@@ -160,6 +161,6 @@ class _AtomSerializer(_TypeSerializer):
             atom._display_mode = context.read_uint()
 
         if version >= 8:
-            atom._alt_loc = context.read_using_serializer(self.string)
+            atom._alt_loc = context.read_using_serializer(self.char)
 
         return atom

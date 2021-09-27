@@ -3,6 +3,7 @@ from . import *
 from ._type_serializer import _TypeSerializer
 
 from ._string_serializer import _StringSerializer
+from ._char_serializer import _CharSerializer
 from ._tuple_serializer import _TupleSerializer
 from ._array_serializer import _ArraySerializer
 from ._bool_serializer import _BoolSerializer

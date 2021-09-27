@@ -226,7 +226,7 @@ class Residue(_Residue, Base):
         """
         | Alternate Locations that should not be rendered.
 
-        :type: :class:`str`
+        :type: :class:`list<:class:`str`>`
         """
         return self._ignored_alt_locs
 

@@ -1,4 +1,4 @@
-from nanome._internal._util._serializers import _ArraySerializer, _StringSerializer, _ColorSerializer
+from nanome._internal._util._serializers import _ArraySerializer, _StringSerializer, _ColorSerializer, _CharSerializer
 from . import _AtomSerializerID
 from . import _BondSerializer
 from .. import _Residue
@@ -14,6 +14,7 @@ class _ResidueSerializer(_TypeSerializer):
         self.bond = _BondSerializer()
         self.color = _ColorSerializer()
         self.string = _StringSerializer()
+        self.char = _CharSerializer()
 
     def version(self):
         #Version 0 corresponds to Nanome release 1.10
@@ -50,7 +51,8 @@ class _ResidueSerializer(_TypeSerializer):
         context.write_int(value._secondary_structure.value)
 
         if (version >= 2):
-            context.write_using_serializer(self.string, value._ignored_alt_locs)
+            self.array.set_type(self.char)
+            context.write_using_serializer(self.array, value._ignored_alt_locs)
 
     def deserialize(self, version, context):
         residue = _Residue._create()
@@ -75,6 +77,7 @@ class _ResidueSerializer(_TypeSerializer):
         residue._secondary_structure = _Residue.SecondaryStructure.safe_cast(context.read_int())
 
         if (version >= 2):
-            residue._ignored_alt_locs = context.read_using_serializer(self.string)
+            self.array.set_type(self.char)
+            residue._ignored_alt_locs = context.read_using_serializer(self.array)
 
         return residue
