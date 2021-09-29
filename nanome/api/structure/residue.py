@@ -220,6 +220,19 @@ class Residue(_Residue, Base):
     @secondary_structure.setter
     def secondary_structure(self, value):
         self._secondary_structure = value
+
+    @property
+    def ignored_alt_locs(self):
+        """
+        | Alternate Locations that should not be rendered.
+
+        :type: :class:`list<:class:`str`>`
+        """
+        return self._ignored_alt_locs
+
+    @ignored_alt_locs.setter
+    def ignored_alt_locs(self, value):
+        self._ignored_alt_locs = value
     # endregion
 
     # region deprecated
