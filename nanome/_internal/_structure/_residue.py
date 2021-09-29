@@ -97,7 +97,7 @@ class _Residue(_Base):
         residue._ribbon_color = self._ribbon_color.copy()
         residue._labeled = self._labeled 
         residue._label_text = self._label_text 
-        residue._ignored_alt_locs = self._ignored_alt_locs 
+        residue._ignored_alt_locs = self._ignored_alt_locs[:]
         return residue
 
     def _deep_copy(self, conformer_number = None):
