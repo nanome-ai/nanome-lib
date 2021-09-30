@@ -346,6 +346,20 @@ class Atom(_Atom, Base):
     def vdw_radius(self, value):
         self._vdw_radius = value
 
+    @property
+    def alt_loc(self):
+        """
+        | String of length 1. Identifier of the alternate location.
+
+        :type: :class:`str`
+        """
+        return self._alt_loc
+
+    @alt_loc.setter
+    def alt_loc(self, value):
+        self._alt_loc = value[0]
+    # endregion
+
     # endregion
 
     # region conformer stuff
