@@ -360,8 +360,6 @@ class Atom(_Atom, Base):
         self._alt_loc = value[0]
     # endregion
 
-    # endregion
-
     # region conformer stuff
     @property
     def current_conformer(self):
