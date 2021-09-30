@@ -274,6 +274,7 @@ class ColorScheme(IntEnum):
     IMGT = 12
     Kabat = 13
     Chothia = 14
+    APF = 15
 
 
 class ColorSchemeTarget(IntEnum):
