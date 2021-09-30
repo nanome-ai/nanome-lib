@@ -1,12 +1,15 @@
 import nanome
 from nanome.util import Vector3, Color
+from nanome.util.logs import Logs
 from . import _Base
 
 class _Atom(_Base):
     AtomRenderingMode = nanome.util.enums.AtomRenderingMode
+    _vdw_radii = {}
 
     @classmethod
     def _create(cls):
+        _fill_atom_table()
         return cls()
 
     _atom_count = 0
@@ -114,6 +117,17 @@ class _Atom(_Base):
         self._positions[self._current_conformer] = value
 
     @property
+    def _vdw_radius(self):
+        if len(_Atom._vdw_radii) < 1:
+            _Atom._fill_atom_table()
+        atomSymbolLower = self._symbol.lower()
+        if atomSymbolLower in _Atom._vdw_radii:
+            return _Atom._vdw_radii[atomSymbolLower]
+        #unknown type
+        Logs.warning("Unknown atom type '"+atomSymbolLower+"'")
+        return 0.0
+
+    @property
     def _exists(self):
         return self._in_conformer[self._current_conformer]
     
@@ -195,3 +209,127 @@ class _Atom(_Base):
             atom._position = self._positions[conformer_number]
             #atom._exists = self._in_conformer[conformer_number]
         return atom
+
+
+    @classmethod
+    def _fill_atom_table(cls):
+        #From NanomeAtomTable.csv
+        cls._vdw_radii = {}
+        cls._vdw_radii["h"] = 1.1
+        cls._vdw_radii["he"] = 1.4
+        cls._vdw_radii["li"] = 1.81
+        cls._vdw_radii["be"] = 1.53
+        cls._vdw_radii["b"] = 1.92
+        cls._vdw_radii["c"] = 1.7
+        cls._vdw_radii["n"] = 1.55
+        cls._vdw_radii["o"] = 1.52
+        cls._vdw_radii["f"] = 1.47
+        cls._vdw_radii["ne"] = 1.54
+        cls._vdw_radii["na"] = 2.27
+        cls._vdw_radii["mg"] = 1.73
+        cls._vdw_radii["al"] = 1.84
+        cls._vdw_radii["si"] = 2.1
+        cls._vdw_radii["p"] = 1.8
+        cls._vdw_radii["s"] = 1.8
+        cls._vdw_radii["cl"] = 1.75
+        cls._vdw_radii["ar"] = 1.88
+        cls._vdw_radii["k"] = 2.75
+        cls._vdw_radii["ca"] = 2.31
+        cls._vdw_radii["sc"] = 2.3
+        cls._vdw_radii["ti"] = 2.15
+        cls._vdw_radii["v"] = 2.05
+        cls._vdw_radii["cr"] = 2.05
+        cls._vdw_radii["mn"] = 2.05
+        cls._vdw_radii["fe"] = 2.05
+        cls._vdw_radii["co"] = 2
+        cls._vdw_radii["ni"] = 2
+        cls._vdw_radii["cu"] = 2
+        cls._vdw_radii["zn"] = 2.1
+        cls._vdw_radii["ga"] = 1.87
+        cls._vdw_radii["ge"] = 2.11
+        cls._vdw_radii["as"] = 1.85
+        cls._vdw_radii["se"] = 1.9
+        cls._vdw_radii["br"] = 1.83
+        cls._vdw_radii["kr"] = 2.02
+        cls._vdw_radii["rb"] = 3.03
+        cls._vdw_radii["sr"] = 2.49
+        cls._vdw_radii["y"] = 2.4
+        cls._vdw_radii["zr"] = 2.3
+        cls._vdw_radii["nb"] = 2.15
+        cls._vdw_radii["mo"] = 2.1
+        cls._vdw_radii["tc"] = 2.05
+        cls._vdw_radii["ru"] = 2.05
+        cls._vdw_radii["rh"] = 2
+        cls._vdw_radii["pd"] = 2.05
+        cls._vdw_radii["ag"] = 2.1
+        cls._vdw_radii["cd"] = 2.2
+        cls._vdw_radii["in"] = 2.2
+        cls._vdw_radii["sn"] = 1.93
+        cls._vdw_radii["sb"] = 2.17
+        cls._vdw_radii["te"] = 2.06
+        cls._vdw_radii["i"] = 1.98
+        cls._vdw_radii["xe"] = 2.16
+        cls._vdw_radii["cs"] = 3.43
+        cls._vdw_radii["ba"] = 2.68
+        cls._vdw_radii["la"] = 2.5
+        cls._vdw_radii["ce"] = 2.48
+        cls._vdw_radii["pr"] = 2.47
+        cls._vdw_radii["nd"] = 2.45
+        cls._vdw_radii["pm"] = 2.43
+        cls._vdw_radii["sm"] = 2.42
+        cls._vdw_radii["eu"] = 2.4
+        cls._vdw_radii["gd"] = 2.38
+        cls._vdw_radii["tb"] = 2.37
+        cls._vdw_radii["dy"] = 2.35
+        cls._vdw_radii["ho"] = 2.33
+        cls._vdw_radii["er"] = 2.32
+        cls._vdw_radii["tm"] = 2.3
+        cls._vdw_radii["yb"] = 2.28
+        cls._vdw_radii["lu"] = 2.27
+        cls._vdw_radii["hf"] = 2.25
+        cls._vdw_radii["ta"] = 2.2
+        cls._vdw_radii["w"] = 2.1
+        cls._vdw_radii["re"] = 2.05
+        cls._vdw_radii["os"] = 2
+        cls._vdw_radii["ir"] = 2
+        cls._vdw_radii["pt"] = 2.05
+        cls._vdw_radii["au"] = 2.1
+        cls._vdw_radii["hg"] = 2.05
+        cls._vdw_radii["tl"] = 1.96
+        cls._vdw_radii["pb"] = 2.02
+        cls._vdw_radii["bi"] = 2.07
+        cls._vdw_radii["po"] = 1.97
+        cls._vdw_radii["at"] = 2.02
+        cls._vdw_radii["rn"] = 2.2
+        cls._vdw_radii["fr"] = 3.48
+        cls._vdw_radii["ra"] = 2.83
+        cls._vdw_radii["ac"] = 2
+        cls._vdw_radii["th"] = 2.4
+        cls._vdw_radii["pa"] = 2
+        cls._vdw_radii["u"] = 2.3
+        cls._vdw_radii["np"] = 2
+        cls._vdw_radii["pu"] = 2
+        cls._vdw_radii["am"] = 2
+        cls._vdw_radii["cm"] = 2
+        cls._vdw_radii["bk"] = 2
+        cls._vdw_radii["cf"] = 2
+        cls._vdw_radii["es"] = 2
+        cls._vdw_radii["fm"] = 2
+        cls._vdw_radii["md"] = 2
+        cls._vdw_radii["no"] = 2
+        cls._vdw_radii["lr"] = 2
+        cls._vdw_radii["rf"] = 2
+        cls._vdw_radii["db"] = 2
+        cls._vdw_radii["sg"] = 2
+        cls._vdw_radii["bh"] = 2
+        cls._vdw_radii["hs"] = 2
+        cls._vdw_radii["mt"] = 2
+        cls._vdw_radii["ds"] = 2
+        cls._vdw_radii["rg"] = 2
+        cls._vdw_radii["cn"] = 2
+        cls._vdw_radii["nh"] = 2
+        cls._vdw_radii["fl"] = 2
+        cls._vdw_radii["mc"] = 2
+        cls._vdw_radii["lv"] = 2
+        cls._vdw_radii["ts"] = 2
+        cls._vdw_radii["og"] = 2

@@ -334,6 +334,19 @@ class Atom(_Atom, Base):
         self._polar_hydrogen = value
 
     @property
+    def vdw_radius(self):
+        """
+        | VDW radius of the atom in Angstrom
+
+        :type: :class:`float`
+        """
+        return self._vdw_radius
+
+    @vdw_radius.setter
+    def vdw_radius(self, value):
+        self._vdw_radius = value
+
+    @property
     def alt_loc(self):
         """
         | String of length 1. Identifier of the alternate location.
