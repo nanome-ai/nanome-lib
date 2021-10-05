@@ -4,8 +4,6 @@ from nanome.util.enums import Permissions
 from nanome._internal._network._commands._callbacks import _Messages
 
 
-
-
 class Files(_Files):
     """
     | Class to navigate through files and directories on the machine running Nanome using unix-like filesystem methods.
