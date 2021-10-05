@@ -20,12 +20,12 @@ PERMISSIONS = [enums.Permissions.local_files_access]
 
 class SandBox(nanome.PluginInstance):
     def start(self):
-      self.room.set_skybox(nanome.util.enums.SkyBoxes.Graydient)
-      
+        self.room.set_skybox(nanome.util.enums.SkyBoxes.Graydient)
+
     def on_run(self):
         self.apply_color_scheme(enums.ColorScheme.BFactor, enums.ColorSchemeTarget.All, False)
         self.request_workspace(self.work)
-    
+
     def work(self, workspace):
         (proteins, ligands, solvents) = self.categorize_atoms(workspace)
         self.color_categories(proteins, ligands, solvents)
@@ -105,7 +105,7 @@ class SandBox(nanome.PluginInstance):
     def count_heavy_atoms(self, component):
         count = 0
         for atom in component:
-            if (atom.symbol != 'H'):
+            if atom.symbol != "H":
                 count += 1
         return count
 
@@ -122,6 +122,7 @@ class SandBox(nanome.PluginInstance):
             atom.atom_color = nanome.util.Color.Green()
         for atom in solvents:
             atom.atom_color = nanome.util.Color.Blue()
+
 
 def __init__(self):
     pass

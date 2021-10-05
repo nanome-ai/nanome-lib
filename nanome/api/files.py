@@ -3,10 +3,14 @@ from nanome.util import FileErrorCode
 from nanome.util.enums import Permissions
 from nanome._internal._network._commands._callbacks import _Messages
 
+
+
+
 class Files(_Files):
     """
     | Class to navigate through files and directories on the machine running Nanome using unix-like filesystem methods.
     """
+
     def __init__(self, plugin_instance):
         self.plugin = plugin_instance
 
@@ -86,10 +90,11 @@ class Files(_Files):
 
         def cb(error, file):
             if error == FileErrorCode.no_error:
-                with open(dest, 'wb') as ofile:
+                with open(dest, "wb") as ofile:
                     ofile.write(file)
                     ofile.close()
             callback(error, dest)
+
         id = self.plugin._network._send(_Messages.get, source, True)
         result = self.plugin._save_callback(id, cb if callback else None)
         if callback is None and self.plugin.is_async:

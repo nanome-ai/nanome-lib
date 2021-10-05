@@ -1,7 +1,7 @@
 from nanome._internal._network._commands._callbacks._commands_enums import _Messages
 
 
-class IntegrationRequest():
+class IntegrationRequest:
     def __init__(self, request_id, type, args, network):
         self.__request_id = request_id
         self.__type = type

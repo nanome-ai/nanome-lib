@@ -1,4 +1,3 @@
-
 import os
 
 from nanome.util import Logs, config
@@ -56,7 +55,7 @@ class PluginInstance(_PluginInstance):
         """
         | Called when user presses "Run"
         """
-        Logs.warning('Callback on_run not defined. Ignoring')
+        Logs.warning("Callback on_run not defined. Ignoring")
 
     def on_stop(self):
         """
@@ -68,7 +67,7 @@ class PluginInstance(_PluginInstance):
         """
         | Called when user presses "Advanced Settings"
         """
-        Logs.warning('Callback on_advanced_settings not defined. Ignoring')
+        Logs.warning("Callback on_advanced_settings not defined. Ignoring")
 
     def on_complex_added(self):
         """
@@ -253,8 +252,7 @@ class PluginInstance(_PluginInstance):
         :param scale: New scale of the menu
         :type scale: :class:`~nanome.util.vector3`
         """
-        self._network._send(_Messages.menu_transform_set,
-                            (index, position, rotation, scale), False)
+        self._network._send(_Messages.menu_transform_set, (index, position, rotation, scale), False)
 
     def request_menu_transform(self, index, callback=None):
         """
@@ -346,8 +344,8 @@ class PluginInstance(_PluginInstance):
         :type url: str
         """
         url = url.strip()
-        if '://' not in url:
-            url = 'http://' + url
+        if "://" not in url:
+            url = "http://" + url
         self._network._send(_Messages.open_url, (url, desktop_browser), False)
 
     def request_presenter_info(self, callback=None):
@@ -413,11 +411,11 @@ class PluginInstance(_PluginInstance):
         for file in files_list:
             if isinstance(file, tuple):
                 full_path, file_name = file
-                file_name += '.' + full_path.split('.')[-1]
+                file_name += "." + full_path.split(".")[-1]
             else:
-                full_path = file.replace('\\', '/')
-                file_name = full_path.split('/')[-1]
-            with open(full_path, 'rb') as content_file:
+                full_path = file.replace("\\", "/")
+                file_name = full_path.split("/")[-1]
+            with open(full_path, "rb") as content_file:
                 data = content_file.read()
             files.append((file_name, data))
 
@@ -458,7 +456,7 @@ class PluginInstance(_PluginInstance):
 
     @property
     def plugin_files_path(self):
-        path = os.path.expanduser(config.fetch('plugin_files_path'))
+        path = os.path.expanduser(config.fetch("plugin_files_path"))
         if not os.path.exists(path):
             os.makedirs(path)
         return path
@@ -493,6 +491,7 @@ class PluginInstance(_PluginInstance):
     def create_atom_stream(self, atom_indices_list, stream_type, callback):
         self.create_writing_stream(atom_indices_list, stream_type, callback)
 
+
 class AsyncPluginInstance(PluginInstance):
     """
     | Base class of any asynchronous plugin.
@@ -500,7 +499,9 @@ class AsyncPluginInstance(PluginInstance):
     | All methods available to PluginInstance are available to AsyncPluginInstance.
     | Decorating these methods with @async_callback will allow them to use the async keyword in their definition
     """
+
     is_async = True
+
 
 class _DefaultPlugin(PluginInstance):
     def __init__(self):

@@ -1,12 +1,14 @@
 from nanome.util.logs import Logs
 from nanome._internal._ui import _Menu
 
+
 def __find_content(network, content_id):
     for menu in network._plugin._menus.values():
         content = menu._find_content(content_id)
         if content is not None:
             return content
     return None
+
 
 def _menu_toggled(network, arg, request_id):
     index = arg[0]
@@ -21,6 +23,7 @@ def _menu_toggled(network, arg, request_id):
     else:
         Logs.error("Can't find Menu for callback")
 
+
 def _slider_released(network, arg, request_id):
     tuple_obj = arg
     content_id = tuple_obj[0]
@@ -31,6 +34,7 @@ def _slider_released(network, arg, request_id):
         active_slider._on_slider_released()
     else:
         Logs.error("Can't find UI content for callback")
+
 
 def _slider_changed(network, arg, request_id):
     tuple_obj = arg
@@ -43,6 +47,7 @@ def _slider_changed(network, arg, request_id):
     else:
         Logs.error("Can't find UI content for callback")
 
+
 def _text_submit(network, arg, request_id):
     tuple_obj = arg
     content_id = tuple_obj[0]
@@ -53,6 +58,7 @@ def _text_submit(network, arg, request_id):
         active_txt._on_text_submitted()
     else:
         Logs.error("Can't find UI content for callback")
+
 
 def _text_changed(network, arg, request_id):
     tuple_obj = arg
@@ -65,6 +71,7 @@ def _text_changed(network, arg, request_id):
     else:
         Logs.error("Can't find UI content for callback")
 
+
 def _button_pressed(network, arg, request_id):
     content_id = arg[0]
     btn = __find_content(network, content_id)
@@ -75,6 +82,7 @@ def _button_pressed(network, arg, request_id):
     else:
         Logs.error("Can't find UI content for callback")
 
+
 def _button_hover(network, arg, request_id):
     content_id = arg[0]
     state = arg[1]
@@ -83,7 +91,8 @@ def _button_hover(network, arg, request_id):
         btn._on_button_hover(state)
     else:
         Logs.error("Can't find UI content for callback")
-        
+
+
 def _image_pressed(network, arg, request_id):
     content_id = arg[0]
     x = arg[1]
@@ -93,6 +102,7 @@ def _image_pressed(network, arg, request_id):
         img._on_image_pressed(x, y)
     else:
         Logs.error("Can't find UI content for callback")
+
 
 def _image_held(network, arg, request_id):
     content_id = arg[0]
@@ -104,6 +114,7 @@ def _image_held(network, arg, request_id):
     else:
         Logs.error("Can't find UI content for callback")
 
+
 def _image_released(network, arg, request_id):
     content_id = arg[0]
     x = arg[1]
@@ -113,6 +124,7 @@ def _image_released(network, arg, request_id):
         img._on_image_released(x, y)
     else:
         Logs.error("Can't find UI content for callback")
+
 
 def _dropdown_item_clicked(network, arg, request_id):
     content_id = arg[0]

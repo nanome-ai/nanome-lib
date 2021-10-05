@@ -3,6 +3,7 @@ from . import _ui_base_json
 from nanome.util import Logs
 import json
 
+
 def parse_json(node_json):
     node = _LayoutNode._create()
     node._name = node_json.read("name", node._name)
@@ -13,10 +14,12 @@ def parse_json(node_json):
     node._sizing_value = node_json.read("sizing_value", node._sizing_value)
     node._forward_dist = node_json.read("forward_dist", node._forward_dist)
     node._padding_type = node_json.read("padding_type", node._padding_type)
-    node._padding = (node_json.read("padding_x", node._padding[0]),
-                     node_json.read("padding_y", node._padding[1]),
-                     node_json.read("padding_z", node._padding[2]),
-                     node_json.read("padding_w", node._padding[3]))
+    node._padding = (
+        node_json.read("padding_x", node._padding[0]),
+        node_json.read("padding_y", node._padding[1]),
+        node_json.read("padding_z", node._padding[2]),
+        node_json.read("padding_w", node._padding[3]),
+    )
     content_json = node_json.read_object("content")
     if content_json is not None:
         content_obj = _ui_base_json.parse_json(content_json)
@@ -25,6 +28,7 @@ def parse_json(node_json):
     for child_obj in child_list:
         node._add_child(parse_json(child_obj))
     return node
+
 
 def write_json(helper, node):
     helper.write("name", node._name)
@@ -40,14 +44,14 @@ def write_json(helper, node):
     helper.write("padding_y", node._padding[1])
     helper.write("padding_z", node._padding[2])
     helper.write("padding_w", node._padding[3])
-    #convert all children
+    # convert all children
     children = []
     for child in node._get_children():
         c_helper = helper.make_instance()
         write_json(c_helper, child)
         children.append(c_helper.get_dict())
     helper.write("children", children)
-    #convert all contents
+    # convert all contents
     content = helper.make_instance()
     _ui_base_json.write_json(content, node._get_content())
     helper.write("content", content)

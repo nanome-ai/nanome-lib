@@ -25,7 +25,6 @@ def deep_copy_tester(height):
 
 
 class CopyTestCase(unittest.TestCase):
-
     def test_shallow(self):
         shallow_copy_tester(struct.Atom)
         shallow_copy_tester(struct.Bond)

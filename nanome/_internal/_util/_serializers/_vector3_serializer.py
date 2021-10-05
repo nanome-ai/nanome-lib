@@ -2,6 +2,7 @@ from nanome.util import Vector3
 
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _Vector3Serializer(_TypeSerializer):
     def __init__(self):
         pass
@@ -21,7 +22,8 @@ class _Vector3Serializer(_TypeSerializer):
         x = context.read_float()
         y = context.read_float()
         z = context.read_float()
-        return Vector3(x,y,z)
+        return Vector3(x, y, z)
+
 
 class _UnityPositionSerializer(_TypeSerializer):
     def __init__(self):

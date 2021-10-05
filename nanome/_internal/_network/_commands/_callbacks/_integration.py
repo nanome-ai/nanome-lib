@@ -1,5 +1,6 @@
 from nanome._internal._network._commands._callbacks._commands_enums import _Hashes
 
+
 def _integration(network, args, request_id):
     from nanome.api.integration import Integration, IntegrationRequest
 

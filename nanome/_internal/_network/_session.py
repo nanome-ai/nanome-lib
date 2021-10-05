@@ -25,6 +25,7 @@ class _Session(object):
                 self._net_plugin.send(packet)
             if has_proc_data:
                 from nanome._internal._util import _DataType
+
                 request = self.__proc_plugin_pipe.recv()
                 if request._type == _DataType.process:
                     self._process_manager._received_request(request._data, self)

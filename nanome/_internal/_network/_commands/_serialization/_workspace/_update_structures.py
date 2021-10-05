@@ -3,19 +3,20 @@ from nanome._internal._network._serialization import _ContextDeserialization, _C
 from nanome._internal._util._serializers import _ArraySerializer, _DictionarySerializer, _LongSerializer, _TypeSerializer
 from nanome._internal._structure._serialization import _ComplexSerializer, _MoleculeSerializer, _ChainSerializer, _ResidueSerializer, _BondSerializer, _AtomSerializer, _AtomSerializerID
 
-#deep
+# deep
+
 
 class _UpdateStructures(_TypeSerializer):
     def __init__(self, shallow):
         self.array_serializer = _ArraySerializer()
-        #setting the shallow flag
+        # setting the shallow flag
         self.complex_serializer = _ComplexSerializer(shallow)
         self.molecule_serializer = _MoleculeSerializer(shallow)
         self.chain_serializer = _ChainSerializer(shallow)
         self.residue_serializer = _ResidueSerializer(shallow)
         self.bond_serializer = _BondSerializer(shallow)
         self.atom_serializer = _AtomSerializerID(shallow)
-        #atom dict only used by deep
+        # atom dict only used by deep
         self.dict = _DictionarySerializer()
         self.dict.set_types(_LongSerializer(), _AtomSerializer())
 
@@ -26,7 +27,7 @@ class _UpdateStructures(_TypeSerializer):
         return 0
 
     def serialize(self, version, value, context):
-        #value is a structure[]
+        # value is a structure[]
 
         atoms = []
         bonds = []

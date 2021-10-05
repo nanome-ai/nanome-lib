@@ -1,12 +1,15 @@
 import hashlib, copy
 from nanome.util import StringBuilder, Vector3, enums
-s_ConformersDisabled = False #Nanome.Core.Config.getBool("mol-conformers-disabled", "false")
-s_ConformersAlways = False #Nanome.Core.Config.getBool("mol-conformers-always", "false")
+
+s_ConformersDisabled = False  # Nanome.Core.Config.getBool("mol-conformers-disabled", "false")
+s_ConformersAlways = False  # Nanome.Core.Config.getBool("mol-conformers-always", "false")
+
 
 def _get_hash_code(string):
     return hash(string)
 
-def convert_to_frames(complex, old_to_new_atoms = None): #Data.Complex -> Data.Complex
+
+def convert_to_frames(complex, old_to_new_atoms=None):  # Data.Complex -> Data.Complex
     new_complex = complex._shallow_copy()
     for molecule in complex._molecules:
         count = molecule._conformer_count
@@ -14,7 +17,8 @@ def convert_to_frames(complex, old_to_new_atoms = None): #Data.Complex -> Data.C
             new_complex.add_molecule(molecule._deep_copy(i, old_to_new_atoms))
     return new_complex
 
-def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Data.Complex
+
+def convert_to_conformers(complex, force_conformer=None):  # Data.Complex -> Data.Complex
     frame_count = len(complex._molecules)
     # Maybe conformers are disabled
     if frame_count <= 1 or s_ConformersDisabled:
@@ -26,9 +30,9 @@ def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Dat
     atom_total_count = 0
     bond_total_count = 0
     # Create molecular container
-    new_complex = complex._shallow_copy() #Data.Complex
+    new_complex = complex._shallow_copy()  # Data.Complex
     new_complex._current_frame = 0
-    new_molecule = complex._molecules[0]._shallow_copy() # Data.Molecule
+    new_molecule = complex._molecules[0]._shallow_copy()  # Data.Molecule
     # Group structures by their hash
     new_chains = {}
     new_residues = {}
@@ -77,7 +81,7 @@ def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Dat
                     off = 0
                     if name_hash in names_dictionary:
                         off = names_dictionary[name_hash]
-                    off +=1
+                    off += 1
                     names_dictionary[name_hash] = off
                     # Lookup or create atom with hash
                     hash_atom = _get_atom_hash(sb, atom, off)
@@ -86,8 +90,8 @@ def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Dat
                         new_atom = new_atoms[hash_atom]
                     else:
                         new_atom = atom._shallow_copy()
-                        new_atom._in_conformer = [False]*new_molecule._conformer_count
-                        new_atom._positions = [Vector3()]*new_molecule._conformer_count
+                        new_atom._in_conformer = [False] * new_molecule._conformer_count
+                        new_atom._positions = [Vector3()] * new_molecule._conformer_count
                         new_residue._add_atom(new_atom)
                         if off > 1:
                             new_atom.name = new_atom.name + str(off)
@@ -98,9 +102,9 @@ def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Dat
                     new_atom._positions[molecule_index] = atom.position.get_copy()
                     # Save
                     atoms_dictionary[atom._unique_identifier] = (hash_atom, new_atom)
-                    atom_total_count+=1
-                residue_total_count+=1
-            chain_total_count+=1
+                    atom_total_count += 1
+                residue_total_count += 1
+            chain_total_count += 1
 
         for bond in molecule.bonds:
             atom_info_1 = atoms_dictionary[bond._atom1._unique_identifier]
@@ -117,15 +121,15 @@ def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Dat
                 new_bond = new_bonds[hash_bond]
             else:
                 new_bond = bond._shallow_copy()
-                new_bond._in_conformer = [False]*new_molecule._conformer_count
-                new_bond._kinds = [enums.Kind.CovalentSingle]*new_molecule._conformer_count
+                new_bond._in_conformer = [False] * new_molecule._conformer_count
+                new_bond._kinds = [enums.Kind.CovalentSingle] * new_molecule._conformer_count
                 new_residue._add_bond(new_bond)
                 new_bonds[hash_bond] = new_bond
             # Update current conformer
             new_bond._in_conformer[molecule_index] = True
             new_bond._kinds[molecule_index] = bond.kind
             # Count bonds
-            bond_total_count+=1
+            bond_total_count += 1
 
         for atom in molecule.atoms:
             for bond in atom.bonds:
@@ -145,7 +149,7 @@ def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Dat
                     new_bond._atom2 = atom_info_2[1]
 
         # Molecule idx
-        molecule_index+=1
+        molecule_index += 1
     if force_conformer == None:
         force_conformer = s_ConformersAlways
     # Important decision to make, is everything suited for a trajectories?
@@ -187,17 +191,20 @@ def convert_to_conformers(complex, force_conformer = None): #Data.Complex -> Dat
     # Otherwise let's start grabbing the data
     return new_complex
 
-def _get_chain_hash(sb, chain): #StringBuilder, Data.Chain -> int
+
+def _get_chain_hash(sb, chain):  # StringBuilder, Data.Chain -> int
     return _get_hash_code(chain.name)
 
-def _get_residue_hash(sb, residue): #StringBuilder, Data.Residue -> int
+
+def _get_residue_hash(sb, residue):  # StringBuilder, Data.Residue -> int
     sb.clear()
     sb.append(residue._serial)
     sb.append_string(residue._name)
     sb.append_string(residue._chain._name)
     return _get_hash_code(sb.to_string(":"))
 
-def _get_atom_hash(sb, atom, off): #StringBuilder, Data.Atom, int -> int
+
+def _get_atom_hash(sb, atom, off):  # StringBuilder, Data.Atom, int -> int
     sb.clear()
     sb.append(atom._symbol)
     sb.append_string(atom._name)
@@ -208,7 +215,8 @@ def _get_atom_hash(sb, atom, off): #StringBuilder, Data.Atom, int -> int
     sb.append_string(atom._residue._chain._name)
     return _get_hash_code(sb.to_string(":"))
 
-def _get_bond_hash(sb, bond, atom1, atom2): #StringBuilder, Data.Bond, int, int -> int
+
+def _get_bond_hash(sb, bond, atom1, atom2):  # StringBuilder, Data.Bond, int, int -> int
     sb.clear()
     sb.append(atom1)
     sb.append(atom2)

@@ -8,7 +8,7 @@ class _JsonHelper(object):
     def __init__(self, json=None):
         if json == None:
             json = {}
-        assert(isinstance(json, dict))
+        assert isinstance(json, dict)
         self.json = json
 
     def read(self, name, default):
@@ -16,10 +16,10 @@ class _JsonHelper(object):
             return default
         value = self.json[name]
         def_type = type(default)
-        #using == to miss inheritance (bool, intenum)
+        # using == to miss inheritance (bool, intenum)
         if def_type == int:
             return int(float(value))
-        #using isinstance to catch inheritance
+        # using isinstance to catch inheritance
         elif isinstance(default, Vector3):
             return self.read_vector3(name)
         elif isinstance(default, Color):
@@ -35,19 +35,19 @@ class _JsonHelper(object):
             return Vector3(value.read("x", 0.0), value.read("y", 0.0), value.read("z", 0.0))
 
     def write(self, name, value):
-        if (isinstance(value, Color)):
+        if isinstance(value, Color):
             self.json[name] = value._color
-        elif(isinstance(value, IntEnum)):
+        elif isinstance(value, IntEnum):
             self.write(name, int(value))
-        elif (isinstance(value, Vector3)):
+        elif isinstance(value, Vector3):
             self.write_vector(name, value)
-        elif (isinstance(value, _JsonHelper)):
+        elif isinstance(value, _JsonHelper):
             self.json[name] = value.get_dict()
         else:
             self.json[name] = value
 
     def write_vector(self, name, value):
-        builder=_JsonHelper()
+        builder = _JsonHelper()
         builder.write("x", value.x)
         builder.write("y", value.y)
         builder.write("z", value.z)

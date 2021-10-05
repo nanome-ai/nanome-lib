@@ -19,16 +19,16 @@ def alter_object(x):
 
 def get_bond_hash(bond):  # StringBuilder, Data.Bond, int, int -> int
     line = ""
-    line += (bond._atom1.name)
-    line += (":")
-    line += (bond._atom2.name)
-    line += (":")
+    line += bond._atom1.name
+    line += ":"
+    line += bond._atom2.name
+    line += ":"
     line += str(bond._residue._serial)
-    line += (":")
+    line += ":"
     line += str(bond._residue._name)
-    line += (":")
+    line += ":"
     line += str(bond._chain._name)
-    return (line)
+    return line
 
 
 def sort_bonds(complex):
@@ -103,7 +103,6 @@ def deep_copy_tester(height):
 
 
 class ConformerTestCase(unittest.TestCase):
-
     def test_conformer_api(self):
         # test molecule
         deep_copy_tester(4)
@@ -114,44 +113,44 @@ class ConformerTestCase(unittest.TestCase):
         atom = next(molecule.atoms)
         bond = next(molecule.bonds)
         molecule.set_current_conformer(1)
-        assert(molecule.current_conformer == 1)
-        assert(atom.current_conformer == 1)
-        assert(bond.current_conformer == 1)
-        assert(molecule.conformer_count == 1)
-        assert(atom.conformer_count == 1)
-        assert(bond.conformer_count == 1)
+        assert molecule.current_conformer == 1
+        assert atom.current_conformer == 1
+        assert bond.current_conformer == 1
+        assert molecule.conformer_count == 1
+        assert atom.conformer_count == 1
+        assert bond.conformer_count == 1
         molecule.set_conformer_count(2)
-        assert(molecule.current_conformer == 1)
-        assert(atom.current_conformer == 1)
-        assert(bond.current_conformer == 1)
-        assert(molecule.conformer_count == 2)
-        assert(atom.conformer_count == 2)
-        assert(bond.conformer_count == 2)
+        assert molecule.current_conformer == 1
+        assert atom.current_conformer == 1
+        assert bond.current_conformer == 1
+        assert molecule.conformer_count == 2
+        assert atom.conformer_count == 2
+        assert bond.conformer_count == 2
         molecule.set_conformer_count(1)
-        assert(molecule.current_conformer == 0)
-        assert(atom.current_conformer == 0)
-        assert(bond.current_conformer == 0)
-        assert(molecule.conformer_count == 1)
-        assert(atom.conformer_count == 1)
-        assert(bond.conformer_count == 1)
+        assert molecule.current_conformer == 0
+        assert atom.current_conformer == 0
+        assert bond.current_conformer == 0
+        assert molecule.conformer_count == 1
+        assert atom.conformer_count == 1
+        assert bond.conformer_count == 1
 
         # list_resizing
         molecule = test._deep_copy()
         atom = next(molecule.atoms)
         bond = next(molecule.bonds)
         molecule.set_conformer_count(2)
-        assert(len(molecule.names) == 2)
-        assert(len(molecule.associateds) == 2)
-        assert(molecule.names[1] == molecule.names[0])
-        assert(molecule.associateds[1] == molecule.associateds[0])
-        assert(len(atom.positions) == 2)
-        assert(len(atom.in_conformer) == 2)
-        assert(atom.positions[1].equals(atom.positions[0]))
-        assert(atom.in_conformer[1] == atom.in_conformer[0])
-        assert(len(bond.kinds) == 2)
-        assert(len(bond.in_conformer) == 2)
-        assert(bond.kinds[1] == bond.kinds[0])
-        assert(bond.in_conformer[1] == bond.in_conformer[0])
+        assert len(molecule.names) == 2
+        assert len(molecule.associateds) == 2
+        assert molecule.names[1] == molecule.names[0]
+        assert molecule.associateds[1] == molecule.associateds[0]
+        assert len(atom.positions) == 2
+        assert len(atom.in_conformer) == 2
+        assert atom.positions[1].equals(atom.positions[0])
+        assert atom.in_conformer[1] == atom.in_conformer[0]
+        assert len(bond.kinds) == 2
+        assert len(bond.in_conformer) == 2
+        assert bond.kinds[1] == bond.kinds[0]
+        assert bond.in_conformer[1] == bond.in_conformer[0]
 
         # convenience functions
         reference = test._deep_copy()
@@ -164,21 +163,21 @@ class ConformerTestCase(unittest.TestCase):
         molecule = reference._deep_copy()
         atom = next(molecule.atoms)
         molecule.create_conformer(1)
-        assert(molecule.conformer_count == 4)
-        assert(len(molecule.names) == 4)
-        assert(len(atom.positions) == 4)
-        assert(atom.positions[0].equals(atom.positions[1]))
-        assert(atom.positions[0] != atom.positions[1])
+        assert molecule.conformer_count == 4
+        assert len(molecule.names) == 4
+        assert len(atom.positions) == 4
+        assert atom.positions[0].equals(atom.positions[1])
+        assert atom.positions[0] != atom.positions[1]
         molecule.create_conformer(4)
         molecule.create_conformer(0)
 
         molecule = reference._deep_copy()
         bond = next(molecule.bonds)
         molecule.copy_conformer(2, 0)
-        assert(molecule.conformer_count == 4)
-        assert(len(molecule.names) == 4)
-        assert(len(bond.kinds) == 4)
-        assert(bond.kinds[0] == bond.kinds[3])
+        assert molecule.conformer_count == 4
+        assert len(molecule.names) == 4
+        assert len(bond.kinds) == 4
+        assert bond.kinds[0] == bond.kinds[3]
         molecule.copy_conformer(3)
         molecule.copy_conformer(0)
 
@@ -187,11 +186,11 @@ class ConformerTestCase(unittest.TestCase):
         atom = next(molecule.atoms)
         position = atom.positions[2]
         molecule.move_conformer(2, 0)
-        assert(molecule.conformer_count == 3)
-        assert(len(molecule.names) == 3)
-        assert(len(atom.positions) == 3)
-        assert(atom.position[2] != position)
-        assert(position == atom.positions[0])
+        assert molecule.conformer_count == 3
+        assert len(molecule.names) == 3
+        assert len(atom.positions) == 3
+        assert atom.position[2] != position
+        assert position == atom.positions[0]
         molecule.move_conformer(2, 2)
         molecule.move_conformer(0, 0)
         molecule.move_conformer(0, 3)
@@ -203,12 +202,12 @@ class ConformerTestCase(unittest.TestCase):
         position = atom.positions[2]
         deleted = atom.positions[0]
         molecule.delete_conformer(0)
-        assert(molecule.current_conformer == 1)
-        assert(molecule.conformer_count == 2)
-        assert(len(molecule.names) == 2)
-        assert(len(atom.positions) == 2)
-        assert(atom.positions[1] == position)
-        assert(atom.positions[0] != deleted)
+        assert molecule.current_conformer == 1
+        assert molecule.conformer_count == 2
+        assert len(molecule.names) == 2
+        assert len(atom.positions) == 2
+        assert atom.positions[1] == position
+        assert atom.positions[0] != deleted
         molecule.delete_conformer(1)
         molecule.delete_conformer(0)
 
@@ -224,42 +223,42 @@ class ConformerTestCase(unittest.TestCase):
             atom.positions = sample_positions
         except ValueError:
             failed = True
-        assert(failed)
+        assert failed
 
         failed = False
         try:
             atom.in_conformer = sample_exists
         except ValueError:
             failed = True
-        assert(failed)
+        assert failed
 
         failed = False
         try:
             bond.in_conformer = sample_exists
         except ValueError:
             failed = True
-        assert(failed)
+        assert failed
 
         failed = False
         try:
             bond.kinds = sample_kinds
         except ValueError:
             failed = True
-        assert(failed)
+        assert failed
 
         failed = False
         try:
             molecule.associateds = [{}, {}, {}]
         except ValueError:
             failed = True
-        assert(failed)
+        assert failed
 
         failed = False
         try:
             molecule.names = ["", "", ""]
         except ValueError:
             failed = True
-        assert(failed)
+        assert failed
 
         new_atom = struct.Atom()
         new_atom.in_conformer = sample_exists
@@ -268,7 +267,7 @@ class ConformerTestCase(unittest.TestCase):
             next(molecule.residues).add_atom(new_atom)
         except ValueError:
             failed = True
-        assert(failed)
+        assert failed
 
         new_atom = struct.Atom()
         new_atom.positions = sample_positions
@@ -277,7 +276,7 @@ class ConformerTestCase(unittest.TestCase):
             next(molecule.residues).add_atom(new_atom)
         except ValueError:
             failed = True
-        assert(failed)
+        assert failed
 
         new_atom = struct.Atom()
         new_atom.in_conformer = sample_exists
@@ -286,7 +285,7 @@ class ConformerTestCase(unittest.TestCase):
             next(molecule.residues).add_atom(new_atom)
         except ValueError:
             failed = True
-        assert(failed)
+        assert failed
 
         new_bond = struct.Bond()
         new_bond.kinds = sample_kinds
@@ -295,7 +294,7 @@ class ConformerTestCase(unittest.TestCase):
             next(molecule.residues).add_bond(new_bond)
         except ValueError:
             failed = True
-        assert(failed)
+        assert failed
 
         new_bond = struct.Bond()
         new_bond.in_conformer = sample_exists
@@ -304,7 +303,7 @@ class ConformerTestCase(unittest.TestCase):
             next(molecule.residues).add_bond(new_bond)
         except ValueError:
             failed = True
-        assert(failed)
+        assert failed
 
     def test_wholistic(self):
         original = create_mixed_tree()
@@ -320,7 +319,7 @@ class ConformerTestCase(unittest.TestCase):
         for res1, res2 in zip(original.residues, copy.residues):
             total_bonds1 += len(res1._bonds)
             total_bonds2 += len(res2._bonds)
-        assert(total_bonds1 == total_bonds2)
+        assert total_bonds1 == total_bonds2
 
     def test_to_conformer(self):
         molecule_count = 5
@@ -333,24 +332,24 @@ class ConformerTestCase(unittest.TestCase):
         sort_bonds(conformer_copy)
 
         # check the numbers
-        assert(mc2 == 1)
+        assert mc2 == 1
         for molecule in conformer_copy.molecules:
-            assert(molecule._conformer_count == mc1)
-            assert(len(molecule._names) == mc1)
-            assert(len(molecule._associateds) == mc1)
-        assert (cc2 == cc1 / mc1)
-        assert (rc2 == rc1 / mc1)
-        assert (bc2 == bc1 / mc1)
+            assert molecule._conformer_count == mc1
+            assert len(molecule._names) == mc1
+            assert len(molecule._associateds) == mc1
+        assert cc2 == cc1 / mc1
+        assert rc2 == rc1 / mc1
+        assert bc2 == bc1 / mc1
         for bond in conformer_copy.bonds:
-            assert(bond._conformer_count == mc1)
-            assert(len(bond._kinds) == mc1)
-            assert(len(bond._in_conformer) == mc1)
+            assert bond._conformer_count == mc1
+            assert len(bond._kinds) == mc1
+            assert len(bond._in_conformer) == mc1
 
-        assert (ac2 == ac1 / mc1)
+        assert ac2 == ac1 / mc1
         for atom in conformer_copy.atoms:
-            assert(atom._conformer_count == mc1)
-            assert(len(atom._positions) == mc1)
-            assert(len(atom._in_conformer) == mc1)
+            assert atom._conformer_count == mc1
+            assert len(atom._positions) == mc1
+            assert len(atom._in_conformer) == mc1
 
         # check the values
         k = 0
@@ -360,9 +359,9 @@ class ConformerTestCase(unittest.TestCase):
             molecule._name = first_molecule._names[conf]
             for atom1, atom2 in zip(molecule.atoms, first_molecule.atoms):
                 assert_equal(atom1, atom2, conformer_blind)
-                assert(atom1._position.equals(atom2._positions[conf]))
-                assert(atom1._in_conformer[0] == atom2._in_conformer[conf])
+                assert atom1._position.equals(atom2._positions[conf])
+                assert atom1._in_conformer[0] == atom2._in_conformer[conf]
             for bond1, bond2 in zip(molecule.bonds, first_molecule.bonds):
-                assert(bond1._kind == bond2._kinds[conf])
-                assert(bond1._in_conformer[0] == bond2._in_conformer[conf])
-        assert (k == molecule_count)
+                assert bond1._kind == bond2._kinds[conf]
+                assert bond1._in_conformer[0] == bond2._in_conformer[conf]
+        assert k == molecule_count

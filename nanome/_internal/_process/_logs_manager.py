@@ -2,11 +2,12 @@ from collections import deque
 import logging
 from logging.handlers import RotatingFileHandler
 
-class _LogsManager():
+
+class _LogsManager:
     __pending = deque()
 
     def __init__(self, filename):
-        self.__logger = logging.getLogger('plugin_logger')
+        self.__logger = logging.getLogger("plugin_logger")
         self.__logger.setLevel(logging.DEBUG)
         self.__handler = RotatingFileHandler(filename, maxBytes=1048576, backupCount=3, delay=False)
         self.__logger.addHandler(self.__handler)

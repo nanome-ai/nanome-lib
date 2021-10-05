@@ -29,7 +29,7 @@ class Substructure(_Substructure):
     @property
     def structure_type(self):
         """
-        | 
+        |
 
         :type: :class:`~nanome.util.enums.SubstructureType`
         """

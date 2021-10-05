@@ -3,6 +3,7 @@ from .. import _LayoutNode
 
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _LayoutNodeSerializer(_TypeSerializer):
     def __init__(self):
         pass
@@ -12,7 +13,7 @@ class _LayoutNodeSerializer(_TypeSerializer):
 
     def name(self):
         return "LayoutNode"
-    
+
     def serialize(self, version, value, context):
         context.write_int(value._id)
         context.write_bool(value._enabled)
@@ -32,9 +33,9 @@ class _LayoutNodeSerializer(_TypeSerializer):
         context.write_int_array(child_ids)
         has_content = value._content != None
         context.write_bool(has_content)
-        if (has_content):
+        if has_content:
             content_id = value._content._content_id
-            if (version == 0):
+            if version == 0:
                 content_id = (context._plugin_id << 24) & 0x7FFFFFFF
                 content_id |= value._content._content_id
             context.write_int(content_id)
@@ -49,15 +50,12 @@ class _LayoutNodeSerializer(_TypeSerializer):
         layout_node._sizing_value = context.read_float()
         layout_node._forward_dist = context.read_float()
         layout_node._padding_type = _LayoutNode.PaddingTypes(context.read_uint())
-        layout_node._padding = (context.read_float(), 
-                                context.read_float(), 
-                                context.read_float(), 
-                                context.read_float())
+        layout_node._padding = (context.read_float(), context.read_float(), context.read_float(), context.read_float())
         layout_node._child_ids = context.read_int_array()
         has_content = context.read_bool()
-        if (has_content):
+        if has_content:
             layout_node._content_id = context.read_int()
-            if (version == 0):
+            if version == 0:
                 id_mask = 0x00FFFFFF
                 layout_node._content_id &= id_mask
         else:

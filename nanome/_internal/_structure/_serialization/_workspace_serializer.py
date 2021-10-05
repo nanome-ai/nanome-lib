@@ -4,6 +4,7 @@ from .. import _Workspace
 
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _WorkspaceSerializer(_TypeSerializer):
     def __init__(self):
         self.array = _ArraySerializer()

@@ -1,5 +1,6 @@
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _ArraySerializer(_TypeSerializer):
     def __init__(self):
         self._serializer = None
@@ -9,10 +10,10 @@ class _ArraySerializer(_TypeSerializer):
 
     def name(self):
         return "Array"
-        
+
     def serialize(self, version, value, context):
         if self._serializer == None:
-            raise TypeError('Trying to serialize array without setting content type first')
+            raise TypeError("Trying to serialize array without setting content type first")
 
         context.write_uint(len(value))
         for cur in value:
@@ -20,7 +21,7 @@ class _ArraySerializer(_TypeSerializer):
 
     def deserialize(self, version, context):
         if self._serializer == None:
-            raise TypeError('Trying to deserialize array without setting content type first')
+            raise TypeError("Trying to deserialize array without setting content type first")
 
         length = context.read_uint()
         result = []

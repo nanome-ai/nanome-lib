@@ -1,4 +1,4 @@
-#classes
+# classes
 from ._ui_base import _UIBase
 from ._mesh import _Mesh
 from ._image import _Image
@@ -14,7 +14,7 @@ from ._ui_list import _UIList
 from ._layout_node import _LayoutNode
 from ._menu import _Menu
 
-#folders
+# folders
 from . import *
 from . import _io
 from . import _serialization

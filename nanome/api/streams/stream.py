@@ -10,6 +10,7 @@ class Stream(object):
 
     | When created, a stream is linked to a number of structures. Each call to :func:`~update` will update all these structures
     """
+
     _streams = dict()
 
     Type = nanome.util.enums.StreamType
@@ -35,8 +36,10 @@ class Stream(object):
         """
         id = self.__network._send(_Messages.stream_feed, (self.__id, data, self.__data_type), done_callback is not None)
         if done_callback is None:
+
             def done_callback():
                 return None
+
         nanome.PluginInstance._save_callback(id, done_callback)
 
     def set_on_interrupt_callback(self, callback):

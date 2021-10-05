@@ -16,7 +16,7 @@ class Vector3(object):
         self._positions[i] = float(value)
 
     def __str__(self):
-        s = ' '.join([str(self._positions[0]), str(self._positions[1]), str(self._positions[2])])
+        s = " ".join([str(self._positions[0]), str(self._positions[1]), str(self._positions[2])])
         return s
 
     def get_copy(self):

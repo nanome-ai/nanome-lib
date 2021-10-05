@@ -1,10 +1,12 @@
 from nanome._internal._ui import _UIList
 from . import UIBase
 
+
 class UIList(_UIList, UIBase):
     """
     | A class representing a list of UI elements.
     """
+
     def __init__(self):
         _UIList.__init__(self)
         UIBase.__init__(self)
@@ -17,6 +19,7 @@ class UIList(_UIList, UIBase):
         :type: :class:`list` <:class:`~nanome.ui.LayoutNode`>
         """
         return self._items
+
     @items.setter
     def items(self, value):
         self._items = value
@@ -29,6 +32,7 @@ class UIList(_UIList, UIBase):
         :type: :class:`int`
         """
         return self._display_columns
+
     @display_columns.setter
     def display_columns(self, value):
         self._display_columns = value
@@ -41,6 +45,7 @@ class UIList(_UIList, UIBase):
         :type: :class:`int`
         """
         return self._display_rows
+
     @display_rows.setter
     def display_rows(self, value):
         self._display_rows = value
@@ -55,6 +60,7 @@ class UIList(_UIList, UIBase):
         :type: :class:`int`
         """
         return self._total_columns
+
     @total_columns.setter
     def total_columns(self, value):
         self._total_columns = value
@@ -67,8 +73,10 @@ class UIList(_UIList, UIBase):
         :type: :class:`bool`
         """
         return self._unusable
+
     @unusable.setter
     def unusable(self, value):
         self._unusable = value
+
 
 _UIList._create = UIList

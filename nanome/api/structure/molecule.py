@@ -80,6 +80,7 @@ class Molecule(_Molecule, Base):
         for residue in self.residues:
             for bond in residue.bonds:
                 yield bond
+
     # endregion
 
     # region connections
@@ -89,6 +90,7 @@ class Molecule(_Molecule, Base):
         | Complex that the molecule belongs to
         """
         return self._complex
+
     # endregion
 
     # region all fields
@@ -120,6 +122,7 @@ class Molecule(_Molecule, Base):
     @associated.setter
     def associated(self, value):
         self._associated = value
+
     # endregion
 
     # region conformer stuff
@@ -168,6 +171,7 @@ class Molecule(_Molecule, Base):
 
     def copy_conformer(self, src, index=None):
         self._copy_conformer(src, index)
+
     # endregion
 
     def get_substructures(self, callback=None):
@@ -207,6 +211,7 @@ class Molecule(_Molecule, Base):
         @name.setter
         def name(self, value):
             self.parent.name = value
+
     # endregion
 
 

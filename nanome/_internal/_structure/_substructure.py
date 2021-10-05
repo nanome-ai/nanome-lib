@@ -1,5 +1,6 @@
 import nanome
 
+
 class _Substructure:
     SubstructureType = nanome.util.enums.SubstructureType
 
@@ -8,6 +9,6 @@ class _Substructure:
         return cls()
 
     def __init__(self):
-        self._name = ''
+        self._name = ""
         self._residues = []
         self._structure_type = None

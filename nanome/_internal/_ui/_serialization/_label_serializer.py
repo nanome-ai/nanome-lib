@@ -4,6 +4,7 @@ from nanome.util.enums import VertAlignOptions, HorizAlignOptions
 from . import _UIBaseSerializer
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _LabelSerializer(_TypeSerializer):
     def __init__(self):
         self.string = _StringSerializer()
@@ -16,7 +17,7 @@ class _LabelSerializer(_TypeSerializer):
         return "Label"
 
     def serialize(self, version, value, context):
-        if (version == 0 ):
+        if version == 0:
             safe_id = (context._plugin_id << 24) & 0x7FFFFFFF
             safe_id |= value._content_id
         else:
@@ -38,7 +39,7 @@ class _LabelSerializer(_TypeSerializer):
     def deserialize(self, version, context):
         value = _Label._create()
         value._content_id = context.read_int()
-        if (version == 0):
+        if version == 0:
             id_mask = 0x00FFFFFF
             value._content_id &= id_mask
         value._text_value = context.read_using_serializer(self.string)
@@ -53,5 +54,6 @@ class _LabelSerializer(_TypeSerializer):
         value._text_italic = context.read_bool()
         value._text_underlined = context.read_bool()
         return value
+
 
 _UIBaseSerializer.register_type("Label", _UIBaseSerializer.ContentType.elabel, _LabelSerializer())

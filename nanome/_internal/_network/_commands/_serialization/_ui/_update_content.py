@@ -2,6 +2,7 @@ from nanome._internal._ui._serialization import _UIBaseSerializer
 from nanome._internal._util._serializers import _ArraySerializer
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _UpdateContent(_TypeSerializer):
     def __init__(self):
         self._array = _ArraySerializer()

@@ -11,10 +11,11 @@ try:
 except ImportError:
     asyncio = False
 
-NANOBABEL_PATH = find_executable('nanobabel')
-OBABEL_PATH = find_executable('obabel')
+NANOBABEL_PATH = find_executable("nanobabel")
+OBABEL_PATH = find_executable("obabel")
 
-class _Bonding():
+
+class _Bonding:
     def __init__(self, plugin, complex_list, callback=None, fast_mode=None):
         self.__complexes = complex_list
         self.__framed_complexes = [complex.convert_to_frames() for complex in complex_list]
@@ -43,8 +44,8 @@ class _Bonding():
 
         self.__complex_idx = 0
         self.__molecule_idx = -1
-        self.__input = tempfile.NamedTemporaryFile(delete=False, suffix='.pdb')
-        self.__output = tempfile.NamedTemporaryFile(delete=False, suffix='.mol')
+        self.__input = tempfile.NamedTemporaryFile(delete=False, suffix=".pdb")
+        self.__output = tempfile.NamedTemporaryFile(delete=False, suffix=".mol")
 
         self.__proc = Process()
         self.__proc.output_text = True
@@ -53,15 +54,15 @@ class _Bonding():
 
         if NANOBABEL_PATH:
             self.__proc.executable_path = NANOBABEL_PATH
-            self.__proc.args += ['bonding', '-i', self.__input.name, '-o', self.__output.name]
+            self.__proc.args += ["bonding", "-i", self.__input.name, "-o", self.__output.name]
         elif OBABEL_PATH:
             self.__proc.executable_path = OBABEL_PATH
-            self.__proc.args += ['-ipdb', self.__input.name, '-osdf', '-O' + self.__output.name]
+            self.__proc.args += ["-ipdb", self.__input.name, "-osdf", "-O" + self.__output.name]
         else:
             Logs.error("No bonding package found.")
 
         if self.__fast_mode:
-            self.__proc.args.append('-f')
+            self.__proc.args.append("-f")
 
         self.__next()
         return self.__future

@@ -3,10 +3,12 @@ from nanome._internal._macro._serialization import _MacroSerializer
 
 macro_serializer = _MacroSerializer()
 string_serializer = _StringSerializer()
+
+
 class _SaveMacro(_TypeSerializer):
     _macro_serializer = macro_serializer
     _string_serializer = string_serializer
-    
+
     def __init__(self):
         pass
 
@@ -23,6 +25,7 @@ class _SaveMacro(_TypeSerializer):
 
     def deserialize(self, version, context):
         raise NotImplementedError
+
 
 class _DeleteMacro(_TypeSerializer):
     _macro_serializer = macro_serializer
@@ -44,6 +47,7 @@ class _DeleteMacro(_TypeSerializer):
 
     def deserialize(self, version, context):
         raise NotImplementedError
+
 
 class _RunMacro(_TypeSerializer):
     _macro_serializer = macro_serializer
@@ -86,6 +90,7 @@ class _GetMacros(_TypeSerializer):
     def deserialize(self, version, context):
         raise NotImplementedError
 
+
 class _GetMacrosResponse(_TypeSerializer):
     _macro_serializer = macro_serializer
     _string_serializer = string_serializer
@@ -105,6 +110,7 @@ class _GetMacrosResponse(_TypeSerializer):
 
     def deserialize(self, version, context):
         return context.read_using_serializer(self._array_serializer)
+
 
 class _StopMacro(_TypeSerializer):
     _macro_serializer = macro_serializer

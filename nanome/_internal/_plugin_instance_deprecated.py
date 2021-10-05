@@ -48,7 +48,7 @@ def _create_shape(self, shape_type):
     if shape_type == ShapeType.Line:
         return _shapes._Line._create()
 
-    raise ValueError('Parameter shape_type must be a value of nanome.util.enums.ShapeType')
+    raise ValueError("Parameter shape_type must be a value of nanome.util.enums.ShapeType")
 
 
 _PluginInstance.create_shape = _create_shape

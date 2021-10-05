@@ -8,7 +8,7 @@ class _Label(_Shape):
         _Shape.__init__(self, ShapeType.Label)
         self._anchors = [_Anchor._create()]
         self._text = ""
-        self._font_size = .5
+        self._font_size = 0.5
 
     @classmethod
     def _create(cls):

@@ -1,12 +1,14 @@
 # flake8: noqa
 
 from . import *
+
 # classes
 
 from .string_builder import StringBuilder
 from .color import Color
 from .logs import Logs
 from .enum import Enum, IntEnum, auto
+
 try:
     from .enum import reset_auto
 except:

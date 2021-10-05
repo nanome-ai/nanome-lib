@@ -14,13 +14,14 @@ HAS_ADVANCED_OPTIONS = False
 
 # Plugin
 
+
 class SimpleHBond(nanome.PluginInstance):
     def start(self):
         print("Start Simple HBond Plugin")
-    
+
     @staticmethod
-    def _is_good_element(atom, current_element = None):
-        if atom.symbol != 'H' and atom.symbol != 'O':
+    def _is_good_element(atom, current_element=None):
+        if atom.symbol != "H" and atom.symbol != "O":
             return False
         if current_element == atom.symbol:
             return False
@@ -30,9 +31,11 @@ class SimpleHBond(nanome.PluginInstance):
     def _check_atom(atom, original_atom, original_residue, depth, visited_atoms):
         visited_atoms.append(atom)
         # If we traveled at least minimum_bond_distance and distance is under maximum_angstrom_distance, we might have a HBond here
-        if depth >= minimum_bond_distance \
-            and nanome.util.Vector3.distance(atom.position, original_atom.position) <= maximum_angstrom_distance \
-            and SimpleHBond._is_good_element(atom, original_atom.symbol):
+        if (
+            depth >= minimum_bond_distance
+            and nanome.util.Vector3.distance(atom.position, original_atom.position) <= maximum_angstrom_distance
+            and SimpleHBond._is_good_element(atom, original_atom.symbol)
+        ):
             new_bond = nanome.structure.Bond()
             new_bond.kind = nanome.structure.Bond.Kind.Hydrogen
             new_bond.atom1 = original_atom
@@ -106,5 +109,6 @@ class SimpleHBond(nanome.PluginInstance):
 
     def __init__(self):
         pass
+
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, SimpleHBond)

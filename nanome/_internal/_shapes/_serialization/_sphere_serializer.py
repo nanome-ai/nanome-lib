@@ -1,6 +1,7 @@
 from nanome._internal._util._serializers import _TypeSerializer
 from nanome._internal._shapes._sphere import _Sphere
 
+
 class _SphereSerializer(_TypeSerializer):
     def __init__(self):
         pass

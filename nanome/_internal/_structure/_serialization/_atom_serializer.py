@@ -57,7 +57,7 @@ class _AtomSerializer(_TypeSerializer):
         if version >= 3:
             has_conformer = len(value._positions) > 1
             context.write_bool(has_conformer)
-            if (has_conformer):
+            if has_conformer:
                 self.array.set_type(self.vector)
                 context.write_using_serializer(self.array, value._positions)
                 self.array.set_type(self.bool)
@@ -147,8 +147,7 @@ class _AtomSerializer(_TypeSerializer):
             atom._polar_hydrogen = context.read_bool()
 
         if version == 4:
-            atom._atom_type["IDATM"] = context.read_using_serializer(
-                self.string)
+            atom._atom_type["IDATM"] = context.read_using_serializer(self.string)
 
         if version >= 4:
             atom._formal_charge = context.read_int()

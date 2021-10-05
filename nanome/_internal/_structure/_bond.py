@@ -1,6 +1,7 @@
 from . import _Base
 import nanome
 
+
 class _Bond(_Base):
     Kind = nanome.util.enums.Kind
 
@@ -47,7 +48,7 @@ class _Bond(_Base):
             value._bonds.append(self)
         self.__atom2 = value
 
-    #region connections
+    # region connections
     @property
     def _residue(self):
         return self._parent
@@ -75,9 +76,10 @@ class _Bond(_Base):
             return parent._complex
         else:
             return None
-    #endregion
 
-    #region conformer stuff
+    # endregion
+
+    # region conformer stuff
     @property
     def _current_conformer(self):
         if self._molecule != None:
@@ -96,8 +98,8 @@ class _Bond(_Base):
         curr_size = len(self._kinds)
         if new_size > curr_size:
             extension = new_size - curr_size
-            self._kinds.extend([self._kinds[-1]]*(extension))
-            self._in_conformer.extend([self._in_conformer[-1]]*(extension))
+            self._kinds.extend([self._kinds[-1]] * (extension))
+            self._in_conformer.extend([self._in_conformer[-1]] * (extension))
         else:
             self._kinds = self._kinds[:new_size]
             self._in_conformer = self._in_conformer[:new_size]
@@ -115,7 +117,7 @@ class _Bond(_Base):
         del self._kinds[index]
         del self._in_conformer[index]
 
-    def _copy_conformer(self, src, index= None):
+    def _copy_conformer(self, src, index=None):
         if index is None:
             index = src
         value = self._in_conformer[src]
@@ -134,14 +136,15 @@ class _Bond(_Base):
     @property
     def _exists(self):
         return self._in_conformer[self._current_conformer]
-    
+
     @_exists.setter
     def _exists(self, value):
         self._in_conformer[self._current_conformer] = value
-    #endregion
 
-    #copies the structure. If conformer_number is not None it will only copy that conformer's data.
-    def _shallow_copy(self, conformer_number = None):
+    # endregion
+
+    # copies the structure. If conformer_number is not None it will only copy that conformer's data.
+    def _shallow_copy(self, conformer_number=None):
         bond = _Bond._create()
         if conformer_number == None:
             bond._in_conformer = list(self._in_conformer)

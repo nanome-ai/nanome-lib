@@ -3,12 +3,14 @@ from .content import Content
 import re
 import traceback
 
+
 def parse_lines(lines):
     try:
         return _parse_lines(lines)
     except:
         Logs.error("Could not read pdb")
         raise
+
 
 def _parse_lines(lines):
     lines = [line.rstrip() for line in lines]
@@ -19,7 +21,7 @@ def _parse_lines(lines):
     model_done = False
     line_counter = 0
     total_lines = len(lines)
-    while (line_counter < total_lines):
+    while line_counter < total_lines:
         line = lines[line_counter]
         try:
             record_type = record_chunk_string(line, 1, 6)
@@ -50,20 +52,20 @@ def _parse_lines(lines):
                         rec.chain_identifier = str(chain_idx)
                     model_number = max(model_number, 1)
                     rec.model_number = model_number
-                    if (not rec.residue_name == "SOL"):
+                    if not rec.residue_name == "SOL":
                         content.records.append(rec)
                         content.atoms.append(rec)
-            if (record_type == "COMPND"):
+            if record_type == "COMPND":
                 try:
                     rec = record_compnd(line, line_counter)
                     content.records.append(rec)
                     content.compnds.append(rec)
                 except:
                     Logs.warning("Error parsing COMPND:", traceback.format_exc())
-            if (record_type == "REMARK"):
+            if record_type == "REMARK":
                 rec = record_remark(line, line_counter)
                 content.records.append(rec)
-                if (rec.num in content._remarks):
+                if rec.num in content._remarks:
                     content._remarks[rec.num] = content._remarks[rec.num] + "\n" + rec.text
                 else:
                     content._remarks[rec.num] = rec.text
@@ -98,7 +100,7 @@ def _parse_lines(lines):
                 model_done = True
             content.raw.append(line)
         except:
-            print ("LINE: " + str(line_counter))
+            print("LINE: " + str(line_counter))
             print("PDB Parsing error")
             raise
         line_counter += 1
@@ -125,12 +127,12 @@ def record_atom(line, line_number):
     charge_str = record_chunk_string(line, 79, 80)
     if len(charge_str) >= 1:
         record.formal_charge = int(charge_str[:1])
-        if len(charge_str) >= 2 and charge_str[1] == '-':
+        if len(charge_str) >= 2 and charge_str[1] == "-":
             record.formal_charge *= -1
     # Special cases
-    if (len(record.element_symbol) <= 0):
+    if len(record.element_symbol) <= 0:
         record.element_symbol = record.atom_name
-    if (len(record.residue_name) <= 0):
+    if len(record.residue_name) <= 0:
         record.residue_name = "LIG"
     # Extra infos
     record.type = "ATOM"
@@ -161,7 +163,7 @@ def record_het_atom(line, line_number):
     charge_str = record_chunk_string(line, 79, 80)
     if len(charge_str) >= 1:
         record.formal_charge = int(charge_str[:1])
-        if len(charge_str) >= 2 and charge_str[1] == '-':
+        if len(charge_str) >= 2 and charge_str[1] == "-":
             record.formal_charge *= -1
     # Special cases
     if len(record.element_symbol) <= 0:
@@ -338,14 +340,14 @@ def record_ter(line, line_number):
 
 def record_chunk_float(line, start, end):
     val = record_chunk_string(line, start, end)
-    if (len(val) < 1):
+    if len(val) < 1:
         return 0
     return float(val)
 
 
 def record_chunk_int(line, start, end):
     val = record_chunk_string(line, start, end)
-    if (len(val) < 1):
+    if len(val) < 1:
         return 0
     return int(val)
 

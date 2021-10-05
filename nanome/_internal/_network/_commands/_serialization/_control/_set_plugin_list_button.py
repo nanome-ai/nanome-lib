@@ -1,5 +1,6 @@
 from nanome._internal._util._serializers import _StringSerializer, _TypeSerializer
 
+
 class _SetPluginListButton(_TypeSerializer):
     def __init__(self):
         self.__string = _StringSerializer()

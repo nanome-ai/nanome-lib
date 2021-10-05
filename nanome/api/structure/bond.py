@@ -8,6 +8,7 @@ class Bond(_Bond, Base):
     """
     | Represents a Bond between two atoms
     """
+
     Kind = nanome.util.enums.Kind
 
     def __init__(self):
@@ -68,6 +69,7 @@ class Bond(_Bond, Base):
         | Complex that the bond is part of
         """
         return self._complex
+
     # endregion
 
     # region all fields
@@ -96,6 +98,7 @@ class Bond(_Bond, Base):
     @exists.setter
     def exists(self, value):
         self._exists = value
+
     # endregion
 
     # region conformer stuff
@@ -128,6 +131,7 @@ class Bond(_Bond, Base):
             if len(value) != self.conformer_count:
                 raise ValueError("Length of in_conformer must match the conformer count of the parent molecule.")
         self._in_conformer = value
+
     # endregion
 
     # region deprecated
@@ -149,4 +153,6 @@ class Bond(_Bond, Base):
             self.parent.kind = value
 
     # endregion
+
+
 _Bond._create = Bond

@@ -13,6 +13,7 @@ HAS_ADVANCED_OPTIONS = False
 
 # Plugin
 
+
 class SubstructuresPlugin(nanome.PluginInstance):
     def start(self):
         print("Start SubstructuresPlugin Plugin")
@@ -30,7 +31,7 @@ class SubstructuresPlugin(nanome.PluginInstance):
             molecule.get_ligands(self.on_ligands)
             molecule.get_solvents(self.on_solvents)
             molecule.get_substructures(self.on_substructures)
-            
+
     def on_proteins(self, subs):
         print("on_proteins")
         unique = {}
@@ -55,11 +56,11 @@ class SubstructuresPlugin(nanome.PluginInstance):
                 unique[s] = 0
         for s in unique.keys():
             name, length, type = s
-            print (name, length, type, unique[s])
+            print(name, length, type, unique[s])
 
-        if (len (subs) == 0):
+        if len(subs) == 0:
             return
-        
+
         molecule = next(subs[0].residues).molecule
 
         all_res = []
@@ -70,7 +71,7 @@ class SubstructuresPlugin(nanome.PluginInstance):
                     atom.position = atom.position * 1.1
 
         for residue in molecule.residues:
-            assert(residue in all_res)
+            assert residue in all_res
 
         self.update_structures_deep(all_res)
 
@@ -102,5 +103,6 @@ class SubstructuresPlugin(nanome.PluginInstance):
 
     def __init__(self):
         pass
+
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, SubstructuresPlugin)

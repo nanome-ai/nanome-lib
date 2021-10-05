@@ -2,6 +2,7 @@ from nanome.util import Logs
 from .content import Content
 import re
 
+
 def parse_lines(lines):
     try:
         return _parse_lines(lines)
@@ -9,7 +10,8 @@ def parse_lines(lines):
         Logs.error("Could not read sdf")
         raise
 
-def _parse_lines(lines):    
+
+def _parse_lines(lines):
     lines = [line.rstrip() for line in lines]
     lines_by_model = []
     lines_by_model.append([])
@@ -79,7 +81,7 @@ def parse_model(lines):
                         bond.bond_order = record_chunk_int(line, 7, 9)
                         model.bonds.append(bond)
                         bond_counter = bond_counter - 1
-                    elif line[0] == 'm':
+                    elif line[0] == "m":
                         model.properties.append(line)
                 elif version == "V3000":
                     parts = line.split()
@@ -107,15 +109,15 @@ def parse_model(lines):
                                     bond.serial_atom1 = int(parts[4])
                                     bond.serial_atom2 = int(parts[5])
                                     model.bonds.append(bond)
-                if line[0] == '>':
+                if line[0] == ">":
                     regexpression = re.compile(r">\s+<(.+?)>")
                     title = re.match(regexpression, line).group(0)
                     line_counter = line_counter + 1
                     data = ""
                     # read line until you see another comment or the end of the molecule
                     while line_counter < total_lines:
-                        if len(lines[line_counter]) > 0:  #skip empty lines
-                            if lines[line_counter][0] == '>' or "$$$$" in lines[line_counter]:
+                        if len(lines[line_counter]) > 0:  # skip empty lines
+                            if lines[line_counter][0] == ">" or "$$$$" in lines[line_counter]:
                                 line_counter = line_counter - 1
                                 break
                             else:
@@ -135,9 +137,10 @@ def parse_model(lines):
         #           Logs.error("SDF Parsing error", e.Message + e.StackTrace)
         raise
 
+
 def parse_additional_v3000_attributes(parts, atom):
     for i in range(8, len(parts)):
-        attr = parts[i].split('=')
+        attr = parts[i].split("=")
         if len(attr) != 2:
             continue
 
@@ -146,6 +149,7 @@ def parse_additional_v3000_attributes(parts, atom):
                 atom.charge = int(attr[1])
             except:
                 pass
+
 
 def record_chunk_float(line, start, end):
     str = record_chunk_string(line, start, end)

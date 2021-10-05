@@ -32,7 +32,7 @@ class _Plugin(object):
 
     def __read_key(self):
         # check if arg is key data
-        if re.match(r'^[0-9A-F]+$', self.__key):
+        if re.match(r"^[0-9A-F]+$", self.__key):
             return self.__key
         try:
             f = open(self.__key, "r")
@@ -69,7 +69,7 @@ class _Plugin(object):
 
         elif packet.packet_type == Network._Packet.packet_type_plugin_disconnection:
             if _Plugin._plugin_id == -1:
-                if self._description['auth'] is None:
+                if self._description["auth"] is None:
                     Logs.error("Connection refused by NTS. Are you missing a security key file?")
                 else:
                     Logs.error("Connection refused by NTS. Your security key file might be invalid")
@@ -113,13 +113,13 @@ class _Plugin(object):
         wait = 3
 
         if os.name == "nt":
-            sub_kwargs = {'creationflags': subprocess.CREATE_NEW_PROCESS_GROUP}
+            sub_kwargs = {"creationflags": subprocess.CREATE_NEW_PROCESS_GROUP}
             break_signal = signal.CTRL_BREAK_EVENT
         else:
             sub_kwargs = {}
             break_signal = signal.SIGTERM
 
-        sub_args = [x for x in sys.argv if x != '-r' and x != "--auto-reload"]
+        sub_args = [x for x in sys.argv if x != "-r" and x != "--auto-reload"]
 
         try:
             sub_args = [sys.executable] + sub_args
@@ -150,7 +150,7 @@ class _Plugin(object):
         if self._pre_run is not None:
             self._pre_run()
         _Plugin.instance = self
-        self._description['auth'] = self.__read_key()
+        self._description["auth"] = self.__read_key()
         self._process_manager = _ProcessManager()
         if self.__write_log_file:
             self._logs_manager = _LogsManager(self._plugin_class.__name__ + ".log")
@@ -243,7 +243,7 @@ class _Plugin(object):
         self.__exit()
 
     def __exit(self):
-        Logs.debug('Exiting')
+        Logs.debug("Exiting")
         for session in _Plugin.instance._sessions.values():
             session.signal_and_close_pipes()
             session.plugin_process.join()
@@ -259,7 +259,22 @@ class _Plugin(object):
         main_conn_proc, process_conn_proc = Pipe()
         session = Network._Session(session_id, self._network, self._process_manager, self._logs_manager, main_conn_net, main_conn_proc)
         permissions = self._description["permissions"]
-        process = Process(target=_Plugin._launch_plugin, args=(self._plugin_class, session_id, process_conn_net, process_conn_proc, _Plugin.__serializer, _Plugin._plugin_id, version_table, _TypeSerializer.get_version_table(), Logs._is_verbose(), _Plugin._custom_data, permissions))
+        process = Process(
+            target=_Plugin._launch_plugin,
+            args=(
+                self._plugin_class,
+                session_id,
+                process_conn_net,
+                process_conn_proc,
+                _Plugin.__serializer,
+                _Plugin._plugin_id,
+                version_table,
+                _TypeSerializer.get_version_table(),
+                Logs._is_verbose(),
+                _Plugin._custom_data,
+                permissions,
+            ),
+        )
         process.start()
         session.plugin_process = process
         self._sessions[session_id] = session
@@ -267,13 +282,16 @@ class _Plugin(object):
 
     @staticmethod
     def _is_process():
-        return current_process().name != 'MainProcess'
+        return current_process().name != "MainProcess"
 
     @classmethod
     def _launch_plugin_profile(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
-        cProfile.runctx('_Plugin._launch_plugin(plugin_class, session_id, pipe_net, pipe_proc, serializer, '
-                        'plugin_id, version_table, original_version_table, verbose, custom_data,'
-                        'permissions)', globals(), locals(), 'profile.out')
+        cProfile.runctx(
+            "_Plugin._launch_plugin(plugin_class, session_id, pipe_net, pipe_proc, serializer, " "plugin_id, version_table, original_version_table, verbose, custom_data," "permissions)",
+            globals(),
+            locals(),
+            "profile.out",
+        )
 
     @classmethod
     def _launch_plugin(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
@@ -299,14 +317,14 @@ class _Plugin(object):
             integrations[i] = _Hashes.IntegrationRequestHashes[integrations[i]]
 
         self._description = {
-            'name': name,
-            'description': description,
-            'category': category,
-            'tags': tags,
-            'hasAdvanced': has_advanced,
-            'auth': None,
-            'permissions': permissions,
-            'integrations': integrations
+            "name": name,
+            "description": description,
+            "category": category,
+            "tags": tags,
+            "hasAdvanced": has_advanced,
+            "auth": None,
+            "permissions": permissions,
+            "integrations": integrations,
         }
         self._plugin_class = None
         self.__connected = False

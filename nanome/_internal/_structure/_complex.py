@@ -2,32 +2,32 @@ from nanome.util import Vector3, Quaternion, Logs
 from . import _Base
 from . import _helpers
 
-class _Complex(_Base):
 
+class _Complex(_Base):
     @classmethod
     def _create(cls):
         return cls()
 
     def __init__(self):
         super(_Complex, self).__init__()
-        #Molecular
+        # Molecular
         self._name = "complex"
         self._index_tag = 0
         self._split_tag = ""
         self._remarks = {}
-        #Rendering
+        # Rendering
         self._boxed = False
         self._locked = False
         self._visible = True
         self._computing = False
         self._current_frame = 0
-        self._selected = False #selected on live
+        self._selected = False  # selected on live
         self._surface_dirty = False
         self._surface_refresh_rate = -1.0  # Not used yet, future auto surface refresh
         self._box_label = ""
-        #Transform
-        self._position = Vector3(0,0,0)
-        self._rotation = Quaternion(0,0,0,0)
+        # Transform
+        self._position = Vector3(0, 0, 0)
+        self._rotation = Quaternion(0, 0, 0, 0)
         self._molecules = []
         self._parent = None
 
@@ -38,7 +38,7 @@ class _Complex(_Base):
     def _remove_molecule(self, molecule):
         self._molecules.remove(molecule)
         molecule._parent = None
-    
+
     def _set_molecules(self, molecules):
         self._molecules = molecules
         for molecule in molecules:
@@ -74,17 +74,17 @@ class _Complex(_Base):
                 except StopIteration:
                     pass
 
-    def _shallow_copy(self, target = None):
+    def _shallow_copy(self, target=None):
         if target == None:
             complex = _Complex._create()
         else:
             complex = target
-        #Molecular
+        # Molecular
         complex._name = self._name
         complex._index_tag = self._index_tag
         complex._split_tag = self._split_tag
         complex._remarks = self._remarks
-        #Rendering
+        # Rendering
         complex._boxed = self._boxed
         complex._locked = self._locked
         complex._visible = self._visible
@@ -94,19 +94,19 @@ class _Complex(_Base):
         complex._surface_dirty = self._surface_dirty
         complex._surface_refresh_rate = self._surface_refresh_rate
         complex._box_label = self._box_label
-        #Transform
+        # Transform
         complex._position = self._position.get_copy()
         complex._rotation = self._rotation.get_copy()
         return complex
 
     def _deep_copy(self):
         return _helpers._copy._deep_copy_complex(self)
-    
-    def _convert_to_conformers(self, force_conformers = None):
+
+    def _convert_to_conformers(self, force_conformers=None):
         result = _helpers._conformer_helper.convert_to_conformers(self, None)
         return result
 
-    def _convert_to_frames(self, old_to_new_atoms = None):
+    def _convert_to_frames(self, old_to_new_atoms=None):
         result = _helpers._conformer_helper.convert_to_frames(self, old_to_new_atoms)
         return result
 

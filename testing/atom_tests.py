@@ -28,7 +28,7 @@ def compare_atom_positions(complex1, complex2):
     a1 = complex1.atoms
     a2 = complex2.atoms
     for atom1, atom2 in zip(a1, a2):
-        assert(atom1.position.equals(atom2.position))
+        assert atom1.position.equals(atom2.position)
         assert_equal(atom1, atom2, options)
 
 
@@ -144,49 +144,48 @@ def create_workspace():
 
 
 def assert_parents(atom, bond, residue, chain, molecule, complex):
-    assert(bond.residue == residue)
-    assert(bond.chain == chain)
-    assert(bond.molecule == molecule)
-    assert(bond.complex == complex)
+    assert bond.residue == residue
+    assert bond.chain == chain
+    assert bond.molecule == molecule
+    assert bond.complex == complex
 
-    assert(atom.residue == residue)
-    assert(atom.chain == chain)
-    assert(atom.molecule == molecule)
-    assert(atom.complex == complex)
+    assert atom.residue == residue
+    assert atom.chain == chain
+    assert atom.molecule == molecule
+    assert atom.complex == complex
 
-    assert(residue.chain == chain)
-    assert(residue.molecule == molecule)
-    assert(residue.complex == complex)
+    assert residue.chain == chain
+    assert residue.molecule == molecule
+    assert residue.complex == complex
 
-    assert(chain.molecule == molecule)
-    assert(chain.complex == complex)
+    assert chain.molecule == molecule
+    assert chain.complex == complex
 
-    assert(molecule.complex == complex)
+    assert molecule.complex == complex
 
 
 def assert_no_parents(atom, bond, residue, chain, molecule, complex):
-    assert(bond.residue is None)
-    assert(bond.chain is None)
-    assert(bond.molecule is None)
-    assert(bond.complex is None)
+    assert bond.residue is None
+    assert bond.chain is None
+    assert bond.molecule is None
+    assert bond.complex is None
 
-    assert(atom.residue is None)
-    assert(atom.chain is None)
-    assert(atom.molecule is None)
-    assert(atom.complex is None)
+    assert atom.residue is None
+    assert atom.chain is None
+    assert atom.molecule is None
+    assert atom.complex is None
 
-    assert(residue.chain is None)
-    assert(residue.molecule is None)
-    assert(residue.complex is None)
+    assert residue.chain is None
+    assert residue.molecule is None
+    assert residue.complex is None
 
-    assert(chain.molecule is None)
-    assert(chain.complex is None)
+    assert chain.molecule is None
+    assert chain.complex is None
 
-    assert(molecule.complex is None)
+    assert molecule.complex is None
 
 
 class AtomTestCase(unittest.TestCase):
-
     def test_parent_pointers(self):
         atom = struct.Atom()
         bond = struct.Bond()
@@ -300,50 +299,50 @@ class AtomTestCase(unittest.TestCase):
         a = 0
         for atom in complex.atoms:
             a += 1
-        assert(a == 5721)
+        assert a == 5721
         a = 0
         for residue in complex.residues:
             for atom in residue.atoms:
                 a += 1
-        assert(a == 5721)
+        assert a == 5721
         a = 0
         for chain in complex.chains:
             for atom in chain.atoms:
                 a += 1
-        assert(a == 5721)
+        assert a == 5721
         a = 0
         for molecule in complex.molecules:
             for atom in molecule.atoms:
                 a += 1
-        assert(a == 5721)
+        assert a == 5721
         a = 0
         # gets first molecule
         molecule = next(complex.molecules)
         for residue in molecule.residues:
             for atom in residue.atoms:
                 a += 1
-        assert(a == 76)
+        assert a == 76
         a = 0
         for chain in molecule.chains:
             for atom in chain.atoms:
                 a += 1
-        assert(a == 76)
+        assert a == 76
         a = 0
         for residue in molecule.residues:
             for atom in residue.atoms:
                 a += 1
-        assert(a == 76)
+        assert a == 76
         a = 0
         chain = next(molecule.chains)
         for residue in chain.residues:
             for atom in residue.atoms:
                 a += 1
-        assert(a == 76)
+        assert a == 76
         b = False
         for residue in chain.residues:
             for _ in residue.bonds:
                 b = True
-        assert(b)
+        assert b
 
     def test_equality(self):
         assert_equal(create_atom(), create_atom(), options)

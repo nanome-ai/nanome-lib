@@ -32,8 +32,8 @@ def compare_atom_positions(complex1, complex2):
         atom1 = next(a1)
         atom2 = next(a2)
         difference = atom1.position.x - atom2.position.x
-        assert(difference < .001)
-        assert(difference > -.001)
+        assert difference < 0.001
+        assert difference > -0.001
 
 
 class MmcifTestCase(unittest.TestCase):
@@ -49,11 +49,11 @@ class MmcifTestCase(unittest.TestCase):
         # fact checks
         counters = count_structures(complex1)
         (molecule_count, chain_count, residue_count, bond_count, atom_count) = counters
-        assert(molecule_count == 1)
-        assert(chain_count == 1)
-        assert(residue_count == 28)
-        assert(bond_count == 0)
-        assert(atom_count == 504)
+        assert molecule_count == 1
+        assert chain_count == 1
+        assert residue_count == 28
+        assert bond_count == 0
+        assert atom_count == 504
         #
 
         complex2 = struct.Complex.io.from_mmcif(path=output_dir)
@@ -71,11 +71,11 @@ class MmcifTestCase(unittest.TestCase):
         # fact checks
         counters = count_structures(complex1)
         (molecule_count, chain_count, residue_count, bond_count, atom_count) = counters
-        assert(molecule_count == 1)
-        assert(chain_count == 1)
-        assert(residue_count == 1)
-        assert(bond_count == 0)
-        assert(atom_count == 28)
+        assert molecule_count == 1
+        assert chain_count == 1
+        assert residue_count == 1
+        assert bond_count == 0
+        assert atom_count == 28
         #
 
         complex1.io.to_mmcif(output_dir)

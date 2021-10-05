@@ -1,5 +1,6 @@
 from nanome._internal._util._serializers import _Vector3Serializer, _UnityPositionSerializer, _UnityRotationSerializer, _TypeSerializer
 
+
 class _SetMenuTransform(_TypeSerializer):
     def __init__(self):
         self.pos = _UnityPositionSerializer()

@@ -4,6 +4,7 @@ from . import _UIBaseSerializer
 
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _LayoutNodeSerializerDeep(_TypeSerializer):
     def __init__(self):
         self._layout_array = _ArraySerializer()
@@ -33,7 +34,7 @@ class _LayoutNodeSerializerDeep(_TypeSerializer):
         context.write_using_serializer(self._layout_array, value._children)
         has_content = value._content != None
         context.write_bool(has_content)
-        if (has_content):
+        if has_content:
             context.write_using_serializer(self._content_serializer, value._content)
 
     def deserialize(self, version, context):
@@ -46,12 +47,9 @@ class _LayoutNodeSerializerDeep(_TypeSerializer):
         result._sizing_value = context.read_float()
         result._forward_dist = context.read_float()
         result._padding_type = _LayoutNode.PaddingTypes(context.read_int())
-        result._padding = (context.read_float(),
-                           context.read_float(),
-                           context.read_float(),
-                           context.read_float())
+        result._padding = (context.read_float(), context.read_float(), context.read_float(), context.read_float())
         result._children = context.read_using_serializer(self._layout_array)
         has_content = context.read_bool()
-        if (has_content):
+        if has_content:
             result._content = context.read_using_serializer(self._content_serializer)
         return result

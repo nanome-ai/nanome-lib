@@ -76,7 +76,7 @@ class TestShapes(nanome.PluginInstance):
         self.menu.enabled = True
         self.update_menu(self.menu)
 
-    class SphereFactory():
+    class SphereFactory:
         spheres = []
         parent = None
 
@@ -86,6 +86,7 @@ class TestShapes(nanome.PluginInstance):
 
             def done(success):
                 cls.spheres.append(sphere)
+
             sphere.upload(done)
 
         @classmethod
@@ -111,6 +112,7 @@ class TestShapes(nanome.PluginInstance):
                 def done(success):
                     cls.spheres.append(spheres[0])
                     cls.spheres.append(spheres[1])
+
                 Shape.upload_multiple(spheres, done)
 
             cls.parent.request_workspace(received)
@@ -141,6 +143,7 @@ class TestShapes(nanome.PluginInstance):
 
                 def done(success):
                     cls.spheres.append(sphere)
+
                 sphere.upload(done)
 
             cls.parent.request_workspace(received)
@@ -166,10 +169,10 @@ class TestShapes(nanome.PluginInstance):
             sphere.radius = random.uniform(0.5, 2.0)
             sphere.color = nanome.util.Color(random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255), random.randrange(100, 255))
             anchor = sphere.anchors[0]
-            anchor.local_offset = nanome.util.Vector3(random.uniform(-.05, .05), random.uniform(-.05, .05), random.uniform(-.05, .05))
+            anchor.local_offset = nanome.util.Vector3(random.uniform(-0.05, 0.05), random.uniform(-0.05, 0.05), random.uniform(-0.05, 0.05))
             return sphere
 
-    class LineFactory():
+    class LineFactory:
         queued_anchor = None
         lines = []
         labels = []
@@ -242,7 +245,7 @@ class TestShapes(nanome.PluginInstance):
             anchor = Anchor()
             anchor.target = target
             anchor.local_offset = nanome.util.Vector3(1, 0, 0)  # nanome.util.Vector3(random.uniform(-.05, .05), random.uniform(-.05, .05), random.uniform(-.05, .05))
-            anchor.viewer_offset = nanome.util.Vector3(0, 0, .01)
+            anchor.viewer_offset = nanome.util.Vector3(0, 0, 0.01)
             anchor.anchor_type = a_type
             if cls.queued_anchor == None:
                 cls.queued_anchor = anchor
@@ -275,19 +278,21 @@ class TestShapes(nanome.PluginInstance):
         def create_line(cls, anchor1, anchor2):
             line = Line()
             line.anchors = [anchor1, anchor2]
-            line.dash_distance = .4
+            line.dash_distance = 0.4
             line.thickness *= 2
 
             label = Label()
             label.anchors = [cls.copy_anchor(anchor1), cls.copy_anchor(anchor2)]
-            label.anchors[0].viewer_offset = nanome.util.Vector3(0, 0, -.01)
-            label.anchors[1].viewer_offset = nanome.util.Vector3(0, 0, -.01)
+            label.anchors[0].viewer_offset = nanome.util.Vector3(0, 0, -0.01)
+            label.anchors[1].viewer_offset = nanome.util.Vector3(0, 0, -0.01)
             label.text = "bloop"
 
             def done1(success):
                 cls.lines.append(line)
+
             def done2(success):
                 cls.labels.append(label)
+
             line.upload(done1)
             label.upload(done2)
 

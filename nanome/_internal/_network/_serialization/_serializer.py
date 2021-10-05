@@ -76,6 +76,7 @@ class Serializer(object):
     def __init__(self):
         self._plugin_id = 0
 
+
 # -------------Commands----------- #
 # Commands are incoming (nanome -> plugin)
 

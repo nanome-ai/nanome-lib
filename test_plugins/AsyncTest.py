@@ -6,6 +6,7 @@ DESCRIPTION = "Tests async/await in plugins."
 CATEGORY = "testing"
 HAS_ADVANCED_OPTIONS = False
 
+
 class AsyncTest(nanome.AsyncPluginInstance):
     def start(self):
         self.on_run()
@@ -20,6 +21,7 @@ class AsyncTest(nanome.AsyncPluginInstance):
         complex.position.x += 1
 
         await self.update_structures_deep([complex])
-        Logs.message('done')
+        Logs.message("done")
+
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, False, AsyncTest)

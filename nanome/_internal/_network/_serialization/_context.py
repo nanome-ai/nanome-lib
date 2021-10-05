@@ -2,27 +2,29 @@ from .. import _Data
 import struct
 from nanome.util import Logs
 
+
 class _PacketDebuggingException(Exception):
-	def __init__(self):
-		self.__stack = []
+    def __init__(self):
+        self.__stack = []
 
-	def _append(self, value):
-		self.__stack.append(value)
+    def _append(self, value):
+        self.__stack.append(value)
 
-	def _pop(self):
-		self.__stack.pop()
+    def _pop(self):
+        self.__stack.pop()
 
-	def _raise(self, current_value):
-		stack_str = ""
-		for value in self.__stack:
-			stack_str += value + " -> "
-		stack_str += current_value
-		super().__init__("Error while trying to deserialize the following : " + stack_str)
-		raise self
+    def _raise(self, current_value):
+        stack_str = ""
+        for value in self.__stack:
+            stack_str += value + " -> "
+        stack_str += current_value
+        super().__init__("Error while trying to deserialize the following : " + stack_str)
+        raise self
+
 
 class _ContextSerialization(object):
     # pylint: disable=method-hidden
-    def __init__(self, plugin_id, version_table = None, packet_debugging = False):
+    def __init__(self, plugin_id, version_table=None, packet_debugging=False):
         self._data = _Data()
         self.payload = {}
         self.__version_table = version_table
@@ -130,9 +132,10 @@ class _ContextSerialization(object):
         sub_context = _ContextSerialization(self._plugin_id, self.__version_table, self.__packet_debugging)
         return sub_context
 
+
 class _ContextDeserialization(object):
     # pylint: disable=method-hidden
-    def __init__(self, bytes, version_table = None, packet_debugging = False):
+    def __init__(self, bytes, version_table=None, packet_debugging=False):
         self._data = _Data()
         self._data.received_data(bytes)
         self.payload = {}

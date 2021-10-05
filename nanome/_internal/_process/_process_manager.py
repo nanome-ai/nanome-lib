@@ -3,6 +3,7 @@ import subprocess
 import traceback
 import sys
 from threading import Thread
+
 try:
     from queue import Queue, Empty
 except ImportError:
@@ -11,10 +12,10 @@ except ImportError:
 from nanome._internal._process import _ProcessEntry
 from nanome.util import Logs, IntEnum, auto
 
-POSIX = 'posix' in sys.builtin_module_names
+POSIX = "posix" in sys.builtin_module_names
 
 
-class _ProcessManager():
+class _ProcessManager:
     class _DataType(IntEnum):
         queued = auto()
         position_changed = auto()
@@ -62,9 +63,9 @@ class _ProcessManager():
 
         def enqueue_output(pipe, queue, text):
             if text:
-                sentinel = ''
+                sentinel = ""
             else:
-                sentinel = b''
+                sentinel = b""
 
             for line in iter(pipe.readline, sentinel):
                 queue.put(line)

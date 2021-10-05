@@ -3,6 +3,7 @@ from nanome.util import FileErrorCode, FileData, IntEnum
 
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _FileDataSerializer(_TypeSerializer):
     def __init__(self):
         pass

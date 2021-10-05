@@ -12,10 +12,10 @@ BASE_DIR = os.path.join(os.path.dirname(__file__))
 class ComplexUtilsTestCase(unittest.TestCase):
     def setUp(self):
         super().setUp()
-        with open(f'{BASE_DIR}/test_assets/pickles/1a9l.pickle', 'rb') as f:
+        with open(f"{BASE_DIR}/test_assets/pickles/1a9l.pickle", "rb") as f:
             self.complex1 = pickle.load(f)
 
-        with open(f'{BASE_DIR}/test_assets/pickles/1fsv.pickle', 'rb') as f:
+        with open(f"{BASE_DIR}/test_assets/pickles/1fsv.pickle", "rb") as f:
             self.complex2 = pickle.load(f)
 
     def test_align_to(self):

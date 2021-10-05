@@ -7,6 +7,7 @@ class Image(_Image, UIBase):
     """
     | Represents an image in a menu
     """
+
     ScalingOptions = nanome.util.enums.ScalingOptions
 
     def __init__(self, file_path=""):

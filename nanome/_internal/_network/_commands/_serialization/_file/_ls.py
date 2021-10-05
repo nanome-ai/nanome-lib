@@ -2,6 +2,7 @@ from nanome._internal._util._serializers import _TypeSerializer, _StringSerializ
 from nanome._internal._network._commands._serialization._file._file_meta import _FileMeta
 from nanome.util import FileError
 
+
 class _LS(_TypeSerializer):
     def __init__(self):
         self.__string = _StringSerializer()

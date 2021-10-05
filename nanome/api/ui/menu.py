@@ -6,6 +6,7 @@ class Menu(_Menu):
     """
     | Represents a menu for a plugin
     """
+
     io = MenuIO()
 
     def __init__(self, index=0, title="title"):
@@ -116,6 +117,7 @@ class Menu(_Menu):
     @index.setter
     def index(self, value):
         self._index = value
+
     # endregion
 
     def find_content(self, content_id):

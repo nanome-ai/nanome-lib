@@ -4,7 +4,7 @@ from . import _ProcessManager
 from collections import deque
 
 
-class _ProcessManagerInstance():
+class _ProcessManagerInstance:
     def __init__(self, pipe):
         self.__pipe = pipe
         Process._manager = self
@@ -59,6 +59,7 @@ class _ProcessManagerInstance():
 
     def send(self, type, data):
         from nanome._internal._util import _ProcData
+
         to_send = _ProcData()
         to_send._data = [type, data]
         self.__pipe.send(to_send)

@@ -36,11 +36,11 @@ class _ProcessNetwork(object):
         return cls.__send(code, None, arg, False)
 
     @classmethod
-    def _send(cls, code, arg, expects_response): 
+    def _send(cls, code, arg, expects_response):
         return cls.__send(code, cls._instance.__version_table, arg, expects_response)
 
     @classmethod
-    def __send(cls, code, version_table, arg, expects_response): 
+    def __send(cls, code, version_table, arg, expects_response):
         self = cls._instance
         command_id = self._command_id
         to_send = self._serializer.serialize_message(command_id, code, arg, version_table, expects_response)
@@ -75,8 +75,8 @@ class _ProcessNetwork(object):
 
             received_object, command_hash, request_id = self._serializer.deserialize_command(payload, self.__version_table)
             if received_object == None and command_hash == None and request_id == None:
-                return True # Happens if deserialize_command returns None, an error message is already displayed in that case
-                
+                return True  # Happens if deserialize_command returns None, an error message is already displayed in that case
+
             try:
                 callback = self._serializer._command_callbacks[command_hash]
             except:

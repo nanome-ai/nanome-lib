@@ -5,11 +5,12 @@ from . import _UIBaseSerializer
 
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _TextInputSerializer(_TypeSerializer):
     def __init__(self):
         self.string = _StringSerializer()
         self.color = _ColorSerializer()
-    
+
     def version(self):
         return 3
 
@@ -17,7 +18,7 @@ class _TextInputSerializer(_TypeSerializer):
         return "TextInput"
 
     def serialize(self, version, value, context):
-        if (version == 0 ):
+        if version == 0:
             safe_id = (context._plugin_id << 24) & 0x7FFFFFFF
             safe_id |= value._content_id
         else:
@@ -44,7 +45,7 @@ class _TextInputSerializer(_TypeSerializer):
     def deserialize(self, version, context):
         value = _TextInput._create()
         value._content_id = context.read_int()
-        if (version == 0):
+        if version == 0:
             id_mask = 0x00FFFFFF
             value._content_id &= id_mask
         value._max_length = context.read_int()
@@ -65,5 +66,6 @@ class _TextInputSerializer(_TypeSerializer):
             value._padding_top = context.read_float()
             value._padding_bottom = context.read_float()
         return value
+
 
 _UIBaseSerializer.register_type("TextInput", _UIBaseSerializer.ContentType.etextInput, _TextInputSerializer())

@@ -2,6 +2,7 @@ from nanome._internal._structure import _Complex, _Workspace
 from nanome._internal._structure._serialization import _ComplexSerializer, _AtomSerializer
 from nanome._internal._util._serializers import _ArraySerializer, _TypeSerializer, _StringSerializer, _LongSerializer, _DictionarySerializer
 
+
 class _ExportFilesItem(_TypeSerializer):
     def __init__(self):
         self.__complex = _ComplexSerializer()
@@ -27,7 +28,7 @@ class _ExportFilesItem(_TypeSerializer):
             context.write_byte(0)
             context.write_long(value)
         else:
-            raise TypeError('Trying to serialize an unsupported type for export files')
+            raise TypeError("Trying to serialize an unsupported type for export files")
 
     def deserialize(self, version, context):
         result_type = context.read_byte()
@@ -38,6 +39,7 @@ class _ExportFilesItem(_TypeSerializer):
             if len(res) == 0:
                 return None
             return res
+
 
 class _ExportFiles(_TypeSerializer):
     def __init__(self):
@@ -52,7 +54,7 @@ class _ExportFiles(_TypeSerializer):
 
     def serialize(self, version, value, context):
         context.write_byte(int(value[0]))
-        if (value[1] != None):
+        if value[1] != None:
             context.write_bool(True)
             context.write_using_serializer(self.__array, value[1])
         else:

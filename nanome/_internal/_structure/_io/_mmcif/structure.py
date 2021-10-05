@@ -2,7 +2,9 @@ import math
 from nanome.util import Vector3
 from nanome._internal._structure import _Complex, _Molecule, _Chain, _Residue, _Bond, _Atom
 from .content import Content
+
 MaxCategorySize = 40
+
 
 def structure(content):
     remarks = StructureRemarks(content.remarks)
@@ -14,7 +16,7 @@ def structure(content):
     all_chains = {}
     all_molecules = {}
 
-    helper = None    
+    helper = None
     if content.cell != None:
         helper = UnitCellHelper(content.cell)
 
@@ -52,6 +54,7 @@ def structure(content):
     # Done
     return complex._convert_to_conformers()
 
+
 def StructureAtom(c_atom, helper):
     atom = _Atom._create()
     atom._serial = c_atom.atom_serial
@@ -61,19 +64,20 @@ def StructureAtom(c_atom, helper):
     atom._symbol = c_atom.symbol
     atom._name = c_atom.atom_name
     atom._is_het = c_atom.is_het
-    if (atom._symbol == ""):
+    if atom._symbol == "":
         atom._symbol = atom._name[0]
-    if (c_atom.fract and helper != None):
+    if c_atom.fract and helper != None:
         helper.Orthogonalize(c_atom.x, c_atom.y, c_atom.z, atom._position)
     return atom
+
 
 def StructureRemarks(remarks):
     results = {}
     for category_name in remarks:
-        #eliminating remarks that would be too long.
+        # eliminating remarks that would be too long.
         category = remarks[category_name]
         category_size = len(category) * len(category[0])
-        if (category_size <= MaxCategorySize):
+        if category_size <= MaxCategorySize:
             category_data = category
             object_number = 1
             for data_object in category_data:
@@ -88,7 +92,8 @@ def StructureRemarks(remarks):
                 object_number += 1
     return results
 
-class UnitCellHelper():
+
+class UnitCellHelper:
     def __init__(self, cell):
         a = cell.length_a
         b = cell.length_b
@@ -96,24 +101,21 @@ class UnitCellHelper():
         alpha = cell.angle_alpha
         beta = cell.angle_beta
         gamma = cell.angle_gamma
-        cos_alpha = math.cos(math.radians(alpha)) #float
-        cos_beta = math.cos(math.radians(beta)) #float
-        cos_gamma = math.cos(math.radians(gamma)) #float
-        sin_alpha = math.sin(math.radians(alpha)) #float
-        sin_beta = math.sin(math.radians(beta)) #float
-        sin_gamma = math.sin(math.radians(gamma)) #float
-        if (sin_alpha == 0 or sin_beta == 0 or sin_gamma == 0):
+        cos_alpha = math.cos(math.radians(alpha))  # float
+        cos_beta = math.cos(math.radians(beta))  # float
+        cos_gamma = math.cos(math.radians(gamma))  # float
+        sin_alpha = math.sin(math.radians(alpha))  # float
+        sin_beta = math.sin(math.radians(beta))  # float
+        sin_gamma = math.sin(math.radians(gamma))  # float
+        if sin_alpha == 0 or sin_beta == 0 or sin_gamma == 0:
             raise Exception("Impossible Unit Cell Angle")
-        cos_alpha_star_sin_beta = (cos_beta * cos_gamma - cos_alpha) / sin_gamma #float
-        cos_alpha_star = cos_alpha_star_sin_beta / sin_beta #float
-        s1rca2 = math.sqrt(1.0 - cos_alpha_star * cos_alpha_star) #float
+        cos_alpha_star_sin_beta = (cos_beta * cos_gamma - cos_alpha) / sin_gamma  # float
+        cos_alpha_star = cos_alpha_star_sin_beta / sin_beta  # float
+        s1rca2 = math.sqrt(1.0 - cos_alpha_star * cos_alpha_star)  # float
 
-        self.orth = [
-            a,      b * cos_gamma,   c * cos_beta,
-            0.0,    b * sin_gamma,  -c * cos_alpha_star_sin_beta,
-            0.0,    0.0,             c * sin_beta * s1rca2]
+        self.orth = [a, b * cos_gamma, c * cos_beta, 0.0, b * sin_gamma, -c * cos_alpha_star_sin_beta, 0.0, 0.0, c * sin_beta * s1rca2]
 
-    def Orthogonalize(self, x,  y,  z, orth):
+    def Orthogonalize(self, x, y, z, orth):
 
         orth.x = self.orth[0] * x + self.orth[1] * y + self.orth[2] * z
         orth.y = self.orth[4] * y + self.orth[5] * z

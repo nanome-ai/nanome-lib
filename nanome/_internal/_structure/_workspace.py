@@ -1,8 +1,8 @@
 from nanome.util import Vector3, Quaternion, Logs
 from . import _Base
 
-class _Workspace(_Base):
 
+class _Workspace(_Base):
     @classmethod
     def _create(cls):
         return cls()
@@ -10,7 +10,7 @@ class _Workspace(_Base):
     def __init__(self):
         self._position = Vector3()
         self._rotation = Quaternion()
-        self._scale = Vector3(0.02,0.02,0.02)
+        self._scale = Vector3(0.02, 0.02, 0.02)
         self._complexes = []
 
     def _add_complex(self, complex):

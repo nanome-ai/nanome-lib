@@ -1,9 +1,10 @@
 __metaclass__ = type
-#classes inherting from _UIBase are expected to also inherit UIBase separately.
+# classes inherting from _UIBase are expected to also inherit UIBase separately.
 class _UIBase(object):
     id_gen = 0
+
     def __init__(self):
-        #protocol
+        # protocol
         self._content_id = _UIBase.id_gen
         _UIBase.id_gen += 1
 

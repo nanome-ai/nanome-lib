@@ -53,6 +53,7 @@ class Octree:
             self._root.add(self, entry)
         except RecursionError:
             from . import Logs
+
             Logs.error("Maximum recursion depth reached. Make sure you don't add more than the max_objects number of objects with the exact same position.")
             raise
 
@@ -126,16 +127,18 @@ class Octree:
             p = self.position  # parent position
             o = q_size  # offset
             OctNode = Octree._OctNode
-            self.branches = [OctNode((p[0] - o, p[1] - o, p[2] - o), q_size),  # ---
-                             OctNode((p[0] + o, p[1] - o, p[2] - o), q_size),  # +--
-                             OctNode((p[0] - o, p[1] + o, p[2] - o), q_size),  # -+-
-                             OctNode((p[0] + o, p[1] + o, p[2] - o), q_size),  # ++-
-                             OctNode((p[0] - o, p[1] - o, p[2] + o), q_size),  # --+
-                             OctNode((p[0] + o, p[1] - o, p[2] + o), q_size),  # +-+
-                             OctNode((p[0] - o, p[1] + o, p[2] + o), q_size),  # -++
-                             OctNode((p[0] + o, p[1] + o, p[2] + o), q_size)]  # +++
+            self.branches = [
+                OctNode((p[0] - o, p[1] - o, p[2] - o), q_size),  # ---
+                OctNode((p[0] + o, p[1] - o, p[2] - o), q_size),  # +--
+                OctNode((p[0] - o, p[1] + o, p[2] - o), q_size),  # -+-
+                OctNode((p[0] + o, p[1] + o, p[2] - o), q_size),  # ++-
+                OctNode((p[0] - o, p[1] - o, p[2] + o), q_size),  # --+
+                OctNode((p[0] + o, p[1] - o, p[2] + o), q_size),  # +-+
+                OctNode((p[0] - o, p[1] + o, p[2] + o), q_size),  # -++
+                OctNode((p[0] + o, p[1] + o, p[2] + o), q_size),
+            ]  # +++
             # move children down
-            while(len(self.here) > 0):
+            while len(self.here) > 0:
                 entry = self.here[-1]
                 del self.here[-1]
                 self.add(tree, entry)
@@ -150,7 +153,7 @@ class Octree:
 
         def print_out(self, depth):
             if len(self.here) > 0 or self.branches is not None:
-                print(depth * ' ' + "Depth:", str(depth), "center:", str(self.position), "size:", str(self.h_size), "entries:", str(len(self.here)))
+                print(depth * " " + "Depth:", str(depth), "center:", str(self.position), "size:", str(self.h_size), "entries:", str(len(self.here)))
                 if self.branches is not None:
                     for branch in self.branches:
                         branch.print_out(depth + 1)

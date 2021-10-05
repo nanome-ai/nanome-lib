@@ -11,6 +11,7 @@ HAS_ADVANCED_OPTIONS = False
 
 # Plugin
 
+
 class DeepUpdatePlugin(nanome.PluginInstance):
     def start(self):
         print("Start DeepUpdateWorkspace Plugin")
@@ -57,19 +58,17 @@ class DeepUpdatePlugin(nanome.PluginInstance):
                                 print("bond colored")
                                 redbond = False
                                 DeepUpdatePlugin.red_bond(bond)
-                                continue                            
+                                continue
                         for atom in residue.atoms:
                             if redatom:
                                 print("atom colored")
                                 redatom = False
                                 dirty_structures.append(atom)
                                 DeepUpdatePlugin.red_atom(atom)
-                                continue                            
+                                continue
         nanome.util.Logs.debug("XXXXXXXXXXXXXXXXXXXXXXXX")
         self.update_structures_deep(dirty_structures)
 
-
-        
     @staticmethod
     def red_atom(atom):
         atom.surface_rendering = True
@@ -105,5 +104,6 @@ class DeepUpdatePlugin(nanome.PluginInstance):
 
     def __init__(self):
         pass
+
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, DeepUpdatePlugin)

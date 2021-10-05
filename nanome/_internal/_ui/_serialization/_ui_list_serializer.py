@@ -5,6 +5,7 @@ from .. import _UIList
 
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _UIListSerializer(_TypeSerializer):
     def __init__(self):
         self._array = _ArraySerializer()
@@ -17,7 +18,7 @@ class _UIListSerializer(_TypeSerializer):
         return "List"
 
     def serialize(self, version, value, context):
-        if (version == 0 ):
+        if version == 0:
             safe_id = (context._plugin_id << 24) & 0x7FFFFFFF
             safe_id |= value._content_id
         else:
@@ -32,7 +33,7 @@ class _UIListSerializer(_TypeSerializer):
     def deserialize(self, version, context):
         value = _UIList._create()
         value._content_id = context.read_int()
-        if (version == 0):
+        if version == 0:
             id_mask = 0x00FFFFFF
             value._content_id &= id_mask
         value._items = context.read_using_serializer(self._array)
@@ -41,5 +42,6 @@ class _UIListSerializer(_TypeSerializer):
         value._total_columns = context.read_int()
         value._unusable = context.read_bool()
         return value
+
 
 _UIBaseSerializer.register_type("UIList", _UIBaseSerializer.ContentType.elist, _UIListSerializer())

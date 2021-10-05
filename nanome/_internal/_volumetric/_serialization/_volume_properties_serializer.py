@@ -2,6 +2,7 @@ from .. import _VolumeData
 from nanome._internal._util._serializers import _TypeSerializer, _ArraySerializer
 from . import _VolumeLayerSerializer
 
+
 class _VolumePropertiesSerializer(_TypeSerializer):
     def __init__(self):
         self.__array = _ArraySerializer()

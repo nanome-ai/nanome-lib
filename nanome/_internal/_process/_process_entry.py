@@ -1,4 +1,4 @@
-class _ProcessEntry():
+class _ProcessEntry:
     _current_process_id = 0
 
     def __init__(self, request, session):

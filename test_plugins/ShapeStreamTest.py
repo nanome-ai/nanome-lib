@@ -99,6 +99,7 @@ class ShapeStreamTest(nanome.PluginInstance):
             self.__colors.append(0)
             self.__colors.append(0)
             self.__colors.append(255)
+
         return cb
 
     def on_stream_update_done(self):
@@ -148,7 +149,7 @@ class ShapeStreamTest(nanome.PluginInstance):
 
         filename = "objs/bananome.obj"
         o3dmesh = o3d.io.read_triangle_mesh(filename)
-        if not o3dmesh.has_vertex_normals():            
+        if not o3dmesh.has_vertex_normals():
             o3dmesh.compute_vertex_normals()
         if o3dmesh.has_vertex_colors():
             mesh.colors = np.asarray(o3dmesh.vertex_colors).flatten()
@@ -160,7 +161,7 @@ class ShapeStreamTest(nanome.PluginInstance):
         mesh.triangles = np.asarray(o3dmesh.triangles).flatten()
         mesh.anchors[0].position = nanome.util.Vector3(0, 0, 0)
         mesh.color = nanome.util.Color(255, 0, 0, 255)
-        #Fill colors and UVs if empty
+        # Fill colors and UVs if empty
         if len(mesh.uv) == 0:
             mesh.uv = np.repeat([0.0, 0.0], len(mesh.vertices) / 3)
         if len(mesh.colors) == 0:

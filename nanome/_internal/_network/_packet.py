@@ -3,6 +3,7 @@ import struct
 
 import zlib
 
+
 class _Packet(object):
     packet_header_length = 15
     protocol_version = 0
@@ -15,8 +16,8 @@ class _Packet(object):
     packet_type_client_disconnection = 6
     packet_type_master_change = 7
     packet_type_keep_alive = 8
-    header_pack = struct.Struct('<HIBIi').pack
-    header_unpack = struct.Struct('<HIBIi').unpack
+    header_pack = struct.Struct("<HIBIi").pack
+    header_unpack = struct.Struct("<HIBIi").unpack
     __compress_obj = zlib.compressobj(4, zlib.DEFLATED, -zlib.MAX_WBITS)
 
     @staticmethod
@@ -25,7 +26,7 @@ class _Packet(object):
 
     def write_string(self, str):
         self.payload_length += len(str)
-        self.payload.extend(str.encode('utf-8'))
+        self.payload.extend(str.encode("utf-8"))
 
     def write(self, data):
         self.payload_length += len(data)
@@ -78,4 +79,3 @@ class _Packet(object):
         self.plugin_id = 0
         self.payload_length = 0
         self.payload = bytearray()
-    

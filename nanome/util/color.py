@@ -63,7 +63,7 @@ class Color(object):
         :param value: Int value of the color
         :type value: :class:`int`
         """
-        if (value < 0):  # convert to uint
+        if value < 0:  # convert to uint
             value += 4294967295  # max int
         value = int(value)
         color = Color(whole_num=value)

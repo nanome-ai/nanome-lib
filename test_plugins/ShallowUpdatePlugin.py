@@ -12,29 +12,31 @@ HAS_ADVANCED_OPTIONS = False
 
 # Plugin
 
+
 def count_structures(complex):
     molecule_counter = sum(1 for i in complex.molecules)
     chain_counter = sum(1 for i in complex.chains)
     residue_counter = sum(1 for i in complex.residues)
     bond_counter = sum(1 for i in complex.bonds)
     atom_counter = sum(1 for i in complex.atoms)
-    print("molecule_counter:",molecule_counter)
-    print("chain_counter:",chain_counter)
-    print("residue_counter:",residue_counter)
-    print("bond_counter:",bond_counter)
-    print("atom_counter:",atom_counter)
+    print("molecule_counter:", molecule_counter)
+    print("chain_counter:", chain_counter)
+    print("residue_counter:", residue_counter)
+    print("bond_counter:", bond_counter)
+    print("atom_counter:", atom_counter)
     return molecule_counter, chain_counter, residue_counter, bond_counter, atom_counter
+
 
 class ShallowUpdatePlugin(nanome.PluginInstance):
     def start(self):
         print("Start ShallowUpdate Plugin")
 
-#complex: name
-#molecule: name
-#chain: name
-#residue: name
-#bond: kind
-#atom: name
+    # complex: name
+    # molecule: name
+    # chain: name
+    # residue: name
+    # bond: kind
+    # atom: name
     def on_workspace_received(self, workspace):
         nanome.util.Logs.debug("RUNNINNGANSDGNASDNFASDFA")
         redcomplex = True
@@ -80,14 +82,14 @@ class ShallowUpdatePlugin(nanome.PluginInstance):
                                 print("bond colored")
                                 # redbond = False
                                 dirty_structures.append(bond)
-                                # continue                            
+                                # continue
                         for atom in residue.atoms:
                             if redatom:
                                 print("atom colored")
                                 atom.name = "EEE"
                                 # redatom = False
                                 dirty_structures.append(atom)
-                                # continue                            
+                                # continue
         nanome.util.Logs.debug("XXXXXXXXXXXXXXXXXXXXXXXX")
         nanome.util.Logs.debug(len(dirty_structures))
         self.update_structures_shallow(dirty_structures)
@@ -97,5 +99,6 @@ class ShallowUpdatePlugin(nanome.PluginInstance):
 
     def __init__(self):
         pass
+
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, ShallowUpdatePlugin)

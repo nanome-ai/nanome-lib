@@ -1,5 +1,4 @@
-
-class _DropdownItem():
+class _DropdownItem:
     @classmethod
     def _create(cls):
         return cls()

@@ -1,10 +1,11 @@
 import nanome
+
 # from nanome import UI
 import nanome.api.ui as UI
+
 # from nanome.serialization.commands import ReceiveMenu, UpdateMenu
 from nanome._internal._ui._serialization import _LayoutNodeSerializer, _UIBaseSerializer
-from testing.utilities import (
-    alter_object, assert_equal, rand_string, create_test, test_serializer, TestOptions)
+from testing.utilities import alter_object, assert_equal, rand_string, create_test, test_serializer, TestOptions
 import unittest
 
 
@@ -54,12 +55,12 @@ def create_list():
     prefab.layout_orientation = nanome.ui.LayoutNode.LayoutTypes.vertical
     child1 = nanome.ui.LayoutNode()
     child1.sizing_type = nanome.ui.LayoutNode.SizingTypes.ratio
-    child1.sizing_value = .3
+    child1.sizing_value = 0.3
     child1.name = "label"
-    child1.forward_dist = .01
+    child1.forward_dist = 0.01
     child2 = nanome.ui.LayoutNode()
     child2.name = "button"
-    child2.forward_dist = .01
+    child2.forward_dist = 0.01
     prefab.add_child(child1)
     prefab.add_child(child2)
     prefab_label = nanome.ui.Label()
@@ -91,13 +92,13 @@ def create_layout_node():
     return value
 
 
-class FakeNetwork():
+class FakeNetwork:
     def __init__(self, original):
         self.original = original
         pass
 
     def on_menu_received(self, menu):
-        assert(self.original != menu)
+        assert self.original != menu
         assert_equal(self.original, menu)
 
 
@@ -115,7 +116,7 @@ def check_property(obj, property_name):
     prop = get_property(obj, property_name)
     prop.fget()
     prop.fset(v)
-    assert(prop.fget() == v)
+    assert prop.fget() == v
 
 
 def check_set_all(multi, value):
@@ -124,11 +125,11 @@ def check_set_all(multi, value):
 
 
 def assert_multi(multi, value):
-    assert(multi.idle == value)
-    assert(multi.selected == value)
-    assert(multi.highlighted == value)
-    assert(multi.selected_highlighted == value)
-    assert(multi.unusable == value)
+    assert multi.idle == value
+    assert multi.selected == value
+    assert multi.highlighted == value
+    assert multi.selected_highlighted == value
+    assert multi.unusable == value
 
 
 class FakeProperty(object):
@@ -139,6 +140,7 @@ class FakeProperty(object):
 
 def get_property(obj, attr):
     from functools import partial
+
     for it in [obj] + obj.__class__.mro():
         if attr in it.__dict__:
             prop = it.__dict__[attr]
@@ -147,6 +149,7 @@ def get_property(obj, attr):
             fp = FakeProperty(fset, fget)
             return fp
     raise AttributeError
+
 
 # region deprecation testing
 
@@ -182,8 +185,9 @@ def confirm_warning(*args):
 
 def assert_warning():
     global warned
-    assert(warned)
+    assert warned
     warned = False
+
 
 # tests that a multi-variable is equivalent to a collection of single-variables
 # multi is the multi variable object
@@ -200,8 +204,9 @@ def test_multi_var(multi, obj, base):
     def test_var(multi, single):
         single.fset("val1")
         assert_warning()
-        assert(multi.fget() == single.fget())
+        assert multi.fget() == single.fget()
         assert_warning()
+
     # this gets the property for us so we can test it.
     s_idle = get_property(obj, base + "_idle")
     m_idle = get_property(multi, "idle")
@@ -219,11 +224,12 @@ def test_multi_var(multi, obj, base):
     m_unusable = get_property(multi, "unusable")
     test_var(m_unusable, s_unusable)
     restore_warning()
+
+
 # endregion
 
 
 class UITestCase(unittest.TestCase):
-
     def test_ui(self):
         UI.Button()
         UI.Label()

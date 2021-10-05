@@ -4,10 +4,11 @@ from . import _LayoutNodeSerializer
 
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _MenuSerializer(_TypeSerializer):
     def __init__(self):
         self.string = _StringSerializer()
-    
+
     def version(self):
         return 0
 
@@ -28,7 +29,7 @@ class _MenuSerializer(_TypeSerializer):
         menu._enabled = context.read_bool()
         menu._index = context.read_int()
         menu._title = context.read_using_serializer(self.string)
-        menu._locked= context.read_bool()
+        menu._locked = context.read_bool()
         menu._width = context.read_float()
         menu._height = context.read_float()
         menu._root_id = context.read_int()

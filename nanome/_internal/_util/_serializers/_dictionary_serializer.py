@@ -2,6 +2,7 @@ from . import _TupleSerializer, _ArraySerializer
 
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _DictionarySerializer(_TypeSerializer):
     def __init__(self):
         self._serializer = None
@@ -14,12 +15,12 @@ class _DictionarySerializer(_TypeSerializer):
 
     def serialize(self, version, value, context):
         if self._serializer == None:
-            raise TypeError('Trying to serialize dictionary without setting content type first')
+            raise TypeError("Trying to serialize dictionary without setting content type first")
         context.write_using_serializer(self._serializer, value.items())
 
     def deserialize(self, version, context):
         if self._serializer == None:
-            raise TypeError('Trying to deserialize dictionary without setting content type first')
+            raise TypeError("Trying to deserialize dictionary without setting content type first")
         result = dict(context.read_using_serializer(self._serializer))
         return result
 

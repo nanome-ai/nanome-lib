@@ -24,9 +24,9 @@ class Residue(_Residue, Base):
         :param atom: Atom to add to the residue
         :type atom: :class:`~nanome.structure.Atom`
         """
-        if (self.molecule is not None and len(atom.in_conformer) > self.molecule.conformer_count):
+        if self.molecule is not None and len(atom.in_conformer) > self.molecule.conformer_count:
             raise ValueError("Length of in_conformer must match the conformer count of the parent molecule.")
-        if (self.molecule is not None and len(atom.positions) > self.molecule.conformer_count):
+        if self.molecule is not None and len(atom.positions) > self.molecule.conformer_count:
             raise ValueError("Length of positions must match the conformer count of the parent molecule.")
         atom.index = -1
         self._add_atom(atom)
@@ -48,9 +48,9 @@ class Residue(_Residue, Base):
         :param bond: Bond to add to the residue
         :type bond: :class:`~nanome.structure.Bond`
         """
-        if (self.molecule is not None and len(bond.in_conformer) > self.molecule.conformer_count):
+        if self.molecule is not None and len(bond.in_conformer) > self.molecule.conformer_count:
             raise ValueError("Length of in_conformer must match the conformer count of the parent molecule.")
-        if (self.molecule is not None and len(bond.kinds) > self.molecule.conformer_count):
+        if self.molecule is not None and len(bond.kinds) > self.molecule.conformer_count:
             raise ValueError("Length of kinds must match the conformer count of the parent molecule.")
         bond.index = -1
         self._add_bond(bond)
@@ -81,6 +81,7 @@ class Residue(_Residue, Base):
         """
         for bond in self._bonds:
             yield bond
+
     # endregion
 
     # region connections
@@ -104,6 +105,7 @@ class Residue(_Residue, Base):
         | Complex that the residue is part of
         """
         return self._complex
+
     # endregion
 
     # region all fields
@@ -233,6 +235,7 @@ class Residue(_Residue, Base):
     @ignored_alt_locs.setter
     def ignored_alt_locs(self, value):
         self._ignored_alt_locs = value
+
     # endregion
 
     # region deprecated
@@ -335,4 +338,6 @@ class Residue(_Residue, Base):
             self.parent.secondary_structure = value
 
     # endregion
+
+
 _Residue._create = Residue

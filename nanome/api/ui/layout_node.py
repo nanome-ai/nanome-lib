@@ -13,6 +13,7 @@ class LayoutNode(_LayoutNode):
     :param name: Name of the node, used to identify it and find it later
     :type name: :class:`str`
     """
+
     PaddingTypes = nanome.util.enums.PaddingTypes
     SizingTypes = nanome.util.enums.SizingTypes
     LayoutTypes = nanome.util.enums.LayoutTypes
@@ -155,6 +156,7 @@ class LayoutNode(_LayoutNode):
     @parent.setter
     def parent(self, value):
         self._parent = value
+
     # endregion
     # region API functions
 
@@ -180,8 +182,8 @@ class LayoutNode(_LayoutNode):
         return res
 
     def find_ancestor(self, name):
-        if (self._parent is not None):
-            if (self._parent.name == name):
+        if self._parent is not None:
+            if self._parent.name == name:
                 return self._parent
             return self._parent.find_ancestor(name)
         return None
@@ -220,7 +222,7 @@ class LayoutNode(_LayoutNode):
             left if left is not None else self.padding[0],
             right if right is not None else self.padding[1],
             top if top is not None else self.padding[2],
-            down if down is not None else self.padding[3]
+            down if down is not None else self.padding[3],
         )
 
     def set_size_ratio(self, size):
@@ -233,6 +235,7 @@ class LayoutNode(_LayoutNode):
 
     def set_size_expand(self):
         self.sizing_type = _LayoutNode.SizingTypes.expand
+
     # endregion
     # region Content adders
 
@@ -301,5 +304,7 @@ class LayoutNode(_LayoutNode):
         return dropdown_
 
     # endregion
+
+
 LayoutNode.io._setup_addon(LayoutNode)
 _LayoutNode._create = LayoutNode

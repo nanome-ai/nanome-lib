@@ -50,11 +50,11 @@ def read_write_read_frames(filename):
 def check_facts(complex, molecules, chains, residues, bonds, atoms):
     counters = count_structures(complex)
     (molecule_count, chain_count, residue_count, bond_count, atom_count) = counters
-    assert(molecule_count == molecules)
-    assert(chain_count == chains)
-    assert(residue_count == residues)
-    assert(bond_count == bonds)
-    assert(atom_count == atoms)
+    assert molecule_count == molecules
+    assert chain_count == chains
+    assert residue_count == residues
+    assert bond_count == bonds
+    assert atom_count == atoms
 
 
 def count_structures(complex):
@@ -78,12 +78,11 @@ def compare_atom_positions(complex1, complex2):
         atom1 = next(a1)
         atom2 = next(a2)
         difference = atom1.position.x - atom2.position.x
-        assert(difference < .001)
-        assert(difference > -.001)
+        assert difference < 0.001
+        assert difference > -0.001
 
 
 class SDFTestCase(unittest.TestCase):
-
     def test_aromatic(self):
         input_dir = test_assets + ("/sdf/aromatic.sdf")
 
@@ -95,7 +94,7 @@ class SDFTestCase(unittest.TestCase):
         for bond in complex2.bonds:
             if bond.kind == nanome.util.enums.Kind.Aromatic:
                 aromatic_bond = True
-        assert(aromatic_bond)
+        assert aromatic_bond
 
     def test_thrombin(self):
         input_dir = test_assets + ("/sdf/small_thrombin.sdf")
@@ -118,7 +117,7 @@ class SDFTestCase(unittest.TestCase):
             as_lines = f.readlines()
         complex3 = struct.Complex.io.from_sdf(string=as_string)
         complex4 = struct.Complex.io.from_sdf(lines=as_lines)
-        assert(complex1 is not None)
-        assert(complex2 is not None)
-        assert(complex3 is not None)
-        assert(complex4 is not None)
+        assert complex1 is not None
+        assert complex2 is not None
+        assert complex3 is not None
+        assert complex4 is not None

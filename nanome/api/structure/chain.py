@@ -58,6 +58,7 @@ class Chain(_Chain, Base):
         for residue in self.residues:
             for bond in residue.bonds:
                 yield bond
+
     # endregion
 
     # region connections
@@ -74,6 +75,7 @@ class Chain(_Chain, Base):
         | Complex that this chain is in
         """
         return self._complex
+
     # endregion
 
     # region all fields
@@ -91,6 +93,7 @@ class Chain(_Chain, Base):
         if type(value) is not str:
             value = str(value)
         self._name = value
+
     # endregion
 
     # region deprecated
@@ -112,4 +115,6 @@ class Chain(_Chain, Base):
             self.parent.name = value
 
     # endregion
+
+
 _Chain._create = Chain

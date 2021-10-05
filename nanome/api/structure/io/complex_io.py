@@ -105,19 +105,19 @@ class ComplexIO(_Addon):
         return self.__from_file(kwargs, _mmcif)
 
     def __from_file(self, kwargs, parser):
-        if (len(kwargs) != 1):
+        if len(kwargs) != 1:
             nanome.util.Logs.warning("Multiple args not supported. Ignoring extraneous arguments.")
 
-        if ("path" in kwargs):
+        if "path" in kwargs:
             path = kwargs["path"]
             with open(path) as f:
                 lines = f.readlines()
-        elif ("file" in kwargs):
+        elif "file" in kwargs:
             file = kwargs["file"]
             lines = file.readlines()
-        elif ("lines" in kwargs):
+        elif "lines" in kwargs:
             lines = kwargs["lines"]
-        elif ("string" in kwargs):
+        elif "string" in kwargs:
             lines = kwargs["string"].splitlines()
         else:
             raise ValueError("No valid argument")

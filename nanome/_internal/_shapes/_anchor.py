@@ -1,6 +1,7 @@
 from nanome.util import Vector3, Logs
 from nanome.util.enums import ShapeAnchorType
 
+
 class _Anchor(object):
     def __init__(self):
         self._target = 0

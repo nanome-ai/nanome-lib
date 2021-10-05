@@ -8,6 +8,7 @@ class Atom(_Atom, Base):
     """
     | Represents an Atom
     """
+
     AtomRenderingMode = nanome.util.enums.AtomRenderingMode
 
     def __init__(self):
@@ -51,6 +52,7 @@ class Atom(_Atom, Base):
         | Complex that the atom is part of
         """
         return self._complex
+
     # endregion
 
     # region all fields
@@ -358,6 +360,7 @@ class Atom(_Atom, Base):
     @alt_loc.setter
     def alt_loc(self, value):
         self._alt_loc = value[0]
+
     # endregion
 
     # region conformer stuff
@@ -534,4 +537,6 @@ class Atom(_Atom, Base):
             self._parent.is_het = value
 
     # endregion
+
+
 _Atom._create = Atom

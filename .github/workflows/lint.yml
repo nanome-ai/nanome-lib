@@ -1,0 +1,24 @@
+name: Lint
+
+# on: [push, pull_request]
+on:
+  push:
+    branch: black-formatter
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - name: Install Python dependencies
+        run: |
+          pip install black
+      - uses: wearerequired/lint-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          black: true
+          auto_fix: true
+          git_name: 'git-action'
+          git_email: 'gitbot@nanome.ai'
+          black_args: '--line-length 200'

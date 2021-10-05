@@ -1,6 +1,7 @@
 import nanome
 from nanome._internal._structure import _Complex, _Molecule, _Chain, _Residue, _Atom, _Bond
 
+
 class Results(object):
     def __init__(self):
         self.saved_atoms = []
@@ -13,7 +14,9 @@ class Results(object):
             self.position = None
             self.model_number = 0
 
+
 Options = nanome.util.complex_save_options.MMCIFSaveOptions
+
 
 class ColumnWidths(object):
     def __init__(self):
@@ -67,11 +70,9 @@ def to_file(path, complex, options=None):
                 for atom in residue._atoms:
                     if saved_atom_constraint is None or atom in saved_atom_constraint:
                         if options.write_hydrogens or atom.symbol != "H":
-                            saved_atom = atom_to_saved_atom(
-                                atom, atom_num, model_num)
+                            saved_atom = atom_to_saved_atom(atom, atom_num, model_num)
                             result.saved_atoms.append(saved_atom)
-                            text_atom = atom_to_text(atom, residue, chain,
-                                                    atom_num, model_num)
+                            text_atom = atom_to_text(atom, residue, chain, atom_num, model_num)
                             text_atoms.append(text_atom)
                             update_column_widths(text_atom, column_widths)
                             atom_num += 1
@@ -80,7 +81,7 @@ def to_file(path, complex, options=None):
     for text_atom in text_atoms:
         lines.append(text_atom_to_line(text_atom, column_widths))
     lines.append("#")
-    file_text = '\n'.join(lines)
+    file_text = "\n".join(lines)
     f = open(path, "w")
     f.write(file_text)
     f.close()
@@ -122,10 +123,8 @@ def text_atom_to_line(text_atom, column_widths):
     line += pad_right(1 + column_widths.auth_seq_id, text_atom.auth_seq_id)
     line += pad_right(1 + column_widths.auth_comp_id, text_atom.auth_comp_id)
     line += pad_right(1 + column_widths.auth_asym_id, text_atom.auth_asym_id)
-    line += pad_right(1 + column_widths.auth_atom_id,
-                      add_quotes_if_needed(text_atom.auth_atom_id))
-    line += pad_right(1 + column_widths.pdbx_PDB_model_num,
-                      text_atom.pdbx_PDB_model_num)
+    line += pad_right(1 + column_widths.auth_atom_id, add_quotes_if_needed(text_atom.auth_atom_id))
+    line += pad_right(1 + column_widths.pdbx_PDB_model_num, text_atom.pdbx_PDB_model_num)
     return line
 
 
@@ -167,28 +166,19 @@ def atom_to_saved_atom(atom, id, model):
 
 def update_column_widths(text_atom, column_widths):
     # type: (AtomText, ColumnWidths)
-    column_widths.group_PDB = max(
-        len(text_atom.group_PDB), column_widths.group_PDB)
+    column_widths.group_PDB = max(len(text_atom.group_PDB), column_widths.group_PDB)
     column_widths.id = max(len(text_atom.id), column_widths.id)
-    column_widths.type_symbol = max(
-        len(text_atom.type_symbol), column_widths.type_symbol)
+    column_widths.type_symbol = max(len(text_atom.type_symbol), column_widths.type_symbol)
     column_widths.cartn_x = max(len(text_atom.cartn_x), column_widths.cartn_x)
     column_widths.cartn_y = max(len(text_atom.cartn_y), column_widths.cartn_y)
     column_widths.cartn_z = max(len(text_atom.cartn_z), column_widths.cartn_z)
-    column_widths.occupancy = max(
-        len(text_atom.occupancy), column_widths.occupancy)
-    column_widths.b_iso_or_equiv = max(
-        len(text_atom.b_iso_or_equiv), column_widths.b_iso_or_equiv)
-    column_widths.auth_seq_id = max(
-        len(text_atom.auth_seq_id), column_widths.auth_seq_id)
-    column_widths.auth_comp_id = max(
-        len(text_atom.auth_comp_id), column_widths.auth_comp_id)
-    column_widths.auth_asym_id = max(
-        len(text_atom.auth_asym_id), column_widths.auth_asym_id)
-    column_widths.auth_atom_id = max(
-        len(text_atom.auth_atom_id), column_widths.auth_atom_id)
-    column_widths.pdbx_PDB_model_num = max(
-        len(text_atom.pdbx_PDB_model_num), column_widths.pdbx_PDB_model_num)
+    column_widths.occupancy = max(len(text_atom.occupancy), column_widths.occupancy)
+    column_widths.b_iso_or_equiv = max(len(text_atom.b_iso_or_equiv), column_widths.b_iso_or_equiv)
+    column_widths.auth_seq_id = max(len(text_atom.auth_seq_id), column_widths.auth_seq_id)
+    column_widths.auth_comp_id = max(len(text_atom.auth_comp_id), column_widths.auth_comp_id)
+    column_widths.auth_asym_id = max(len(text_atom.auth_asym_id), column_widths.auth_asym_id)
+    column_widths.auth_atom_id = max(len(text_atom.auth_atom_id), column_widths.auth_atom_id)
+    column_widths.pdbx_PDB_model_num = max(len(text_atom.pdbx_PDB_model_num), column_widths.pdbx_PDB_model_num)
 
 
 def float_to_string(value, digits):
@@ -196,17 +186,17 @@ def float_to_string(value, digits):
     int_comp = int(value)
     string_val = str(round(value, digits))
     float_digits = len(string_val) - len(str(int_comp)) - 1
-    if (int_comp == 0 and value < 0):
+    if int_comp == 0 and value < 0:
         float_digits -= 1
     for i in range(digits - float_digits):
-        string_val += '0'
+        string_val += "0"
     return string_val
 
 
 def add_quotes_if_needed(text):
     # type: (str) -> str
     if "'" in text:
-        return "\"" + text + "\""
+        return '"' + text + '"'
     else:
         return text
 
@@ -216,16 +206,16 @@ def pad_right(pad, addition):
     diff = pad - len(addition)
     if diff > 0:
         for i in range(diff):
-            base += ' '
+            base += " "
     return base
 
 
 def pad_left(pad, addition):
     base = ""
     diff = pad - len(addition)
-    if (diff > 0):
+    if diff > 0:
         for i in range(diff):
-            base += ' '
+            base += " "
     base += addition
     return base
 

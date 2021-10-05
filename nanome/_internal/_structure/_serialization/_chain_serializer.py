@@ -4,8 +4,9 @@ from .. import _Chain
 
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _ChainSerializer(_TypeSerializer):
-    def __init__(self, shallow = False):
+    def __init__(self, shallow=False):
         self.shallow = shallow
         self.array_serializer = _ArraySerializer()
         self.array_serializer.set_type(_ResidueSerializer())
@@ -19,7 +20,7 @@ class _ChainSerializer(_TypeSerializer):
 
     def serialize(self, version, value, context):
         context.write_long(value._index)
-        if (self.shallow):
+        if self.shallow:
             context.write_using_serializer(self.array_serializer, [])
         else:
             context.write_using_serializer(self.array_serializer, value._residues)

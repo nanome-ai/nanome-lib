@@ -10,7 +10,7 @@ def rand_int():
 
 def rand_float():
     dbl = random.uniform(-340282346638528859811704183484516925440, 340282346638528859811704183484516925440)
-    flt = struct.unpack('f', struct.pack('f', dbl))[0]
+    flt = struct.unpack("f", struct.pack("f", dbl))[0]
     return flt
 
 
@@ -53,9 +53,9 @@ class ContextTestCase(unittest.TestCase):
         ints_out = buffer.read_int_array()
         floats_out = buffer.read_float_array()
         longs_out = buffer.read_long_array()
-        assert(tuple(ints_in) == ints_out)
-        assert(tuple(floats_in) == floats_out)
-        assert(tuple(longs_in) == longs_out)
+        assert tuple(ints_in) == ints_out
+        assert tuple(floats_in) == floats_out
+        assert tuple(longs_in) == longs_out
 
     def test_primitive(self):
         buffer = _Data()
@@ -110,46 +110,46 @@ class ContextTestCase(unittest.TestCase):
 
         # check vals
         i = 0
-        assert (buffer.read_bool() == test_values[i])
+        assert buffer.read_bool() == test_values[i]
         i += 1
-        assert (buffer.read_bool() == test_values[i])
+        assert buffer.read_bool() == test_values[i]
         i += 1
-        assert (buffer.read_int() == test_values[i])
+        assert buffer.read_int() == test_values[i]
         i += 1
-        assert (buffer.read_int() == test_values[i])
+        assert buffer.read_int() == test_values[i]
         i += 1
-        assert (buffer.read_float() == test_values[i])
+        assert buffer.read_float() == test_values[i]
         i += 1
-        assert (buffer.read_float() == test_values[i])
+        assert buffer.read_float() == test_values[i]
         i += 1
-        assert (buffer.read_float() == test_values[i])
+        assert buffer.read_float() == test_values[i]
         i += 1
-        assert (buffer.read_float() == test_values[i])
+        assert buffer.read_float() == test_values[i]
         i += 1
-        assert (buffer.read_long() == test_values[i])
+        assert buffer.read_long() == test_values[i]
         i += 1
-        assert (buffer.read_long() == test_values[i])
+        assert buffer.read_long() == test_values[i]
         i += 1
-        assert (buffer.read_uint() == test_values[i])
+        assert buffer.read_uint() == test_values[i]
         i += 1
-        assert (buffer.read_uint() == test_values[i])
+        assert buffer.read_uint() == test_values[i]
         i += 1
-        assert (buffer.read_byte() == test_values[i])
+        assert buffer.read_byte() == test_values[i]
         i += 1
-        assert (buffer.read_byte() == test_values[i])
+        assert buffer.read_byte() == test_values[i]
         i += 1
         # randoms
-        assert (buffer.read_int() == test_values[i])
+        assert buffer.read_int() == test_values[i]
         i += 1
-        assert (buffer.read_float() == test_values[i])
+        assert buffer.read_float() == test_values[i]
         i += 1
-        assert (buffer.read_long() == test_values[i])
+        assert buffer.read_long() == test_values[i]
         i += 1
-        assert (buffer.read_long() == test_values[i])
+        assert buffer.read_long() == test_values[i]
         i += 1
-        assert (buffer.read_uint() == test_values[i])
+        assert buffer.read_uint() == test_values[i]
         i += 1
-        assert (buffer.read_byte() == test_values[i])
+        assert buffer.read_byte() == test_values[i]
         i += 1
 
         # check the buffer is empty
@@ -158,4 +158,4 @@ class ContextTestCase(unittest.TestCase):
             buffer.read_byte()
         except:
             empty = True
-        assert(empty)
+        assert empty

@@ -7,6 +7,7 @@ class TextInput(_TextInput, UIBase):
     """
     | Represents a text input, where the user can input text
     """
+
     HorizAlignOptions = nanome.util.enums.HorizAlignOptions
 
     def __init__(self):

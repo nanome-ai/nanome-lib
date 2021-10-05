@@ -30,7 +30,7 @@ class _ComplexSerializer(_TypeSerializer):
 
     def serialize(self, version, value, context):
         context.write_long(value._index)
-        if (self.shallow):
+        if self.shallow:
             context.write_using_serializer(self.array, [])
         else:
             context.write_using_serializer(self.array, value._molecules)
@@ -44,7 +44,7 @@ class _ComplexSerializer(_TypeSerializer):
         if version >= 2:
             context.write_int(value._index_tag)
             context.write_using_serializer(self.string, value._split_tag)
-        if version >=3:
+        if version >= 3:
             context.write_using_serializer(self.pos, value._position)
             context.write_using_serializer(self.rot, value._rotation)
         else:
@@ -54,14 +54,13 @@ class _ComplexSerializer(_TypeSerializer):
             context.write_using_serializer(self.quaternion, rotation)
         context.write_using_serializer(self.dictionary, value._remarks)
 
-        #writing junk because selected flag is one directional.
+        # writing junk because selected flag is one directional.
         context.write_bool(False)
         context.write_bool(value._surface_dirty)
         context.write_float(value._surface_refresh_rate)
 
         if version >= 1:
             context.write_using_serializer(self.string, value._box_label)
-
 
     def deserialize(self, version, context):
         complex = _Complex._create()
@@ -79,7 +78,7 @@ class _ComplexSerializer(_TypeSerializer):
         if version >= 2:
             complex._index_tag = context.read_int()
             complex._split_tag = context.read_using_serializer(self.string)
-        if version >=3:
+        if version >= 3:
             complex._position = context.read_using_serializer(self.vector)
             complex._rotation = context.read_using_serializer(self.quaternion)
         else:
@@ -87,7 +86,7 @@ class _ComplexSerializer(_TypeSerializer):
             complex._rotation = context.read_using_serializer(self.quaternion)._inverse_handedness()
 
         complex._remarks = context.read_using_serializer(self.dictionary)
-        #true iff at least 1 atom is selected in current molecule
+        # true iff at least 1 atom is selected in current molecule
         complex._selected = context.read_bool()
         context.read_bool()  # Read surface dirty but ignore it
         complex._surface_dirty = False

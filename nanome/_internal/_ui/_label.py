@@ -2,6 +2,7 @@ import nanome
 from . import _UIBase
 from nanome.util.color import Color
 
+
 class _Label(_UIBase):
     HorizAlignOptions = nanome.util.enums.HorizAlignOptions
     VertAlignOptions = nanome.util.enums.VertAlignOptions
@@ -23,7 +24,7 @@ class _Label(_UIBase):
         self._text_bold = False
         self._text_italic = False
         self._text_underlined = False
-    
+
     def _copy_values_deep(self, other):
         super(_Label, self)._copy_values_deep(other)
         self._text_value = other._text_value

@@ -15,18 +15,18 @@ except ImportError:
 
 
 if sys.platform.startswith("linux"):
-    DSSP_PATH = os.path.join(os.path.dirname(__file__), '_external', '_dssp', 'dssp-linux')
+    DSSP_PATH = os.path.join(os.path.dirname(__file__), "_external", "_dssp", "dssp-linux")
     os.chmod(DSSP_PATH, 0o777)
 elif sys.platform.startswith("win"):
-    DSSP_PATH = os.path.join(os.path.dirname(__file__), '_external', '_dssp', 'dssp-3.0.0-win32.exe')
+    DSSP_PATH = os.path.join(os.path.dirname(__file__), "_external", "_dssp", "dssp-3.0.0-win32.exe")
 else:
     DSSP_PATH = None
 
 
-class _Dssp():
-    _types_coil = [' ', 'C', 'S', 'T']
-    _types_sheet = ['B', 'E']
-    _types_helix = ['G', 'H', 'I']
+class _Dssp:
+    _types_coil = [" ", "C", "S", "T"]
+    _types_sheet = ["B", "E"]
+    _types_helix = ["G", "H", "I"]
 
     def __init__(self, plugin, complex_list, callback=None):
         self.__complexes = complex_list
@@ -49,13 +49,13 @@ class _Dssp():
 
         self.__complex_idx = 0
         self.__molecule_idx = -1
-        self.__input = tempfile.NamedTemporaryFile(delete=False, suffix='.pdb')
-        self.__output = tempfile.NamedTemporaryFile(delete=False, suffix='.dssp')
+        self.__input = tempfile.NamedTemporaryFile(delete=False, suffix=".pdb")
+        self.__output = tempfile.NamedTemporaryFile(delete=False, suffix=".dssp")
         self.__current_complex_result = []
 
         self.__proc = Process()
         self.__proc.executable_path = DSSP_PATH
-        self.__proc.args = ['-i', self.__input.name, '-o', self.__output.name]
+        self.__proc.args = ["-i", self.__input.name, "-o", self.__output.name]
         self.__proc.output_text = True
         self.__proc.on_error = self.__on_error
         self.__proc.on_done = self.__dssp_done
@@ -107,7 +107,7 @@ class _Dssp():
         result = []
         i = 0
         while i < len(lines):
-            if lines[i][2] == '#':
+            if lines[i][2] == "#":
                 i += 1
                 while i < len(lines) and len(lines[i]) > 0:
                     line = lines[i]

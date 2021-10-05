@@ -22,7 +22,7 @@ class Matrix(object):
         self.__rows[m] = row
 
     def __str__(self):
-        s = '\n'.join([' '.join([str(item) for item in row]) for row in self.__rows])
+        s = "\n".join([" ".join([str(item) for item in row]) for row in self.__rows])
         return s
 
     def __eq__(self, matrix):
@@ -104,7 +104,7 @@ class Matrix(object):
         return [[rows[j][i] for j in range(m)] for i in range(n)]
 
     def get_minor(self, i, j):
-        rows = [row[:j] + row[j + 1:] for row in (self.__rows[:i] + self.__rows[i + 1:])]
+        rows = [row[:j] + row[j + 1 :] for row in (self.__rows[:i] + self.__rows[i + 1 :])]
         result = Matrix(len(rows), len(rows[0]))
         result.__rows = rows
         return result
@@ -169,10 +169,12 @@ class Matrix(object):
 
     @classmethod
     def compose_transformation_matrix(cls, position, rotation, scale=None):
-        if (scale is None):
+        if scale is None:
             return cls._compose_transformation_matrix(position, rotation)
         if not isinstance(position, Vector3) or not isinstance(rotation, Quaternion) or not isinstance(scale, Vector3):
-            raise ValueError("compose_translation_matrix expects a Vector3, a Quaternion, and a Vector3.\n Received (" + str(type(position)) + ", " + str(type(rotation)) + ", " + str(type(scale)) + ")")
+            raise ValueError(
+                "compose_translation_matrix expects a Vector3, a Quaternion, and a Vector3.\n Received (" + str(type(position)) + ", " + str(type(rotation)) + ", " + str(type(scale)) + ")"
+            )
         S = cls(4, 4)
         S[0][0] = scale.x
         S[1][1] = scale.y

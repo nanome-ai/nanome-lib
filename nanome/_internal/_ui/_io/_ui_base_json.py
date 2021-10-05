@@ -1,7 +1,9 @@
 from nanome.util import Logs
 from .. import _Button, _Mesh, _Slider, _Label, _TextInput, _UIBase, _UIList, _Image, _LoadingBar, _Dropdown
 from . import _button_json, _mesh_json, _slider_json, _text_input_json, _label_json, _ui_list_json, _image_json, _loading_bar_json, _dropdown_json
-#this line shouldnt't be needed ^^^
+
+# this line shouldnt't be needed ^^^
+
 
 def parse_json(content_json):
     type_name = content_json.read("type_name", "Unknown")
@@ -27,34 +29,35 @@ def parse_json(content_json):
         Logs.error("unknown content type: " + type_name)
         return _UIBase()
 
+
 def write_json(helper, content):
-    if(content is None):
+    if content is None:
         return None
-    elif(isinstance(content, _Button)):
+    elif isinstance(content, _Button):
         type_name = "Button"
         _button_json.write_json(helper, content)
-    elif(isinstance(content, _Mesh)):
+    elif isinstance(content, _Mesh):
         type_name = "Mesh"
         _mesh_json.write_json(helper, content)
-    elif(isinstance(content, _Slider)):
+    elif isinstance(content, _Slider):
         type_name = "Slider"
         _slider_json.write_json(helper, content)
-    elif(isinstance(content, _TextInput)):
+    elif isinstance(content, _TextInput):
         type_name = "TextInput"
         _text_input_json.write_json(helper, content)
-    elif(isinstance(content, _Label)):
+    elif isinstance(content, _Label):
         type_name = "Label"
         _label_json.write_json(helper, content)
-    elif(isinstance(content, _UIList)):
+    elif isinstance(content, _UIList):
         type_name = "List"
         _ui_list_json.write_json(helper, content)
-    elif(isinstance(content, _Image)):
+    elif isinstance(content, _Image):
         type_name = "Image"
         _image_json.write_json(helper, content)
-    elif(isinstance(content, _LoadingBar)):
+    elif isinstance(content, _LoadingBar):
         type_name = "LoadingBar"
         _loading_bar_json.write_json(helper, content)
-    elif(isinstance(content, _Dropdown)):
+    elif isinstance(content, _Dropdown):
         type_name = "Dropdown"
         _dropdown_json.write_json(helper, content)
     else:

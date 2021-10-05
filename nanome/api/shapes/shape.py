@@ -80,7 +80,7 @@ class Shape(_Shape):
             # If upload multiple fails, upload each one at a time.
             # Done as a fallback for older versions of Nanome that don't support
             # upload_multiple yet
-            Logs.warning('upload_multiple() failed, attempting to upload one at a time.')
+            Logs.warning("upload_multiple() failed, attempting to upload one at a time.")
 
             # Make sure fallback works for async calls
             future = None
@@ -118,7 +118,7 @@ class Shape(_Shape):
             # If destroy multiple fails, upload each one at a time.
             # Done as a fallback for older versions of Nanome that don't support
             # destroy_multiple yet
-            Logs.warning('destroy_multiple() failed, attempting to destroy one at a time.')
+            Logs.warning("destroy_multiple() failed, attempting to destroy one at a time.")
             for shape in shapes:
                 shape.destroy()
 

@@ -5,13 +5,15 @@ try:
 except ImportError:
     asyncio = False
 
-class Process():
+
+class Process:
     """
     | A command-line process wrapper.
     """
+
     _manager = None
 
-    class _ProcessRequest():
+    class _ProcessRequest:
         def __init__(self):
             self.executable_path = ""
             self.args = []

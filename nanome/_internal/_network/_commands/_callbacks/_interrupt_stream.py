@@ -1,6 +1,7 @@
 from nanome.util import Logs
 from nanome.util.stream import StreamInterruptReason
 
+
 def _receive_interrupt_stream(network, result, request_id):
     from nanome.api.streams import Stream
 

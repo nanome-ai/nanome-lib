@@ -3,6 +3,7 @@ from . import _DropdownItemSerializer
 from .. import _Dropdown
 from nanome._internal._util._serializers import _StringSerializer, _ArraySerializer, _TypeSerializer
 
+
 class _DropdownSerializer(_TypeSerializer):
     def __init__(self):
         self.string = _StringSerializer()
@@ -30,5 +31,6 @@ class _DropdownSerializer(_TypeSerializer):
         value._max_displayed_items = context.read_int()
         value._items = context.read_using_serializer(self.items)
         return value
+
 
 _UIBaseSerializer.register_type("Dropdown", _UIBaseSerializer.ContentType.edropdown, _DropdownSerializer())

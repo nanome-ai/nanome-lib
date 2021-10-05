@@ -1,7 +1,7 @@
 from . import _UIBase
 
-class _Dropdown(_UIBase):
 
+class _Dropdown(_UIBase):
     @classmethod
     def _create(cls):
         return cls()
@@ -15,7 +15,7 @@ class _Dropdown(_UIBase):
         self._items = []
         self._item_clicked_callback = lambda self, item: None
 
-    def _on_item_clicked (self, item):
+    def _on_item_clicked(self, item):
         self._item_clicked_callback(self, item)
 
     def _register_item_clicked_callback(self, func):
@@ -28,4 +28,3 @@ class _Dropdown(_UIBase):
         self._max_displayed_items = other._max_displayed_items
         self._items = [item._clone() for item in other._items]
         self._item_clicked_callback = other._item_clicked_callback
-

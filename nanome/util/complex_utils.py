@@ -1,5 +1,3 @@
-
-
 class ComplexUtils:
     """Useful util functions for working with Complexes."""
 
@@ -21,6 +19,7 @@ class ComplexUtils:
     def combine_ligands(receptor, ligands):
         """Align ligand Complexes to receptor, and combine into one Complex."""
         from nanome.api.structure import Complex
+
         combined_ligands = Complex()
         combined_ligands.names = []
         for ligand in ligands:
@@ -48,7 +47,7 @@ class ComplexUtils:
     def reset_transform(complex):
         # Must be used in conjuntion with `align_to`
         # to set the old_position and old_rotation values.
-        if hasattr(complex, 'old_position'):
+        if hasattr(complex, "old_position"):
             complex.position = complex.old_position
-        if hasattr(complex, 'old_rotation'):
+        if hasattr(complex, "old_rotation"):
             complex.rotation = complex.old_rotation

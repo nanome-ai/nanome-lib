@@ -5,7 +5,7 @@ import random
 import shutil
 
 
-class TestOptions():
+class TestOptions:
     def __init__(self, ignore_vars=[], accurate_floats=False, print_float_warnings=False):
         self.ignore_vars = ignore_vars
         self.accurate_floats = accurate_floats
@@ -17,10 +17,10 @@ def get_test_assets():
 
 
 def assert_equal(first, second, options=None):
-    if (options is None):
+    if options is None:
         options = TestOptions()
     val, path = verbose_equals(first, second, options)
-    if (not val):
+    if not val:
         Logs.debug("PATH:")
         Logs.debug("_" * 80)
         for layer in path:
@@ -31,7 +31,7 @@ def assert_equal(first, second, options=None):
 
 def assert_not_equal(first, second, options=TestOptions()):
     val, path = verbose_equals(first, second, options)
-    if (val):
+    if val:
         Logs.debug("All variables equal")
         raise AssertionError
 
@@ -62,11 +62,11 @@ def compare_values(first, second, seen_cache, options=TestOptions()):
     if first == second:
         return True, []
     # split by type to determing how to compare.
-    curr_type = ("type: " + str(first.__class__))
+    curr_type = "type: " + str(first.__class__)
     if not isinstance(second, first.__class__):
         output = [("DeepEqualsError:")]
-        output[0] += ("\nfirst type: " + str(first.__class__))
-        output[0] += ("\nsecond type: " + str(second.__class__))
+        output[0] += "\nfirst type: " + str(first.__class__)
+        output[0] += "\nsecond type: " + str(second.__class__)
         return False, output
     elif isinstance(first, list):
         result, output = compare_lists(first, second, seen_cache, options)
@@ -83,7 +83,7 @@ def compare_values(first, second, seen_cache, options=TestOptions()):
         except:
             diff = False
             if isinstance(first, float) and not options.accurate_floats:
-                if (abs(first - second) > .00001):
+                if abs(first - second) > 0.00001:
                     diff = True
                 elif first != second and options.print_float_warnings:
                     Logs.debug("floating point variables slightly different")
@@ -91,8 +91,8 @@ def compare_values(first, second, seen_cache, options=TestOptions()):
                 diff = True
             if diff:
                 output = [("DeepEqualsError: " + str(first.__class__))]
-                output[0] += ("\nfirst val: " + str(first))
-                output[0] += ("\nsecond val: " + str(second))
+                output[0] += "\nfirst val: " + str(first)
+                output[0] += "\nsecond val: " + str(second)
                 return False, output
             else:
                 return True, []
@@ -111,8 +111,8 @@ def compare_lists(first, second, seen_cache, options=TestOptions()):
     first_len = len(first)
     if first_len != len(second):
         output = [("Lists different lengths")]
-        output[0] += ("\nList1 len: " + str(first_len))
-        output[0] += ("\nList2 len: " + str(len(second)))
+        output[0] += "\nList1 len: " + str(first_len)
+        output[0] += "\nList2 len: " + str(len(second))
 
         return False, output
     else:
@@ -128,23 +128,23 @@ def compare_dicts(first, second, seen_cache, options=TestOptions()):
         if isinstance(key, str):
             if key in options.ignore_vars:
                 continue
-        if (key not in first):
+        if key not in first:
             output = [("DeepEqualsError: " + str(first.__class__))]
-            output[0] += ("\nkey " + str(key) + " not in first object")
+            output[0] += "\nkey " + str(key) + " not in first object"
             return False, output
     for key in first:
         if isinstance(key, str):
             if key in options.ignore_vars:
                 continue
-        if (key not in second):
+        if key not in second:
             output = [("DeepEqualsError: " + str(first.__class__))]
-            output[0] += ("\nkey " + str(key) + " not in second object")
+            output[0] += "\nkey " + str(key) + " not in second object"
             return False, output
         else:
             result, output = compare_values(first[key], second[key], seen_cache, options)
             if not result:
                 # newstr = ("type: " + str(first.__class__))
-                newstr = ("\nvariable: " + str(key))
+                newstr = "\nvariable: " + str(key)
                 output.insert(0, newstr)
                 return False, output
     return True, []
@@ -176,13 +176,13 @@ def alter_value(value, seen_cache={}):
             if isinstance(value, bool):
                 return not value
             elif isinstance(value, int):
-                if (value == 4294967295):
+                if value == 4294967295:
                     value = 1
                 return value + 1
             elif isinstance(value, str):
                 return value + " altered"
             elif isinstance(value, float):
-                return value + .1
+                return value + 0.1
             else:
                 return value
 
@@ -199,6 +199,7 @@ def previously_altered(value, seen_cache):
 
 def test_serializer(serializer, obj_to_test, options=None):
     from nanome._internal._network._serialization._context import _ContextDeserialization, _ContextSerialization
+
     context_s = _ContextSerialization(plugin_id=random.randint(0, 0xFFFFFFFF), version_table=FakeVersionTable())
     serializer.serialize(serializer.version(), obj_to_test, context_s)
     context_d = _ContextDeserialization(context_s.to_array(), FakeVersionTable())
@@ -214,12 +215,14 @@ class FakeVersionTable(object):
 def create_test(name, func, args):
     def test():
         return func(*args)
+
     test.__name__ = name
     return test
 
 
 def create_full_tree(height):
     from nanome import structure as struct
+
     if height == 1:
         atom = alter_object(struct.Atom())
         return atom
@@ -262,6 +265,7 @@ def create_full_tree(height):
 
 def create_molecule():
     from nanome import structure as struct
+
     molecule = struct.Molecule()
     molecule._associateds = [
         {
@@ -276,6 +280,7 @@ def create_molecule():
 
 def create_complex():
     from nanome import structure as struct
+
     complex = struct.Complex()
     complex._remarks = {
         "key1": "value1",
@@ -288,6 +293,7 @@ def create_complex():
 
 def bond_atoms(atom1, atom2):
     from nanome import structure as struct
+
     bond = struct.Bond()
     bond.atom1 = atom1
     bond.atom2 = atom2
@@ -301,8 +307,9 @@ def rand_int(min=-0x7FFFFFFF, max=0x7FFFFFFF):
 
 def rand_float(min=-340282346638528859811704183484516925440, max=340282346638528859811704183484516925440):
     import struct
+
     dbl = random.uniform(min, max)
-    flt = struct.unpack('f', struct.pack('f', dbl))[0]
+    flt = struct.unpack("f", struct.pack("f", dbl))[0]
     return flt
 
 
@@ -330,7 +337,7 @@ def rand_color():
     return Color(whole_num=rand_int())
 
 
-class Counter():
+class Counter:
     def __init__(self):
         self.count = 0
 
@@ -350,7 +357,7 @@ class Counter():
         return "counter(" + self.count + ")"
 
 
-class DebugTimer():
+class DebugTimer:
 
     _name_space = 30
     _elapsed_space = 14
@@ -384,7 +391,7 @@ class DebugTimer():
     def summary(cls):
         return cls.curr_process.summary()
 
-    class Process():
+    class Process:
         def __init__(self, name):
             self.name = name
             self.start_time = DebugTimer._get_time()
@@ -477,8 +484,8 @@ class DebugTimer():
 
     @classmethod
     def _start(cls):
-        cls.nano = 10**9
-        cls.milli = 10**3
+        cls.nano = 10 ** 9
+        cls.milli = 10 ** 3
         cls.curr_process = None
         cls.process_totals = {}
 

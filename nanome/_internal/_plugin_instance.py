@@ -19,6 +19,8 @@ UPDATE_RATE = 1.0 / 60.0
 MINIMUM_SLEEP = 0.001
 
 __metaclass__ = type
+
+
 class _PluginInstance(object):
     __callbacks = dict()
     __futures = dict()
@@ -48,7 +50,7 @@ class _PluginInstance(object):
             return
 
         if id not in callbacks:
-            Logs.warning('Received an unknown callback id:', id)
+            Logs.warning("Received an unknown callback id:", id)
             return
 
         callbacks[id](*args)
@@ -68,7 +70,7 @@ class _PluginInstance(object):
         try:
             callbacks[index](new_complex)
         except KeyError:
-            Logs.warning('Received an unknown updated complex index:', index)
+            Logs.warning("Received an unknown updated complex index:", index)
 
     @classmethod
     def _on_selection_changed(cls, index, new_complex):
@@ -76,7 +78,7 @@ class _PluginInstance(object):
         try:
             callbacks[index](new_complex)
         except KeyError:
-            Logs.warning('Received an unknown updated complex index:', index)
+            Logs.warning("Received an unknown updated complex index:", index)
 
     def _on_stop(self):
         try:

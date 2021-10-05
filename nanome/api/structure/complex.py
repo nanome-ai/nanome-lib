@@ -11,6 +11,7 @@ class Complex(_Complex, Base):
     """
     | Represents a Complex that contains molecules.
     """
+
     io = ComplexIO()
 
     def __init__(self):
@@ -84,6 +85,7 @@ class Complex(_Complex, Base):
         for residue in self.residues:
             for bond in residue.bonds:
                 yield bond
+
     # endregion
 
     # region all fields
@@ -112,7 +114,7 @@ class Complex(_Complex, Base):
     @locked.setter
     def locked(self, value):
         self._locked = value
-        if (value):
+        if value:
             self._boxed = True
 
     @property
@@ -240,7 +242,7 @@ class Complex(_Complex, Base):
     def full_name(self, value):
         self._name = value
         self._index_tag = 0
-        self._split_tag = ''
+        self._split_tag = ""
 
     @property
     def position(self):
@@ -273,6 +275,7 @@ class Complex(_Complex, Base):
 
     def get_complex_to_workspace_matrix(self):
         return Matrix.compose_transformation_matrix(self._position, self._rotation)
+
     # endregion
 
     def convert_to_conformers(self, force_conformers=None):
@@ -337,7 +340,7 @@ class Complex(_Complex, Base):
         @locked.setter
         def locked(self, value):
             self.parent.locked = value
-            if (value):
+            if value:
                 self.parent.boxed = True
 
         @property
@@ -445,5 +448,7 @@ class Complex(_Complex, Base):
             return result
 
     # endregion
+
+
 Complex.io._setup_addon(Complex)
 _Complex._create = Complex

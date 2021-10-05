@@ -1,8 +1,8 @@
 import unittest
 from nanome.util import Logs
 
-test_directory = 'testing/'
-file_pattern = '*_tests.py'
+test_directory = "testing/"
+file_pattern = "*_tests.py"
 
 Logs._set_verbose(True)
 

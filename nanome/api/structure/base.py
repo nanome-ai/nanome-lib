@@ -1,4 +1,5 @@
 from nanome._internal._structure._base import _Base
+
 __metaclass__ = type
 
 

@@ -1,5 +1,6 @@
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _DestroyStream(_TypeSerializer):
     def __init__(self):
         pass

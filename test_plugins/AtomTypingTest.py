@@ -24,5 +24,4 @@ class AtomTypingTest(nanome.PluginInstance):
         self.update_workspace(workspace)
 
 
-nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY,
-                    HAS_ADVANCED_OPTIONS, AtomTypingTest)
+nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, AtomTypingTest)

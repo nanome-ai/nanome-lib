@@ -4,6 +4,7 @@ from nanome.util import Logs
 
 Options = nanome.util.complex_save_options.SDFSaveOptions
 
+
 class Results(object):
     def __init__(self):
         self.saved_atoms = []
@@ -36,7 +37,7 @@ def to_file(path, complex, options=None):
             lines.append("$$$$")
         number_atoms = 0
         number_bonds = 0
-        serial_by_atom_unique = {}  #<long, int>
+        serial_by_atom_unique = {}  # <long, int>
         atom_serial = 1
 
         chains = molecule._chains
@@ -56,7 +57,7 @@ def to_file(path, complex, options=None):
                     atom_serial += 1
                     number_atoms += 1
         for chain in chains:
-            if (options.write_all_bonds) or (options.write_het_bonds and chain._name[0] == 'H'):
+            if (options.write_all_bonds) or (options.write_het_bonds and chain._name[0] == "H"):
                 for residue in chain._residues:
                     for bond in residue._bonds:
                         if bond.atom1._unique_identifier in serial_by_atom_unique and bond.atom2._unique_identifier in serial_by_atom_unique:
@@ -71,7 +72,7 @@ def to_file(path, complex, options=None):
         add_bonds(lines, result.saved_bonds)
         add_footer(lines)
         molecule_number += 1
-    file_text = '\n'.join(lines)
+    file_text = "\n".join(lines)
     f = open(path, "w")
     f.write(file_text)
     f.close()
@@ -113,7 +114,7 @@ def add_atoms(lines, saved_atoms):
 
 
 def add_bonds(lines, saved_bonds):
-    linked = {}  #<long,bool>
+    linked = {}  # <long,bool>
     idx = 0
     lines.append("M  V30 BEGIN BOND")
     for saved_bond in saved_bonds:
@@ -142,11 +143,12 @@ def float_to_string(value, digits):
     int_comp = int(value)
     string_val = str(round(value, digits))
     float_digits = len(string_val) - len(str(int_comp)) - 1
-    if (int_comp == 0 and value < 0):
+    if int_comp == 0 and value < 0:
         float_digits -= 1
     for i in range(digits - float_digits):
-        string_val += '0'
+        string_val += "0"
     return string_val
+
 
 def add_footer(lines):
     lines.append("M  V30 END CTAB")

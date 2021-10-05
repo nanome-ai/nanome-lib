@@ -3,7 +3,6 @@ import unittest
 
 
 class TestColorProperties(unittest.TestCase):
-
     def test_rgb(self):
         color = Color.Black()
         rgb = color.rgb

@@ -1,3 +1,3 @@
-__version__ = '{{version}}'
+__version__ = "{{version}}"
 
 from . import *

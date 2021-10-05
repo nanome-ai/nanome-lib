@@ -1,4 +1,5 @@
 import math
+
 # placeholder quaternion
 
 
@@ -14,7 +15,7 @@ class Quaternion(object):
         self._w = float(w)
 
     def __str__(self):
-        s = ' '.join([str(self._x), str(self._y), str(self._z), str(self._w)])
+        s = " ".join([str(self._x), str(self._y), str(self._z), str(self._w)])
         return s
 
     def set(self, x, y, z, w):
@@ -118,7 +119,7 @@ class Quaternion(object):
         """
         return self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
 
-    EPS = 1 * (10**-6)
+    EPS = 1 * (10 ** -6)
 
     def equals(self, other):
         return abs(self.dot(other)) > 1 - Quaternion.EPS
@@ -134,7 +135,7 @@ class Quaternion(object):
         """
         r = Quaternion(point.x, point.y, point.z, 0)
         q_conj = self.get_conjugate()
-        result = ((self * r) * q_conj)
+        result = (self * r) * q_conj
         point = point.get_copy()
         point.x = result.x
         point.y = result.y
