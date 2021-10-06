@@ -1,9 +1,6 @@
 name: Lint
 
-# on: [push, pull_request]
-on:
-  push:
-    branch: black-formatter
+on: [push, pull_request]
 
 jobs:
   lint:
