@@ -1,16 +1,20 @@
+##################
 User Interface API
-==================
+##################
 
+*******************
 Plugin Menu Creator
-^^^^^^^^^^^^^^^^^^^
+*******************
 
 In order to make menu creation easier, we provide a tool called StackStudio.
 
 .. todo::
     Write how to integrate plugin menu creator menus in a plugin
 
+
+***
 API
-^^^
+***
 
 The UI API can be used to create a Menu from scratch or to interact with any menu or UI element generator by the Plugin Menu Creator.
 
@@ -41,8 +45,9 @@ Following is an example of manual UI creation:
 .. literalinclude:: ../../test_plugins/UIPlugin.py
    :language: python
 
+******************
 Z-fighting problem
-^^^^^^^^^^^^^^^^^^
+******************
 
 A known problem, called z-fighting, is the following:
 
