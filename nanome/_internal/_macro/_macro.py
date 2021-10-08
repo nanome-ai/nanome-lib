@@ -6,7 +6,7 @@ from nanome._internal._network._commands._callbacks import _Messages
 
 
 class _Macro(object):
-    #generates a different random identifier for each instance of the plugin lib.
+    # generates a different random identifier for each instance of the plugin lib.
     _plugin_identifier = ''.join(random.choice(string.ascii_letters + string.digits) for i in range(12))
 
     def __init__(self):

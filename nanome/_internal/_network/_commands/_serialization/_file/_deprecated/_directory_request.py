@@ -3,6 +3,7 @@ from nanome.util import DirectoryRequestResult, DirectoryErrorCode
 
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _DirectoryRequest(_TypeSerializer):
     def __init__(self):
         self.__string = _StringSerializer()

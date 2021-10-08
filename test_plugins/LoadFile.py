@@ -14,6 +14,7 @@ HAS_ADVANCED_OPTIONS = False
 
 # Plugin
 
+
 class LoadFile(nanome.PluginInstance):
     filename = "/mmcif/tebgit.cif"
     test_assets = os.getcwd() + ("/testing/test_assets")
@@ -47,7 +48,7 @@ class LoadFile(nanome.PluginInstance):
         # workspace = Workspace()
         # workspace.complexes = [complex1]
         # self.update_workspace(workspace)
-    
+
     def on_advanced_settings(self):
         Logs.debug("adv pressed")
         self.request_workspace(self.on_workspace_received)
@@ -60,14 +61,15 @@ class LoadFile(nanome.PluginInstance):
                 if atom.selected:
                     atoms.append(atom)
         if self.zoom:
-            self.zoom_on_structures(atoms, lambda : print("Zoomed"))
+            self.zoom_on_structures(atoms, lambda: print("Zoomed"))
             self.zoom = False
         else:
-            self.center_on_structures(atoms, lambda : print("Centered"))
+            self.center_on_structures(atoms, lambda: print("Centered"))
             self.zoom = True
 
     def __init__(self):
         self.zoom = True
         pass
+
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, LoadFile)

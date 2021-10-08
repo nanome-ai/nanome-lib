@@ -9,6 +9,7 @@ import errno
 import time
 import traceback
 
+
 class _NetInstance(object):
     header_state = 0
     payload_state = 1

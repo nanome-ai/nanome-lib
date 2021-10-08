@@ -12,6 +12,7 @@ DESCRIPTION = "Tests add_bonds."
 CATEGORY = "testing"
 HAS_ADVANCED_OPTIONS = False
 
+
 class BondingTest(nanome.PluginInstance):
     def start(self):
         self.on_run()
@@ -34,5 +35,6 @@ class BondingTest(nanome.PluginInstance):
 
         self.add_bonds([complex], bonding_done)
         print('starting bonding')
+
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, False, BondingTest)

@@ -12,37 +12,45 @@ HAS_ADVANCED_OPTIONS = False
 
 # Plugin
 
-def menu_closed_callback(menu): 
+
+def menu_closed_callback(menu):
     Logs.message("Menu closed: " + menu.title + " " + str(menu.enabled))
 
-def menu_opened_callback(menu): 
+
+def menu_opened_callback(menu):
     Logs.message("Menu opened: " + menu.title + " " + str(menu.enabled))
 
-def slider_changed_callback(slider): 
+
+def slider_changed_callback(slider):
     Logs.message("slider changed: " + str(slider.current_value))
 
-def dropdown_callback(dropdown, item): 
+
+def dropdown_callback(dropdown, item):
     Logs.message("dropdown item selected: " + str(item.name))
 
-def slider_released_callback(slider): 
+
+def slider_released_callback(slider):
     Logs.message("slider released: " + str(slider.current_value))
 
-def text_changed_callback(textInput): 
+
+def text_changed_callback(textInput):
     Logs.message("text input changed: " + str(textInput.input_text))
 
-def text_submitted_callback(textInput): 
+
+def text_submitted_callback(textInput):
     Logs.message("text input submitted: " + str(textInput.input_text))
+
 
 class UIPlugin(nanome.PluginInstance):
     def create_callbacks(self):
-        def spawn_menu_callback(button): 
+        def spawn_menu_callback(button):
             Logs.message("button pressed: " + button.text.value.idle)
             self.update_content(button)
             self.spawn_sub_menu()
 
         self.spawn_menu_callback = spawn_menu_callback
 
-        def hover_callback(button, hovered): 
+        def hover_callback(button, hovered):
             Logs.message("button hover: " + button.text.value.idle, hovered)
 
         self.hover_callback = hover_callback
@@ -54,7 +62,7 @@ class UIPlugin(nanome.PluginInstance):
 
         self.select_button_callback = select_button_callback
 
-        def loading_bar_callback(button): 
+        def loading_bar_callback(button):
             Logs.message("button pressed: " + button.text.value.idle)
 
             self.loadingBar.percentage += .1
@@ -69,7 +77,7 @@ class UIPlugin(nanome.PluginInstance):
         self.integration.import_file = self.import_file
         Logs.message("Start UI Plugin")
         self.create_callbacks()
-    
+
     def import_file(self, request):
         self.on_run()
 
@@ -83,7 +91,7 @@ class UIPlugin(nanome.PluginInstance):
         menu = self.menu
         menu.title = "Example UI Plugin"
         menu.width = 1.0
-        menu.height =  1.0
+        menu.height = 1.0
         menu.register_closed_callback(menu_closed_callback)
         self.tab1 = self.create_tab1()
         self.tab2 = self.create_tab2()
@@ -117,7 +125,7 @@ class UIPlugin(nanome.PluginInstance):
     def create_tab1(self):
         self.menu_index = 1
         self.previous_menu = None
-        
+
         content = nanome.ui.LayoutNode()
         ln_contentBase = nanome.ui.LayoutNode()
         ln_label = nanome.ui.LayoutNode()
@@ -143,7 +151,7 @@ class UIPlugin(nanome.PluginInstance):
         ln_button.padding = (0.01, 0.01, 0.01, 0.01)
         ln_button.forward_dist = .001
 
-        #super styled button
+        # super styled button
         button = nanome.ui.Button()
         button.name = "OpenSubMenu"
         b_t = button.text
@@ -219,7 +227,7 @@ class UIPlugin(nanome.PluginInstance):
         child1.forward_dist = .01
         child2 = nanome.ui.LayoutNode()
         child2.name = "button"
-        child2.forward_dist =.01
+        child2.forward_dist = .01
         prefab.add_child(child1)
         prefab.add_child(child2)
         prefabLabel = nanome.ui.Label()
@@ -250,7 +258,7 @@ class UIPlugin(nanome.PluginInstance):
         ln_contentBase.add_child(ln_button)
         ln_contentBase.add_child(ln_slider)
         ln_contentBase.add_child(ln_textInput)
-        ln_contentBase.add_child(ln_list) 
+        ln_contentBase.add_child(ln_list)
         ln_label.set_content(label)
         ln_button.set_content(button)
         ln_slider.set_content(slider)
@@ -323,7 +331,7 @@ class UIPlugin(nanome.PluginInstance):
         child1.forward_dist = .01
         child2 = nanome.ui.LayoutNode()
         child2.name = "button"
-        child2.forward_dist =.01
+        child2.forward_dist = .01
         prefab.add_child(child1)
         prefab.add_child(child2)
         prefabLabel = nanome.ui.Label()
@@ -359,8 +367,8 @@ class UIPlugin(nanome.PluginInstance):
         ln._sizing_value = .1
 
         def tab1_callback(button):
-            self.tab_button1.selected  = True
-            self.tab_button2.selected  = False
+            self.tab_button1.selected = True
+            self.tab_button2.selected = False
             self.tab1.enabled = True
             self.tab2.enabled = False
 
@@ -368,8 +376,8 @@ class UIPlugin(nanome.PluginInstance):
             self.update_content(self.tab_button1, self.tab_button2)
 
         def tab2_callback(button):
-            self.tab_button2.selected  = True
-            self.tab_button1.selected  = False
+            self.tab_button2.selected = True
+            self.tab_button1.selected = False
             self.tab2.enabled = True
             self.tab1.enabled = False
 
@@ -386,6 +394,7 @@ class UIPlugin(nanome.PluginInstance):
 
     def __init__(self):
         pass
+
 
 permissions = [nanome.util.enums.Permissions.local_files_access]
 integrations = [nanome.util.enums.Integrations.minimization, nanome.util.enums.Integrations.structure_prep]

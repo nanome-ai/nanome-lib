@@ -1,7 +1,8 @@
 from . import _UIBase
 
+
 class _UIList(_UIBase):
-    
+
     @classmethod
     def _create(cls):
         return cls()
@@ -13,7 +14,7 @@ class _UIList(_UIBase):
         self._display_rows = 10
         self._total_columns = 1
         self._unusable = False
-        
+
     def _copy_values_deep(self, other):
         super(_UIList, self)._copy_values_deep(other)
         self._items = []

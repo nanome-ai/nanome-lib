@@ -99,6 +99,7 @@ end
 
 # Plugin
 
+
 class MacroPlugin(nanome.PluginInstance):
     def start(self):
         print("Started")
@@ -122,5 +123,6 @@ class MacroPlugin(nanome.PluginInstance):
 
     def __init__(self):
         pass
+
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, MacroPlugin)

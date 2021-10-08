@@ -60,7 +60,7 @@ class FileExplorer(nanome.AsyncPluginInstance):
             self.update_content(self.path_text)
 
         error, files = await self.files.ls(".")
-        if error != nanome.util.FileError.no_error: # If API couldn't access directory, display error
+        if error != nanome.util.FileError.no_error:  # If API couldn't access directory, display error
             nanome.util.Logs.error("Directory request error:", str(error))
             return
         self.grid.items = []
@@ -125,5 +125,6 @@ class FileExplorer(nanome.AsyncPluginInstance):
     def path_leaf(self, path):
         head, tail = ntpath.split(path)
         return tail or ntpath.basename(head)
+
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, FileExplorer, permissions=[nanome.util.enums.Permissions.local_files_access])

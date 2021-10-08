@@ -4,18 +4,18 @@ from setuptools import find_packages, setup
 README = (pathlib.Path(__file__).parent / "README.md").read_text()
 
 setup(
-    name = 'nanome',
-    packages=find_packages(exclude=["testing","doc","test_plugins"]),
-    version = '0.29.1',
+    name='nanome',
+    packages=find_packages(exclude=["testing", "doc", "test_plugins"]),
+    version='0.29.1',
     license='MIT',
-    description = 'Python API for Nanome Plugins',
-    long_description = README,
-    long_description_content_type = "text/markdown",
-    author = 'Nanome',
-    author_email = 'hello@nanome.ai',
-    url = 'https://github.com/nanome-ai/nanome',
+    description='Python API for Nanome Plugins',
+    long_description=README,
+    long_description_content_type="text/markdown",
+    author='Nanome',
+    author_email='hello@nanome.ai',
+    url='https://github.com/nanome-ai/nanome',
     platforms="any",
-    keywords = ['virtual-reality', 'chemistry', 'python', 'api', 'plugin'],
+    keywords=['virtual-reality', 'chemistry', 'python', 'api', 'plugin'],
     install_requires=[],
     classifiers=[
         'Development Status :: 3 - Alpha',

@@ -493,6 +493,7 @@ class PluginInstance(_PluginInstance):
     def create_atom_stream(self, atom_indices_list, stream_type, callback):
         self.create_writing_stream(atom_indices_list, stream_type, callback)
 
+
 class AsyncPluginInstance(PluginInstance):
     """
     | Base class of any asynchronous plugin.
@@ -501,6 +502,7 @@ class AsyncPluginInstance(PluginInstance):
     | Decorating these methods with @async_callback will allow them to use the async keyword in their definition
     """
     is_async = True
+
 
 class _DefaultPlugin(PluginInstance):
     def __init__(self):

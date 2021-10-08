@@ -7,6 +7,7 @@ import struct
 float_unpack = struct.Struct('!f').unpack_from
 int_unpack = struct.Struct('!i').unpack_from
 
+
 def parse_file(path):
     try:
         data = []
@@ -24,15 +25,17 @@ def parse_file(path):
         Logs.error("Could not read em file: " + path)
         raise
 
+
 def read_buffer(bytes_):
-    header_size = 1024 #size in bytes
-    header = struct.unpack(str(256)+"i", bytes_[:header_size])
-    unit_cell = struct.unpack(str(6)+"f", bytes_[40:64])
-    symmetry_size = header[23] #size in bytes
+    header_size = 1024  # size in bytes
+    header = struct.unpack(str(256) + "i", bytes_[:header_size])
+    unit_cell = struct.unpack(str(6) + "f", bytes_[40:64])
+    symmetry_size = header[23]  # size in bytes
     symmetry = bytes_[header_size:header_size + symmetry_size]
-    body_length = int((len(bytes_)-(header_size+symmetry_size))/4) #length in floats
-    body = struct.unpack(str(body_length) + "f", bytes_[header_size+symmetry_size:])
+    body_length = int((len(bytes_) - (header_size + symmetry_size)) / 4)  # length in floats
+    body = struct.unpack(str(body_length) + "f", bytes_[header_size + symmetry_size:])
     return header, unit_cell, symmetry, body
+
 
 def parse_data(bytes):
     results = read_buffer(bytes)
@@ -50,11 +53,11 @@ def parse_data(bytes):
         data_size_byte = 4
     else:
         raise Exception("CryoEM> Only mode 2 is supported")
-    
+
     start_x = header[4]
     start_y = header[5]
     start_z = header[6]
-    
+
     if (unit_cell[3] != 90 or unit_cell[4] != 90 or unit_cell[5] != 90):
         raise ("CryoEM> Cell is not perpendicular. Is this an Electron Density Map?")
 

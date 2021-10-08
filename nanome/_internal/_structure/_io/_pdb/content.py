@@ -18,6 +18,7 @@ class Content(object):
         def __init__(self):
             type = ""
             line_number = 0
+
     class MtrixRecord(Record):
         def __init__(self):
             self.row = 0
@@ -27,6 +28,7 @@ class Content(object):
             self.mn3 = 0
             self.vn = 0
             self.iGiven = 0
+
     class OrigxRecord(Record):
         def __init__(self):
             self.row = 0
@@ -34,12 +36,14 @@ class Content(object):
             self.on2 = 0
             self.on3 = 0
             self.tn = 0
+
     class ScaleRecord(Record):
         def __init__(self):
             self.row = 0
             self.sn1 = 0
             self.sn2 = 0
             self.un = 0
+
     class CrystRecord(Record):
         def __init__(self):
             self.row = 0
@@ -51,6 +55,7 @@ class Content(object):
             self.gamma = 0
             self.space_group = 0
             self.z_value = 0
+
     class HelixRecord(Record):
         def __init__(self):
             self.helix_serial_number = 0
@@ -66,11 +71,13 @@ class Content(object):
             self.helix_class = 0
             self.helix_comment = ""
             self.helix_length = 0
+
     class SheetRecord(Record):
         def __init__(self):
             self.strand_id = 0
             self.sheet_id = ""
             self.strand_count = 0
+
     class AtomRecord(Record):
         def __init__(self):
             self.atom_serial_number = 0
@@ -90,6 +97,7 @@ class Content(object):
             self.element_symbol = ""
             self.formal_charge = 0
             self.is_het_atom = False
+
     class TerRecord(Record):
         def __init__(self):
             self.atom_serial_number = 0
@@ -97,10 +105,12 @@ class Content(object):
             self.chain_identifier = ""
             self.residue_serial_number = 0
             self.residue_insertion_code = ""
+
     class RemarkRecord(Record):
         def __init__(self):
             self.num = ""
             self.text = ""
+
     class CompndRecord(Record):
         def __init__(self):
             self.num = 0

@@ -6,6 +6,7 @@ from .. import _Atom
 # Deserializes the ID and returns the atom from the dict with that ID.
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _AtomSerializerID(_TypeSerializer):
     def version(self):
         return 0

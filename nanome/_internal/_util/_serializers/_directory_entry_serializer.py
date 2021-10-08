@@ -3,10 +3,11 @@ from nanome.util import Logs, DirectoryEntry
 
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _DirectoryEntrySerializer(_TypeSerializer):
     def __init__(self):
         self.__string = _StringSerializer()
-    
+
     def version(self):
         return 0
 

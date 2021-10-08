@@ -1,5 +1,6 @@
 from nanome._internal._util._serializers import _TypeSerializer, _ArraySerializer, _StringSerializer
 
+
 class _FeedStream(_TypeSerializer):
     def __init__(self):
         self.__array = _ArraySerializer()
@@ -27,7 +28,7 @@ class _FeedStream(_TypeSerializer):
 
     def deserialize(self, version, context):
         from nanome.api.streams import Stream
-        
+
         id = context.read_uint()
         type = Stream.DataType.float
         if version > 0:

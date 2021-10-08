@@ -2,6 +2,7 @@ import nanome
 from nanome.util import Vector3, IntEnum
 from nanome._internal._ui import _UIList
 
+
 class _LayoutNode(object):
     PaddingTypes = nanome.util.enums.PaddingTypes
     SizingTypes = nanome.util.enums.SizingTypes
@@ -12,9 +13,10 @@ class _LayoutNode(object):
         return cls()
 
     id_gen = 0
-    def __init__(self, name = "node"):
+
+    def __init__(self, name="node"):
         # type: (str)
-        #protocol vars
+        # protocol vars
         self._id = _LayoutNode.id_gen
         self._enabled = True
         self._layer = 0
@@ -26,7 +28,7 @@ class _LayoutNode(object):
         self._padding = (0.0, 0.0, 0.0, 0.0)
         self._children = []
         self._content = None
-        #API
+        # API
         self._name = name
         self._parent = None
         _LayoutNode.id_gen += 1
@@ -38,7 +40,7 @@ class _LayoutNode(object):
         return self._content
 
     def _set_content(self, ui_content):
-        #add to curr parent
+        # add to curr parent
         self._content = ui_content
         self._save_changes()
 
@@ -47,10 +49,10 @@ class _LayoutNode(object):
         self._save_changes()
 
     def _add_child(self, child_node):
-        #remove from old parent
+        # remove from old parent
         if (child_node._parent != None):
             child_node._parent._remove_child(child_node)
-        #add to curr parent
+        # add to curr parent
         self._children.append(child_node)
         child_node._parent = self
         self._save_changes()
@@ -67,7 +69,7 @@ class _LayoutNode(object):
         self._children = []
         self._save_changes()
 
-    #copies node formatting but not children or content
+    # copies node formatting but not children or content
     def copy_values_shallow(self, other):
         self._layer = other._layer
         self._layout_orientation = other._layout_orientation
@@ -91,7 +93,7 @@ class _LayoutNode(object):
         result._copy_values_deep(self)
         return result
 
-#region non-api functions
+# region non-api functions
     def _find_content(self, content_id):
         found_val = None
         content = self._content
@@ -110,19 +112,19 @@ class _LayoutNode(object):
                 return found_val
         return None
 
-    def _append_all_content(self, all_content = []):
+    def _append_all_content(self, all_content=[]):
         if (self._content != None):
             all_content.append(self._content)
         for child in self._children:
             child._append_all_content(all_content)
         return all_content
 
-    def _append_all_nodes(self, all_nodes = []):
+    def _append_all_nodes(self, all_nodes=[]):
         all_nodes.append(self)
         for child in self._children:
             child._append_all_nodes(all_nodes)
         return all_nodes
-#endregion
+# endregion
 
     def _save_changes(self):
         pass

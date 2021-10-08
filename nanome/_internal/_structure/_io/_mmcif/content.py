@@ -4,9 +4,9 @@ class Content(object):
         self.atoms = []
         self.cell = None
         # Raw file content in the mapping format
-        #Dictionary<string, List<Dictionary<string, string>>>
+        # Dictionary<string, List<Dictionary<string, string>>>
         self.remarks = {}
-    
+
     # Stores all the information of an MMCIF atom
     class Atom(object):
         def __init__(self):
@@ -25,7 +25,7 @@ class Content(object):
             self.fract = False
             # model indicate structure that need to put into complex
             self.model = 1
-    
+
     class UnitCell(object):
         def __init__(self):
             self.length_a = 1

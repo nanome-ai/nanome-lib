@@ -1,5 +1,6 @@
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _DropdownCallback(_TypeSerializer):
     def __init__(self):
         pass
@@ -9,9 +10,9 @@ class _DropdownCallback(_TypeSerializer):
 
     def name(self):
         return "DropdownCallback"
-        
+
     def serialize(self, version, value, context):
-        #value is a tuple containing the image ID and the item index.
+        # value is a tuple containing the image ID and the item index.
         context.write_int(value[0])
         context.write_int(value[1])
 

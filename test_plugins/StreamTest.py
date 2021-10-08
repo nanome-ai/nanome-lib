@@ -10,6 +10,7 @@ HAS_ADVANCED_OPTIONS = False
 
 # Plugin
 
+
 class StreamTest(nanome.PluginInstance):
     def __init__(self):
         self.__running = False
@@ -76,7 +77,7 @@ class StreamTest(nanome.PluginInstance):
             self.create_writing_stream(indices, nanome.api.streams.Stream.Type.scale, self.on_stream_scale_creation)
             self.create_writing_stream(complex_indices, nanome.api.streams.Stream.Type.complex_position_rotation, self.on_stream_complex_creation)
 
-        self.update_structures_deep(list(map(lambda complex : complex, workspace.complexes)), workspace_ready)
+        self.update_structures_deep(list(map(lambda complex: complex, workspace.complexes)), workspace_ready)
 
     def on_stream_update_done(self):
         self.__done_count += 1
@@ -105,6 +106,7 @@ class StreamTest(nanome.PluginInstance):
         if self.__stream_count >= 4:
             self.__running = True
             self.update_streams()
+
 
 class StreamReadingTest(nanome.PluginInstance):
     def __init__(self):

@@ -1,5 +1,6 @@
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _TupleSerializer(_TypeSerializer):
     def __init__(self, serializer1=None, serializer2=None):
         self._serializer1 = serializer1
@@ -23,7 +24,7 @@ class _TupleSerializer(_TypeSerializer):
             raise TypeError('Trying to deserialize tuple without setting content type first')
         first = context.read_using_serializer(self._serializer1)
         second = context.read_using_serializer(self._serializer2)
-        return (first,second)
+        return (first, second)
 
     def set_types(self, serializer1, serializer2):
         self._serializer1 = serializer1

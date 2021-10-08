@@ -82,4 +82,5 @@ class Mesh(_Mesh, Shape):
     def uv(self, value):
         self._uv = value
 
+
 _Mesh._create = Mesh

@@ -1,9 +1,11 @@
 from . import _StringSerializer
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _CachedImageSerializer(_TypeSerializer):
     cache = set()
     session = 0
+
     def __init__(self):
         self._string = _StringSerializer()
 

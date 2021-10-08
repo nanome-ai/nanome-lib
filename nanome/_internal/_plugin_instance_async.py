@@ -4,6 +4,7 @@ import asyncio
 import traceback
 from timeit import default_timer as timer
 
+
 async def _async_update_loop(self, UPDATE_RATE, MINIMUM_SLEEP):
     try:
         self.start()

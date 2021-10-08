@@ -1,5 +1,6 @@
 from nanome._internal._util._serializers import _TypeSerializer, _StringSerializer
 
+
 class _GetPresenterInfoResponse(_TypeSerializer):
     def __init__(self):
         self.string = _StringSerializer()

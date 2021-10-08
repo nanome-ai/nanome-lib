@@ -3,12 +3,14 @@ from .content import Content
 import re
 import traceback
 
+
 def parse_lines(lines):
     try:
         return _parse_lines(lines)
     except:
         Logs.error("Could not read pdb")
         raise
+
 
 def _parse_lines(lines):
     lines = [line.rstrip() for line in lines]
@@ -98,7 +100,7 @@ def _parse_lines(lines):
                 model_done = True
             content.raw.append(line)
         except:
-            print ("LINE: " + str(line_counter))
+            print("LINE: " + str(line_counter))
             print("PDB Parsing error")
             raise
         line_counter += 1

@@ -3,6 +3,7 @@ from .. import _Macro
 
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _MacroSerializer(_TypeSerializer):
     def __init__(self):
         self.string = _StringSerializer()

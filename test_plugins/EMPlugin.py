@@ -15,6 +15,7 @@ HAS_ADVANCED_OPTIONS = False
 
 # Plugin
 
+
 class EMPlugin(nanome.PluginInstance):
     def start(self):
         print("Start Load File")
@@ -22,7 +23,7 @@ class EMPlugin(nanome.PluginInstance):
     def on_run(self):
         path = testing.utilities.get_test_assets() + "volumetric\\cryo_em\\0170.map.gz"
         self.upload_cryo_em(path, self.on_em_uploaded)
-    
+
     def on_advanced_settings(self):
         Logs.debug("adv pressed")
 
@@ -32,5 +33,6 @@ class EMPlugin(nanome.PluginInstance):
     def __init__(self):
         self.zoom = True
         pass
+
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, EMPlugin)

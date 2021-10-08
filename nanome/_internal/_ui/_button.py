@@ -3,6 +3,7 @@ from nanome.util import Vector3, Color
 import nanome
 from copy import deepcopy
 
+
 class _Button(_UIBase):
 
     HorizAlignOptions = nanome.util.enums.HorizAlignOptions
@@ -15,7 +16,7 @@ class _Button(_UIBase):
 
     def __init__(self):
         super(_Button, self).__init__()
-        #PROTOCOL
+        # PROTOCOL
         self._name = ""
         self._selected = False
         self._unusable = False
@@ -27,7 +28,7 @@ class _Button(_UIBase):
         self._outline = _Button._ButtonOutline._create()
         self._switch = _Button._ButtonSwitch._create()
         self._tooltip = _Button._ButtonTooltip._create()
-        #API
+        # API
         self._pressed_callback = lambda _: None
         self._hover_callback = None
 
@@ -42,7 +43,7 @@ class _Button(_UIBase):
         self._pressed_callback = func
 
     def _register_hover_callback(self, func):
-        if func == None and self._hover_callback == None: # Low hanging filter but there may be others
+        if func == None and self._hover_callback == None:  # Low hanging filter but there may be others
             return
         try:
             nanome._internal._network._ProcessNetwork._instance._send(
@@ -74,7 +75,7 @@ class _Button(_UIBase):
             self._padding_left = 0.0
             self._padding_right = 0.0
             self._line_spacing = 0.0
-            self._vertical_align =  _Button.VertAlignOptions.Middle
+            self._vertical_align = _Button.VertAlignOptions.Middle
             self._horizontal_align = _Button.HorizAlignOptions.Middle
 
     class _ButtonIcon(object):
@@ -112,9 +113,9 @@ class _Button(_UIBase):
             self._size = _Button._MultiStateVariable._create(.3)
             self._color = _Button._MultiStateVariable._create()
             self._color._idle = Color.White()
-            self._color._highlighted = Color(whole_num = 0x2fdbbfff)
-            self._color._selected = Color(whole_num = 0x00e5bfff)
-            self._color._selected_highlighted = Color(whole_num = 0x00f9d0ff)
+            self._color._highlighted = Color(whole_num=0x2fdbbfff)
+            self._color._selected = Color(whole_num=0x00e5bfff)
+            self._color._selected_highlighted = Color(whole_num=0x00f9d0ff)
             self._color._unusable = Color.Grey()
 
     class _ButtonSwitch(object):
@@ -173,30 +174,30 @@ class _Button(_UIBase):
         self._icon._ratio = other._icon._ratio
         self._icon._position = other._icon._position
         self._icon._rotation = other._icon._rotation
-        #Mesh
+        # Mesh
         self._mesh._active = other._mesh._active
         self._mesh._enabled._copy(other._mesh._enabled)
         self._mesh._color._copy(other._mesh._color)
-        #Outline
+        # Outline
         self._outline._active = other._outline._active
         self._outline._size._copy(other._outline._size)
         self._outline._color._copy(other._outline._color)
-        #Tooltip
+        # Tooltip
         self._tooltip._title = other._tooltip._title
         self._tooltip._content = other._tooltip._content
         self._tooltip._bounds = other._tooltip._bounds
         self._tooltip._positioning_target = other._tooltip._positioning_target
         self._tooltip._positioning_origin = other._tooltip._positioning_origin
-        #Callbacks
+        # Callbacks
         self._pressed_callback = other._pressed_callback
         self._register_hover_callback(other._hover_callback)
 
     class _MultiStateVariable(object):
         @classmethod
-        def _create(cls, default = None):
+        def _create(cls, default=None):
             return cls()
 
-        def __init__(self, default = None):
+        def __init__(self, default=None):
             self._set_all(default)
 
         def _set_all(self, value):

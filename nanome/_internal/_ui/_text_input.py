@@ -2,15 +2,16 @@ import nanome
 from . import _UIBase
 from nanome.util import Color
 
+
 class _TextInput(_UIBase):
     HorizAlignOptions = nanome.util.enums.HorizAlignOptions
-        
+
     @classmethod
     def _create(cls):
         return cls()
-        
+
     def __init__(self):
-        #Protocol
+        # Protocol
         super(_TextInput, self).__init__()
         self._max_length = 10
         self._placeholder_text = ""
@@ -27,14 +28,14 @@ class _TextInput(_UIBase):
         self._multi_line = False
         self._password = False
         self._number = False
-        #API
+        # API
         self._changed_callback = lambda self: None
         self._submitted_callback = lambda self: None
 
-    def _on_text_changed (self):
+    def _on_text_changed(self):
         self._changed_callback(self)
-    
-    def _on_text_submitted (self):
+
+    def _on_text_submitted(self):
         self._submitted_callback(self)
 
     def _copy_values_deep(self, other):

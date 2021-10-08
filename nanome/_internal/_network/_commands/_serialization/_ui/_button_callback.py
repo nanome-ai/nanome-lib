@@ -1,5 +1,6 @@
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _ButtonCallback(_TypeSerializer):
     def __init__(self):
         pass
@@ -9,7 +10,7 @@ class _ButtonCallback(_TypeSerializer):
 
     def name(self):
         return "ButtonCallback"
-        
+
     def serialize(self, version, value, context):
         id = value[0]
         state = value[1]

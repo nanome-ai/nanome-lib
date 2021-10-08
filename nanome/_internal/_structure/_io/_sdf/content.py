@@ -2,7 +2,7 @@ class Content(object):
     def __init__(self):
         self.name = ""
         self.models = []
-    
+
     class Atom(object):
         def __init__(self):
             self.serial = 0
@@ -28,5 +28,5 @@ class Content(object):
             self.version = "V2000"
             self.atoms = []
             self.bonds = []
-            self.properties = [] #strings
-            self._associated = {} #<string, strings>
+            self.properties = []  # strings
+            self._associated = {}  # <string, strings>

@@ -1,6 +1,8 @@
 import nanome
 import sys
 import time
+
+
 class UpdateWorkspace(nanome.PluginInstance):
     def start(self):
         print("Start UpdateWorkspace Plugin")
@@ -19,8 +21,9 @@ class UpdateWorkspace(nanome.PluginInstance):
         for atom in self.all_atoms:
             atom.position.y += 1
             a_pos.append(atom.position.x)
-            a_pos.append((atom.position.y)%100)
+            a_pos.append((atom.position.y) % 100)
             a_pos.append(atom.position.z)
+
         def repeat():
             self.stream_created(stream, None)
         stream.update(a_pos, repeat)
@@ -30,6 +33,7 @@ class UpdateWorkspace(nanome.PluginInstance):
 
     def __init__(self):
         pass
+
 
 if __name__ == "__main__":
     plugin = nanome.Plugin("Profile Streams", "", "Test", False)

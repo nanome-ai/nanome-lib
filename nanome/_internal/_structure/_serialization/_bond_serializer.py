@@ -4,8 +4,9 @@ from .. import _Bond
 from nanome._internal._util._serializers import _TypeSerializer, _ArraySerializer, _BoolSerializer, _ByteSerializer
 from nanome.util import Logs
 
+
 class _BondSerializer(_TypeSerializer):
-    def __init__(self, shallow = False):
+    def __init__(self, shallow=False):
         self.shallow = shallow
         self.atom_serializer = _AtomSerializerID()
         self.array = _ArraySerializer()
@@ -13,14 +14,14 @@ class _BondSerializer(_TypeSerializer):
         self.byte = _ByteSerializer()
 
     def version(self):
-        #Version 0 corresponds to Nanome release 1.12
+        # Version 0 corresponds to Nanome release 1.12
         return 1
 
     def name(self):
         return "Bond"
 
     def serialize(self, version, value, context):
-        #nothing to do with shallow yet 
+        # nothing to do with shallow yet
         context.write_long(value._index)
         if version >= 1:
             has_conformer = len(value._in_conformer) > 1

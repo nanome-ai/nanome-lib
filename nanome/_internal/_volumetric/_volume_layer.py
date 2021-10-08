@@ -1,5 +1,6 @@
 from nanome.util import Color
 
+
 class _VolumeLayer():
     def __init__(self):
         self._color = Color()

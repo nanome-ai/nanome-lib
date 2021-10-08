@@ -5,6 +5,7 @@ try:
 except ImportError:
     asyncio = False
 
+
 class Process():
     """
     | A command-line process wrapper.

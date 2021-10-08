@@ -3,6 +3,7 @@ import nanome
 from nanome._internal._ui import _Button
 from . import UIBase
 
+
 class Button(_Button, UIBase):
     """
     | Represents a clickable button on a menu
@@ -10,7 +11,7 @@ class Button(_Button, UIBase):
     HorizAlignOptions = nanome.util.enums.HorizAlignOptions
     VertAlignOptions = nanome.util.enums.VertAlignOptions
 
-    def __init__(self, text = None, icon = None):
+    def __init__(self, text=None, icon=None):
         _Button.__init__(self)
         UIBase.__init__(self)
         self.text = self._text
@@ -50,6 +51,7 @@ class Button(_Button, UIBase):
         :type: :class:`str`
         """
         return self._name
+
     @name.setter
     def name(self, value):
         self._name = value
@@ -63,6 +65,7 @@ class Button(_Button, UIBase):
         :type: :class:`bool`
         """
         return self._selected
+
     @selected.setter
     def selected(self, value):
         self._selected = value
@@ -76,6 +79,7 @@ class Button(_Button, UIBase):
         :type: :class:`bool`
         """
         return self._unusable
+
     @unusable.setter
     def unusable(self, value):
         self._unusable = value
@@ -154,6 +158,7 @@ class Button(_Button, UIBase):
             :type: :class:`bool`
             """
             return self._active
+
         @active.setter
         def active(self, value):
             self._active = value
@@ -167,6 +172,7 @@ class Button(_Button, UIBase):
             :type: :class:`bool`
             """
             return self._auto_size
+
         @auto_size.setter
         def auto_size(self, value):
             self._auto_size = value
@@ -180,6 +186,7 @@ class Button(_Button, UIBase):
             :type: :class:`float`
             """
             return self._min_size
+
         @min_size.setter
         def min_size(self, value):
             self._min_size = value
@@ -193,6 +200,7 @@ class Button(_Button, UIBase):
             :type: :class:`float`
             """
             return self._max_size
+
         @max_size.setter
         def max_size(self, value):
             self._max_size = value
@@ -205,6 +213,7 @@ class Button(_Button, UIBase):
             :type: :class:`float`
             """
             return self._size
+
         @size.setter
         def size(self, value):
             self._size = value
@@ -217,6 +226,7 @@ class Button(_Button, UIBase):
             :type: :class:`bool`
             """
             return self._underlined
+
         @underlined.setter
         def underlined(self, value):
             self._underlined = value
@@ -229,6 +239,7 @@ class Button(_Button, UIBase):
             :type: :class:`bool`
             """
             return self._ellipsis
+
         @ellipsis.setter
         def ellipsis(self, value):
             self._ellipsis = value
@@ -241,6 +252,7 @@ class Button(_Button, UIBase):
             :type: :class:`float`
             """
             return self._padding_top
+
         @padding_top.setter
         def padding_top(self, value):
             self._padding_top = value
@@ -253,6 +265,7 @@ class Button(_Button, UIBase):
             :type: :class:`float`
             """
             return self._padding_bottom
+
         @padding_bottom.setter
         def padding_bottom(self, value):
             self._padding_bottom = value
@@ -265,6 +278,7 @@ class Button(_Button, UIBase):
             :type: :class:`float`
             """
             return self._padding_left
+
         @padding_left.setter
         def padding_left(self, value):
             self._padding_left = value
@@ -277,6 +291,7 @@ class Button(_Button, UIBase):
             :type: :class:`float`
             """
             return self._padding_right
+
         @padding_right.setter
         def padding_right(self, value):
             self._padding_right = value
@@ -289,6 +304,7 @@ class Button(_Button, UIBase):
             :type: :class:`float`
             """
             return self._line_spacing
+
         @line_spacing.setter
         def line_spacing(self, value):
             self._line_spacing = value
@@ -301,6 +317,7 @@ class Button(_Button, UIBase):
             :type: :class:`~nanome.util.enums.VertAlignOptions`
             """
             return self._vertical_align
+
         @vertical_align.setter
         def vertical_align(self, value):
             self._vertical_align = value
@@ -313,6 +330,7 @@ class Button(_Button, UIBase):
             :type: :class:`~nanome.util.enums.HorizAlignOptions`
             """
             return self._horizontal_align
+
         @horizontal_align.setter
         def horizontal_align(self, value):
             self._horizontal_align = value
@@ -353,6 +371,7 @@ class Button(_Button, UIBase):
             :type: :class:`bool`
             """
             return self._active
+
         @active.setter
         def active(self, value):
             self._active = value
@@ -365,6 +384,7 @@ class Button(_Button, UIBase):
             :type: :class:`float`
             """
             return self._sharpness
+
         @sharpness.setter
         def sharpness(self, value):
             self._sharpness = value
@@ -378,6 +398,7 @@ class Button(_Button, UIBase):
             :type: :class:`float`
             """
             return self._size
+
         @size.setter
         def size(self, value):
             self._size = value
@@ -391,6 +412,7 @@ class Button(_Button, UIBase):
             :type: :class:`float`
             """
             return self._ratio
+
         @ratio.setter
         def ratio(self, value):
             self._ratio = value
@@ -405,6 +427,7 @@ class Button(_Button, UIBase):
             :type: :class:`tuple` <:class:`float`, :class:`float`, :class:`float`>
             """
             return self._position
+
         @position.setter
         def position(self, value):
             self._position = value
@@ -419,6 +442,7 @@ class Button(_Button, UIBase):
             :type: :class:`tuple` <:class:`float`, :class:`float`, :class:`float`>
             """
             return self._rotation
+
         @rotation.setter
         def rotation(self, value):
             self._rotation = value
@@ -459,6 +483,7 @@ class Button(_Button, UIBase):
             :type: :class:`bool`
             """
             return self._active
+
         @active.setter
         def active(self, value):
             self._active = value
@@ -499,6 +524,7 @@ class Button(_Button, UIBase):
             :type: :class:`bool`
             """
             return self._active
+
         @active.setter
         def active(self, value):
             self._active = value
@@ -513,6 +539,7 @@ class Button(_Button, UIBase):
             :type: :class:`bool`
             """
             return self._active
+
         @active.setter
         def active(self, value):
             self._active = value
@@ -525,6 +552,7 @@ class Button(_Button, UIBase):
             :type: :class:`~nanome.ui.Color`
             """
             return self._on_color
+
         @on_color.setter
         def on_color(self, value):
             self._on_color = value
@@ -537,6 +565,7 @@ class Button(_Button, UIBase):
             :type: :class:`~nanome.ui.Color`
             """
             return self._off_color
+
         @off_color.setter
         def off_color(self, value):
             self._off_color = value
@@ -551,6 +580,7 @@ class Button(_Button, UIBase):
             :type: :class:`str`
             """
             return self._title
+
         @title.setter
         def title(self, value):
             self._title = value
@@ -563,6 +593,7 @@ class Button(_Button, UIBase):
             :type: :class:`str`
             """
             return self._content
+
         @content.setter
         def content(self, value):
             self._content = value
@@ -575,6 +606,7 @@ class Button(_Button, UIBase):
             :type: :class:`tuple` <:class:`float`, :class:`float`, :class:`float`>
             """
             return self._bounds
+
         @bounds.setter
         def bounds(self, value):
             self._bounds = value
@@ -588,6 +620,7 @@ class Button(_Button, UIBase):
             :type: :class:`~nanome.util.enums.ToolTipPositioning`
             """
             return self._positioning_target
+
         @positioning_target.setter
         def positioning_target(self, value):
             self._positioning_target = value
@@ -601,13 +634,14 @@ class Button(_Button, UIBase):
             :type: :class:`~nanome.util.enums.ToolTipPositioning`
             """
             return self._positioning_origin
+
         @positioning_origin.setter
         def positioning_origin(self, value):
             self._positioning_origin = value
     _Button._ButtonTooltip._create = ButtonTooltip
 
     class MultiStateVariable(_Button._MultiStateVariable):
-        def __init__(self, default = None):
+        def __init__(self, default=None):
             _Button._MultiStateVariable.__init__(self, default)
 
         def set_all(self, value):
@@ -687,4 +721,6 @@ class Button(_Button, UIBase):
         def unusable(self, value):
             self._unusable = value
     _Button._MultiStateVariable._create = MultiStateVariable
+
+
 _Button._create = Button

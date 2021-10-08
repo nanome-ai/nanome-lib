@@ -1,7 +1,7 @@
 from . import *
-#classes
+# classes
 from ._commands_enums import _Commands, _Messages, _Hashes
-#functions
+# functions
 from ._advanced_settings import _advanced_settings
 from ._complex_list import _receive_complexes
 from ._create_stream_result import _receive_create_stream_result

@@ -11,6 +11,7 @@ HAS_ADVANCED_OPTIONS = False
 
 # Plugin
 
+
 class UpdateWorkspace(nanome.PluginInstance):
     def start(self):
         print("Start UpdateWorkspace Plugin")
@@ -24,13 +25,13 @@ class UpdateWorkspace(nanome.PluginInstance):
                 for chain in molecule.chains:
                     for residue in chain.residues:
                         for bond in residue.bonds:
-                            bond_count+=1
+                            bond_count += 1
                         for atom in residue.atoms:
                             atom.position.x = -atom.position.x
                             atom.surface_rendering = True
                             atom.surface_color = nanome.util.Color.Red()
-                            atom_count+=1
-                            
+                            atom_count += 1
+
         print("bonds:", bond_count)
         print("flipped", atom_count, "atoms")
         self.update_workspace(workspace)
@@ -40,5 +41,6 @@ class UpdateWorkspace(nanome.PluginInstance):
 
     def __init__(self):
         pass
+
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, UpdateWorkspace)

@@ -2,6 +2,7 @@ from nanome._internal._util._serializers import _StringSerializer
 
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _ExportFile(_TypeSerializer):
     _String = _StringSerializer()
 

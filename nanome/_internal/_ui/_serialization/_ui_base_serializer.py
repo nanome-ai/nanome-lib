@@ -2,6 +2,7 @@ from nanome.util import Logs, IntEnum
 
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _UIBaseSerializer(_TypeSerializer):
     class ContentType(IntEnum):
         ebutton = 0

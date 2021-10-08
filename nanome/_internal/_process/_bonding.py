@@ -14,6 +14,7 @@ except ImportError:
 NANOBABEL_PATH = find_executable('nanobabel')
 OBABEL_PATH = find_executable('obabel')
 
+
 class _Bonding():
     def __init__(self, plugin, complex_list, callback=None, fast_mode=None):
         self.__complexes = complex_list

@@ -1,5 +1,6 @@
 import nanome
 
+
 class _Substructure:
     SubstructureType = nanome.util.enums.SubstructureType
 

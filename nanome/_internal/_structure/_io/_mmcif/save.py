@@ -1,6 +1,7 @@
 import nanome
 from nanome._internal._structure import _Complex, _Molecule, _Chain, _Residue, _Atom, _Bond
 
+
 class Results(object):
     def __init__(self):
         self.saved_atoms = []
@@ -13,7 +14,9 @@ class Results(object):
             self.position = None
             self.model_number = 0
 
+
 Options = nanome.util.complex_save_options.MMCIFSaveOptions
+
 
 class ColumnWidths(object):
     def __init__(self):
@@ -71,7 +74,7 @@ def to_file(path, complex, options=None):
                                 atom, atom_num, model_num)
                             result.saved_atoms.append(saved_atom)
                             text_atom = atom_to_text(atom, residue, chain,
-                                                    atom_num, model_num)
+                                                     atom_num, model_num)
                             text_atoms.append(text_atom)
                             update_column_widths(text_atom, column_widths)
                             atom_num += 1

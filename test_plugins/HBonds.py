@@ -13,6 +13,7 @@ HAS_ADVANCED_OPTIONS = False
 
 # Plugin
 
+
 class HBonds(nanome.PluginInstance):
     def start(self):
         pass
@@ -25,5 +26,6 @@ class HBonds(nanome.PluginInstance):
 
     def __init__(self):
         pass
+
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, HBonds)

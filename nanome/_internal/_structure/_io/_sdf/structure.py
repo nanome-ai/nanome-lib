@@ -3,6 +3,7 @@ from nanome.util import Vector3
 from nanome._internal._structure import _Complex, _Molecule, _Chain, _Residue, _Bond, _Atom
 from .content import Content
 
+
 def structure(content):
     # type: (Content) -> Complex
     complex = _Complex._create()

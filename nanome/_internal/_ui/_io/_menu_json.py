@@ -3,6 +3,7 @@ from . import _layout_node_json
 from nanome.util import Logs
 import json
 
+
 def parse_json(menu_json):
     new_menu = _Menu._create()
     assert(menu_json.read("is_menu", True))
@@ -12,6 +13,7 @@ def parse_json(menu_json):
     root = menu_json.read_object("effective_root")
     new_menu._root = _layout_node_json.parse_json(root)
     return new_menu
+
 
 def write_json(helper, menu):
     helper.write("is_menu", True)

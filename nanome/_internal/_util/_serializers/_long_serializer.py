@@ -1,5 +1,6 @@
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _LongSerializer(_TypeSerializer):
     def __init__(self):
         pass
@@ -9,7 +10,7 @@ class _LongSerializer(_TypeSerializer):
 
     def name(self):
         return "long"
-        
+
     def serialize(self, version, value, context):
         context.write_long(value)
 

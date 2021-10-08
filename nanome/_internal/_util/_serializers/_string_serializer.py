@@ -10,6 +10,7 @@ else:
     def to_bytes(value, encoding):
         return bytearray(value, 'utf-8')
 
+
 class _StringSerializer(_TypeSerializer):
     def __init__(self):
         pass

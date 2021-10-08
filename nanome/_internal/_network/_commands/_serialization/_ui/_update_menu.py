@@ -3,6 +3,7 @@ from nanome._internal._ui._serialization import _LayoutNodeSerializer, _UIBaseSe
 
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _UpdateMenu(_TypeSerializer):
     def __init__(self):
         self.menu = _MenuSerializer()

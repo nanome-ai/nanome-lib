@@ -3,6 +3,7 @@ import struct
 
 import zlib
 
+
 class _Packet(object):
     packet_header_length = 15
     protocol_version = 0
@@ -78,4 +79,3 @@ class _Packet(object):
         self.plugin_id = 0
         self.payload_length = 0
         self.payload = bytearray()
-    

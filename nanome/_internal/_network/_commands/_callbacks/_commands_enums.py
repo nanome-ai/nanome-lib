@@ -11,16 +11,18 @@ import sys
 
 # /!\ /!\ /!\
 # Values names are really important here, as they are hashed, and need to match Nanome
+
+
 class _Commands(_CommandEnum):
     # Tmp hack
-    reset_auto() #Not an enum
+    reset_auto()  # Not an enum
 
-    #Control
+    # Control
     connect = auto()
     run = auto()
     advanced_settings = auto()
 
-    #UI
+    # UI
     menu_toggle = auto()
     button_press = auto()
     button_hover = auto()
@@ -34,7 +36,7 @@ class _Commands(_CommandEnum):
     dropdown_item_click = auto()
     menu_transform_response = auto()
 
-    #Structure
+    # Structure
     workspace_response = auto()
     complex_list_response = auto()
     complexes_response = auto()
@@ -50,19 +52,19 @@ class _Commands(_CommandEnum):
     selection_changed = auto()
     compute_hbonds_done = auto()
 
-    #Stream
+    # Stream
     stream_create_done = auto()
     stream_feed = auto()
     stream_feed_done = auto()
     stream_interrupt = auto()
 
-    #File deprecated
-    directory_response= auto()
-    file_response= auto()
-    file_save_done= auto()
-    export_files_result= auto()
+    # File deprecated
+    directory_response = auto()
+    file_response = auto()
+    file_save_done = auto()
+    export_files_result = auto()
 
-    #Files
+    # Files
     print_working_directory_response = auto()
     cd_response = auto()
     ls_response = auto()
@@ -74,7 +76,7 @@ class _Commands(_CommandEnum):
     rmdir_response = auto()
     mkdir_response = auto()
 
-    #Macro
+    # Macro
     get_macros_response = auto()
     run_macro_result = auto()
 
@@ -87,22 +89,24 @@ class _Commands(_CommandEnum):
     set_shape_result = auto()
     delete_shape_result = auto()
 
-    #Other
+    # Other
     add_volume_done = auto()
     load_file_done = auto()
     integration = auto()
 
 # /!\ /!\ /!\
 # Values names are really important here, as they are hashed, and need to match Nanome
+
+
 class _Messages(_CommandEnum):
     # Tmp hack
-    reset_auto() #Not an enum
-    
-    #Control
+    reset_auto()  # Not an enum
+
+    # Control
     connect = auto()
     plugin_list_button_set = auto()
 
-    #UI
+    # UI
     menu_update = auto()
     content_update = auto()
     node_update = auto()
@@ -111,7 +115,7 @@ class _Messages(_CommandEnum):
     notification_send = auto()
     hook_ui_callback = auto()
 
-    #Structure
+    # Structure
     structures_deep_update = auto()
     structures_shallow_update = auto()
     structures_zoom = auto()
@@ -128,18 +132,18 @@ class _Messages(_CommandEnum):
     hook_selection_changed = auto()
     compute_hbonds = auto()
 
-    #Streams
+    # Streams
     stream_create = auto()
     stream_feed = auto()
     stream_destroy = auto()
 
-    #Files Deprecated
+    # Files Deprecated
     directory_request = auto()
     file_request = auto()
     file_save = auto()
     export_files = auto()
 
-    #Files
+    # Files
     print_working_directory = auto()
     cd = auto()
     ls = auto()
@@ -151,7 +155,7 @@ class _Messages(_CommandEnum):
     mkdir = auto()
     cp = auto()
 
-    #Macro
+    # Macro
     save_macro = auto()
     delete_macro = auto()
     run_macro = auto()
@@ -166,7 +170,7 @@ class _Messages(_CommandEnum):
     set_shape = auto()
     delete_shape = auto()
 
-    #Other
+    # Other
     add_volume = auto()
     open_url = auto()
     load_file = auto()
@@ -174,9 +178,10 @@ class _Messages(_CommandEnum):
     set_skybox = auto()
     apply_color_scheme = auto()
 
+
 class _Integrations(_CommandEnum):
     # Tmp hack
-    reset_auto() #Not an enum
+    reset_auto()  # Not an enum
 
     # Hydrogens
     hydrogen_add = auto()
@@ -190,6 +195,7 @@ class _Integrations(_CommandEnum):
     export_file = auto()
     import_file = auto()
 
+
 class _Hashes():
     CommandHashes = [None] * len(_Commands)
     MessageHashes = [None] * len(_Messages)
@@ -198,8 +204,10 @@ class _Hashes():
     PermissionRequestHashes = [None] * len(Permissions)
     HashToIntegrationName = dict()
 
+
 a_char_value = ord('a')
 z_char_value = ord('z')
+
 
 def hash_command(str):
     result = 0
@@ -215,6 +223,7 @@ def hash_command(str):
         if hit >= 6:
             break
     return result
+
 
 def init_hashes():
     hashes = dict()
@@ -276,5 +285,6 @@ def init_hashes():
             continue
         hashes[hash] = command.name
         _Hashes.PermissionRequestHashes[i] = hash
+
 
 init_hashes()

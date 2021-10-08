@@ -1,5 +1,6 @@
 from . import _UIBase
 
+
 class _Slider(_UIBase):
 
     @classmethod
@@ -7,19 +8,19 @@ class _Slider(_UIBase):
         return cls()
 
     def __init__(self):
-        #Protocol
+        # Protocol
         super(_Slider, self).__init__()
         self._current_value = 0.0
         self._min_value = 0.0
         self._max_value = 1.0
-        #API
+        # API
         self._changed_callback = lambda self: None
         self._released_callback = lambda self: None
 
-    def _on_slider_changed (self):
+    def _on_slider_changed(self):
         self._changed_callback(self)
 
-    def _on_slider_released (self):
+    def _on_slider_released(self):
         self._released_callback(self)
 
     def _copy_values_deep(self, other):
