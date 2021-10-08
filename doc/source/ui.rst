@@ -2,29 +2,24 @@
 User Interface API
 ##################
 
-The UI API can be used to create a Menu from scratch, or to interact with any menu or UI element generator built in StackStudio.
+The UI API can be used to create Menus for your Plugins.
 
-********************
-StackStudio Download
-********************
-- `Windows <https://nanome.s3-us-west-1.amazonaws.com/installers/StackStudio/StackStudio_v5.2_Windows.zip>`_ 
-- `Mac <https://nanome.s3-us-west-1.amazonaws.com/installers/StackStudio/StackStudio_v0.5_Mac.zip>`_
-
+Menus can be created using just the lib, or using our WYSIWYG application StackStudio, and imported. (Examples below.)
 
 **************
-Menu hierarchy
+Hierarchy
 **************
 UI elements are organized like so:
 
 - **Menu** - Contains its size, title, enabled state, etc.
-- ---- **Root** - Main Layout Node
-- ---------- **Layout** Node - Contains positioning information, orientation, etc.
+- ---- **Root** - Main LayoutNode
+- ---------- **LayoutNode** - Contains positioning information, orientation, etc.
 - ---------------- **Content** - Button/Slider/Text Input/etc.
-- ---------------- **Children** Layout Nodes - A layout node can contain other Layout Nodes
+- ---------------- **Children** LayoutNodes - A layout node can contain other Layout Nodes
 
 A menu hierarchy is created by placing :class:`~nanome.api.ui.layout_node.LayoutNode` under each other, and changing their orientations and sizes.
 
-Currently available UI elements are:
+Currently available UI elements:
 
 - :class:`~nanome.api.ui.button.Button`
 - :class:`~nanome.api.ui.slider.Slider`
@@ -43,6 +38,13 @@ StackStudio
 StackStudio is a WYSIWYG editor for Menus, making it easier to create UIs for your plugins.
 You create your menu, export it as JSON, and import it to your plugin.
 
+========
+Download
+========
+
+- `Windows <https://nanome.s3-us-west-1.amazonaws.com/installers/StackStudio/StackStudio_v5.2_Windows.zip>`_ 
+- `Mac <https://nanome.s3-us-west-1.amazonaws.com/installers/StackStudio/StackStudio_v0.5_Mac.zip>`_
+
 .. image:: stackstudio.png
   :width: 800
   :alt: stackstudio
@@ -53,9 +55,28 @@ Tips
 - Save Frequently: there's currently no way to undo changes, so export your JSONs as often as possible.
 - For images, you can add a placeholder in StackStudio, and set the size and dimensions. However, the real image needs to be loaded by the plugin
 
+==================
+Keyboard Shortcuts
+==================
+- **1 / 2 / 3** - switch between tabs on right panel
+- **up / down** - navigate layout node hierarchy
+- **left / right** - jump to parent / child node
+- **ctrl up / ctrl down** - move node up / down within parent node
+- **ctrl left** - unparent node from parent
+- **ctrl right** - parent node to node above
+- **ctrl c** - copy node and children
+- **ctrl v** - paste copied node and children
+- **ctrl s** - Export JSON
+- **ctrl o** - Select JSON File to import
+- **c** - quick add content to selected node
+- **n** - create child node
+- **delete / backspace** - delete selected node 
+***********
+Examples
+***********
 
 ==================================
-Importing a Menu into your Plugin
+Importing a Menu from JSON
 ==================================
 .. code-block:: python
 
@@ -70,7 +91,7 @@ Importing a Menu into your Plugin
   class ExampleMenu:
     """Wrapper for interacting with nanome.ui.Menu object.
     
-    We've found over time that putting a wrapper around the core Menu class 
+    We've found over time that putting a wrapper around the core Menu object 
     provides the best abstraction.
     """
 
@@ -98,7 +119,7 @@ Importing a Menu into your Plugin
 
 
   class HelloNanomePlugin(nanome.PluginInstance):
-      """Render an example menu which has a button."""
+      """Render an example menu that has a clickable button."""
       
       def start(self):
         self.menu = ExampleMenu(self)
@@ -108,13 +129,14 @@ Importing a Menu into your Plugin
 
 
 ===================================================
-Creating a Menus from scratch (No StackStudio JSON)
+Creating a Menu from scratch (No JSON)
 ===================================================
 
 .. code-block:: python
 
   import nanome
   from nanome.api.ui import Menu
+
 
   class HelloNanomePlugin(nanome.PluginInstance):
 
