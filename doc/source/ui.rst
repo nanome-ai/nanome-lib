@@ -72,6 +72,23 @@ Keyboard Shortcuts
 - **c** - quick add content to selected node
 - **n** - create child node
 - **delete / backspace** - delete selected node 
+
+
+******************
+Z-fighting problem
+******************
+
+A known problem, called z-fighting, is the following:
+
+.. image:: z-fighting.png
+  :width: 400
+  :alt: z-fighting
+
+If you look closely, you will see that the text intersects with its background. This happens when two objects are exactly on the same plan.
+
+To fix this issue, try to set the :attr:`~nanome.api.ui.layout_node.LayoutNode.forward_dist` of your foreground element (here, the text)
+
+
 ***********
 Examples
 ***********
@@ -171,16 +188,9 @@ Creating a Menu from scratch (No JSON)
       self.send_notification(nanome.util.enums.NotificationTypes.success, msg)
 
 
-******************
-Z-fighting problem
-******************
+========================
+In Depth API usage
+========================
 
-A known problem, called z-fighting, is the following:
-
-.. image:: z-fighting.png
-  :width: 400
-  :alt: z-fighting
-
-If you look closely, you will see that the text intersects with its background. This happens when two objects are exactly on the same plan.
-
-To fix this issue, try to set the :attr:`~nanome.api.ui.layout_node.LayoutNode.forward_dist` of your foreground element (here, the text)
+.. literalinclude:: ../../test_plugins/UIPlugin.py
+   :language: python
