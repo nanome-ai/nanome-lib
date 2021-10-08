@@ -1,6 +1,7 @@
 import nanome
 from nanome._internal._room import _Room
 
+
 class Room(_Room):
     """
     | Represents a room in Nanome

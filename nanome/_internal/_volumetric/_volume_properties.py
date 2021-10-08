@@ -1,5 +1,6 @@
 from nanome.util import enums
 
+
 class _VolumeProperties():
     VolumeVisualStyle = enums.VolumeVisualStyle
 

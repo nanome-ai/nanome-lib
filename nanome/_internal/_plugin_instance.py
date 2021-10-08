@@ -19,6 +19,8 @@ UPDATE_RATE = 1.0 / 60.0
 MINIMUM_SLEEP = 0.001
 
 __metaclass__ = type
+
+
 class _PluginInstance(object):
     __callbacks = dict()
     __futures = dict()

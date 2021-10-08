@@ -3,6 +3,7 @@ from .. import _Mesh
 from nanome.util import IntEnum
 from nanome._internal._util._serializers import _ColorSerializer, _TypeSerializer
 
+
 class _MeshSerializer(_TypeSerializer):
     def __init__(self):
         self.color = _ColorSerializer()
@@ -14,7 +15,7 @@ class _MeshSerializer(_TypeSerializer):
         return "Mesh"
 
     def serialize(self, version, value, context):
-        if (version == 0 ):
+        if (version == 0):
             safe_id = (context._plugin_id << 24) & 0x7FFFFFFF
             safe_id |= value._content_id
         else:
@@ -30,5 +31,6 @@ class _MeshSerializer(_TypeSerializer):
             value._content_id &= id_mask
         value._mesh_color = context.read_using_serializer(self.color)
         return value
+
 
 _UIBaseSerializer.register_type("Mesh", _UIBaseSerializer.ContentType.emesh, _MeshSerializer())

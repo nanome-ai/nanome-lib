@@ -2,6 +2,7 @@ from nanome.util import Quaternion
 
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _QuaternionSerializer(_TypeSerializer):
     def __init__(self):
         pass
@@ -26,6 +27,7 @@ class _QuaternionSerializer(_TypeSerializer):
         w = context.read_float()
         quaternion.set(x, y, z, w)
         return quaternion
+
 
 class _UnityRotationSerializer(_TypeSerializer):
     def __init__(self):

@@ -4,6 +4,7 @@ from nanome._internal._structure._serialization import _WorkspaceSerializer, _At
 
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _UpdateWorkspace(_TypeSerializer):
     def __init__(self):
         self.workspace = _WorkspaceSerializer()

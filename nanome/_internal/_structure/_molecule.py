@@ -2,6 +2,7 @@ from . import _Base
 from . import _helpers
 import copy
 
+
 class _Molecule(_Base):
     @classmethod
     def _create(cls):
@@ -11,7 +12,7 @@ class _Molecule(_Base):
         super(_Molecule, self).__init__()
         self._chains = []
         self._parent = None
-        #conformers
+        # conformers
         self._current_conformer = 0
         self.__conformer_count = 1
         self._names = [""]
@@ -24,13 +25,13 @@ class _Molecule(_Base):
     def _remove_chain(self, chain):
         self._chains.remove(chain)
         chain._parent = None
-    
+
     def _set_chains(self, chains):
         self._chains = chains
         for chain in chains:
             chain._parent = self
 
-    #region connections
+    # region connections
 
     @property
     def _residues(self):
@@ -43,7 +44,7 @@ class _Molecule(_Base):
         for residue in self._residues:
             for atom in residue._atoms:
                 yield atom
-                
+
     @property
     def _bonds(self):
         for residue in self._residues:
@@ -53,12 +54,12 @@ class _Molecule(_Base):
     @property
     def _complex(self):
         return self._parent
-    #endregion
+    # endregion
 
     @property
     def _name(self):
         return self._names[self._current_conformer]
-    
+
     @_name.setter
     def _name(self, value):
         self._names[self._current_conformer] = value
@@ -66,22 +67,22 @@ class _Molecule(_Base):
     @property
     def _associated(self):
         return self._associateds[self._current_conformer]
-    
+
     @_associated.setter
     def _associated(self, value):
         self._associateds[self._current_conformer] = value
 
-    #region conformers
+    # region conformers
     @property
     def _conformer_count(self):
         return self.__conformer_count
-    
+
     @_conformer_count.setter
     def _conformer_count(self, value):
         curr_size = len(self._names)
         if value > curr_size:
             extension = value - curr_size
-            self._names.extend([self._names[-1]]*(extension))
+            self._names.extend([self._names[-1]] * (extension))
             copy_val = self._associateds[-1]
             self._associateds.extend([copy_val.copy() for i in range(extension)])
         else:
@@ -96,7 +97,7 @@ class _Molecule(_Base):
             bond._resize_conformer(value)
 
     def _create_conformer(self, index):
-        src = max(0, index-1)
+        src = max(0, index - 1)
         self._copy_conformer(src, index)
 
     def _move_conformer(self, src, dest):
@@ -122,11 +123,11 @@ class _Molecule(_Base):
         for bond in self._bonds:
             bond._delete_conformer(index)
         self.__conformer_count -= 1
-        self._current_conformer = min(self._current_conformer, self.__conformer_count-1)
+        self._current_conformer = min(self._current_conformer, self.__conformer_count - 1)
 
-    def _copy_conformer(self, src, index= None):
+    def _copy_conformer(self, src, index=None):
         if index is None:
-            index = src+1
+            index = src + 1
         value = self._names[src]
         self._names.insert(index, value)
         value = self._associateds[src].copy()
@@ -137,10 +138,10 @@ class _Molecule(_Base):
             bond._copy_conformer(src, index)
         self.__conformer_count += 1
 
-    #endregion
+    # endregion
 
-        #copies the structure. If conformer_number is not None it will only copy that conformer's data
-    def _shallow_copy(self, conformer_number = None):
+        # copies the structure. If conformer_number is not None it will only copy that conformer's data
+    def _shallow_copy(self, conformer_number=None):
         molecule = _Molecule._create()
         if conformer_number == None:
             molecule._names = list(self._names)
@@ -154,5 +155,5 @@ class _Molecule(_Base):
             molecule._current_conformer = 0
         return molecule
 
-    def _deep_copy(self, conformer_number = None, old_to_new_atoms = None):
+    def _deep_copy(self, conformer_number=None, old_to_new_atoms=None):
         return _helpers._copy._deep_copy_molecule(self, conformer_number, old_to_new_atoms)

@@ -1,6 +1,7 @@
 import nanome
 from nanome.util import Color, Logs
 
+
 class _Shape(object):
     def __init__(self, shape_type):
         self._index = -1

@@ -2,6 +2,7 @@ from nanome._internal._network._serialization import _ContextDeserialization, _C
 from nanome._internal._util._serializers import _StringSerializer
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _SendNotification(_TypeSerializer):
     def __init__(self):
         self.string = _StringSerializer()

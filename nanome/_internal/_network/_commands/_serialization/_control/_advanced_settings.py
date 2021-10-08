@@ -1,5 +1,6 @@
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _AdvancedSettings(_TypeSerializer):
     def __init__(self):
         pass
@@ -9,7 +10,7 @@ class _AdvancedSettings(_TypeSerializer):
 
     def name(self):
         return "AdvancedSettings"
-        
+
     def serialize(self, version, value, data):
         pass
 

@@ -1,6 +1,7 @@
 from .. import _LoadingBar
 from nanome.util.color import Color
 
+
 def parse_json(content_json):
     loading_bar = _LoadingBar._create()
     loading_bar._percentage = content_json.read("percentage", loading_bar._percentage)
@@ -8,6 +9,7 @@ def parse_json(content_json):
     loading_bar._description = content_json.read("description", loading_bar._description)
     loading_bar._failure = content_json.read("failure", loading_bar._failure)
     return loading_bar
+
 
 def write_json(helper, loading_bar):
     helper.write("percentage", loading_bar._percentage)

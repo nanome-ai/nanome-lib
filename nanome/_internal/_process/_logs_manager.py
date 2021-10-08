@@ -2,6 +2,7 @@ from collections import deque
 import logging
 from logging.handlers import RotatingFileHandler
 
+
 class _LogsManager():
     __pending = deque()
 

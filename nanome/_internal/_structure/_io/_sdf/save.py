@@ -4,6 +4,7 @@ from nanome.util import Logs
 
 Options = nanome.util.complex_save_options.SDFSaveOptions
 
+
 class Results(object):
     def __init__(self):
         self.saved_atoms = []
@@ -36,7 +37,7 @@ def to_file(path, complex, options=None):
             lines.append("$$$$")
         number_atoms = 0
         number_bonds = 0
-        serial_by_atom_unique = {}  #<long, int>
+        serial_by_atom_unique = {}  # <long, int>
         atom_serial = 1
 
         chains = molecule._chains
@@ -113,7 +114,7 @@ def add_atoms(lines, saved_atoms):
 
 
 def add_bonds(lines, saved_bonds):
-    linked = {}  #<long,bool>
+    linked = {}  # <long,bool>
     idx = 0
     lines.append("M  V30 BEGIN BOND")
     for saved_bond in saved_bonds:
@@ -147,6 +148,7 @@ def float_to_string(value, digits):
     for i in range(digits - float_digits):
         string_val += '0'
     return string_val
+
 
 def add_footer(lines):
     lines.append("M  V30 END CTAB")

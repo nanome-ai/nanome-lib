@@ -2,6 +2,7 @@ from nanome.util import Vector3
 from nanome._internal._structure import _Complex, _Molecule, _Chain, _Residue, _Bond, _Atom
 from .content import Content
 
+
 def structure(content):
     num_molecules = max(content.model_count, 1)
     atoms_by_molecule = []
@@ -18,13 +19,13 @@ def structure(content):
         complex._add_molecule(molecule)
     # Done
     return complex._convert_to_conformers()
-        
-         
+
+
 def structure_molecule(atoms, compnds):
     # All structured infos
-    all_residues = {} #<string, Residue>
-    all_chains = {} #<string, Chain>
-    all_atoms = {} #<string, Atom>
+    all_residues = {}  # <string, Residue>
+    all_chains = {}  # <string, Chain>
+    all_atoms = {}  # <string, Atom>
     # Read all atoms
     for ratom in atoms:
         atom = _Atom._create()
@@ -64,7 +65,3 @@ def structure_molecule(atoms, compnds):
         molecule._add_chain(all_chains[chain])
     # Done
     return molecule
-        
-
-    
-

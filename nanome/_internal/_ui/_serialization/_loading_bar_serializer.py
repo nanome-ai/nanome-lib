@@ -3,6 +3,7 @@ from . import _UIBaseSerializer
 from .. import _LoadingBar
 from nanome._internal._util._serializers import _StringSerializer, _TypeSerializer
 
+
 class _LoadingBarSerializer(_TypeSerializer):
     def __init__(self):
         self.string = _StringSerializer()
@@ -14,7 +15,7 @@ class _LoadingBarSerializer(_TypeSerializer):
         return "LoadingBar"
 
     def serialize(self, version, value, context):
-        if (version == 0 ):
+        if (version == 0):
             safe_id = (context._plugin_id << 24) & 0x7FFFFFFF
             safe_id |= value._content_id
         else:
@@ -36,5 +37,6 @@ class _LoadingBarSerializer(_TypeSerializer):
         value._description = context.read_using_serializer(self.string)
         value._failure = context.read_bool()
         return value
+
 
 _UIBaseSerializer.register_type("LoadingBar", _UIBaseSerializer.ContentType.eloadingBar, _LoadingBarSerializer())

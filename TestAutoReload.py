@@ -4,6 +4,7 @@ from multiprocessing import Process
 import time
 import sys
 
+
 def start_process():
     print("Start subproc")
     sys.stdout.flush()
@@ -12,10 +13,13 @@ def start_process():
         sys.stdout.flush()
         time.sleep(3)
 
+
 class Test(nanome.PluginInstance):
     pass
 
+
 process = None
+
 
 def pre_run():
     print("Pre run")
@@ -24,10 +28,12 @@ def pre_run():
     process = Process(target=start_process)
     process.start()
 
+
 def post_run():
     print("Post run")
     sys.stdout.flush()
     process.kill()
+
 
 if __name__ == "__main__":
     plugin = nanome.Plugin("Test Autoreload", "", "Test", False)

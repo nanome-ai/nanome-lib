@@ -1,6 +1,7 @@
 from nanome._internal._util._serializers import _TypeSerializer, _ArraySerializer, _DictionarySerializer, _LongSerializer
 from nanome._internal._structure._serialization import _SubstructureSerializer, _AtomSerializer, _MoleculeSerializer
 
+
 class _RequestSubstructure(_TypeSerializer):
     def __init__(self):
         self.array = _ArraySerializer()

@@ -11,13 +11,16 @@ HAS_ADVANCED_OPTIONS = False
 
 # Plugin
 
+
 class ImagePlugin(nanome.PluginInstance):
     def __init__(self):
         pass
     # Function called when Nanome connects to the Plugin, after its instantiation
+
     def start(self):
         self.create_image_menu()
     # Function called when user clicks on the "Run" button in Nanome
+
     def on_run(self):
         self.open_menu()
 
@@ -33,7 +36,7 @@ class ImagePlugin(nanome.PluginInstance):
         root = self.menu.root
         image_node = root.find_node("ImageNode")
         self.image = image_node.add_new_image(os.path.expanduser("~/Desktop/png.png"))
-                
+
         width_node = root.find_node("WidthNode")
         height_node = root.find_node("HeightNode")
 
@@ -90,7 +93,7 @@ class ImagePlugin(nanome.PluginInstance):
         width.register_submitted_callback(setWidth)
         height = height_node.add_new_text_input()
         height.register_submitted_callback(setHeight)
-        
+
         fill_button.register_pressed_callback(image_setting)
         fit_button.register_pressed_callback(image_setting)
         stretch_button.register_pressed_callback(image_setting)

@@ -2,6 +2,7 @@ from . import _TupleSerializer, _ArraySerializer
 
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _DictionarySerializer(_TypeSerializer):
     def __init__(self):
         self._serializer = None

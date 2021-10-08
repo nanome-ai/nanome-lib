@@ -1,6 +1,7 @@
 from nanome._internal._util._serializers import _TypeSerializer
 from nanome._internal._shapes._mesh import _Mesh
 
+
 class _MeshSerializer(_TypeSerializer):
     def __init__(self):
         pass

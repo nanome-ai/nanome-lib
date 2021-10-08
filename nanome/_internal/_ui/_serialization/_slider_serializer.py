@@ -4,6 +4,7 @@ from . import _UIBaseSerializer
 
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _SliderSerializer(_TypeSerializer):
     def __init__(self):
         pass
@@ -15,7 +16,7 @@ class _SliderSerializer(_TypeSerializer):
         return "Slider"
 
     def serialize(self, version, value, context):
-        if (version == 0 ):
+        if (version == 0):
             safe_id = (context._plugin_id << 24) & 0x7FFFFFFF
             safe_id |= value._content_id
         else:
@@ -33,8 +34,9 @@ class _SliderSerializer(_TypeSerializer):
             id_mask = 0x00FFFFFF
             value._content_id &= id_mask
         value._current_value = context.read_float()
-        value._min_value =context.read_float()
-        value._max_value =context.read_float()
+        value._min_value = context.read_float()
+        value._max_value = context.read_float()
         return value
+
 
 _UIBaseSerializer.register_type("Slider", _UIBaseSerializer.ContentType.eslider, _SliderSerializer())

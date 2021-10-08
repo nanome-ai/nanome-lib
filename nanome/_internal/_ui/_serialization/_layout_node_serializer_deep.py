@@ -4,6 +4,7 @@ from . import _UIBaseSerializer
 
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _LayoutNodeSerializerDeep(_TypeSerializer):
     def __init__(self):
         self._layout_array = _ArraySerializer()

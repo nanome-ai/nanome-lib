@@ -3,6 +3,7 @@ from nanome._internal._util._serializers import _DictionarySerializer, _LongSeri
 
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _ReceiveWorkspace(_TypeSerializer):
     def __init__(self):
         self.workspace = _WorkspaceSerializer()

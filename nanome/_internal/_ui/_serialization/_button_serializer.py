@@ -5,6 +5,7 @@ from .. import _Button
 
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _ButtonSerializer(_TypeSerializer):
     def __init__(self):
         self.string = _StringSerializer()
@@ -45,7 +46,7 @@ class _ButtonSerializer(_TypeSerializer):
         context.write_float(button._text._size)
         context.write_bool(button._text._underlined)
         if version >= 3:
-            context.write_bool(button._text._ellipsis) #default on
+            context.write_bool(button._text._ellipsis)  # default on
             context.write_bool(button._text._bold._idle)
             context.write_bool(button._text._bold._selected)
             context.write_bool(button._text._bold._highlighted)
@@ -175,7 +176,7 @@ class _ButtonSerializer(_TypeSerializer):
         value._text._size = context.read_float()
         value._text._underlined = context.read_bool()
         if version >= 3:
-            value._text._ellipsis = context.read_bool() #default on
+            value._text._ellipsis = context.read_bool()  # default on
             value._text._bold._idle = context.read_bool()
             value._text._bold._selected = context.read_bool()
             value._text._bold._highlighted = context.read_bool()
@@ -262,5 +263,6 @@ class _ButtonSerializer(_TypeSerializer):
             value._switch._on_color = context.read_using_serializer(self.color)
             value._switch._off_color = context.read_using_serializer(self.color)
         return value
+
 
 _UIBaseSerializer.register_type("Button", _UIBaseSerializer.ContentType.ebutton, _ButtonSerializer())

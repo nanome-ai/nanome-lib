@@ -1,5 +1,6 @@
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _ImportFile(_TypeSerializer):
 
     def version(self):

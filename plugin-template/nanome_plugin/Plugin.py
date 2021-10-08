@@ -15,10 +15,10 @@ class {{class}}(nanome.PluginInstance):
         node.add_new_label(msg)
         Logs.message(msg)
 
-
     def on_run(self):
         self.menu.enabled = True
         self.update_menu(self.menu)
+
 
 def main():
     plugin = nanome.Plugin('{{name}}', '{{description}}', '{{category}}', False)

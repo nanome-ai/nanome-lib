@@ -1,5 +1,6 @@
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _MenuCallback(_TypeSerializer):
     def __init__(self):
         pass
@@ -9,7 +10,7 @@ class _MenuCallback(_TypeSerializer):
 
     def name(self):
         return "MenuCallback"
-        
+
     def serialize(self, version, value, context):
         if version >= 1:
             context.write_byte(value[0])

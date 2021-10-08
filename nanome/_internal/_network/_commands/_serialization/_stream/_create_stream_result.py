@@ -1,6 +1,7 @@
 from nanome._internal._util._serializers import _TypeSerializer
 from nanome.util.enums import StreamDataType, StreamDirection
 
+
 class _CreateStreamResult(_TypeSerializer):
     def __init__(self):
         pass

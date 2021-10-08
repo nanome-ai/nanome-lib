@@ -2,6 +2,7 @@ from nanome._internal._structure import _Complex, _Workspace
 from nanome._internal._structure._serialization import _ComplexSerializer, _AtomSerializer
 from nanome._internal._util._serializers import _ArraySerializer, _TypeSerializer, _StringSerializer, _LongSerializer, _DictionarySerializer
 
+
 class _ExportFilesItem(_TypeSerializer):
     def __init__(self):
         self.__complex = _ComplexSerializer()
@@ -38,6 +39,7 @@ class _ExportFilesItem(_TypeSerializer):
             if len(res) == 0:
                 return None
             return res
+
 
 class _ExportFiles(_TypeSerializer):
     def __init__(self):

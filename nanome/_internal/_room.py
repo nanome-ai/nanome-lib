@@ -2,6 +2,7 @@ import nanome
 from nanome._internal._network import _ProcessNetwork
 from nanome._internal._network._commands._callbacks import _Messages
 
+
 class _Room():
     SkyBoxes = nanome.util.enums.SkyBoxes
 

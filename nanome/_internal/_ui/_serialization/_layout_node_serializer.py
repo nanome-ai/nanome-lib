@@ -3,6 +3,7 @@ from .. import _LayoutNode
 
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _LayoutNodeSerializer(_TypeSerializer):
     def __init__(self):
         pass
@@ -12,7 +13,7 @@ class _LayoutNodeSerializer(_TypeSerializer):
 
     def name(self):
         return "LayoutNode"
-    
+
     def serialize(self, version, value, context):
         context.write_int(value._id)
         context.write_bool(value._enabled)
@@ -49,9 +50,9 @@ class _LayoutNodeSerializer(_TypeSerializer):
         layout_node._sizing_value = context.read_float()
         layout_node._forward_dist = context.read_float()
         layout_node._padding_type = _LayoutNode.PaddingTypes(context.read_uint())
-        layout_node._padding = (context.read_float(), 
-                                context.read_float(), 
-                                context.read_float(), 
+        layout_node._padding = (context.read_float(),
+                                context.read_float(),
+                                context.read_float(),
                                 context.read_float())
         layout_node._child_ids = context.read_int_array()
         has_content = context.read_bool()

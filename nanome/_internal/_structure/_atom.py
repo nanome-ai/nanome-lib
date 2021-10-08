@@ -3,6 +3,7 @@ from nanome.util import Vector3, Color
 from nanome.util.logs import Logs
 from . import _Base
 
+
 class _Atom(_Base):
     AtomRenderingMode = nanome.util.enums.AtomRenderingMode
     _vdw_radii = {}
@@ -13,9 +14,10 @@ class _Atom(_Base):
         return cls()
 
     _atom_count = 0
+
     def __init__(self):
         super(_Atom, self).__init__()
-        #Molecular
+        # Molecular
         self._symbol = "C"
         self._serial = 1
         self._name = "default"
@@ -29,8 +31,8 @@ class _Atom(_Base):
         self._donor = False
         self._polar_hydrogen = False
         self._alt_loc = "."
-        #Rendering
-        #API
+        # Rendering
+        # API
         self._selected = False
         self._atom_mode = _Atom.AtomRenderingMode.BallStick
         self._labeled = False
@@ -40,21 +42,21 @@ class _Atom(_Base):
         self._surface_rendering = False
         self._surface_color = Color.Clear()
         self._surface_opacity = 1.0
-        #No API
+        # No API
         self._display_mode = 0xFFFFFFFF
         self._hydrogened = True
         self._watered = True
         self._het_atomed = True
         self._het_surfaced = True
-        #conformer
+        # conformer
         self._positions = [Vector3()]
         self._in_conformer = [True]
-        #internal
+        # internal
         self._unique_identifier = _Atom._atom_count
         self._bonds = []
         self._parent = None
         _Atom._atom_count += 1
-    
+
     @property
     def _atom_rendering(self):
         return self._display_mode & 1
@@ -66,7 +68,7 @@ class _Atom(_Base):
         else:
             self._display_mode &= 0xFFFFFFFE
 
-    #region connections
+    # region connections
     @property
     def _residue(self):
         return self._parent
@@ -91,9 +93,9 @@ class _Atom(_Base):
             return self._parent._complex
         else:
             return None
-    #endregion
+    # endregion
 
-    #region conformer stuff
+    # region conformer stuff
     @property
     def _current_conformer(self):
         if self._molecule != None:
@@ -111,7 +113,7 @@ class _Atom(_Base):
     @property
     def _position(self):
         return self._positions[self._current_conformer]
-    
+
     @_position.setter
     def _position(self, value):
         self._positions[self._current_conformer] = value
@@ -123,14 +125,14 @@ class _Atom(_Base):
         atomSymbolLower = self._symbol.lower()
         if atomSymbolLower in _Atom._vdw_radii:
             return _Atom._vdw_radii[atomSymbolLower]
-        #unknown type
-        Logs.warning("Unknown atom type '"+atomSymbolLower+"'")
+        # unknown type
+        Logs.warning("Unknown atom type '" + atomSymbolLower + "'")
         return 0.0
 
     @property
     def _exists(self):
         return self._in_conformer[self._current_conformer]
-    
+
     @_exists.setter
     def _exists(self, value):
         self._in_conformer[self._current_conformer] = value
@@ -139,7 +141,7 @@ class _Atom(_Base):
         curr_size = len(self._in_conformer)
         if new_size > curr_size:
             extension = new_size - curr_size
-            self._in_conformer.extend([self._in_conformer[-1]]*(extension))
+            self._in_conformer.extend([self._in_conformer[-1]] * (extension))
             copy_val = self._positions[-1]
             self._positions.extend([copy_val.get_copy() for i in range(extension)])
         else:
@@ -151,7 +153,7 @@ class _Atom(_Base):
         self._in_conformer.insert(dest, temp)
         temp = self._positions[src]
         self._positions.insert(dest, temp)
-        src = src + 1 if src>dest else src
+        src = src + 1 if src > dest else src
         del self._in_conformer[src]
         del self._positions[src]
 
@@ -159,24 +161,24 @@ class _Atom(_Base):
         del self._positions[index]
         del self._in_conformer[index]
 
-    def _copy_conformer(self, src, index= None):
+    def _copy_conformer(self, src, index=None):
         if index is None:
             index = src
         value = self._in_conformer[src]
         self._in_conformer.insert(index, value)
         value = self._positions[src].get_copy()
         self._positions.insert(index, value)
-    #endregion
+    # endregion
 
-    #copies the structure. If conformer_number is not None it will only copy that conformer's data..
-    def _shallow_copy(self, conformer_number = None):
+    # copies the structure. If conformer_number is not None it will only copy that conformer's data..
+    def _shallow_copy(self, conformer_number=None):
         atom = _Atom._create()
         atom._symbol = self._symbol
         atom._serial = self._serial
         atom._name = self._name
         atom._is_het = self._is_het
         atom._atom_type = self._atom_type
-        #No API
+        # No API
         atom._occupancy = self._occupancy
         atom._bfactor = self._bfactor
         atom._acceptor = self._acceptor
@@ -184,8 +186,8 @@ class _Atom(_Base):
         atom._polar_hydrogen = self._polar_hydrogen
         atom._formal_charge = self._formal_charge
         atom._partial_charge = self._partial_charge
-        #Rendering
-        #API
+        # Rendering
+        # API
         atom._selected = self._selected
         atom._atom_mode = self._atom_mode
         atom._labeled = self._labeled
@@ -195,13 +197,13 @@ class _Atom(_Base):
         atom._surface_rendering = self._surface_rendering
         atom._surface_color = self._surface_color.copy()
         atom._surface_opacity = self._surface_opacity
-        #No API
+        # No API
         atom._display_mode = self._display_mode
         atom._hydrogened = self._hydrogened
         atom._watered = self._watered
         atom._het_atomed = self._het_atomed
         atom._het_surfaced = self._het_surfaced
-        #conformer
+        # conformer
         if conformer_number == None:
             atom._positions = [position.get_copy() for position in self._positions]
             atom._in_conformer = list(self._in_conformer)
@@ -210,10 +212,9 @@ class _Atom(_Base):
             #atom._exists = self._in_conformer[conformer_number]
         return atom
 
-
     @classmethod
     def _fill_atom_table(cls):
-        #From NanomeAtomTable.csv
+        # From NanomeAtomTable.csv
         cls._vdw_radii = {}
         cls._vdw_radii["h"] = 1.1
         cls._vdw_radii["he"] = 1.4

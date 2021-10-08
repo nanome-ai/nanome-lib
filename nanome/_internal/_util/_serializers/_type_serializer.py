@@ -2,6 +2,8 @@ from nanome.util import Logs
 from abc import ABCMeta, abstractmethod
 
 __metaclass__ = type
+
+
 class _TypeSerializer(object):
     __metaclass__ = ABCMeta
     __version_table = dict()
@@ -15,7 +17,6 @@ class _TypeSerializer(object):
     @classmethod
     def register_string_raw(cls, string, version):
         cls.__version_table[string] = version
-
 
     @classmethod
     def get_version_table(cls):

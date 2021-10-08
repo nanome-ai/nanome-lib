@@ -4,6 +4,7 @@ from nanome._internal._util._serializers import _TypeSerializer, _LongSerializer
 from nanome._internal._structure._serialization import _ComplexSerializer, _AtomSerializer
 from nanome._internal._volumetric._io._em_map._parse import parse_file
 
+
 class _AddVolume(_TypeSerializer):
     def __init__(self):
         self.__complex = _ComplexSerializer()

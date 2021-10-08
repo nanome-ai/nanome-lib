@@ -1,5 +1,6 @@
 from nanome.util import Vector3
 
+
 class _UnitCell(object):
     def __init__(self):
         self._A = 0.0

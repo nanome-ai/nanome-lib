@@ -13,9 +13,9 @@ class _OpenURL(_TypeSerializer):
         return "OpenURL"
 
     def serialize(self, version, value, context):
-        context.write_using_serializer(self.string, value[0]) # URL
+        context.write_using_serializer(self.string, value[0])  # URL
         if version >= 1:
-            context.write_bool(value[1]) # Desktop Browser
+            context.write_bool(value[1])  # Desktop Browser
 
     def deserialize(self, version, context):
         raise NotImplementedError

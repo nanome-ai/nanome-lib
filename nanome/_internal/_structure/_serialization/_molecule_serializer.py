@@ -4,8 +4,9 @@ from .. import _Molecule
 from nanome._internal._util._serializers import _ArraySerializer, _DictionarySerializer, _StringSerializer
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _MoleculeSerializer(_TypeSerializer):
-    def __init__(self, shallow = False):
+    def __init__(self, shallow=False):
         self.shallow = shallow
         self.array = _ArraySerializer()
         self.string = _StringSerializer()
@@ -13,7 +14,7 @@ class _MoleculeSerializer(_TypeSerializer):
         self.dictionary.set_types(self.string, self.string)
 
     def version(self):
-        #Version 0 corresponds to Nanome release 1.12
+        # Version 0 corresponds to Nanome release 1.12
         return 1
 
     def name(self):

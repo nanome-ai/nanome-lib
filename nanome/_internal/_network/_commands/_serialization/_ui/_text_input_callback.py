@@ -1,5 +1,6 @@
 from nanome._internal._util._serializers import _TypeSerializer, _TupleSerializer, _IntSerializer, _StringSerializer
 
+
 class _TextInputCallback(_TypeSerializer):
     def __init__(self):
         self.__tuple = _TupleSerializer(_IntSerializer(), _StringSerializer())
@@ -9,7 +10,7 @@ class _TextInputCallback(_TypeSerializer):
 
     def name(self):
         return "TextInputCallback"
-        
+
     def serialize(self, version, value, context):
         if (version == 0):
             plugin_mask = (context._plugin_id << 24) & 0x7FFFFFFF

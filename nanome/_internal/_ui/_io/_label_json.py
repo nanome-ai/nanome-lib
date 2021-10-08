@@ -2,6 +2,7 @@ from nanome.util.enums import HorizAlignOptions, VertAlignOptions
 from nanome._internal._ui import _Label
 from nanome.util.color import Color
 
+
 def parse_json(content_json):
     label = _Label._create()
     label._text_value = content_json.read("text", label._text_value)
@@ -16,6 +17,7 @@ def parse_json(content_json):
     label._text_italic = content_json.read("text_italics", label._text_italic)
     label._text_underlined = content_json.read("text_underlined", label._text_underlined)
     return label
+
 
 def write_json(helper, label):
     helper.write("text", label._text_value)

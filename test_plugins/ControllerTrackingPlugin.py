@@ -1,7 +1,9 @@
 import nanome
 from nanome.util import Logs
 import sys
-import time, random, struct
+import time
+import random
+import struct
 import math
 from nanome.api.structure import *
 from nanome.util import Vector3, Quaternion, Matrix
@@ -14,6 +16,7 @@ HAS_ADVANCED_OPTIONS = False
 
 # Plugin
 
+
 def rand_float(lower, upper):
     lower = max(-340282346638528859811704183484516925440, lower)
     upper = min(340282346638528859811704183484516925440, upper)
@@ -21,31 +24,35 @@ def rand_float(lower, upper):
     flt = struct.unpack('f', struct.pack('f', dbl))[0]
     return flt
 
+
 def rand_pos():
-    return Vector3(rand_float(-5,5), rand_float(0,2), rand_float(-5,5))
+    return Vector3(rand_float(-5, 5), rand_float(0, 2), rand_float(-5, 5))
+
 
 def random_quaternion():
-  #double x,y,z, u,v,w, s
-  x = rand_float(-1,1)
-  y = rand_float(-1,1)
-  z = x*x + y*y
-  while(z>1):
-        x = rand_float(-1,1)
-        y = rand_float(-1,1)
-        z = x*x + y*y
-  u = rand_float(-1,1)
-  v = rand_float(-1,1)
-  w = u*u + v*v
-  while(w>1):
-        u = rand_float(-1,1)
-        v = rand_float(-1,1)
-        w = u*u + v*v
-  s = math.sqrt((1-z) / w)
-  return Quaternion(x, y, s*u, s*v)
+    # double x,y,z, u,v,w, s
+    x = rand_float(-1, 1)
+    y = rand_float(-1, 1)
+    z = x * x + y * y
+    while(z > 1):
+        x = rand_float(-1, 1)
+        y = rand_float(-1, 1)
+        z = x * x + y * y
+    u = rand_float(-1, 1)
+    v = rand_float(-1, 1)
+    w = u * u + v * v
+    while(w > 1):
+        u = rand_float(-1, 1)
+        v = rand_float(-1, 1)
+        w = u * u + v * v
+    s = math.sqrt((1 - z) / w)
+    return Quaternion(x, y, s * u, s * v)
+
 
 def rand_scale():
-    scale = rand_float(.5,1)
+    scale = rand_float(.5, 1)
     return Vector3(scale, scale, scale)
+
 
 class ControllerTrackingPlugin(nanome.PluginInstance):
     def start(self):
@@ -64,7 +71,7 @@ class ControllerTrackingPlugin(nanome.PluginInstance):
         self.last = time.time()
         self.outstanding = True
         self.update_menu(self.menu)
-        self.request_menu_transform(0, lambda _1,_2,_3:None)
+        self.request_menu_transform(0, lambda _1, _2, _3: None)
         self.set_menu_transform(0, self.menu_position, self.menu_rotation, self.menu_scale)
         self.request_menu_transform(0, self.check_menu_stats)
 
@@ -109,9 +116,9 @@ class ControllerTrackingPlugin(nanome.PluginInstance):
         for complex in complexes:
             if complex.name == "head":
                 self.head_complex = complex
-            elif complex.name == "left": 
+            elif complex.name == "left":
                 self.left_complex = complex
-            elif complex.name == "right": 
+            elif complex.name == "right":
                 self.right_complex = complex
         self.request_controller_transforms(self.received)
 
@@ -132,7 +139,7 @@ class ControllerTrackingPlugin(nanome.PluginInstance):
         new_residue.add_bond(new_bond)
         new_bond.atom1 = new_atom1
         new_bond.atom2 = new_atom2
-        new_atom2.position = Vector3(0,0,1)
+        new_atom2.position = Vector3(0, 0, 1)
         new_atom1.atom_color = color
         new_atom2.atom_color = color
         return new_complex
@@ -152,5 +159,6 @@ class ControllerTrackingPlugin(nanome.PluginInstance):
 
     def __init__(self):
         pass
+
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, ControllerTrackingPlugin)

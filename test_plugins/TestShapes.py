@@ -286,6 +286,7 @@ class TestShapes(nanome.PluginInstance):
 
             def done1(success):
                 cls.lines.append(line)
+
             def done2(success):
                 cls.labels.append(label)
             line.upload(done1)

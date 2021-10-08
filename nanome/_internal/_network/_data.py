@@ -3,6 +3,7 @@ import struct
 expand_size = 1048576  # 1 MB
 expand_buffer = bytearray(expand_size)
 
+
 class _Data(object):
     bool_pack = struct.Struct('<?').pack_into
     float_pack = struct.Struct('<f').pack_into
@@ -26,7 +27,7 @@ class _Data(object):
         start = self._buffered_bytes + self._buffered_computed
         size = len(data)
         self.expand_data(size)
-        self._received_bytes[start:start+size] = data
+        self._received_bytes[start:start + size] = data
 
     def expand_data(self, size):
         self._buffered_bytes += size
@@ -41,9 +42,9 @@ class _Data(object):
         return self._buffered_bytes >= size
 
     def to_array(self):
-        return memoryview(self._received_bytes)[self._buffered_computed:self._buffered_computed+self._buffered_bytes]
-        
-#region write Data
+        return memoryview(self._received_bytes)[self._buffered_computed:self._buffered_computed + self._buffered_bytes]
+
+# region write Data
     def write_bool(self, value):
 
         pre = self._buffered_bytes + self._buffered_computed
@@ -83,7 +84,7 @@ class _Data(object):
         pre = self._buffered_bytes + self._buffered_computed
         size = len(data)
         self.expand_data(size)
-        self._received_bytes[pre:pre+size] = data
+        self._received_bytes[pre:pre + size] = data
 
     def write_byte_array(self, data):
         size = len(data)
@@ -125,8 +126,8 @@ class _Data(object):
         self.expand_data(byte_size)
         pack_into(self._received_bytes, pre, *data)
 
-#endregion
-#region read Data
+# endregion
+# region read Data
     def consume_data(self, size):
         self._buffered_bytes -= size
         self._buffered_computed += size
@@ -238,8 +239,8 @@ class _Data(object):
         if byte_size > self._buffered_bytes:
             raise BufferError(
                 'Trying to read more data than available, check API compatibility')
-    
+
         result = struct.unpack(str(size) + "q", self._received_bytes[self._buffered_computed:self._buffered_computed + byte_size])
         self.consume_data(byte_size)
         return result
-#end region
+# end region

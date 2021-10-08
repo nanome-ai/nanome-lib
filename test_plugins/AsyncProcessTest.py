@@ -6,6 +6,7 @@ DESCRIPTION = "Tests async/await on Process API for plugins."
 CATEGORY = "testing"
 HAS_ADVANCED_OPTIONS = False
 
+
 class AsyncTest(nanome.AsyncPluginInstance):
     def start(self):
         self.on_run()
@@ -26,5 +27,6 @@ class AsyncTest(nanome.AsyncPluginInstance):
         # test executing process second time
         ret = await p.start()
         Logs.message('returned', ret)
+
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, False, AsyncTest)

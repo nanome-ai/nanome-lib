@@ -3,6 +3,7 @@ from nanome._internal._util._serializers import _ArraySerializer, _DictionarySer
 from nanome._internal._structure._serialization import _ComplexSerializer, _AtomSerializer
 from nanome._internal._util._serializers import _TypeSerializer
 
+
 class _AddToWorkspace(_TypeSerializer):
     def __init__(self):
         self.__array = _ArraySerializer()

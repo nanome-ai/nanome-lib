@@ -2,6 +2,7 @@ from nanome._internal._structure._workspace import _Workspace
 from nanome.util import Matrix, Logs
 from .client import WorkspaceClient
 
+
 class Workspace(_Workspace):
     """
     | Workspace that contains all the complexes shown in Nanome.
@@ -21,6 +22,7 @@ class Workspace(_Workspace):
         :type: list of :class:`~nanome.structure.Complex`
         """
         return self._complexes
+
     @complexes.setter
     def complexes(self, value):
         self._complexes = value
@@ -45,7 +47,7 @@ class Workspace(_Workspace):
         complex.index = -1
         self._remove_complex(complex)
 
-    #region fields
+    # region fields
     @property
     def position(self):
         """
@@ -54,6 +56,7 @@ class Workspace(_Workspace):
         :type: :class:`~nanome.util.Vector3`
         """
         return self._position
+
     @position.setter
     def position(self, value):
         self._position = value
@@ -66,6 +69,7 @@ class Workspace(_Workspace):
         :type: :class:`~nanome.util.Quaternion`
         """
         return self._rotation
+
     @rotation.setter
     def rotation(self, value):
         self._rotation = value
@@ -78,10 +82,11 @@ class Workspace(_Workspace):
         :type: :class:`~nanome.util.Vector3`
         """
         return self._scale
+
     @scale.setter
     def scale(self, value):
         self._scale = value
-    #endregion
+    # endregion
 
     def get_workspace_to_world_matrix(self):
         return Matrix.compose_transformation_matrix(self._position, self._rotation, self._scale)
@@ -89,7 +94,7 @@ class Workspace(_Workspace):
     def get_world_to_workspace_matrix(self):
         return self.get_workspace_to_world_matrix().get_inverse()
 
-    #region deprecated
+    # region deprecated
     @property
     @Logs.deprecated()
     def transform(self):
@@ -102,6 +107,7 @@ class Workspace(_Workspace):
         @property
         def position(self):
             return self.parent.position
+
         @position.setter
         def position(self, value):
             self.parent.position = value
@@ -109,6 +115,7 @@ class Workspace(_Workspace):
         @property
         def rotation(self):
             return self.parent.rotation
+
         @rotation.setter
         def rotation(self, value):
             self.parent.rotation = value
@@ -116,9 +123,11 @@ class Workspace(_Workspace):
         @property
         def scale(self):
             return self.parent.scale
+
         @scale.setter
         def scale(self, value):
             self.parent.scale = value
-    #endregion
+
+    # endregion
 Workspace.client._setup_addon(Workspace)
 _Workspace._create = Workspace
