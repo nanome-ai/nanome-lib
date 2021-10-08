@@ -2,24 +2,18 @@
 User Interface API
 ##################
 
-***
-API
-***
+The UI API can be used to create a Menu from scratch, or to interact with any menu or UI element generator built in StackStudio.
 
-The UI API can be used to create a Menu from scratch, or to interact with any menu or UI element generator built in  Stack Studio.
-
-====================
+********************
 StackStudio Download
-====================
-- `Windows <'https://nanome.s3-us-west-1.amazonaws.com/installers/StackStudio/StackStudio_v5.2_Windows.zip'>`_ 
-- `Mac <'https://nanome.s3-us-west-1.amazonaws.com/installers/StackStudio/StackStudio_v0.5_Mac.zip'>`_
+********************
+- `Windows <https://nanome.s3-us-west-1.amazonaws.com/installers/StackStudio/StackStudio_v5.2_Windows.zip>`_ 
+- `Mac <https://nanome.s3-us-west-1.amazonaws.com/installers/StackStudio/StackStudio_v0.5_Mac.zip>`_
 
 
-
-==============
+**************
 Menu hierarchy
-==============
-
+**************
 UI elements are organized like so:
 
 - **Menu** - Contains its size, title, enabled state, etc.
@@ -47,60 +41,63 @@ StackStudio
 ***********
 
 StackStudio is a WYSIWYG editor for Menus, making it easier to create UIs for your plugins.
-You create your menu, export it as JSON, and import it at runtime in your plugin
+You create your menu, export it as JSON, and import it to your plugin.
 
 .. image:: stackstudio.png
   :width: 800
   :alt: stackstudio
 
-Download
---------
-- `Windows <'https://nanome.s3-us-west-1.amazonaws.com/installers/StackStudio/StackStudio_v5.2_Windows.zip'>`_ 
-- `Mac <'https://nanome.s3-us-west-1.amazonaws.com/installers/StackStudio/StackStudio_v0.5_Mac.zip'>`_
-
 ====
 Tips
 ====
 - Save Frequently: there's currently no way to undo changes, so export your JSONs as often as possible.
-- For images, you can add a placeholder in StackStudio, but the real image needs to be loaded by the plugin
+- For images, you can add a placeholder in StackStudio, and set the size and dimensions. However, the real image needs to be loaded by the plugin
 
 
-
-================================
-Importing Menus into your Plugin
-================================
+==================================
+Importing a Menu into your Plugin
+==================================
 .. code-block:: python
 
   import nanome
-  from nanome.api import Plugin, PluginInstance
+  import os
 
-  # Path to menu exported from StackStudio
+  # Path to json exported from StackStudio
   MENU_JSON = path.join('menu.json')
-  
+  IMAGE_PATH = os.path.join('sample_image.png')
+
+
   class ExampleMenu:
     """Wrapper for interacting with nanome.ui.Menu object.
     
-    We've found over time that putting a wrapper around the core Menu class provides the best abstraction.
+    We've found over time that putting a wrapper around the core Menu class 
+    provides the best abstraction.
     """
 
     def __init__(self, plugin):
+      """Initialize the menu.
+
+      :param plugin: PluginInstance
+      """
       self.plugin = plugin
+
+      # This is where we render the JSON into a Menu object
       self._menu = nanome.ui.Menu.io.from_json(MENU_JSON)
 
-      # Store UI contents as attributes, for easy access
-      self.example_btn = self._menu.root.find_node('Example LayoutNode').get_content()
+      # Store button from menu as attribute, and register callback
+      self.example_btn = self._menu.root.find_node('LayoutNode with Button').get_content()
       self.example_btn.register_pressed_callback(self.on_btn_pressed)
 
+      # Add image to LayoutNode
+      self.ln_image = self._menu.root.find_node('ImageLayoutNode')
+      self.ln_image.add_new_image(IMAGE_PATH)
+
     def enable(self):
-      self.menu.enabled = True
+      self._menu.enabled = True
       self.plugin.update_menu(self._menu)
 
-    def on_btn_pressed(self, btn):
-      message = "Hello Nanome!"
-      self.send_notification(nanome.util.enums.NotificationTypes.success, message)
 
-
-  class HelloNanomePlugin(PluginInstance):
+  class HelloNanomePlugin(nanome.PluginInstance):
       """Render an example menu which has a button."""
       
       def start(self):
@@ -108,6 +105,47 @@ Importing Menus into your Plugin
 
       def on_run(self):
         self.menu.enable()
+
+
+===================================================
+Creating a Menus from scratch (No StackStudio JSON)
+===================================================
+
+.. code-block:: python
+
+  import nanome
+  from nanome.api.ui import Menu
+
+  class HelloNanomePlugin(nanome.PluginInstance):
+
+    def start(self):
+      # Create a new Menu
+      self.menu = self.create_menu()
+    
+    def on_run(self):
+      self.menu.enabled = True
+      self.update_menu(self.menu)
+
+    def create_menu(self):
+      menu = Menu()
+      menu.title = 'Example Menu'
+      menu.width = 1
+      menu.height = 1
+
+      # Add a label that says "Hello Nanome"
+      msg = 'Hello Nanome!'
+      node = menu.root.create_child_node()
+      node.add_new_label(msg)
+
+      # Add a button that says "Click Me!"
+      ln_button = menu.root.create_child_node()
+      btn = ln_button.add_new_button('Click Me!')
+      btn.register_pressed_callback(self.on_btn_pressed)
+      return menu
+
+    def on_btn_pressed(self, btn):
+      msg = "Hello Nanome!"
+      self.send_notification(nanome.util.enums.NotificationTypes.success, msg)
 
 
 ******************
