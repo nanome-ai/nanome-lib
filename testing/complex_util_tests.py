@@ -10,7 +10,7 @@ BASE_DIR = os.path.join(os.path.dirname(__file__))
 
 class ComplexUtilsTestCase(unittest.TestCase):
     def setUp(self):
-        super(ComplexUtilsTestCase, self).__init__()
+        super(ComplexUtilsTestCase, self).setUp()
         complex_1_pickle = BASE_DIR + '/test_assets/pickles/1a9l.pickle'
         complex_2_pickle = BASE_DIR + '/test_assets/pickles/1fsv.pickle'
         with open(complex_1_pickle, 'rb') as f:
