@@ -21,15 +21,15 @@ A menu hierarchy is created by placing :class:`~nanome.api.ui.layout_node.Layout
 
 Currently available UI elements:
 
-- :mod:`~nanome.api.ui.button.Button`
-- :mod:`~nanome.api.ui.dropdown.Dropdown`
-- :mod:`~nanome.api.ui.image.Image`
-- :mod:`~nanome.api.ui.label.Label`
-- :mod:`~nanome.api.ui.loading_bar.LoadingBar`
-- :mod:`~nanome.api.ui.mesh.Mesh`
-- :mod:`~nanome.api.ui.slider.Slider`
-- :mod:`~nanome.api.ui.text_input.TextInput`
-- :mod:`~nanome.api.ui.ui_list.UIList`
+- :class:`~nanome.api.ui.button.Button`
+- :class:`~nanome.api.ui.dropdown.Dropdown`
+- :class:`~nanome.api.ui.image.Image`
+- :class:`~nanome.api.ui.label.Label`
+- :class:`~nanome.api.ui.loading_bar.LoadingBar`
+- :class:`~nanome.api.ui.mesh.Mesh`
+- :class:`~nanome.api.ui.slider.Slider`
+- :class:`~nanome.api.ui.text_input.TextInput`
+- :class:`~nanome.api.ui.ui_list.UIList`
 
 ***********
 StackStudio
