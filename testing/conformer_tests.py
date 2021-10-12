@@ -9,8 +9,8 @@ from nanome.util import Logs, Vector3
 
 test_assets = os.getcwd() + ("/testing/test_assets")
 test_output_dir = os.getcwd() + ("/testing/test_outputs")
-options = TestOptions(ignore_vars=["_unique_identifier", "_serial", "_index"])
-conformer_blind = TestOptions(ignore_vars=["_Molecule__conformer_count", "_positions", "_molecules", "_kinds", "_in_conformer", "_names", "_associateds", "_unique_identifier", "_serial", "_index"])
+options = TestOptions(ignore_vars=["_unique_identifier", "_serial", "_index", "_alt_loc"])
+conformer_blind = TestOptions(ignore_vars=["_Molecule__conformer_count", "_positions", "_molecules", "_kinds", "_in_conformer", "_names", "_associateds", "_unique_identifier", "_serial", "_index", "_alt_loc"])
 
 
 def alter_object(x):

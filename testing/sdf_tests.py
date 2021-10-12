@@ -9,7 +9,7 @@ import unittest
 
 test_assets = os.getcwd() + ("/testing/test_assets")
 test_output_dir = os.getcwd() + ("/testing/test_outputs")
-options = TestOptions(ignore_vars=["_unique_identifier", "_remarks", "_associateds"])
+options = TestOptions(ignore_vars=["_unique_identifier", "_remarks", "_associateds", "_alt_loc"])
 
 
 i = 0

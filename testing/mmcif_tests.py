@@ -8,7 +8,7 @@ import unittest
 
 test_assets = os.getcwd() + ("/testing/test_assets")
 test_output_dir = os.getcwd() + ("/testing/test_outputs")
-options = TestOptions(ignore_vars=["_serial", "_unique_identifier", "_remarks", "_associateds", "_positions"])
+options = TestOptions(ignore_vars=["_serial", "_unique_identifier", "_remarks", "_associateds", "_positions", "_alt_loc"])
 
 
 def count_structures(complex):
