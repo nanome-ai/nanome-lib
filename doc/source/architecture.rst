@@ -5,23 +5,6 @@ Architecture
 If you have any feedback or question, don't hesitate to contact us or to directly contribute to our `Github <https://github.com/nanome-ai>`_
 
 
-**************
-API Structure
-**************
-The API is broken down into a few different submodules
-
-- :mod:`nanome.api.plugins_instance.py`: Contains PluginInstance class, which provides interface for interacting with your Nanome workspace
-- :mod:`nanome.api.plugins.py`: contains Plugin class, which manages networking and callbacks.
-- :mod:`nanome.api.structure`: Workspace API. Used for modeling atomic structures and representations.
-- :mod:`nanome.api.ui`: Build Menus and forms for your plugin.
-- :mod:`nanome.api.shapes`: Render shapes and lines in workspace.
-- :mod:`nanome.api.streams`: Real time updates to your workspace
-- :mod:`nanome.api.util`: Enums, data structures, and utility functions used throughout our plugins.
-- :mod:`nanome.api.streams`: Streams allow for real time updates to your workspace
-- :mod:`nanome.api.integrations`: Integrations allow for plugins to communicate with other plugins
-- :mod:`nanome.api.macros`: Enable Lua macro scripts to be run (Not yet documented)
-
-
 ************
 How it works
 ************
@@ -72,6 +55,22 @@ Here is a simple way to represent the Plugin System architecture:
 
 NB: A plugin cannot talk to a Nanome session/user before being connected to it.
 NB2: Communications are encrypted from Nanome to NTS and from NTS to Plugins
+
+**************
+API Structure
+**************
+The API is broken down into a few different submodules
+
+- :mod:`nanome.api.plugins_instance.py`: Contains PluginInstance class, which provides interface for interacting with your Nanome workspace
+- :mod:`nanome.api.plugins.py`: contains Plugin class, which manages networking and callbacks.
+- :mod:`nanome.api.structure`: Workspace API. Used for modeling atomic structures and representations.
+- :mod:`nanome.api.ui`: Build Menus and forms for your plugin.
+- :mod:`nanome.api.shapes`: Render shapes and lines in workspace.
+- :mod:`nanome.api.streams`: Real time updates to your workspace
+- :mod:`nanome.api.util`: Enums, data structures, and utility functions used throughout our plugins.
+- :mod:`nanome.api.streams`: Streams allow for real time updates to your workspace
+- :mod:`nanome.api.integrations`: Integrations allow for plugins to communicate with other plugins
+- :mod:`nanome.api.macros`: Enable Lua macro scripts to be run (Not yet documented)
 
 
 **********************
