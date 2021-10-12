@@ -14,9 +14,16 @@ class ComplexUtilsTestCase(unittest.TestCase):
         super().setUp()
         with open(f'{BASE_DIR}/test_assets/pickles/1a9l.pickle', 'rb') as f:
             self.complex1 = pickle.load(f)
+            # TODO: Update pickle to contain new properties
+            for residue in self.complex1.residues:
+                residue._ignored_alt_locs = []
+
 
         with open(f'{BASE_DIR}/test_assets/pickles/1fsv.pickle', 'rb') as f:
             self.complex2 = pickle.load(f)
+            # TODO: Update pickle to contain new properties
+            for residue in self.complex2.residues:
+                residue._ignored_alt_locs = []
 
     def test_align_to(self):
         ComplexUtils.align_to(self.complex1, self.complex2)
