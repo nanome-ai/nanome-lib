@@ -11,5 +11,5 @@ Logs._set_verbose(True)
 suite = unittest.TestLoader().discover(test_directory, pattern=file_pattern)
 runner = unittest.TextTestRunner(verbosity=1).run(suite)
 
-ret = not runner.wasSuccessful()
-sys.exit(ret)
+exit_code = 0 if runner.wasSuccessful() else 1
+sys.exit(exit_code)
