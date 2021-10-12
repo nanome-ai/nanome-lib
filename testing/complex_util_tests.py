@@ -1,7 +1,7 @@
 import os
 import unittest
-import pickle
 
+from nanome.api.structure import Complex
 from nanome.util import ComplexUtils
 
 
@@ -11,19 +11,10 @@ BASE_DIR = os.path.join(os.path.dirname(__file__))
 class ComplexUtilsTestCase(unittest.TestCase):
     def setUp(self):
         super(ComplexUtilsTestCase, self).setUp()
-        complex_1_pickle = BASE_DIR + '/test_assets/pickles/1a9l.pickle'
-        complex_2_pickle = BASE_DIR + '/test_assets/pickles/1fsv.pickle'
-        with open(complex_1_pickle, 'rb') as f:
-            self.complex1 = pickle.load(f)
-            # TODO: Update pickle to contain new properties
-            for residue in self.complex1.residues:
-                residue._ignored_alt_locs = []
-
-        with open(complex_2_pickle, 'rb') as f:
-            self.complex2 = pickle.load(f)
-            # TODO: Update pickle to contain new properties
-            for residue in self.complex2.residues:
-                residue._ignored_alt_locs = []
+        complex_1_pdb = BASE_DIR + '/test_assets/pdb/1a9l.pdb'
+        complex_2_pdb = BASE_DIR + '/test_assets/pdb/1fsv.pdb'
+        self.complex1 = Complex.io.from_pdb(path=complex_1_pdb)
+        self.complex2 = Complex.io.from_pdb(path=complex_2_pdb)
 
     def test_align_to(self):
         ComplexUtils.align_to(self.complex1, self.complex2)
