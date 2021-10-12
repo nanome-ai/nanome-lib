@@ -12,7 +12,7 @@ import tempfile
 
 
 test_assets = os.getcwd() + ("/testing/test_assets")
-options = TestOptions(ignore_vars=["_unique_identifier", "_remarks", "_associateds", "_parent"])
+options = TestOptions(ignore_vars=["_unique_identifier", "_remarks", "_associateds", "_parent", "_alt_loc"])
 
 
 def flip_x_positions(complex):

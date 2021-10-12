@@ -8,7 +8,7 @@ from testing.utilities import assert_equal, assert_not_equal, TestOptions
 
 test_assets = os.getcwd() + ("/testing/test_assets")
 test_output_dir = os.getcwd() + ("/testing/test_outputs")
-options = TestOptions(ignore_vars=["_serial", "_unique_identifier", "_remarks", "_associateds", "_positions"])
+options = TestOptions(ignore_vars=["_serial", "_unique_identifier", "_remarks", "_associateds", "_positions", "_alt_loc"])
 
 
 def count_structures(complex):
