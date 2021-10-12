@@ -21,15 +21,15 @@ A menu hierarchy is created by placing :class:`~nanome.api.ui.layout_node.Layout
 
 Currently available UI elements:
 
-- :class:`~nanome.api.ui.button.Button`
-- :class:`~nanome.api.ui.dropdown.Dropdown`
-- :class:`~nanome.api.ui.image.Image`
-- :class:`~nanome.api.ui.label.Label`
-- :class:`~nanome.api.ui.loading_bar.LoadingBar`
-- :class:`~nanome.api.ui.mesh.Mesh`
-- :class:`~nanome.api.ui.slider.Slider`
-- :class:`~nanome.api.ui.text_input.TextInput`
-- :class:`~nanome.api.ui.ui_list.UIList`
+- :mod:`~nanome.api.ui.button.Button`
+- :mod:`~nanome.api.ui.dropdown.Dropdown`
+- :mod:`~nanome.api.ui.image.Image`
+- :mod:`~nanome.api.ui.label.Label`
+- :mod:`~nanome.api.ui.loading_bar.LoadingBar`
+- :mod:`~nanome.api.ui.mesh.Mesh`
+- :mod:`~nanome.api.ui.slider.Slider`
+- :mod:`~nanome.api.ui.text_input.TextInput`
+- :mod:`~nanome.api.ui.ui_list.UIList`
 
 
 ***********
@@ -96,6 +96,9 @@ Examples
 ==================================
 Importing a Menu from JSON
 ==================================
+
+ We've found over time that creating a wrapper class around the ``Menu`` class is a good idea.
+
 .. code-block:: python
 
   import nanome
@@ -107,11 +110,7 @@ Importing a Menu from JSON
 
 
   class ExampleMenu:
-    """Wrapper for interacting with nanome.ui.Menu object.
-    
-    We've found over time that putting a wrapper around the core Menu object 
-    provides the best abstraction.
-    """
+    """Wrapper for interacting with nanome.ui.Menu object."""
 
     def __init__(self, plugin):
       """Initialize the menu.
@@ -134,6 +133,10 @@ Importing a Menu from JSON
     def enable(self):
       self._menu.enabled = True
       self.plugin.update_menu(self._menu)
+
+    def on_btn_pressed(self, btn):
+      msg = "Hello Nanome!"
+      self.send_notification(nanome.util.enums.NotificationTypes.success, msg)
 
 
   class HelloNanomePlugin(nanome.PluginInstance):
@@ -191,6 +194,8 @@ Creating a Menu from scratch (No JSON)
 ========================
 In Depth API usage
 ========================
+
+A fun example of how to set up callback functions for most types of form fields.
 
 .. literalinclude:: ../../test_plugins/UIPlugin.py
    :language: python
