@@ -65,6 +65,7 @@ Keyboard Shortcuts
 - **ctrl left** - unparent node from parent
 - **ctrl right** - parent node to node above
 - **ctrl c** - copy node and children
+- **ctrl x** - cut node and children
 - **ctrl v** - paste copied node and children
 - **ctrl s** - Export JSON
 - **ctrl o** - Select JSON File to import
@@ -83,7 +84,7 @@ A known problem, called z-fighting, is the following:
   :width: 400
   :alt: z-fighting
 
-If you look closely, you will see that the text intersects with its background. This happens when two objects are exactly on the same plan.
+If you look closely, you will see that the text intersects with its background. This happens when two objects are exactly on the same plane.
 
 To fix this issue, try to set the :attr:`~nanome.api.ui.layout_node.LayoutNode.forward_dist` of your foreground element (here, the text)
 
@@ -106,8 +107,9 @@ Importing a Menu from JSON
   import os
 
   # Path to json exported from StackStudio
-  MENU_JSON = path.join('menu.json')
-  IMAGE_PATH = os.path.join('sample_image.png')
+  BASE_DIR = os.path.dirname(os.path.realpath(__file__))
+  MENU_JSON = os.path.join(BASE_DIR, 'menu.json')
+  IMAGE_PATH = os.path.join(BASE_DIR, 'sample_image.png')
 
 
   class ExampleMenu:
@@ -141,13 +143,13 @@ Importing a Menu from JSON
 
 
   class HelloNanomePlugin(nanome.PluginInstance):
-      """Render an example menu that has a clickable button."""
+    """Render an example menu that has a clickable button."""
       
-      def start(self):
-        self.menu = ExampleMenu(self)
+    def start(self):
+      self.menu = ExampleMenu(self)
 
-      def on_run(self):
-        self.menu.enable()
+    def on_run(self):
+      self.menu.enable()
 
 
 ===================================================
