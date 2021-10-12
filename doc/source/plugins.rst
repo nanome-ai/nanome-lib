@@ -26,7 +26,6 @@ When starting a plugin, a few optional arguments are available:
 
 .. code-block:: bash
 
-    Base Arguments:
     -a HOST, --host HOST  connects to NTS at the specified IP address
     -p PORT, --port PORT  connects to NTS at the specified port
     -r, --auto-reload     Restart plugin automatically if a .py or .json file in
@@ -56,6 +55,7 @@ Starting a plugin is fairly easy. Copy this snippet into a file HelloNanomePlugi
   from nanome.api import Plugin, PluginInstance
   from nanome.util import Logs
 
+
   class HelloNanomePlugin(PluginInstance):
       """Get most basic plugin running."""
       
@@ -63,6 +63,7 @@ Starting a plugin is fairly easy. Copy this snippet into a file HelloNanomePlugi
           message = "Hello Nanome!"
           self.send_notification(nanome.util.enums.NotificationTypes.success, message)
           Logs.message(message)
+
 
   if __name__ == '__main__':
     # Information describing the plugin

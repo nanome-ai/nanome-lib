@@ -31,7 +31,6 @@ Currently available UI elements:
 - :mod:`~nanome.api.ui.text_input.TextInput`
 - :mod:`~nanome.api.ui.ui_list.UIList`
 
-
 ***********
 StackStudio
 ***********
@@ -99,6 +98,8 @@ Importing a Menu from JSON
 
  We've found over time that creating a wrapper class around the ``Menu`` class is a good idea.
 
+ The wrapper class can hold attributes referencing UI elements, callback functions, 
+
 .. code-block:: python
 
   import nanome
@@ -152,50 +153,34 @@ Importing a Menu from JSON
 ===================================================
 Creating a Menu from scratch (No JSON)
 ===================================================
+You can alternatively build a menu up using a function similar to below.
 
 .. code-block:: python
 
-  import nanome
   from nanome.api.ui import Menu
 
+  def create_menu(self):
+    menu = Menu()
+    menu.title = 'Example Menu'
+    menu.width = 1
+    menu.height = 1
 
-  class HelloNanomePlugin(nanome.PluginInstance):
+    # Add a label that says "Hello Nanome"
+    msg = 'Hello Nanome!'
+    node = menu.root.create_child_node()
+    node.add_new_label(msg)
 
-    def start(self):
-      # Create a new Menu
-      self.menu = self.create_menu()
-    
-    def on_run(self):
-      self.menu.enabled = True
-      self.update_menu(self.menu)
-
-    def create_menu(self):
-      menu = Menu()
-      menu.title = 'Example Menu'
-      menu.width = 1
-      menu.height = 1
-
-      # Add a label that says "Hello Nanome"
-      msg = 'Hello Nanome!'
-      node = menu.root.create_child_node()
-      node.add_new_label(msg)
-
-      # Add a button that says "Click Me!"
-      ln_button = menu.root.create_child_node()
-      btn = ln_button.add_new_button('Click Me!')
-      btn.register_pressed_callback(self.on_btn_pressed)
-      return menu
-
-    def on_btn_pressed(self, btn):
-      msg = "Hello Nanome!"
-      self.send_notification(nanome.util.enums.NotificationTypes.success, msg)
-
+    # Add a button that says "Click Me!"
+    ln_button = menu.root.create_child_node()
+    btn = ln_button.add_new_button('Click Me!')
+    btn.register_pressed_callback(self.on_btn_pressed)
+    return menu
 
 ========================
 In Depth API usage
 ========================
 
-A fun example of how to set up callback functions for most types of form fields.
+A fun example of how to set up callback functions for most UI Elements.
 
 .. literalinclude:: ../../test_plugins/UIPlugin.py
    :language: python
