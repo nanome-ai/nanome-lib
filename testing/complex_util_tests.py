@@ -18,7 +18,6 @@ class ComplexUtilsTestCase(unittest.TestCase):
             for residue in self.complex1.residues:
                 residue._ignored_alt_locs = []
 
-
         with open(f'{BASE_DIR}/test_assets/pickles/1fsv.pickle', 'rb') as f:
             self.complex2 = pickle.load(f)
             # TODO: Update pickle to contain new properties
