@@ -6,7 +6,6 @@ from nanome.api import structure as struct
 from testing.utilities import assert_equal, assert_not_equal, TestOptions
 
 
-
 test_assets = os.getcwd() + ("/testing/test_assets")
 test_output_dir = os.getcwd() + ("/testing/test_outputs")
 options = TestOptions(ignore_vars=["_serial", "_unique_identifier", "_remarks", "_associateds", "_positions"])
@@ -19,6 +18,7 @@ def count_structures(complex):
     bond_counter = sum(1 for i in complex.bonds)
     atom_counter = sum(1 for i in complex.atoms)
     return molecule_counter, chain_counter, residue_counter, bond_counter, atom_counter
+
 
 def compare_atom_positions(complex1, complex2):
     a1 = complex1.atoms
