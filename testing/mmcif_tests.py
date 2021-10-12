@@ -1,9 +1,10 @@
 import os
+import tempfile
+import unittest
 
 from nanome.api import structure as struct
 from testing.utilities import assert_equal, assert_not_equal, TestOptions
 
-import unittest
 
 
 test_assets = os.getcwd() + ("/testing/test_assets")
@@ -18,12 +19,6 @@ def count_structures(complex):
     bond_counter = sum(1 for i in complex.bonds)
     atom_counter = sum(1 for i in complex.atoms)
     return molecule_counter, chain_counter, residue_counter, bond_counter, atom_counter
-    print("molecule_counter:", molecule_counter)
-    print("chain_counter:", chain_counter)
-    print("residue_counter:", residue_counter)
-    print("bond_counter:", bond_counter)
-    print("atom_counter:", atom_counter)
-
 
 def compare_atom_positions(complex1, complex2):
     a1 = complex1.atoms
@@ -41,10 +36,10 @@ class MmcifTestCase(unittest.TestCase):
     # MMCIF
     def test_1fsv(self):
         input_dir = test_assets + ("/mmcif/1fsv.cif")
-        output_dir = test_output_dir + ("/testOutput.cif")
+        output_cif = tempfile.NamedTemporaryFile(suffix='.cif').name
 
         complex1 = struct.Complex.io.from_mmcif(path=input_dir)
-        complex1.io.to_mmcif(output_dir)
+        complex1.io.to_mmcif(output_cif)
 
         # fact checks
         counters = count_structures(complex1)
@@ -54,10 +49,8 @@ class MmcifTestCase(unittest.TestCase):
         assert(residue_count == 28)
         assert(bond_count == 0)
         assert(atom_count == 504)
-        #
 
-        complex2 = struct.Complex.io.from_mmcif(path=output_dir)
-
+        complex2 = struct.Complex.io.from_mmcif(path=output_cif)
         compare_atom_positions(complex1, complex2)
         assert_equal(complex1, complex2, options)
         assert_not_equal(complex2, struct.Complex(), options)
@@ -65,7 +58,7 @@ class MmcifTestCase(unittest.TestCase):
     # weird cif from CCDC
     def test_tebgit(self):
         input_dir = test_assets + ("/mmcif/tebgit.cif")
-        output_dir = test_output_dir + ("/testOutput.cif")
+        output_cif = tempfile.NamedTemporaryFile(suffix='.cif').name
 
         complex1 = struct.Complex.io.from_mmcif(path=input_dir)
         # fact checks
@@ -76,11 +69,9 @@ class MmcifTestCase(unittest.TestCase):
         assert(residue_count == 1)
         assert(bond_count == 0)
         assert(atom_count == 28)
-        #
+        complex1.io.to_mmcif(output_cif)
 
-        complex1.io.to_mmcif(output_dir)
-
-        complex2 = struct.Complex.io.from_mmcif(path=output_dir)
+        complex2 = struct.Complex.io.from_mmcif(path=output_cif)
 
         compare_atom_positions(complex1, complex2)
         assert_equal(complex1, complex2, options)

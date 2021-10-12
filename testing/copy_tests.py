@@ -6,8 +6,7 @@ from testing.utilities import alter_object, assert_equal, create_full_tree, Test
 import unittest
 
 test_assets = os.getcwd() + ("/testing/test_assets")
-test_output_dir = os.getcwd() + ("/testing/test_outputs")
-options = TestOptions(ignore_vars=["_unique_identifier", "_index, "_alt_loc""])
+options = TestOptions(ignore_vars=["_unique_identifier", "_index", "_alt_loc"])
 
 
 def shallow_copy_tester(constructor):

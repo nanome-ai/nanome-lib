@@ -6,6 +6,7 @@ from testing.utilities import assert_equal, assert_not_equal, TestOptions
 
 from nanome.util import Logs
 import unittest
+import tempfile
 
 test_assets = os.getcwd() + ("/testing/test_assets")
 test_output_dir = os.getcwd() + ("/testing/test_outputs")
@@ -17,7 +18,7 @@ i = 0
 
 def read_write_read(filename):
     global i
-    output_file = test_output_dir + "/testOutput" + str(i) + ".sdf"
+    output_file = tempfile.NamedTemporaryFile(suffix='.sdf').name
     i += 1
     complex1 = struct.Complex.io.from_sdf(path=filename)
     complex1.io.to_sdf(output_file)
@@ -32,7 +33,8 @@ def read_write_read(filename):
 
 def read_write_read_frames(filename):
     global i
-    output_file = test_output_dir + "/testOutput" + str(i) + ".sdf"
+    suffix = '_' + str(i) + '.sdf'
+    output_file = tempfile.NamedTemporaryFile(suffix=suffix).name
     i += 1
     complex1 = struct.Complex.io.from_sdf(path=filename)
     complex1 = complex1.convert_to_frames()
