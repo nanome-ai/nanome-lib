@@ -3,6 +3,7 @@ from nanome.api.ui import Menu
 from nanome.api.ui import LayoutNode
 from testing.utilities import *
 import unittest
+import tempfile
 
 test_assets = os.getcwd() + ("/testing/test_assets")
 test_output_dir = os.getcwd() + ("/testing/test_outputs")
@@ -11,7 +12,8 @@ test_output_dir = os.getcwd() + ("/testing/test_outputs")
 class JsonTestCase(unittest.TestCase):
     def test_menu_json(self):
         test_path = test_assets + "/test_menu.json"
-        output_path = test_output_dir + "/test_menu.json"
+        output_path = tempfile.NamedTemporaryFile(suffix='.json').name
+
         menu = Menu.io.from_json(test_path)
         menu.io.to_json(output_path)
         menu2 = Menu.io.from_json(output_path)
@@ -27,7 +29,7 @@ class JsonTestCase(unittest.TestCase):
 
     def test_text_layout_node_json(self):
         test_path = test_assets + "/test_menu.json"
-        output_path = test_output_dir + "/test_node.json"
+        output_path = tempfile.NamedTemporaryFile(suffix='.json').name
         menu = Menu.io.from_json(test_path)
         root = menu.root
         root.io.to_json(output_path)

@@ -8,10 +8,10 @@ from nanome._internal._network._serialization._context import _ContextDeserializ
 from nanome._internal._network._commands._serialization import _UpdateWorkspace, _ReceiveWorkspace
 from testing.utilities import assert_equal, assert_not_equal, TestOptions
 import unittest
+import tempfile
 
 
 test_assets = os.getcwd() + ("/testing/test_assets")
-test_output_dir = os.getcwd() + ("/testing/test_outputs")
 options = TestOptions(ignore_vars=["_unique_identifier", "_remarks", "_associateds", "_parent", "_alt_loc"])
 
 
@@ -372,10 +372,10 @@ class AtomTestCase(unittest.TestCase):
     def test_pdb(self):
         # Testing save load PDB
         input_dir = test_assets + ("/pdb/1fsv.pdb")
-        output_dir = test_output_dir + ("/testOutput.pdb")
+        output_file = tempfile.NamedTemporaryFile(suffix='.pdb').name
 
         complex1 = struct.Complex.io.from_pdb(path=input_dir)
-        complex1.io.to_pdb(output_dir)
+        complex1.io.to_pdb(output_file)
 
         complex2 = struct.Complex.io.from_pdb(path=input_dir)
 
