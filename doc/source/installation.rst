@@ -2,8 +2,8 @@
 Installation
 ############
 
-Access to a Nanome Transport Server (NTS) is required to run your plugins and connect them to Nanome.
-A public server will be available in the near future. If you need an NTS, please contact us.
+.. note::
+  Access to a Nanome Transport Server (NTS) is required to run plugins and connect them to Nanome. A public server will be available in the future. If you need access to NTS, please contact us.
 
 ******************
 Install nanome-lib

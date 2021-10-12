@@ -24,12 +24,24 @@ Arguments
 
 When starting a plugin, a few optional arguments are available:
 
-* ``-h``: Displays available arguments
-* ``-a [IP]``: Specifies NTS domain or ip address
-* ``-p [PORT]``: Specifies NTS port
-* ``-k [FILE]``: Specifies a key file to use (if NTS is protected by key)
-* ``-v``: Enables verbose mode, to display :func:`~nanome.util.logs.Logs.debug` messages
-* ``-r``: Enables Live Reload
+.. code-block:: bash
+
+    -a HOST, --host HOST  connects to NTS at the specified IP address
+    -p PORT, --port PORT  connects to NTS at the specified port
+    -r, --auto-reload     Restart plugin automatically if a .py or .json file in
+                            current directory changes
+    -v, --verbose         enable verbose mode, to display Logs.debug
+    -n NAME, --name NAME  Name to display for this plugin in Nanome
+    -k KEYFILE, --keyfile KEYFILE
+                            Specifies a key file or key string to use to connect
+                            to NTS
+    -i IGNORE, --ignore IGNORE
+                            To use with auto-reload. All paths matching this
+                            pattern will be ignored, use commas to specify
+                            several. Supports */?/[seq]/[!seq]
+    --write-log-file WRITE_LOG_FILE
+                            Enable or disable writing logs to .log file
+
 
 *************************
 Running Your First Plugin
@@ -43,6 +55,7 @@ Starting a plugin is fairly easy. Copy this snippet into a file HelloNanomePlugi
   from nanome.api import Plugin, PluginInstance
   from nanome.util import Logs
 
+
   class HelloNanomePlugin(PluginInstance):
       """Get most basic plugin running."""
       
@@ -50,6 +63,7 @@ Starting a plugin is fairly easy. Copy this snippet into a file HelloNanomePlugi
           message = "Hello Nanome!"
           self.send_notification(nanome.util.enums.NotificationTypes.success, message)
           Logs.message(message)
+
 
   if __name__ == '__main__':
     # Information describing the plugin
