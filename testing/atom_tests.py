@@ -371,15 +371,14 @@ class AtomTestCase(unittest.TestCase):
 
     def test_pdb(self):
         # Testing save load PDB
-        with tempfile.TemporaryDirectory() as test_output_dir:
-            input_dir = test_assets + ("/pdb/1fsv.pdb")
-            output_file = test_output_dir + ("/testOutput.pdb")
+        input_dir = test_assets + ("/pdb/1fsv.pdb")
+        output_file = tempfile.NamedTemporaryFile(suffix='.pdb').name
 
-            complex1 = struct.Complex.io.from_pdb(path=input_dir)
-            complex1.io.to_pdb(output_file)
+        complex1 = struct.Complex.io.from_pdb(path=input_dir)
+        complex1.io.to_pdb(output_file)
 
-            complex2 = struct.Complex.io.from_pdb(path=input_dir)
+        complex2 = struct.Complex.io.from_pdb(path=input_dir)
 
-            compare_atom_positions(complex1, complex2)
-            assert_equal(complex1, complex2, options)
-            assert_not_equal(complex2, struct.Complex(), options)
+        compare_atom_positions(complex1, complex2)
+        assert_equal(complex1, complex2, options)
+        assert_not_equal(complex2, struct.Complex(), options)

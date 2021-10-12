@@ -2,7 +2,6 @@ import os
 import unittest
 import pickle
 
-from nanome.api.structure import Complex
 from nanome.util import ComplexUtils
 
 
@@ -12,13 +11,15 @@ BASE_DIR = os.path.join(os.path.dirname(__file__))
 class ComplexUtilsTestCase(unittest.TestCase):
     def setUp(self):
         super().setUp()
-        with open(f'{BASE_DIR}/test_assets/pickles/1a9l.pickle', 'rb') as f:
+        complex_1_pickle = BASE_DIR + '/test_assets/pickles/1a9l.pickle'
+        complex_2_pickle = BASE_DIR + '/test_assets/pickles/1fsv.pickle'
+        with open(complex_1_pickle, 'rb') as f:
             self.complex1 = pickle.load(f)
             # TODO: Update pickle to contain new properties
             for residue in self.complex1.residues:
                 residue._ignored_alt_locs = []
 
-        with open(f'{BASE_DIR}/test_assets/pickles/1fsv.pickle', 'rb') as f:
+        with open(complex_2_pickle, 'rb') as f:
             self.complex2 = pickle.load(f)
             # TODO: Update pickle to contain new properties
             for residue in self.complex2.residues:
