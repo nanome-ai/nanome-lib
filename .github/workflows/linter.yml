@@ -8,8 +8,6 @@ jobs:
     # Check if the PR is not from a fork
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
-    env:
-      CHANGED_PYTHON_FILES: ""
     steps:
       - uses: actions/checkout@v2
         with:
@@ -28,6 +26,7 @@ jobs:
                   $changed_python_files=$changed_python_files" ${changed_file}"
             fi
           done
+          echo " THESE ARE THE CHANGED PYTHON FILES: ${changed_python_files}"
           echo "::set-output name=output::$changed_python_files"
 
       - name: autopep8
