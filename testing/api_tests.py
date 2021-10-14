@@ -14,15 +14,9 @@ class ApiTestCase(unittest.TestCase):
     def test_ui_creates(self):
         assert_equal(ui.Menu().__class__, _ui._Menu._create().__class__)
         assert_equal(ui.LayoutNode().__class__, _ui._LayoutNode._create().__class__)
-        
-        
-        
         assert_equal(ui.Button().__class__, _ui._Button._create().__class__)
         assert_equal(ui.Mesh().__class__, _ui._Mesh._create().__class__)
         assert_equal(ui.Slider().__class__, _ui._Slider._create().__class__)
-        
-        
-        
         assert_equal(ui.Label().__class__, _ui._Label._create().__class__)
         assert_equal(ui.TextInput().__class__, _ui._TextInput._create().__class__)
         assert_equal(ui.UIList().__class__, _ui._UIList._create().__class__)
