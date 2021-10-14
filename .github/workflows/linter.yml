@@ -21,7 +21,7 @@ jobs:
         id: autopep8
         uses: peter-evans/autopep8@v1
         with:
-          args: --exit-code --recursive --in-place --ignore E501 ${{ steps.changed_files.outputs.all }}
+          args: --exit-code --recursive --exclude .github --in-place --ignore E501 ${{ steps.changed_files.outputs.all }}
       - name: Commit autopep8 changes
         if: steps.autopep8.outputs.exit-code == 2
         run: |
