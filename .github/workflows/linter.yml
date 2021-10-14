@@ -23,7 +23,7 @@ jobs:
         id: changed_python_files
         run: |
           echo "${{ steps.changed_files.outputs.all }}"
-          changed_python_files=""
+          changed_python_files="oogy boogy"
           for changed_file in ${{ steps.changed_files.outputs.all }}; do
             echo "${changed_file}"
             if [[ "${changed_file}" == *.py ]]; then
