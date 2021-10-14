@@ -23,17 +23,17 @@ jobs:
           changed_python_files=""
           for changed_file in ${{ steps.changed_files.outputs.all }}; do
             if [[ "${changed_file}" == *.py ]]; then
-                  $changed_python_files=$changed_python_files" ${changed_file}"
+                  $changed_python_files="${changed_python_files} ${changed_file}"
             fi
           done
-          echo " THESE ARE THE CHANGED PYTHON FILES: ${changed_python_files}"
-          echo "::set-output name=output::$changed_python_files"
+          echo "THESE ARE THE CHANGED PYTHON FILES: ${changed_python_files}"
+          echo "::set-output name=file_list::$changed_python_files"
 
       - name: autopep8
         id: autopep8
         uses: peter-evans/autopep8@v1
         with:
-          args: --exit-code --recursive --in-place --ignore E501 ${{ steps.changed_python_files.output }}
+          args: --exit-code --recursive --in-place --ignore E501 ${{ steps.changed_python_files.outputs.file_list }}
       - name: Commit autopep8 changes
         if: steps.autopep8.outputs.exit-code == 2
         run: |
