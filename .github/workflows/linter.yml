@@ -25,6 +25,7 @@ jobs:
           echo "${{ steps.changed_files.outputs.all }}"
           changed_python_files=""
           for changed_file in ${{ steps.changed_files.outputs.all }}; do
+            echo "${changed_file}"
             if [[ "${changed_file}" == *.py ]]; then
                   $changed_python_files="${changed_python_files} ${changed_file}"
             fi
