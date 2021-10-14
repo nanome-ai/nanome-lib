@@ -16,18 +16,16 @@ jobs:
 
       - id: changed_files
         uses: jitterbit/get-changed-files@v1
-        # with:
-        #   format: json
-      
+
       - name: Get changed python files
         id: changed_python_files
         run: |
           echo "${{ steps.changed_files.outputs.all }}"
-          changed_python_files="oogy boogy"
+          changed_python_files=""
           for changed_file in ${{ steps.changed_files.outputs.all }}; do
             echo "${changed_file}"
             if [[ "${changed_file}" == *.py ]]; then
-                  $changed_python_files=${changed_python_files}" ${changed_file}"
+                  $changed_python_files="${changed_python_files} ${changed_file}"
             fi
           done
           echo "THESE ARE THE CHANGED PYTHON FILES: ${changed_python_files}"
