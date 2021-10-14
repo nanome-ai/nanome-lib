@@ -2,7 +2,19 @@ from nanome.util import Color
 import unittest
 
 
+
+
+
+
+
+
+
 class TestColorProperties(unittest.TestCase):
+
+
+
+
+
 
     def test_rgb(self):
         color = Color.Black()

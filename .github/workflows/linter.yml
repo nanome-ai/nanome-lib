@@ -17,7 +17,7 @@ jobs:
       - id: changed_files
         uses: jitterbit/get-changed-files@v1
 
-      - name: Get changed python files
+      - name: Get modified python files
         id: changed_python_files
         run: |
           changed_python_files=""
