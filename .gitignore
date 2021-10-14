@@ -8,11 +8,11 @@
 *.user
 .coverage
 test_outputs/
-doc/build/
-doc/source/_build/
-doc/source/nanome.*
-doc/source/modules.rst
+doc / build/
+doc / source / _build/
+doc / source / nanome.*
+doc / source / modules.rst
 build/
 dist/
-nanome.egg-info/
-nanome/plugin-template.zip
+nanome.egg - info/
+nanome / plugin - template.zip

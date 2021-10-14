@@ -8,6 +8,8 @@ jobs:
     # Check if the PR is not from a fork
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
+    env:
+      CHANGED_PYTHON_FILES: ""
     steps:
       - uses: actions/checkout@v2
         with:
@@ -16,12 +18,19 @@ jobs:
 
       - id: changed_files
         uses: jitterbit/get-changed-files@v1
+        run: |
+          for changed_file in ${{ steps.files.outputs.all }}; do
+            if [[ "${changed_file}" == *.py ]]; then
+                  {env.CHANGED_PYTHON_FILES}+="${changed_file} "
+            fi
+            echo "Do something with this ${changed_file}."
+          done
 
       - name: autopep8
         id: autopep8
         uses: peter-evans/autopep8@v1
         with:
-          args: --exit-code --recursive --exclude .github --in-place --ignore E501 ${{ steps.changed_files.outputs.all }}
+          args: --exit-code --recursive --exclude .github --in-place --ignore E501 {env.CHANGED_PYTHON_FILES}
       - name: Commit autopep8 changes
         if: steps.autopep8.outputs.exit-code == 2
         run: |
