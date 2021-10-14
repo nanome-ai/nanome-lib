@@ -18,19 +18,23 @@ jobs:
 
       - id: changed_files
         uses: jitterbit/get-changed-files@v1
+      
+      - name: Get changed python files
+        id: changed_python_files
         run: |
-          for changed_file in ${{ steps.files.outputs.all }}; do
+          changed_python_files=""
+          for changed_file in ${{ steps.changed_files.outputs.all }}; do
             if [[ "${changed_file}" == *.py ]]; then
-                  {env.CHANGED_PYTHON_FILES}+="${changed_file} "
+                  $changed_python_files=$changed_python_files" ${changed_file}"
             fi
-            echo "Do something with this ${changed_file}."
           done
+          echo "::set-output name=output::$changed_python_files"
 
       - name: autopep8
         id: autopep8
         uses: peter-evans/autopep8@v1
         with:
-          args: --exit-code --recursive --exclude .github --in-place --ignore E501 {env.CHANGED_PYTHON_FILES}
+          args: --exit-code --recursive --in-place --ignore E501 ${{ steps.changed_python_files.output }}
       - name: Commit autopep8 changes
         if: steps.autopep8.outputs.exit-code == 2
         run: |
