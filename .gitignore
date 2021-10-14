@@ -6,6 +6,7 @@
 *.pyc
 *.sln
 *.user
+.coverage
 test_outputs/
 doc/build/
 doc/source/_build/
