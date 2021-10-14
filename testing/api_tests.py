@@ -9,9 +9,6 @@ test_assets = os.getcwd() + ("/testing/test_assets")
 test_output_dir = os.getcwd() + ("/testing/test_outputs")
 
 
-
-
-
 class ApiTestCase(unittest.TestCase):
 
     def test_ui_creates(self):
@@ -23,13 +20,6 @@ class ApiTestCase(unittest.TestCase):
         assert_equal(ui.Label().__class__, _ui._Label._create().__class__)
         assert_equal(ui.TextInput().__class__, _ui._TextInput._create().__class__)
         assert_equal(ui.UIList().__class__, _ui._UIList._create().__class__)
-
-
-
-
-
-
-
 
     def test_structure_creates(self):
         assert_equal(structure.Atom().__class__, _structure._Atom._create().__class__)
