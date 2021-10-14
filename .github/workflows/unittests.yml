@@ -22,8 +22,8 @@ jobs:
           pip install -r requirements.txt
       - name: Run tests.py
         run: coverage run --source=nanome --omit=nanome/util/_logs_2.py -m unittest discover tests.py
-      - name: print coverage report
-        run: coverage report
+      - name: print coverage percentage
+        run: coverage report | grep TOTAL
 
   python2:
     runs-on: ubuntu-latest
