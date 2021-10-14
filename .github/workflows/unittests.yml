@@ -18,10 +18,12 @@ jobs:
           python-version: 3.7.12
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
+          python -m pip install --upgrade pip coverage
           pip install -r requirements.txt
       - name: Run tests.py
-        run: python tests.py
+        run: coverage run --source=nanome --omit=nanome/util/_logs_2.py -m unittest discover tests.py
+      - name: print coverage percentage
+        run: coverage report | grep TOTAL
 
   python2:
     runs-on: ubuntu-latest
