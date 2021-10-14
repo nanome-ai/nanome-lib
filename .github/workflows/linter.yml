@@ -23,7 +23,7 @@ jobs:
         uses: jitterbit/get-changed-files@v1
       - run: |
           pip install autopep8
-          autopep8 --exit-code --recursive --in-place --ignore E501 ${{ steps.files.outputs.all }}
+          autopep8 --exit-code --recursive --in-place --ignore E501 ${{ steps.autopep8.outputs.all }}
       - name: Commit autopep8 changes
         if: steps.autopep8.outputs.exit-code == 2
         run: |
