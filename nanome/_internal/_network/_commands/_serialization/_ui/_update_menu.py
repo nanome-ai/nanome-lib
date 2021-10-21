@@ -21,11 +21,11 @@ class _UpdateMenu(_TypeSerializer):
         (menu, shallow) = value
         if version >= 1:
             context.write_byte(menu.index)
-        context.write_using_serializer(self.menu, menu)
-
         if version >= 2:
             context.write_bool(shallow)
-        nodes = [] 
+
+        context.write_using_serializer(self.menu, menu)
+        nodes = []
         content = []
         if not shallow:
             nodes = menu._get_all_nodes()
