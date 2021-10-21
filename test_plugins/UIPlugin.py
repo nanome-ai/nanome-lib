@@ -113,10 +113,14 @@ class UIPlugin(nanome.PluginInstance):
             ln.add_new_label(str(self.menu_index - 1))
             self.update_menu(self.previous_menu)
 
+        def change_title(button):
+            menu.title = "New Title"
+            self.update_menu(menu, True)
+
         root = menu.root
         button_node = root.create_child_node("button_node")
         button = button_node.add_new_button("button")
-        button.register_pressed_callback(self.select_button_callback)
+        button.register_pressed_callback(change_title)
 
         self.update_menu(menu)
         self.menu_index += 1
