@@ -12,19 +12,28 @@ class _UpdateMenu(_TypeSerializer):
         self.content = _UIBaseSerializer()
 
     def version(self):
-        return 1
+        return 2
 
     def name(self):
         return "UpdateMenu"
 
     def serialize(self, version, value, context):
+        (menu, shallow) = value
         if version >= 1:
-            context.write_byte(value.index)
-        context.write_using_serializer(self.menu, value)
+            context.write_byte(menu.index)
+        context.write_using_serializer(self.menu, menu)
+
+        if version >= 2:
+            context.write_bool(shallow)
+        nodes = [] 
+        content = []
+        if not shallow:
+            nodes = menu._get_all_nodes()
+            content = menu._get_all_content()
         self.array.set_type(self.layout)
-        context.write_using_serializer(self.array, value._get_all_nodes())
+        context.write_using_serializer(self.array, nodes)
         self.array.set_type(self.content)
-        context.write_using_serializer(self.array, value._get_all_content())
+        context.write_using_serializer(self.array, content)
 
     def deserialize(self, version, context):
         return None

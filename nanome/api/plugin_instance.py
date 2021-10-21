@@ -204,15 +204,17 @@ class PluginInstance(_PluginInstance):
         id = self._network._send(_Messages.add_to_workspace, complex_list, expects_response)
         return self._save_callback(id, callback)
 
-    def update_menu(self, menu):
+    def update_menu(self, menu, shallow=False):
         """
         | Update the menu in Nanome
 
         :param menu: Menu to update
         :type menu: :class:`~nanome.ui.Menu`
+        :param shallow: Whether you want to update only the menu's top level, or the whole tree.
+        :type shallow: bool
         """
         self._menus[menu.index] = menu
-        self._network._send(_Messages.menu_update, menu, False)
+        self._network._send(_Messages.menu_update, (menu, shallow), False)
 
     def update_content(self, *content):
         """
