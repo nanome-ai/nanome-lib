@@ -53,7 +53,6 @@ def interactive_mode():
         user_input = user_input.strip()
         if user_input == '':
             continue
-
         namespace = parser.parse_args([argument.option_strings[0], user_input])
         config.set(config_key, getattr(namespace, config_key))
 
