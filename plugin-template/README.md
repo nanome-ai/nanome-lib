@@ -17,24 +17,45 @@ To run {{name}} in a Docker container:
 ```sh
 $ cd docker
 $ ./build.sh
-$ ./deploy.sh -a <plugin_server_address> [optional args]
+$ ./deploy.sh [run_args]
 ```
 
-### Optional arguments:
+### Run args
 
-- `-x arg`
+These args are passed to deploy.sh, and then forwarded to the Plugin's run.py command
 
-  Example argument documentation
+```sh
+usage: run.py [-h] [-a HOST] [-p PORT] [-r] [-v] [-n NAME] [-k KEYFILE]
+              [-i IGNORE] [--write-log-file WRITE_LOG_FILE]
 
-**TODO**: Add any optional argument documentation here, or remove section entirely.
+Starts a Nanome Plugin.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -a HOST, --host HOST  connects to NTS at the specified IP address
+  -p PORT, --port PORT  connects to NTS at the specified port
+  -r, --auto-reload     Restart plugin automatically if a .py or .json file in
+                        current directory changes
+  -v, --verbose         enable verbose mode, to display Logs.debug
+  -n NAME, --name NAME  Name to display for this plugin in Nanome
+  -k KEYFILE, --keyfile KEYFILE
+                        Specifies a key file or key string to use to connect
+                        to NTS
+  -i IGNORE, --ignore IGNORE
+                        To use with auto-reload. All paths matching this
+                        pattern will be ignored, use commas to specify
+                        several. Supports */?/[seq]/[!seq]
+  --write-log-file WRITE_LOG_FILE
+                        Enable or disable writing logs to .log file
+
+```
 
 ## Development
-
 To run {{name}} with autoreload:
 
 ```sh
 $ python3 -m pip install -r requirements.txt
-$ python3 run.py -r -a <plugin_server_address> [optional args]
+$ python3 run.py -r [run_args]
 ```
 
 ## License
