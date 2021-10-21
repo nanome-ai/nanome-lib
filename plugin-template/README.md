@@ -17,10 +17,10 @@ To run {{name}} in a Docker container:
 ```sh
 $ cd docker
 $ ./build.sh
-$ ./deploy.sh [args]
+$ ./deploy.sh [run_args]
 ```
 
-### Deploy args
+### Run args
 
 These args are passed to deploy.sh, and then forwarded to the Plugin's run.py command
 
@@ -55,7 +55,7 @@ To run {{name}} with autoreload:
 
 ```sh
 $ python3 -m pip install -r requirements.txt
-$ python3 run.py -r [other_args]
+$ python3 run.py -r [run_args]
 ```
 
 ## License
