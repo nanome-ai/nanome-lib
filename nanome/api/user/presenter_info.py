@@ -7,6 +7,9 @@ class PresenterInfo():
         self._account_id = ""
         self._account_name = ""
         self._account_email = ""
+        self._has_org = False
+        self._org_id = 0
+        self._org_name = ""
 
     @property
     def account_id(self):
@@ -46,3 +49,42 @@ class PresenterInfo():
     @account_email.setter
     def account_email(self, value):
         self._account_email = value
+
+    @property
+    def has_org(self):
+        """
+        | If the presenter belongs to an organization
+
+        :type: :class:`bool`
+        """
+        return self._has_org
+
+    @has_org.setter
+    def has_org(self, value):
+        self._has_org = value
+
+    @property
+    def org_id(self):
+        """
+        | The ID of the organization the presenter belongs to
+
+        :type: :class:`int`
+        """
+        return self._org_id
+
+    @org_id.setter
+    def org_id(self, value):
+        self._org_id = value
+
+    @property
+    def org_name(self):
+        """
+        | The name of the organization the presenter belongs to
+
+        :type: :class:`str`
+        """
+        return self._org_name
+
+    @org_name.setter
+    def org_name(self, value):
+        self._org_name = value

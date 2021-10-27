@@ -6,7 +6,7 @@ class _GetPresenterInfoResponse(_TypeSerializer):
         self.string = _StringSerializer()
 
     def version(self):
-        return 0
+        return 1
 
     def name(self):
         return "GetPresenterInfoResponse"
@@ -21,5 +21,9 @@ class _GetPresenterInfoResponse(_TypeSerializer):
         result.account_id = context.read_using_serializer(self.string)
         result.account_name = context.read_using_serializer(self.string)
         result.account_email = context.read_using_serializer(self.string)
+        result.has_org = context.read_bool()
+        if result.has_org:
+            result.org_id = context.read_int()
+            result.org_name = context.read_using_serializer(self.string)
 
         return result
