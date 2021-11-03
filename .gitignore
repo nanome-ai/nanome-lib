@@ -16,3 +16,4 @@ build/
 dist/
 nanome.egg-info/
 nanome/plugin-template.zip
+htmlcov
