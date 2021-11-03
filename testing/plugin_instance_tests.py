@@ -5,11 +5,10 @@ from nanome import PluginInstance
 from nanome.api import structure, ui
 from nanome.util import enums
 
-import pdb
-pdb.set_trace()
 if sys.version_info.major >= 3:
     from unittest.mock import MagicMock
 else:
+    # Python 2.7 way of getting magicmock. Requires pip install mock
     from mock import MagicMock
 
 
