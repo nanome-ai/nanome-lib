@@ -491,7 +491,7 @@ class PluginInstance(_PluginInstance):
         id = self._network._send(_Messages.stream_create, (Stream.Type.position, atom_indices_list, StreamDirection.writing), callback is not None)
         self._save_callback(id, callback)
 
-    @Logs.deprecated("create_atom_stream")
+    @Logs.deprecated("create_writing_stream")
     def create_atom_stream(self, atom_indices_list, stream_type, callback):
         self.create_writing_stream(atom_indices_list, stream_type, callback)
 
