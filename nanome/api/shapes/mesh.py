@@ -92,7 +92,7 @@ class Mesh(_Mesh, Shape):
         """
         return self._texture_path
 
-    @uv.setter
+    @texture_path.setter
     def texture_path(self, value):
         self._texture_path = value
 

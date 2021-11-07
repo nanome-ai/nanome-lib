@@ -2,7 +2,7 @@ from nanome._internal._util._serializers import _TypeSerializer
 from nanome._internal._shapes._mesh import _Mesh
 from nanome.util import Logs
 
-import tempfile
+import tempfile, os
 from io import BytesIO
 from PIL import Image
 
@@ -17,17 +17,19 @@ class _MeshSerializer(_TypeSerializer):
         return "MeshShape"
 
     def read_texture(self, value):
-        if os.path.isfile(value.texture_path):
-            try:
-                img = Image.open(value.texture_path, mode='r')
-                byte_arr = BytesIO()
-                img.save(byte_arr, format='PNG')
-                texture_bytes = byte_arr.getvalue()
-                return (texture_bytes, [img.size[0], img.size[1]])
-            except Exception as e:
-                Logs.Error("Error reading texture file: "+e)
-        else:
-            Logs.Error("Texture file does not exist")
+        if type(value.texture_path) == str:
+            path = value.texture_path.replace("\\", "/")
+            if os.path.isfile(path):
+                try:
+                    img = Image.open(path, mode='r')
+                    byte_arr = BytesIO()
+                    img.save(byte_arr, format='PNG')
+                    texture_bytes = byte_arr.getvalue()
+                    return (texture_bytes, [img.size[0], img.size[1]])
+                except Exception as e:
+                    Logs.Error("Error reading texture file: "+e)
+            else:
+                Logs.Error("Texture file does not exist")
         return ([], [0,0])
     
     def create_texture(self, path, size, array):
@@ -44,6 +46,7 @@ class _MeshSerializer(_TypeSerializer):
         texture_bytes, texture_size = self.read_texture(value)
         context.write_int_array(texture_size)
         context.write_byte_array(texture_bytes)
+        Logs.debug("Sending texture of size", texture_size)
 
     def deserialize(self, version, context):
         result = _Mesh._create()
@@ -52,8 +55,8 @@ class _MeshSerializer(_TypeSerializer):
         result.colors = context.read_float_array()
         result.triangles = context.read_int_array()
         result.uv = context.read_float_array()
-        
         texture_size = context.read_int_array()
+        
         if texture_size[0] > 0 and texture_size[1] > 0:
             temp_texture = tempfile.NamedTemporaryFile(delete=False, suffix='png')
             texture_bytes = context.read_byte_array()
