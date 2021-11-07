@@ -12,6 +12,7 @@ class _Mesh(_Shape):
         self._colors = []
         self._triangles = []
         self._uv = []
+        self._texture_path = ""
 
     @classmethod
     def _create(cls):

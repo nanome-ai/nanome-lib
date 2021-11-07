@@ -82,5 +82,18 @@ class Mesh(_Mesh, Shape):
     def uv(self, value):
         self._uv = value
 
+    @property
+    def texture_path(self):
+        """
+        | Path to the texture mapped to the mesh, read by pillow, encoded as png in a byte array
+
+        :param value: Path to the texture
+        :type value: string
+        """
+        return self._texture_path
+
+    @uv.setter
+    def texture_path(self, value):
+        self._texture_path = value
 
 _Mesh._create = Mesh
