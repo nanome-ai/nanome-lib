@@ -5,8 +5,11 @@ from nanome.util import Logs
 import tempfile
 import os
 from io import BytesIO
-from PIL import Image
-
+try:
+    from PIL import Image
+    pillow_available = True
+except ImportError:
+    pillow_available = False
 
 class _MeshSerializer(_TypeSerializer):
     def __init__(self):
@@ -19,7 +22,7 @@ class _MeshSerializer(_TypeSerializer):
         return "MeshShape"
 
     def read_texture(self, value):
-        if type(value.texture_path) == str:
+        if pillow_available and type(value.texture_path) == str:
             path = value.texture_path.replace("\\", "/")
             if os.path.isfile(path):
                 try:
@@ -48,7 +51,8 @@ class _MeshSerializer(_TypeSerializer):
         texture_bytes, texture_size = self.read_texture(value)
         context.write_int_array(texture_size)
         context.write_byte_array(texture_bytes)
-        Logs.debug("Sending texture of size", texture_size)
+        if texture_size[0] > 0 and texture_size[1] > 0:
+            Logs.debug("Sending texture of size", texture_size)
 
     def deserialize(self, version, context):
         result = _Mesh._create()
