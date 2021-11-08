@@ -11,6 +11,7 @@ try:
 except ImportError:
     pillow_available = False
 
+
 class _MeshSerializer(_TypeSerializer):
     def __init__(self):
         pass
