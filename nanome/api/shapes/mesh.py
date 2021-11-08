@@ -96,4 +96,5 @@ class Mesh(_Mesh, Shape):
     def texture_path(self, value):
         self._texture_path = value
 
+
 _Mesh._create = Mesh

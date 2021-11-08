@@ -2,9 +2,11 @@ from nanome._internal._util._serializers import _TypeSerializer
 from nanome._internal._shapes._mesh import _Mesh
 from nanome.util import Logs
 
-import tempfile, os
+import tempfile
+import os
 from io import BytesIO
 from PIL import Image
+
 
 class _MeshSerializer(_TypeSerializer):
     def __init__(self):
@@ -27,15 +29,15 @@ class _MeshSerializer(_TypeSerializer):
                     texture_bytes = byte_arr.getvalue()
                     return (texture_bytes, [img.size[0], img.size[1]])
                 except Exception as e:
-                    Logs.Error("Error reading texture file: "+e)
+                    Logs.Error("Error reading texture file: " + e)
             else:
                 Logs.Error("Texture file does not exist")
-        return ([], [0,0])
-    
+        return ([], [0, 0])
+
     def create_texture(self, path, size, array):
         img = Image.open(BytesIO(array))
         img.save(path, format='PNG')
-    
+
     def serialize(self, version, value, context):
         context.write_float_array(value.vertices)
         context.write_float_array(value.normals)
@@ -56,7 +58,7 @@ class _MeshSerializer(_TypeSerializer):
         result.triangles = context.read_int_array()
         result.uv = context.read_float_array()
         texture_size = context.read_int_array()
-        
+
         if texture_size[0] > 0 and texture_size[1] > 0:
             temp_texture = tempfile.NamedTemporaryFile(delete=False, suffix='png')
             texture_bytes = context.read_byte_array()
