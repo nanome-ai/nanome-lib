@@ -85,7 +85,7 @@ class Mesh(_Mesh, Shape):
     @property
     def texture_path(self):
         """
-        | Path to the texture mapped to the mesh, read by pillow, encoded as png in a byte array
+        | Path to the texture mapped to the mesh, has to be png or jpeg
 
         :param value: Path to the texture
         :type value: string
