@@ -82,5 +82,19 @@ class Mesh(_Mesh, Shape):
     def uv(self, value):
         self._uv = value
 
+    @property
+    def texture_path(self):
+        """
+        | Path to the texture mapped to the mesh, has to be png or jpeg
+
+        :param value: Path to the texture
+        :type value: string
+        """
+        return self._texture_path
+
+    @texture_path.setter
+    def texture_path(self, value):
+        self._texture_path = value
+
 
 _Mesh._create = Mesh
