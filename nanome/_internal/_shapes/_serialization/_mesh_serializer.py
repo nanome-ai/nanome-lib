@@ -33,7 +33,6 @@ class _MeshSerializer(_TypeSerializer):
             else:
                 Logs.Error("Texture file should be a png or a jpg file")
         return []
-    
 
     def serialize(self, version, value, context):
         context.write_float_array(value.vertices)
@@ -50,7 +49,7 @@ class _MeshSerializer(_TypeSerializer):
     def create_texture_file(self, texture_path, texture_bytes):
         with open(texture_path, "wb") as f:
             f.write(texture_bytes)
-        
+
     def deserialize(self, version, context):
         result = _Mesh._create()
         result.vertices = context.read_float_array()
