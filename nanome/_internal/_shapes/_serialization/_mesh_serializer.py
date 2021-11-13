@@ -27,11 +27,11 @@ class _MeshSerializer(_TypeSerializer):
                             texture_bytes = bytearray(f.read())
                             return texture_bytes
                     except Exception as e:
-                        Logs.Error("Error reading texture file: " + e)
+                        Logs.error("Error reading texture file: " + e)
                 else:
-                    Logs.Error("Texture file does not exist")
+                    Logs.error("Texture file does not exist")
             else:
-                Logs.Error("Texture file should be a png or a jpg file")
+                Logs.error("Texture file should be a png or a jpg file")
         return []
 
     def serialize(self, version, value, context):
