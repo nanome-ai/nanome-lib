@@ -17,7 +17,7 @@ class _MeshSerializer(_TypeSerializer):
         return "MeshShape"
 
     def read_texture(self, value):
-        if type(value.texture_path) == str:
+        if value.texture_path != "":
             filename, ext = os.path.splitext(value.texture_path)
             if ext.lower() in [".jpeg", ".jpg", ".png"]:
                 path = value.texture_path.replace("\\", "/")
