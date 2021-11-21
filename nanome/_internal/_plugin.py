@@ -25,7 +25,7 @@ KEEP_ALIVE_TIMEOUT = 15.0
 __metaclass__ = type
 
 
-class _Plugin:
+class _Plugin(object):
     __serializer = Serializer()
     _plugin_id = -1
     _custom_data = None
@@ -326,6 +326,6 @@ class _Plugin:
         self._key = ''
         self._host = ''
         self._port = None
+        self._to_ignore = []
         self.__waiting_keep_alive = False
-        self.__to_ignore = []
         self.__connected = False

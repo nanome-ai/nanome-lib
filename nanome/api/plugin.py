@@ -8,7 +8,7 @@ from nanome.util.logs import Logs
 from nanome.util import config
 
 
-class Plugin:
+class Plugin(object):
     """Process that connects to NTS, and allows a user to access a PluginInstance.
 
     When plugin process is running, an entry is added to the Nanome Stacks Menu.
@@ -98,9 +98,8 @@ class Plugin:
             self._plugin._run()
 
     @classmethod
-    def setup(
-        cls, name, description, tags, has_advanced, plugin_class, host="config",
-            port="config", key="config", permissions=[], integrations=[]):
+    def setup(cls, name, description, tags, has_advanced, plugin_class, host="config",
+              port="config", key="config", permissions=[], integrations=[]):
         if not cls._is_process():
             plugin = cls(name, description, tags, has_advanced, permissions, integrations)
             plugin.plugin_class = plugin_class
