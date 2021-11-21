@@ -6,7 +6,7 @@ from nanome._internal._network._serialization._serializer import Serializer
 from nanome._internal._util._serializers import _TypeSerializer
 from nanome.util.logs import Logs
 
-from multiprocessing import Process, Pipe
+from multiprocessing import Process, Pipe, current_process
 from timeit import default_timer as timer
 import sys
 import json
@@ -329,3 +329,7 @@ class _Plugin(object):
         self._to_ignore = []
         self.__waiting_keep_alive = False
         self.__connected = False
+
+    @staticmethod
+    def _is_process():
+        return current_process().name != 'MainProcess'

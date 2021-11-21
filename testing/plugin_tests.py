@@ -48,7 +48,7 @@ class PluginTestCase(unittest.TestCase):
             '--name', name,
             '--verbose'
         ]
-        self.plugin._plugin._autoreload = MagicMock()
+        self.plugin._autoreload = MagicMock()
         with patch.object(sys, 'argv', testargs):
             self.plugin.run(host, port, key)
         self.assertEqual(self.plugin.write_log_file, True)

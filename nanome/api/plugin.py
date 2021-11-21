@@ -1,5 +1,4 @@
 import argparse
-from multiprocessing import current_process
 
 from . import _DefaultPlugin
 from nanome._internal import _Plugin
@@ -8,7 +7,7 @@ from nanome.util.logs import Logs
 from nanome.util import config
 
 
-class Plugin(object):
+class Plugin(_Plugin):
     """Process that connects to NTS, and allows a user to access a PluginInstance.
 
     When plugin process is running, an entry is added to the Nanome Stacks Menu.
@@ -17,7 +16,7 @@ class Plugin(object):
     connected to the user's Nanome session.
     """
 
-    def __init__(self, name, description, tags=[], has_advanced=False, permissions=[], integrations=[]):
+    def __init__(self, name, description, tags=None, has_advanced=False, permissions=None, integrations=None):
         """
         :param name: Name of the plugin to display
         :type name: :class:`str`
@@ -28,7 +27,10 @@ class Plugin(object):
         :param has_advanced: If true, plugin will display an "Advanced Settings" button
         :type has_advanced: :class:`bool`
         """
-        self._plugin = _Plugin(
+        tags = tags or []
+        permissions = permissions or []
+        integrations = integrations or []
+        super(Plugin, self).__init__(
             name, description, tags=tags, has_advanced=has_advanced,
             permissions=permissions, integrations=integrations)
         self.plugin_class = _DefaultPlugin
@@ -93,13 +95,16 @@ class Plugin(object):
 
         Logs.debug("Start plugin")
         if self.has_autoreload:
-            self._plugin._autoreload()
+            self._autoreload()
         else:
-            self._plugin._run()
+            self._run()
 
     @classmethod
     def setup(cls, name, description, tags, has_advanced, plugin_class, host="config",
-              port="config", key="config", permissions=[], integrations=[]):
+              port="config", key="config", permissions=None, integrations=None):
+
+        permissions = permissions or []
+        integrations = integrations or []
         if not cls._is_process():
             plugin = cls(name, description, tags, has_advanced, permissions, integrations)
             plugin.plugin_class = plugin_class
@@ -120,76 +125,76 @@ class Plugin(object):
 
     @property
     def host(self):
-        return getattr(self._plugin, '_host', None)
+        return getattr(self, '_host', None)
 
     @host.setter
     def host(self, value):
-        return setattr(self._plugin, '_host', value)
+        setattr(self, '_host', value)
 
     @property
     def port(self):
-        return getattr(self._plugin, '_port', None)
+        return getattr(self, '_port', None)
 
     @port.setter
     def port(self, value):
-        return setattr(self._plugin, '_port', value)
+        setattr(self, '_port', value)
 
     @property
     def key(self):
-        return getattr(self._plugin, '_key', None)
+        return getattr(self, '_key', None)
 
     @key.setter
     def key(self, value):
-        return setattr(self._plugin, '_key', value)
+        setattr(self, '_key', value)
 
     @property
     def write_log_file(self):
-        return getattr(self._plugin, '_write_log_file', None)
+        return getattr(self, '_write_log_file', None)
 
     @write_log_file.setter
     def write_log_file(self, value):
-        return setattr(self._plugin, '_write_log_file', value)
+        setattr(self, '_write_log_file', value)
 
     @property
     def has_autoreload(self):
-        return getattr(self._plugin, '_has_autoreload', None)
+        return getattr(self, '_has_autoreload', None)
 
     @has_autoreload.setter
     def has_autoreload(self, value):
-        setattr(self._plugin, '_has_autoreload', value)
+        setattr(self, '_has_autoreload', value)
 
     @property
     def has_verbose(self):
-        return getattr(self._plugin, '_has_verbose', None)
+        return getattr(self, '_has_verbose', None)
 
     @has_verbose.setter
     def has_verbose(self, value):
-        return setattr(self._plugin, '_has_verbose', value)
+        setattr(self, '_has_verbose', value)
 
     @property
     def to_ignore(self):
-        return getattr(self._plugin, '_to_ignore')
+        return getattr(self, '_to_ignore')
 
     @to_ignore.setter
     def to_ignore(self, value):
-        return setattr(self._plugin, '_to_ignore', value)
+        setattr(self, '_to_ignore', value)
 
     @property
     def plugin_class(self):
-        return getattr(self._plugin, '_plugin_class', None)
+        return getattr(self, '_plugin_class', None)
 
     @plugin_class.setter
     def plugin_class(self, value):
-        return setattr(self._plugin, '_plugin_class', value)
+        setattr(self, '_plugin_class', value)
 
     @property
     def name(self):
         """Name of plugin as shown in the Nanome Stacks menu."""
-        return self._plugin._description.get('name')
+        return self._description.get('name')
 
     @name.setter
     def name(self, value):
-        self._plugin._description['name'] = value
+        self._description['name'] = value
 
     def set_plugin_class(self, plugin_class):
         """
@@ -224,7 +229,3 @@ class Plugin(object):
     @post_run.setter
     def post_run(self, value):
         self._post_run = value
-
-    @staticmethod
-    def _is_process():
-        return current_process().name != 'MainProcess'
