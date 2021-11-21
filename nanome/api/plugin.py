@@ -86,7 +86,7 @@ class Plugin:
 
         if args.ignore:
             to_ignore = args.ignore.split(",")
-            self.to_ignore.extend(to_ignore)
+            self.to_ignore = to_ignore
 
         # Name can be set during the class instantiation without cli arg.
         if args.name:
@@ -168,11 +168,7 @@ class Plugin:
 
     @property
     def to_ignore(self):
-        attr_name = '__to_ignore'
-        if not hasattr(self, attr_name):
-            default_value = []
-            setattr(self, attr_name, default_value)
-        return getattr(self, attr_name)
+        return getattr(self._plugin, '__to_ignore')
 
     @to_ignore.setter
     def to_ignore(self, value):
