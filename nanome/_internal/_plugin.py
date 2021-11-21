@@ -35,6 +35,7 @@ class _Plugin:
             signal.signal(signal.SIGBREAK, self.__on_termination_signal)
         else:
             signal.signal(signal.SIGTERM, self.__on_termination_signal)
+
         if self._pre_run is not None:
             self._pre_run()
 
@@ -288,10 +289,10 @@ class _Plugin:
         plugin._run()
 
     def __init__(self, name, description, tags=None, has_advanced=False, permissions=None, integrations=None):
-        tags = tags or dict()
-        # permissions = permissions or dict()
-        integrations = integrations or dict()
-        self._sessions = dict()
+        tags = tags or []
+        permissions = permissions or []
+        integrations = integrations or []
+        self._sessions = []
 
         if isinstance(tags, str):
             tags = [tags]
