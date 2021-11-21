@@ -25,10 +25,29 @@ KEEP_ALIVE_TIMEOUT = 15.0
 __metaclass__ = type
 
 
-class _Plugin(object):
+class _Plugin:
     __serializer = Serializer()
     _plugin_id = -1
     _custom_data = None
+
+    def _run(self):
+        if os.name == "nt":
+            signal.signal(signal.SIGBREAK, self.__on_termination_signal)
+        else:
+            signal.signal(signal.SIGTERM, self.__on_termination_signal)
+        if self._pre_run is not None:
+            self._pre_run()
+
+        self._description['auth'] = self.__read_key()
+        self._process_manager = _ProcessManager()
+        if self.__write_log_file:
+            self._logs_manager = _LogsManager(self._plugin_class.__name__ + ".log")
+        else:
+            self._logs_manager = None
+        self.__reconnect_attempt = 0
+        self.__connect()
+        breakpoint()
+        self.__loop()
 
     def __read_key(self):
         # check if arg is key data
@@ -142,29 +161,11 @@ class _Plugin(object):
                 process.send_signal(break_signal)
                 break
 
-    def __run(self):
-        if os.name == "nt":
-            signal.signal(signal.SIGBREAK, self.__on_termination_signal)
-        else:
-            signal.signal(signal.SIGTERM, self.__on_termination_signal)
-        if self._pre_run is not None:
-            self._pre_run()
-        _Plugin.instance = self
-        self._description['auth'] = self.__read_key()
-        self._process_manager = _ProcessManager()
-        if self.__write_log_file:
-            self._logs_manager = _LogsManager(self._plugin_class.__name__ + ".log")
-        else:
-            self._logs_manager = None
-        self.__reconnect_attempt = 0
-        self.__connect()
-        self.__loop()
-
     def __connect(self):
-        self._network = Network._NetInstance(self, _Plugin._on_packet_received)
+        self._network = Network._NetInstance(self, self._on_packet_received)
         if self._network.connect(self.__host, self.__port):
-            if _Plugin._plugin_id >= 0:
-                plugin_id = _Plugin._plugin_id
+            if self._plugin_id >= 0:
+                plugin_id = self._plugin_id
             else:
                 plugin_id = 0
             packet = Network._Packet()
@@ -257,9 +258,18 @@ class _Plugin(object):
             self._sessions[session_id].signal_and_close_pipes()
         main_conn_net, process_conn_net = Pipe()
         main_conn_proc, process_conn_proc = Pipe()
-        session = Network._Session(session_id, self._network, self._process_manager, self._logs_manager, main_conn_net, main_conn_proc)
+        session = Network._Session(
+            session_id, self._network, self._process_manager, self._logs_manager,
+            main_conn_net, main_conn_proc)
         permissions = self._description["permissions"]
-        process = Process(target=_Plugin._launch_plugin, args=(self._plugin_class, session_id, process_conn_net, process_conn_proc, _Plugin.__serializer, _Plugin._plugin_id, version_table, _TypeSerializer.get_version_table(), Logs._is_verbose(), _Plugin._custom_data, permissions))
+        process = Process(
+            target=_Plugin._launch_plugin,
+            args=(
+                self._plugin_class, session_id, process_conn_net,
+                process_conn_proc, _Plugin.__serializer, _Plugin._plugin_id,
+                version_table, _TypeSerializer.get_version_table(),
+                Logs._is_verbose(), _Plugin._custom_data, permissions)
+        )
         process.start()
         session.plugin_process = process
         self._sessions[session_id] = session
@@ -282,7 +292,10 @@ class _Plugin(object):
         Logs.debug("Starting plugin")
         plugin._run()
 
-    def __init__(self, name, description, tags=[], has_advanced=False, permissions=[], integrations=[]):
+    def __init__(self, name, description, tags=None, has_advanced=False, permissions=None, integrations=None):
+        tags = tags or dict()
+        # permissions = permissions or dict()
+        integrations = integrations or dict()
         self._sessions = dict()
 
         if isinstance(tags, str):
@@ -309,10 +322,14 @@ class _Plugin(object):
             'integrations': integrations
         }
         self._plugin_class = None
+        self._pre_run = None
+        self._post_run = None
         self.__connected = False
         self.__has_autoreload = False
         self.__has_verbose = False
         self.__to_ignore = []
-        self._pre_run = None
-        self._post_run = None
         self.__waiting_keep_alive = False
+        self.__write_log_file = True
+        self.__key = ''
+        self.__host = ''
+        self.__port = None

@@ -18,7 +18,7 @@ class PluginTestCase(unittest.TestCase):
         self.plugin._network = MagicMock()
         # self.plugin._network = MagicMock()
         self.plugin_instance = PluginInstance()
-        self.plugin_instance._network = MagicMock()
+        # self.plugin_instance._network = MagicMock()
         self.plugin.set_plugin_class(PluginInstance)
 
     def test_create_parser(self):
@@ -26,14 +26,10 @@ class PluginTestCase(unittest.TestCase):
         self.assertTrue(isinstance(parser, argparse.ArgumentParser))
 
     @unittest.mock.patch('nanome._internal._plugin.Network')
-    # @unittest.mock.patch('nanome._internal._plugin.Network')
-    def test_run(self, mock):
+    # @unittest.mock.patch('nanome._internal._plugin._Plugin.__loop')
+    def test_run(self, plugin_mock):  # , plugin_instance_mock):
         host = 'anyhost'
         port = 8000
         key = ''
-        import multiprocessing, time
-        p = multiprocessing.Process(target=self.plugin.run, args=(host, port, key))
-        p.start()
-        time.sleep(2)
-        p.terminate()
-        p.join()
+        # self.plugin._plugin.__loop = MagicMock()
+        self.plugin.run(host, port, key)

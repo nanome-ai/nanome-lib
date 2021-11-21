@@ -7,7 +7,7 @@ from nanome.util.logs import Logs
 from nanome.util import config
 
 
-class Plugin(_Plugin):
+class Plugin:
     """
     | Core class of any Plugin.
     | Manages network, callbacks and APIs
@@ -21,6 +21,12 @@ class Plugin(_Plugin):
     :param has_advanced: If true, plugin will display an "Advanced Settings" button
     :type has_advanced: :class:`bool`
     """
+
+    def __init__(self, name, description, tags=[], has_advanced=False, permissions=[], integrations=[]):
+        self._plugin = _Plugin(
+            name, description, tags=tags, has_advanced=has_advanced,
+            permissions=permissions, integrations=integrations)
+        self._plugin_class = _DefaultPlugin
 
     @staticmethod
     def create_parser():
@@ -38,27 +44,6 @@ class Plugin(_Plugin):
         parser.add_argument('-i', '--ignore', help='To use with auto-reload. All paths matching this pattern will be ignored, use commas to specify several. Supports */?/[seq]/[!seq]', default='')
         parser.add_argument('--write-log-file', type=bool, help='Enable or disable writing logs to .log file')
         return parser
-
-    @classmethod
-    def setup(cls, name, description, tags, has_advanced, plugin_class, host="config", port="config", key="config", permissions=[], integrations=[]):
-        if not _Plugin._is_process():
-            plugin = cls(name, description, tags, has_advanced, permissions, integrations)
-            plugin.set_plugin_class(plugin_class)
-            plugin.run(host, port, key)
-
-    @staticmethod
-    def set_custom_data(*args):
-        """
-        | Store arbitrary data to send to plugin instances
-
-        :param args: Variable length argument list
-        :type args: Anything serializable
-        """
-        _Plugin._custom_data = args
-
-    @staticmethod
-    def set_maximum_processes_count(max_process_nb):
-        _ProcessManager._max_process_count = max_process_nb
 
     def run(self, host="config", port="config", key="config"):
         """
@@ -80,22 +65,22 @@ class Plugin(_Plugin):
         parser = self.create_parser()
         args, _ = parser.parse_known_args()
 
-        self.__host = args.host or default_host
-        self.__port = args.port or default_port
-        self.__key = args.keyfile or default_key
+        self.host = args.host or default_host
+        self.port = args.port or default_port
+        self.key = args.keyfile or default_key
 
         if args.write_log_file is not None:
-            self.__write_log_file = args.write_log_file
+            self.write_log_file = args.write_log_file
         else:
-            self.__write_log_file = default_write_log_file
+            self.write_log_file = default_write_log_file
 
-        self.__has_autoreload = args.auto_reload
-        self.__has_verbose = args.verbose
+        self.has_autoreload = args.auto_reload
+        self.has_verbose = args.verbose
         Logs._set_verbose(args.verbose)
 
         if args.ignore:
             to_ignore = args.ignore.split(",")
-            self.__to_ignore.extend(to_ignore)
+            self.to_ignore.extend(to_ignore)
 
         # Name can be set during the class instantiation without cli arg.
         if args.name:
@@ -103,9 +88,107 @@ class Plugin(_Plugin):
 
         Logs.debug("Start plugin")
         if self.__has_autoreload:
-            self.__autoreload()
+            self._plugin.__autoreload()
         else:
-            self.__run()
+            self._plugin._run()
+
+    @classmethod
+    def setup(cls, name, description, tags, has_advanced, plugin_class, host="config", port="config", key="config", permissions=[], integrations=[]):
+        if not cls._is_process():
+            plugin = cls(name, description, tags, has_advanced, permissions, integrations)
+            plugin.plugin_class = plugin_class
+            plugin.run(host, port, key)
+
+    def set_custom_data(self, *args):
+        """
+        | Store arbitrary data to send to plugin instances
+
+        :param args: Variable length argument list
+        :type args: Anything serializable
+        """
+        self._custom_data = args
+
+    @staticmethod
+    def set_maximum_processes_count(max_process_nb):
+        _ProcessManager._max_process_count = max_process_nb
+
+    @property
+    def host(self):
+        return getattr(self._plugin, '__host', None)
+
+    @host.setter
+    def host(self, value):
+        return setattr(self._plugin, '__host', value)
+
+    @property
+    def port(self):
+        return getattr(self._plugin, '__port', None)
+
+    @port.setter
+    def port(self, value):
+        return setattr(self._plugin, '__port', value)
+
+    @property
+    def key(self):
+        return getattr(self._plugin, '__key', None)
+
+    @key.setter
+    def key(self, value):
+        return setattr(self._plugin, '__key', value)
+
+    @property
+    def write_log_file(self):
+        if not hasattr(self._plugin, '__write_log_file'):
+            self._plugin.__write_log_file = None
+        return self._plugin.__write_log_file
+
+    @write_log_file.setter
+    def write_log_file(self, value):
+        return setattr(self._plugin, '__write_log_file', value)
+
+    @property
+    def has_autoreload(self):
+        return getattr(self._plugin, '__has_autoreload', None)
+
+    @has_autoreload.setter
+    def has_autoreload(self, value):
+        self.__has_autoreload = value
+
+    @property
+    def has_verbose(self):
+        return getattr(self._plugin, '__has_verbose', None)
+
+    @has_verbose.setter
+    def has_verbose(self, value):
+        self.__has_verbose = value
+
+    @property
+    def has_verbose(self):
+        return getattr(self._plugin, '__has_verbose', None)
+
+    @has_verbose.setter
+    def has_verbose(self, value):
+        self.__has_verbose = value
+
+    @property
+    def to_ignore(self):
+        attr_name = '__to_ignore'
+        if not hasattr(self, attr_name):
+            default_value = []
+            setattr(self, attr_name, default_value)
+        return getattr(self, attr_name)
+
+    @to_ignore.setter
+    def to_ignore(self, value):
+        return setattr(self._plugin, '__to_ignore', value)
+
+    @property
+    def plugin_class(self):
+        return getattr(self._plugin, '_plugin_class', None)
+
+    @plugin_class.setter
+    def plugin_class(self, value):
+        return setattr(self._plugin, '_plugin_class', value)
 
     def set_plugin_class(self, plugin_class):
         """
@@ -115,7 +198,7 @@ class Plugin(_Plugin):
         :param plugin_class: Plugin class to instantiate
         :type plugin_class: :class:`~nanome.PluginInstance`
         """
-        self._plugin_class = plugin_class
+        self.plugin_class = plugin_class
 
     @property
     def pre_run(self):
@@ -140,7 +223,3 @@ class Plugin(_Plugin):
     @post_run.setter
     def post_run(self, value):
         self._post_run = value
-
-    def __init__(self, name, description, tags=[], has_advanced=False, permissions=[], integrations=[]):
-        super(Plugin, self).__init__(name, description, tags, has_advanced, permissions, integrations)
-        self._plugin_class = _DefaultPlugin
