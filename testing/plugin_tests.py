@@ -6,10 +6,10 @@ from nanome import Plugin, PluginInstance
 from nanome._internal._process import _ProcessManager
 
 if sys.version_info.major >= 3:
-    from unittest.mock import MagicMock
+    from unittest.mock import MagicMock, patch
 else:
     # Python 2.7 way of getting magicmock. Requires pip install mock
-    from mock import MagicMock
+    from mock import MagicMock, patch
 
 
 class PluginTestCase(unittest.TestCase):
@@ -23,9 +23,9 @@ class PluginTestCase(unittest.TestCase):
         parser = Plugin.create_parser()
         self.assertTrue(isinstance(parser, argparse.ArgumentParser))
 
-    @unittest.mock.patch('nanome._internal._plugin.Network')
-    @unittest.mock.patch('nanome._internal._plugin._Plugin._loop')
-    @unittest.mock.patch('nanome._internal._plugin._Plugin._autoreload')
+    @patch('nanome._internal._plugin.Network')
+    @patch('nanome._internal._plugin._Plugin._loop')
+    @patch('nanome._internal._plugin._Plugin._autoreload')
     def test_run(self, network_mock, loop_mock, autoreload_mock):
         host = 'anyhost'
         port = 8000
@@ -49,15 +49,15 @@ class PluginTestCase(unittest.TestCase):
             '--verbose'
         ]
         self.plugin._plugin._autoreload = MagicMock()
-        with unittest.mock.patch.object(sys, 'argv', testargs):
+        with patch.object(sys, 'argv', testargs):
             self.plugin.run(host, port, key)
         self.assertEqual(self.plugin.write_log_file, True)
         self.assertEqual(self.plugin.to_ignore, [ignore])
         self.assertEqual(self.plugin.name, name)
         self.assertEqual(self.plugin.has_verbose, True)
 
-    @unittest.mock.patch('nanome._internal._plugin.Network')
-    @unittest.mock.patch('nanome._internal._plugin._Plugin._loop')
+    @patch('nanome._internal._plugin.Network')
+    @patch('nanome._internal._plugin._Plugin._loop')
     def test_setup(self, network_mock, loop_mock):
         name = 'Test Plugin'
         description = 'Test Plugin'
