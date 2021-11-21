@@ -46,7 +46,6 @@ class _Plugin:
             self._logs_manager = None
         self.__reconnect_attempt = 0
         self.__connect()
-        breakpoint()
         self._loop()
 
     def __read_key(self):
