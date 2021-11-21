@@ -121,59 +121,59 @@ class Plugin:
 
     @property
     def host(self):
-        return getattr(self._plugin, '__host', None)
+        return getattr(self._plugin, '_host', None)
 
     @host.setter
     def host(self, value):
-        return setattr(self._plugin, '__host', value)
+        return setattr(self._plugin, '_host', value)
 
     @property
     def port(self):
-        return getattr(self._plugin, '__port', None)
+        return getattr(self._plugin, '_port', None)
 
     @port.setter
     def port(self, value):
-        return setattr(self._plugin, '__port', value)
+        return setattr(self._plugin, '_port', value)
 
     @property
     def key(self):
-        return getattr(self._plugin, '__key', None)
+        return getattr(self._plugin, '_key', None)
 
     @key.setter
     def key(self, value):
-        return setattr(self._plugin, '__key', value)
+        return setattr(self._plugin, '_key', value)
 
     @property
     def write_log_file(self):
-        return getattr(self._plugin, '__write_log_file', None)
+        return getattr(self._plugin, '_write_log_file', None)
 
     @write_log_file.setter
     def write_log_file(self, value):
-        return setattr(self._plugin, '__write_log_file', value)
+        return setattr(self._plugin, '_write_log_file', value)
 
     @property
     def has_autoreload(self):
-        return getattr(self._plugin, '__has_autoreload', None)
+        return getattr(self._plugin, '_has_autoreload', None)
 
     @has_autoreload.setter
     def has_autoreload(self, value):
-        setattr(self._plugin, '__has_autoreload', value)
+        setattr(self._plugin, '_has_autoreload', value)
 
     @property
     def has_verbose(self):
-        return getattr(self._plugin, '__has_verbose', None)
+        return getattr(self._plugin, '_has_verbose', None)
 
     @has_verbose.setter
     def has_verbose(self, value):
-        return setattr(self._plugin, '__has_verbose', value)
+        return setattr(self._plugin, '_has_verbose', value)
 
     @property
     def to_ignore(self):
-        return getattr(self._plugin, '__to_ignore')
+        return getattr(self._plugin, '_to_ignore')
 
     @to_ignore.setter
     def to_ignore(self, value):
-        return setattr(self._plugin, '__to_ignore', value)
+        return setattr(self._plugin, '_to_ignore', value)
 
     @property
     def plugin_class(self):

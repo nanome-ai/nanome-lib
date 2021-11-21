@@ -1,10 +1,9 @@
 from . import _Data
 from . import _Packet
-from nanome.util import Logs, ImportUtils
+from nanome.util import Logs
 
 import socket
 import ssl
-import sys
 import errno
 import time
 import traceback
@@ -88,7 +87,7 @@ class _NetInstance(object):
     def _received_data(self, data):
         self._data.received_data(data)
         self._processing = True
-        while self._processing == True:
+        while self._processing is True:
             if self._state == _NetInstance.header_state:
                 if self._current_packet.get_header(self._data):
                     self._state = _NetInstance.payload_state
