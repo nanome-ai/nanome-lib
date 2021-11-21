@@ -162,7 +162,7 @@ class _Plugin:
                 break
 
     def __connect(self):
-        self._network = Network._NetInstance(self, self._on_packet_received)
+        self._network = Network._NetInstance(self, self.__class__._on_packet_received)
         if self._network.connect(self._host, self._port):
             if self._plugin_id >= 0:
                 plugin_id = self._plugin_id
