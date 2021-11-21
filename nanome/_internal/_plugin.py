@@ -47,7 +47,7 @@ class _Plugin:
         self.__reconnect_attempt = 0
         self.__connect()
         breakpoint()
-        self.__loop()
+        self._loop()
 
     def __read_key(self):
         # check if arg is key data
@@ -183,7 +183,7 @@ class _Plugin:
             self.__reconnect_attempt += 1
             return False
 
-    def __loop(self):
+    def _loop(self):
         to_remove = []
         try:
             while True:

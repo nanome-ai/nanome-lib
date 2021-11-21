@@ -26,10 +26,9 @@ class PluginTestCase(unittest.TestCase):
         self.assertTrue(isinstance(parser, argparse.ArgumentParser))
 
     @unittest.mock.patch('nanome._internal._plugin.Network')
-    # @unittest.mock.patch('nanome._internal._plugin._Plugin.__loop')
-    def test_run(self, plugin_mock):  # , plugin_instance_mock):
+    def test_run(self, plugin_mock):
         host = 'anyhost'
         port = 8000
         key = ''
-        # self.plugin._plugin.__loop = MagicMock()
+        self.plugin._plugin._loop = MagicMock()
         self.plugin.run(host, port, key)
