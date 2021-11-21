@@ -32,3 +32,9 @@ class PluginTestCase(unittest.TestCase):
         key = ''
         self.plugin._plugin._loop = MagicMock()
         self.plugin.run(host, port, key)
+
+        testargs = ['run.py', '--auto-reload']
+        self.plugin._plugin._autoreload = MagicMock()
+        with unittest.mock.patch.object(sys, 'argv', testargs):
+            self.plugin.run(host, port, key)
+

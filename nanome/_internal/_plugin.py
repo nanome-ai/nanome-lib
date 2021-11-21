@@ -127,7 +127,7 @@ class _Plugin:
         if found_file is False:
             yield 0.0
 
-    def __autoreload(self):
+    def _autoreload(self):
         wait = 3
 
         if os.name == "nt":

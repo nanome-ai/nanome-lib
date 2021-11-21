@@ -8,21 +8,25 @@ from nanome.util import config
 
 
 class Plugin:
-    """
-    | Core class of any Plugin.
-    | Manages network, callbacks and APIs
+    """Process that connects to NTS, and allows a user to access a PluginInstance.
 
-    :param name: Name of the plugin to display
-    :type name: :class:`str`
-    :param description: Description of the plugin to display
-    :type description: :class:`str`
-    :param tags: Tags of the plugin
-    :type tags: :class:`list` <:class:`str`>
-    :param has_advanced: If true, plugin will display an "Advanced Settings" button
-    :type has_advanced: :class:`bool`
+    When the process is running, an entry is added to the Nanome Stacks Menu.
+
+    When a user activates a Plugin, this class creates a PluginInstance object
+    connected to the user's Nanome session.
     """
 
     def __init__(self, name, description, tags=[], has_advanced=False, permissions=[], integrations=[]):
+        """
+        :param name: Name of the plugin to display
+        :type name: :class:`str`
+        :param description: Description of the plugin to display
+        :type description: :class:`str`
+        :param tags: Tags of the plugin
+        :type tags: :class:`list` <:class:`str`>
+        :param has_advanced: If true, plugin will display an "Advanced Settings" button
+        :type has_advanced: :class:`bool`
+        """
         self._plugin = _Plugin(
             name, description, tags=tags, has_advanced=has_advanced,
             permissions=permissions, integrations=integrations)
@@ -87,8 +91,8 @@ class Plugin:
             self._description['name'] = args.name
 
         Logs.debug("Start plugin")
-        if self.__has_autoreload:
-            self._plugin.__autoreload()
+        if self.has_autoreload:
+            self._plugin._autoreload()
         else:
             self._plugin._run()
 
@@ -138,9 +142,7 @@ class Plugin:
 
     @property
     def write_log_file(self):
-        if not hasattr(self._plugin, '__write_log_file'):
-            self._plugin.__write_log_file = None
-        return self._plugin.__write_log_file
+        return getattr(self._plugin, '__write_log_file', None)
 
     @write_log_file.setter
     def write_log_file(self, value):
@@ -152,7 +154,7 @@ class Plugin:
 
     @has_autoreload.setter
     def has_autoreload(self, value):
-        self.__has_autoreload = value
+        setattr(self._plugin, '__has_autoreload', value)
 
     @property
     def has_verbose(self):
@@ -160,15 +162,7 @@ class Plugin:
 
     @has_verbose.setter
     def has_verbose(self, value):
-        self.__has_verbose = value
-
-    @property
-    def has_verbose(self):
-        return getattr(self._plugin, '__has_verbose', None)
-
-    @has_verbose.setter
-    def has_verbose(self, value):
-        self.__has_verbose = value
+        return setattr(self._plugin, '__has_verbose', value)
 
     @property
     def to_ignore(self):
