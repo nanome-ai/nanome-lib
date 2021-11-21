@@ -11,7 +11,7 @@ from nanome.util import config
 class Plugin:
     """Process that connects to NTS, and allows a user to access a PluginInstance.
 
-    When the process is running, an entry is added to the Nanome Stacks Menu.
+    When plugin process is running, an entry is added to the Nanome Stacks Menu.
 
     When a user activates a Plugin, this class creates a PluginInstance object
     connected to the user's Nanome session.

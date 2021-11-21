@@ -78,7 +78,6 @@ class PluginTestCase(unittest.TestCase):
 
     def test_pre_and_post_run(self):
         def test_callback_fn():
-            # Set this for the various pre/post functions
             pass
 
         self.plugin.pre_run = test_callback_fn
