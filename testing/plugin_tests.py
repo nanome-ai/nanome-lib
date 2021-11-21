@@ -24,19 +24,19 @@ class PluginTestCase(unittest.TestCase):
         self.assertTrue(isinstance(parser, argparse.ArgumentParser))
 
     @unittest.mock.patch('nanome._internal._plugin.Network')
-    def test_run(self, network_mock):
+    @unittest.mock.patch('nanome._internal._plugin._Plugin._loop')
+    @unittest.mock.patch('nanome._internal._plugin._Plugin._autoreload')
+    def test_run(self, network_mock, loop_mock, autoreload_mock):
         host = 'anyhost'
         port = 8000
         key = ''
-        self.plugin._plugin._loop = MagicMock()
         self.plugin.run(host, port, key)
-
         self.assertEqual(self.plugin.host, host)
         self.assertEqual(self.plugin.port, port)
         self.assertEqual(self.plugin.key, key)
         self.assertEqual(self.plugin.plugin_class, PluginInstance)
 
-        # Test with args set
+        # Test with different args set
         write_log_file = "True"
         ignore = 'fake_file.py'
         name = 'custom plugin name'
@@ -53,7 +53,7 @@ class PluginTestCase(unittest.TestCase):
             self.plugin.run(host, port, key)
         self.assertEqual(self.plugin.write_log_file, True)
         self.assertEqual(self.plugin.to_ignore, [ignore])
-        self.assertEqual(self.plugin._description['name'], name)
+        self.assertEqual(self.plugin.name, name)
         self.assertEqual(self.plugin.has_verbose, True)
 
     @unittest.mock.patch('nanome._internal._plugin.Network')
@@ -63,7 +63,6 @@ class PluginTestCase(unittest.TestCase):
         description = 'Test Plugin'
         tags = []
         has_advanced = True
-        # plugin_class.__name__ = 'Test PluginInstance'
         self.plugin.setup(name, description, tags, has_advanced, PluginInstance)
 
     def test_custom_data(self):
@@ -78,7 +77,6 @@ class PluginTestCase(unittest.TestCase):
         self.assertEqual(_ProcessManager._max_process_count, new_value)
 
     def test_pre_and_post_run(self):
-        # Test pre_run and post_run functions
         def test_callback_fn():
             # Set this for the various pre/post functions
             pass
