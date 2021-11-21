@@ -32,7 +32,6 @@ class Plugin:
             name, description, tags=tags, has_advanced=has_advanced,
             permissions=permissions, integrations=integrations)
         self.plugin_class = _DefaultPlugin
-        self._description = {}
 
     @staticmethod
     def create_parser():
@@ -90,7 +89,7 @@ class Plugin:
 
         # Name can be set during the class instantiation without cli arg.
         if args.name:
-            self._description['name'] = args.name
+            self.name = args.name
 
         Logs.debug("Start plugin")
         if self.has_autoreload:
@@ -183,6 +182,15 @@ class Plugin:
     @plugin_class.setter
     def plugin_class(self, value):
         return setattr(self._plugin, '_plugin_class', value)
+
+    @property
+    def name(self):
+        """Name of plugin as shown in the Nanome Stacks menu."""
+        return self._plugin._description.get('name')
+
+    @name.setter
+    def name(self, value):
+        self._plugin._description['name'] = value
 
     def set_plugin_class(self, plugin_class):
         """
