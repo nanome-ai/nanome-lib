@@ -1,4 +1,5 @@
 import argparse
+from multiprocessing import current_process
 
 from . import _DefaultPlugin
 from nanome._internal import _Plugin
@@ -30,7 +31,8 @@ class Plugin:
         self._plugin = _Plugin(
             name, description, tags=tags, has_advanced=has_advanced,
             permissions=permissions, integrations=integrations)
-        self._plugin_class = _DefaultPlugin
+        self.plugin_class = _DefaultPlugin
+        self._description = {}
 
     @staticmethod
     def create_parser():
@@ -217,3 +219,7 @@ class Plugin:
     @post_run.setter
     def post_run(self, value):
         self._post_run = value
+
+    @staticmethod
+    def _is_process():
+        return current_process().name != 'MainProcess'

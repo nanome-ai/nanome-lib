@@ -6,7 +6,7 @@ from nanome._internal._network._serialization._serializer import Serializer
 from nanome._internal._util._serializers import _TypeSerializer
 from nanome.util.logs import Logs
 
-from multiprocessing import Process, Pipe, current_process
+from multiprocessing import Process, Pipe
 from timeit import default_timer as timer
 import sys
 import json
@@ -273,10 +273,6 @@ class _Plugin:
         session.plugin_process = process
         self._sessions[session_id] = session
         Logs.debug("Registered new session:", session_id)
-
-    @staticmethod
-    def _is_process():
-        return current_process().name != 'MainProcess'
 
     @classmethod
     def _launch_plugin_profile(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
