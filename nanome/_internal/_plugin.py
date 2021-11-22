@@ -268,7 +268,8 @@ class _Plugin(object):
                 self._plugin_class, session_id, process_conn_net,
                 process_conn_proc, _Plugin.__serializer, _Plugin._plugin_id,
                 version_table, _TypeSerializer.get_version_table(),
-                Logs._is_verbose(), _Plugin._custom_data, permissions)
+                Logs._is_verbose(), _Plugin._custom_data, permissions
+            )
         )
         process.start()
         session.plugin_process = process
