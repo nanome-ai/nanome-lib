@@ -42,7 +42,6 @@ class _Plugin(object):
         self._description['auth'] = self.__read_key()
         self._process_manager = _ProcessManager()
         if self.__write_log_file:
-
             self._logs_manager = _LogsManager(self._plugin_class.__name__ + ".log")
         else:
             self._logs_manager = None
