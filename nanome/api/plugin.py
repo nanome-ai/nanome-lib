@@ -125,59 +125,59 @@ class Plugin(_Plugin):
 
     @property
     def host(self):
-        return getattr(self, '_host', None)
+        return getattr(self, '__host', None)
 
     @host.setter
     def host(self, value):
-        setattr(self, '_host', value)
+        setattr(self, '__host', value)
 
     @property
     def port(self):
-        return getattr(self, '_port', None)
+        return getattr(self, '__port', None)
 
     @port.setter
     def port(self, value):
-        setattr(self, '_port', value)
+        setattr(self, '__port', value)
 
     @property
     def key(self):
-        return getattr(self, '_key', None)
+        return getattr(self, '__key', None)
 
     @key.setter
     def key(self, value):
-        setattr(self, '_key', value)
+        setattr(self, '__key', value)
 
     @property
     def write_log_file(self):
-        return getattr(self, '_write_log_file', None)
+        return getattr(self, '__write_log_file', None)
 
     @write_log_file.setter
     def write_log_file(self, value):
-        setattr(self, '_write_log_file', value)
+        setattr(self, '__write_log_file', value)
 
     @property
     def has_autoreload(self):
-        return getattr(self, '_has_autoreload', None)
+        return getattr(self, '__has_autoreload', None)
 
     @has_autoreload.setter
     def has_autoreload(self, value):
-        setattr(self, '_has_autoreload', value)
+        setattr(self, '__has_autoreload', value)
 
     @property
     def has_verbose(self):
-        return getattr(self, '_has_verbose', None)
+        return getattr(self, '__has_verbose', None)
 
     @has_verbose.setter
     def has_verbose(self, value):
-        setattr(self, '_has_verbose', value)
+        setattr(self, '__has_verbose', value)
 
     @property
     def to_ignore(self):
-        return getattr(self, '_to_ignore')
+        return getattr(self, '__to_ignore')
 
     @to_ignore.setter
     def to_ignore(self, value):
-        setattr(self, '_to_ignore', value)
+        setattr(self, '__to_ignore', value)
 
     @property
     def plugin_class(self):
