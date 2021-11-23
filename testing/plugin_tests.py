@@ -23,10 +23,11 @@ class PluginTestCase(unittest.TestCase):
         parser = Plugin.create_parser()
         self.assertTrue(isinstance(parser, argparse.ArgumentParser))
 
-    @patch('nanome._internal._plugin.Network')
-    @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin._Plugin._autoreload')
-    def test_run(self, network_mock, loop_mock, autoreload_mock):
+    @patch('nanome._internal._plugin._Plugin._loop')
+    @patch('nanome._internal._plugin.Network._NetInstance.connect')
+    @patch('nanome._internal._plugin.Network._NetInstance.send')
+    def test_run(self, send_mock, connect_mock, loop_mock, autoreload_mock):
         host = 'anyhost'
         port = 8000
         key = ''
@@ -35,6 +36,9 @@ class PluginTestCase(unittest.TestCase):
         self.assertEqual(self.plugin.port, port)
         self.assertEqual(self.plugin.key, key)
         self.assertEqual(self.plugin.plugin_class, PluginInstance)
+        loop_mock.assert_called_once()
+        connect_mock.assert_called_with(host, port)
+        send_mock.assert_called_once()
 
         # Test with different args set
         write_log_file = "True"
@@ -48,13 +52,13 @@ class PluginTestCase(unittest.TestCase):
             '--name', name,
             '--verbose'
         ]
-        self.plugin._autoreload = MagicMock()
         with patch.object(sys, 'argv', testargs):
             self.plugin.run(host, port, key)
         self.assertEqual(self.plugin.write_log_file, True)
         self.assertEqual(self.plugin.to_ignore, [ignore])
         self.assertEqual(self.plugin.name, name)
         self.assertEqual(self.plugin.verbose, True)
+        autoreload_mock.assert_called_once()
 
     @patch('nanome._internal._plugin.Network')
     @patch('nanome._internal._plugin._Plugin._loop')
