@@ -54,7 +54,7 @@ class PluginTestCase(unittest.TestCase):
         self.assertEqual(self.plugin.write_log_file, True)
         self.assertEqual(self.plugin.to_ignore, [ignore])
         self.assertEqual(self.plugin.name, name)
-        self.assertEqual(self.plugin.has_verbose, True)
+        self.assertEqual(self.plugin.verbose, True)
 
     @patch('nanome._internal._plugin.Network')
     @patch('nanome._internal._plugin._Plugin._loop')

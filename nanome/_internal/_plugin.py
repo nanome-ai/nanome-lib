@@ -322,8 +322,6 @@ class _Plugin(object):
         self._plugin_class = None
         self._pre_run = None
         self._post_run = None
-        # self.__has_autoreload = False
-        # self.__has_verbose = False
         self.__write_log_file = True
         self.__key = ''
         self.__host = ''

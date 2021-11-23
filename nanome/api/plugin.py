@@ -82,7 +82,7 @@ class Plugin(_Plugin):
             self.write_log_file = default_write_log_file
 
         self.has_autoreload = args.auto_reload
-        self.has_verbose = args.verbose
+        self.verbose = args.verbose
         Logs._set_verbose(args.verbose)
 
         if args.ignore:
@@ -156,6 +156,14 @@ class Plugin(_Plugin):
         setattr(self, '__write_log_file', value)
 
     @property
+    def verbose(self):
+        return getattr(self, '__verbose', None)
+
+    @verbose.setter
+    def verbose(self, value):
+        setattr(self, '__verbose', value)
+
+    @property
     def has_autoreload(self):
         return getattr(self, '__has_autoreload', None)
 
@@ -164,15 +172,9 @@ class Plugin(_Plugin):
         setattr(self, '__has_autoreload', value)
 
     @property
-    def has_verbose(self):
-        return getattr(self, '__has_verbose', None)
-
-    @has_verbose.setter
-    def has_verbose(self, value):
-        setattr(self, '__has_verbose', value)
-
-    @property
     def to_ignore(self):
+        if not hasattr(self, '__to_ignore'):
+            self._to_ignore = []
         return getattr(self, '__to_ignore')
 
     @to_ignore.setter
@@ -181,6 +183,7 @@ class Plugin(_Plugin):
 
     @property
     def plugin_class(self):
+        """Child class of PluginInstance class that will be instantiated when Session activated."""
         return getattr(self, '_plugin_class', None)
 
     @plugin_class.setter
