@@ -320,15 +320,15 @@ class _Plugin(object):
             'integrations': integrations
         }
         self._plugin_class = None
+        self.__connected = False
+        self.__host = ''
+        self.__key = ''
+        self.__port = None
         self._pre_run = None
         self._post_run = None
         self.__write_log_file = True
-        self.__key = ''
-        self.__host = ''
-        self.__port = None
         self.__to_ignore = []
         self.__waiting_keep_alive = False
-        self.__connected = False
 
     @staticmethod
     def _is_process():

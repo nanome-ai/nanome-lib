@@ -173,8 +173,6 @@ class Plugin(_Plugin):
 
     @property
     def to_ignore(self):
-        if not hasattr(self, '__to_ignore'):
-            self._to_ignore = []
         return getattr(self, '__to_ignore')
 
     @to_ignore.setter
