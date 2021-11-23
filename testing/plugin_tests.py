@@ -60,14 +60,16 @@ class PluginTestCase(unittest.TestCase):
         self.assertEqual(self.plugin.verbose, True)
         autoreload_mock.assert_called_once()
 
-    @patch('nanome._internal._plugin.Network')
     @patch('nanome._internal._plugin._Plugin._loop')
-    def test_setup(self, network_mock, loop_mock):
+    @patch('nanome._internal._plugin.Network._NetInstance')
+    def test_setup(self, netinstance_mock, loop_mock):
         name = 'Test Plugin'
         description = 'Test Plugin'
         tags = []
         has_advanced = True
         self.plugin.setup(name, description, tags, has_advanced, PluginInstance)
+        netinstance_mock.assert_called_once()
+        loop_mock.assert_called_once()
 
     def test_custom_data(self):
         # Test set_custom_data()
