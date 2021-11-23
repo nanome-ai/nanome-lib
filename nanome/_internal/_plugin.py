@@ -41,7 +41,7 @@ class _Plugin(object):
 
         self._description['auth'] = self.__read_key()
         self._process_manager = _ProcessManager()
-        if self.__write_log_file:
+        if self._write_log_file:
             self._logs_manager = _LogsManager(self._plugin_class.__name__ + ".log")
         else:
             self._logs_manager = None
@@ -51,10 +51,10 @@ class _Plugin(object):
 
     def __read_key(self):
         # check if arg is key data
-        if re.match(r'^[0-9A-F]+$', self.__key):
-            return self.__key
+        if re.match(r'^[0-9A-F]+$', self._key):
+            return self._key
         try:
-            f = open(self.__key, "r")
+            f = open(self._key, "r")
             key = f.read().strip()
             return key
         except:
@@ -119,7 +119,7 @@ class _Plugin(object):
             for file in filter(self.__file_filter, files):
                 file_path = os.path.join(root, file)
                 matched = False
-                for pattern in self.__to_ignore:
+                for pattern in self._to_ignore:
                     if fnmatch.fnmatch(file_path, pattern):
                         matched = True
                 if matched is False:
@@ -163,7 +163,7 @@ class _Plugin(object):
 
     def __connect(self):
         self._network = Network._NetInstance(self, self.__class__._on_packet_received)
-        if self._network.connect(self.__host, self.__port):
+        if self._network.connect(self._host, self._port):
             if self._plugin_id >= 0:
                 plugin_id = self._plugin_id
             else:
@@ -320,13 +320,13 @@ class _Plugin(object):
         }
         self._plugin_class = None
         self.__connected = False
-        self.__host = ''
-        self.__key = ''
-        self.__port = None
+        self._host = ''
+        self._key = ''
+        self._port = None
         self._pre_run = None
         self._post_run = None
-        self.__write_log_file = True
-        self.__to_ignore = []
+        self._write_log_file = True
+        self._to_ignore = []
         self.__waiting_keep_alive = False
 
     @staticmethod
