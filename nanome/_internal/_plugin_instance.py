@@ -41,8 +41,8 @@ class _PluginInstance(object):
             cls.__callbacks[id] = callback
 
     def _call(self, id, *args):
-        callbacks = _PluginInstance.__callbacks
-        futures = _PluginInstance.__futures
+        callbacks = self.__callbacks
+        futures = self.__futures
 
         if asyncio and self.is_async and futures.get(id):
             futures[id].set_result(args[0] if len(args) == 1 else args)
@@ -66,7 +66,7 @@ class _PluginInstance(object):
 
     @classmethod
     def _on_complex_updated(cls, index, new_complex):
-        callbacks = _PluginInstance.__complex_updated_callbacks
+        callbacks = cls.__complex_updated_callbacks
         try:
             callbacks[index](new_complex)
         except KeyError:
@@ -74,7 +74,7 @@ class _PluginInstance(object):
 
     @classmethod
     def _on_selection_changed(cls, index, new_complex):
-        callbacks = _PluginInstance.__selection_changed_callbacks
+        callbacks = cls.__selection_changed_callbacks
         try:
             callbacks[index](new_complex)
         except KeyError:

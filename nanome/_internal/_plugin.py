@@ -30,12 +30,31 @@ class _Plugin(object):
     _plugin_id = -1
     _custom_data = None
 
+    def _run(self):
+        if os.name == "nt":
+            signal.signal(signal.SIGBREAK, self.__on_termination_signal)
+        else:
+            signal.signal(signal.SIGTERM, self.__on_termination_signal)
+
+        if self._pre_run is not None:
+            self._pre_run()
+
+        self._description['auth'] = self.__read_key()
+        self._process_manager = _ProcessManager()
+        if self._write_log_file:
+            self._logs_manager = _LogsManager(self._plugin_class.__name__ + ".log")
+        else:
+            self._logs_manager = None
+        self.__reconnect_attempt = 0
+        self.__connect()
+        self._loop()
+
     def __read_key(self):
         # check if arg is key data
-        if re.match(r'^[0-9A-F]+$', self.__key):
-            return self.__key
+        if re.match(r'^[0-9A-F]+$', self._key):
+            return self._key
         try:
-            f = open(self.__key, "r")
+            f = open(self._key, "r")
             key = f.read().strip()
             return key
         except:
@@ -49,8 +68,8 @@ class _Plugin(object):
             #   Fix 5/27/2021 - Jeremie: We need to always check for session registration in order to fix timeout issues
             #   When NTS forces disconnection because of plugin list change, session_id still exists in self._sessions,
             #   even though it was disconnected for Nanome
-            if _Plugin.__serializer.try_register_session(packet.payload) is True:
-                received_version_table, _, _ = _Plugin.__serializer.deserialize_command(packet.payload, None)
+            if self.__serializer.try_register_session(packet.payload) is True:
+                received_version_table, _, _ = self.__serializer.deserialize_command(packet.payload, None)
                 version_table = _TypeSerializer.get_best_version_table(received_version_table)
                 self.__on_client_connection(session_id, version_table)
                 return
@@ -64,11 +83,11 @@ class _Plugin(object):
             Logs.warning("Received a command from an unregistered session", session_id)
 
         elif packet.packet_type == Network._Packet.packet_type_plugin_connection:
-            _Plugin._plugin_id = packet.plugin_id
-            Logs.message("Registered with plugin ID", _Plugin._plugin_id, "\n=======================================\n")
+            self._plugin_id = packet.plugin_id
+            Logs.message("Registered with plugin ID", self._plugin_id, "\n=======================================\n")
 
         elif packet.packet_type == Network._Packet.packet_type_plugin_disconnection:
-            if _Plugin._plugin_id == -1:
+            if self._plugin_id == -1:
                 if self._description['auth'] is None:
                     Logs.error("Connection refused by NTS. Are you missing a security key file?")
                 else:
@@ -100,7 +119,7 @@ class _Plugin(object):
             for file in filter(self.__file_filter, files):
                 file_path = os.path.join(root, file)
                 matched = False
-                for pattern in self.__to_ignore:
+                for pattern in self._to_ignore:
                     if fnmatch.fnmatch(file_path, pattern):
                         matched = True
                 if matched is False:
@@ -109,7 +128,7 @@ class _Plugin(object):
         if found_file is False:
             yield 0.0
 
-    def __autoreload(self):
+    def _autoreload(self):
         wait = 3
 
         if os.name == "nt":
@@ -142,29 +161,11 @@ class _Plugin(object):
                 process.send_signal(break_signal)
                 break
 
-    def __run(self):
-        if os.name == "nt":
-            signal.signal(signal.SIGBREAK, self.__on_termination_signal)
-        else:
-            signal.signal(signal.SIGTERM, self.__on_termination_signal)
-        if self._pre_run is not None:
-            self._pre_run()
-        _Plugin.instance = self
-        self._description['auth'] = self.__read_key()
-        self._process_manager = _ProcessManager()
-        if self.__write_log_file:
-            self._logs_manager = _LogsManager(self._plugin_class.__name__ + ".log")
-        else:
-            self._logs_manager = None
-        self.__reconnect_attempt = 0
-        self.__connect()
-        self.__loop()
-
     def __connect(self):
-        self._network = Network._NetInstance(self, _Plugin._on_packet_received)
-        if self._network.connect(self.__host, self.__port):
-            if _Plugin._plugin_id >= 0:
-                plugin_id = _Plugin._plugin_id
+        self._network = Network._NetInstance(self, self.__class__._on_packet_received)
+        if self._network.connect(self._host, self._port):
+            if self._plugin_id >= 0:
+                plugin_id = self._plugin_id
             else:
                 plugin_id = 0
             packet = Network._Packet()
@@ -182,7 +183,7 @@ class _Plugin(object):
             self.__reconnect_attempt += 1
             return False
 
-    def __loop(self):
+    def _loop(self):
         to_remove = []
         try:
             while True:
@@ -211,11 +212,11 @@ class _Plugin(object):
                         self.__connected = False
                         self.__disconnection_time = timer()
                         continue
-                elif now - self.__last_keep_alive >= KEEP_ALIVE_TIME_INTERVAL and _Plugin._plugin_id >= 0:
+                elif now - self.__last_keep_alive >= KEEP_ALIVE_TIME_INTERVAL and self._plugin_id >= 0:
                     self.__last_keep_alive = now
                     self.__waiting_keep_alive = True
                     packet = Network._Packet()
-                    packet.set(_Plugin._plugin_id, Network._Packet.packet_type_keep_alive, 0)
+                    packet.set(self._plugin_id, Network._Packet.packet_type_keep_alive, 0)
                     self._network.send(packet)
 
                 del to_remove[:]
@@ -224,7 +225,7 @@ class _Plugin(object):
                         session.close_pipes()
                         to_remove.append(id)
                 for id in to_remove:
-                    self._sessions[id]._send_disconnection_message(_Plugin._plugin_id)
+                    self._sessions[id]._send_disconnection_message(self._plugin_id)
                     del self._sessions[id]
                 self._process_manager._update()
                 if self._logs_manager:
@@ -244,7 +245,7 @@ class _Plugin(object):
 
     def __exit(self):
         Logs.debug('Exiting')
-        for session in _Plugin.instance._sessions.values():
+        for session in self._sessions.values():
             session.signal_and_close_pipes()
             session.plugin_process.join()
         if self._post_run is not None:
@@ -257,17 +258,23 @@ class _Plugin(object):
             self._sessions[session_id].signal_and_close_pipes()
         main_conn_net, process_conn_net = Pipe()
         main_conn_proc, process_conn_proc = Pipe()
-        session = Network._Session(session_id, self._network, self._process_manager, self._logs_manager, main_conn_net, main_conn_proc)
+        session = Network._Session(
+            session_id, self._network, self._process_manager, self._logs_manager,
+            main_conn_net, main_conn_proc)
         permissions = self._description["permissions"]
-        process = Process(target=_Plugin._launch_plugin, args=(self._plugin_class, session_id, process_conn_net, process_conn_proc, _Plugin.__serializer, _Plugin._plugin_id, version_table, _TypeSerializer.get_version_table(), Logs._is_verbose(), _Plugin._custom_data, permissions))
+        process = Process(
+            target=self._launch_plugin,
+            args=(
+                self._plugin_class, session_id, process_conn_net,
+                process_conn_proc, self.__serializer, self._plugin_id,
+                version_table, _TypeSerializer.get_version_table(),
+                Logs._is_verbose(), self._custom_data, permissions
+            )
+        )
         process.start()
         session.plugin_process = process
         self._sessions[session_id] = session
         Logs.debug("Registered new session:", session_id)
-
-    @staticmethod
-    def _is_process():
-        return current_process().name != 'MainProcess'
 
     @classmethod
     def _launch_plugin_profile(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
@@ -282,7 +289,10 @@ class _Plugin(object):
         Logs.debug("Starting plugin")
         plugin._run()
 
-    def __init__(self, name, description, tags=[], has_advanced=False, permissions=[], integrations=[]):
+    def __init__(self, name, description, tags=None, has_advanced=False, permissions=None, integrations=None):
+        tags = tags or []
+        permissions = permissions or []
+        integrations = integrations or []
         self._sessions = dict()
 
         if isinstance(tags, str):
@@ -310,9 +320,15 @@ class _Plugin(object):
         }
         self._plugin_class = None
         self.__connected = False
-        self.__has_autoreload = False
-        self.__has_verbose = False
-        self.__to_ignore = []
+        self._host = ''
+        self._key = ''
+        self._port = None
         self._pre_run = None
         self._post_run = None
+        self._write_log_file = True
+        self._to_ignore = []
         self.__waiting_keep_alive = False
+
+    @staticmethod
+    def _is_process():
+        return current_process().name != 'MainProcess'
