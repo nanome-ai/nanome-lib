@@ -68,8 +68,8 @@ class _Plugin(object):
             #   Fix 5/27/2021 - Jeremie: We need to always check for session registration in order to fix timeout issues
             #   When NTS forces disconnection because of plugin list change, session_id still exists in self._sessions,
             #   even though it was disconnected for Nanome
-            if _Plugin.__serializer.try_register_session(packet.payload) is True:
-                received_version_table, _, _ = _Plugin.__serializer.deserialize_command(packet.payload, None)
+            if self.__serializer.try_register_session(packet.payload) is True:
+                received_version_table, _, _ = self.__serializer.deserialize_command(packet.payload, None)
                 version_table = _TypeSerializer.get_best_version_table(received_version_table)
                 self.__on_client_connection(session_id, version_table)
                 return
@@ -83,11 +83,11 @@ class _Plugin(object):
             Logs.warning("Received a command from an unregistered session", session_id)
 
         elif packet.packet_type == Network._Packet.packet_type_plugin_connection:
-            _Plugin._plugin_id = packet.plugin_id
-            Logs.message("Registered with plugin ID", _Plugin._plugin_id, "\n=======================================\n")
+            self._plugin_id = packet.plugin_id
+            Logs.message("Registered with plugin ID", self._plugin_id, "\n=======================================\n")
 
         elif packet.packet_type == Network._Packet.packet_type_plugin_disconnection:
-            if _Plugin._plugin_id == -1:
+            if self._plugin_id == -1:
                 if self._description['auth'] is None:
                     Logs.error("Connection refused by NTS. Are you missing a security key file?")
                 else:
@@ -212,11 +212,11 @@ class _Plugin(object):
                         self.__connected = False
                         self.__disconnection_time = timer()
                         continue
-                elif now - self.__last_keep_alive >= KEEP_ALIVE_TIME_INTERVAL and _Plugin._plugin_id >= 0:
+                elif now - self.__last_keep_alive >= KEEP_ALIVE_TIME_INTERVAL and self._plugin_id >= 0:
                     self.__last_keep_alive = now
                     self.__waiting_keep_alive = True
                     packet = Network._Packet()
-                    packet.set(_Plugin._plugin_id, Network._Packet.packet_type_keep_alive, 0)
+                    packet.set(self._plugin_id, Network._Packet.packet_type_keep_alive, 0)
                     self._network.send(packet)
 
                 del to_remove[:]
@@ -225,7 +225,7 @@ class _Plugin(object):
                         session.close_pipes()
                         to_remove.append(id)
                 for id in to_remove:
-                    self._sessions[id]._send_disconnection_message(_Plugin._plugin_id)
+                    self._sessions[id]._send_disconnection_message(self._plugin_id)
                     del self._sessions[id]
                 self._process_manager._update()
                 if self._logs_manager:
@@ -245,7 +245,7 @@ class _Plugin(object):
 
     def __exit(self):
         Logs.debug('Exiting')
-        for session in _Plugin.instance._sessions.values():
+        for session in self._sessions.values():
             session.signal_and_close_pipes()
             session.plugin_process.join()
         if self._post_run is not None:
@@ -263,12 +263,12 @@ class _Plugin(object):
             main_conn_net, main_conn_proc)
         permissions = self._description["permissions"]
         process = Process(
-            target=_Plugin._launch_plugin,
+            target=self.__class__._launch_plugin,
             args=(
                 self._plugin_class, session_id, process_conn_net,
-                process_conn_proc, _Plugin.__serializer, _Plugin._plugin_id,
+                process_conn_proc, self.__serializer, self._plugin_id,
                 version_table, _TypeSerializer.get_version_table(),
-                Logs._is_verbose(), _Plugin._custom_data, permissions
+                Logs._is_verbose(), self._custom_data, permissions
             )
         )
         process.start()
