@@ -263,7 +263,7 @@ class _Plugin(object):
             main_conn_net, main_conn_proc)
         permissions = self._description["permissions"]
         process = Process(
-            target=self.__class__._launch_plugin,
+            target=self._launch_plugin,
             args=(
                 self._plugin_class, session_id, process_conn_net,
                 process_conn_proc, self.__serializer, self._plugin_id,
