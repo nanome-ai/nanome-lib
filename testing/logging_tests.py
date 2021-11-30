@@ -69,4 +69,46 @@ class LoggingTestCase(unittest.TestCase):
         # Test that NTSLoggingHandler used when updating logs.
         self.plugin._logs_manager.update()
         handle_mock.assert_called()
-        logger_mock.assert_called()
+
+    @patch('nanome._internal._plugin._Plugin._loop')
+    @patch('nanome._internal._plugin.Network._NetInstance')
+    def test_file_logger_called(self, netinstance_mock, loop_mock):
+        """Assert if write_log_file is True, the file logger is utilized."""
+        write_log_file = "True"
+        host = 'anyhost'
+        port = 8000
+        key = ''
+
+        testargs = [
+            'run.py',
+            '--write-log-file', write_log_file,
+        ]
+        with patch.object(sys, 'argv', testargs):
+            self.plugin.run(host, port, key)
+
+        self.plugin._logs_manager.file_logger.info = MagicMock()
+        # Write log, and make sure File logger called.
+        Logs.message('Test message')
+        self.plugin._logs_manager.update()
+        self.plugin._logs_manager.file_logger.info.assert_called()
+
+    @patch('nanome._internal._plugin._Plugin._loop')
+    @patch('nanome._internal._plugin.Network._NetInstance')
+    def test_file_logger_not_called(self, netinstance_mock, loop_mock):
+        """Assert if write_log_file is False, the file logger is not utilized."""
+        write_log_file = False
+        host = 'anyhost'
+        port = 8000
+        key = ''
+
+        testargs = [
+            'run.py',
+            '--write-log-file', write_log_file,
+        ]
+        with patch.object(sys, 'argv', testargs):
+            self.plugin.run(host, port, key)
+
+        self.plugin._logs_manager.file_logger.info = MagicMock()
+        Logs.message('Test message')
+        self.plugin._logs_manager.update()
+        self.plugin._logs_manager.file_logger.info.assert_not_called()

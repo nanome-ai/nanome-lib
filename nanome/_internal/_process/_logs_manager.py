@@ -27,24 +27,24 @@ class _LogsManager():
         self.plugin = plugin
 
         # Set up File Logger
-        self._file_logger = logging.getLogger('file_logger')
-        self._file_logger.setLevel(logging.DEBUG)
+        self.file_logger = logging.getLogger('file_logger')
+        self.file_logger.setLevel(logging.DEBUG)
         self._file_handler = RotatingFileHandler(filename, maxBytes=1048576, backupCount=3, delay=False)
-        self._file_logger.addHandler(self._file_handler)
+        self.file_logger.addHandler(self._file_handler)
 
         # Set up Log Forwarding to NTS
-        self._nts_logger = logging.getLogger('nts_logger')
-        self._nts_logger.setLevel(logging.DEBUG)
+        self.nts_logger = logging.getLogger('nts_logger')
+        self.nts_logger.setLevel(logging.DEBUG)
         self._nts_handler = NTSLoggingHandler(self.plugin)
-        self._nts_logger.addHandler(self._nts_handler)
+        self.nts_logger.addHandler(self._nts_handler)
 
     def update(self):
         for _ in range(0, len(_LogsManager.__pending)):
             entry = _LogsManager.__pending.popleft()
             if self.write_log_file:
-                self._file_logger.info(entry)
+                self.file_logger.info(entry)
             if self.forward_to_nts:
-                self._nts_logger.info(entry)
+                self.nts_logger.info(entry)
 
     @classmethod
     def received_request(cls, request):
