@@ -16,7 +16,6 @@ class LoggingTestCase(unittest.TestCase):
 
     def setUp(self):
         self.plugin = Plugin('Test Plugin', 'Unit Test Plugin')
-        self.plugin._network = MagicMock()
         self.plugin.set_plugin_class(PluginInstance)
 
     @patch('nanome._internal._plugin._Plugin._loop')
@@ -47,3 +46,27 @@ class LoggingTestCase(unittest.TestCase):
             self.plugin.run(host, port, key)
         self.assertEqual(self.plugin.write_log_file, True)
         self.assertTrue(isinstance(self.plugin._logs_manager, _LogsManager))
+
+    @patch('nanome._internal._plugin._Plugin._loop')
+    @patch('nanome._internal._plugin.Network._NetInstance')
+    @patch('nanome._internal._process._logs_manager.NTSLoggingHandler.handle')
+    def test_nts_handler_called(self, handle_mock, netinstance_mock, loop_mock):
+        """Assert logs get forwarded to NTS."""
+        write_log_file = "True"
+        host = 'anyhost'
+        port = 8000
+        key = ''
+
+        testargs = [
+            'run.py',
+            '--write-log-file', write_log_file,
+        ]
+        with patch.object(sys, 'argv', testargs):
+            self.plugin.run(host, port, key)
+
+        # Write log, and make sure NTSLogging Handler called.
+        Logs.message('Test message')
+        # Test that NTSLoggingHandler used when updating logs.
+        self.plugin._logs_manager.update()
+        handle_mock.assert_called()
+        logger_mock.assert_called()
