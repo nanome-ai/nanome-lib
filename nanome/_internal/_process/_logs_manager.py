@@ -3,12 +3,30 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 
+class NTSLoggingHandler(logging.StreamHandler):
+    """Forward Log records to NTS."""
+
+    def __init__(self, plugin, *args, **kwargs):
+        self._plugin = plugin
+        super().__init__(*args, **kwargs)
+
+    def handle(self, record):
+        breakpoint()
+        super().handle(record)
+        # Use new NTS message format to forward logs.
+        log_code = 'SomethingSomething'  # What should this real value be?
+        expects_response = False
+        self._network._send(log_code, record, expects_response)
+
+
 class _LogsManager():
     __pending = deque()
 
-    def __init__(self, filename, write_log_file=True, forward_to_nts=True):
+    def __init__(self, filename, write_log_file=True, plugin=None, forward_to_nts=True):
         self.write_log_file = write_log_file
         self.forward_to_nts = forward_to_nts
+        self.plugin = plugin
+
         # Set up File Logger
         self._file_logger = logging.getLogger('file_logger')
         self._file_logger.setLevel(logging.DEBUG)
@@ -18,7 +36,7 @@ class _LogsManager():
         # Set up Log Forwarding to NTS
         self._nts_logger = logging.getLogger('nts_logger')
         self._nts_logger.setLevel(logging.DEBUG)
-        self._nts_handler = logging.StreamHandler()
+        self._nts_handler = NTSLoggingHandler(self.plugin)
         self._nts_logger.addHandler(self._nts_handler)
 
     def update(self):

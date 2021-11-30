@@ -3,6 +3,7 @@ import unittest
 
 from nanome import Plugin, PluginInstance
 from nanome._internal._process._logs_manager import _LogsManager
+from nanome.util import Logs
 
 if sys.version_info.major >= 3:
     from unittest.mock import MagicMock, patch
@@ -25,17 +26,6 @@ class LoggingTestCase(unittest.TestCase):
         port = 8000
         key = ''
 
-        # Test log manager created when write_log = True
-        write_log_file = "True"
-        testargs = [
-            'run.py',
-            '--write-log-file', write_log_file,
-        ]
-        with patch.object(sys, 'argv', testargs):
-            self.plugin.run(host, port, key)
-        self.assertEqual(self.plugin.write_log_file, True)
-        self.assertTrue(isinstance(self.plugin._logs_manager, _LogsManager))
-
         # Set write_log_file to False, and verify LogsManager is still created.
         write_log_file = 0
         testargs = [
@@ -45,4 +35,15 @@ class LoggingTestCase(unittest.TestCase):
         with patch.object(sys, 'argv', testargs):
             self.plugin.run(host, port, key)
         self.assertEqual(self.plugin.write_log_file, False)
+        self.assertTrue(isinstance(self.plugin._logs_manager, _LogsManager))
+
+        # Set write_log_file to True, and verify LogsManager is still created.
+        write_log_file = "True"
+        testargs = [
+            'run.py',
+            '--write-log-file', write_log_file,
+        ]
+        with patch.object(sys, 'argv', testargs):
+            self.plugin.run(host, port, key)
+        self.assertEqual(self.plugin.write_log_file, True)
         self.assertTrue(isinstance(self.plugin._logs_manager, _LogsManager))

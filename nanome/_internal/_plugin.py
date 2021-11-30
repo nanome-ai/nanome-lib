@@ -43,7 +43,7 @@ class _Plugin(object):
         self._process_manager = _ProcessManager()
 
         log_filename = self._plugin_class.__name__ + ".log"
-        self._logs_manager = _LogsManager(log_filename, write_log_file=self._write_log_file)
+        self._logs_manager = _LogsManager(log_filename, plugin=self, write_log_file=self._write_log_file)
         self.__reconnect_attempt = 0
         self.__connect()
         self._loop()
