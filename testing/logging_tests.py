@@ -20,7 +20,7 @@ class LoggingTestCase(unittest.TestCase):
 
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance')
-    def test_log_manager(self, netinstance_mock, loop_mock):
+    def test_log_manager_creation(self, netinstance_mock, loop_mock):
         host = 'anyhost'
         port = 8000
         key = ''
@@ -52,23 +52,45 @@ class LoggingTestCase(unittest.TestCase):
     @patch('nanome._internal._process._logs_manager.NTSLoggingHandler.handle')
     def test_nts_handler_called(self, handle_mock, netinstance_mock, loop_mock):
         """Assert logs get forwarded to NTS."""
-        write_log_file = "True"
+        remote_logging = "True"
         host = 'anyhost'
         port = 8000
         key = ''
 
         testargs = [
             'run.py',
-            '--write-log-file', write_log_file,
+            '--remote-logging', remote_logging
         ]
+
         with patch.object(sys, 'argv', testargs):
             self.plugin.run(host, port, key)
 
         # Write log, and make sure NTSLogging Handler called.
-        Logs.message('Test message')
-        # Test that NTSLoggingHandler used when updating logs.
+        Logs.message('This should be forwarded to NTS.')
         self.plugin._logs_manager.update()
         handle_mock.assert_called()
+
+    @patch('nanome._internal._plugin._Plugin._loop')
+    @patch('nanome._internal._plugin.Network._NetInstance')
+    @patch('nanome._internal._process._logs_manager.NTSLoggingHandler.handle')
+    def test_nts_handler_not_called(self, handle_mock, netinstance_mock, loop_mock):
+        """Assert logs don't get forwarded to NTS if remote-logging is False."""
+        remote_logging = False
+        host = 'anyhost'
+        port = 8000
+        key = ''
+
+        testargs = [
+            'run.py',
+            '--remote-logging', remote_logging
+        ]
+        with patch.object(sys, 'argv', testargs):
+            self.plugin.run(host, port, key)
+
+        # Write log, and make sure NTSLogging Handler not called.
+        Logs.message('This should be forwarded to NTS.')
+        self.plugin._logs_manager.update()
+        handle_mock.assert_not_called()
 
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance')

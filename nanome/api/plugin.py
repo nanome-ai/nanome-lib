@@ -50,6 +50,7 @@ class Plugin(_Plugin):
         parser.add_argument('-k', '--keyfile', default='', help='Specifies a key file or key string to use to connect to NTS')
         parser.add_argument('-i', '--ignore', help='To use with auto-reload. All paths matching this pattern will be ignored, use commas to specify several. Supports */?/[seq]/[!seq]', default='')
         parser.add_argument('--write-log-file', type=bool, help='Enable or disable writing logs to .log file')
+        parser.add_argument('--remote-logging', type=bool, dest='remote_logging', help='Toggle whether or not logs should be forwarded to NTS.')
         return parser
 
     def run(self, host="config", port="config", key="config"):
@@ -67,6 +68,7 @@ class Plugin(_Plugin):
         default_port = config.fetch('port') if port == 'config' else port
         default_key = config.fetch('key') if key == 'config' else key
         default_write_log_file = config.fetch('write_log_file')
+        default_remote_logging = False
 
         # Parse command line args and set internal variables.
         parser = self.create_parser()
@@ -80,6 +82,11 @@ class Plugin(_Plugin):
             self.write_log_file = args.write_log_file
         else:
             self.write_log_file = default_write_log_file
+
+        if args.remote_logging is not None:
+            self.remote_logging = args.remote_logging
+        else:
+            self.remote_logging = default_remote_logging
 
         self.has_autoreload = args.auto_reload
         self.verbose = args.verbose
@@ -154,6 +161,14 @@ class Plugin(_Plugin):
     @write_log_file.setter
     def write_log_file(self, value):
         setattr(self, '_write_log_file', value)
+
+    @property
+    def remote_logging(self):
+        return getattr(self, '_remote_logging', None)
+
+    @remote_logging.setter
+    def remote_logging(self, value):
+        setattr(self, '_remote_logging', value)
 
     @property
     def verbose(self):

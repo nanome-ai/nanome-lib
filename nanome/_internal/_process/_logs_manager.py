@@ -21,9 +21,9 @@ class NTSLoggingHandler(logging.StreamHandler):
 class _LogsManager():
     __pending = deque()
 
-    def __init__(self, filename, write_log_file=True, plugin=None, forward_to_nts=True):
+    def __init__(self, filename, write_log_file=True, plugin=None, remote_logging=False):
         self.write_log_file = write_log_file
-        self.forward_to_nts = forward_to_nts
+        self.remote_logging = remote_logging
         self.plugin = plugin
 
         # Set up File Logger
@@ -43,7 +43,7 @@ class _LogsManager():
             entry = _LogsManager.__pending.popleft()
             if self.write_log_file:
                 self.file_logger.info(entry)
-            if self.forward_to_nts:
+            if self.remote_logging:
                 self.nts_logger.info(entry)
 
     @classmethod

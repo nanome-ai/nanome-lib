@@ -31,6 +31,14 @@ def create_parser():
         default=False,
         type=lambda x: (str(x).lower() in ['true', 'yes', '1']),
         help='Enable or disable .log file writing')
+
+    parser.add_argument(
+        '--remote-logging',
+        dest='remote_logging',
+        default=False,
+        type=lambda x: (str(x).lower() in ['true', 'yes', '1']),
+        help='Toggle whether or not logs should be forwarded to NTS.'
+    )
     return parser
 
 

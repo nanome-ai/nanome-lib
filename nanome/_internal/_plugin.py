@@ -43,7 +43,11 @@ class _Plugin(object):
         self._process_manager = _ProcessManager()
 
         log_filename = self._plugin_class.__name__ + ".log"
-        self._logs_manager = _LogsManager(log_filename, plugin=self, write_log_file=self._write_log_file)
+        self._logs_manager = _LogsManager(
+            log_filename,
+            plugin=self,
+            write_log_file=self._write_log_file,
+            remote_logging=self._remote_logging)
         self.__reconnect_attempt = 0
         self.__connect()
         self._loop()
@@ -324,6 +328,7 @@ class _Plugin(object):
         self._pre_run = None
         self._post_run = None
         self._write_log_file = True
+        self._remote_logging = False
         self._to_ignore = []
         self.__waiting_keep_alive = False
 
