@@ -16,7 +16,7 @@ class _LogsManager():
         self._file_logger.addHandler(self._file_handler)
 
         # Set up Log Forwarding to NTS
-        self._nts_logger = logging.getLogger('file_logger')
+        self._nts_logger = logging.getLogger('nts_logger')
         self._nts_logger.setLevel(logging.DEBUG)
         self._nts_handler = logging.StreamHandler()
         self._nts_logger.addHandler(self._nts_handler)
