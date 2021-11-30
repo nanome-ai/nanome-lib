@@ -227,8 +227,7 @@ class _Plugin(object):
                     self._sessions[id]._send_disconnection_message(self._plugin_id)
                     del self._sessions[id]
                 self._process_manager._update()
-                if self._logs_manager:
-                    self._logs_manager._update()
+                self._logs_manager.update()
         except KeyboardInterrupt:
             self.__exit()
 

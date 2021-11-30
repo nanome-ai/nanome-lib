@@ -6,20 +6,29 @@ from logging.handlers import RotatingFileHandler
 class _LogsManager():
     __pending = deque()
 
-    def __init__(self, filename, write_log_file=True):
-        self._logger = logging.getLogger('plugin_logger')
-        self._logger.setLevel(logging.DEBUG)
-        if write_log_file:
-            self._handler = RotatingFileHandler(filename, maxBytes=1048576, backupCount=3, delay=False)
-        else:
-            self._handler = logging.StreamHandler()
-        self._logger.addHandler(self._handler)
+    def __init__(self, filename, write_log_file=True, forward_to_nts=True):
+        self.write_log_file = write_log_file
+        self.forward_to_nts = forward_to_nts
+        # Set up File Logger
+        self._file_logger = logging.getLogger('file_logger')
+        self._file_logger.setLevel(logging.DEBUG)
+        self._file_handler = RotatingFileHandler(filename, maxBytes=1048576, backupCount=3, delay=False)
+        self._file_logger.addHandler(self._file_handler)
 
-    def _update(self):
+        # Set up Log Forwarding to NTS
+        self._nts_logger = logging.getLogger('file_logger')
+        self._nts_logger.setLevel(logging.DEBUG)
+        self._nts_handler = logging.StreamHandler()
+        self._nts_logger.addHandler(self._nts_handler)
+
+    def update(self):
         for _ in range(0, len(_LogsManager.__pending)):
             entry = _LogsManager.__pending.popleft()
-            self._logger.info(entry)
+            if self.write_log_file:
+                self._file_logger.info(entry)
+            if self.forward_to_nts:
+                self._nts_logger.info(entry)
 
     @classmethod
-    def _received_request(cls, request):
+    def received_request(cls, request):
         cls.__pending.append(request)

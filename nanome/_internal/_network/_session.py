@@ -1,5 +1,4 @@
 from nanome.util import Logs
-from nanome.util.enum import IntEnum, auto
 from . import _Packet
 import traceback
 
@@ -29,8 +28,8 @@ class _Session(object):
                 if request._type == _DataType.process:
                     self._process_manager._received_request(request._data, self)
                 elif request._type == _DataType.log:
-                    if self._logs_manager:
-                        self._logs_manager._received_request(request._data)
+                    self._logs_manager.received_request(request._data)
+
         except EOFError:
             Logs.error("Plugin encountered an error, please check the logs.", traceback.format_exc())
             return False
