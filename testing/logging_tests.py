@@ -134,3 +134,21 @@ class LoggingTestCase(unittest.TestCase):
         Logs.message('Test message')
         self.plugin._logs_manager.update()
         self.plugin._logs_manager.file_logger.info.assert_not_called()
+
+    @patch('nanome._internal._plugin._Plugin._loop')
+    @patch('nanome._internal._plugin.Network._NetInstance.connect')
+    @patch('nanome._internal._plugin.Network._NetInstance.send')
+    def test_nts_logger_handler(self, send_mock, connect_mock, loop_mock):
+        """Ensure NTSLoggingHandler.handle() triggers a network request."""
+        host = 'anyhost'
+        port = 8000
+        key = ''
+
+        with patch.object(sys, 'argv', ['run.py', '--remote-logging', 'True']):
+            self.plugin.run(host, port, key)
+
+        # Add fresh patch, and make sure network send is called during log update.
+        Logs.message("Test!")
+        with patch('nanome._internal._plugin.Network._NetInstance.send') as network_patch:
+            self.plugin._logs_manager.update()
+            network_patch.assert_called()
