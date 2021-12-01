@@ -56,7 +56,7 @@ class LoggingTestCase(unittest.TestCase):
             self.plugin.run(self.host, self.port, self.key)
 
         # Write log, and make sure NTSLogging Handler not called.
-        Logs.message('This should be forwarded to NTS.')
+        Logs.message('This should not be forwarded to NTS.')
         self.plugin._logs_manager.update()
 
         # log_file_handler should be called, but set to NullHandler
@@ -112,7 +112,7 @@ class LoggingTestCase(unittest.TestCase):
             self.plugin.run(self.host, self.port, self.key)
 
         # Add fresh patch, and make sure network send is called during log update.
-        Logs.message("Test!")
+        Logs.message("Testing network request")
         with patch('nanome._internal._plugin.Network._NetInstance.send') as network_patch:
             self.plugin._logs_manager.update()
             network_patch.assert_called()
