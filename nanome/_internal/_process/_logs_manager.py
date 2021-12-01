@@ -8,10 +8,10 @@ class NTSLoggingHandler(logging.StreamHandler):
 
     def __init__(self, plugin, *args, **kwargs):
         self._plugin = plugin
-        super().__init__(*args, **kwargs)
+        super(NTSLoggingHandler, self).__init__(*args, **kwargs)
 
     def handle(self, record):
-        super().handle(record)
+        super(NTSLoggingHandler, self).handle(record)
         # Use new NTS message format to forward logs.
         log_code = 'SomethingSomething'  # What should this real value be?
         expects_response = False
