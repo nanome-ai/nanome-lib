@@ -130,3 +130,23 @@ class LoggingTestCase(unittest.TestCase):
         Logs.debug("This is a debug message")
         Logs.message("This is a regular message")
         self.plugin._logs_manager.update()
+
+    @patch('nanome._internal._plugin._Plugin._loop')
+    @patch('nanome._internal._plugin.Network._NetInstance')
+    def test_console_handler_called(self, netinstance_mock, loop_mock):
+        """Assert logs are always logged to the console."""
+        testargs = [
+            'run.py',
+            '--remote-logging', False,
+            '--write-log-file', False
+        ]
+
+        with patch.object(sys, 'argv', testargs):
+            self.plugin.run(self.host, self.port, self.key)
+
+        # Write log, and make sure console handler is called.
+        Logs.message('This should be written to console.')
+        console_handler = self.plugin._logs_manager.console_handler
+        with patch.object(console_handler, 'handle') as handle_mock:
+            self.plugin._logs_manager.update()
+            handle_mock.assert_called()

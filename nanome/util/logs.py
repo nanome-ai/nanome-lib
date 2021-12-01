@@ -15,12 +15,6 @@ class Logs(object):
         info = auto()
 
     _is_windows_cmd = False
-    _print_type = {
-        'debug': {'color': '\x1b[0m', 'msg': ''},
-        'warning': {'color': '\x1b[33m', 'msg': 'Warning: '},
-        'error': {'color': '\x1b[91m', 'msg': 'Error: '}
-    }
-    _closing = '\x1b[0m'
     __verbose = None
     __pipe = None
 
