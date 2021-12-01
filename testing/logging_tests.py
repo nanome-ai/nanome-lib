@@ -1,8 +1,8 @@
+import logging
 import sys
 import unittest
 
 from nanome import Plugin, PluginInstance
-from nanome._internal._process._logs_manager import _LogsManager
 from nanome.util import Logs
 
 if sys.version_info.major >= 3:
@@ -61,11 +61,14 @@ class LoggingTestCase(unittest.TestCase):
         # Write log, and make sure NTSLogging Handler not called.
         Logs.message('This should be forwarded to NTS.')
         self.plugin._logs_manager.update()
-        handle_mock.assert_not_called()
+
+        # log_file_handler should be called, but set to NullHandler
+        nts_handler = self.plugin._logs_manager.nts_handler
+        self.assertTrue(isinstance(nts_handler, logging.NullHandler))
 
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance')
-    def test_file_logger_called(self, netinstance_mock, loop_mock):
+    def test_file_handler_called(self, netinstance_mock, loop_mock):
         """Assert if write_log_file is True, the file logger is utilized."""
         write_log_file = "True"
         host = 'anyhost'
@@ -79,15 +82,15 @@ class LoggingTestCase(unittest.TestCase):
         with patch.object(sys, 'argv', testargs):
             self.plugin.run(host, port, key)
 
-        self.plugin._logs_manager.file_logger.info = MagicMock()
+        self.plugin._logs_manager.log_file_handler.handle = MagicMock()
         # Write log, and make sure File logger called.
-        Logs.message('Test message')
+        Logs.message('Log file handler should be called.')
         self.plugin._logs_manager.update()
-        self.plugin._logs_manager.file_logger.info.assert_called()
+        self.plugin._logs_manager.log_file_handler.handle.assert_called()
 
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance')
-    def test_file_logger_not_called(self, netinstance_mock, loop_mock):
+    def test_file_handler_not_called(self, netinstance_mock, loop_mock):
         """Assert if write_log_file is False, the file logger is not utilized."""
         write_log_file = False
         host = 'anyhost'
@@ -101,10 +104,14 @@ class LoggingTestCase(unittest.TestCase):
         with patch.object(sys, 'argv', testargs):
             self.plugin.run(host, port, key)
 
-        self.plugin._logs_manager.file_logger.info = MagicMock()
-        Logs.message('Test message')
+        self.plugin._logs_manager.log_file_handler.handle = MagicMock()
+        Logs.message('Log file should not be called')
         self.plugin._logs_manager.update()
-        self.plugin._logs_manager.file_logger.info.assert_not_called()
+
+        # log_file_handler should be called, but set to NullHandler
+        log_file_handler = self.plugin._logs_manager.log_file_handler
+        log_file_handler.handle.assert_called()
+        self.assertTrue(isinstance(log_file_handler, logging.NullHandler))
 
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance.connect')

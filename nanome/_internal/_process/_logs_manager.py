@@ -22,30 +22,38 @@ class _LogsManager():
     __pending = deque()
 
     def __init__(self, filename, write_log_file=True, plugin=None, remote_logging=False):
-        self.write_log_file = write_log_file
-        self.remote_logging = remote_logging
-        self.plugin = plugin
+        self.logger = logging.getLogger(plugin.__class__.__name__)
+        self.logger.setLevel(logging.DEBUG)
 
-        # Set up File Logger
-        self.file_logger = logging.getLogger('file_logger')
-        self.file_logger.setLevel(logging.DEBUG)
-        self._file_handler = RotatingFileHandler(filename, maxBytes=1048576, backupCount=3, delay=False)
-        self.file_logger.addHandler(self._file_handler)
+        self.log_file_handler = logging.NullHandler()
+        self.nts_handler = logging.NullHandler()
+        if write_log_file:
+            self.log_file_handler = self.create_log_file_handler(filename)
+        if remote_logging:
+            self.nts_handler = self.create_nts_handler(plugin)
 
-        # Set up Log Forwarding to NTS
-        self.nts_logger = logging.getLogger('nts_logger')
-        self.nts_logger.setLevel(logging.DEBUG)
-        self._nts_handler = NTSLoggingHandler(self.plugin)
-        self.nts_logger.addHandler(self._nts_handler)
+        self.logger.addHandler(self.log_file_handler)
+        self.logger.addHandler(self.nts_handler)
 
     def update(self):
         for _ in range(0, len(_LogsManager.__pending)):
             entry = _LogsManager.__pending.popleft()
-            if self.write_log_file:
-                self.file_logger.info(entry)
-            if self.remote_logging:
-                self.nts_logger.info(entry)
+            self.logger.info(entry)
 
     @classmethod
     def received_request(cls, request):
         cls.__pending.append(request)
+
+    @staticmethod
+    def create_log_file_handler(filename):
+        """Write log to specified file."""
+        handler = RotatingFileHandler(filename, maxBytes=1048576, backupCount=3, delay=False)
+        return handler
+
+    @staticmethod
+    def create_nts_handler(plugin):
+        # Set up Log Forwarding to NTS
+        handler = NTSLoggingHandler(plugin)
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+        return handler
