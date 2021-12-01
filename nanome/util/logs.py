@@ -56,7 +56,7 @@ class Logs(object):
         :param args: Variable length argument list
         :type args: Anything printable
         """
-        log_type = Logs.LogType.error.name
+        log_type = cls.LogType.error.name
         cls._print(log_type, *args)
 
     @classmethod
@@ -67,7 +67,7 @@ class Logs(object):
         :param args: Variable length argument list
         :type args: Anything printable
         """
-        log_type = log_type = Logs.LogType.warning.name
+        log_type = log_type = cls.LogType.warning.name
         cls._print(log_type, *args)
 
     @classmethod
@@ -78,7 +78,7 @@ class Logs(object):
         :param args: Variable length argument list
         :type args: Anything printable
         """
-        log_type = Logs.LogType.info.name
+        log_type = cls.LogType.info.name
         cls._print(log_type, *args)
 
     @classmethod
@@ -90,7 +90,7 @@ class Logs(object):
         :param args: Variable length argument list
         :type args: Anything printable
         """
-        log_type = log_type = Logs.LogType.debug.name
+        log_type = log_type = cls.LogType.debug.name
         if cls._verbose is None:
             Logs.warning("Debug used before plugin start.")
             cls._print(log_type, *args)
