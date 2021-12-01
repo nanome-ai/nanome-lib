@@ -121,7 +121,6 @@ class LoggingTestCase(unittest.TestCase):
     @patch('nanome._internal._plugin.Network._NetInstance.connect')
     @patch('nanome._internal._plugin.Network._NetInstance.send')
     def test_log_types(self, send_mock, connect_mock, loop_mock):
-
         with patch.object(sys, 'argv', ['run.py', '-v', '--remote-logging', 'True', '--write-log-file', 'True']):
             self.plugin.run(self.host, self.port, self.key)
 
