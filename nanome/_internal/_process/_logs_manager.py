@@ -45,12 +45,20 @@ class ColorFormatter(logging.Formatter):
 
 
 class _LogsManager():
+    """Manages our logging system, and creates required Handlers.
+
+    - Every log manager has a console_handler, which outputs messages to the console.
+    - If write_log_file is set to True, log_file_handler will write messages to file.
+    - If remote_logging is True, Logs are forwarded to NTS.
+    """
+
     _pending = deque()
 
     def __init__(self, filename=None, plugin=None, write_log_file=True, remote_logging=False):
+        filename = filename or ''
+
         self.logger = logging.getLogger(plugin.__class__.__name__)
         self.logger.setLevel(logging.DEBUG)
-        filename = filename or ''
 
         self.console_handler = self.create_console_handler()
         self.log_file_handler = logging.NullHandler()
@@ -58,7 +66,7 @@ class _LogsManager():
 
         if write_log_file and filename:
             self.log_file_handler = self.create_log_file_handler(filename)
-        if remote_logging:
+        if remote_logging and plugin:
             self.nts_handler = self.create_nts_handler(plugin)
 
         self.logger.addHandler(self.console_handler)
@@ -69,14 +77,14 @@ class _LogsManager():
         """Pass log into logger under the appropriate levelname."""
         for _ in range(0, len(_LogsManager._pending)):
             log_type, entry = _LogsManager._pending.popleft()
-            if log_type == 'warning':
+            if log_type == 'info':
+                self.logger.info(entry)
+            elif log_type == 'warning':
                 self.logger.warning(entry)
             elif log_type == 'debug':
                 self.logger.debug(entry)
             elif log_type == 'error':
                 self.logger.error(entry)
-            elif log_type == 'info':
-                self.logger.info(entry)
 
     @classmethod
     def received_request(cls, log_type, request):
@@ -86,7 +94,8 @@ class _LogsManager():
     def create_log_file_handler(filename):
         """Return handler that writes logs to provided filepath."""
         handler = RotatingFileHandler(filename, maxBytes=1048576, backupCount=3, delay=False)
-        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        fmt = '%(asctime)s - %(levelname)s - %(message)s'
+        formatter = logging.Formatter(fmt)
         handler.setFormatter(formatter)
         return handler
 
@@ -94,7 +103,8 @@ class _LogsManager():
     def create_nts_handler(plugin):
         """Return handler that forwards logs to NTS."""
         handler = NTSLoggingHandler(plugin)
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        formatter = logging.Formatter(fmt)
         handler.setFormatter(formatter)
         return handler
 
@@ -102,6 +112,7 @@ class _LogsManager():
     def create_console_handler():
         """Return handler that writes log to console."""
         handler = logging.StreamHandler()
-        color_formatter = ColorFormatter("%(message)s")
+        fmt = "%(message)s"
+        color_formatter = ColorFormatter(fmt)
         handler.setFormatter(color_formatter)
         return handler
