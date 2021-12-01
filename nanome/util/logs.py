@@ -8,19 +8,19 @@ class Logs(object):
     | Allows for easy message logging without buffer issues.
     | Possible log types are Debug, Warning, and Error.
     """
-    class _LogType(IntEnum):
+    class LogType(IntEnum):
         debug = auto()
         warning = auto()
         error = auto()
         info = auto()
 
     _is_windows_cmd = False
-    __verbose = None
+    _verbose = None
     __pipe = None
 
     @classmethod
     def _set_verbose(cls, value):
-        cls.__verbose = value
+        cls._verbose = value
 
     @classmethod
     def _set_pipe(cls, value):
@@ -28,7 +28,7 @@ class Logs(object):
 
     @classmethod
     def _is_verbose(cls):
-        return cls.__verbose
+        return cls._verbose
 
     @classmethod
     def _print(cls, log_type, *args):
@@ -36,11 +36,13 @@ class Logs(object):
         for arg in args:
             arr.append(str(arg))
         msg = ' '.join(arr)
+
         if cls.__pipe is not None:
+            # Send log type and log message to the main process.
             from nanome._internal._util import _DataType, _ProcData
             to_send = _ProcData()
             to_send._type = _DataType.log
-            to_send._data = msg
+            to_send._data = (log_type, msg)
             cls.__pipe.send(to_send)
         else:
             from nanome._internal._process import _LogsManager
@@ -54,7 +56,7 @@ class Logs(object):
         :param args: Variable length argument list
         :type args: Anything printable
         """
-        log_type = Logs._LogType.error.name
+        log_type = Logs.LogType.error.name
         cls._print(log_type, *args)
 
     @classmethod
@@ -65,7 +67,7 @@ class Logs(object):
         :param args: Variable length argument list
         :type args: Anything printable
         """
-        log_type = log_type = Logs._LogType.warning.name
+        log_type = log_type = Logs.LogType.warning.name
         cls._print(log_type, *args)
 
     @classmethod
@@ -76,7 +78,7 @@ class Logs(object):
         :param args: Variable length argument list
         :type args: Anything printable
         """
-        log_type = Logs._LogType.info.name
+        log_type = Logs.LogType.info.name
         cls._print(log_type, *args)
 
     @classmethod
@@ -88,11 +90,11 @@ class Logs(object):
         :param args: Variable length argument list
         :type args: Anything printable
         """
-        log_type = log_type = Logs._LogType.debug.name
-        if cls.__verbose is None:
+        log_type = log_type = Logs.LogType.debug.name
+        if cls._verbose is None:
             Logs.warning("Debug used before plugin start.")
             cls._print(log_type, *args)
-        elif cls.__verbose is True:
+        elif cls._verbose is True:
             cls._print(log_type, *args)
 
     @classmethod
