@@ -4,7 +4,7 @@ from logging.handlers import RotatingFileHandler
 
 
 class NTSLoggingHandler(logging.StreamHandler):
-    """Forward Log records to NTS."""
+    """Forward Log messages to NTS."""
 
     def __init__(self, plugin, *args, **kwargs):
         self._plugin = plugin
@@ -16,6 +16,30 @@ class NTSLoggingHandler(logging.StreamHandler):
         log_code = 'SomethingSomething'  # What should this real value be?
         expects_response = False
         self._plugin._network.send(log_code, record.msg, expects_response)
+
+
+class ColorFormatter(logging.Formatter):
+    """Print log outputs in color."""
+
+    grey = "\x1b[38;21m"
+    yellow = "\x1b[33;21m"
+    red = "\x1b[31;21m"
+    bold_red = "\x1b[31;1m"
+    reset = "\x1b[0m"
+    fmt = "%(message)s"
+
+    FORMATS = {
+        logging.DEBUG: grey + fmt + reset,
+        logging.INFO: grey + fmt + reset,
+        logging.WARNING: yellow + fmt + reset,
+        logging.ERROR: red + fmt + reset,
+        logging.CRITICAL: bold_red + fmt + reset
+    }
+
+    def format(self, record):
+        log_fmt = self.FORMATS.get(record.levelno)
+        formatter = logging.Formatter(log_fmt)
+        return formatter.format(record)
 
 
 class _LogsManager():
@@ -74,6 +98,6 @@ class _LogsManager():
     def create_console_handler():
         """Write log to console."""
         handler = logging.StreamHandler()
-        formatter = logging.Formatter('%(message)s')
-        handler.setFormatter(formatter)
+        color_formatter = ColorFormatter()
+        handler.setFormatter(color_formatter)
         return handler

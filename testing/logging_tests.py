@@ -120,10 +120,13 @@ class LoggingTestCase(unittest.TestCase):
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance.connect')
     @patch('nanome._internal._plugin.Network._NetInstance.send')
-    def test_warnings(self, send_mock, connect_mock, loop_mock):
+    def test_log_types(self, send_mock, connect_mock, loop_mock):
 
-        with patch.object(sys, 'argv', ['run.py', '--remote-logging', 'True', '--write-log-file', 'True']):
+        with patch.object(sys, 'argv', ['run.py', '-v', '--remote-logging', 'True', '--write-log-file', 'True']):
             self.plugin.run(self.host, self.port, self.key)
 
         Logs.warning("This is a warning")
+        Logs.error("This is an error")
+        Logs.debug("This is a debug message")
+        Logs.message("This is a regular message")
         self.plugin._logs_manager.update()
