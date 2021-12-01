@@ -66,7 +66,7 @@ class LoggingTestCase(unittest.TestCase):
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance')
     def test_file_handler_called(self, netinstance_mock, loop_mock):
-        """Assert if write_log_file is True, the file logger is utilized."""
+        """Assert if write_log_file is True, the log_file_handler is utilized."""
         write_log_file = "True"
         testargs = [
             'run.py',
@@ -75,8 +75,8 @@ class LoggingTestCase(unittest.TestCase):
         with patch.object(sys, 'argv', testargs):
             self.plugin.run(self.host, self.port, self.key)
 
+        # Write log, and make sure log_file_handler is called.
         self.plugin._logs_manager.log_file_handler.handle = MagicMock()
-        # Write log, and make sure File logger called.
         Logs.message('Log file handler should be called.')
         self.plugin._logs_manager.update()
         self.plugin._logs_manager.log_file_handler.handle.assert_called()
@@ -84,7 +84,7 @@ class LoggingTestCase(unittest.TestCase):
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance')
     def test_file_handler_not_called(self, netinstance_mock, loop_mock):
-        """Assert if write_log_file is False, the file logger is not utilized."""
+        """Assert if write_log_file is False, the log_file_handler is not utilized."""
         write_log_file = False
         testargs = [
             'run.py',
