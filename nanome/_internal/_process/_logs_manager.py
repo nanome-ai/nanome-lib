@@ -3,7 +3,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 
-class NTSLoggingHandler(logging.StreamHandler):
+class NTSLoggingHandler(logging.Handler):
     """Forward Log messages to NTS."""
 
     def __init__(self, plugin, *args, **kwargs):
@@ -46,15 +46,16 @@ class ColorFormatter(logging.Formatter):
 class _LogsManager():
     _pending = deque()
 
-    def __init__(self, filename, plugin=None, write_log_file=True, remote_logging=False):
+    def __init__(self, filename=None, plugin=None, write_log_file=True, remote_logging=False):
         self.logger = logging.getLogger(plugin.__class__.__name__)
         self.logger.setLevel(logging.DEBUG)
+        filename = filename or ''
 
         self.console_handler = self.create_console_handler()
         self.log_file_handler = logging.NullHandler()
         self.nts_handler = logging.NullHandler()
 
-        if write_log_file:
+        if write_log_file and filename:
             self.log_file_handler = self.create_log_file_handler(filename)
         if remote_logging:
             self.nts_handler = self.create_nts_handler(plugin)
