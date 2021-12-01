@@ -25,6 +25,7 @@ class ColorFormatter(logging.Formatter):
     red = "\x1b[31;21m"
     bold_red = "\x1b[31;1m"
     reset = "\x1b[0m"
+    no_underline = "\x1b[24m"
     formats = {}
 
     def __init__(self, fmt=None, **kwargs):
@@ -32,8 +33,8 @@ class ColorFormatter(logging.Formatter):
         self.formats = {
             logging.DEBUG: self.grey + fmt + self.reset,
             logging.INFO: self.grey + fmt + self.reset,
-            logging.WARNING: self.yellow + fmt + self.reset,
-            logging.ERROR: self.red + fmt + self.reset,
+            logging.WARNING: self.yellow + self.no_underline + fmt + self.reset,
+            logging.ERROR: self.red + self.no_underline + fmt + self.reset,
             logging.CRITICAL: self.bold_red + fmt + self.reset
         }
 
