@@ -18,7 +18,10 @@ class NTSLoggingHandler(logging.Handler):
 
 
 class ColorFormatter(logging.Formatter):
-    """Print log outputs in color."""
+    """Print log outputs in color.
+
+    https://stackoverflow.com/a/56944256
+    """
 
     grey = "\x1b[38;21m"
     yellow = "\x1b[33;21m"
