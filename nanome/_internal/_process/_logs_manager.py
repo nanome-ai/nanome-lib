@@ -32,7 +32,7 @@ class NTSFormatter(logging.Formatter):
     def format(self, record):
         # Replace `sev` value with corresponding LogType from enum.
         msg = super(NTSFormatter, self).format(record)
-        json_msg = json.loads(msg)
+        json_msg = json.loads(msg.replace('\n', '\\n'))
         level_name = json_msg['sev']
         enum_val = getattr(LogTypes, level_name)
         json_msg['sev'] = enum_val
