@@ -1,22 +1,61 @@
-from collections import deque
+import enum
 import logging
+from collections import deque
 from logging.handlers import RotatingFileHandler
+
 from nanome._internal._network import _Packet
+
 import json
+
+
+class LogTypes(enum.Enum):
+    """Log Codes as expected by NTS."""
+
+    DEBUG = 0
+    INFO = 1
+    WARNING = 2
+    ERROR = 3
+
+
+class NTSFormatter(logging.Formatter):
+    """Send NTS json data with specified log level numbers."""
+
+    fmt = {
+        'timestamp': '%(asctime)s',
+        'msg': '%(message)s',
+        'sev': '%(levelname)s'  # Will be manually updated to val from LogType enum.
+    }
+
+    def __init__(self, fmt=None, **kwargs):
+        # Use format saved by class, so no need to pass fmt kwarg
+        fmt = json.dumps(self.fmt)
+        super(NTSFormatter, self).__init__(fmt=fmt, **kwargs)
+
+    def format(self, record):
+        # Replace `sev` value with corresponding LogType from enum.
+        msg = super().format(record)
+        json_msg = json.loads(msg)
+        level_name = json_msg['sev']
+        enum_val = getattr(LogTypes, level_name)
+        json_msg['sev'] = enum_val.value
+        updated_msg = json.dumps(json_msg)
+        return updated_msg
 
 
 class NTSLoggingHandler(logging.Handler):
     """Forward Log messages to NTS."""
 
     def __init__(self, plugin, *args, **kwargs):
-        self._plugin = plugin
         super(NTSLoggingHandler, self).__init__(*args, **kwargs)
+        self._plugin = plugin
+        self.formatter = NTSFormatter()
 
     def handle(self, record):
         # Use new NTS message format to forward logs.
+        fmted_msg = self.formatter.format(record)
         packet = _Packet()
         packet.set(0, _Packet.packet_type_live_logs, 0)
-        packet.write_string(record.msg)
+        packet.write_string(fmted_msg)
         self._plugin._network.send(packet)
 
 
@@ -63,8 +102,9 @@ class _LogsManager():
     def __init__(self, filename=None, plugin=None, write_log_file=True, remote_logging=False):
         filename = filename or ''
 
+        logging_level = logging.DEBUG
         self.logger = logging.getLogger(plugin.__class__.__name__)
-        self.logger.setLevel(logging.DEBUG)
+        self.logger.setLevel(logging_level)
 
         self.console_handler = self.create_console_handler()
         self.log_file_handler = logging.NullHandler()
@@ -72,8 +112,10 @@ class _LogsManager():
 
         if write_log_file and filename:
             self.log_file_handler = self.create_log_file_handler(filename)
+            self.log_file_handler.setLevel(logging_level)
         if remote_logging and plugin:
             self.nts_handler = self.create_nts_handler(plugin)
+            self.nts_handler.setLevel(logging_level)
 
         self.logger.addHandler(self.console_handler)
         self.logger.addHandler(self.log_file_handler)
@@ -109,9 +151,6 @@ class _LogsManager():
     def create_nts_handler(plugin):
         """Return handler that forwards logs to NTS."""
         handler = NTSLoggingHandler(plugin)
-        fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-        formatter = logging.Formatter(fmt)
-        handler.setFormatter(formatter)
         return handler
 
     @staticmethod
