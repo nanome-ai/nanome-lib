@@ -4,6 +4,7 @@ from logging.handlers import RotatingFileHandler
 from nanome._internal._network import _Packet
 import json
 
+
 class NTSLoggingHandler(logging.Handler):
     """Forward Log messages to NTS."""
 
