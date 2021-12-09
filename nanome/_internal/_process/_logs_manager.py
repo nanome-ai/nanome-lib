@@ -1,5 +1,7 @@
 import json
 import logging
+import os
+import sys
 from collections import deque
 from logging.handlers import RotatingFileHandler
 
@@ -8,7 +10,6 @@ from nanome._internal._network import _Packet
 
 class LogTypes:
     """Log Codes as expected by NTS."""
-
     DEBUG = 0
     INFO = 1
     WARNING = 2
@@ -84,7 +85,49 @@ class ColorFormatter(logging.Formatter):
     def format(self, record):
         log_fmt = self.formats.get(record.levelno)
         formatter = logging.Formatter(log_fmt)
-        return formatter.format(record)
+        if self.supports_color():
+            output = formatter.format(record)
+        else:
+            output = super(ColorFormatter, self).format(record)
+        return output
+
+    @staticmethod
+    def supports_color():
+        """Return True if the running system's terminal supports color, False otherwise.
+
+        source: https://github.com/django/django/blob/main/django/core/management/color.py#L20
+        """
+        def vt_codes_enabled_in_windows_registry():
+            """
+            Check the Windows Registry to see if VT code handling has been enabled
+            by default, see https://superuser.com/a/1300251/447564.
+            """
+            try:
+                # winreg is only available on Windows.
+                import winreg
+            except ImportError:
+                return False
+            else:
+                reg_key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, 'Console')
+                try:
+                    reg_key_value, _ = winreg.QueryValueEx(reg_key, 'VirtualTerminalLevel')
+                except FileNotFoundError:
+                    return False
+                else:
+                    return reg_key_value == 1
+
+        # isatty is not always implemented, #6223.
+        is_a_tty = hasattr(sys.stdout, 'isatty') and sys.stdout.isatty()
+
+        return is_a_tty and (
+            sys.platform != 'win32' or
+            'ANSICON' in os.environ or
+            # Windows Terminal supports VT codes.
+            'WT_SESSION' in os.environ or
+            # Microsoft Visual Studio Code's built-in terminal supports colors.
+            os.environ.get('TERM_PROGRAM') == 'vscode' or
+            vt_codes_enabled_in_windows_registry()
+        )
 
 
 class _LogsManager():
