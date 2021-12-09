@@ -1,7 +1,8 @@
 from collections import deque
 import logging
 from logging.handlers import RotatingFileHandler
-
+from nanome._internal._network import _Packet
+import json
 
 class NTSLoggingHandler(logging.Handler):
     """Forward Log messages to NTS."""
@@ -12,9 +13,10 @@ class NTSLoggingHandler(logging.Handler):
 
     def handle(self, record):
         # Use new NTS message format to forward logs.
-        log_code = 'SomethingSomething'  # What should this real value be?
-        expects_response = False
-        self._plugin._network.send(log_code, record.msg, expects_response)
+        packet = _Packet()
+        packet.set(0, _Packet.packet_type_live_logs, 0)
+        packet.write_string(record.msg)
+        self._plugin._network.send(packet)
 
 
 class ColorFormatter(logging.Formatter):

@@ -16,6 +16,8 @@ class _Packet(object):
     packet_type_client_disconnection = 6
     packet_type_master_change = 7
     packet_type_keep_alive = 8
+    packet_type_logs_request = 9
+    packet_type_live_logs = 10
     header_pack = struct.Struct('<HIBIi').pack
     header_unpack = struct.Struct('<HIBIi').unpack
     __compress_obj = zlib.compressobj(4, zlib.DEFLATED, -zlib.MAX_WBITS)
@@ -25,8 +27,9 @@ class _Packet(object):
         return 0
 
     def write_string(self, str):
-        self.payload_length += len(str)
-        self.payload.extend(str.encode('utf-8'))
+        encoded = str.encode('utf-8')
+        self.payload_length += len(encoded)
+        self.payload.extend(encoded)
 
     def write(self, data):
         self.payload_length += len(data)
