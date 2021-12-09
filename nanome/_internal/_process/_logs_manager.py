@@ -1,14 +1,12 @@
-import enum
+import json
 import logging
 from collections import deque
 from logging.handlers import RotatingFileHandler
 
 from nanome._internal._network import _Packet
 
-import json
 
-
-class LogTypes(enum.Enum):
+class LogTypes:
     """Log Codes as expected by NTS."""
 
     DEBUG = 0
@@ -33,11 +31,11 @@ class NTSFormatter(logging.Formatter):
 
     def format(self, record):
         # Replace `sev` value with corresponding LogType from enum.
-        msg = super().format(record)
+        msg = super(NTSFormatter, self).format(record)
         json_msg = json.loads(msg)
         level_name = json_msg['sev']
         enum_val = getattr(LogTypes, level_name)
-        json_msg['sev'] = enum_val.value
+        json_msg['sev'] = enum_val
         updated_msg = json.dumps(json_msg)
         return updated_msg
 
