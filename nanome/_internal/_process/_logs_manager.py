@@ -3,7 +3,7 @@ import logging
 import os
 import sys
 from collections import deque
-from dateutil import parser, tz
+from dateutil import parser
 
 from logging.handlers import RotatingFileHandler
 
@@ -21,7 +21,7 @@ class LogTypes:
 class NTSFormatter(logging.Formatter):
     """Send NTS json data with specified log level numbers."""
 
-    datefmt = "%Y-%m-%dT%H:%M:%S %Z"
+    datefmt = "%Y-%m-%dT%H:%M:%S"
 
     fmt = {
         'timestamp': '%(asctime)s',
@@ -40,8 +40,7 @@ class NTSFormatter(logging.Formatter):
 
         # Convert timestamp to UTC
         timestamp = json_msg['timestamp']
-        tz.tzlocal()
-        timestamp_dt = parser.parse(timestamp).astimezone(tz.UTC)
+        timestamp_dt = parser.parse(timestamp)
         json_msg['timestamp'] = timestamp_dt.strftime(self.datefmt)
 
         # Replace `sev` value with corresponding LogType from enum.
@@ -162,6 +161,10 @@ class _LogsManager():
         self.console_handler = self.create_console_handler()
         self.log_file_handler = logging.NullHandler()
         self.nts_handler = logging.NullHandler()
+
+        # If timezone not specified, set to UTC
+        if not os.environ.get('TZ'):
+            os.environ['TZ'] = 'UTC'
 
         if write_log_file and filename:
             self.log_file_handler = self.create_log_file_handler(filename)
