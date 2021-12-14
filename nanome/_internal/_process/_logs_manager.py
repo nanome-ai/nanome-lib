@@ -21,7 +21,7 @@ class LogTypes:
 class NTSFormatter(logging.Formatter):
     """Send NTS json data with specified log level numbers."""
 
-    datefmt = "%Y-%m-%d %H:%M:%S %Z"
+    datefmt = "%Y-%m-%dT%H:%M:%S"
 
     fmt = {
         'timestamp': '%(asctime)s',
