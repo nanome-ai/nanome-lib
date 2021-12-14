@@ -21,7 +21,7 @@ jobs:
           python -m pip install --upgrade pip coverage
           pip install -r requirements.txt
       - name: Run tests.py
-        run: coverage run --source=nanome --omit=nanome/util/enum.py -m unittest discover tests.py
+        run: coverage run --source=nanome --omit=nanome/util/enum.py -m unittest discover -s testing --pattern *_tests.py
       - name: print coverage percentage
         run: coverage report | grep TOTAL
 
