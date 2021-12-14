@@ -1,8 +1,10 @@
 import json
 import logging
 import os
+import pytz
 import sys
 from collections import deque
+from datetime import datetime
 from logging.handlers import RotatingFileHandler
 
 from nanome._internal._network import _Packet
@@ -19,21 +21,30 @@ class LogTypes:
 class NTSFormatter(logging.Formatter):
     """Send NTS json data with specified log level numbers."""
 
+    datefmt = "%Y-%m-%d %H:%M:%S %Z"
+
     fmt = {
         'timestamp': '%(asctime)s',
         'msg': '%(message)s',
-        'sev': '%(levelname)s'  # Will be manually updated to val from LogType enum.
+        'sev': '%(levelname)s',  # Will be manually updated to val from LogType enum.
     }
 
     def __init__(self, fmt=None, **kwargs):
         # Use format saved by class, so no need to pass fmt kwarg
         fmt = json.dumps(self.fmt)
-        super(NTSFormatter, self).__init__(fmt=fmt, **kwargs)
+        super(NTSFormatter, self).__init__(fmt=fmt, datefmt=self.datefmt, **kwargs)
 
     def format(self, record):
-        # Replace `sev` value with corresponding LogType from enum.
         msg = super(NTSFormatter, self).format(record)
         json_msg = json.loads(msg.replace('\n', '\\n'))
+
+        # Convert timestamp to UTC
+        timestamp = json_msg['timestamp']
+        timestamp_dt = datetime.strptime(timestamp, self.datefmt)
+        utc_dt = timestamp_dt.astimezone(pytz.utc)
+        json_msg['timestamp'] = utc_dt.strftime(self.datefmt)
+
+        # Replace `sev` value with corresponding LogType from enum.
         level_name = json_msg['sev']
         enum_val = getattr(LogTypes, level_name)
         json_msg['sev'] = enum_val
@@ -47,6 +58,7 @@ class NTSLoggingHandler(logging.Handler):
     def __init__(self, plugin, *args, **kwargs):
         super(NTSLoggingHandler, self).__init__(*args, **kwargs)
         self._plugin = plugin
+        # Unique Identifier for current Nanome session
         self.formatter = NTSFormatter()
 
     def handle(self, record):
