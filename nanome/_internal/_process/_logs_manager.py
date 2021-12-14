@@ -1,10 +1,9 @@
 import json
 import logging
 import os
-import pytz
 import sys
 from collections import deque
-from datetime import datetime
+from datetime import datetime, timezone
 from logging.handlers import RotatingFileHandler
 
 from nanome._internal._network import _Packet
@@ -41,7 +40,7 @@ class NTSFormatter(logging.Formatter):
         # Convert timestamp to UTC
         timestamp = json_msg['timestamp']
         timestamp_dt = datetime.strptime(timestamp, self.datefmt)
-        utc_dt = timestamp_dt.astimezone(pytz.utc)
+        utc_dt = timestamp_dt.astimezone(timezone.utc)
         json_msg['timestamp'] = utc_dt.strftime(self.datefmt)
 
         # Replace `sev` value with corresponding LogType from enum.
