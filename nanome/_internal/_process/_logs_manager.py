@@ -3,7 +3,8 @@ import logging
 import os
 import sys
 from collections import deque
-from datetime import datetime, timezone
+from dateutil import parser, tz
+
 from logging.handlers import RotatingFileHandler
 
 from nanome._internal._network import _Packet
@@ -20,7 +21,7 @@ class LogTypes:
 class NTSFormatter(logging.Formatter):
     """Send NTS json data with specified log level numbers."""
 
-    datefmt = "%Y-%m-%dT%H:%M:%S"
+    datefmt = "%Y-%m-%dT%H:%M:%S %Z"
 
     fmt = {
         'timestamp': '%(asctime)s',
@@ -39,9 +40,8 @@ class NTSFormatter(logging.Formatter):
 
         # Convert timestamp to UTC
         timestamp = json_msg['timestamp']
-        timestamp_dt = datetime.strptime(timestamp, self.datefmt)
-        utc_dt = timestamp_dt.astimezone(timezone.utc)
-        json_msg['timestamp'] = utc_dt.strftime(self.datefmt)
+        timestamp_dt = parser.parse(timestamp).astimezone(tz.UTC)
+        json_msg['timestamp'] = timestamp_dt.strftime(self.datefmt)
 
         # Replace `sev` value with corresponding LogType from enum.
         level_name = json_msg['sev']
