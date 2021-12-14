@@ -21,7 +21,7 @@ class LogTypes:
 class NTSFormatter(logging.Formatter):
     """Send NTS json data with specified log level numbers."""
 
-    datefmt = "%Y-%m-%dT%H:%M:%S"
+    datefmt = "%Y-%m-%dT%H:%M:%S %Z"
 
     fmt = {
         'timestamp': '%(asctime)s',
@@ -40,6 +40,7 @@ class NTSFormatter(logging.Formatter):
 
         # Convert timestamp to UTC
         timestamp = json_msg['timestamp']
+        tz.tzlocal()
         timestamp_dt = parser.parse(timestamp).astimezone(tz.UTC)
         json_msg['timestamp'] = timestamp_dt.strftime(self.datefmt)
 
