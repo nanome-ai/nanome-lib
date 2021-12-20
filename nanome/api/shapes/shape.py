@@ -119,8 +119,27 @@ class Shape(_Shape):
             # Done as a fallback for older versions of Nanome that don't support
             # destroy_multiple yet
             Logs.warning('destroy_multiple() failed, attempting to destroy one at a time.')
+
+            # Make sure fallback works for async calls
+            future = None
+            if done_callback is None and nanome.PluginInstance._instance.is_async:
+                loop = asyncio.get_event_loop()
+                future = loop.create_future()
+                done_callback = lambda *args: future.set_result(args)
+
+            results = []
+
+            def destroy_callback(result):
+                results.append(result)
+                if len(results) == len(shapes):
+                    done_callback(results)
+
             for shape in shapes:
-                shape.destroy()
+                shape.destroy(destroy_callback if done_callback else None)
+
+            return future
+
+   
 
 
 _Shape._create = Shape
