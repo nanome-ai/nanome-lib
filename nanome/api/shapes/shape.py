@@ -105,7 +105,7 @@ class Shape(_Shape):
         """
         | Remove the shape from the Nanome App and destroy it.
         """
-        self._destroy(done_callback)
+        return self._destroy(done_callback)
 
     @classmethod
     def destroy_multiple(cls, shapes, done_callback=None):
