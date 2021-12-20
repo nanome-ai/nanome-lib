@@ -139,7 +139,5 @@ class Shape(_Shape):
 
             return future
 
-   
-
 
 _Shape._create = Shape
