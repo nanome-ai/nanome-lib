@@ -101,11 +101,11 @@ class Shape(_Shape):
 
             return future
 
-    def destroy(self):
+    def destroy(self, done_callback=None):
         """
         | Remove the shape from the Nanome App and destroy it.
         """
-        self._destroy()
+        self._destroy(done_callback)
 
     @classmethod
     def destroy_multiple(cls, shapes, done_callback=None):
@@ -113,7 +113,7 @@ class Shape(_Shape):
         | Remove multiple shapes from the Nanome App and destroy them.
         """
         try:
-            _Shape._destroy_multiple(shapes)
+            _Shape._destroy_multiple(shapes, done_callback)
         except TypeError:
             # If destroy multiple fails, upload each one at a time.
             # Done as a fallback for older versions of Nanome that don't support

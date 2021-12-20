@@ -52,10 +52,30 @@ class _Shape(object):
             done_callback = lambda *args: result.real_set_result(args)
         return result
 
-    def _destroy(self):
-        nanome._internal._network._ProcessNetwork._instance._send(nanome._internal._network._commands._callbacks._Messages.delete_shape, [self._index], False)
+    def _destroy(self, done_callback=None):
+        def set_callback(indices):
+            if done_callback is not None:
+                done_callback(indices)
+
+        id = nanome._internal._network._ProcessNetwork._instance._send(nanome._internal._network._commands._callbacks._Messages.delete_shape, [self._index], False)
+        result = nanome.PluginInstance._save_callback(id, set_callback if done_callback else None)
+        if done_callback is None and nanome.PluginInstance._instance.is_async:
+            result.real_set_result = result.set_result
+            result.set_result = lambda args: set_callback(*args)
+            done_callback = lambda *args: result.real_set_result(args)
+        return result
 
     @classmethod
-    def _destroy_multiple(cls, shapes):
+    def _destroy_multiple(cls, shapes, done_callback=None):
+        def set_callback(indices):
+            if done_callback is not None:
+                done_callback(indices)
+
         indices = [x._index for x in shapes]
-        nanome._internal._network._ProcessNetwork._instance._send(nanome._internal._network._commands._callbacks._Messages.delete_shape, indices, False)
+        id = nanome._internal._network._ProcessNetwork._instance._send(nanome._internal._network._commands._callbacks._Messages.delete_shape, indices, True)
+        result = nanome.PluginInstance._save_callback(id, set_callback if done_callback else None)
+        if done_callback is None and nanome.PluginInstance._instance.is_async:
+            result.real_set_result = result.set_result
+            result.set_result = lambda args: set_callback(*args)
+            done_callback = lambda *args: result.real_set_result(args)
+        return result
