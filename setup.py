@@ -16,7 +16,9 @@ setup(
     url='https://github.com/nanome-ai/nanome',
     platforms="any",
     keywords=['virtual-reality', 'chemistry', 'python', 'api', 'plugin'],
-    install_requires=[],
+    install_requires=[
+        'python-dateutil==2.8.1'
+    ],
     classifiers=[
         'Development Status :: 3 - Alpha',
 
