@@ -1,10 +1,6 @@
 import sys
 import functools
 from .enum import IntEnum, auto
-if sys.version_info >= (3, 0):
-    from ._logs_3 import _print
-else:
-    from ._logs_2 import _print
 
 
 class Logs(object):
@@ -12,24 +8,19 @@ class Logs(object):
     | Allows for easy message logging without buffer issues.
     | Possible log types are Debug, Warning, and Error.
     """
-    class _LogType(IntEnum):
+    class LogType(IntEnum):
         debug = auto()
         warning = auto()
         error = auto()
+        info = auto()
 
     _is_windows_cmd = False
-    _print_type = {
-        'debug': {'color': '\x1b[0m', 'msg': ''},
-        'warning': {'color': '\x1b[33m', 'msg': 'Warning: '},
-        'error': {'color': '\x1b[91m', 'msg': 'Error: '}
-    }
-    _closing = '\x1b[0m'
-    __verbose = None
+    _verbose = None
     __pipe = None
 
     @classmethod
     def _set_verbose(cls, value):
-        cls.__verbose = value
+        cls._verbose = value
 
     @classmethod
     def _set_pipe(cls, value):
@@ -37,24 +28,25 @@ class Logs(object):
 
     @classmethod
     def _is_verbose(cls):
-        return cls.__verbose
+        return cls._verbose
 
     @classmethod
-    def _print(cls, col_type, *args):
-        _print(cls, col_type, args)
+    def _print(cls, log_type, *args):
         arr = []
         for arg in args:
             arr.append(str(arg))
-        msg = col_type['msg'] + ' '.join(arr)
+        msg = ' '.join(arr)
+
         if cls.__pipe is not None:
+            # Send log type and log message to the main process.
             from nanome._internal._util import _DataType, _ProcData
             to_send = _ProcData()
             to_send._type = _DataType.log
-            to_send._data = msg
+            to_send._data = (log_type, msg)
             cls.__pipe.send(to_send)
         else:
             from nanome._internal._process import _LogsManager
-            _LogsManager._received_request(msg)
+            _LogsManager.received_request(log_type, msg)
 
     @classmethod
     def error(cls, *args):
@@ -64,7 +56,8 @@ class Logs(object):
         :param args: Variable length argument list
         :type args: Anything printable
         """
-        cls._print(cls._print_type['error'], *args)
+        log_type = cls.LogType.error.name
+        cls._print(log_type, *args)
 
     @classmethod
     def warning(cls, *args):
@@ -74,7 +67,8 @@ class Logs(object):
         :param args: Variable length argument list
         :type args: Anything printable
         """
-        cls._print(cls._print_type['warning'], *args)
+        log_type = cls.LogType.warning.name
+        cls._print(log_type, *args)
 
     @classmethod
     def message(cls, *args):
@@ -84,7 +78,8 @@ class Logs(object):
         :param args: Variable length argument list
         :type args: Anything printable
         """
-        cls._print(cls._print_type['debug'], *args)
+        log_type = cls.LogType.info.name
+        cls._print(log_type, *args)
 
     @classmethod
     def debug(cls, *args):
@@ -95,11 +90,12 @@ class Logs(object):
         :param args: Variable length argument list
         :type args: Anything printable
         """
-        if cls.__verbose is None:
+        log_type = cls.LogType.debug.name
+        if cls._verbose is None:
             Logs.warning("Debug used before plugin start.")
-            cls._print(cls._print_type['debug'], *args)
-        elif cls.__verbose is True:
-            cls._print(cls._print_type['debug'], *args)
+            cls._print(log_type, *args)
+        elif cls._verbose is True:
+            cls._print(log_type, *args)
 
     @classmethod
     def _init(cls):

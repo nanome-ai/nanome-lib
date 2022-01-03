@@ -38,7 +38,7 @@ def launch_plugin(class_name, args):
         if class_name == clsmember[0]:
             class_target = clsmember[1]
             break
-    if class_target == None:
+    if class_target is None:
         nanome.util.Logs.error("Plugin must have the same name as the containing file")
     plugin.set_plugin_class(class_target)
     plugin.run("config", "config", "config")
@@ -49,7 +49,6 @@ if __name__ == "__main__":
     if len(class_names) == 1:
         importlib.import_module("test_plugins." + class_names[0])
     elif len(class_names) > 1:
-        import glob
         modules = glob.glob(join(dirname(__file__), join("test_plugins", "*.py")))
         class_names = [basename(f)[:-3] for f in modules if isfile(f) and not f.endswith('__init__.py')]
         for class_name in class_names:

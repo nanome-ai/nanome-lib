@@ -41,10 +41,13 @@ class _Plugin(object):
 
         self._description['auth'] = self.__read_key()
         self._process_manager = _ProcessManager()
-        if self._write_log_file:
-            self._logs_manager = _LogsManager(self._plugin_class.__name__ + ".log")
-        else:
-            self._logs_manager = None
+
+        self.__log_filename = self._plugin_class.__name__ + ".log"
+        self._logs_manager = _LogsManager(
+            self.__log_filename,
+            plugin=self,
+            write_log_file=self._write_log_file,
+            remote_logging=self._remote_logging)
         self.__reconnect_attempt = 0
         self.__connect()
         self._loop()
@@ -107,6 +110,8 @@ class _Plugin(object):
                 pass
         elif packet.packet_type == Network._Packet.packet_type_keep_alive:
             self.__waiting_keep_alive = False
+        elif packet.packet_type == Network._Packet.packet_type_logs_request:
+            self.__logs_request(packet)
         else:
             Logs.warning("Received a packet of unknown type", packet.packet_type, ". Ignoring")
 
@@ -228,8 +233,7 @@ class _Plugin(object):
                     self._sessions[id]._send_disconnection_message(self._plugin_id)
                     del self._sessions[id]
                 self._process_manager._update()
-                if self._logs_manager:
-                    self._logs_manager._update()
+                self._logs_manager.update()
         except KeyboardInterrupt:
             self.__exit()
 
@@ -275,6 +279,28 @@ class _Plugin(object):
         session.plugin_process = process
         self._sessions[session_id] = session
         Logs.debug("Registered new session:", session_id)
+
+    def __logs_request(self, packet):
+        try:
+            id_str = packet.payload.decode('utf-8')
+            id = int(id_str)
+        except:
+            Logs.error('Received a broken log request from NTS:', packet.payload)
+
+        try:
+            with open(self.__log_filename, 'r') as content_file:
+                content = content_file.read()
+        except:
+            content = ''
+
+        response = {
+            'id': id,
+            'logs': content
+        }
+
+        packet = Network._Packet()
+        packet.set(0, Network._Packet.packet_type_logs_request, 0)
+        packet.write_string(json.dumps(response))
 
     @classmethod
     def _launch_plugin_profile(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
@@ -326,6 +352,7 @@ class _Plugin(object):
         self._pre_run = None
         self._post_run = None
         self._write_log_file = True
+        self._remote_logging = False
         self._to_ignore = []
         self.__waiting_keep_alive = False
 
