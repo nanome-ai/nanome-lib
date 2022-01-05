@@ -2,7 +2,8 @@
 Shapes API
 ###########
 
-Nanome provides the Ability to draw arbitrary shapes for highlighting, or visualizing interactions.
+Nanome provides the ability to draw shapes to your workspace.
+
 
 ***********
 Shape Types
@@ -58,8 +59,9 @@ Example Plugin
 
 .. code-block:: python
 
+	import nanome
 	from nanome.api import structure
-	from nanome.api.shapes import Label, Line, Shape, Sphere
+	from nanome.api.shapes import Anchor, Label, Line, Shape, Sphere
 	from nanome.util import Vector3, enums, Color
 	from nanome.util.asyncio import async_callback
 
@@ -86,18 +88,20 @@ Example Plugin
 			comp = self.add_complex(sphere2_position)
 			comp = (await self.add_to_workspace([comp]))[0]
 			atom = next(comp.atoms)
+
+			anchor2 = Anchor()
+			anchor2.anchor_type = enums.ShapeAnchorType.Atom
+			anchor2.target = atom.index
+			
 			sphere2 = Sphere()
 			sphere2.radius = radius
 			sphere2.color = Color.Blue()
-			anchor2 = sphere2.anchors[0]
-			anchor2.anchor_type == enums.ShapeAnchorType.Atom
-			anchor2.local_offset = atom.position
-			anchor2.target = atom.index
+			sphere2.anchors = [anchor2]
 
-			# Draw line between the two spheres.
+			# Draw line between spheres.
 			line = Line()
 			line.thickness = 1
-			line.dash_distance = 0
+			line.dash_distance = .75
 			line.color = Color.White()
 			line.anchors = [anchor1, anchor2]
 			await Shape.upload_multiple([sphere1, sphere2, line])
@@ -108,7 +112,7 @@ Example Plugin
 			line_label.anchors = line.anchors
 			for anchor in line_label.anchors:
 				anchor.viewer_offset = Vector3(0, 0, -.1)
-			await Shape.upload_multiple([line_label])
+			await Shape.upload(line_label)
 
 		def add_complex(self, position):
 			"""Add a Complex containing one atom to the workspace."""
