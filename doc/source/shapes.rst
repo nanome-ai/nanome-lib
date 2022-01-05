@@ -94,7 +94,7 @@ Example Plugin
 			anchor2.local_offset = atom.position
 			anchor2.target = atom.index
 
-			# Draw line between anchors on spheres.
+			# Draw line between the two spheres.
 			line = Line()
 			line.thickness = 1
 			line.dash_distance = 0
