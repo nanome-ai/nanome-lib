@@ -9,8 +9,8 @@ Shape Types
 ***********
 - Sphere
 - Line
-- Mesh
 - Label
+- Mesh
 
 ***********
 Basic Usage
@@ -29,21 +29,21 @@ Positioning Shapes with Anchors
 *******************************
 Shapes are positioned using associated `Anchors`
 
-The anchor.target value is set based on the provided ShapeAnchorType.
 There are 3 main types of anchors, as enumerated in `nanome.util.enums.ShapeAnchorType`
 
 ShapeAnchorTypes
 ================
 
 - `Workspace`:
-	- anchor.target=Vector3
-	- Shape is centered at coordinates in the global coordinate space.
+	- anchor.local_offset=Vector3()
+	- Use the anchor.local_offset to position the shape in the workspace
 - `Complex`:
 	- anchor.target=int. (Complex Index)
 	- Shape is centered at the origin of the provided complex's local coordinate space.
 - `Atom`:
 	- anchor.target=int.  (Atom Index)
 	- Shape is centered at the provided atom index.
+	- may still need to set anchor.local_offset to the atom's position value.
 
 Anchor Tips
 ===========
@@ -63,13 +63,13 @@ Example Plugin
 	from nanome.util import Vector3, enums, Color
 	from nanome.util.asyncio import async_callback
 
-	class ShapesExample(nanome.AsyncPluginInstance):
+	class ShapesExamplePlugin(nanome.AsyncPluginInstance):
 
 		@async_callback
 		async def on_run(self):
 			workspace = structure.Workspace()
 			self.update_workspace(workspace)
-			
+
 			radius = 5
 			sphere1_position = Vector3(25, 100, 50)
 			sphere2_position = Vector3(50, 100, 50)
@@ -96,8 +96,9 @@ Example Plugin
 
 			# Draw line between anchors on spheres.
 			line = Line()
-			line.radius = 3
-			line.color = Color.Red()
+			line.thickness = 1
+			line.dash_distance = 0
+			line.color = Color.White()
 			line.anchors = [anchor1, anchor2]
 			await Shape.upload_multiple([sphere1, sphere2, line])
 
@@ -106,7 +107,7 @@ Example Plugin
 			line_label.text = 'Label'
 			line_label.anchors = line.anchors
 			for anchor in line_label.anchors:
-				anchor.viewer_offset = Vector3(0, 0, -.01)
+				anchor.viewer_offset = Vector3(0, 0, -.1)
 			await Shape.upload_multiple([line_label])
 
 		def add_complex(self, position):
@@ -125,13 +126,13 @@ Example Plugin
 			chain.add_residue(res)
 			mol.add_chain(chain)
 			comp.add_molecule(mol)
-			comp.name = atom.label_text
+			comp.name = "Test Complex"
 			return comp
 
 
 	def main():
 		plugin = nanome.Plugin('Shape Example', 'Draw some shapes with different anchor types', 'other', False)
-		plugin.set_plugin_class(ShapesExample)
+		plugin.set_plugin_class(ShapesExamplePlugin)
 		plugin.run()
 
 
