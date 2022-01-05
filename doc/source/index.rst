@@ -15,6 +15,7 @@ Table of Contents
    ui
    file
    streams
+   shapes
    notification
    api
    

@@ -1,0 +1,139 @@
+###########
+Shapes API
+###########
+
+Nanome provides the Ability to draw arbitrary shapes for highlighting, or visualizing interactions.
+
+***********
+Shape Types
+***********
+- Sphere
+- Line
+- Mesh
+- Label
+
+***********
+Basic Usage
+***********
+
+.. code-block:: python
+
+	from nanome.api.shapes import Shape, Sphere
+	from nanome.util import Color
+	
+	sphere = Sphere(radius=1.0, color=Color(1.0, 0.0, 0.0))
+	Shape.upload(sphere)
+
+*******************************
+Positioning Shapes with Anchors
+*******************************
+Shapes are positioned using associated `Anchors`
+
+The anchor.target value is set based on the provided ShapeAnchorType.
+There are 3 main types of anchors, as enumerated in `nanome.util.enums.ShapeAnchorType`
+
+ShapeAnchorTypes
+================
+
+- `Workspace`:
+	- anchor.target=Vector3
+	- Shape is centered at coordinates in the global coordinate space.
+- `Complex`:
+	- anchor.target=int. (Complex Index)
+	- Shape is centered at the origin of the provided complex's local coordinate space.
+- `Atom`:
+	- anchor.target=int.  (Atom Index)
+	- Shape is centered at the provided atom index.
+
+Anchor Tips
+===========
+
+- Lines require 2 anchors.
+- For if multiple anchors are added to a shape, the shape will be positioned at the centerpoint of all the anchors.
+- anchor.local_offset and anchor.global_offset can be used to offset the shape from the anchor point.
+
+**************
+Example Plugin
+**************
+
+.. code-block:: python
+
+	from nanome.api import structure
+	from nanome.api.shapes import Label, Line, Shape, Sphere
+	from nanome.util import Vector3, enums, Color
+	from nanome.util.asyncio import async_callback
+
+	class ShapesExample(nanome.AsyncPluginInstance):
+
+		@async_callback
+		async def on_run(self):
+			workspace = structure.Workspace()
+			self.update_workspace(workspace)
+			
+			radius = 5
+			sphere1_position = Vector3(25, 100, 50)
+			sphere2_position = Vector3(50, 100, 50)
+
+			# Draw sphere anchored to point in Workspace
+			sphere1 = Sphere()
+			sphere1.radius = radius
+			sphere1.color = Color.Blue()
+			anchor1 = sphere1.anchors[0]
+			anchor1.anchor_type == enums.ShapeAnchorType.Workspace
+			anchor1.local_offset = sphere1_position
+			
+			# Create atom, and draw sphere anchored to it
+			comp = self.add_complex(sphere2_position)
+			comp = (await self.add_to_workspace([comp]))[0]
+			atom = next(comp.atoms)
+			sphere2 = Sphere()
+			sphere2.radius = radius
+			sphere2.color = Color.Blue()
+			anchor2 = sphere2.anchors[0]
+			anchor2.anchor_type == enums.ShapeAnchorType.Atom
+			anchor2.local_offset = atom.position
+			anchor2.target = atom.index
+
+			# Draw line between anchors on spheres.
+			line = Line()
+			line.radius = 3
+			line.color = Color.Red()
+			line.anchors = [anchor1, anchor2]
+			await Shape.upload_multiple([sphere1, sphere2, line])
+
+			# Lets add a label that's centered on the line.
+			line_label = Label()
+			line_label.text = 'Label'
+			line_label.anchors = line.anchors
+			for anchor in line_label.anchors:
+				anchor.viewer_offset = Vector3(0, 0, -.01)
+			await Shape.upload_multiple([line_label])
+
+		def add_complex(self, position):
+			"""Add a Complex containing one atom to the workspace."""
+			comp = structure.Complex()
+			mol = structure.Molecule()
+			chain = structure.Chain()
+			res = structure.Residue()
+			atom = structure.Atom()
+
+			atom.label_text = 'Atom'
+			atom.position = position
+			# atom.labeled = False
+			# atom.label_text = label_text
+			res.add_atom(atom)
+			chain.add_residue(res)
+			mol.add_chain(chain)
+			comp.add_molecule(mol)
+			comp.name = atom.label_text
+			return comp
+
+
+	def main():
+		plugin = nanome.Plugin('Shape Example', 'Draw some shapes with different anchor types', 'other', False)
+		plugin.set_plugin_class(ShapesExample)
+		plugin.run()
+
+
+	if __name__ == '__main__':
+		main()
