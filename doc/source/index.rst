@@ -14,10 +14,10 @@ Table of Contents
    workspace
    ui
    file
+   shapes
    streams
    notification
    api
-   
 
 
 The Nanome Plugin API provides a way to interface and integrate external software with Nanome's molecular modeling VR software. 
@@ -27,11 +27,11 @@ The extended functionality includes the ability to create new windows inside of 
 Plugins can be designed and ran from different operating systems - Windows, Linux, and Mac  depending on the requirements needed from each plugin.
 
 Some examples of plugins that our customers love are:
- - `Docking <'https://github.com/nanome-ai/plugin-docking'>`_
- - `Chemical Interactions <'https://github.com/nanome-ai/plugin-chemical-interactions'>`_
- - `Electrostatic Potential Map generation <'https://github.com/nanome-ai/plugin-esp'>`_
- - `Chemical Properties <'https://github.com/nanome-ai/plugin-chemical-properties'>`_
- - `Molecular dynamics <'https://github.com/nanome-ai/plugin-molecular-dynamics'>`_
+ - `Docking <https://github.com/nanome-ai/plugin-docking>`_
+ - `Chemical Interactions <https://github.com/nanome-ai/plugin-chemical-interactions>`_
+ - `Electrostatic Potential Map generation <https://github.com/nanome-ai/plugin-esp>`_
+ - `Chemical Properties <https://github.com/nanome-ai/plugin-chemical-properties>`_
+ - `Molecular dynamics <https://github.com/nanome-ai/plugin-molecular-dynamics>`_
  - Custom Database Integrations
  - Loading PDFs and PowerPoints
  - All of our public plugins are available on our `Github <https://github.com/nanome-ai>` (prefixed with "plugin-").

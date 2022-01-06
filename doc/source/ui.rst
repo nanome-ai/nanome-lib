@@ -45,7 +45,7 @@ Download
 - `Windows <https://nanome.s3-us-west-1.amazonaws.com/installers/StackStudio/StackStudio_v5.2_Windows.zip>`_ 
 - `Mac <https://nanome.s3-us-west-1.amazonaws.com/installers/StackStudio/StackStudio_v0.5_Mac.zip>`_
 
-.. image:: stackstudio.png
+.. image:: assets/stackstudio.png
   :width: 800
   :alt: stackstudio
 
@@ -80,7 +80,7 @@ Z-fighting problem
 
 A known problem, called z-fighting, is the following:
 
-.. image:: z-fighting.png
+.. image:: assets/z-fighting.png
   :width: 400
   :alt: z-fighting
 

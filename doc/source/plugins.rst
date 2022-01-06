@@ -189,7 +189,7 @@ IO/Streaming
 * ``save_files``: Save files on the machine running Nanome, and returns result
 * ``create_writing_stream``: Create a stream allowing to continuously update properties of many objects
 * ``create_reading_stream``: Create a stream allowing to continuously receive properties of many objects
-* ``open_url``: Opens a URL in Nanome's computer browser
+* ``open_url``: Opens a URL in the web browser
 * ``send_files_to_load``: Send file(s) to Nanome to load directly using Nanome's importers.
 * ``request_export``: Request a file export using Nanome exporters
 * ``set_plugin_list_button``: Set text and/or usable state of the buttons on the plugin connection menu in Nanome

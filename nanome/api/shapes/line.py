@@ -4,6 +4,7 @@ from . import Shape
 
 
 class Line(_Line, Shape):
+
     def __init__(self):
         Shape.__init__(self, ShapeType.Line)
         _Line.__init__(self)

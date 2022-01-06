@@ -75,7 +75,7 @@ sys.path.insert(0, os.path.abspath('../..'))
 # -- Project information -----------------------------------------------------
 
 project = 'Nanome-Plugin-API'
-copyright = '2019, Nanome'
+copyright = '2022, Nanome'
 author = 'Nanome'
 
 # The short X.Y version
