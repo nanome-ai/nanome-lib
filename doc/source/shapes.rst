@@ -50,16 +50,16 @@ ShapeAnchorTypes
 	- Use the anchor.local_offset to position the shape in the workspace
 - `Complex`:
 	- anchor.target=int. (Complex Index)
-	- Shape is centered at the origin of the provided complex's local coordinate space.
+	- Set anchor.target to the complex index, and Shape will be centered at the origin of the complex's local coordinate space.
 - `Atom`:
 	- anchor.target=int.  (Atom Index)
-	- Shape is centered at the provided atom index.
+	- Set anchor.target to the atom index, and Shape will be centered on the provided atom.
 
 Anchor Tips
 ===========
 
 - Lines require 2 anchors.
-- For if multiple anchors are added to a shape, the shape will be positioned at the centerpoint of all the anchors.
+- If multiple anchors are added to a shape, the shape will be positioned at the center of all the anchors.
 - anchor.local_offset and anchor.global_offset can be used to offset the shape from the anchor point.
 
 **************
@@ -133,8 +133,6 @@ Example Plugin
 
 			atom.label_text = 'Atom'
 			atom.position = position
-			# atom.labeled = False
-			# atom.label_text = label_text
 			res.add_atom(atom)
 			chain.add_residue(res)
 			mol.add_chain(chain)
