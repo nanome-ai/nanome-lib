@@ -46,13 +46,13 @@ ShapeAnchorTypes
 ================
 
 - `Workspace`:
-	- anchor.local_offset=Vector3()
-	- Use the anchor.local_offset to position the shape in the workspace
+	- :code:`anchor.local_offset=Vector3()`
+	- Use anchor.local_offset to position the shape in the workspace
 - `Complex`:
-	- anchor.target=int. (Complex Index)
+	- :code:`anchor.target=int`. (Complex Index)
 	- Set anchor.target to the complex index, and Shape will be centered at the origin of the complex's local coordinate space.
 - `Atom`:
-	- anchor.target=int.  (Atom Index)
+	- :code:`anchor.target=int`.  (Atom Index)
 	- Set anchor.target to the atom index, and Shape will be centered on the provided atom.
 
 Anchor Tips
