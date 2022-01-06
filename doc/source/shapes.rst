@@ -4,11 +4,11 @@ Shapes API
 
 Nanome provides the ability to draw shapes to your workspace.
 
-.. |pic1| image:: network.png
+.. |pic1| image:: assets/network.png
   :width: 45%
   :alt: shapes_png
 
-.. |pic2| image:: interactions.png
+.. |pic2| image:: assets/interactions.png
   :width: 45%
   :alt: interactions_png
 
