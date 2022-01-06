@@ -47,13 +47,13 @@ There are 3 main types of anchors, as enumerated in `nanome.util.enums.ShapeAnch
 ShapeAnchorTypes
 ================
 
-- `Workspace`:
+- Workspace:
 	- :code:`anchor.local_offset=Vector3`
 	- Use anchor.local_offset to position the shape in the workspace
-- `Complex`:
+- Complex:
 	- :code:`anchor.target=int`. (Complex Index)
 	- Set anchor.target to the complex index, and Shape will be centered at the origin of the complex's local coordinate space.
-- `Atom`:
+- Atom:
 	- :code:`anchor.target=int`.  (Atom Index)
 	- Set anchor.target to the atom index, and Shape will be centered on the provided atom.
 
@@ -80,9 +80,6 @@ Example Plugin
 
 		@async_callback
 		async def on_run(self):
-			workspace = structure.Workspace()
-			self.update_workspace(workspace)
-
 			radius = 5
 			sphere1_position = Vector3(25, 100, 50)
 			sphere2_position = Vector3(50, 100, 50)
