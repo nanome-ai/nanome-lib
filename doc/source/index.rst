@@ -14,11 +14,10 @@ Table of Contents
    workspace
    ui
    file
-   streams
    shapes
+   streams
    notification
    api
-   
 
 
 The Nanome Plugin API provides a way to interface and integrate external software with Nanome's molecular modeling VR software. 

@@ -18,10 +18,10 @@ Nanome provides the ability to draw shapes to your workspace.
 ***********
 Shape Types
 ***********
-- Sphere
-- Line
-- Label
-- Mesh
+- ``Sphere``
+- ``Line``
+- ``Label``
+- ``Mesh``
 
 ***********
 Basic Usage
