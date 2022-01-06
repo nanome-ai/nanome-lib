@@ -4,6 +4,16 @@ Shapes API
 
 Nanome provides the ability to draw shapes to your workspace.
 
+.. |pic1| image:: network.png
+  :width: 45%
+  :alt: shapes_png
+
+.. |pic2| image:: interactions.png
+  :width: 45%
+  :alt: interactions_png
+
+|pic2| |pic1|
+
 
 ***********
 Shape Types
@@ -44,7 +54,6 @@ ShapeAnchorTypes
 - `Atom`:
 	- anchor.target=int.  (Atom Index)
 	- Shape is centered at the provided atom index.
-	- may still need to set anchor.local_offset to the atom's position value.
 
 Anchor Tips
 ===========
