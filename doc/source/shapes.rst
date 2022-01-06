@@ -46,7 +46,7 @@ ShapeAnchorTypes
 ================
 
 - `Workspace`:
-	- :code:`anchor.local_offset=Vector3()`
+	- :code:`anchor.local_offset=Vector3`
 	- Use anchor.local_offset to position the shape in the workspace
 - `Complex`:
 	- :code:`anchor.target=int`. (Complex Index)
