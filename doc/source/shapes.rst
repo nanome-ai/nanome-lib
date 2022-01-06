@@ -32,7 +32,9 @@ Basic Usage
 	from nanome.api.shapes import Shape, Sphere
 	from nanome.util import Color
 	
-	sphere = Sphere(radius=1.0, color=Color(1.0, 0.0, 0.0))
+	sphere = Sphere()
+	sphere.radius = 1
+	sphere.color = Color.Blue()
 	Shape.upload(sphere)
 
 *******************************
