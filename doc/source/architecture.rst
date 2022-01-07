@@ -63,14 +63,13 @@ The API is broken down into a few different submodules
 
 - :mod:`nanome.api.plugin_instance`: Contains PluginInstance class, which provides interface for interacting with your Nanome workspace
 - :mod:`nanome.api.plugin`: Contains Plugin class, which manages networking and callbacks.
+- :mod:`nanome.api.integrations`: Integrations allow plugins to hook into Nanome features (such as minimization or hydrogens calculations).
+- :mod:`nanome.api.shapes`: Render shapes and lines in workspace.
+- :mod:`nanome.api.streams`: Real time updates to one or more objects in your workspace.
 - :mod:`nanome.api.structure`: Workspace API. Used for modeling atomic structures and representations.
 - :mod:`nanome.api.ui`: Build Menus and forms for your plugin.
-- :mod:`nanome.api.shapes`: Render shapes and lines in workspace.
-- :mod:`nanome.api.streams`: Real time updates to your workspace.
 - :mod:`nanome.api.util`: Enums, data structures, and utility functions used throughout our plugins.
-- :mod:`nanome.api.streams`: Streams allow for real time updates to your workspace.
-- :mod:`nanome.api.integrations`: Integrations allow plugins to hook into Nanome features (such as minimization or hydrogens calculations).
-- :mod:`nanome.api.macros`: Enable Lua macro scripts to be run (not yet documented).
+- :mod:`nanome.api.macros`: Enable macro scripts written in Lua to be run (not yet documented).
 
 
 **********************
