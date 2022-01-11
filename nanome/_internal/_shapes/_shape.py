@@ -62,7 +62,7 @@ class _Shape(object):
         if done_callback is None and nanome.PluginInstance._instance.is_async:
             result.real_set_result = result.set_result
             result.set_result = lambda args: set_callback(args)
-            done_callback = lambda args: result.real_set_result(args)
+            def done_callback(args): return result.real_set_result(args)
         return result
 
     @classmethod
@@ -77,5 +77,5 @@ class _Shape(object):
         if done_callback is None and nanome.PluginInstance._instance.is_async:
             result.real_set_result = result.set_result
             result.set_result = lambda args: set_callback(args)
-            done_callback = lambda args: result.real_set_result(args)
+            def done_callback(args): return result.real_set_result(args)
         return result

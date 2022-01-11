@@ -87,7 +87,7 @@ class Shape(_Shape):
             if done_callback is None and nanome.PluginInstance._instance.is_async:
                 loop = asyncio.get_event_loop()
                 future = loop.create_future()
-                done_callback = lambda args: future.set_result(args)
+                def done_callback(args): return future.set_result(args)
 
             results = []
 
@@ -125,7 +125,7 @@ class Shape(_Shape):
             if done_callback is None and nanome.PluginInstance._instance.is_async:
                 loop = asyncio.get_event_loop()
                 future = loop.create_future()
-                done_callback = lambda args: future.set_result(args)
+                def done_callback(args): return future.set_result(args)
 
             results = []
 
