@@ -87,7 +87,7 @@ class Shape(_Shape):
             if done_callback is None and nanome.PluginInstance._instance.is_async:
                 loop = asyncio.get_event_loop()
                 future = loop.create_future()
-                done_callback = lambda *args: future.set_result(args)
+                done_callback = lambda args: future.set_result(args)
 
             results = []
 
@@ -113,7 +113,7 @@ class Shape(_Shape):
         | Remove multiple shapes from the Nanome App and destroy them.
         """
         try:
-            _Shape._destroy_multiple(shapes, done_callback)
+            return _Shape._destroy_multiple(shapes, done_callback)
         except TypeError:
             # If destroy multiple fails, upload each one at a time.
             # Done as a fallback for older versions of Nanome that don't support
@@ -125,7 +125,7 @@ class Shape(_Shape):
             if done_callback is None and nanome.PluginInstance._instance.is_async:
                 loop = asyncio.get_event_loop()
                 future = loop.create_future()
-                done_callback = lambda *args: future.set_result(args)
+                done_callback = lambda args: future.set_result(args)
 
             results = []
 
