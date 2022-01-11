@@ -22,6 +22,8 @@ async def _async_update_loop(self, UPDATE_RATE, MINIMUM_SLEEP):
         return
     except:
         msg = traceback.format_exc()
+        # Print manually because for some reason Logs.error doesn't display it.
+        # TODO: Investigate why.
         print(msg)
         Logs.error(msg)
         self._on_stop()
