@@ -47,6 +47,7 @@ Example Plugin
 **************
 
 .. code-block:: python
+
     import nanome
     from nanome.api.shapes import Mesh
     from nanome.util import Color, Vector3
