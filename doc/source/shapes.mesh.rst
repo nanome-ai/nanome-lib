@@ -25,7 +25,7 @@ Basic Usage
     mesh.upload()
 
 Triangle array is a list of 0-based, positive integers.
-Vertices, normals and triangles are mandatory.
+Vertices, normals and triangles are mandatory. Since 1.23.2, the normals are not mandatory and can be re-computed in Nanome.
 
 *******************************
 Mesh coloring
