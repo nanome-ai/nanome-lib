@@ -40,6 +40,8 @@ There are several ways to color a mesh using the Shape API:
 
 Note that the mesh color will blend with the per-vertex colors and the mesh texture.
 
+Since Nanome 1.23.2, transparent meshes are also using textures and per-vertex colors.
+
 As texturing the mesh uses the uv array, the texture will not be mapped if `mesh.uv` is not set.
 
 **************
