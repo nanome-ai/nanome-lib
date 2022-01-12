@@ -95,6 +95,7 @@ class _Plugin(object):
                     Logs.error("Connection refused by NTS. Are you missing a security key file?")
                 else:
                     Logs.error("Connection refused by NTS. Your security key file might be invalid")
+                self._logs_manager.update()
                 sys.exit(1)
             else:
                 Logs.message("Connection ended by NTS")
@@ -150,6 +151,7 @@ class _Plugin(object):
             process = subprocess.Popen(sub_args, **sub_kwargs)
         except:
             Logs.error("Couldn't find a suitable python executable")
+            self._logs_manager.update()
             sys.exit(1)
 
         last_mtime = max(self.__file_times("."))
