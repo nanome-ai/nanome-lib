@@ -99,6 +99,7 @@ class _Plugin(object):
                 sys.exit(1)
             else:
                 Logs.message("Connection ended by NTS")
+                self._logs_manager.update()
                 sys.exit(0)
 
         elif packet.packet_type == Network._Packet.packet_type_client_disconnection:
@@ -256,6 +257,7 @@ class _Plugin(object):
             session.plugin_process.join()
         if self._post_run is not None:
             self._post_run()
+        self._logs_manager.update()
         sys.exit(0)
 
     def __on_client_connection(self, session_id, version_table):
