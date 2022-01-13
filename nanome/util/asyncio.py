@@ -5,18 +5,16 @@ import sys
 # import traceback
 
 
-LOGGER_NAME = 'plugin'
-
-
 def handle_exception(exc_type, exc_value, exc_traceback):
     """Make uncaught exceptions are logged."""
     if issubclass(exc_type, KeyboardInterrupt):
         sys.__excepthook__(exc_type, exc_value, exc_traceback)
         return
-    logger = logging.getLogger(LOGGER_NAME)
+    logger = logging.getLogger('plugin')
     # traceback_str = json.dumps(traceback.format_exc())[1:-1]
     # logger.error(traceback_str, exc_info=(exc_type, exc_value, exc_traceback))
-    logger.error("Uncaught Exception. Traceback will be included in the future.")
+    msg = "Uncaught " + exc_type.__name__
+    logger.critical(msg, exc_info=1)
 
 
 @asyncio.coroutine

@@ -159,7 +159,7 @@ class LogsManager():
             elif log_type == 'debug':
                 self.logger.debug(entry)
             elif log_type == 'error':
-                self.logger.error(entry)
+                self.logger.error(entry, exc_info=1)
 
     @classmethod
     def received_request(cls, log_type, request):
