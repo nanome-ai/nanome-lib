@@ -14,7 +14,7 @@ class Logs(object):
         error = auto()
         info = auto()
 
-    _is_windows_cmd = False
+    _is_windows_cmd = sys.platform == 'win32' and sys.stdout.isatty()
     _verbose = None
     __pipe = None
 
@@ -31,12 +31,8 @@ class Logs(object):
         return cls._verbose
 
     @classmethod
-    def _print(cls, log_type, *args):
-        arr = []
-        for arg in args:
-            arr.append(str(arg))
-        msg = ' '.join(arr)
-
+    def _log(cls, log_type, *args):
+        msg = ' '.join(map(str, args))
         if cls.__pipe is not None:
             # Send log type and log message to the main process.
             from nanome._internal._util import _DataType, _ProcData
@@ -57,7 +53,7 @@ class Logs(object):
         :type args: Anything printable
         """
         log_type = cls.LogType.error.name
-        cls._print(log_type, *args)
+        cls._log(log_type, *args)
 
     @classmethod
     def warning(cls, *args):
@@ -68,7 +64,7 @@ class Logs(object):
         :type args: Anything printable
         """
         log_type = cls.LogType.warning.name
-        cls._print(log_type, *args)
+        cls._log(log_type, *args)
 
     @classmethod
     def message(cls, *args):
@@ -79,7 +75,7 @@ class Logs(object):
         :type args: Anything printable
         """
         log_type = cls.LogType.info.name
-        cls._print(log_type, *args)
+        cls._log(log_type, *args)
 
     @classmethod
     def debug(cls, *args):
@@ -93,14 +89,9 @@ class Logs(object):
         log_type = cls.LogType.debug.name
         if cls._verbose is None:
             Logs.warning("Debug used before plugin start.")
-            cls._print(log_type, *args)
+            cls._log(log_type, *args)
         elif cls._verbose is True:
-            cls._print(log_type, *args)
-
-    @classmethod
-    def _init(cls):
-        if sys.platform == 'win32' and sys.stdout.isatty():
-            cls._is_windows_cmd = True
+            cls._log(log_type, *args)
 
     @staticmethod
     def deprecated(new_func=None, msg=""):
@@ -118,6 +109,3 @@ class Logs(object):
             wrapper.used = False
             return wrapper
         return deprecated_decorator
-
-
-Logs._init()
