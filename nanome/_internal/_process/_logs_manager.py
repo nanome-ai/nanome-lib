@@ -35,14 +35,7 @@ class NTSFormatter(logging.Formatter):
 
     def format(self, record):
         msg = super(NTSFormatter, self).format(record)
-        try:
-            json_msg = json.loads(msg.replace('\n', '\\n'))
-        except json.decoder.JSONDecodeError:
-            # If traceback included, for now just cut that out.
-            # We need to figure out how to add that to message.
-            if 'Traceback' in msg:
-                split_msg = msg.split('\n')
-                json_msg = json.loads(split_msg[0])
+        json_msg = json.loads(msg.replace('\n', '\\n'))
 
         # Convert timestamp to UTC
         timestamp = json_msg['timestamp']

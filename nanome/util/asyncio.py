@@ -1,8 +1,6 @@
 import asyncio
-# import json
 import logging
 import sys
-# import traceback
 
 
 def handle_exception(exc_type, exc_value, exc_traceback):
@@ -11,10 +9,8 @@ def handle_exception(exc_type, exc_value, exc_traceback):
         sys.__excepthook__(exc_type, exc_value, exc_traceback)
         return
     logger = logging.getLogger('plugin')
-    # traceback_str = json.dumps(traceback.format_exc())[1:-1]
-    # logger.error(traceback_str, exc_info=(exc_type, exc_value, exc_traceback))
     msg = "Uncaught " + exc_type.__name__
-    logger.critical(msg, exc_info=1)
+    logger.error(msg, exc_info=1)
 
 
 @asyncio.coroutine
@@ -33,7 +29,6 @@ def exception_wrapper(fn, args, kwargs):
 
 def async_callback(fn):
     def task(*args, **kwargs):
-        # loop = asyncio.get_running_loop()
         fut = asyncio.ensure_future(exception_wrapper(fn, args, kwargs))
         return fut
     return task
