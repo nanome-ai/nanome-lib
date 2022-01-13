@@ -41,8 +41,8 @@ class Logs(object):
             to_send._data = (log_type, msg)
             cls.__pipe.send(to_send)
         else:
-            from nanome._internal._process import _LogsManager
-            _LogsManager.received_request(log_type, msg)
+            from nanome._internal._process import LogsManager
+            LogsManager.received_request(log_type, msg)
 
     @classmethod
     def error(cls, *args):
