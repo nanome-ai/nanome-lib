@@ -4,7 +4,6 @@ import os
 import sys
 from collections import deque
 from dateutil import parser
-
 from logging.handlers import RotatingFileHandler
 
 from nanome._internal._network import _Packet
@@ -36,7 +35,14 @@ class NTSFormatter(logging.Formatter):
 
     def format(self, record):
         msg = super(NTSFormatter, self).format(record)
-        json_msg = json.loads(msg.replace('\n', '\\n'))
+        try:
+            json_msg = json.loads(msg.replace('\n', '\\n'))
+        except json.decoder.JSONDecodeError:
+            # If traceback included, for now just cut that out.
+            # We need to figure out how to add that to message.
+            if 'Traceback' in msg:
+                split_msg = msg.split('\n')
+                json_msg = json.loads(split_msg[0])
 
         # Convert timestamp to UTC
         timestamp = json_msg['timestamp']
@@ -120,7 +126,7 @@ class LogsManager():
         filename = filename or ''
 
         logging_level = logging.DEBUG
-        self.logger = logging.getLogger(plugin.__class__.__name__)
+        self.logger = logging.getLogger('plugin')
         self.logger.setLevel(logging_level)
 
         self.console_handler = self.create_console_handler()
