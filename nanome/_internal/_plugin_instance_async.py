@@ -5,12 +5,12 @@ import traceback
 from timeit import default_timer as timer
 
 
-async def _async_update_loop(self, UPDATE_RATE, MINIMUM_SLEEP):
+async def async_update_loop(plugin_instance, UPDATE_RATE, MINIMUM_SLEEP):
     try:
-        self.start()
+        plugin_instance.start()
         last_update = timer()
-        while self._network._receive() and self._process_manager.update():
-            self.update()
+        while plugin_instance._network._receive() and plugin_instance._process_manager.update():
+            plugin_instance.update()
 
             dt = last_update - timer()
             sleep_time = max(UPDATE_RATE - dt, MINIMUM_SLEEP)
@@ -18,7 +18,7 @@ async def _async_update_loop(self, UPDATE_RATE, MINIMUM_SLEEP):
             last_update = timer()
 
     except KeyboardInterrupt:
-        self._on_stop()
+        plugin_instance._on_stop()
         return
     except:
         msg = traceback.format_exc()
@@ -26,7 +26,7 @@ async def _async_update_loop(self, UPDATE_RATE, MINIMUM_SLEEP):
         # TODO: Investigate why.
         print(msg)
         Logs.error(msg)
-        self._on_stop()
-        self._process_manager._close()
-        self._network._close()
+        plugin_instance._on_stop()
+        plugin_instance._process_manager._close()
+        plugin_instance._network._close()
         return

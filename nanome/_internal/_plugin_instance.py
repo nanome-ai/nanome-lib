@@ -11,7 +11,7 @@ from timeit import default_timer as timer
 
 try:
     import asyncio
-    from ._plugin_instance_async import _async_update_loop
+    from ._plugin_instance_async import async_update_loop
 except ImportError:
     asyncio = False
 
@@ -110,7 +110,7 @@ class _PluginInstance(object):
 
     def _run(self):
         if asyncio and self.is_async:
-            coro = _async_update_loop(self, UPDATE_RATE, MINIMUM_SLEEP)
+            coro = async_update_loop(self, UPDATE_RATE, MINIMUM_SLEEP)
             asyncio.run(coro)
         else:
             self._update_loop()
