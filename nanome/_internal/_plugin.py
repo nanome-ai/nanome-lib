@@ -1,6 +1,6 @@
 from . import _PluginInstance
 from nanome._internal import _network as Network
-from nanome._internal._process import _ProcessManager, _LogsManager
+from nanome._internal._process import _ProcessManager, LogsManager
 from nanome._internal._network._commands._callbacks._commands_enums import _Hashes
 from nanome._internal._network._serialization._serializer import Serializer
 from nanome._internal._util._serializers import _TypeSerializer
@@ -43,7 +43,7 @@ class _Plugin(object):
         self._process_manager = _ProcessManager()
 
         self.__log_filename = self._plugin_class.__name__ + ".log"
-        self._logs_manager = _LogsManager(
+        self._logs_manager = LogsManager(
             self.__log_filename,
             plugin=self,
             write_log_file=self._write_log_file,

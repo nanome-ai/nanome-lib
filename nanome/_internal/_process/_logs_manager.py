@@ -106,7 +106,7 @@ class ColorFormatter(logging.Formatter):
         return not sys.platform == 'win32' or not sys.stdout.isatty()
 
 
-class _LogsManager():
+class LogsManager():
     """Manages our logging system, and creates required Handlers.
 
     - Every log manager has a console_handler, which outputs messages to the console.
@@ -144,8 +144,8 @@ class _LogsManager():
 
     def update(self):
         """Pass log into logger under the appropriate levelname."""
-        for _ in range(0, len(_LogsManager._pending)):
-            log_type, entry = _LogsManager._pending.popleft()
+        for _ in range(0, len(LogsManager._pending)):
+            log_type, entry = LogsManager._pending.popleft()
             if log_type == 'info':
                 self.logger.info(entry)
             elif log_type == 'warning':

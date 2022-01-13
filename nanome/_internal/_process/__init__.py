@@ -5,4 +5,4 @@ from ._process_manager import _ProcessManager
 from ._process_manager_instance import _ProcessManagerInstance
 from ._bonding import _Bonding
 from ._dssp import _Dssp
-from ._logs_manager import _LogsManager
+from ._logs_manager import LogsManager
