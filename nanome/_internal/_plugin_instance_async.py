@@ -1,8 +1,8 @@
-from nanome.util import Logs
-
 import asyncio
 import traceback
 from timeit import default_timer as timer
+
+from nanome.util import Logs
 
 
 async def async_update_loop(plugin_instance, UPDATE_RATE, MINIMUM_SLEEP):
@@ -20,11 +20,11 @@ async def async_update_loop(plugin_instance, UPDATE_RATE, MINIMUM_SLEEP):
     except KeyboardInterrupt:
         plugin_instance._on_stop()
         return
-    except:
+    except Exception:
         msg = traceback.format_exc()
         # Print manually because for some reason Logs.error doesn't display it.
         # TODO: Investigate why.
-        print(msg)
+        # print(msg)
         Logs.error(msg)
         plugin_instance._on_stop()
         plugin_instance._process_manager._close()

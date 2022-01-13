@@ -12,8 +12,8 @@ class _Session(object):
         try:
             has_net_data = self._net_plugin_pipe.poll()
             has_proc_data = self._proc_plugin_pipe.poll()
-        except:
-            Logs.error("Plugin encountered an error, please check the logs.", traceback.format_exc())
+        except Exception:
+            Logs.error("Plugin encountered an error, please check the logs.")
             return False
         try:
             if has_net_data:
