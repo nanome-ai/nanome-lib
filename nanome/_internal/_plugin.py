@@ -60,7 +60,7 @@ class _Plugin(object):
             f = open(self._key, "r")
             key = f.read().strip()
             return key
-        except:
+        except Exception:
             return None
 
     def _on_packet_received(self, packet):
@@ -108,7 +108,7 @@ class _Plugin(object):
                 self._sessions[id].signal_and_close_pipes()
                 del self._sessions[id]
                 Logs.debug("Session", id, "disconnected")
-            except:
+            except Exception:
                 pass
         elif packet.packet_type == Network._Packet.packet_type_keep_alive:
             self.__waiting_keep_alive = False
@@ -150,7 +150,7 @@ class _Plugin(object):
         try:
             sub_args = [sys.executable] + sub_args
             process = subprocess.Popen(sub_args, **sub_kwargs)
-        except:
+        except Exception:
             Logs.error("Couldn't find a suitable python executable")
             self._logs_manager.update()
             sys.exit(1)
@@ -288,13 +288,13 @@ class _Plugin(object):
         try:
             id_str = packet.payload.decode('utf-8')
             id = int(id_str)
-        except:
+        except Exception:
             Logs.error('Received a broken log request from NTS:', packet.payload)
 
         try:
             with open(self.__log_filename, 'r') as content_file:
                 content = content_file.read()
-        except:
+        except Exception:
             content = ''
 
         response = {
