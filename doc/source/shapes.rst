@@ -186,7 +186,7 @@ Shapes Example
 
 	def main():
 		title = 'Shapes and Lines Example'
-		description = 'Draw some shapes with different anchor types'
+		description = 'Draw two spheres connected by a labeled line.'
 		advanced_settings = False
 		plugin = nanome.Plugin(title, description, advanced_settings)
 		plugin.set_plugin_class(ShapesExamplePlugin)
