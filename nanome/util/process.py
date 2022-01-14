@@ -1,10 +1,13 @@
 import subprocess
 import nanome
+import sys
 
-try:
-    import asyncio
-except ImportError:
-    asyncio = False
+asyncio = False
+if sys.version_info >= (3, 4):
+    try:
+        import asyncio
+    except ImportError:
+        pass
 
 
 class Process():
