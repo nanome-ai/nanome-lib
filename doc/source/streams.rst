@@ -103,7 +103,6 @@ StreamType.shape_color
 
 
 StreamType.shape_position
-
 ==============
 | Set position of center of shape.
 
@@ -116,7 +115,6 @@ StreamType.shape_position
 
 
 StreamType.sphere_shape_radius
-
 ===================
 | Set radius of sphere shape.
 

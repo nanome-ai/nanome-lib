@@ -15,7 +15,6 @@ Table of Contents
    ui
    file
    shapes
-   shapes.mesh
    streams
    notification
    api
