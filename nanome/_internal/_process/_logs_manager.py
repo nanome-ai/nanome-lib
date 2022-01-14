@@ -152,7 +152,11 @@ class LogsManager():
             elif log_type == 'debug':
                 self.logger.debug(entry)
             elif log_type == 'error':
-                self.logger.error(entry, exc_info=1)
+                # Only include exc_info in log if exc_type is not None.
+                # Otherwise logging formatter adds Nonetype:None to end of log,
+                # which breaks JSON formatted log messages.
+                use_exc_info = sys.exc_info()[0] is not None
+                self.logger.error(entry, exc_info=use_exc_info)
 
     @classmethod
     def received_request(cls, log_type, request):
