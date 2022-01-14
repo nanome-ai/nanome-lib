@@ -31,7 +31,7 @@ Basic Usage
 
 	from nanome.api.shapes import Shape, Sphere
 	from nanome.util import Color
-	
+
 	sphere = Sphere()
 	sphere.radius = 1
 	sphere.color = Color.Blue()
@@ -39,19 +39,19 @@ Basic Usage
 
 .. code-block:: python
 
-    from nanome.api.shapes import Mesh
-    from nanome.util import Color, Vector3
+	from nanome.api.shapes import Mesh
+	from nanome.util import Color, Vector3
 
-    mesh = Mesh()
-    # Create a cube
-    mesh.vertices = [0.0, 1.0, 1.0,  0.0, 0.0, 1.0,  1.0, 0.0, 1.0,  1.0, 1.0, 1.0,  0.0, 1.0, 0.0,  0.0, 0.0, 0.0,  1.0, 0.0, 0.0,  1.0, 1.0, 0.0]
-    mesh.normals = [-0.408, 0.408, 0.817,  -0.667, -0.667, 0.333,  0.408, -0.408, 0.817,  0.667, 0.667, 0.333,  -0.667, 0.667, -0.333,  -0.408, -0.408, -0.817,  0.667, -0.667, -0.333,  0.408, 0.408, -0.817]
-    mesh.triangles = [0,1,2,  0,2,3,  7,6,5,  7,5,4,  3,2,6,  3,6,7,  4,0,3,  4,3,7,  4,5,1,  4,1,0,  1,5,6,  1,6,2]
+	mesh = Mesh()
+	# Create a cube
+	mesh.vertices = [0.0, 1.0, 1.0,  0.0, 0.0, 1.0,  1.0, 0.0, 1.0,  1.0, 1.0, 1.0,  0.0, 1.0, 0.0,  0.0, 0.0, 0.0,  1.0, 0.0, 0.0,  1.0, 1.0, 0.0]
+	mesh.normals = [-0.408, 0.408, 0.817,  -0.667, -0.667, 0.333,  0.408, -0.408, 0.817,  0.667, 0.667, 0.333,  -0.667, 0.667, -0.333,  -0.408, -0.408, -0.817,  0.667, -0.667, -0.333,  0.408, 0.408, -0.817]
+	mesh.triangles = [0,1,2,  0,2,3,  7,6,5,  7,5,4,  3,2,6,  3,6,7,  4,0,3,  4,3,7,  4,5,1,  4,1,0,  1,5,6,  1,6,2]
 
-    mesh.anchors[0].anchor_type = nanome.util.enums.ShapeAnchorType.Workspace
-    mesh.anchors[0].position = Vector3(0, 0, 0)
-    mesh.color = Color(255, 255, 255, 255)
-    mesh.upload()
+	mesh.anchors[0].anchor_type = nanome.util.enums.ShapeAnchorType.Workspace
+	mesh.anchors[0].position = Vector3(0, 0, 0)
+	mesh.color = Color(255, 255, 255, 255)
+	mesh.upload()
 
 *******************************
 Positioning Shapes with Anchors
@@ -135,7 +135,7 @@ Shapes Example
 			anchor1 = sphere1.anchors[0]
 			anchor1.anchor_type == enums.ShapeAnchorType.Workspace
 			anchor1.local_offset = sphere1_position
-			
+
 			# Create atom, and draw sphere anchored to it
 			comp = self.add_complex(sphere2_position)
 			comp = (await self.add_to_workspace([comp]))[0]
@@ -144,7 +144,7 @@ Shapes Example
 			anchor2 = Anchor()
 			anchor2.anchor_type = enums.ShapeAnchorType.Atom
 			anchor2.target = atom.index
-			
+
 			sphere2 = Sphere()
 			sphere2.radius = radius
 			sphere2.color = Color.Blue()
@@ -205,41 +205,41 @@ Mesh example
 	import nanome
 	from nanome.api.shapes import Mesh
 	from nanome.util import Color, Vector3
-    from nanome.util.asyncio import async_callback
+	from nanome.util.asyncio import async_callback
 
-    class MeshExamplePlugin(nanome.AsyncPluginInstance):
+	class MeshExamplePlugin(nanome.AsyncPluginInstance):
 
-        @async_callback
-        async def on_run(self):
-            mesh = Mesh()
-            # Create a cube
-            mesh.vertices = [
+		@async_callback
+		async def on_run(self):
+			mesh = Mesh()
+			# Create a cube
+			mesh.vertices = [
 			0.0, 20.0, 20.0,  0.0, 0.0, 20.0,  20.0, 0.0, 20.0,  20.0, 20.0, 20.0,
 			0.0, 20.0, 0.0,  0.0, 0.0, 0.0,  20.0, 0.0, 0.0,  20.0, 20.0, 0.0]
-            mesh.normals = [
+			mesh.normals = [
 			-0.408, 0.408, 0.817,  -0.667, -0.667, 0.333,  0.408, -0.408, 0.817,
-			0.667, 0.667, 0.333,  -0.667, 0.667, -0.333,  -0.408, -0.408, -0.817, 
+			0.667, 0.667, 0.333,  -0.667, 0.667, -0.333,  -0.408, -0.408, -0.817,
 			0.667, -0.667, -0.333,  0.408, 0.408, -0.817]
-            mesh.triangles = [
+			mesh.triangles = [
 			0,1,2, 0,2,3, 7,6,5, 7,5,4, 3,2,6, 3,6,7, 4,0,3, 4,3,7, 4,5,1,
 			4,1,0, 1,5,6, 1,6,2]
 
-            mesh.anchors[0].anchor_type = nanome.util.enums.ShapeAnchorType.Workspace
-            mesh.anchors[0].position = Vector3(0, 0, 0)
-            mesh.color = Color(255, 255, 255, 255)
-            mesh.colors = [
+			mesh.anchors[0].anchor_type = nanome.util.enums.ShapeAnchorType.Workspace
+			mesh.anchors[0].position = Vector3(0, 0, 0)
+			mesh.color = Color(255, 255, 255, 255)
+			mesh.colors = [
 				1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0,
 				0.0, 1.0,0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0,
 				0.0, 0.0, 1.0, 1.0]
-            mesh.upload()
+			mesh.upload()
 
-    def main():
+	def main():
 		title = "Mesh Example"
 		description = "Create a cube and color it with per-vertex colors"
 		advanced_settings = False
-        plugin = nanome.Plugin(title, , description, advanced_settings)
-        plugin.set_plugin_class(MeshExamplePlugin)
-        plugin.run()
-    
-    if __name__ == '__main__':
-        main()
+		plugin = nanome.Plugin(title, , description, advanced_settings)
+		plugin.set_plugin_class(MeshExamplePlugin)
+		plugin.run()
+
+	if __name__ == '__main__':
+		main()
