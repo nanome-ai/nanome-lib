@@ -23,9 +23,7 @@ if sys.version_info >= (3, 4):
         https://docs.python.org/3.6/library/asyncio-dev.html?highlight=exception#detect-exceptions-never-consumed
         """
         try:
-            for fut in fn(*args, **kwargs):
-                yield fut
-            # yield from fn(*args, **kwargs)
+            yield from fn(*args, **kwargs)
         except Exception:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             handle_exception(exc_type, exc_value, exc_traceback)

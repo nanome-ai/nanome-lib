@@ -119,7 +119,7 @@ class LogsManager():
         filename = filename or ''
 
         logging_level = logging.DEBUG
-        self.logger = logging.getLogger('plugin')
+        self.logger = logging.getLogger(plugin.plugin_class.__name__)
         self.logger.setLevel(logging_level)
 
         self.console_handler = self.create_console_handler()
