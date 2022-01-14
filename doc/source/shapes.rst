@@ -109,7 +109,7 @@ Example Plugins
 ****************
 
 Shapes Example
-==========================
+==============
 
 .. code-block:: python
 
