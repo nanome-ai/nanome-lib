@@ -1,16 +1,21 @@
-from . import *
-# folders
-from . import _util
-from . import _shapes
-from . import _structure
-from . import _ui
-from . import _network
-from . import _volumetric
-from . import _macro
-# classes
-from ._addon import _Addon
-from ._plugin_instance import _PluginInstance
-from . import _plugin_instance_deprecated
-from ._room import _Room
-from ._files import _Files
-from ._plugin import _Plugin
+from . import *  # noqa F401
+# folders  # noqa F401
+from . import _util  # noqa F401
+from . import _shapes  # noqa F401
+from . import _structure  # noqa F401
+from . import _ui  # noqa F401
+from . import _network  # noqa F401
+from . import _volumetric  # noqa F401
+from . import _macro  # noqa F401
+# classes  # noqa F401
+from ._addon import _Addon  # noqa F401
+from ._plugin_instance import _PluginInstance  # noqa F401
+from . import _plugin_instance_deprecated  # noqa F401
+from ._room import _Room  # noqa F401
+from ._files import _Files  # noqa F401
+from ._plugin import _Plugin  # noqa F401
+
+# Global Variable.
+# It's set by LogsManager, and is accessed in nanome/utils/asyncio.py
+# Required to properly log stack traces while handling exceptions.
+LOGGER_NAME = ''

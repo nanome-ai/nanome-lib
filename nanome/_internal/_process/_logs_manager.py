@@ -6,6 +6,7 @@ from collections import deque
 from dateutil import parser
 from logging.handlers import RotatingFileHandler
 
+import nanome
 from nanome._internal._network import _Packet
 
 
@@ -119,7 +120,10 @@ class LogsManager():
         filename = filename or ''
 
         logging_level = logging.DEBUG
-        self.logger = logging.getLogger(plugin.plugin_class.__name__)
+
+        # Set LOGGER_NAME so that it's available everywhere
+        nanome._internal.LOGGER_NAME = plugin.plugin_class.__name__
+        self.logger = logging.getLogger()
         self.logger.setLevel(logging_level)
 
         self.console_handler = self.create_console_handler()

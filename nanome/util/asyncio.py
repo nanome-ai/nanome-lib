@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import sys
+import nanome
 
 
 def handle_exception(exc_type, exc_value, exc_traceback):
@@ -8,8 +9,14 @@ def handle_exception(exc_type, exc_value, exc_traceback):
     if issubclass(exc_type, KeyboardInterrupt):
         sys.__excepthook__(exc_type, exc_value, exc_traceback)
         return
-    logger = logging.getLogger('plugin')
-    msg = "Uncaught " + exc_type.__name__
+
+    logger_name = nanome._internal.LOGGER_NAME
+    if logger_name:
+        logger = logging.getLogger(logger_name)
+    else:
+        logger = logging.getLogger()
+
+    msg = "Uncaught " + exc_type.__name__ + ": " + str(exc_value)
     logger.error(msg, exc_info=1)
 
 
