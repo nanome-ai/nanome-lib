@@ -4,7 +4,7 @@ import sys
 
 
 def handle_exception(exc_type, exc_value, exc_traceback):
-    """Make uncaught exceptions are logged."""
+    """Make sure uncaught exceptions are logged."""
     if issubclass(exc_type, KeyboardInterrupt):
         sys.__excepthook__(exc_type, exc_value, exc_traceback)
         return

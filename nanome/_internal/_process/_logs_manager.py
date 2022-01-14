@@ -152,7 +152,7 @@ class LogsManager():
             elif log_type == 'debug':
                 self.logger.debug(entry)
             elif log_type == 'error':
-                # Only include exc_info in log if exc_type is not None.
+                # Only include exc_info if sys.exc_info is not None.
                 # Otherwise logging formatter adds Nonetype:None to end of log,
                 # which breaks JSON formatted log messages.
                 use_exc_info = sys.exc_info()[0] is not None

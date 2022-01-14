@@ -24,7 +24,7 @@ async def async_update_loop(plugin_instance, UPDATE_RATE, MINIMUM_SLEEP):
         msg = traceback.format_exc()
         # Print manually because for some reason Logs.error doesn't display it.
         # TODO: Investigate why.
-        # print(msg)
+        print(msg)
         Logs.error(msg)
         plugin_instance._on_stop()
         plugin_instance._process_manager._close()
