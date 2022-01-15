@@ -8,13 +8,15 @@ Structure hierarchy
 
 Molecular structures are organized like so:
 
-- **Workspace**
-- ----**Complex**
-- -------- **Molecule**
-- -------------- **Chain**
-- -------------------- **Residue**
-- -------------------------- **Atom**
-- -------------------------- **Bond**
+.. code-block:: none
+
+    - Workspace
+        - Complex
+            - Molecule
+                - Chain
+                    - Residue
+                        - Atom
+                        - Bond
 
 A complex is a group of molecules and has a position and rotation. In Nanome, the user can switch between the
 molecules of a complex using the frame slider, in the information menu.
@@ -56,41 +58,36 @@ Request entire workspace in deep mode
 
 .. code-block:: python
 
-    def on_run(self):
-        self.request_workspace(self.on_workspace_received)
-
-    def on_workspace_received(self, workspace):
-        pass
-
-
-Request a list of specific complexes in deep mode
-=================================================
-
-.. code-block:: python
-
-    def on_run(self):
-        self.request_complexes([1, 6, 5], self.on_complexes_received) # Requests complexes with ID 1, 6 and 5
-
-    def on_complexes_received(self, complex_list):
-        pass
+    @async_callback
+    async def on_run(self):
+        workspace = await self.request_workspace()
 
 Request all complexes in the workspace in shallow mode
 ======================================================
 
 .. code-block:: python
 
-    def on_run(self):
-        self.request_complex_list(self.on_complex_list_received)
+    @async_callback
+    async def on_run(self):
+        shallow_complexes = await self.request_complex_list()
 
-    def on_complex_list_received(self, complex_list):
-        pass
+Request a list of specific complexes in deep mode
+=================================================
+
+.. code-block:: python
+
+    @async_callback
+    async def on_run(self):
+        deep_complexes = await self.request_complexes([1, 6, 5]) # Requests complexes with ID 1, 6 and 5
 
 Update workspace to match exactly
 =================================
 
 .. code-block:: python
 
-    def on_workspace_received(self, workspace):
+    @async_callback
+    async def on_run(self):
+        workspace = await self.request_workspace()
         # ...
         # Do something with workspace
         # ...
@@ -101,7 +98,8 @@ Add to workspace
 
 .. code-block:: python
 
-    def on_run(self):
+    @async_callback
+    async def on_run(self):
         # ...
         # Create new complexes
         # ...
@@ -114,7 +112,9 @@ In shallow mode:
 
 .. code-block:: python
 
-    def on_complex_list_received(self, complex_list):
+    @async_callback
+    async def on_run(self):
+        shallow_complexes = await self.request_complex_list()
         # ...
         # Do something with shallow structures, i.e. move them, rename them
         # ...
@@ -124,7 +124,9 @@ In deep mode:
 
 .. code-block:: python
 
-    def on_workspace_received(self, complex_list):
+    @async_callback
+    async def on_run(self):
+        deep_complexes = await self.request_complexes([1, 6, 5])
         # ...
         # Do something with deep structures, i.e. move them, rename them
         # ...
