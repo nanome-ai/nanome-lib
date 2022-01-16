@@ -2,6 +2,10 @@ import logging
 import sys
 import unittest
 
+if sys.version_info.major >= 3:
+    # reload is part of standard lib in Python 2.7
+    from importlib import reload
+
 from nanome import Plugin, PluginInstance
 from nanome.util import Logs
 
@@ -21,6 +25,13 @@ class LoggingTestCase(unittest.TestCase):
         self.host = 'anyhost'
         self.port = 8000
         self.key = ''
+
+    def tearDown(self, *args, **kwargs):
+        # Make sure remote logging always off after test.
+        # Without this teardown, logging configs persist to tests run after this.
+        super(LoggingTestCase, self).tearDown(*args, **kwargs)
+        logging.shutdown()
+        reload(logging)
 
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance')
@@ -107,15 +118,9 @@ class LoggingTestCase(unittest.TestCase):
     @patch('nanome._internal._plugin.Network._NetInstance.send')
     def test_nts_logger_handler(self, send_mock, connect_mock, loop_mock):
         """Ensure NTSLoggingHandler.handle() triggers a network request."""
-
         with patch.object(sys, 'argv', ['run.py', '--remote-logging', 'True']):
             self.plugin.run(self.host, self.port, self.key)
-
-        # Add fresh patch, and make sure network send is called during log update.
-        Logs.message("Testing network request")
-        with patch('nanome._internal._plugin.Network._NetInstance.send') as network_patch:
-            self.plugin._logs_manager.update()
-            network_patch.assert_called()
+        send_mock.assert_called()
 
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance.connect')
@@ -142,10 +147,12 @@ class LoggingTestCase(unittest.TestCase):
 
         with patch.object(sys, 'argv', testargs):
             self.plugin.run(self.host, self.port, self.key)
+            console_handler = self.plugin._logs_manager.console_handler
+            with patch.object(console_handler, 'handle') as handle_mock:
+                Logs.message("Should be printed to console")
+                handle_mock.assert_called()
 
-        # Write log, and make sure console handler is called.
-        Logs.message('This should be written to console.')
-        console_handler = self.plugin._logs_manager.console_handler
-        with patch.object(console_handler, 'handle') as handle_mock:
-            self.plugin._logs_manager.update()
-            handle_mock.assert_called()
+        # # Write log, and make sure console handler is called.
+        # Logs.message('This should be written to console.')
+        #     self.plugin._logs_manager.update()
+        #     handle_mock.assert_called()
