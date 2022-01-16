@@ -14,8 +14,3 @@ from . import _plugin_instance_deprecated  # noqa F401
 from ._room import _Room  # noqa F401
 from ._files import _Files  # noqa F401
 from ._plugin import _Plugin  # noqa F401
-
-# Global Variable.
-# It's set by LogsManager, and is accessed in nanome/utils/asyncio.py
-# Required to properly log stack traces while handling exceptions.
-LOGGER_NAME = ''

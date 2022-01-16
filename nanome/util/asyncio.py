@@ -1,7 +1,7 @@
 import asyncio
+import inspect
 import logging
 import sys
-import nanome
 
 
 def handle_exception(exc_type, exc_value, exc_traceback):
@@ -10,9 +10,12 @@ def handle_exception(exc_type, exc_value, exc_traceback):
         sys.__excepthook__(exc_type, exc_value, exc_traceback)
         return
 
-    logger_name = nanome._internal.LOGGER_NAME
-    if logger_name:
-        logger = logging.getLogger(logger_name)
+    # Get the module where error originated from the traceback
+    frm = frm = inspect.trace()[-1]
+    mod = inspect.getmodule(frm[0])
+    mod_name = mod.__name__ if mod else frm[1]
+    if mod_name:
+        logger = logging.getLogger(mod_name)
     else:
         logger = logging.getLogger()
 
