@@ -119,7 +119,9 @@ class LogsManager():
     def __init__(self, filename=None, plugin=None, write_log_file=True, remote_logging=False):
         filename = filename or ''
 
-        logging_level = logging.DEBUG
+        logging_level = logging.INFO
+        if plugin.verbose:
+            logging_level = logging.DEBUG
 
         # Set LOGGER_NAME so that it's available everywhere
         nanome._internal.LOGGER_NAME = plugin.plugin_class.__name__
