@@ -2,7 +2,7 @@ import logging
 import sys
 import unittest
 
-from nanome._internal.logging import NTSLoggingHandler
+from nanome._internal.loggers import NTSLoggingHandler
 from nanome import Plugin, PluginInstance
 from nanome.util import Logs
 
@@ -30,13 +30,11 @@ class LoggingTestCase(unittest.TestCase):
         super(LoggingTestCase, cls).tearDownClass()
         root_logger = logging.getLogger()
         for handler in root_logger.handlers:
-            if isinstance(handler, NTSLoggingHandler):
-                handler.close()
-                root_logger.removeHandler(handler)
+            root_logger.removeHandler(handler)
 
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance')
-    @patch('nanome._internal.logging.NTSLoggingHandler.handle')
+    @patch('nanome._internal.loggers.NTSLoggingHandler.handle')
     def test_nts_handler_called(self, handle_mock, netinstance_mock, loop_mock):
         """Assert logs get forwarded to NTS."""
         remote_logging = "True"
@@ -55,7 +53,7 @@ class LoggingTestCase(unittest.TestCase):
 
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance')
-    @patch('nanome._internal.logging.NTSLoggingHandler.handle')
+    @patch('nanome._internal.loggers.NTSLoggingHandler.handle')
     def test_nts_handler_not_called(self, handle_mock, netinstance_mock, loop_mock):
         """Assert logs don't get forwarded to NTS if remote-logging is False."""
         remote_logging = False

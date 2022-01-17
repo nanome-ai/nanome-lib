@@ -4,7 +4,7 @@ from nanome._internal._process import _ProcessManager
 from nanome._internal._network._commands._callbacks._commands_enums import _Hashes
 from nanome._internal._network._serialization._serializer import Serializer
 from nanome._internal._util._serializers import _TypeSerializer
-from nanome._internal.logging import LogsManager
+from nanome._internal.loggers import LogsManager
 from nanome.util.logs import Logs
 
 from multiprocessing import Process, Pipe, current_process
