@@ -4,7 +4,7 @@ import logging
 import sys
 
 
-def handle_exception(exc_type, exc_value, exc_traceback):
+async def handle_exception(exc_type, exc_value, exc_traceback):
     """Make sure uncaught exceptions are logged."""
     if issubclass(exc_type, KeyboardInterrupt):
         sys.__excepthook__(exc_type, exc_value, exc_traceback)
@@ -23,22 +23,21 @@ def handle_exception(exc_type, exc_value, exc_traceback):
     logger.error(msg, exc_info=1)
 
 
-@asyncio.coroutine
-def exception_wrapper(fn, args, kwargs):
+async def exception_wrapper(fn, args, kwargs):
     """Wrap all callbacks to catch exceptions.
 
     Based on this documentation
     https://docs.python.org/3.6/library/asyncio-dev.html?highlight=exception#detect-exceptions-never-consumed
     """
     try:
-        yield from fn(*args, **kwargs)
+        await fn(*args, **kwargs)
     except Exception:
         exc_type, exc_value, exc_traceback = sys.exc_info()
-        handle_exception(exc_type, exc_value, exc_traceback)
+        await handle_exception(exc_type, exc_value, exc_traceback)
 
 
 def async_callback(fn):
     def task(*args, **kwargs):
-        fut = asyncio.ensure_future(exception_wrapper(fn, args, kwargs))
+        fut = asyncio.create_task(exception_wrapper(fn, args, kwargs))
         return fut
     return task
