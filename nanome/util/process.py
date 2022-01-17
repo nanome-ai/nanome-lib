@@ -3,7 +3,7 @@ import nanome
 import sys
 
 asyncio = False
-if sys.version_info >= (3, 4):
+if sys.version_info >= (3, 7):
     try:
         import asyncio
     except ImportError:
