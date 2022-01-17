@@ -56,7 +56,6 @@ class NTSLoggingHandler(logging.Handler):
     def __init__(self, plugin, *args, **kwargs):
         super(NTSLoggingHandler, self).__init__(*args, **kwargs)
         self._plugin = plugin
-        # Unique Identifier for current Nanome session
         self.formatter = NTSFormatter()
 
     def handle(self, record):
@@ -117,7 +116,6 @@ class LogsManager():
 
     def __init__(self, filename=None, plugin=None, write_log_file=True, remote_logging=False):
         filename = filename or ''
-
         logging_level = logging.INFO
         if plugin.verbose:
             logging_level = logging.DEBUG
@@ -132,16 +130,21 @@ class LogsManager():
         if not os.environ.get('TZ'):
             os.environ['TZ'] = 'UTC'
 
+        existing_handler_types = set([type(hdlr) for hdlr in logging.getLogger().handlers])
         if write_log_file and filename:
             self.log_file_handler = self.create_log_file_handler(filename)
             self.log_file_handler.setLevel(logging_level)
+            if type(self.log_file_handler) not in existing_handler_types:
+                self.logger.addHandler(self.log_file_handler)
+
         if remote_logging and plugin:
             self.nts_handler = self.create_nts_handler(plugin)
             self.nts_handler.setLevel(logging_level)
+            if type(self.nts_handler) not in existing_handler_types:
+                self.logger.addHandler(self.nts_handler)
 
-        self.logger.addHandler(self.console_handler)
-        self.logger.addHandler(self.log_file_handler)
-        self.logger.addHandler(self.nts_handler)
+        if type(self.console_handler) not in existing_handler_types:
+            self.logger.addHandler(self.console_handler)
 
     def update(self):
         """Pass log into logger under the appropriate levelname."""

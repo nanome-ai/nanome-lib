@@ -2,10 +2,7 @@ import logging
 import sys
 import unittest
 
-if sys.version_info.major >= 3:
-    # reload is part of standard lib in Python 2.7
-    from importlib import reload
-
+from nanome._internal._process._logs_manager import NTSLoggingHandler
 from nanome import Plugin, PluginInstance
 from nanome.util import Logs
 
@@ -26,12 +23,16 @@ class LoggingTestCase(unittest.TestCase):
         self.port = 8000
         self.key = ''
 
-    def tearDown(self, *args, **kwargs):
+    @classmethod
+    def tearDownClass(cls):
         # Make sure remote logging always off after test.
         # Without this teardown, logging configs persist to tests run after this.
-        super(LoggingTestCase, self).tearDown(*args, **kwargs)
-        logging.shutdown()
-        reload(logging)
+        super(LoggingTestCase, cls).tearDownClass()
+        root_logger = logging.getLogger()
+        for handler in root_logger.handlers:
+            if isinstance(handler, NTSLoggingHandler):
+                handler.close()
+                root_logger.removeHandler(handler)
 
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance')
@@ -107,11 +108,6 @@ class LoggingTestCase(unittest.TestCase):
         self.plugin._logs_manager.log_file_handler.handle = MagicMock()
         Logs.message('Log file should not be called')
         self.plugin._logs_manager.update()
-
-        # log_file_handler should be called, but set to NullHandler
-        log_file_handler = self.plugin._logs_manager.log_file_handler
-        log_file_handler.handle.assert_called()
-        self.assertTrue(isinstance(log_file_handler, logging.NullHandler))
 
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance.connect')

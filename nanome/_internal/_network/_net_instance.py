@@ -51,15 +51,15 @@ class _NetInstance(object):
                     return
                 total_sent += sent
                 pack = pack[sent:]
-            except ConnectionResetError:
-                Logs.error("Connection has been forcibly closed by the server")
-                raise
             except ssl.SSLError:
                 pass
             except socket.error as e:
                 if e.errno == errno.EWOULDBLOCK or e.errno == errno.EAGAIN:
                     pass
-                pass
+            except Exception:
+                # Originally caught ConnectionResetError, but not Python 2 compatible
+                Logs.error("Connection has been forcibly closed by the server")
+                raise
 
     def disconnect(self):
         self._connection.close()
