@@ -144,7 +144,6 @@ class LogsManager():
         if type(self.console_handler) not in existing_handler_types:
             self.logger.addHandler(self.console_handler)
 
-
     @staticmethod
     def create_log_file_handler(filename):
         """Return handler that writes logs to provided filepath."""
