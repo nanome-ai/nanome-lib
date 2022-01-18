@@ -11,7 +11,7 @@ from timeit import default_timer as timer
 
 try:
     import asyncio
-    from ._plugin_instance_async import _async_update_loop
+    from ._plugin_instance_async import async_update_loop
 except ImportError:
     asyncio = False
 
@@ -110,7 +110,7 @@ class _PluginInstance(object):
 
     def _run(self):
         if asyncio and self.is_async:
-            coro = _async_update_loop(self, UPDATE_RATE, MINIMUM_SLEEP)
+            coro = async_update_loop(self, UPDATE_RATE, MINIMUM_SLEEP)
             asyncio.run(coro)
         else:
             self._update_loop()
@@ -119,8 +119,6 @@ class _PluginInstance(object):
         return _Hashes.PermissionRequestHashes[permission] in self._permissions
 
     def __init__(self, session_id, net_pipe, proc_pipe, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
-        Logs._set_verbose(verbose)
-        Logs._set_pipe(proc_pipe)
         self._menus = {}
 
         self._network = _ProcessNetwork(self, session_id, net_pipe, serializer, plugin_id, version_table)

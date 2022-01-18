@@ -4,7 +4,6 @@ import os
 import sys
 from collections import deque
 from dateutil import parser
-
 from logging.handlers import RotatingFileHandler
 
 from nanome._internal._network import _Packet
@@ -57,7 +56,6 @@ class NTSLoggingHandler(logging.Handler):
     def __init__(self, plugin, *args, **kwargs):
         super(NTSLoggingHandler, self).__init__(*args, **kwargs)
         self._plugin = plugin
-        # Unique Identifier for current Nanome session
         self.formatter = NTSFormatter()
 
     def handle(self, record):
@@ -106,7 +104,7 @@ class ColorFormatter(logging.Formatter):
         return not sys.platform == 'win32' or not sys.stdout.isatty()
 
 
-class _LogsManager():
+class LogsManager():
     """Manages our logging system, and creates required Handlers.
 
     - Every log manager has a console_handler, which outputs messages to the console.
@@ -114,13 +112,12 @@ class _LogsManager():
     - If remote_logging is True, Logs are forwarded to NTS.
     """
 
-    _pending = deque()
-
     def __init__(self, filename=None, plugin=None, write_log_file=True, remote_logging=False):
         filename = filename or ''
-
-        logging_level = logging.DEBUG
-        self.logger = logging.getLogger(plugin.__class__.__name__)
+        logging_level = logging.INFO
+        if plugin.verbose:
+            logging_level = logging.DEBUG
+        self.logger = logging.getLogger()
         self.logger.setLevel(logging_level)
 
         self.console_handler = self.create_console_handler()
@@ -131,33 +128,21 @@ class _LogsManager():
         if not os.environ.get('TZ'):
             os.environ['TZ'] = 'UTC'
 
+        existing_handler_types = set([type(hdlr) for hdlr in logging.getLogger().handlers])
         if write_log_file and filename:
             self.log_file_handler = self.create_log_file_handler(filename)
             self.log_file_handler.setLevel(logging_level)
+            if type(self.log_file_handler) not in existing_handler_types:
+                self.logger.addHandler(self.log_file_handler)
+
         if remote_logging and plugin:
             self.nts_handler = self.create_nts_handler(plugin)
             self.nts_handler.setLevel(logging_level)
+            if type(self.nts_handler) not in existing_handler_types:
+                self.logger.addHandler(self.nts_handler)
 
-        self.logger.addHandler(self.console_handler)
-        self.logger.addHandler(self.log_file_handler)
-        self.logger.addHandler(self.nts_handler)
-
-    def update(self):
-        """Pass log into logger under the appropriate levelname."""
-        for _ in range(0, len(_LogsManager._pending)):
-            log_type, entry = _LogsManager._pending.popleft()
-            if log_type == 'info':
-                self.logger.info(entry)
-            elif log_type == 'warning':
-                self.logger.warning(entry)
-            elif log_type == 'debug':
-                self.logger.debug(entry)
-            elif log_type == 'error':
-                self.logger.error(entry)
-
-    @classmethod
-    def received_request(cls, log_type, request):
-        cls._pending.append((log_type, request))
+        if type(self.console_handler) not in existing_handler_types:
+            self.logger.addHandler(self.console_handler)
 
     @staticmethod
     def create_log_file_handler(filename):

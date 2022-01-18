@@ -3,7 +3,6 @@ from nanome.util import IntEnum, auto
 
 class _DataType(IntEnum):
     process = auto()
-    log = auto()
 
 
 class _ProcData():

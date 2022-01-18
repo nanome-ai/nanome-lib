@@ -2,6 +2,7 @@ import logging
 import sys
 import unittest
 
+from nanome._internal.logs import NTSLoggingHandler
 from nanome import Plugin, PluginInstance
 from nanome.util import Logs
 
@@ -22,9 +23,18 @@ class LoggingTestCase(unittest.TestCase):
         self.port = 8000
         self.key = ''
 
+    @classmethod
+    def tearDownClass(cls):
+        # Make sure remote logging always off after test.
+        # Without this teardown, logging configs persist to tests run after this.
+        super(LoggingTestCase, cls).tearDownClass()
+        root_logger = logging.getLogger()
+        for handler in root_logger.handlers:
+            root_logger.removeHandler(handler)
+
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance')
-    @patch('nanome._internal._process._logs_manager.NTSLoggingHandler.handle')
+    @patch('nanome._internal.logs.NTSLoggingHandler.handle')
     def test_nts_handler_called(self, handle_mock, netinstance_mock, loop_mock):
         """Assert logs get forwarded to NTS."""
         remote_logging = "True"
@@ -38,12 +48,11 @@ class LoggingTestCase(unittest.TestCase):
 
         # Write log, and make sure NTSLogging Handler called.
         Logs.message('This should be forwarded to NTS.')
-        self.plugin._logs_manager.update()
         handle_mock.assert_called()
 
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance')
-    @patch('nanome._internal._process._logs_manager.NTSLoggingHandler.handle')
+    @patch('nanome._internal.logs.NTSLoggingHandler.handle')
     def test_nts_handler_not_called(self, handle_mock, netinstance_mock, loop_mock):
         """Assert logs don't get forwarded to NTS if remote-logging is False."""
         remote_logging = False
@@ -57,7 +66,6 @@ class LoggingTestCase(unittest.TestCase):
 
         # Write log, and make sure NTSLogging Handler not called.
         Logs.message('This should not be forwarded to NTS.')
-        self.plugin._logs_manager.update()
 
         # log_file_handler should be called, but set to NullHandler
         nts_handler = self.plugin._logs_manager.nts_handler
@@ -78,7 +86,6 @@ class LoggingTestCase(unittest.TestCase):
         # Write log, and make sure log_file_handler is called.
         self.plugin._logs_manager.log_file_handler.handle = MagicMock()
         Logs.message('Log file handler should be called.')
-        self.plugin._logs_manager.update()
         self.plugin._logs_manager.log_file_handler.handle.assert_called()
 
     @patch('nanome._internal._plugin._Plugin._loop')
@@ -95,27 +102,15 @@ class LoggingTestCase(unittest.TestCase):
 
         self.plugin._logs_manager.log_file_handler.handle = MagicMock()
         Logs.message('Log file should not be called')
-        self.plugin._logs_manager.update()
-
-        # log_file_handler should be called, but set to NullHandler
-        log_file_handler = self.plugin._logs_manager.log_file_handler
-        log_file_handler.handle.assert_called()
-        self.assertTrue(isinstance(log_file_handler, logging.NullHandler))
 
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance.connect')
     @patch('nanome._internal._plugin.Network._NetInstance.send')
     def test_nts_logger_handler(self, send_mock, connect_mock, loop_mock):
         """Ensure NTSLoggingHandler.handle() triggers a network request."""
-
         with patch.object(sys, 'argv', ['run.py', '--remote-logging', 'True']):
             self.plugin.run(self.host, self.port, self.key)
-
-        # Add fresh patch, and make sure network send is called during log update.
-        Logs.message("Testing network request")
-        with patch('nanome._internal._plugin.Network._NetInstance.send') as network_patch:
-            self.plugin._logs_manager.update()
-            network_patch.assert_called()
+        send_mock.assert_called()
 
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance.connect')
@@ -128,7 +123,6 @@ class LoggingTestCase(unittest.TestCase):
         Logs.error("This is an error")
         Logs.debug("This is a debug message")
         Logs.message("This is a regular message")
-        self.plugin._logs_manager.update()
 
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance')
@@ -142,10 +136,7 @@ class LoggingTestCase(unittest.TestCase):
 
         with patch.object(sys, 'argv', testargs):
             self.plugin.run(self.host, self.port, self.key)
-
-        # Write log, and make sure console handler is called.
-        Logs.message('This should be written to console.')
-        console_handler = self.plugin._logs_manager.console_handler
-        with patch.object(console_handler, 'handle') as handle_mock:
-            self.plugin._logs_manager.update()
-            handle_mock.assert_called()
+            console_handler = self.plugin._logs_manager.console_handler
+            with patch.object(console_handler, 'handle') as handle_mock:
+                Logs.message("Should be printed to console")
+                handle_mock.assert_called()
