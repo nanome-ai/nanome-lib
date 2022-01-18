@@ -152,7 +152,7 @@ class _Plugin(object):
             sub_args = [sys.executable] + sub_args
             process = subprocess.Popen(sub_args, **sub_kwargs)
         except Exception:
-            logger.info("Couldn't find a suitable python executable")
+            logger.error("Couldn't find a suitable python executable")
             sys.exit(1)
 
         last_mtime = max(self.__file_times("."))
