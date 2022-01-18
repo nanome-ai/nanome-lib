@@ -112,8 +112,6 @@ class LogsManager():
     - If remote_logging is True, Logs are forwarded to NTS.
     """
 
-    _pending = deque()
-
     def __init__(self, filename=None, plugin=None, write_log_file=True, remote_logging=False):
         filename = filename or ''
         logging_level = logging.INFO
@@ -146,26 +144,6 @@ class LogsManager():
         if type(self.console_handler) not in existing_handler_types:
             self.logger.addHandler(self.console_handler)
 
-    def update(self):
-        """Pass log into logger under the appropriate levelname."""
-        for _ in range(0, len(LogsManager._pending)):
-            log_type, entry = LogsManager._pending.popleft()
-            if log_type == 'info':
-                self.logger.info(entry)
-            elif log_type == 'warning':
-                self.logger.warning(entry)
-            elif log_type == 'debug':
-                self.logger.debug(entry)
-            elif log_type == 'error':
-                # Only include exc_info if sys.exc_info is not None.
-                # Otherwise logging formatter adds Nonetype:None to end of log,
-                # which breaks JSON formatted log messages.
-                use_exc_info = sys.exc_info()[0] is not None
-                self.logger.error(entry, exc_info=use_exc_info)
-
-    @classmethod
-    def received_request(cls, log_type, request):
-        cls._pending.append((log_type, request))
 
     @staticmethod
     def create_log_file_handler(filename):

@@ -48,7 +48,6 @@ class LoggingTestCase(unittest.TestCase):
 
         # Write log, and make sure NTSLogging Handler called.
         Logs.message('This should be forwarded to NTS.')
-        self.plugin._logs_manager.update()
         handle_mock.assert_called()
 
     @patch('nanome._internal._plugin._Plugin._loop')
@@ -67,7 +66,6 @@ class LoggingTestCase(unittest.TestCase):
 
         # Write log, and make sure NTSLogging Handler not called.
         Logs.message('This should not be forwarded to NTS.')
-        self.plugin._logs_manager.update()
 
         # log_file_handler should be called, but set to NullHandler
         nts_handler = self.plugin._logs_manager.nts_handler
@@ -88,7 +86,6 @@ class LoggingTestCase(unittest.TestCase):
         # Write log, and make sure log_file_handler is called.
         self.plugin._logs_manager.log_file_handler.handle = MagicMock()
         Logs.message('Log file handler should be called.')
-        self.plugin._logs_manager.update()
         self.plugin._logs_manager.log_file_handler.handle.assert_called()
 
     @patch('nanome._internal._plugin._Plugin._loop')
@@ -105,7 +102,6 @@ class LoggingTestCase(unittest.TestCase):
 
         self.plugin._logs_manager.log_file_handler.handle = MagicMock()
         Logs.message('Log file should not be called')
-        self.plugin._logs_manager.update()
 
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance.connect')
@@ -127,7 +123,6 @@ class LoggingTestCase(unittest.TestCase):
         Logs.error("This is an error")
         Logs.debug("This is a debug message")
         Logs.message("This is a regular message")
-        self.plugin._logs_manager.update()
 
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance')
@@ -145,8 +140,3 @@ class LoggingTestCase(unittest.TestCase):
             with patch.object(console_handler, 'handle') as handle_mock:
                 Logs.message("Should be printed to console")
                 handle_mock.assert_called()
-
-        # # Write log, and make sure console handler is called.
-        # Logs.message('This should be written to console.')
-        #     self.plugin._logs_manager.update()
-        #     handle_mock.assert_called()
