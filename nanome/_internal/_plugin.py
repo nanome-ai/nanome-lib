@@ -90,8 +90,7 @@ class _Plugin(object):
 
         elif packet.packet_type == Network._Packet.packet_type_plugin_connection:
             self._plugin_id = packet.plugin_id
-            msg =  "Registered with plugin ID {}\n=======================================\n".format(str(self._plugin_id))
-            logger.info(msg)
+            logger.info("Registered with plugin ID {}\n=======================================\n".format(str(self._plugin_id)))
 
         elif packet.packet_type == Network._Packet.packet_type_plugin_disconnection:
             if self._plugin_id == -1:
