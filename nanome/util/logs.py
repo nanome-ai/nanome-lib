@@ -1,4 +1,3 @@
-import sys
 import functools
 import inspect
 from .enum import IntEnum, auto

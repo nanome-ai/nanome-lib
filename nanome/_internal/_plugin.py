@@ -4,7 +4,7 @@ from nanome._internal._process import _ProcessManager
 from nanome._internal._network._commands._callbacks._commands_enums import _Hashes
 from nanome._internal._network._serialization._serializer import Serializer
 from nanome._internal._util._serializers import _TypeSerializer
-from nanome._internal.loggers import LogsManager
+from nanome._internal.logs import LogsManager
 import logging
 
 from multiprocessing import Process, Pipe, current_process
@@ -90,7 +90,8 @@ class _Plugin(object):
 
         elif packet.packet_type == Network._Packet.packet_type_plugin_connection:
             self._plugin_id = packet.plugin_id
-            logger.info("Registered with plugin ID", self._plugin_id, "\n=======================================\n")
+            msg =  "Registered with plugin ID {}\n=======================================\n".format(str(self._plugin_id))
+            logger.info(msg)
 
         elif packet.packet_type == Network._Packet.packet_type_plugin_disconnection:
             if self._plugin_id == -1:
