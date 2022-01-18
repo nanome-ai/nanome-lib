@@ -11,7 +11,7 @@ async def handle_exception(exc_type, exc_value, exc_traceback):
         return
 
     # Get the module where error originated from the traceback
-    frm = frm = inspect.trace()[-1]
+    frm = inspect.trace()[-1]
     mod = inspect.getmodule(frm[0])
     mod_name = mod.__name__ if mod else frm[1]
     if mod_name:
