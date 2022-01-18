@@ -86,7 +86,7 @@ class _Plugin(object):
                 return
 
             # Doesn't register? It's an error
-            logger.warning("Received a command from an unregistered session", session_id)
+            logger.warning("Received a command from an unregistered session {}".format(session_id))
 
         elif packet.packet_type == Network._Packet.packet_type_plugin_connection:
             self._plugin_id = packet.plugin_id
@@ -108,7 +108,7 @@ class _Plugin(object):
                 id = packet.session_id
                 self._sessions[id].signal_and_close_pipes()
                 del self._sessions[id]
-                logger.debug("Session", id, "disconnected")
+                logger.debug("Session {} disconnected".format(id))
             except Exception:
                 pass
         elif packet.packet_type == Network._Packet.packet_type_keep_alive:
@@ -116,7 +116,7 @@ class _Plugin(object):
         elif packet.packet_type == Network._Packet.packet_type_logs_request:
             self.__logs_request(packet)
         else:
-            logger.warning("Received a packet of unknown type", packet.packet_type, ". Ignoring")
+            logger.warning("Received a packet of unknown type {}. Ignoring".format(packet.packet_type))
 
     def __file_filter(self, name):
         return name.endswith(".py") or name.endswith(".json")
@@ -260,7 +260,7 @@ class _Plugin(object):
 
     def __on_client_connection(self, session_id, version_table):
         if session_id in self._sessions:  # If session_id already exists, close it first ()
-            logger.info("Closing session ID", session_id, "because a new session connected with the same ID")
+            logger.info("Closing session ID {} because a new session connected with the same ID".format(session_id))
             self._sessions[session_id].signal_and_close_pipes()
         main_conn_net, process_conn_net = Pipe()
         main_conn_proc, process_conn_proc = Pipe()
@@ -288,7 +288,7 @@ class _Plugin(object):
             id_str = packet.payload.decode('utf-8')
             id = int(id_str)
         except Exception:
-            logger.error('Received a broken log request from NTS:', packet.payload)
+            logger.error('Received a broken log request from NTS: {}'.format(packet.payload))
 
         try:
             with open(self.__log_filename, 'r') as content_file:
