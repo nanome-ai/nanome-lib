@@ -5,7 +5,7 @@ from nanome._internal._network._commands._callbacks._commands_enums import _Hash
 from nanome._internal._network._serialization._serializer import Serializer
 from nanome._internal._util._serializers import _TypeSerializer
 from nanome._internal.loggers import LogsManager
-from nanome.util.logs import Logs
+import logging
 
 from multiprocessing import Process, Pipe, current_process
 from timeit import default_timer as timer
@@ -18,6 +18,8 @@ import fnmatch
 import re
 import subprocess
 import signal
+
+logger = logging.getLogger(__name__)
 
 MAX_RECONNECT_WAIT = 20.0
 KEEP_ALIVE_TIME_INTERVAL = 60.0
@@ -84,22 +86,22 @@ class _Plugin(object):
                 return
 
             # Doesn't register? It's an error
-            Logs.warning("Received a command from an unregistered session", session_id)
+            logger.warning("Received a command from an unregistered session", session_id)
 
         elif packet.packet_type == Network._Packet.packet_type_plugin_connection:
             self._plugin_id = packet.plugin_id
-            Logs.message("Registered with plugin ID", self._plugin_id, "\n=======================================\n")
+            logger.info("Registered with plugin ID", self._plugin_id, "\n=======================================\n")
 
         elif packet.packet_type == Network._Packet.packet_type_plugin_disconnection:
             if self._plugin_id == -1:
                 if self._description['auth'] is None:
-                    Logs.error("Connection refused by NTS. Are you missing a security key file?")
+                    logger.error("Connection refused by NTS. Are you missing a security key file?")
                 else:
-                    Logs.error("Connection refused by NTS. Your security key file might be invalid")
+                    logger.error("Connection refused by NTS. Your security key file might be invalid")
                 self._logs_manager.update()
                 sys.exit(1)
             else:
-                Logs.message("Connection ended by NTS")
+                logger.info("Connection ended by NTS")
                 self._logs_manager.update()
                 sys.exit(0)
 
@@ -108,7 +110,7 @@ class _Plugin(object):
                 id = packet.session_id
                 self._sessions[id].signal_and_close_pipes()
                 del self._sessions[id]
-                Logs.debug("Session", id, "disconnected")
+                logger.debug("Session", id, "disconnected")
             except Exception:
                 pass
         elif packet.packet_type == Network._Packet.packet_type_keep_alive:
@@ -116,7 +118,7 @@ class _Plugin(object):
         elif packet.packet_type == Network._Packet.packet_type_logs_request:
             self.__logs_request(packet)
         else:
-            Logs.warning("Received a packet of unknown type", packet.packet_type, ". Ignoring")
+            logger.warning("Received a packet of unknown type", packet.packet_type, ". Ignoring")
 
     def __file_filter(self, name):
         return name.endswith(".py") or name.endswith(".json")
@@ -152,7 +154,7 @@ class _Plugin(object):
             sub_args = [sys.executable] + sub_args
             process = subprocess.Popen(sub_args, **sub_kwargs)
         except Exception:
-            Logs.error("Couldn't find a suitable python executable")
+            logger.info("Couldn't find a suitable python executable")
             self._logs_manager.update()
             sys.exit(1)
 
@@ -162,7 +164,7 @@ class _Plugin(object):
                 max_mtime = max(self.__file_times("."))
                 if max_mtime > last_mtime:
                     last_mtime = max_mtime
-                    Logs.message("Restarting plugin")
+                    logger.info("Restarting plugin")
                     process.send_signal(break_signal)
                     process = subprocess.Popen(sub_args, **sub_kwargs)
                 time.sleep(wait)
@@ -202,7 +204,7 @@ class _Plugin(object):
                     reconnect_wait = min(2 ** self.__reconnect_attempt, MAX_RECONNECT_WAIT)
                     elapsed = now - self.__disconnection_time
                     if elapsed >= reconnect_wait:
-                        Logs.message("Trying to reconnect...")
+                        logger.info("Trying to reconnect...")
                         if self.__connect() is False:
                             if self.__reconnect_attempt == 3:
                                 self.__disconnect()
@@ -252,7 +254,7 @@ class _Plugin(object):
         self.__exit()
 
     def __exit(self):
-        Logs.debug('Exiting')
+        logger.debug('Exiting')
         for session in self._sessions.values():
             session.signal_and_close_pipes()
             session.plugin_process.join()
@@ -263,7 +265,7 @@ class _Plugin(object):
 
     def __on_client_connection(self, session_id, version_table):
         if session_id in self._sessions:  # If session_id already exists, close it first ()
-            Logs.message("Closing session ID", session_id, "because a new session connected with the same ID")
+            logger.info("Closing session ID", session_id, "because a new session connected with the same ID")
             self._sessions[session_id].signal_and_close_pipes()
         main_conn_net, process_conn_net = Pipe()
         main_conn_proc, process_conn_proc = Pipe()
@@ -271,26 +273,27 @@ class _Plugin(object):
             session_id, self._network, self._process_manager, self._logs_manager,
             main_conn_net, main_conn_proc)
         permissions = self._description["permissions"]
+        is_verbose = True
         process = Process(
             target=self._launch_plugin,
             args=(
                 self._plugin_class, session_id, process_conn_net,
                 process_conn_proc, self.__serializer, self._plugin_id,
                 version_table, _TypeSerializer.get_version_table(),
-                Logs._is_verbose(), self._custom_data, permissions
+                is_verbose, self._custom_data, permissions
             )
         )
         process.start()
         session.plugin_process = process
         self._sessions[session_id] = session
-        Logs.debug("Registered new session:", session_id)
+        logger.debug("Registered new session:", session_id)
 
     def __logs_request(self, packet):
         try:
             id_str = packet.payload.decode('utf-8')
             id = int(id_str)
         except Exception:
-            Logs.error('Received a broken log request from NTS:', packet.payload)
+            logger.error('Received a broken log request from NTS:', packet.payload)
 
         try:
             with open(self.__log_filename, 'r') as content_file:
@@ -317,7 +320,7 @@ class _Plugin(object):
     def _launch_plugin(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
         plugin = plugin_class()
         _PluginInstance.__init__(plugin, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions)
-        Logs.debug("Starting plugin")
+        logger.debug("Starting plugin")
         plugin._run()
 
     def __init__(self, name, description, tags=None, has_advanced=False, permissions=None, integrations=None):

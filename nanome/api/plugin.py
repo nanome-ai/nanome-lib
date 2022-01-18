@@ -90,7 +90,6 @@ class Plugin(_Plugin):
 
         self.has_autoreload = args.auto_reload
         self.verbose = args.verbose
-        Logs._set_verbose(args.verbose)
 
         if args.ignore:
             to_ignore = args.ignore.split(",")

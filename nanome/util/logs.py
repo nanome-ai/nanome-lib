@@ -16,36 +16,6 @@ class Logs(object):
         error = auto()
         info = auto()
 
-    _is_windows_cmd = sys.platform == 'win32' and sys.stdout.isatty()
-    _verbose = None
-    __pipe = None
-
-    @classmethod
-    def _set_verbose(cls, value):
-        cls._verbose = value
-
-    @classmethod
-    def _set_pipe(cls, value):
-        cls.__pipe = value
-
-    @classmethod
-    def _is_verbose(cls):
-        return cls._verbose
-
-    @classmethod
-    def _log(cls, log_type, *args):
-        msg = ' '.join(map(str, args))
-        if cls.__pipe is not None:
-            # Send log type and log message to the main process.
-            from nanome._internal._util import _DataType, _ProcData
-            to_send = _ProcData()
-            to_send._type = _DataType.log
-            to_send._data = (log_type, msg)
-            cls.__pipe.send(to_send)
-        else:
-            from nanome._internal._process import LogsManager
-            LogsManager.received_request(log_type, msg)
-
     @classmethod
     def error(cls, *args):
         """
