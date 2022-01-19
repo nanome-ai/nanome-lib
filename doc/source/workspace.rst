@@ -140,6 +140,18 @@ Add to workspace
         # ...
         self.add_to_workspace([new_complex1, new_complex2])
 
+Remove from workspace
+=====================
+
+.. code-block:: python
+
+    @async_callback
+    async def on_run(self):
+        # ...
+        # Get list of complexes to remove
+        # ...
+        self.remove_from_workspace(complexes_to_remove)
+
 Update specific structures
 ==========================
 
