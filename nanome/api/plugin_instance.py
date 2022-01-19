@@ -6,6 +6,7 @@ from nanome.util.enums import StreamDirection, PluginListButtonType
 from nanome._internal import _PluginInstance
 from nanome._internal._process import _Bonding, _Dssp
 from nanome._internal._network._commands._callbacks import _Messages
+from nanome.api.structure import Complex
 from nanome.api.integration import Integration
 from nanome.api.ui import Menu
 from nanome.api.streams import Stream
@@ -202,6 +203,23 @@ class PluginInstance(_PluginInstance):
         """
         expects_response = callback is not None or self.is_async
         id = self._network._send(_Messages.add_to_workspace, complex_list, expects_response)
+        return self._save_callback(id, callback)
+
+    def remove_from_workspace(self, complex_list, callback=None):
+        """
+        | Remove a list of complexes from the current workspace
+
+        :param complex_list: List of Complexes to remove
+        :type complex_list: list of :class:`~nanome.structure.Complex`
+        """
+        empty_complexes = []
+        for complex in complex_list:
+            empty = Complex()
+            empty.index = complex.index
+            empty_complexes.append(empty)
+
+        expects_response = callback is not None or self.is_async
+        id = self._network._send(_Messages.structures_deep_update, empty_complexes, expects_response)
         return self._save_callback(id, callback)
 
     def update_menu(self, menu, shallow=False):
