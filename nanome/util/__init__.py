@@ -6,15 +6,11 @@ from . import *
 from .string_builder import StringBuilder
 from .color import Color
 from .logs import Logs
-from .enum import Enum, IntEnum, auto
-try:
-    from .enum import reset_auto
-except:
-    pass
+from .enum import Enum, IntEnum, auto, reset_auto
 
 try:
     from .asyncio import async_callback
-except:
+except SyntaxError:
     pass
 
 from . import enums

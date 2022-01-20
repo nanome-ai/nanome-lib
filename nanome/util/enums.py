@@ -1,10 +1,6 @@
 from . import IntEnum
-from .enum import auto
-try:
-    from nanome.util import reset_auto
-except:
-    def reset_auto():
-        pass
+from .enum import auto, reset_auto
+
 import sys
 
 
@@ -331,7 +327,7 @@ class Integrations(_CommandEnum):
 
 
 class Permissions(_CommandEnum):
-    # Tmp hack
-    reset_auto()  # Not an enum
+    # Reset enum counter for Python 2.7
+    reset_auto()
 
     local_files_access = auto()

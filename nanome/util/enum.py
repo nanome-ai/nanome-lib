@@ -19,6 +19,10 @@ else:
 
 if sys.version_info >= (3, 6):
     from enum import auto
+
+    def reset_auto():
+        pass
+
 else:
     from .py2_enum import auto, reset_auto
 
