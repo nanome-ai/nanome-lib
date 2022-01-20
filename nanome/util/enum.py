@@ -12,6 +12,7 @@ def safe_cast(cls, value):
             Logs.warning("Invalid value", value, "for enum", cls.__name__, ". Library might outdated.")
         return list(cls)[0]
 
+
 if sys.version_info >= (3, 4):
     from enum import Enum, IntEnum
 else:

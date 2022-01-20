@@ -6,7 +6,7 @@ from nanome.util.enums import _CommandEnum, Integrations, Permissions
 
 
 class _Commands(_CommandEnum):
-    # Reset enum counter for Python 2.7 
+    # Reset enum counter for Python 2.7
     reset_auto()  # Not an enum
 
     # Control
@@ -91,7 +91,7 @@ class _Commands(_CommandEnum):
 
 
 class _Messages(_CommandEnum):
-    # Reset enum counter for Python 2.7 
+    # Reset enum counter for Python 2.7
     reset_auto()
 
     # Control
