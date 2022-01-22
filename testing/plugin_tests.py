@@ -4,6 +4,7 @@ import unittest
 
 from nanome import Plugin, PluginInstance
 from nanome._internal._process import _ProcessManager
+from nanome.util import config
 
 if sys.version_info.major >= 3:
     from unittest.mock import MagicMock, patch
@@ -98,21 +99,28 @@ class PluginTestCase(unittest.TestCase):
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance')
     @patch('nanome._internal._plugin.Network._NetInstance')
-    def test_config_priority(self, send_mock, connect_mock, loop_mock):
-        # make sure that the config priority is held in tact
-        host = 'anyhost'
-        port = 8000
-        key = ''
-        self.plugin.run(host, port, key)
-        self.assertEqual(self.plugin.host, host)
-        self.assertEqual(self.plugin.port, port)
-        self.assertEqual(self.plugin.key, key)
-        self.assertEqual(self.plugin.plugin_class, PluginInstance)
+    def test_config_priority(self, *args):
+        """Validate order of priority for plugin settings.
 
-        # Test with different args set as environment variables.
+        Order of priority for settings:
+        1. First, parameters to function are checked
+        2) Then CLI args are checked.
+        3) Then Environment variables.
+        4) then nanome json config file
+        """
+        # Lowest priority: nanome.util.config config file.
+        config_host = config.fetch('host')
+        config_port = config.fetch('port')
+        config_key = config.fetch('key')
+        self.plugin.run()
+        self.assertEqual(self.plugin.host, config_host)
+        self.assertEqual(self.plugin.port, config_port)
+        self.assertEqual(self.plugin.key, config_key)
+
+        # Environment variables should take precedent over config file.
         env_host = 'environ_host'
         env_port = 8001
-        env_key = 'env_key12345'
+        env_key = 'environ_key12345'
         environ_dict = {
             'NTS_HOST': env_host,
             'NTS_PORT': str(env_port),
@@ -123,6 +131,40 @@ class PluginTestCase(unittest.TestCase):
             self.assertEqual(self.plugin.host, env_host)
             self.assertEqual(self.plugin.port, env_port)
             self.assertEqual(self.plugin.key, env_key)
+
+        # CLI args should take precedent over environment variables.
+        cli_host = 'cli_host'
+        cli_port = 8003
+        cli_key = 'cli_key12345'
+        cli_write_log_file = 'False'
+        cli_name = 'cli-plugin-name'
+        cli_ignore = 'cli_ignore.py'
+        testargs = [
+            'run.py',
+            '--write-log-file', cli_write_log_file,
+            '--ignore', cli_ignore,
+            '--name', cli_name,
+            '--key', cli_key,
+            '--verbose',
+            '-a', cli_host,
+            '-p', str(cli_port),
+        ]
+        with patch.object(sys, 'argv', testargs), patch.dict('os.environ', environ_dict):
+            self.plugin.run()
+        self.assertEqual(self.plugin.write_log_file, True)
+        self.assertEqual(self.plugin.to_ignore, [cli_ignore])
+        self.assertEqual(self.plugin.name, cli_name)
+        self.assertEqual(self.plugin.verbose, True)
+
+        # fn parameters take precedent over everything
+        kwarg_host = 'anyhost'
+        kwarg_port = 8000
+        kwarg_key = ''
+        with patch.dict('os.environ', environ_dict):
+            self.plugin.run(kwarg_host, kwarg_port, kwarg_key)
+            self.assertEqual(self.plugin.host, kwarg_host)
+            self.assertEqual(self.plugin.port, kwarg_port)
+            self.assertEqual(self.plugin.key, kwarg_key)
 
         # # Test with different args set
         # write_log_file = "True"
