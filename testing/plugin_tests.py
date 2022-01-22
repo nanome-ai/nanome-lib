@@ -57,6 +57,7 @@ class PluginTestCase(unittest.TestCase):
         ]
         with patch.object(sys, 'argv', testargs):
             self.plugin.run(host, port, key)
+
         self.assertEqual(self.plugin.write_log_file, True)
         self.assertEqual(self.plugin.remote_logging, False)
         self.assertEqual(self.plugin.to_ignore, [ignore])
@@ -105,13 +106,16 @@ class PluginTestCase(unittest.TestCase):
         Order of priority for settings:
         1. First, parameters to function are checked
         2) Then CLI args are checked.
-        3) Then Environment variables.
-        4) then nanome json config file
+        3) Environment variables.
         """
         # Lowest priority: nanome.util.config config file.
-        config_host = config.fetch('host')
-        config_port = config.fetch('port')
-        config_key = config.fetch('key')
+        config_host = 'config_host'
+        config_port = 8000
+        config_key = 'config_key54321'
+        config.set('host', config_host)
+        config.set('port', config_port)
+        config.set('key', config_key)
+
         self.plugin.run()
         self.assertEqual(self.plugin.host, config_host)
         self.assertEqual(self.plugin.port, config_port)
