@@ -1,4 +1,5 @@
 import argparse
+import os
 
 from . import _DefaultPlugin
 from nanome._internal import _Plugin
@@ -66,6 +67,24 @@ class Plugin(_Plugin):
         parser.add_argument('--remote-logging', type=str2bool, dest='remote_logging', help='Toggle whether or not logs should be forwarded to NTS.')
         return parser
 
+    @property
+    def environ_dict(self):
+        """Get values set by environment variables."""
+        if not hasattr(self, '_environ_dict'):
+            environ_dict = {
+                'host': os.environ.get('NTS_HOST'),
+                'port': os.environ.get('NTS_PORT'),
+                'keyfile': os.environ.get('NTS_KEYFILE'),
+                'auto-reload': os.environ.get('PLUGIN_AUTO_RELOAD'),
+                'name': os.environ.get('PLUGIN_NAME'),
+                'verbose': os.environ.get('PLUGIN_VERBOSE'),
+                'write-log-file': os.environ.get('PLUGIN_WRITE_LOG_FILE'),
+                'remote-logging': os.environ.get('PLUGIN_REMOTE_LOGGING'),
+            }
+            # remove any keys that haven't been set.
+            self._environ_dict = {k: v for k, v in environ_dict.items() if v is not None}
+        return self._environ_dict
+
     def run(self, host="config", port="config", key="config"):
         """
         | Starts the plugin by connecting to the server specified.
@@ -77,39 +96,47 @@ class Plugin(_Plugin):
         :type host: str
         :type port: int
         """
-        default_host = config.fetch('host') if host == 'config' else host
-        default_port = config.fetch('port') if port == 'config' else port
-        default_key = config.fetch('key') if key == 'config' else key
-        default_write_log_file = config.fetch('write_log_file')
-        default_remote_logging = False
+        # Order of priority for settings:
+        # 1. First, parameters to function are checked
+        # 2) Then CLI args are checked.
+        # 3) Then Environment variables.
+        # 4) then nanome json config file
 
         # Parse command line args and set internal variables.
         parser = self.create_parser()
-        args, _ = parser.parse_known_args()
+        cli_dict = vars(parser.parse_known_args()[0])
+        for k in list(cli_dict.keys()):
+            if cli_dict[k] in ['config', None, '']:
+                cli_dict.pop(k)
+        environ_dict = self.environ_dict
 
-        self.host = args.host or default_host
-        self.port = args.port or default_port
-        self.key = args.keyfile or default_key
+        # Create dict out of config file.
+        config_file_dict = {
+            "host": config.fetch("host"),
+            "port": config.fetch("port"),
+            "key": config.fetch("key"),
+            "plugin_files_path": config.fetch("plugin_files_path"),
+            "write_log_file": config.fetch("write_log_file"),
+        }
 
-        if args.write_log_file is not None:
-            self.write_log_file = args.write_log_file
-        else:
-            self.write_log_file = default_write_log_file
+        fn_params = {'host': host, 'port': port, 'key': key}
+        plugin_settings = {**config_file_dict, **environ_dict, **cli_dict, **fn_params}
 
-        if args.remote_logging is not None:
-            self.remote_logging = args.remote_logging
-        else:
-            self.remote_logging = default_remote_logging
+        self.host = plugin_settings.get('host')
+        self.port = plugin_settings.get('port')
+        self.key = plugin_settings.get('key')
+        self.write_log_file = plugin_settings.get('write_log_file') or False
+        self.remote_logging = plugin_settings.get('remote_logging') or False
+        self.has_autoreload = plugin_settings.get('auto_reload')
+        self.verbose = plugin_settings.get('verbose')
 
-        self.has_autoreload = args.auto_reload
-        self.verbose = args.verbose
-
-        if args.ignore:
-            to_ignore = args.ignore.split(",")
+        if plugin_settings.get('ignore'):
+            to_ignore = plugin_settings.get('ignore').split(",")
             self.to_ignore = to_ignore
 
-        if args.name:
-            self.name = args.name
+        # Name can be set during the class instantiation without cli arg.
+        if plugin_settings.get('name'):
+            self.name = plugin_settings.get('name')
 
         # Configure Logging
         self.__log_filename = self._plugin_class.__name__ + ".log"
