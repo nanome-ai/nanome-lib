@@ -4,7 +4,7 @@ import json
 from nanome.util import Logs
 
 
-__all__ = ["fetch", "set", "settings"]
+__all__ = ["fetch", "set", "settings", "get_config_path"]
 
 default_json_string = """{
     "host":"127.0.0.1",
@@ -45,7 +45,7 @@ def get_config_path():
     if home is None:
         home = os.getenv('HOME')
     directory = home + s + ".nanome_lib"
-    config_path = directory + s + "config.json"
+    config_path = directory + s + "config.txt"
     return config_path
 
 
@@ -83,14 +83,15 @@ def set(key, value):
     :param value: The value to set the config item to
     :type value: :class:`str`
     """
+    breakpoint()
     config_path = get_config_path()
     with open(config_path, "r") as file:
         config_json = json.load(file)
         config_json[key] = value
+
     with open(config_path, "w") as file:
         json.dump(config_json, file)
         return True
-    return False
 
 
 def _get_environ_dict():
