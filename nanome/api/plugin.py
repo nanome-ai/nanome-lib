@@ -70,20 +70,19 @@ class Plugin(_Plugin):
     @property
     def environ_dict(self):
         """Get values set by environment variables."""
-        if not hasattr(self, '_environ_dict'):
-            environ_dict = {
-                'host': os.environ.get('NTS_HOST'),
-                'port': os.environ.get('NTS_PORT'),
-                'keyfile': os.environ.get('NTS_KEYFILE'),
-                'auto-reload': os.environ.get('PLUGIN_AUTO_RELOAD'),
-                'name': os.environ.get('PLUGIN_NAME'),
-                'verbose': os.environ.get('PLUGIN_VERBOSE'),
-                'write-log-file': os.environ.get('PLUGIN_WRITE_LOG_FILE'),
-                'remote-logging': os.environ.get('PLUGIN_REMOTE_LOGGING'),
-            }
-            # remove any keys that haven't been set.
-            self._environ_dict = {k: v for k, v in environ_dict.items() if v is not None}
-        return self._environ_dict
+        environ_dict = {
+            'host': os.environ.get('NTS_HOST'),
+            'port': os.environ.get('NTS_PORT'),
+            'key': os.environ.get('NTS_KEYFILE'),
+            'auto-reload': os.environ.get('PLUGIN_AUTO_RELOAD'),
+            'name': os.environ.get('PLUGIN_NAME'),
+            'verbose': os.environ.get('PLUGIN_VERBOSE'),
+            'write-log-file': os.environ.get('PLUGIN_WRITE_LOG_FILE'),
+            'remote-logging': os.environ.get('PLUGIN_REMOTE_LOGGING'),
+        }
+        # remove any keys that haven't been set.
+        environ_dict = {k: v for k, v in environ_dict.items() if v is not None}
+        return environ_dict
 
     def run(self, host="config", port="config", key="config"):
         """
@@ -120,10 +119,14 @@ class Plugin(_Plugin):
         }
 
         fn_params = {'host': host, 'port': port, 'key': key}
+        for k in list(fn_params):
+            if fn_params[k] == 'config':
+                fn_params.pop(k)
+
         plugin_settings = {**config_file_dict, **environ_dict, **cli_dict, **fn_params}
 
         self.host = plugin_settings.get('host')
-        self.port = plugin_settings.get('port')
+        self.port = int(plugin_settings.get('port'))
         self.key = plugin_settings.get('key')
         self.write_log_file = plugin_settings.get('write_log_file') or False
         self.remote_logging = plugin_settings.get('remote_logging') or False
