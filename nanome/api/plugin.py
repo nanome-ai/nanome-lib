@@ -109,8 +109,8 @@ class Plugin(_Plugin):
             self._run()
 
     @classmethod
-    def setup(cls, name, description, tags, has_advanced, plugin_class, host="config",
-              port="config", key="config", permissions=None, integrations=None):
+    def setup(cls, name, description, tags, has_advanced, plugin_class, host=None,
+              port=None, key=None, permissions=None, integrations=None):
 
         permissions = permissions or []
         integrations = integrations or []
