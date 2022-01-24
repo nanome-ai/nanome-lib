@@ -83,7 +83,6 @@ def set(key, value):
     :param value: The value to set the config item to
     :type value: :class:`str`
     """
-    breakpoint()
     config_path = get_config_path()
     with open(config_path, "r") as file:
         config_json = json.load(file)
@@ -145,7 +144,10 @@ def load_settings():
 
     cli_dict = _get_cli_args()
     environ_dict = _get_environ_dict()
-    plugin_settings = {**config_dict, **environ_dict, **cli_dict}
+
+    plugin_settings = dict(config_dict)
+    plugin_settings.update(environ_dict)
+    plugin_settings.update(cli_dict)
     return plugin_settings
 
 
