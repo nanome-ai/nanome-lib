@@ -83,6 +83,10 @@ class PluginTestCase(unittest.TestCase):
         description = 'Test Plugin'
         tags = []
         has_advanced = True
+        
+        config.set('host', 'anyhost')
+        config.set('port', 8000)
+        config.set('key', 'abcdefg1234')
         self.plugin.setup(name, description, tags, has_advanced, PluginInstance)
         netinstance_mock.assert_called_once()
         loop_mock.assert_called_once()

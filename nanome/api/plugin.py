@@ -1,4 +1,5 @@
 import argparse
+import sys
 
 from . import _DefaultPlugin
 from nanome._internal import _Plugin
@@ -77,7 +78,15 @@ class Plugin(_Plugin):
         :type port: int
         """
         self.host = host if host else config.fetch('host')
-        self.port = port if port else int(config.fetch('port'))
+
+        if not self.host:
+            Logs.error('No NTS host provided')
+            sys.exit(1)
+        try:
+            self.port = port if port else int(config.fetch('port'))
+        except ValueError:
+            Logs.error('Port must be an integer, received \"{}\"'.format(port))
+            sys.exit(1)
         self.key = key if key is not None else config.fetch('key')
         self.write_log_file = config.fetch('write_log_file') or False
         self.remote_logging = config.fetch('remote_logging') or False

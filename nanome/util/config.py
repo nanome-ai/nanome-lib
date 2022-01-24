@@ -7,10 +7,10 @@ from nanome.util import Logs
 __all__ = ["fetch", "set", "settings", "get_config_path"]
 
 default_json_string = """{
-    "host":"127.0.0.1",
-    "port":8888,
-    "key":"nts_key",
-    "plugin_files_path":"~/Documents/nanome-plugins",
+    "host":"",
+    "port":"",
+    "key":"",
+    "plugin_files_path":"",
     "write_log_file":true
 }"""
 
@@ -76,7 +76,6 @@ def set(key, value):
     """
     | Set a configuration entry in your nanome configuration.
     | Built-in keys are host, port, key and plugin_files_path.
-    | Default values are 127.0.0.1, 8888, nts_key and ~/Documents/nanome-plugins
 
     :param key: The key of the config value to set
     :type key: :class:`str`

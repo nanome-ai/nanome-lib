@@ -1,8 +1,16 @@
 import argparse
 import sys
-
+import logging
 from nanome.util import config
 
+<<<<<<< HEAD
+from nanome.util import config
+=======
+>>>>>>> remove default config values, better handle invalid configs, fix setup_config.py
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+logger.addHandler(logging.StreamHandler())
 
 def create_parser():
     """Arguments used to set global config values.
@@ -42,10 +50,10 @@ def interactive_mode():
         config_key = argument.dest
         if config_key == 'help':
             continue
-
-        print("==============================")
-        print(config_key + " (" + argument.help + ")")
-        print("Current Value: {}".format(config.fetch(config_key)))
+        
+        logger.info("==============================")
+        logger.info(config_key + " (" + argument.help + ")")
+        logger.info("Current Value: {}".format(config.fetch(config_key)))
         user_input = input("New Value (leave empty if unchanged): ")
         user_input = user_input.strip()
         if user_input == '':
