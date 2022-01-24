@@ -1,20 +1,12 @@
-from nanome.util import Logs, IntEnum, auto
+from nanome.util import Logs, IntEnum, auto, reset_auto
 from nanome.util.enums import _CommandEnum, Integrations, Permissions
-
-try:
-    from nanome.util import reset_auto
-except:
-    def reset_auto():
-        pass
-
-import sys
 
 # /!\ /!\ /!\
 # Values names are really important here, as they are hashed, and need to match Nanome
 
 
 class _Commands(_CommandEnum):
-    # Tmp hack
+    # Reset enum counter for Python 2.7
     reset_auto()  # Not an enum
 
     # Control
@@ -99,8 +91,8 @@ class _Commands(_CommandEnum):
 
 
 class _Messages(_CommandEnum):
-    # Tmp hack
-    reset_auto()  # Not an enum
+    # Reset enum counter for Python 2.7
+    reset_auto()
 
     # Control
     connect = auto()
@@ -180,8 +172,8 @@ class _Messages(_CommandEnum):
 
 
 class _Integrations(_CommandEnum):
-    # Tmp hack
-    reset_auto()  # Not an enum
+    # Reset enum counter for Python 2.7
+    reset_auto()
 
     # Hydrogens
     hydrogen_add = auto()
