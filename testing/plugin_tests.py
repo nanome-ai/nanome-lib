@@ -19,6 +19,17 @@ class PluginTestCase(unittest.TestCase):
         self.plugin = Plugin('Test Plugin', 'Unit Test Plugin')
         self.plugin._network = MagicMock()
         self.plugin.set_plugin_class(PluginInstance)
+        # Store original config values and reset on tearDown
+        # We don't want tests changing the configs permanently
+        self.original_config_host = config.fetch('host')
+        self.original_config_port = config.fetch('port')
+        self.original_config_key = config.fetch('key')
+
+    def tearDown(self):
+        config.set('host', self.original_config_host)
+        config.set('port', self.original_config_port)
+        config.set('key', self.original_config_key)
+        super(PluginTestCase, self).tearDown()
 
     def test_create_parser(self):
         parser = Plugin.create_parser()
@@ -99,14 +110,14 @@ class PluginTestCase(unittest.TestCase):
 
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance')
-    @patch('nanome._internal._plugin.Network._NetInstance')
     def test_config_priority(self, *args):
         """Validate order of priority for plugin settings.
 
         Order of priority for settings:
-        1. First, parameters to function are checked
+        1. First, parameters to run() function are checked
         2) Then CLI args are checked.
-        3) Environment variables.
+        3) Then environment variables.
+        4) Finally, fall back on config file.
         """
         # Lowest priority: nanome.util.config config file.
         config_host = 'config_host'
