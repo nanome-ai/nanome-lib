@@ -1,13 +1,8 @@
 import argparse
 import sys
-import logging
 
 from nanome.util import config
 
-
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-logger.addHandler(logging.StreamHandler())
 
 def create_parser():
     """Arguments used to set global config values.
@@ -19,7 +14,7 @@ def create_parser():
             'Run without arguments for interactive mode'
         )
     )
-    parser.add_argument('-a', '--host', dest='host', help='NTS server address')
+    parser.add_argument('-a', '--host', dest='host', help='NTS address')
     parser.add_argument('-p', '--port', type=int, dest='port', help='NTS server port')
     parser.add_argument('-k', '--key', dest='key', help='NTS authentication key file or string')
     parser.add_argument(
@@ -40,7 +35,7 @@ def create_parser():
 
 def interactive_mode():
     """Set config values one by one using input from the user."""
-    logger.info('\nSetup global configurations for Nanome Plugins.\n')
+    print('\nSetup global configurations for Nanome Plugins.\n')
 
     parser = create_parser()
     for argument in parser._actions:
@@ -48,9 +43,9 @@ def interactive_mode():
         if config_key == 'help':
             continue
         
-        logger.info("==============================")
-        logger.info(config_key + " (" + argument.help + ")")
-        logger.info("Current Value: {}".format(config.fetch(config_key)))
+        print("==============================")
+        print(config_key + " (" + argument.help + ")")
+        print("Current Value: {}".format(config.fetch(config_key)))
         user_input = input("New Value (leave empty if unchanged): ")
         user_input = user_input.strip()
         if user_input == '':
