@@ -9,6 +9,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 logger.addHandler(logging.StreamHandler())
 
+
 def create_parser():
     """Arguments used to set global config values.
     rtype: argsparser: args parser
@@ -47,7 +48,7 @@ def interactive_mode():
         config_key = argument.dest
         if config_key == 'help':
             continue
-        
+
         logger.info("==============================")
         logger.info(config_key + " (" + argument.help + ")")
         logger.info("Current Value: {}".format(config.fetch(config_key)))
