@@ -40,10 +40,7 @@ def create_parser():
 
 def interactive_mode():
     """Set config values one by one using input from the user."""
-    logger.info("""
-        Setup utility for Nanome Plugins global configuration. 
-        run without arguments for interactive mode.
-    """)
+    logger.info('\nSetup global configurations for Nanome Plugins.\n')
 
     parser = create_parser()
     for argument in parser._actions:
