@@ -42,7 +42,7 @@ def interactive_mode():
         config_key = argument.dest
         if config_key == 'help':
             continue
-        
+
         print("==============================")
         print(config_key + " (" + argument.help + ")")
         print("Current Value: {}".format(config.fetch(config_key)))
