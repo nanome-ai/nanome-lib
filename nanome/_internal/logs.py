@@ -115,7 +115,7 @@ class LogsManager():
     def __init__(self, filename=None, plugin=None, write_log_file=True, remote_logging=False):
         filename = filename or ''
         logging_level = logging.INFO
-        if plugin.verbose:
+        if plugin and plugin.verbose:
             logging_level = logging.DEBUG
         self.logger = logging.getLogger()
         self.logger.setLevel(logging_level)
