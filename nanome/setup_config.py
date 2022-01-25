@@ -14,8 +14,8 @@ def create_parser():
             'Run without arguments for interactive mode'
         )
     )
-    parser.add_argument('-a', '--host', dest='host', help='NTS address')
-    parser.add_argument('-p', '--port', type=int, dest='port', help='NTS server port')
+    parser.add_argument('-a', '--host', dest='host', help='NTS host or IP')
+    parser.add_argument('-p', '--port', type=int, dest='port', help='NTS port')
     parser.add_argument('-k', '--key', dest='key', help='NTS authentication key file or string')
     parser.add_argument(
         '-f', '--files_path',
