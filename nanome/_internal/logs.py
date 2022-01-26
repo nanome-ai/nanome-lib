@@ -57,37 +57,54 @@ class NTSFormatter(logging.Formatter):
 
     def format(self, record):
         msg = super(NTSFormatter, self).format(record)
-        json_msg = json.loads(msg.replace('\n', '\\n'))
+        try:
+            json_msg = json.loads(msg.replace('\n', '\\n'))
+        except json.JSONDecodeError:
+            updated_msg = msg
+        else:
+            # Convert timestamp to UTC
+            timestamp = json_msg['timestamp']
+            timestamp_dt = parser.parse(timestamp)
+            json_msg['timestamp'] = timestamp_dt.strftime(self.datefmt)
 
-        # Convert timestamp to UTC
-        timestamp = json_msg['timestamp']
-        timestamp_dt = parser.parse(timestamp)
-        json_msg['timestamp'] = timestamp_dt.strftime(self.datefmt)
-
-        # Replace `sev` value with corresponding LogType from enum.
-        level_name = json_msg['sev']
-        enum_val = getattr(LogTypes, level_name)
-        json_msg['sev'] = enum_val
-        updated_msg = json.dumps(json_msg)
+            # Replace `sev` value with corresponding LogType from enum.
+            level_name = json_msg['sev']
+            enum_val = getattr(LogTypes, level_name)
+            json_msg['sev'] = enum_val
+            updated_msg = json.dumps(json_msg)
         return updated_msg
 
 
 class NTSLoggingHandler(logging.Handler):
     """Forward Log messages to NTS."""
 
-    def __init__(self, plugin, *args, **kwargs):
-        super(NTSLoggingHandler, self).__init__(*args, **kwargs)
+    pipe = None
+
+    def __init__(self, plugin=None, pipe=None):
+        super(NTSLoggingHandler, self).__init__()
         self._plugin = plugin
         self.formatter = NTSFormatter()
 
     def handle(self, record):
         # Use new NTS message format to forward logs.
-        fmted_msg = self.formatter.format(record)
-        packet = _Packet()
-        packet.set(0, _Packet.packet_type_live_logs, 0)
-        packet.write_string(fmted_msg)
-        if self._plugin.connected:
-            self._plugin._network.send(packet)
+        if self.pipe:
+            # If a pipe is set, then the data must be sent to the main process
+            # in order to be forwarded to NTS.
+            to_send = _ProcData()
+            to_send._type = _DataType.log
+            to_send._data = record
+            try:
+                self.pipe.send(to_send)
+            except BrokenPipeError:
+                # Connection has been closed.
+                pass
+        else:
+            fmted_msg = self.formatter.format(record)
+            packet = _Packet()
+            packet.set(0, _Packet.packet_type_live_logs, 0)
+            packet.write_string(fmted_msg)
+            if self._plugin and self._plugin.connected:
+                self._plugin._network.send(packet)
 
 
 class ColorFormatter(logging.Formatter):
@@ -163,7 +180,7 @@ class LogsManager():
             if type(self.log_file_handler) not in existing_handler_types:
                 self.logger.addHandler(self.log_file_handler)
 
-        if self.remote_logging and self.plugin:
+        if self.remote_logging:
             self.nts_handler = self.create_nts_handler(self.plugin)
             self.nts_handler.setLevel(logging_level)
             if type(self.nts_handler) not in existing_handler_types:
@@ -173,7 +190,7 @@ class LogsManager():
             self.logger.addHandler(self.console_handler)
 
     @classmethod
-    def configure_child_process(cls, pipe_conn, plugin_name):
+    def configure_child_process(cls, pipe_conn, plugin_class):
         """Set up a PipeHandler that forwards all Logs to the main Process."""
         logger = logging.getLogger()
         logger.handlers = []
@@ -190,7 +207,7 @@ class LogsManager():
             from nanome.api import Plugin
             parser = Plugin.create_parser()
             cli_args, _ = parser.parse_known_args()
-            filename = plugin_name + ".log"
+            filename = plugin_class.__name__ + ".log"
 
             if cli_args.write_log_file is not None:
                 write_log_file = cli_args.write_log_file
@@ -201,11 +218,16 @@ class LogsManager():
             if cli_args.remote_logging is not None:
                 remote_logging = cli_args.remote_logging
 
-            obj = cls(
+            log_mgr = cls(
                 filename=filename,
                 write_log_file=write_log_file,
                 remote_logging=remote_logging)
-            obj.configure_main_process()
+            log_mgr.configure_main_process()
+            nts_handler = next((
+                hdlr for hdlr in logging.getLogger().handlers
+                if isinstance(hdlr, NTSLoggingHandler)
+            ), None)
+            nts_handler.pipe = pipe_conn
 
     @staticmethod
     def create_log_file_handler(filename):
@@ -217,7 +239,7 @@ class LogsManager():
         return handler
 
     @staticmethod
-    def create_nts_handler(plugin):
+    def create_nts_handler(plugin=None):
         """Return handler that forwards logs to NTS."""
         handler = NTSLoggingHandler(plugin)
         return handler
