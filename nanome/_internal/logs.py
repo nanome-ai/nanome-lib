@@ -172,10 +172,11 @@ class LogsManager():
     @classmethod
     def configure_child_process(cls, pipe_conn, plugin_name):
         """Set up a PipeHandler that forwards all Logs to the main Process."""
+        logger = logging.getLogger()
+        logger.handlers = []
         if os.name == 'nt':
             # Windows requires pipes going to main process to access logs
             # Send all logs, and let main process determine what logging level to show.
-            logger = logging.getLogger()
             logger.setLevel(logging.DEBUG)
             pipe_handler = PipeHandler(pipe_conn)
             pipe_handler.level = logging.DEBUG
@@ -187,7 +188,10 @@ class LogsManager():
             parser = Plugin.create_parser()
             settings, _ = parser.parse_known_args()
             filename = plugin_name + ".log"
-            obj = cls(filename=filename, write_log_file=settings.write_log_file, remote_logging=settings.remote_logging)
+            obj = cls(
+                filename=filename,
+                write_log_file=settings.write_log_file,
+                remote_logging=settings.remote_logging)
             obj.configure_main_process()
 
     @staticmethod
