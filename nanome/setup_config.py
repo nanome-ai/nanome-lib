@@ -3,11 +3,6 @@ import sys
 import logging
 from nanome.util import config
 
-<<<<<<< HEAD
-from nanome.util import config
-=======
->>>>>>> remove default config values, better handle invalid configs, fix setup_config.py
-
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 logger.addHandler(logging.StreamHandler())
