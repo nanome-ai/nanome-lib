@@ -129,9 +129,14 @@ class LogsManager():
     """
 
     def __init__(self, filename=None, plugin=None, write_log_file=True, remote_logging=False):
-        filename = filename or ''
+        self.filename = filename or ''
+        self.plugin = plugin
+        self.write_log_file = write_log_file
+        self.remote_logging = remote_logging
+
+    def configure_main_process(self):
         logging_level = logging.INFO
-        if plugin and plugin.verbose:
+        if self.plugin and self.plugin.verbose:
             logging_level = logging.DEBUG
         self.logger = logging.getLogger()
         self.logger.setLevel(logging_level)
@@ -145,20 +150,30 @@ class LogsManager():
             os.environ['TZ'] = 'UTC'
 
         existing_handler_types = set([type(hdlr) for hdlr in logging.getLogger().handlers])
-        if write_log_file and filename:
-            self.log_file_handler = self.create_log_file_handler(filename)
+        if self.write_log_file and self.filename:
+            self.log_file_handler = self.create_log_file_handler(self.filename)
             self.log_file_handler.setLevel(logging_level)
             if type(self.log_file_handler) not in existing_handler_types:
                 self.logger.addHandler(self.log_file_handler)
 
-        if remote_logging and plugin:
-            self.nts_handler = self.create_nts_handler(plugin)
+        if self.remote_logging and self.plugin:
+            self.nts_handler = self.create_nts_handler(self.plugin)
             self.nts_handler.setLevel(logging_level)
             if type(self.nts_handler) not in existing_handler_types:
                 self.logger.addHandler(self.nts_handler)
 
         if type(self.console_handler) not in existing_handler_types:
             self.logger.addHandler(self.console_handler)
+
+    @staticmethod
+    def configure_child_process(pipe_conn):
+        """Set up a PipeHandler that forwards all Logs to the main Process."""
+        logger = logging.getLogger()
+        # Send all logs, and let main process determine what logging level to show.
+        logger.setLevel(logging.DEBUG)
+        pipe_handler = PipeHandler(pipe_conn)
+        pipe_handler.level = logging.DEBUG
+        logger.addHandler(pipe_handler)
 
     @staticmethod
     def create_log_file_handler(filename):
