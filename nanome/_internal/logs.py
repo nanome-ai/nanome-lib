@@ -22,6 +22,7 @@ class PipeHandler(logging.Handler):
 
     Resolves issues with logging from multiple processes.
     """
+
     def __init__(self, pipe_conn):
         super(PipeHandler, self).__init__()
         self.pipe_conn = pipe_conn
