@@ -4,7 +4,7 @@ from nanome._internal._process import _ProcessManager
 from nanome._internal._network._commands._callbacks._commands_enums import _Hashes
 from nanome._internal._network._serialization._serializer import Serializer
 from nanome._internal._util._serializers import _TypeSerializer
-from nanome._internal.logs import LogsManager, PipeHandler
+from nanome._internal.logs import LogsManager
 import logging
 
 from multiprocessing import Process, Pipe, current_process
@@ -181,7 +181,7 @@ class _Plugin(object):
             packet.set(0, Network._Packet.packet_type_plugin_connection, plugin_id)
             packet.write_string(json.dumps(self._description))
             self._network.send(packet)
-            self.__connected = True
+            self.connected = True
             self.__reconnect_attempt = 0
             self.__last_keep_alive = timer()
             for session in self._sessions.values():
@@ -198,7 +198,7 @@ class _Plugin(object):
             while True:
                 now = timer()
 
-                if self.__connected is False:
+                if self.connected is False:
                     reconnect_wait = min(2 ** self.__reconnect_attempt, MAX_RECONNECT_WAIT)
                     elapsed = now - self.__disconnection_time
                     if elapsed >= reconnect_wait:
@@ -211,14 +211,14 @@ class _Plugin(object):
                         time.sleep(reconnect_wait - elapsed)
                         continue
                 if self._network.receive() is False:
-                    self.__connected = False
+                    self.connected = False
                     self.__disconnection_time = timer()
                     self._network.disconnect()
                     continue
 
                 if self.__waiting_keep_alive:
                     if now - self.__last_keep_alive >= KEEP_ALIVE_TIMEOUT:
-                        self.__connected = False
+                        self.connected = False
                         self.__disconnection_time = timer()
                         continue
                 elif now - self.__last_keep_alive >= KEEP_ALIVE_TIME_INTERVAL and self._plugin_id >= 0:
@@ -351,7 +351,7 @@ class _Plugin(object):
             'integrations': integrations
         }
         self._plugin_class = None
-        self.__connected = False
+        self.connected = False
         self._host = ''
         self._key = ''
         self._port = None

@@ -86,7 +86,8 @@ class NTSLoggingHandler(logging.Handler):
         packet = _Packet()
         packet.set(0, _Packet.packet_type_live_logs, 0)
         packet.write_string(fmted_msg)
-        self._plugin._network.send(packet)
+        if self._plugin.connected:
+            self._plugin._network.send(packet)
 
 
 class ColorFormatter(logging.Formatter):
