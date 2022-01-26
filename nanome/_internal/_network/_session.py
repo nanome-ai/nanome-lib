@@ -28,8 +28,8 @@ class _Session(object):
                 if request._type == _DataType.process:
                     self._process_manager._received_request(request._data, self)
                 elif request._type == _DataType.log:
-                    log_type, data = request._data
-                    self._logs_manager.received_request(log_type, data)
+                    record = request._data
+                    self._logs_manager.received_request(record)
 
         except EOFError:
             Logs.error("Plugin encountered an error, please check the logs.", traceback.format_exc())
@@ -39,13 +39,13 @@ class _Session(object):
     def _on_packet_received(self, payload):
         try:
             self._net_plugin_pipe.send(payload)
-        except:
+        except Exception:
             Logs.error("Cannot deliver packet to plugin", self._session_id, "Did it crash?")
 
     def send_process_data(self, data):
         try:
             self._proc_plugin_pipe.send(data)
-        except:
+        except Exception:
             Logs.error("Cannot deliver process info to plugin", self._session_id, "Did it crash?")
 
     def _send_disconnection_message(self, plugin_id):

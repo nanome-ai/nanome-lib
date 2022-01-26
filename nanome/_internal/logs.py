@@ -25,8 +25,7 @@ class PipeHandler(logging.Handler):
         from nanome._internal._util import _DataType, _ProcData
         to_send = _ProcData()
         to_send._type = _DataType.log
-        log_type = 'info'
-        to_send._data = (log_type, record.msg)
+        to_send._data = record
         self.pipe_conn.send(to_send)
 
 
@@ -182,12 +181,5 @@ class LogsManager():
         return handler
 
     @classmethod
-    def received_request(cls, log_type, entry):
-        if log_type == 'info':
-            logging.getLogger().info(entry)
-        elif log_type == 'warning':
-            logging.getLogger().warning(entry)
-        elif log_type == 'debug':
-            logging.getLogger().debug(entry)
-        elif log_type == 'error':
-            logging.getLogger().error(entry)
+    def received_request(cls, record):
+        logging.log(record.levelno, record.msg)
