@@ -30,7 +30,11 @@ class PipeHandler(logging.Handler):
         to_send = _ProcData()
         to_send._type = _DataType.log
         to_send._data = record
-        self.pipe_conn.send(to_send)
+        try:
+            self.pipe_conn.send(to_send)
+        except BrokenPipeError:
+            # Connection has been closed.
+            pass
 
 
 class NTSFormatter(logging.Formatter):
