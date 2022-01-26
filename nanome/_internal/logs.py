@@ -17,7 +17,10 @@ class LogTypes:
 
 
 class PipeHandler(logging.Handler):
+    """Send log records through pipe to main process.
 
+    Resolves issues with logging from multiple processes.
+    """
     def __init__(self, pipe_conn):
         self.pipe_conn = pipe_conn
 
@@ -182,4 +185,5 @@ class LogsManager():
 
     @classmethod
     def received_request(cls, record):
-        logging.log(record.levelno, record.msg)
+        logger = logging.getLogger(record.name)
+        logger.log(record.levelno, record.msg)
