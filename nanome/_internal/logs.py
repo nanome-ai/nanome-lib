@@ -169,15 +169,21 @@ class LogsManager():
         if type(self.console_handler) not in existing_handler_types:
             self.logger.addHandler(self.console_handler)
 
-    @staticmethod
-    def configure_child_process(pipe_conn):
+    @classmethod
+    def configure_child_process(cls, pipe_conn):
         """Set up a PipeHandler that forwards all Logs to the main Process."""
-        logger = logging.getLogger()
-        # Send all logs, and let main process determine what logging level to show.
-        logger.setLevel(logging.DEBUG)
-        pipe_handler = PipeHandler(pipe_conn)
-        pipe_handler.level = logging.DEBUG
-        logger.addHandler(pipe_handler)
+        if os.name == 'nt':
+            # Windows requires pipes going to main process to access logs
+            # Send all logs, and let main process determine what logging level to show.
+            logger = logging.getLogger()
+            logger.setLevel(logging.DEBUG)
+            pipe_handler = PipeHandler(pipe_conn)
+            pipe_handler.level = logging.DEBUG
+            logger.addHandler(pipe_handler)
+        else:
+            # Mac/Linux can be configured the same way as the main process
+            obj = cls()
+            obj.configure_main_process()
 
     @staticmethod
     def create_log_file_handler(filename):
