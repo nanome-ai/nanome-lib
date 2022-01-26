@@ -170,7 +170,7 @@ class LogsManager():
             self.logger.addHandler(self.console_handler)
 
     @classmethod
-    def configure_child_process(cls, pipe_conn):
+    def configure_child_process(cls, pipe_conn, plugin_name):
         """Set up a PipeHandler that forwards all Logs to the main Process."""
         if os.name == 'nt':
             # Windows requires pipes going to main process to access logs
@@ -182,7 +182,12 @@ class LogsManager():
             logger.addHandler(pipe_handler)
         else:
             # Mac/Linux can be configured the same way as the main process
-            obj = cls()
+            # Get logging settings from sys.argv
+            from nanome.api import Plugin
+            parser = Plugin.create_parser()
+            settings, _ = parser.parse_known_args()
+            filename = plugin_name + ".log"
+            obj = cls(filename=filename, write_log_file=settings.write_log_file, remote_logging=settings.remote_logging)
             obj.configure_main_process()
 
     @staticmethod

@@ -6,6 +6,8 @@ from nanome._internal._network._serialization._serializer import Serializer
 from nanome._internal._util._serializers import _TypeSerializer
 from nanome._internal.logs import LogsManager, PipeHandler
 import logging
+from tblib import pickling_support
+
 
 from multiprocessing import Process, Pipe, current_process
 from timeit import default_timer as timer
@@ -34,6 +36,7 @@ class _Plugin(object):
     _custom_data = None
 
     def _run(self):
+        pickling_support.install()
         if os.name == "nt":
             signal.signal(signal.SIGBREAK, self.__on_termination_signal)
         else:
@@ -314,11 +317,13 @@ class _Plugin(object):
 
     @classmethod
     def _launch_plugin(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
+        pickling_support.install()
         plugin = plugin_class()
+
         _PluginInstance.__init__(plugin, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions)
         logger = logging.getLogger()
         logger.handlers = []  # All handlers should be configured by LogsManager
-        LogsManager.configure_child_process(pipe_proc)
+        LogsManager.configure_child_process(pipe_proc, plugin_class.__name__)
         logger.debug("Starting plugin")
         plugin._run()
 

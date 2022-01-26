@@ -5,6 +5,7 @@ from nanome._internal._process import _ProcessManagerInstance
 from nanome._internal._network._commands._callbacks import _Messages
 from nanome._internal._network._commands._callbacks._commands_enums import _Hashes
 
+import os
 import traceback
 import time
 from timeit import default_timer as timer
@@ -101,8 +102,12 @@ class _PluginInstance(object):
         except KeyboardInterrupt:
             self._on_stop()
             return
-        except:
-            Logs.error(traceback.format_exc())
+        except Exception as e:
+            if os.name == 'nt':
+                msg = traceback.format_exc()
+            else:
+                msg = ' '.join(map(str, e.args))
+            Logs.error(msg)
             self._on_stop()
             self._process_manager._close()
             self._network._close()
