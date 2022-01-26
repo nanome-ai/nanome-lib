@@ -1,11 +1,6 @@
 import argparse
 import sys
-import logging
 from nanome.util import config
-
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-logger.addHandler(logging.StreamHandler())
 
 def create_parser():
     """Arguments used to set global config values.
@@ -46,9 +41,9 @@ def interactive_mode():
         if config_key == 'help':
             continue
         
-        logger.info("==============================")
-        logger.info(config_key + " (" + argument.help + ")")
-        logger.info("Current Value: {}".format(config.fetch(config_key)))
+        print("==============================")
+        print(config_key + " (" + argument.help + ")")
+        print("Current Value: {}".format(config.fetch(config_key)))
         user_input = input("New Value (leave empty if unchanged): ")
         user_input = user_input.strip()
         if user_input == '':
