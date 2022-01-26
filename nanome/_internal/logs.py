@@ -9,6 +9,7 @@ from nanome._internal._network import _Packet
 from nanome._internal._util import _DataType, _ProcData
 from nanome.util import config
 
+
 class LogTypes:
     """Log Codes as expected by NTS."""
     DEBUG = 0
