@@ -143,7 +143,7 @@ class PluginTestCase(unittest.TestCase):
         environ_dict = {
             'NTS_HOST': env_host,
             'NTS_PORT': str(env_port),
-            'NTS_KEYFILE': env_key
+            'NTS_KEY': env_key
         }
         with patch.dict('os.environ', environ_dict):
             self.plugin.run()
@@ -155,9 +155,10 @@ class PluginTestCase(unittest.TestCase):
         cli_host = 'cli_host'
         cli_port = 8003
         cli_key = 'cli_key12345'
-        cli_write_log_file = 'False'
+        cli_write_log_file = 'false'
         cli_name = 'cli-plugin-name'
         cli_ignore = 'cli_ignore.py'
+        cli_remote_logging = 'y'
         testargs = [
             'run.py',
             '--write-log-file', cli_write_log_file,
@@ -167,13 +168,15 @@ class PluginTestCase(unittest.TestCase):
             '--verbose',
             '-a', cli_host,
             '-p', str(cli_port),
+            '--remote-logging', cli_remote_logging
         ]
         with patch.object(sys, 'argv', testargs), patch.dict('os.environ', environ_dict):
             self.plugin.run()
-        self.assertEqual(self.plugin.write_log_file, True)
+        self.assertEqual(self.plugin.write_log_file, False)
         self.assertEqual(self.plugin.to_ignore, [cli_ignore])
         self.assertEqual(self.plugin.name, cli_name)
         self.assertEqual(self.plugin.verbose, True)
+        self.assertEqual(self.plugin.remote_logging, True)
 
         # fn parameters take precedent over everything
         kwarg_host = 'anyhost'
