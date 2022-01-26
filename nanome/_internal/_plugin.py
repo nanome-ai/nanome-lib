@@ -316,7 +316,8 @@ class _Plugin(object):
     def _launch_plugin(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
         plugin = plugin_class()
         _PluginInstance.__init__(plugin, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions)
-        logger = logging.getLogger().handlers = []  # All handlers should be configured by LogsManager
+        logger = logging.getLogger()
+        logger.handlers = []  # All handlers should be configured by LogsManager
         LogsManager.configure_child_process(pipe_proc)
         logger.debug("Starting plugin")
         plugin._run()

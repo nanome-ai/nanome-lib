@@ -201,5 +201,6 @@ class LogsManager():
 
     @classmethod
     def received_request(cls, record):
+        """When a log record is received through the PipeHandler, log it."""
         logger = logging.getLogger(record.name)
-        logger.log(record.levelno, record.msg)
+        logger.handle(record)
