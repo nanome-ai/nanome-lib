@@ -29,7 +29,7 @@ class _Session(object):
                     self._process_manager._received_request(request._data, self)
                 elif request._type == _DataType.log:
                     record = request._data
-                    self._logs_manager.received_request(record)
+                    self._logs_manager.log_record(record)
 
         except EOFError:
             Logs.error("Plugin encountered an error, please check the logs.", traceback.format_exc())

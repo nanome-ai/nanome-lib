@@ -203,8 +203,8 @@ class LogsManager():
         handler.setFormatter(color_formatter)
         return handler
 
-    @classmethod
-    def received_request(cls, record):
+    @staticmethod
+    def log_record(record):
         """When a log record is received through the PipeHandler, log it."""
         logger = logging.getLogger(record.name)
         logger.handle(record)
