@@ -108,6 +108,9 @@ class _PluginInstance(object):
             else:
                 msg = ' '.join(map(str, e.args))
             Logs.error(msg)
+            # Give log a little time to reach destination before closing pipe
+            if os.name == 'nt':
+                time.sleep(0.1)
             self._on_stop()
             self._process_manager._close()
             self._network._close()

@@ -182,7 +182,7 @@ class LogsManager():
             logger.addHandler(pipe_handler)
         else:
             # Mac/Linux can be configured the same way as the main process
-            # Get logging settings from sys.argv
+            # Get logging settings from sys.argv and config
             from nanome.api import Plugin
             parser = Plugin.create_parser()
             settings, _ = parser.parse_known_args()
