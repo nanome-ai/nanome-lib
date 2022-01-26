@@ -1,7 +1,5 @@
 import nanome
 from nanome.util import Logs
-import sys
-import time
 
 # Config
 
