@@ -53,19 +53,11 @@ class Plugin(_Plugin):
     def create_parser():
         """Command Line Interface for Plugins.
 
+        Moved into config.py, but there are plugins that retrieve parser from Plugin class.
+        Leaving this here for backwards compatibility.
+
         rtype: argsparser: args parser
         """
-        parser = argparse.ArgumentParser(description='Starts a Nanome Plugin.')
-        parser.add_argument('-a', '--host', help='connects to NTS at the specified IP address')
-        parser.add_argument('-p', '--port', type=int, help='connects to NTS at the specified port')
-        parser.add_argument('-r', '--auto-reload', action='store_true', help='Restart plugin automatically if a .py or .json file in current directory changes')
-        parser.add_argument('-v', '--verbose', action='store_true', help='enable verbose mode, to display Logs.debug')
-        parser.add_argument('-n', '--name', help='Name to display for this plugin in Nanome', default='')
-        parser.add_argument('-k', '--keyfile', default='', help='Specifies a key file or key string to use to connect to NTS')
-        parser.add_argument('-i', '--ignore', help='To use with auto-reload. All paths matching this pattern will be ignored, use commas to specify several. Supports */?/[seq]/[!seq]', default='')
-        parser.add_argument('--write-log-file', type=str2bool, help='Enable or disable writing logs to .log file')
-        parser.add_argument('--remote-logging', type=str2bool, dest='remote_logging', help='Toggle whether or not logs should be forwarded to NTS.')
-        return parser
 
     def run(self, host=None, port=None, key=None):
         """

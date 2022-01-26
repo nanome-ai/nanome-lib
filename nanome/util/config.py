@@ -4,7 +4,7 @@ import json
 from nanome.util import Logs
 
 
-__all__ = ["fetch", "set", "settings", "get_config_path"]
+__all__ = ["fetch", "set", "settings", "get_config_path", "create_parser"]
 
 default_json_string = """{
     "host":"",
@@ -110,15 +110,15 @@ def _get_environ_dict():
 
 
 def _get_cli_args():
-    parser = _create_parser()
+    parser = create_parser()
     cli_dict = vars(parser.parse_known_args()[0])
     for k in list(cli_dict.keys()):
-        if cli_dict[k] in ['config', None, '']:
+        if cli_dict[k] in [None, '']:
             cli_dict.pop(k)
     return cli_dict
 
 
-def _create_parser():
+def create_parser():
     """Command Line Interface for Plugins.
 
     rtype: argsparser: args parser
@@ -137,6 +137,13 @@ def _create_parser():
 
 
 def load_settings():
+    """Load settings from different sources, and combine them by priority.
+
+    Order of priority for settings:
+    1) Highest priority are CLI args used at runtime.
+    2) Then environment variables.
+    3) Finally, fall back on config file.
+    """
     config_path = _setup_file()
     with open(config_path, "r") as f:
         config_dict = json.load(f)
