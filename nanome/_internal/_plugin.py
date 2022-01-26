@@ -315,11 +315,13 @@ class _Plugin(object):
     def _launch_plugin(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
         plugin = plugin_class()
         _PluginInstance.__init__(plugin, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions)
+        LogsManager()  # Sets up root loggers.
+        logger = logging.getLogger()
+        logger.removeHandler(logger.handlers[0])
         pipe_handler = PipeHandler(pipe_proc)
         pipe_handler.level = logging.DEBUG
-        logging.getLogger().addHandler(pipe_handler)
+        logger.addHandler(pipe_handler)
         logger.debug("Starting plugin")
-        LogsManager()  # Sets up root loggers.
         plugin._run()
 
     def __init__(self, name, description, tags=None, has_advanced=False, permissions=None, integrations=None):
