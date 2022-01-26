@@ -7,7 +7,7 @@ from logging.handlers import RotatingFileHandler
 
 from nanome._internal._network import _Packet
 from nanome._internal._util import _DataType, _ProcData
-
+from nanome.util import config
 
 class LogTypes:
     """Log Codes as expected by NTS."""
@@ -184,15 +184,25 @@ class LogsManager():
             logger.addHandler(pipe_handler)
         else:
             # Mac/Linux can be configured the same way as the main process
-            # Get logging settings from sys.argv and config
+            # Get logging settings from command line args and config
             from nanome.api import Plugin
             parser = Plugin.create_parser()
-            settings, _ = parser.parse_known_args()
+            cli_args, _ = parser.parse_known_args()
             filename = plugin_name + ".log"
+
+            if cli_args.write_log_file is not None:
+                write_log_file = cli_args.write_log_file
+            else:
+                write_log_file = config.fetch('write_log_file')
+
+            remote_logging = False
+            if cli_args.remote_logging is not None:
+                remote_logging = cli_args.remote_logging
+
             obj = cls(
                 filename=filename,
-                write_log_file=settings.write_log_file,
-                remote_logging=settings.remote_logging)
+                write_log_file=write_log_file,
+                remote_logging=remote_logging)
             obj.configure_main_process()
 
     @staticmethod
