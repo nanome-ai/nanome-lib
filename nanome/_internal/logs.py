@@ -6,6 +6,7 @@ from dateutil import parser
 from logging.handlers import RotatingFileHandler
 
 from nanome._internal._network import _Packet
+from nanome._internal._util import _DataType, _ProcData
 
 
 class LogTypes:
@@ -22,10 +23,10 @@ class PipeHandler(logging.Handler):
     Resolves issues with logging from multiple processes.
     """
     def __init__(self, pipe_conn):
+        super(PipeHandler, self).__init__()
         self.pipe_conn = pipe_conn
 
-    def handle(self, record):
-        from nanome._internal._util import _DataType, _ProcData
+    def emit(self, record):
         to_send = _ProcData()
         to_send._type = _DataType.log
         to_send._data = record
