@@ -27,6 +27,9 @@ class _Session(object):
                 request = self._proc_plugin_pipe.recv()
                 if request._type == _DataType.process:
                     self._process_manager._received_request(request._data, self)
+                elif request._type == _DataType.log:
+                    log_type, data = request._data
+                    self._logs_manager.received_request(log_type, data)
 
         except EOFError:
             Logs.error("Plugin encountered an error, please check the logs.", traceback.format_exc())

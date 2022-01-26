@@ -4,7 +4,7 @@ from nanome._internal._process import _ProcessManager
 from nanome._internal._network._commands._callbacks._commands_enums import _Hashes
 from nanome._internal._network._serialization._serializer import Serializer
 from nanome._internal._util._serializers import _TypeSerializer
-from nanome._internal.logs import LogsManager
+from nanome._internal.logs import LogsManager, PipeHandler
 import logging
 
 from multiprocessing import Process, Pipe, current_process
@@ -315,6 +315,9 @@ class _Plugin(object):
     def _launch_plugin(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
         plugin = plugin_class()
         _PluginInstance.__init__(plugin, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions)
+        pipe_handler = PipeHandler(pipe_proc)
+        pipe_handler.level = logging.DEBUG
+        logging.getLogger().addHandler(pipe_handler)
         logger.debug("Starting plugin")
         LogsManager()  # Sets up root loggers.
         plugin._run()

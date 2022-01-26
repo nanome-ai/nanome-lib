@@ -2,7 +2,6 @@ import json
 import logging
 import os
 import sys
-from collections import deque
 from dateutil import parser
 from logging.handlers import RotatingFileHandler
 
@@ -15,6 +14,20 @@ class LogTypes:
     INFO = 1
     WARNING = 2
     ERROR = 3
+
+
+class PipeHandler(logging.Handler):
+
+    def __init__(self, pipe_conn):
+        self.pipe_conn = pipe_conn
+
+    def handle(self, record):
+        from nanome._internal._util import _DataType, _ProcData
+        to_send = _ProcData()
+        to_send._type = _DataType.log
+        log_type = 'info'
+        to_send._data = (log_type, record.msg)
+        self.pipe_conn.send(to_send)
 
 
 class NTSFormatter(logging.Formatter):
@@ -167,3 +180,14 @@ class LogsManager():
         color_formatter = ColorFormatter(fmt)
         handler.setFormatter(color_formatter)
         return handler
+
+    @classmethod
+    def received_request(cls, log_type, entry):
+        if log_type == 'info':
+            logging.getLogger().info(entry)
+        elif log_type == 'warning':
+            logging.getLogger().warning(entry)
+        elif log_type == 'debug':
+            logging.getLogger().debug(entry)
+        elif log_type == 'error':
+            logging.getLogger().error(entry)
