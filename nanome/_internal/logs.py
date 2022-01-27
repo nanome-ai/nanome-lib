@@ -9,6 +9,7 @@ from nanome._internal._network import _Packet
 from nanome._internal._util import _DataType, _ProcData
 from nanome.util import config
 
+logger = logging.getLogger(__name__)
 
 class LogTypes:
     """Log Codes as expected by NTS."""
@@ -60,6 +61,7 @@ class NTSFormatter(logging.Formatter):
         try:
             json_msg = json.loads(msg.replace('\n', '\\n'))
         except json.JSONDecodeError:
+            logger.warning('JSON Decode Error in NTSFormatter')
             updated_msg = msg
         else:
             # Convert timestamp to UTC
@@ -192,15 +194,15 @@ class LogsManager():
     @classmethod
     def configure_child_process(cls, pipe_conn, plugin_class):
         """Set up a PipeHandler that forwards all Logs to the main Process."""
-        logger = logging.getLogger()
-        logger.handlers = []
+        root = logging.getLogger()
+        root.handlers = []
         if os.name == 'nt':
             # Windows requires pipes going to main process to access logs
             # Send all logs, and let main process determine what logging level to show.
-            logger.setLevel(logging.DEBUG)
+            root.setLevel(logging.DEBUG)
             pipe_handler = PipeHandler(pipe_conn)
             pipe_handler.level = logging.DEBUG
-            logger.addHandler(pipe_handler)
+            root.addHandler(pipe_handler)
         else:
             # Mac/Linux can be configured the same way as the main process
             # Get logging settings from command line args and config
@@ -256,5 +258,5 @@ class LogsManager():
     @staticmethod
     def log_record(record):
         """When a log record is received through the PipeHandler, log it."""
-        logger = logging.getLogger(record.name)
-        logger.handle(record)
+        record_logger = logging.getLogger(record.name)
+        record_logger.handle(record)
