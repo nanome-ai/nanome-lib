@@ -1,7 +1,9 @@
-import pathlib
 from setuptools import find_packages, setup
+import os
 
-README = (pathlib.Path(__file__).parent / "README.md").read_text()
+README_PATH = os.path.join(os.path.dirname(__file__), "README.md")
+with open(README_PATH, 'r') as f:
+    README = f.read()
 
 setup(
     name='nanome',
