@@ -11,6 +11,7 @@ from nanome.util import config
 
 logger = logging.getLogger(__name__)
 
+
 class LogTypes:
     """Log Codes as expected by NTS."""
     DEBUG = 0
