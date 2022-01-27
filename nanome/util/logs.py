@@ -1,7 +1,6 @@
 import functools
 import inspect
 import logging
-import os
 import sys
 
 from .enum import IntEnum, auto
@@ -29,7 +28,7 @@ class Logs(object):
         module = cls.caller_name()
         logger = logging.getLogger(module)
         msg = ' '.join(map(str, args))
-        use_exc_info = sys.exc_info()[0] is not None and os.name != 'nt'
+        use_exc_info = sys.exc_info()[0] is not None
         logger.error(msg, exc_info=use_exc_info)
 
     @classmethod

@@ -5,7 +5,6 @@ from nanome._internal._process import _ProcessManagerInstance
 from nanome._internal._network._commands._callbacks import _Messages
 from nanome._internal._network._commands._callbacks._commands_enums import _Hashes
 
-import os
 import traceback
 import time
 from timeit import default_timer as timer
@@ -103,14 +102,10 @@ class _PluginInstance(object):
             self._on_stop()
             return
         except Exception as e:
-            if os.name == 'nt':
-                msg = traceback.format_exc()
-            else:
-                msg = ' '.join(map(str, e.args))
+            msg = ' '.join(map(str, e.args))
             Logs.error(msg)
             # Give log a little time to reach destination before closing pipe
-            if os.name == 'nt':
-                time.sleep(0.1)
+            time.sleep(0.1)
             self._on_stop()
             self._process_manager._close()
             self._network._close()

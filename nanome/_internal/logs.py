@@ -7,7 +7,9 @@ from logging.handlers import RotatingFileHandler
 
 from nanome._internal._network import _Packet
 from nanome._internal._util import _DataType, _ProcData
-from nanome.util import config
+from tblib import pickling_support
+
+pickling_support.install()
 
 logger = logging.getLogger(__name__)
 
@@ -197,40 +199,10 @@ class LogsManager():
         """Set up a PipeHandler that forwards all Logs to the main Process."""
         root = logging.getLogger()
         root.handlers = []
-        if os.name == 'nt':
-            # Windows requires pipes going to main process to access logs
-            # Send all logs, and let main process determine what logging level to show.
-            root.setLevel(logging.DEBUG)
-            pipe_handler = PipeHandler(pipe_conn)
-            pipe_handler.level = logging.DEBUG
-            root.addHandler(pipe_handler)
-        else:
-            # Mac/Linux can be configured the same way as the main process
-            # Get logging settings from command line args and config
-            from nanome.api import Plugin
-            parser = Plugin.create_parser()
-            cli_args, _ = parser.parse_known_args()
-            filename = plugin_class.__name__ + ".log"
-
-            if cli_args.write_log_file is not None:
-                write_log_file = cli_args.write_log_file
-            else:
-                write_log_file = config.fetch('write_log_file')
-
-            remote_logging = False
-            if cli_args.remote_logging is not None:
-                remote_logging = cli_args.remote_logging
-
-            log_mgr = cls(
-                filename=filename,
-                write_log_file=write_log_file,
-                remote_logging=remote_logging)
-            log_mgr.configure_main_process()
-            nts_handler = next((
-                hdlr for hdlr in logging.getLogger().handlers
-                if isinstance(hdlr, NTSLoggingHandler)
-            ), None)
-            nts_handler.pipe = pipe_conn
+        root.setLevel(logging.DEBUG)
+        pipe_handler = PipeHandler(pipe_conn)
+        pipe_handler.level = logging.DEBUG
+        root.addHandler(pipe_handler)
 
     @staticmethod
     def create_log_file_handler(filename):
