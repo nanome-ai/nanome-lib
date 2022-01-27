@@ -1,7 +1,9 @@
-import pathlib
 from setuptools import find_packages, setup
+import os
 
-README = (pathlib.Path(__file__).parent / "README.md").read_text()
+README_PATH = os.path.join(os.path.dirname(__file__), "README.md")
+with open(README_PATH, 'r') as f:
+    README = f.read()
 
 setup(
     name='nanome',
@@ -17,7 +19,8 @@ setup(
     platforms="any",
     keywords=['virtual-reality', 'chemistry', 'python', 'api', 'plugin'],
     install_requires=[
-        'python-dateutil==2.8.1'
+        'python-dateutil==2.8.1',
+        'tblib==1.7.0'
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',

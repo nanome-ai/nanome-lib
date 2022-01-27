@@ -101,8 +101,11 @@ class _PluginInstance(object):
         except KeyboardInterrupt:
             self._on_stop()
             return
-        except:
-            Logs.error(traceback.format_exc())
+        except Exception as e:
+            msg = ' '.join(map(str, e.args))
+            Logs.error(msg)
+            # Give log a little time to reach destination before closing pipe
+            time.sleep(0.1)
             self._on_stop()
             self._process_manager._close()
             self._network._close()

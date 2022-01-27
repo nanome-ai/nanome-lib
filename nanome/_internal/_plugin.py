@@ -51,6 +51,7 @@ class _Plugin(object):
             plugin=self,
             write_log_file=self._write_log_file,
             remote_logging=self._remote_logging)
+        self._logs_manager.configure_main_process()
         self.__reconnect_attempt = 0
         self.__connect()
         self._loop()
@@ -180,7 +181,7 @@ class _Plugin(object):
             packet.set(0, Network._Packet.packet_type_plugin_connection, plugin_id)
             packet.write_string(json.dumps(self._description))
             self._network.send(packet)
-            self.__connected = True
+            self.connected = True
             self.__reconnect_attempt = 0
             self.__last_keep_alive = timer()
             for session in self._sessions.values():
@@ -197,7 +198,7 @@ class _Plugin(object):
             while True:
                 now = timer()
 
-                if self.__connected is False:
+                if self.connected is False:
                     reconnect_wait = min(2 ** self.__reconnect_attempt, MAX_RECONNECT_WAIT)
                     elapsed = now - self.__disconnection_time
                     if elapsed >= reconnect_wait:
@@ -210,14 +211,14 @@ class _Plugin(object):
                         time.sleep(reconnect_wait - elapsed)
                         continue
                 if self._network.receive() is False:
-                    self.__connected = False
+                    self.connected = False
                     self.__disconnection_time = timer()
                     self._network.disconnect()
                     continue
 
                 if self.__waiting_keep_alive:
                     if now - self.__last_keep_alive >= KEEP_ALIVE_TIMEOUT:
-                        self.__connected = False
+                        self.connected = False
                         self.__disconnection_time = timer()
                         continue
                 elif now - self.__last_keep_alive >= KEEP_ALIVE_TIME_INTERVAL and self._plugin_id >= 0:
@@ -314,7 +315,9 @@ class _Plugin(object):
     @classmethod
     def _launch_plugin(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
         plugin = plugin_class()
+
         _PluginInstance.__init__(plugin, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions)
+        LogsManager.configure_child_process(pipe_proc)
         logger.debug("Starting plugin")
         plugin._run()
 
@@ -348,7 +351,7 @@ class _Plugin(object):
             'integrations': integrations
         }
         self._plugin_class = None
-        self.__connected = False
+        self.connected = False
         self._host = ''
         self._key = ''
         self._port = None

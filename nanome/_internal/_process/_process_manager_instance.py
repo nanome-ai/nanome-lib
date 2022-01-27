@@ -12,7 +12,10 @@ class _ProcessManagerInstance():
         self.__processes = dict()
 
     def _close(self):
-        self.__pipe.close()
+        try:
+            self.__pipe.close()
+        except BrokenPipeError:
+            pass
 
     def update(self):
         has_data = None

@@ -19,7 +19,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip coverage
-          pip install -r requirements.txt
+          pip install -e .
       - name: Run tests.py
         run: coverage run --source=nanome --omit=nanome/util/py2_enum.py -m unittest discover -s testing --pattern *_tests.py
       - name: print coverage percentage
@@ -36,7 +36,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -e .
           pip install mock
       - name: Run tests.py
         run: python tests.py

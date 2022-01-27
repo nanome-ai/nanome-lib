@@ -2,11 +2,16 @@ import json
 import logging
 import os
 import sys
-from collections import deque
 from dateutil import parser
 from logging.handlers import RotatingFileHandler
 
 from nanome._internal._network import _Packet
+from nanome._internal._util import _DataType, _ProcData
+from tblib import pickling_support
+
+pickling_support.install()
+
+logger = logging.getLogger(__name__)
 
 
 class LogTypes:
@@ -15,6 +20,27 @@ class LogTypes:
     INFO = 1
     WARNING = 2
     ERROR = 3
+
+
+class PipeHandler(logging.Handler):
+    """Send log records through pipe to main process.
+
+    Resolves issues with logging from multiple processes.
+    """
+
+    def __init__(self, pipe_conn):
+        super(PipeHandler, self).__init__()
+        self.pipe_conn = pipe_conn
+
+    def emit(self, record):
+        to_send = _ProcData()
+        to_send._type = _DataType.log
+        to_send._data = record
+        try:
+            self.pipe_conn.send(to_send)
+        except BrokenPipeError:
+            # Connection has been closed.
+            pass
 
 
 class NTSFormatter(logging.Formatter):
@@ -35,26 +61,30 @@ class NTSFormatter(logging.Formatter):
 
     def format(self, record):
         msg = super(NTSFormatter, self).format(record)
-        json_msg = json.loads(msg.replace('\n', '\\n'))
+        try:
+            json_msg = json.loads(msg.replace('\n', '\\n'))
+        except json.JSONDecodeError:
+            logger.warning('JSON Decode Error in NTSFormatter')
+            updated_msg = msg
+        else:
+            # Convert timestamp to UTC
+            timestamp = json_msg['timestamp']
+            timestamp_dt = parser.parse(timestamp)
+            json_msg['timestamp'] = timestamp_dt.strftime(self.datefmt)
 
-        # Convert timestamp to UTC
-        timestamp = json_msg['timestamp']
-        timestamp_dt = parser.parse(timestamp)
-        json_msg['timestamp'] = timestamp_dt.strftime(self.datefmt)
-
-        # Replace `sev` value with corresponding LogType from enum.
-        level_name = json_msg['sev']
-        enum_val = getattr(LogTypes, level_name)
-        json_msg['sev'] = enum_val
-        updated_msg = json.dumps(json_msg)
+            # Replace `sev` value with corresponding LogType from enum.
+            level_name = json_msg['sev']
+            enum_val = getattr(LogTypes, level_name)
+            json_msg['sev'] = enum_val
+            updated_msg = json.dumps(json_msg)
         return updated_msg
 
 
 class NTSLoggingHandler(logging.Handler):
     """Forward Log messages to NTS."""
 
-    def __init__(self, plugin, *args, **kwargs):
-        super(NTSLoggingHandler, self).__init__(*args, **kwargs)
+    def __init__(self, plugin):
+        super(NTSLoggingHandler, self).__init__()
         self._plugin = plugin
         self.formatter = NTSFormatter()
 
@@ -64,7 +94,8 @@ class NTSLoggingHandler(logging.Handler):
         packet = _Packet()
         packet.set(0, _Packet.packet_type_live_logs, 0)
         packet.write_string(fmted_msg)
-        self._plugin._network.send(packet)
+        if self._plugin and self._plugin.connected:
+            self._plugin._network.send(packet)
 
 
 class ColorFormatter(logging.Formatter):
@@ -113,9 +144,14 @@ class LogsManager():
     """
 
     def __init__(self, filename=None, plugin=None, write_log_file=True, remote_logging=False):
-        filename = filename or ''
+        self.filename = filename or ''
+        self.plugin = plugin
+        self.write_log_file = write_log_file
+        self.remote_logging = remote_logging
+
+    def configure_main_process(self):
         logging_level = logging.INFO
-        if plugin.verbose:
+        if self.plugin and self.plugin.verbose:
             logging_level = logging.DEBUG
         self.logger = logging.getLogger()
         self.logger.setLevel(logging_level)
@@ -129,20 +165,30 @@ class LogsManager():
             os.environ['TZ'] = 'UTC'
 
         existing_handler_types = set([type(hdlr) for hdlr in logging.getLogger().handlers])
-        if write_log_file and filename:
-            self.log_file_handler = self.create_log_file_handler(filename)
+        if self.write_log_file and self.filename:
+            self.log_file_handler = self.create_log_file_handler(self.filename)
             self.log_file_handler.setLevel(logging_level)
             if type(self.log_file_handler) not in existing_handler_types:
                 self.logger.addHandler(self.log_file_handler)
 
-        if remote_logging and plugin:
-            self.nts_handler = self.create_nts_handler(plugin)
+        if self.remote_logging:
+            self.nts_handler = self.create_nts_handler(self.plugin)
             self.nts_handler.setLevel(logging_level)
             if type(self.nts_handler) not in existing_handler_types:
                 self.logger.addHandler(self.nts_handler)
 
         if type(self.console_handler) not in existing_handler_types:
             self.logger.addHandler(self.console_handler)
+
+    @staticmethod
+    def configure_child_process(pipe_conn):
+        """Set up a PipeHandler that forwards all Logs to the main Process."""
+        root = logging.getLogger()
+        root.handlers = []
+        root.setLevel(logging.DEBUG)
+        pipe_handler = PipeHandler(pipe_conn)
+        pipe_handler.level = logging.DEBUG
+        root.addHandler(pipe_handler)
 
     @staticmethod
     def create_log_file_handler(filename):
@@ -154,7 +200,7 @@ class LogsManager():
         return handler
 
     @staticmethod
-    def create_nts_handler(plugin):
+    def create_nts_handler(plugin=None):
         """Return handler that forwards logs to NTS."""
         handler = NTSLoggingHandler(plugin)
         return handler
@@ -167,3 +213,9 @@ class LogsManager():
         color_formatter = ColorFormatter(fmt)
         handler.setFormatter(color_formatter)
         return handler
+
+    @staticmethod
+    def log_record(record):
+        """When a log record is received through the PipeHandler, log it."""
+        record_logger = logging.getLogger(record.name)
+        record_logger.handle(record)
