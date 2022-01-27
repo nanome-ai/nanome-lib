@@ -83,33 +83,19 @@ class NTSFormatter(logging.Formatter):
 class NTSLoggingHandler(logging.Handler):
     """Forward Log messages to NTS."""
 
-    pipe = None
-
-    def __init__(self, plugin=None, pipe=None):
+    def __init__(self, plugin):
         super(NTSLoggingHandler, self).__init__()
         self._plugin = plugin
         self.formatter = NTSFormatter()
 
     def handle(self, record):
         # Use new NTS message format to forward logs.
-        if self.pipe:
-            # If a pipe is set, then the data must be sent to the main process
-            # in order to be forwarded to NTS.
-            to_send = _ProcData()
-            to_send._type = _DataType.log
-            to_send._data = record
-            try:
-                self.pipe.send(to_send)
-            except BrokenPipeError:
-                # Connection has been closed.
-                pass
-        else:
-            fmted_msg = self.formatter.format(record)
-            packet = _Packet()
-            packet.set(0, _Packet.packet_type_live_logs, 0)
-            packet.write_string(fmted_msg)
-            if self._plugin and self._plugin.connected:
-                self._plugin._network.send(packet)
+        fmted_msg = self.formatter.format(record)
+        packet = _Packet()
+        packet.set(0, _Packet.packet_type_live_logs, 0)
+        packet.write_string(fmted_msg)
+        if self._plugin and self._plugin.connected:
+            self._plugin._network.send(packet)
 
 
 class ColorFormatter(logging.Formatter):
@@ -194,8 +180,8 @@ class LogsManager():
         if type(self.console_handler) not in existing_handler_types:
             self.logger.addHandler(self.console_handler)
 
-    @classmethod
-    def configure_child_process(cls, pipe_conn, plugin_class):
+    @staticmethod
+    def configure_child_process(pipe_conn):
         """Set up a PipeHandler that forwards all Logs to the main Process."""
         root = logging.getLogger()
         root.handlers = []
