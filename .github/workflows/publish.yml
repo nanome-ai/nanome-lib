@@ -26,18 +26,15 @@ jobs:
       - name: Install Dependencies
         run: |
           python -m pip install bump2version setuptools wheel twine
-      - name: Bump Version
-        run: |
-          git config --global user.name 'Gitbot'
-          git config --global user.email 'gitbot@nanome.ai'
-          bump2version ${{ github.event.inputs.version }}
-          git push --follow-tags
+#       - name: Bump Version
+#         run: |
+#           git config --global user.name 'Gitbot'
+#           git config --global user.email 'gitbot@nanome.ai'
+#           bump2version ${{ github.event.inputs.version }}
+#           git push --follow-tags
       - name: Build and Publish
-        env:
-          TWINE_USERNAME: ${{ secrets.PYPI_USER }}
-          TWINE_PASSNAME: ${{ secrets.PYPI_PASS }}
         run: |
           (cd plugin-template && zip -9r ../nanome/plugin-template.zip .)
           python setup.py sdist
           python setup.py bdist_wheel --universal
-          twine upload dist/*
+          twine upload -u ${{ secrets.PYPI_USER }} -p ${{ secrets.PYPI_PASS }} dist/*
