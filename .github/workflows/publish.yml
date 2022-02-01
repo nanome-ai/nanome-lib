@@ -28,6 +28,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.NANOME_BOT_PAT }}
         run: |
+          git config --global user.name 'Gitbot'
+          git config --global user.email 'gitbot@nanome.ai'
           bump2version ${{ github.event.inputs.version }}
           git push --follow-tags
       - name: Build
