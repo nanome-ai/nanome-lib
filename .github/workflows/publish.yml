@@ -17,6 +17,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.NANOME_BOT_PAT }}
       - name: Install Python 3
         uses: actions/setup-python@v1
         with:
@@ -29,7 +31,7 @@ jobs:
           git config --global user.name 'Gitbot'
           git config --global user.email 'gitbot@nanome.ai'
           bump2version ${{ github.event.inputs.version }}
-          git push --follow-tags https://${{ secrets.NANOME_BOT_PAT }}@github.com/${{ github.repository }} master
+          git push --follow-tags
       - name: Build and Publish
         env:
           TWINE_USERNAME: ${{ secrets.PYPI_USER }}
