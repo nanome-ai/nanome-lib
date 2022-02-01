@@ -37,4 +37,4 @@ jobs:
           (cd plugin-template && zip -9r ../nanome/plugin-template.zip .)
           python setup.py sdist
           python setup.py bdist_wheel --universal
-          twine upload -u ${{ secrets.PYPI_USER }} -p ${{ secrets.PYPI_PASS }} dist/*
+          twine upload -u "${{ secrets.PYPI_USER }}" -p "${{ secrets.PYPI_PASS }}" dist/*
