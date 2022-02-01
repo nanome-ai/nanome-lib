@@ -28,8 +28,8 @@ jobs:
           python -m pip install bump2version setuptools wheel twine
       - name: Bump Version
         run: |
-          git config --global user.name 'Gitbot'
-          git config --global user.email 'gitbot@nanome.ai'
+          git config --global user.name 'nanome-bot'
+          git config --global user.email '45469149+nanome-bot@users.noreply.github.com'
           bump2version ${{ github.event.inputs.version }}
           git push --follow-tags
       - name: Build and Publish
