@@ -26,12 +26,12 @@ jobs:
       - name: Install Dependencies
         run: |
           python -m pip install bump2version setuptools wheel twine
-#       - name: Bump Version
-#         run: |
-#           git config --global user.name 'Gitbot'
-#           git config --global user.email 'gitbot@nanome.ai'
-#           bump2version ${{ github.event.inputs.version }}
-#           git push --follow-tags
+      - name: Bump Version
+        run: |
+          git config --global user.name 'Gitbot'
+          git config --global user.email 'gitbot@nanome.ai'
+          bump2version ${{ github.event.inputs.version }}
+          git push --follow-tags
       - name: Build and Publish
         env:
           TWINE_USERNAME: __token__
