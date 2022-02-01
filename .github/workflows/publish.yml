@@ -25,12 +25,10 @@ jobs:
         run: |
           python -m pip install bump2version setuptools wheel twine
       - name: Bump Version
-        env:
-          GITHUB_TOKEN: ${{ secrets.NANOME_BOT_PAT }}
         run: |
           git config --global user.name 'Gitbot'
           git config --global user.email 'gitbot@nanome.ai'
-          git remote set-url origin https://$GITHUB_TOKEN@github.com/${{ github.repository }}
+          git remote set-url origin https://${{ secrets.NANOME_BOT_PAT }}@github.com/${{ github.repository }}
           bump2version ${{ github.event.inputs.version }}
           git push --follow-tags
       - name: Build
