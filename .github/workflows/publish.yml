@@ -30,7 +30,7 @@ jobs:
           git config --global user.email 'gitbot@nanome.ai'
           bump2version ${{ github.event.inputs.version }}
           git push --follow-tags https://${{ secrets.NANOME_BOT_PAT }}@github.com/${{ github.repository }} master
-      - name: Build
+      - name: Build and Publish
         env:
           TWINE_USERNAME: ${{ secrets.PYPI_USER }}
           TWINE_PASSNAME: ${{ secrets.PYPI_PASS }}
