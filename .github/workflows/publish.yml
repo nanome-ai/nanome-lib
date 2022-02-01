@@ -33,8 +33,11 @@ jobs:
 #           bump2version ${{ github.event.inputs.version }}
 #           git push --follow-tags
       - name: Build and Publish
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
         run: |
           (cd plugin-template && zip -9r ../nanome/plugin-template.zip .)
           python setup.py sdist
           python setup.py bdist_wheel --universal
-          twine upload -u "${{ secrets.PYPI_USER }}" -p "${{ secrets.PYPI_PASS }}" dist/*
+          twine upload dist/*
