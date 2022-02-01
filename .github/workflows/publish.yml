@@ -28,9 +28,8 @@ jobs:
         run: |
           git config --global user.name 'Gitbot'
           git config --global user.email 'gitbot@nanome.ai'
-          git remote set-url origin https://${{ secrets.NANOME_BOT_PAT }}@github.com/${{ github.repository }}
           bump2version ${{ github.event.inputs.version }}
-          git push --follow-tags origin master
+          git push --follow-tags https://${{ secrets.NANOME_BOT_PAT }}@github.com/${{ github.repository }} master
       - name: Build
         env:
           TWINE_USERNAME: ${{ secrets.PYPI_USER }}
