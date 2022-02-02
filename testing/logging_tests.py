@@ -23,14 +23,22 @@ class LoggingTestCase(unittest.TestCase):
         self.port = 8000
         self.key = ''
 
+        # Make it so that Logs logged in this module are handled the same as "nanome"
+        testing_logger = logging.getLogger('logging_tests')
+        nanome_logger = logging.getLogger('nanome')
+        testing_logger.handlers = nanome_logger.handlers
+        testing_logger.setLevel(logging.DEBUG)
+
     @classmethod
     def tearDownClass(cls):
         # Make sure remote logging always off after test.
         # Without this teardown, logging configs persist to tests run after this.
         super(LoggingTestCase, cls).tearDownClass()
-        root_logger = logging.getLogger()
-        for handler in root_logger.handlers:
-            root_logger.removeHandler(handler)
+        nanome_logger = logging.getLogger("nanome")
+        testing_logger = logging.getLogger('logging_tests')
+
+        nanome_logger.handlers = []
+        testing_logger.handlers = []
 
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance')
