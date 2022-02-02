@@ -19,7 +19,6 @@ setup(
     platforms="any",
     keywords=['virtual-reality', 'chemistry', 'python', 'api', 'plugin'],
     install_requires=[
-        'python-dateutil==2.8.1',
         'tblib==1.7.0',
         'graypy==2.1.0'
     ],

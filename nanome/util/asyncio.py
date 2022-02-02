@@ -23,7 +23,7 @@ async def handle_exception(exc_type, exc_value, exc_traceback):
 
     msg = "Uncaught " + exc_type.__name__ + ": " + str(exc_value)
     logger.error(msg, exc_info=1)
-    time.sleep(0.1)  # Give log a split second to process
+    asyncio.sleep(0.1)  # Give log a split second to process
 
 
 async def exception_wrapper(fn, args, kwargs):

@@ -3,7 +3,6 @@ import logging
 import os
 import sys
 import graypy
-from dateutil import parser
 from logging.handlers import RotatingFileHandler
 
 from nanome._internal._network import _Packet
@@ -44,8 +43,12 @@ class PipeHandler(logging.Handler):
             pass
 
 
-class NanomeGelfHandler(graypy.handler.BaseGELFHandler):
-    """Create a GELF dictionary from a log record, including nanome-specific fields."""
+class NTSLoggingHandler(graypy.handler.BaseGELFHandler):
+    """Forward Log messages to NTS."""
+
+    def __init__(self, plugin):
+        super(NTSLoggingHandler, self).__init__()
+        self._plugin = plugin
 
     def make_gelf_dict(self, record):
         gelf_dict = self._make_gelf_dict(record)
@@ -55,14 +58,6 @@ class NanomeGelfHandler(graypy.handler.BaseGELFHandler):
             'plugin_id': self._plugin._plugin_id
         })
         return gelf_dict
-
-
-class NTSLoggingHandler(NanomeGelfHandler):
-    """Forward Log messages to NTS."""
-
-    def __init__(self, plugin):
-        super(NTSLoggingHandler, self).__init__()
-        self._plugin = plugin
 
     def emit(self, record):
         gelf_dict = self.make_gelf_dict(record)
