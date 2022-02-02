@@ -23,6 +23,12 @@ class LoggingTestCase(unittest.TestCase):
         self.port = 8000
         self.key = ''
 
+        # Make it so that "testing" module is logged the same as "nanome"
+        testing_logger = logging.getLogger('testing')
+        nanome_logger = logging.getLogger('nanome')
+        testing_logger.handlers = nanome_logger.handlers
+        testing_logger.setLevel(logging.DEBUG)
+
     @classmethod
     def tearDownClass(cls):
         # Make sure remote logging always off after test.
@@ -138,5 +144,6 @@ class LoggingTestCase(unittest.TestCase):
             self.plugin.run(self.host, self.port, self.key)
             console_handler = self.plugin._logs_manager.console_handler
             with patch.object(console_handler, 'handle') as handle_mock:
+                breakpoint()
                 Logs.message("Should be printed to console")
                 handle_mock.assert_called()

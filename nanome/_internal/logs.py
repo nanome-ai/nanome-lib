@@ -170,7 +170,7 @@ class LogsManager():
         if not os.environ.get('TZ'):
             os.environ['TZ'] = 'UTC'
 
-        existing_handler_types = set([type(hdlr) for hdlr in logging.getLogger().handlers])
+        existing_handler_types = set([type(hdlr) for hdlr in lib_logger.handlers])
         if self.write_log_file and self.filename:
             self.log_file_handler = self.create_log_file_handler(self.filename)
             self.log_file_handler.setLevel(logging_level)
