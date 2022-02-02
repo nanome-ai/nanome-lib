@@ -14,14 +14,6 @@ pickling_support.install()
 logger = logging.getLogger(__name__)
 
 
-class LogTypes:
-    """Log Codes as expected by NTS."""
-    DEBUG = 0
-    INFO = 1
-    WARNING = 2
-    ERROR = 3
-
-
 class PipeHandler(logging.Handler):
     """Send log records through pipe to main process.
 
