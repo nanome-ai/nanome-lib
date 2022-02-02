@@ -149,12 +149,18 @@ class LogsManager():
         self.write_log_file = write_log_file
         self.remote_logging = remote_logging
 
-    def configure_main_process(self):
+    def configure_main_process(self, plugin_class):
         logging_level = logging.INFO
         if self.plugin and self.plugin.verbose:
             logging_level = logging.DEBUG
-        self.logger = logging.getLogger()
-        self.logger.setLevel(logging_level)
+
+        lib_logger = logging.getLogger("nanome")
+        lib_logger.setLevel(logging_level)
+
+        # Set up logger for plugin modules
+        plugin_module = plugin_class.__module__.split('.')[0]
+        plugin_logger = logging.getLogger(plugin_module)
+        plugin_logger.setLevel(logging_level)
 
         self.console_handler = self.create_console_handler()
         self.log_file_handler = logging.NullHandler()
@@ -169,26 +175,39 @@ class LogsManager():
             self.log_file_handler = self.create_log_file_handler(self.filename)
             self.log_file_handler.setLevel(logging_level)
             if type(self.log_file_handler) not in existing_handler_types:
-                self.logger.addHandler(self.log_file_handler)
+                lib_logger.addHandler(self.log_file_handler)
+                plugin_logger.addHandler(self.log_file_handler)
 
         if self.remote_logging:
             self.nts_handler = self.create_nts_handler(self.plugin)
             self.nts_handler.setLevel(logging_level)
             if type(self.nts_handler) not in existing_handler_types:
-                self.logger.addHandler(self.nts_handler)
+                lib_logger.addHandler(self.nts_handler)
+                plugin_logger.addHandler(self.nts_handler)
 
         if type(self.console_handler) not in existing_handler_types:
-            self.logger.addHandler(self.console_handler)
+            lib_logger.addHandler(self.console_handler)
+            plugin_logger.addHandler(self.console_handler)
 
     @staticmethod
-    def configure_child_process(pipe_conn):
+    def configure_child_process(pipe_conn, plugin_class):
         """Set up a PipeHandler that forwards all Logs to the main Process."""
-        root = logging.getLogger()
-        root.handlers = []
-        root.setLevel(logging.DEBUG)
+        # reset loggers on nanome-lib.
+        nanome_logger = logging.getLogger("nanome")
+        nanome_logger.handlers = []
+        nanome_logger.setLevel(logging.DEBUG)
+
+        # make sure plugin module is logged
+        plugin_module = plugin_class.__module__.split('.')[0]
+        plugin_logger = logging.getLogger(plugin_module)
+        plugin_logger.handlers = []
+        plugin_logger.setLevel(logging.DEBUG)
+        
         pipe_handler = PipeHandler(pipe_conn)
         pipe_handler.level = logging.DEBUG
-        root.addHandler(pipe_handler)
+
+        nanome_logger.addHandler(pipe_handler)
+        plugin_logger.addHandler(pipe_handler)
 
     @staticmethod
     def create_log_file_handler(filename):

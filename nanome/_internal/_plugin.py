@@ -51,7 +51,7 @@ class _Plugin(object):
             plugin=self,
             write_log_file=self._write_log_file,
             remote_logging=self._remote_logging)
-        self._logs_manager.configure_main_process()
+        self._logs_manager.configure_main_process(self.plugin_class)
         self.__reconnect_attempt = 0
         self.__connect()
         self._loop()
@@ -317,7 +317,7 @@ class _Plugin(object):
         plugin = plugin_class()
 
         _PluginInstance.__init__(plugin, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions)
-        LogsManager.configure_child_process(pipe_proc)
+        LogsManager.configure_child_process(pipe_proc, plugin_class)
         logger.debug("Starting plugin")
         plugin._run()
 
