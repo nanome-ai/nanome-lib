@@ -202,7 +202,7 @@ class LogsManager():
         plugin_logger = logging.getLogger(plugin_module)
         plugin_logger.handlers = []
         plugin_logger.setLevel(logging.DEBUG)
-        
+
         pipe_handler = PipeHandler(pipe_conn)
         pipe_handler.level = logging.DEBUG
 
