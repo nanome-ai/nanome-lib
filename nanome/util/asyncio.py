@@ -2,7 +2,6 @@ import asyncio
 import inspect
 import logging
 import sys
-import time
 
 
 async def handle_exception(exc_type, exc_value, exc_traceback):
