@@ -5,7 +5,6 @@ import sys
 import time
 
 
-
 async def handle_exception(exc_type, exc_value, exc_traceback):
     """Make sure uncaught exceptions are logged."""
     if issubclass(exc_type, KeyboardInterrupt):
