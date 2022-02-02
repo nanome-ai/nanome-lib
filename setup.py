@@ -8,7 +8,7 @@ with open(README_PATH, 'r') as f:
 setup(
     name='nanome',
     packages=find_packages(exclude=["testing", "doc", "test_plugins"]),
-    version='0.34.2',
+    version='0.34.3',
     license='MIT',
     description='Python API for Nanome Plugins',
     long_description=README,
