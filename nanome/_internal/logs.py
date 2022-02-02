@@ -65,13 +65,10 @@ class NTSLoggingHandler(NanomeGelfHandler):
         self._plugin = plugin
 
     def emit(self, record):
-        # Use new NTS message format to forward logs
-        # fmted_msg = self.formatter.format(record)
         gelf_dict = self.make_gelf_dict(record)
         packet = _Packet()
         packet.set(0, _Packet.packet_type_live_logs, 0)
         packet.write_string(json.dumps(gelf_dict))
-        # packet.write_string(fmted_msg)
         if self._plugin and self._plugin.connected:
             self._plugin._network.send(packet)
 
