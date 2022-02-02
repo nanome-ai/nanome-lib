@@ -92,14 +92,13 @@ class NTSLoggingHandler(graypy.handler.BaseGELFHandler):
 
     def emit(self, record):
         # Use new NTS message format to forward logs
-        fmted_msg = self.formatter.format(record)
+        # fmted_msg = self.formatter.format(record)
         gelf_dict = self._make_gelf_dict(record)
         packet = _Packet()
-        # packet.set(0, _Packet.packet_type_live_logs, 0)
+        packet.set(0, _Packet.packet_type_live_logs, 0)
         packet.write_string(json.dumps(gelf_dict))
         # packet.write_string(fmted_msg)
         if self._plugin and self._plugin.connected:
-            print(gelf_dict)
             self._plugin._network.send(packet)
 
 
