@@ -102,7 +102,8 @@ class _PluginInstance(object):
             self._on_stop()
             return
         except Exception as e:
-            msg = ' '.join(map(str, e.args))
+            text = ' '.join(map(str, e.args))
+            msg = "Uncaught " + type(e).__name__ + ": " + text
             Logs.error(msg)
             # Give log a little time to reach destination before closing pipe
             time.sleep(0.1)

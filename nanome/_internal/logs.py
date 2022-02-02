@@ -2,7 +2,7 @@ import json
 import logging
 import os
 import sys
-from dateutil import parser
+import graypy
 from logging.handlers import RotatingFileHandler
 
 from nanome._internal._network import _Packet
@@ -12,14 +12,6 @@ from tblib import pickling_support
 pickling_support.install()
 
 logger = logging.getLogger(__name__)
-
-
-class LogTypes:
-    """Log Codes as expected by NTS."""
-    DEBUG = 0
-    INFO = 1
-    WARNING = 2
-    ERROR = 3
 
 
 class PipeHandler(logging.Handler):
@@ -43,57 +35,27 @@ class PipeHandler(logging.Handler):
             pass
 
 
-class NTSFormatter(logging.Formatter):
-    """Send NTS json data with specified log level numbers."""
-
-    datefmt = "%Y-%m-%dT%H:%M:%S"
-
-    fmt = {
-        'timestamp': '%(asctime)s',
-        'msg': '%(message)s',
-        'sev': '%(levelname)s',  # Will be manually updated to val from LogType enum.
-    }
-
-    def __init__(self, fmt=None, **kwargs):
-        # Use format saved by class, so no need to pass fmt kwarg
-        fmt = json.dumps(self.fmt)
-        super(NTSFormatter, self).__init__(fmt=fmt, datefmt=self.datefmt, **kwargs)
-
-    def format(self, record):
-        msg = super(NTSFormatter, self).format(record)
-        try:
-            json_msg = json.loads(msg.replace('\n', '\\n'))
-        except json.JSONDecodeError:
-            logger.warning('JSON Decode Error in NTSFormatter')
-            updated_msg = msg
-        else:
-            # Convert timestamp to UTC
-            timestamp = json_msg['timestamp']
-            timestamp_dt = parser.parse(timestamp)
-            json_msg['timestamp'] = timestamp_dt.strftime(self.datefmt)
-
-            # Replace `sev` value with corresponding LogType from enum.
-            level_name = json_msg['sev']
-            enum_val = getattr(LogTypes, level_name)
-            json_msg['sev'] = enum_val
-            updated_msg = json.dumps(json_msg)
-        return updated_msg
-
-
-class NTSLoggingHandler(logging.Handler):
+class NTSLoggingHandler(graypy.handler.BaseGELFHandler):
     """Forward Log messages to NTS."""
 
     def __init__(self, plugin):
         super(NTSLoggingHandler, self).__init__()
         self._plugin = plugin
-        self.formatter = NTSFormatter()
 
-    def handle(self, record):
-        # Use new NTS message format to forward logs.
-        fmted_msg = self.formatter.format(record)
+    def make_gelf_dict(self, record):
+        gelf_dict = self._make_gelf_dict(record)
+        gelf_dict.update({
+            'plugin_name': self._plugin.name,
+            'plugin_class': self._plugin.plugin_class.__name__,
+            'plugin_id': self._plugin._plugin_id
+        })
+        return gelf_dict
+
+    def emit(self, record):
+        gelf_dict = self.make_gelf_dict(record)
         packet = _Packet()
         packet.set(0, _Packet.packet_type_live_logs, 0)
-        packet.write_string(fmted_msg)
+        packet.write_string(json.dumps(gelf_dict))
         if self._plugin and self._plugin.connected:
             self._plugin._network.send(packet)
 
