@@ -273,7 +273,8 @@ class _Plugin(object):
         permissions = self._description["permissions"]
 
         # Ensures consistent behavior between Windows and Linux
-        multiprocessing.set_start_method('spawn')
+        # Commented out for now because crashes on Linux :/
+        # multiprocessing.set_start_method('spawn')
 
         process = Process(
             target=self._launch_plugin,
