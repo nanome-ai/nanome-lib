@@ -270,9 +270,9 @@ class _Plugin(object):
             session_id, self._network, self._process_manager, self._logs_manager,
             main_conn_net, main_conn_proc)
         permissions = self._description["permissions"]
-        
+
         # Ensures consistent behavior between Windows and Linux
-        multiprocessing.set_start_method('spawn')  
+        multiprocessing.set_start_method('spawn')
 
         process = Process(
             target=self._launch_plugin,
