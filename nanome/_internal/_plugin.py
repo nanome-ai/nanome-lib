@@ -270,7 +270,10 @@ class _Plugin(object):
             session_id, self._network, self._process_manager, self._logs_manager,
             main_conn_net, main_conn_proc)
         permissions = self._description["permissions"]
-        multiprocessing.set_start_method('spawn')
+        
+        # Ensures consistent behavior between Windows and Linux
+        multiprocessing.set_start_method('spawn')  
+
         process = Process(
             target=self._launch_plugin,
             args=(
@@ -282,7 +285,7 @@ class _Plugin(object):
         )
         process.start()
         session.plugin_process = process
-        self._sessions[session_id] = session
+        self._sessions[session_id] = sessionf
         logger.debug("Registered new session: {}".format(session_id))
 
     def __logs_request(self, packet):
