@@ -6,7 +6,6 @@ import socket
 import ssl
 import errno
 import time
-import traceback
 
 
 class _NetInstance(object):
@@ -74,8 +73,10 @@ class _NetInstance(object):
             return False
         except KeyboardInterrupt:
             raise
-        except:
-            Logs.error(traceback.format_exc())
+        except Exception as e:
+            msg = "Uncaught {}: {}".format(type(e).__name__, e.reason) 
+            Logs.error(msg)
+            time.sleep(0.1)
             return False
         else:
             if len(data) == 0:
