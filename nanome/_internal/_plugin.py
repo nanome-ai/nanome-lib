@@ -7,6 +7,7 @@ from nanome._internal._util._serializers import _TypeSerializer
 from nanome._internal.logs import LogsManager
 import logging
 
+import multiprocessing
 from multiprocessing import Process, Pipe, current_process
 from timeit import default_timer as timer
 import sys
@@ -269,6 +270,7 @@ class _Plugin(object):
             session_id, self._network, self._process_manager, self._logs_manager,
             main_conn_net, main_conn_proc)
         permissions = self._description["permissions"]
+        multiprocessing.set_start_method('spawn')
         process = Process(
             target=self._launch_plugin,
             args=(
@@ -314,7 +316,6 @@ class _Plugin(object):
     @classmethod
     def _launch_plugin(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, custom_data, permissions):
         plugin = plugin_class()
-
         _PluginInstance.__init__(plugin, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, custom_data, permissions)
         LogsManager.configure_child_process(pipe_proc, plugin_class)
         logger.debug("Starting plugin")
