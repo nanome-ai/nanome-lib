@@ -7,6 +7,18 @@ from nanome.util.logs import Logs
 from nanome.util import config
 
 
+def str2bool(v):
+    """Accept various truthy/falsey values as boolean arguments."""
+    if isinstance(v, bool):
+        return v
+    if v.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    else:
+        raise argparse.ArgumentTypeError('Boolean value expected.')
+
+
 class Plugin(_Plugin):
     """Process that connects to NTS, and allows a user to access a PluginInstance.
 
@@ -49,8 +61,8 @@ class Plugin(_Plugin):
         parser.add_argument('-n', '--name', help='Name to display for this plugin in Nanome', default='')
         parser.add_argument('-k', '--keyfile', default='', help='Specifies a key file or key string to use to connect to NTS')
         parser.add_argument('-i', '--ignore', help='To use with auto-reload. All paths matching this pattern will be ignored, use commas to specify several. Supports */?/[seq]/[!seq]', default='')
-        parser.add_argument('--write-log-file', type=bool, help='Enable or disable writing logs to .log file')
-        parser.add_argument('--remote-logging', type=bool, dest='remote_logging', help='Toggle whether or not logs should be forwarded to NTS.')
+        parser.add_argument('--write-log-file', type=str2bool, help='Enable or disable writing logs to .log file')
+        parser.add_argument('--remote-logging', type=str2bool, dest='remote_logging', help='Toggle whether or not logs should be forwarded to NTS.')
         return parser
 
     def run(self, host="config", port="config", key="config"):
