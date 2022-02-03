@@ -30,8 +30,8 @@ class _ProcessNetwork(object):
         self._plugin._call(request_id, *args)
 
     def _close(self):
-        self._process_conn.send(stop_bytes)
-        self._process_conn.close()
+        self._queue_net_out.send(stop_bytes)
+        self._queue_net_out.close()
 
     @classmethod
     def _send_connect(cls, code, arg):
@@ -52,7 +52,7 @@ class _ProcessNetwork(object):
         # if code != 0: # Messages.connect
         #     packet.compress()
         try:
-            self._process_conn.send(packet)
+            self._queue_net_out.put(packet)
         except BrokenPipeError:
             pass  # Ignore, as it will be closed later on, during _receive
         self._command_id = (command_id + 1) % 4294967295  # Cap by uint max
@@ -61,9 +61,9 @@ class _ProcessNetwork(object):
     def _receive(self):
         payload = None
         try:
-            has_data = self._process_conn.poll()
+            has_data = not self._queue_net_in.empty()
             if has_data:
-                payload = self._process_conn.recv()
+                payload = self._queue_net_in.get()
         except BrokenPipeError:
             Logs.debug("Pipe has been closed, exiting process")
             self._plugin._on_stop()
@@ -87,10 +87,11 @@ class _ProcessNetwork(object):
             callback(self, received_object, request_id)
         return True
 
-    def __init__(self, plugin, session_id, pipe, serializer, plugin_id, version_table):
+    def __init__(self, plugin, session_id, queue_net_in, queue_net_out, serializer, plugin_id, version_table):
         self._plugin = plugin
         self._session_id = session_id
-        self._process_conn = pipe
+        self._queue_net_in = queue_net_in
+        self._queue_net_out = queue_net_out
         self._serializer = serializer
         self._serializer._plugin_id = plugin_id
         self._plugin_id = plugin_id
