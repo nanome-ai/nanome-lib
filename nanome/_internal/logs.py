@@ -158,16 +158,18 @@ class LogsManager():
         # reset loggers on nanome-lib.
         nanome_logger = logging.getLogger("nanome")
         nanome_logger.handlers = []
-        nanome_logger.setLevel(logging.INFO)
+        nanome_logger.setLevel(logging.DEBUG)
 
         # make sure plugin module is logged
         plugin_module = plugin_class.__module__.split('.')[0]
         plugin_logger = logging.getLogger(plugin_module)
         plugin_logger.handlers = []
-        plugin_logger.setLevel(logging.INFO)
+        plugin_logger.setLevel(logging.DEBUG)
 
+        # Pipe should send all logs to main process
+        # If debug logs are disabled, they will be filtered in main process.
         pipe_handler = PipeHandler(pipe_conn)
-        pipe_handler.level = logging.INFO
+        pipe_handler.level = logging.DEBUG
 
         nanome_logger.addHandler(pipe_handler)
         plugin_logger.addHandler(pipe_handler)

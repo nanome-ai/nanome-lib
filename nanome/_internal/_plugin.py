@@ -285,7 +285,7 @@ class _Plugin(object):
         )
         process.start()
         session.plugin_process = process
-        self._sessions[session_id] = sessionf
+        self._sessions[session_id] = session
         logger.debug("Registered new session: {}".format(session_id))
 
     def __logs_request(self, packet):
