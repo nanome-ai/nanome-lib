@@ -124,15 +124,16 @@ class LogsManager():
         plugin_logger = logging.getLogger(plugin_module)
         plugin_logger.setLevel(logging_level)
 
+        existing_handler_types = set([type(hdlr) for hdlr in lib_logger.handlers])
+
         self.console_handler = self.create_console_handler()
         self.log_file_handler = logging.NullHandler()
         self.nts_handler = logging.NullHandler()
 
-        # If timezone not specified, set to UTC
-        if not os.environ.get('TZ'):
-            os.environ['TZ'] = 'UTC'
+        if type(self.console_handler) not in existing_handler_types:
+            lib_logger.addHandler(self.console_handler)
+            plugin_logger.addHandler(self.console_handler)
 
-        existing_handler_types = set([type(hdlr) for hdlr in lib_logger.handlers])
         if self.write_log_file and self.filename:
             self.log_file_handler = self.create_log_file_handler(self.filename)
             self.log_file_handler.setLevel(logging_level)
@@ -147,9 +148,9 @@ class LogsManager():
                 lib_logger.addHandler(self.nts_handler)
                 plugin_logger.addHandler(self.nts_handler)
 
-        if type(self.console_handler) not in existing_handler_types:
-            lib_logger.addHandler(self.console_handler)
-            plugin_logger.addHandler(self.console_handler)
+        # If timezone not specified, set to UTC
+        if not os.environ.get('TZ'):
+            os.environ['TZ'] = 'UTC'
 
     @staticmethod
     def configure_child_process(pipe_conn, plugin_class):
@@ -157,16 +158,16 @@ class LogsManager():
         # reset loggers on nanome-lib.
         nanome_logger = logging.getLogger("nanome")
         nanome_logger.handlers = []
-        nanome_logger.setLevel(logging.DEBUG)
+        nanome_logger.setLevel(logging.INFO)
 
         # make sure plugin module is logged
         plugin_module = plugin_class.__module__.split('.')[0]
         plugin_logger = logging.getLogger(plugin_module)
         plugin_logger.handlers = []
-        plugin_logger.setLevel(logging.DEBUG)
+        plugin_logger.setLevel(logging.INFO)
 
         pipe_handler = PipeHandler(pipe_conn)
-        pipe_handler.level = logging.DEBUG
+        pipe_handler.level = logging.INFO
 
         nanome_logger.addHandler(pipe_handler)
         plugin_logger.addHandler(pipe_handler)
