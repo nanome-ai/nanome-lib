@@ -7,6 +7,7 @@ from nanome._internal._util._serializers import _TypeSerializer
 from nanome._internal.logs import LogsManager
 import logging
 
+import multiprocessing
 from multiprocessing import Process, Pipe, Queue, current_process
 from timeit import default_timer as timer
 import sys
@@ -270,14 +271,17 @@ class _Plugin(object):
             session_id, self._network, self._process_manager, self._logs_manager,
             main_conn_net, process_conn_net, main_conn_proc)
         permissions = self._description["permissions"]
-        is_verbose = True
+
+        # Ensures consistent behavior between Windows and Linux
+        multiprocessing.set_start_method('spawn')
+
         process = Process(
             target=self._launch_plugin,
             args=(
                 self._plugin_class, session_id, main_conn_net, process_conn_net,
                 process_conn_proc, self.__serializer, self._plugin_id,
                 version_table, _TypeSerializer.get_version_table(),
-                is_verbose, self._custom_data, permissions
+                self._custom_data, permissions
             )
         )
         process.start()
@@ -314,10 +318,9 @@ class _Plugin(object):
                         'permissions)', globals(), locals(), 'profile.out')
 
     @classmethod
-    def _launch_plugin(cls, plugin_class, session_id, queue_net_in, queue_net_out, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
+    def _launch_plugin(cls, plugin_class, session_id, queue_net_in, queue_net_out, pipe_proc, serializer, plugin_id, version_table, original_version_table, custom_data, permissions):
         plugin = plugin_class()
-
-        _PluginInstance.__init__(plugin, session_id, queue_net_in, queue_net_out, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions)
+        _PluginInstance.__init__(plugin, session_id, queue_net_in, queue_net_out, pipe_proc, serializer, plugin_id, version_table, original_version_table, custom_data, permissions)
         LogsManager.configure_child_process(pipe_proc, plugin_class)
         logger.debug("Starting plugin")
         plugin._run()

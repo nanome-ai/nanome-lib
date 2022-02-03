@@ -41,13 +41,15 @@ class PluginTestCase(unittest.TestCase):
         send_mock.assert_called_once()
 
         # Test with different args set
-        write_log_file = "True"
+        write_log_file = "yes"
+        remote_logging = "false"
         ignore = 'fake_file.py'
         name = 'custom plugin name'
         testargs = [
             'run.py',
             '--auto-reload',
             '--write-log-file', write_log_file,
+            '--remote-logging', remote_logging,
             '--ignore', ignore,
             '--name', name,
             '--verbose'
@@ -55,6 +57,7 @@ class PluginTestCase(unittest.TestCase):
         with patch.object(sys, 'argv', testargs):
             self.plugin.run(host, port, key)
         self.assertEqual(self.plugin.write_log_file, True)
+        self.assertEqual(self.plugin.remote_logging, False)
         self.assertEqual(self.plugin.to_ignore, [ignore])
         self.assertEqual(self.plugin.name, name)
         self.assertEqual(self.plugin.verbose, True)
