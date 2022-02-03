@@ -7,7 +7,7 @@ from nanome._internal._util._serializers import _TypeSerializer
 from nanome._internal.logs import LogsManager
 import logging
 
-from multiprocessing import Process, Pipe, current_process
+from multiprocessing import Process, Pipe, Queue, current_process
 from timeit import default_timer as timer
 import sys
 import json
@@ -263,17 +263,18 @@ class _Plugin(object):
         if session_id in self._sessions:  # If session_id already exists, close it first ()
             logger.info("Closing session ID {} because a new session connected with the same ID".format(session_id))
             self._sessions[session_id].signal_and_close_pipes()
-        main_conn_net, process_conn_net = Pipe()
+        main_conn_net = Queue()
+        process_conn_net = Queue()
         main_conn_proc, process_conn_proc = Pipe()
         session = Network._Session(
             session_id, self._network, self._process_manager, self._logs_manager,
-            main_conn_net, main_conn_proc)
+            main_conn_net, process_conn_net, main_conn_proc)
         permissions = self._description["permissions"]
         is_verbose = True
         process = Process(
             target=self._launch_plugin,
             args=(
-                self._plugin_class, session_id, process_conn_net,
+                self._plugin_class, session_id, main_conn_net, process_conn_net,
                 process_conn_proc, self.__serializer, self._plugin_id,
                 version_table, _TypeSerializer.get_version_table(),
                 is_verbose, self._custom_data, permissions
@@ -313,10 +314,10 @@ class _Plugin(object):
                         'permissions)', globals(), locals(), 'profile.out')
 
     @classmethod
-    def _launch_plugin(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
+    def _launch_plugin(cls, plugin_class, session_id, queue_net_in, queue_net_out, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
         plugin = plugin_class()
 
-        _PluginInstance.__init__(plugin, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions)
+        _PluginInstance.__init__(plugin, session_id, queue_net_in, queue_net_out, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions)
         LogsManager.configure_child_process(pipe_proc, plugin_class)
         logger.debug("Starting plugin")
         plugin._run()

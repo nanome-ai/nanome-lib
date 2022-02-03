@@ -122,10 +122,10 @@ class _PluginInstance(object):
     def _has_permission(self, permission):
         return _Hashes.PermissionRequestHashes[permission] in self._permissions
 
-    def __init__(self, session_id, net_pipe, proc_pipe, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
+    def __init__(self, session_id, queue_net_in, queue_net_out, proc_pipe, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
         self._menus = {}
 
-        self._network = _ProcessNetwork(self, session_id, net_pipe, serializer, plugin_id, version_table)
+        self._network = _ProcessNetwork(self, session_id, queue_net_in, queue_net_out, serializer, plugin_id, version_table)
         self._process_manager = _ProcessManagerInstance(proc_pipe)
 
         Logs.debug("Plugin constructed for session", session_id)
