@@ -30,7 +30,7 @@ class _ProcessNetwork(object):
         self._plugin._call(request_id, *args)
 
     def _close(self):
-        self._queue_net_out.send(stop_bytes)
+        self._queue_net_out.put(stop_bytes)
         self._queue_net_out.close()
 
     @classmethod
