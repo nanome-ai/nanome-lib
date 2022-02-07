@@ -229,7 +229,7 @@ Mesh example
 			mesh.color = Color(255, 255, 255, 255)
 			mesh.colors = [
 				1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0,
-				0.0, 1.0,0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0,
+				0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0,
 				0.0, 0.0, 1.0, 1.0]
 			mesh.upload()
 
@@ -237,7 +237,7 @@ Mesh example
 		title = "Mesh Example"
 		description = "Create a cube and color it with per-vertex colors"
 		advanced_settings = False
-		plugin = nanome.Plugin(title, , description, advanced_settings)
+		plugin = nanome.Plugin(title, description, advanced_settings)
 		plugin.set_plugin_class(MeshExamplePlugin)
 		plugin.run()
 
