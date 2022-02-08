@@ -110,7 +110,7 @@ class _Plugin(object):
                 id = packet.session_id
                 self._sessions[id].signal_and_close_pipes()
                 del self._sessions[id]
-                logger.debug("Session {} disconnected".format(id))
+                logger.info("Session {} disconnected".format(id))
             except Exception:
                 pass
         elif packet.packet_type == Network._Packet.packet_type_keep_alive:
