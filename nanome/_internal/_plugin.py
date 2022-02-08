@@ -35,10 +35,6 @@ class _Plugin(object):
     _custom_data = None
 
     def _run(self):
-        # Ensures consistent behavior between Windows and Linux
-        # Commented out for now because crashes on Linux :/
-        multiprocessing.set_start_method('spawn')
-
         if os.name == "nt":
             signal.signal(signal.SIGBREAK, self.__on_termination_signal)
         else:
@@ -268,6 +264,9 @@ class _Plugin(object):
         if session_id in self._sessions:  # If session_id already exists, close it first ()
             logger.info("Closing session ID {} because a new session connected with the same ID".format(session_id))
             self._sessions[session_id].signal_and_close_pipes()
+
+        # set_start_method ensures consistent process behavior between Windows and Linux
+        multiprocessing.set_start_method('spawn')
         main_conn_net = Queue()
         process_conn_net = Queue()
         main_conn_proc, process_conn_proc = Pipe()
