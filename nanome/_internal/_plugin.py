@@ -35,6 +35,10 @@ class _Plugin(object):
     _custom_data = None
 
     def _run(self):
+        # Ensures consistent behavior between Windows and Linux
+        # Commented out for now because crashes on Linux :/
+        multiprocessing.set_start_method('spawn')
+
         if os.name == "nt":
             signal.signal(signal.SIGBREAK, self.__on_termination_signal)
         else:
@@ -271,10 +275,6 @@ class _Plugin(object):
             session_id, self._network, self._process_manager, self._logs_manager,
             main_conn_net, process_conn_net, main_conn_proc)
         permissions = self._description["permissions"]
-
-        # Ensures consistent behavior between Windows and Linux
-        # Commented out for now because crashes on Linux :/
-        # multiprocessing.set_start_method('spawn')
 
         process = Process(
             target=self._launch_plugin,
