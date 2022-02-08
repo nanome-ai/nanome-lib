@@ -110,7 +110,7 @@ class _Plugin(object):
                 id = packet.session_id
                 self._sessions[id].signal_and_close_pipes()
                 del self._sessions[id]
-                logger.debug("Session {} disconnected".format(id))
+                logger.info("Session {} disconnected".format(id))
             except Exception:
                 pass
         elif packet.packet_type == Network._Packet.packet_type_keep_alive:
@@ -264,6 +264,9 @@ class _Plugin(object):
         if session_id in self._sessions:  # If session_id already exists, close it first ()
             logger.info("Closing session ID {} because a new session connected with the same ID".format(session_id))
             self._sessions[session_id].signal_and_close_pipes()
+
+        # set_start_method ensures consistent process behavior between Windows and Linux
+        multiprocessing.set_start_method('spawn')
         main_conn_net = Queue()
         process_conn_net = Queue()
         main_conn_proc, process_conn_proc = Pipe()
@@ -271,10 +274,6 @@ class _Plugin(object):
             session_id, self._network, self._process_manager, self._logs_manager,
             main_conn_net, process_conn_net, main_conn_proc)
         permissions = self._description["permissions"]
-
-        # Ensures consistent behavior between Windows and Linux
-        # Commented out for now because crashes on Linux :/
-        # multiprocessing.set_start_method('spawn')
 
         process = Process(
             target=self._launch_plugin,
@@ -288,7 +287,7 @@ class _Plugin(object):
         process.start()
         session.plugin_process = process
         self._sessions[session_id] = session
-        logger.debug("Registered new session: {}".format(session_id))
+        logger.info("Registered new session: {}".format(session_id))
 
     def __logs_request(self, packet):
         try:
