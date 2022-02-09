@@ -6,6 +6,8 @@ from nanome._internal._network._serialization._serializer import Serializer
 from nanome._internal._util._serializers import _TypeSerializer
 from nanome._internal.logs import LogsManager
 import logging
+import random
+import string
 
 import multiprocessing
 from multiprocessing import Process, Pipe, Queue, current_process
@@ -279,6 +281,10 @@ class _Plugin(object):
                 self._custom_data, permissions
             )
         )
+
+        # Add random string to end of process name for uniqueness
+        suffix = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(5))
+        process.name = "{}-{}".format(process.name, suffix)
         process.start()
         session.plugin_process = process
         self._sessions[session_id] = session
