@@ -1,6 +1,4 @@
 import argparse
-import multiprocessing
-import sys
 
 from . import _DefaultPlugin
 from nanome._internal import _Plugin
