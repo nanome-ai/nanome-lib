@@ -1,7 +1,10 @@
 import argparse
+import multiprocessing
+import sys
 
 from . import _DefaultPlugin
 from nanome._internal import _Plugin
+from nanome._internal.logs import LogsManager
 from nanome._internal._process import _ProcessManager
 from nanome.util.logs import Logs
 from nanome.util import config
@@ -111,7 +114,21 @@ class Plugin(_Plugin):
         if args.name:
             self.name = args.name
 
-        Logs.debug("Start plugin")
+        # Configure Logging
+        self.__log_filename = self._plugin_class.__name__ + ".log"
+        self._logs_manager = LogsManager(
+            self.__log_filename,
+            plugin=self,
+            write_log_file=self.write_log_file,
+            remote_logging=self.remote_logging)
+        self._logs_manager.configure_main_process(self.plugin_class)
+
+        Logs.message("Starting Plugin")
+
+        # set_start_method ensures consistent process behavior between Windows and Linux
+        if sys.version_info.major >= 3 and sys.version_info.minor >= 4:
+            multiprocessing.set_start_method('spawn', force=True)
+
         if self.has_autoreload:
             self._autoreload()
         else:

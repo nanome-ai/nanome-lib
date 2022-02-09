@@ -35,10 +35,6 @@ class _Plugin(object):
     _custom_data = None
 
     def _run(self):
-        # set_start_method ensures consistent process behavior between Windows and Linux
-        if sys.version_info.major >= 3 and sys.version_info.minor >= 4:
-            multiprocessing.set_start_method('spawn', force=True)
-
         if os.name == "nt":
             signal.signal(signal.SIGBREAK, self.__on_termination_signal)
         else:
@@ -50,13 +46,6 @@ class _Plugin(object):
         self._description['auth'] = self.__read_key()
         self._process_manager = _ProcessManager()
 
-        self.__log_filename = self._plugin_class.__name__ + ".log"
-        self._logs_manager = LogsManager(
-            self.__log_filename,
-            plugin=self,
-            write_log_file=self._write_log_file,
-            remote_logging=self._remote_logging)
-        self._logs_manager.configure_main_process(self.plugin_class)
         self.__reconnect_attempt = 0
         self.__connect()
         self._loop()

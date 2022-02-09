@@ -41,7 +41,7 @@ def launch_plugin(class_name, args):
     if class_target is None:
         nanome.util.Logs.error("Plugin must have the same name as the containing file")
     plugin.set_plugin_class(class_target)
-    plugin.run("config", "config", "config")
+    plugin.run()
 
 
 if __name__ == "__main__":
