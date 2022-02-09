@@ -110,7 +110,6 @@ class Plugin(_Plugin):
             to_ignore = args.ignore.split(",")
             self.to_ignore = to_ignore
 
-        # Name can be set during the class instantiation without cli arg.
         if args.name:
             self.name = args.name
 
@@ -124,10 +123,6 @@ class Plugin(_Plugin):
         self._logs_manager.configure_main_process(self.plugin_class)
 
         Logs.message("Starting Plugin")
-
-        # set_start_method ensures consistent process behavior between Windows and Linux
-        if sys.version_info.major >= 3 and sys.version_info.minor >= 4:
-            multiprocessing.set_start_method('spawn', force=True)
 
         if self.has_autoreload:
             self._autoreload()
