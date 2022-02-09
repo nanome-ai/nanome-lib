@@ -48,7 +48,7 @@ class NTSLoggingHandler(graypy.handler.BaseGELFHandler):
             'plugin_name': self._plugin.name,
             'plugin_class': self._plugin.plugin_class.__name__,
             'plugin_id': self._plugin._plugin_id,
-            
+
         })
         return gelf_dict
 
