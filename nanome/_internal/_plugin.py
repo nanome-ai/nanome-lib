@@ -50,13 +50,6 @@ class _Plugin(object):
         self._description['auth'] = self.__read_key()
         self._process_manager = _ProcessManager()
 
-        self.__log_filename = self._plugin_class.__name__ + ".log"
-        self._logs_manager = LogsManager(
-            self.__log_filename,
-            plugin=self,
-            write_log_file=self._write_log_file,
-            remote_logging=self._remote_logging)
-        self._logs_manager.configure_main_process(self.plugin_class)
         self.__reconnect_attempt = 0
         self.__connect()
         self._loop()
@@ -286,6 +279,7 @@ class _Plugin(object):
                 self._custom_data, permissions
             )
         )
+        process.name = "Session-{}".format(session_id)
         process.start()
         session.plugin_process = process
         self._sessions[session_id] = session
