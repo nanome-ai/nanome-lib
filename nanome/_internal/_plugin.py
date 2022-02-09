@@ -36,7 +36,7 @@ class _Plugin(object):
 
     def _run(self):
         # set_start_method ensures consistent process behavior between Windows and Linux
-        if sys.version_info.major >= 3:
+        if sys.version_info.major >= 3 and sys.version_info.minor >= 4:
             multiprocessing.set_start_method('spawn', force=True)
 
         if os.name == "nt":
