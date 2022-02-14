@@ -12,9 +12,11 @@ class _ProcessNetwork(object):
     _instance = None
 
     def _on_run(self):
+        Logs.message("on_run called")
         self._plugin.on_run()
 
     def on_advanced_settings(self):
+        Logs.message("on_advanced_settings called")
         self._plugin.on_advanced_settings()
 
     def on_complex_added(self):

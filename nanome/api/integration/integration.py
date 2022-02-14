@@ -19,4 +19,5 @@ class Integration():
         if callback is None:
             Logs.warning("Integration", name, "called but not implemented by the plugin")
             return
+        Logs.message("Integration", name, "called")
         callback(request)
