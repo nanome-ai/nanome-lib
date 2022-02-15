@@ -11,7 +11,7 @@ Load settings from different sources, and combine them by priority.
 Order of priority for settings:
 1) Highest priority are CLI args used at runtime.
 2) Then environment variables.
-3) Finally, fall back on config file.
+3) Finally, fall back on config file setup with `nanome-setup-plugins` command.
 
 Fetchable Settings
 host            NTS host or ip address
@@ -65,10 +65,7 @@ def load_settings():
     2) Then environment variables.
     3) Finally, fall back on config file.
     """
-    config_path = _setup_file()
-    with open(config_path, "r") as f:
-        config_dict = json.load(f)
-
+    config_dict = _get_config_dict()
     cli_dict = _get_cli_args()
     environ_dict = _get_environ_dict()
 
@@ -115,14 +112,37 @@ def set(key, value):
         return True
 
 
-def _get_config_path():
-    s = "/"
-    home = os.getenv('APPDATA')
-    if home is None:
-        home = os.getenv('HOME')
-    directory = home + s + ".nanome_lib"
-    config_path = directory + s + "config.txt"
-    return config_path
+def _get_config_dict():
+    config_path = _setup_file()
+    with open(config_path, "r") as f:
+        config_dict = json.load(f)
+    serialized_dict = _serialize_dict_with_parser(config_dict)
+    return serialized_dict
+
+
+def _get_environ_dict():
+    """Get values set by environment variables."""
+    environ_dict = {
+        'host': os.environ.get('NTS_HOST'),
+        'port': os.environ.get('NTS_PORT'),
+        'key': os.environ.get('NTS_KEY'),
+        'name': os.environ.get('PLUGIN_NAME'),
+        'verbose': os.environ.get('PLUGIN_VERBOSE'),
+        'write_log_file': os.environ.get('PLUGIN_WRITE_LOG_FILE'),
+        'remote_logging': os.environ.get('PLUGIN_REMOTE_LOGGING'),
+        'auto_reload': os.environ.get('PLUGIN_AUTO_RELOAD'),
+    }
+    serialized_dict = _serialize_dict_with_parser(environ_dict)
+    return serialized_dict
+
+
+def _get_cli_args():
+    parser = create_parser()
+    cli_dict = vars(parser.parse_known_args()[0])
+    for k in list(cli_dict.keys()):
+        if cli_dict[k] in [None, '']:
+            cli_dict.pop(k)
+    return cli_dict
 
 
 def _setup_file():
@@ -144,6 +164,16 @@ def _setup_file():
     return config_path
 
 
+def _get_config_path():
+    s = "/"
+    home = os.getenv('APPDATA')
+    if home is None:
+        home = os.getenv('HOME')
+    directory = home + s + ".nanome_lib"
+    config_path = directory + s + "config.txt"
+    return config_path
+
+
 def _setup_clean_config(config_path):
     default_json = {
         "host": "",
@@ -156,37 +186,17 @@ def _setup_clean_config(config_path):
         json.dump(default_json, file)
 
 
-def _get_environ_dict():
-    """Get values set by environment variables."""
-    environ_dict = {
-        'host': os.environ.get('NTS_HOST'),
-        'port': os.environ.get('NTS_PORT'),
-        'key': os.environ.get('NTS_KEY'),
-        'name': os.environ.get('PLUGIN_NAME'),
-        'verbose': os.environ.get('PLUGIN_VERBOSE'),
-        'write_log_file': os.environ.get('PLUGIN_WRITE_LOG_FILE'),
-        'remote_logging': os.environ.get('PLUGIN_REMOTE_LOGGING'),
-        'auto_reload': os.environ.get('PLUGIN_AUTO_RELOAD'),
-    }
-    # Use cli parser to format args as correct data types.
+def _serialize_dict_with_parser(args_dict):
+    """Use cli parser to format args as correct data types."""
     parser = create_parser()
     for action in parser._actions:
         field_name = action.dest
-        if field_name in environ_dict and environ_dict[field_name] is not None:
-            arg_list = [action.option_strings[0], environ_dict[field_name]]
+        if field_name in args_dict and args_dict[field_name] is not None:
+            arg_list = [action.option_strings[0], str(args_dict[field_name])]
             ns, _ = parser.parse_known_args(arg_list)
-            environ_dict[field_name] = getattr(ns, field_name)
-    environ_dict = {k: v for k, v in environ_dict.items() if v is not None}
-    return environ_dict
-
-
-def _get_cli_args():
-    parser = create_parser()
-    cli_dict = vars(parser.parse_known_args()[0])
-    for k in list(cli_dict.keys()):
-        if cli_dict[k] in [None, '']:
-            cli_dict.pop(k)
-    return cli_dict
+            args_dict[field_name] = getattr(ns, field_name)
+    args_dict = {k: v for k, v in args_dict.items() if v is not None}
+    return args_dict
 
 
 def str2bool(v):
