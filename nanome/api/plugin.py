@@ -64,7 +64,7 @@ class Plugin(_Plugin):
             Logs.error('No NTS host provided')
             sys.exit(1)
         try:
-            self.port = port if port else int(settings.get('port'))
+            self.port = int(port) if port else int(settings.get('port'))
         except ValueError:
             Logs.error('Port must be an integer, received \"{}\"'.format(port))
             sys.exit(1)
