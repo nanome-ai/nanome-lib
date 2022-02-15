@@ -2,6 +2,7 @@ import argparse
 import sys
 from nanome.util import config
 
+
 def create_parser():
     """Arguments used to set global config values.
     rtype: argsparser: args parser
@@ -40,7 +41,7 @@ def interactive_mode():
         config_key = argument.dest
         if config_key == 'help':
             continue
-        
+
         print("==============================")
         print(config_key + " (" + argument.help + ")")
         print("Current Value: {}".format(config.fetch(config_key)))
