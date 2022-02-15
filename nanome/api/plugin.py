@@ -70,29 +70,30 @@ class Plugin(_Plugin):
         :type host: str
         :type port: int
         """
-        self.host = host if host else config.fetch('host')
+        settings = config.load_settings()
+        self.host = host if host else settings.get('host')
 
         if not self.host:
             Logs.error('No NTS host provided')
             sys.exit(1)
         try:
-            self.port = port if port else int(config.fetch('port'))
+            self.port = port if port else int(settings.get('port'))
         except ValueError:
             Logs.error('Port must be an integer, received \"{}\"'.format(port))
             sys.exit(1)
-        self.key = key if key is not None else config.fetch('key')
-        self.write_log_file = config.fetch('write_log_file') or False
-        self.remote_logging = config.fetch('remote_logging') or False
-        self.has_autoreload = config.fetch('auto_reload')
-        self.verbose = config.fetch('verbose')
+        self.key = key if key is not None else settings.get('key')
+        self.write_log_file = settings.get('write_log_file') or False
+        self.remote_logging = settings.get('remote_logging') or False
+        self.has_autoreload = settings.get('auto_reload')
+        self.verbose = settings.get('verbose')
 
-        if config.fetch('ignore'):
-            to_ignore = config.fetch('ignore').split(",")
+        if settings.get('ignore'):
+            to_ignore = settings.get('ignore').split(",")
             self.to_ignore = to_ignore
 
         # Name can be set during the class instantiation without cli arg.
-        if config.fetch('name'):
-            self.name = config.fetch('name')
+        if settings.get('name'):
+            self.name = settings.get('name')
 
         # Configure Logging
         self.__log_filename = self._plugin_class.__name__ + ".log"
