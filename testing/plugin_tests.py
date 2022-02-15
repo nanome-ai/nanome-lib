@@ -1,4 +1,5 @@
 import argparse
+from distutils.util import strtobool
 import sys
 import unittest
 
@@ -83,7 +84,7 @@ class PluginTestCase(unittest.TestCase):
         description = 'Test Plugin'
         tags = []
         has_advanced = True
-        
+
         config.set('host', 'anyhost')
         config.set('port', 8000)
         config.set('key', 'abcdefg1234')
@@ -114,6 +115,7 @@ class PluginTestCase(unittest.TestCase):
 
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance')
+    @patch('nanome._internal._plugin._Plugin._autoreload')
     def test_config_priority(self, *args):
         """Validate order of priority for plugin settings.
 
@@ -138,18 +140,36 @@ class PluginTestCase(unittest.TestCase):
 
         # Environment variables should take precedent over config file.
         env_host = 'environ_host'
-        env_port = 8001
+        env_port = '8001'
         env_key = 'environ_key12345'
+        env_name = "Environment Name"
+        env_verbose = 'True'
+        env_write_log_file = 'False'
+        env_remote_logging = 'False'
+        env_auto_reload = 'True'
+
         environ_dict = {
             'NTS_HOST': env_host,
-            'NTS_PORT': str(env_port),
-            'NTS_KEY': env_key
+            'NTS_PORT': env_port,
+            'NTS_KEY': env_key,
+            'PLUGIN_NAME': env_name,
+            'PLUGIN_VERBOSE': env_verbose,
+            'PLUGIN_WRITE_LOG_FILE': env_write_log_file,
+            'PLUGIN_REMOTE_LOGGING': env_remote_logging,
+            'PLUGIN_AUTO_RELOAD': env_auto_reload
         }
         with patch.dict('os.environ', environ_dict):
             self.plugin.run()
-            self.assertEqual(self.plugin.host, env_host)
-            self.assertEqual(self.plugin.port, env_port)
-            self.assertEqual(self.plugin.key, env_key)
+
+        self.assertEqual(self.plugin.host, env_host)
+        self.assertEqual(self.plugin.port, int(env_port))
+        self.assertEqual(self.plugin.key, env_key)
+        self.assertEqual(self.plugin.name, env_name)
+        self.assertEqual(self.plugin.verbose, bool(strtobool(env_verbose)))
+        self.assertEqual(self.plugin.write_log_file, bool(strtobool(env_write_log_file)))
+        self.assertEqual(self.plugin.remote_logging, bool(strtobool(env_remote_logging)))
+        self.assertEqual(self.plugin.write_log_file, bool(strtobool(env_write_log_file)))
+        self.assertEqual(self.plugin.has_autoreload, bool(strtobool(env_auto_reload)))
 
         # CLI args should take precedent over environment variables.
         cli_host = 'cli_host'
