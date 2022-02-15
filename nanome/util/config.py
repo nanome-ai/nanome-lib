@@ -22,8 +22,8 @@ name            Name to display for this plugin in Nanome
 write_log_file  Enable or disable writing logs to .log file
 remote_logging  Toggle whether or not logs should be forwarded to NTS.
 auto_reload     Restart plugin automatically if a .py or .json file in current directory changes
-ignore         To use with auto-reload. All paths matching this pattern will be ignored,
-                    use commas to specify several. Supports */?/[seq]/[!seq]
+ignore          To use with auto-reload. All paths matching this pattern will be ignored,
+                use commas to specify several. Supports */?/[seq]/[!seq]
 
 Environment Variable settings keys.
 NTS_HOST
