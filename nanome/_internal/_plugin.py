@@ -47,7 +47,8 @@ class _Plugin(object):
         if self._pre_run is not None:
             self._pre_run()
 
-        self._description['auth'] = self.__read_key()
+        if self._key:
+            self._description['auth'] = self.__read_key()
         self._process_manager = _ProcessManager()
 
         self.__reconnect_attempt = 0
