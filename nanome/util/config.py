@@ -14,9 +14,9 @@ Order of priority for settings:
 3) Finally, fall back on config file.
 
 Fetchable Settings
-host            Connects to NTS at the specified IP address
-port            Connects to NTS at the specified port
-keyfile         Specifies a key file or key string to use to connect to NTS
+host            NTS host or ip address
+port            NTS port
+key         Specifies a key file or key string to use to connect to NTS
 verbose         Enable verbose mode, to display Logs.debug
 name            Name to display for this plugin in Nanome
 write_log_file  Enable or disable writing logs to .log file
@@ -37,6 +37,24 @@ PLUGIN_REMOTE_LOGGING
 """
 
 __all__ = ['load_settings', 'fetch', 'set', 'create_parser']
+
+
+def create_parser():
+    """Command Line Interface for Plugins.
+
+    rtype: argsparser: args parser
+    """
+    parser = argparse.ArgumentParser(description='Starts a Nanome Plugin.')
+    parser.add_argument('-a', '--host', help='connects to NTS at the specified IP address')
+    parser.add_argument('-p', '--port', type=int, help='connects to NTS at the specified port')
+    parser.add_argument('-k', '--keyfile', dest='key', default='', help='Specifies a key file or key string to use to connect to NTS')
+    parser.add_argument('-n', '--name', help='Name to display for this plugin in Nanome', default='')
+    parser.add_argument('-v', '--verbose', action='store_true', default=None, help='enable verbose mode, to display Logs.debug')
+    parser.add_argument('--write-log-file', type=str2bool, default=None, dest='write_log_file', help='Enable or disable writing logs to .log file')
+    parser.add_argument('--remote-logging', type=str2bool, default=None, dest='remote_logging', help='Toggle whether or not logs should be forwarded to NTS.')
+    parser.add_argument('-r', '--auto-reload', action='store_true', default=None, dest='auto_reload', help='Restart plugin automatically if a .py or .json file in current directory changes')
+    parser.add_argument('-i', '--ignore', help='To use with auto-reload. All paths matching this pattern will be ignored, use commas to specify several. Supports */?/[seq]/[!seq]', default='')
+    return parser
 
 
 def load_settings():
@@ -97,24 +115,6 @@ def set(key, value):
         return True
 
 
-def create_parser():
-    """Command Line Interface for Plugins.
-
-    rtype: argsparser: args parser
-    """
-    parser = argparse.ArgumentParser(description='Starts a Nanome Plugin.')
-    parser.add_argument('-a', '--host', help='connects to NTS at the specified IP address')
-    parser.add_argument('-p', '--port', type=int, help='connects to NTS at the specified port')
-    parser.add_argument('-r', '--auto-reload', action='store_true', help='Restart plugin automatically if a .py or .json file in current directory changes')
-    parser.add_argument('-v', '--verbose', action='store_true', help='enable verbose mode, to display Logs.debug')
-    parser.add_argument('-n', '--name', help='Name to display for this plugin in Nanome', default='')
-    parser.add_argument('-k', '--keyfile', default='', help='Specifies a key file or key string to use to connect to NTS')
-    parser.add_argument('-i', '--ignore', help='To use with auto-reload. All paths matching this pattern will be ignored, use commas to specify several. Supports */?/[seq]/[!seq]', default='')
-    parser.add_argument('--write-log-file', type=str2bool, help='Enable or disable writing logs to .log file')
-    parser.add_argument('--remote-logging', type=str2bool, dest='remote_logging', help='Toggle whether or not logs should be forwarded to NTS.')
-    return parser
-
-
 def _get_config_path():
     s = "/"
     home = os.getenv('APPDATA')
@@ -168,7 +168,14 @@ def _get_environ_dict():
         'remote_logging': os.environ.get('PLUGIN_REMOTE_LOGGING'),
         'auto_reload': os.environ.get('PLUGIN_AUTO_RELOAD'),
     }
-    # remove any keys that haven't been set.
+    # Use cli parser to format args as correct data types.
+    parser = create_parser()
+    for action in parser._actions:
+        field_name = action.dest
+        if field_name in environ_dict and environ_dict[field_name] is not None:
+            arg_list = [action.option_strings[0], environ_dict[field_name]]
+            ns, _ = parser.parse_known_args(arg_list)
+            environ_dict[field_name] = getattr(ns, field_name)
     environ_dict = {k: v for k, v in environ_dict.items() if v is not None}
     return environ_dict
 
