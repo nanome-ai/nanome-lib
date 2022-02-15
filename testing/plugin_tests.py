@@ -147,6 +147,7 @@ class PluginTestCase(unittest.TestCase):
         env_write_log_file = 'False'
         env_remote_logging = 'False'
         env_auto_reload = 'True'
+        env_ignore = '/app/fakefile1,/app/fakefile2'
 
         environ_dict = {
             'NTS_HOST': env_host,
@@ -156,8 +157,10 @@ class PluginTestCase(unittest.TestCase):
             'PLUGIN_VERBOSE': env_verbose,
             'PLUGIN_WRITE_LOG_FILE': env_write_log_file,
             'PLUGIN_REMOTE_LOGGING': env_remote_logging,
-            'PLUGIN_AUTO_RELOAD': env_auto_reload
+            'PLUGIN_AUTO_RELOAD': env_auto_reload,
+            'PLUGIN_IGNORE': env_ignore
         }
+
         with patch.dict('os.environ', environ_dict):
             self.plugin.run()
 
@@ -170,6 +173,7 @@ class PluginTestCase(unittest.TestCase):
         self.assertEqual(self.plugin.remote_logging, bool(strtobool(env_remote_logging)))
         self.assertEqual(self.plugin.write_log_file, bool(strtobool(env_write_log_file)))
         self.assertEqual(self.plugin.has_autoreload, bool(strtobool(env_auto_reload)))
+        self.assertEqual(self.plugin.to_ignore, env_ignore.split(','))
 
         # CLI args should take precedent over environment variables.
         cli_host = 'cli_host'
