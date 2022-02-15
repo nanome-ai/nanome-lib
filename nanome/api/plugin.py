@@ -58,6 +58,7 @@ class Plugin(_Plugin):
 
         rtype: argsparser: args parser
         """
+        return config.create_parser()
 
     def run(self, host=None, port=None, key=None):
         """
