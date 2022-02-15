@@ -68,7 +68,6 @@ def load_settings():
     config_dict = _get_config_dict()
     cli_dict = _get_cli_args()
     environ_dict = _get_environ_dict()
-
     plugin_settings = dict(config_dict)
     plugin_settings.update(environ_dict)
     plugin_settings.update(cli_dict)
@@ -191,11 +190,11 @@ def _serialize_dict_with_parser(args_dict):
     parser = create_parser()
     for action in parser._actions:
         field_name = action.dest
-        if field_name in args_dict and args_dict[field_name] is not None:
+        if field_name in args_dict and args_dict[field_name] not in [None, '']:
             arg_list = [action.option_strings[0], str(args_dict[field_name])]
             ns, _ = parser.parse_known_args(arg_list)
             args_dict[field_name] = getattr(ns, field_name)
-    args_dict = {k: v for k, v in args_dict.items() if v is not None}
+    args_dict = {k: v for k, v in args_dict.items() if v not in [None, '']}
     return args_dict
 
 
