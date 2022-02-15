@@ -16,7 +16,7 @@ Order of priority for settings:
 Fetchable Settings
 host            NTS host or ip address
 port            NTS port
-key         Specifies a key file or key string to use to connect to NTS
+key             Specifies a key file or key string to use to connect to NTS
 verbose         Enable verbose mode, to display Logs.debug
 name            Name to display for this plugin in Nanome
 write_log_file  Enable or disable writing logs to .log file
