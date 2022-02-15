@@ -32,8 +32,9 @@ NTS_KEY
 PLUGIN_NAME
 PLUGIN_VERBOSE
 PLUGIN_WRITE_LOG_FILE
-PLUGIN_AUTO_RELOAD
 PLUGIN_REMOTE_LOGGING
+PLUGIN_AUTO_RELOAD
+PLUGIN_IGNORE
 """
 
 __all__ = ['load_settings', 'fetch', 'set', 'create_parser']
@@ -130,6 +131,7 @@ def _get_environ_dict():
         'write_log_file': os.environ.get('PLUGIN_WRITE_LOG_FILE'),
         'remote_logging': os.environ.get('PLUGIN_REMOTE_LOGGING'),
         'auto_reload': os.environ.get('PLUGIN_AUTO_RELOAD'),
+        'ignore': os.environ.get('PLUGIN_IGNORE'),
     }
     serialized_dict = _serialize_dict_with_parser(environ_dict)
     return serialized_dict
