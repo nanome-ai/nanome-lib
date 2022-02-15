@@ -47,8 +47,7 @@ class _Plugin(object):
         if self._pre_run is not None:
             self._pre_run()
 
-        if self._key:
-            self._description['auth'] = self.__read_key()
+        self._description['auth'] = self.__read_key()
         self._process_manager = _ProcessManager()
 
         self.__reconnect_attempt = 0
@@ -56,8 +55,10 @@ class _Plugin(object):
         self._loop()
 
     def __read_key(self):
+        if not self._key:
+            return
         # check if arg is key data
-        if re.match(r'^[0-9A-F]+$', self._key):
+        elif re.match(r'^[0-9A-F]+$', self._key):
             return self._key
         try:
             f = open(self._key, "r")
