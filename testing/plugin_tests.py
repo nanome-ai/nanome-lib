@@ -1,9 +1,11 @@
 import argparse
+from distutils.util import strtobool
 import sys
 import unittest
 
 from nanome import Plugin, PluginInstance
 from nanome._internal._process import _ProcessManager
+from nanome.util import config
 
 if sys.version_info.major >= 3:
     from unittest.mock import MagicMock, patch
@@ -18,6 +20,17 @@ class PluginTestCase(unittest.TestCase):
         self.plugin = Plugin('Test Plugin', 'Unit Test Plugin')
         self.plugin._network = MagicMock()
         self.plugin.set_plugin_class(PluginInstance)
+        # Store original config values and reset on tearDown
+        # We don't want tests changing the configs permanently
+        self.original_config_host = config.fetch('host')
+        self.original_config_port = config.fetch('port')
+        self.original_config_key = config.fetch('key')
+
+    def tearDown(self):
+        config.set('host', self.original_config_host)
+        config.set('port', self.original_config_port)
+        config.set('key', self.original_config_key)
+        super(PluginTestCase, self).tearDown()
 
     def test_create_parser(self):
         parser = Plugin.create_parser()
@@ -56,6 +69,7 @@ class PluginTestCase(unittest.TestCase):
         ]
         with patch.object(sys, 'argv', testargs):
             self.plugin.run(host, port, key)
+
         self.assertEqual(self.plugin.write_log_file, True)
         self.assertEqual(self.plugin.remote_logging, False)
         self.assertEqual(self.plugin.to_ignore, [ignore])
@@ -70,6 +84,10 @@ class PluginTestCase(unittest.TestCase):
         description = 'Test Plugin'
         tags = []
         has_advanced = True
+
+        config.set('host', 'anyhost')
+        config.set('port', 8000)
+        config.set('key', 'abcdefg1234')
         self.plugin.setup(name, description, tags, has_advanced, PluginInstance)
         netinstance_mock.assert_called_once()
         loop_mock.assert_called_once()
@@ -94,3 +112,102 @@ class PluginTestCase(unittest.TestCase):
 
         self.plugin.post_run = test_callback_fn
         self.plugin.post_run()
+
+    @patch('nanome._internal._plugin._Plugin._loop')
+    @patch('nanome._internal._plugin.Network._NetInstance')
+    @patch('nanome._internal._plugin._Plugin._autoreload')
+    def test_config_priority(self, *args):
+        """Validate order of priority for plugin settings.
+
+        Order of priority for settings:
+        1. First, parameters to run() function are checked
+        2) Then CLI args are checked.
+        3) Then environment variables.
+        4) Finally, fall back on config file.
+        """
+        # Lowest priority: nanome.util.config config file.
+        config_host = 'config_host'
+        config_port = 8000
+        config_key = 'config_key54321'
+        config.set('host', config_host)
+        config.set('port', config_port)
+        config.set('key', config_key)
+
+        self.plugin.run()
+        self.assertEqual(self.plugin.host, config_host)
+        self.assertEqual(self.plugin.port, config_port)
+        self.assertEqual(self.plugin.key, config_key)
+
+        # Environment variables should take precedent over config file.
+        env_host = 'environ_host'
+        env_port = '8001'
+        env_key = 'environ_key12345'
+        env_name = "Environment Name"
+        env_verbose = 'True'
+        env_write_log_file = 'False'
+        env_remote_logging = 'False'
+        env_auto_reload = 'True'
+        env_ignore = '/app/fakefile1,/app/fakefile2'
+
+        environ_dict = {
+            'NTS_HOST': env_host,
+            'NTS_PORT': env_port,
+            'NTS_KEY': env_key,
+            'PLUGIN_NAME': env_name,
+            'PLUGIN_VERBOSE': env_verbose,
+            'PLUGIN_WRITE_LOG_FILE': env_write_log_file,
+            'PLUGIN_REMOTE_LOGGING': env_remote_logging,
+            'PLUGIN_AUTO_RELOAD': env_auto_reload,
+            'PLUGIN_IGNORE': env_ignore
+        }
+
+        with patch.dict('os.environ', environ_dict):
+            self.plugin.run()
+
+        self.assertEqual(self.plugin.host, env_host)
+        self.assertEqual(self.plugin.port, int(env_port))
+        self.assertEqual(self.plugin.key, env_key)
+        self.assertEqual(self.plugin.name, env_name)
+        self.assertEqual(self.plugin.verbose, bool(strtobool(env_verbose)))
+        self.assertEqual(self.plugin.write_log_file, bool(strtobool(env_write_log_file)))
+        self.assertEqual(self.plugin.remote_logging, bool(strtobool(env_remote_logging)))
+        self.assertEqual(self.plugin.write_log_file, bool(strtobool(env_write_log_file)))
+        self.assertEqual(self.plugin.has_autoreload, bool(strtobool(env_auto_reload)))
+        self.assertEqual(self.plugin.to_ignore, env_ignore.split(','))
+
+        # CLI args should take precedent over environment variables.
+        cli_host = 'cli_host'
+        cli_port = 8003
+        cli_key = 'cli_key12345'
+        cli_write_log_file = 'false'
+        cli_name = 'cli-plugin-name'
+        cli_ignore = 'cli_ignore.py'
+        cli_remote_logging = 'y'
+        testargs = [
+            'run.py',
+            '--write-log-file', cli_write_log_file,
+            '--ignore', cli_ignore,
+            '--name', cli_name,
+            '--key', cli_key,
+            '--verbose',
+            '-a', cli_host,
+            '-p', str(cli_port),
+            '--remote-logging', cli_remote_logging
+        ]
+        with patch.object(sys, 'argv', testargs), patch.dict('os.environ', environ_dict):
+            self.plugin.run()
+        self.assertEqual(self.plugin.write_log_file, False)
+        self.assertEqual(self.plugin.to_ignore, [cli_ignore])
+        self.assertEqual(self.plugin.name, cli_name)
+        self.assertEqual(self.plugin.verbose, True)
+        self.assertEqual(self.plugin.remote_logging, True)
+
+        # fn parameters take precedent over everything
+        kwarg_host = 'anyhost'
+        kwarg_port = 8000
+        kwarg_key = ''
+        with patch.dict('os.environ', environ_dict), patch.object(sys, 'argv', testargs):
+            self.plugin.run(kwarg_host, kwarg_port, kwarg_key)
+            self.assertEqual(self.plugin.host, kwarg_host)
+            self.assertEqual(self.plugin.port, kwarg_port)
+            self.assertEqual(self.plugin.key, kwarg_key)

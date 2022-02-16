@@ -55,8 +55,10 @@ class _Plugin(object):
         self._loop()
 
     def __read_key(self):
+        if not self._key:
+            return
         # check if arg is key data
-        if re.match(r'^[0-9A-F]+$', self._key):
+        elif re.match(r'^[0-9A-F]+$', self._key):
             return self._key
         try:
             f = open(self._key, "r")

@@ -1,6 +1,5 @@
 import argparse
 import sys
-
 from nanome.util import config
 
 

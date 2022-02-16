@@ -1,4 +1,4 @@
-import argparse
+import sys
 
 from . import _DefaultPlugin
 from nanome._internal import _Plugin
@@ -6,18 +6,6 @@ from nanome._internal.logs import LogsManager
 from nanome._internal._process import _ProcessManager
 from nanome.util.logs import Logs
 from nanome.util import config
-
-
-def str2bool(v):
-    """Accept various truthy/falsey values as boolean arguments."""
-    if isinstance(v, bool):
-        return v
-    if v.lower() in ('yes', 'true', 't', 'y', '1'):
-        return True
-    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
-        return False
-    else:
-        raise argparse.ArgumentTypeError('Boolean value expected.')
 
 
 class Plugin(_Plugin):
@@ -52,64 +40,47 @@ class Plugin(_Plugin):
     def create_parser():
         """Command Line Interface for Plugins.
 
+        Moved into config.py, but there are plugins that retrieve parser from Plugin class.
+        Leaving this here for backwards compatibility.
+
         rtype: argsparser: args parser
         """
-        parser = argparse.ArgumentParser(description='Starts a Nanome Plugin.')
-        parser.add_argument('-a', '--host', help='connects to NTS at the specified IP address')
-        parser.add_argument('-p', '--port', type=int, help='connects to NTS at the specified port')
-        parser.add_argument('-r', '--auto-reload', action='store_true', help='Restart plugin automatically if a .py or .json file in current directory changes')
-        parser.add_argument('-v', '--verbose', action='store_true', help='enable verbose mode, to display Logs.debug')
-        parser.add_argument('-n', '--name', help='Name to display for this plugin in Nanome', default='')
-        parser.add_argument('-k', '--keyfile', default='', help='Specifies a key file or key string to use to connect to NTS')
-        parser.add_argument('-i', '--ignore', help='To use with auto-reload. All paths matching this pattern will be ignored, use commas to specify several. Supports */?/[seq]/[!seq]', default='')
-        parser.add_argument('--write-log-file', type=str2bool, help='Enable or disable writing logs to .log file')
-        parser.add_argument('--remote-logging', type=str2bool, dest='remote_logging', help='Toggle whether or not logs should be forwarded to NTS.')
-        return parser
+        return config.create_parser()
 
-    def run(self, host="config", port="config", key="config"):
+    def run(self, host=None, port=None, key=None):
         """
         | Starts the plugin by connecting to the server specified.
         | If arguments (-a, -p) are given when starting plugin, host/port will be ignored.
         | Function will return only when plugin exits.
-
         :param host: NTS IP address if plugin started without -a option
         :param port: NTS port if plugin started without -p option
         :type host: str
         :type port: int
         """
-        default_host = config.fetch('host') if host == 'config' else host
-        default_port = config.fetch('port') if port == 'config' else port
-        default_key = config.fetch('key') if key == 'config' else key
-        default_write_log_file = config.fetch('write_log_file')
-        default_remote_logging = False
+        settings = config.load_settings()
+        self.host = host if host else settings.get('host')
 
-        # Parse command line args and set internal variables.
-        parser = self.create_parser()
-        args, _ = parser.parse_known_args()
+        if not self.host:
+            Logs.error('No NTS host provided')
+            sys.exit(1)
+        try:
+            self.port = int(port) if port else int(settings.get('port'))
+        except ValueError:
+            Logs.error('Port must be an integer, received \"{}\"'.format(port))
+            sys.exit(1)
+        self.key = key if key is not None else settings.get('key')
+        self.write_log_file = settings.get('write_log_file') or False
+        self.remote_logging = settings.get('remote_logging') or False
+        self.has_autoreload = settings.get('auto_reload')
+        self.verbose = settings.get('verbose')
 
-        self.host = args.host or default_host
-        self.port = args.port or default_port
-        self.key = args.keyfile or default_key
-
-        if args.write_log_file is not None:
-            self.write_log_file = args.write_log_file
-        else:
-            self.write_log_file = default_write_log_file
-
-        if args.remote_logging is not None:
-            self.remote_logging = args.remote_logging
-        else:
-            self.remote_logging = default_remote_logging
-
-        self.has_autoreload = args.auto_reload
-        self.verbose = args.verbose
-
-        if args.ignore:
-            to_ignore = args.ignore.split(",")
+        if settings.get('ignore'):
+            to_ignore = settings.get('ignore').split(",")
             self.to_ignore = to_ignore
 
-        if args.name:
-            self.name = args.name
+        # Name can be set during the class instantiation without cli arg.
+        if settings.get('name'):
+            self.name = settings.get('name')
 
         # Configure Logging
         self.__log_filename = self._plugin_class.__name__ + ".log"
@@ -128,8 +99,8 @@ class Plugin(_Plugin):
             self._run()
 
     @classmethod
-    def setup(cls, name, description, tags, has_advanced, plugin_class, host="config",
-              port="config", key="config", permissions=None, integrations=None):
+    def setup(cls, name, description, tags, has_advanced, plugin_class, host=None,
+              port=None, key=None, permissions=None, integrations=None):
 
         permissions = permissions or []
         integrations = integrations or []
