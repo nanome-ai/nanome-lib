@@ -94,7 +94,15 @@ class Vector3(object):
         return Vector3(self.x / scalar, self.y / scalar, self.z / scalar)
 
     def __eq__(self, other):
-        return self.x == other.x and self.y == other.y and self.z == other.z
+        if isinstance(other, Vector3):
+            return self.x == other.x and self.y == other.y and self.z == other.z
+        return NotImplemented
+
+    def __ne__(self, other):
+        eq = self == other
+        if eq is not NotImplemented:
+            return not eq
+        return NotImplemented
 
     def equals(self, other):
         """
