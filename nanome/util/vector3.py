@@ -81,7 +81,7 @@ class Vector3(object):
     def __mul__(self, scalar):
         return Vector3(self.x * scalar, self.y * scalar, self.z * scalar)
 
-    def __div__(self, scalar):
+    def __truediv__(self, scalar):
         return Vector3(self.x / scalar, self.y / scalar, self.z / scalar)
 
     def __eq__(self, other):
