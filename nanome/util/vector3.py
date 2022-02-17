@@ -72,6 +72,15 @@ class Vector3(object):
         """
         return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z
 
+    def __pos__(self):
+        return self
+
+    def __neg__(self):
+        return self * -1
+
+    def __abs__(self):
+        return Vector3(abs(self.x), abs(self.y), abs(self.z))
+
     def __add__(self, other):
         return Vector3(self.x + other.x, self.y + other.y, self.z + other.z)
 
