@@ -204,7 +204,9 @@ class Vector3(object):
 
         :type: :class:`~nanome.util.Vector3`
         """
-        return self / self.magnitude
+        if self.magnitude > 0:
+            return self / self.magnitude
+        return self
 
     def _inverse_handedness(self):
         """
