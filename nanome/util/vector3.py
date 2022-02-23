@@ -1,3 +1,4 @@
+from __future__ import division
 import math
 
 
@@ -15,16 +16,39 @@ class Vector3(object):
     def __setitem__(self, i, value):
         self._positions[i] = float(value)
 
+    def __repr__(self):
+        return 'Vector3(x={}, y={}, z={})'.format(*self._positions)
+
     def __str__(self):
-        s = ' '.join([str(self._positions[0]), str(self._positions[1]), str(self._positions[2])])
+        s = ' '.join([str(self.x), str(self.y), str(self.z)])
         return s
+
+    def __iter__(self):
+        return self._positions.__iter__()
 
     def get_copy(self):
         """
         :return: A copy of this vector.
         :rtype: :class:`~nanome.util.Vector3`
         """
-        return Vector3(self._positions[0], self._positions[1], self._positions[2])
+        return Vector3(self.x, self.y, self.z)
+
+    @classmethod
+    def cross(cls, v1, v2):
+        """
+        | Returns the cross product of two vectors.
+
+        :param v1: The first vector
+        :type v1: :class:`~nanome.util.Vector3`
+        :param v2: The second vector
+        :type v2: :class:`~nanome.util.Vector3`
+        :return: Cross product of v1 and v2
+        :rtype: :class:`~nanome.util.Vector3`
+        """
+        x = v1.y * v2.z - v1.z * v2.y
+        y = v1.z * v2.x - v1.x * v2.z
+        z = v1.x * v2.y - v1.y * v2.x
+        return Vector3(x, y, z)
 
     @classmethod
     def distance(cls, v1, v2):
@@ -38,14 +62,51 @@ class Vector3(object):
         """
         return math.sqrt((v2.x - v1.x) ** 2 + (v2.y - v1.y) ** 2 + (v2.z - v1.z) ** 2)
 
+    @classmethod
+    def dot(cls, v1, v2):
+        """
+        | Returns the dot product of two vectors.
+
+        :param v1: The first vector
+        :type v1: :class:`~nanome.util.Vector3`
+        :param v2: The second vector
+        :type v2: :class:`~nanome.util.Vector3`
+        :return: Dot product of v1 and v2
+        :rtype: :class:`float`
+        """
+        return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z
+
+    def __pos__(self):
+        return self
+
+    def __neg__(self):
+        return self * -1
+
+    def __abs__(self):
+        return Vector3(abs(self.x), abs(self.y), abs(self.z))
+
     def __add__(self, other):
-        return Vector3(self._positions[0] + other.x, self._positions[1] + other.y, self._positions[2] + other.z)
+        return Vector3(self.x + other.x, self.y + other.y, self.z + other.z)
 
     def __sub__(self, other):
-        return Vector3(self._positions[0] - other.x, self._positions[1] - other.y, self._positions[2] - other.z)
+        return Vector3(self.x - other.x, self.y - other.y, self.z - other.z)
 
     def __mul__(self, scalar):
-        return Vector3(self._positions[0] * scalar, self._positions[1] * scalar, self._positions[2] * scalar)
+        return Vector3(self.x * scalar, self.y * scalar, self.z * scalar)
+
+    def __truediv__(self, scalar):
+        return Vector3(self.x / scalar, self.y / scalar, self.z / scalar)
+
+    def __eq__(self, other):
+        if isinstance(other, Vector3):
+            return self.x == other.x and self.y == other.y and self.z == other.z
+        return NotImplemented
+
+    def __ne__(self, other):
+        eq = self == other
+        if eq is not NotImplemented:
+            return not eq
+        return NotImplemented
 
     def equals(self, other):
         """
@@ -56,14 +117,14 @@ class Vector3(object):
         :return: Whether or not this vector is component-equal to 'other'
         :rtype: :class:`bool`
         """
-        return self.x == other.x and self.y == other.y and self.z == other.z
+        return self == other
 
     def unpack(self):
         """
         :return: a 3-tuple containing this vector's x, y, and z components.
         :rtype: :class:`tuple`
         """
-        return self._positions[0], self._positions[1], self._positions[2]
+        return self.x, self.y, self.z
 
     def set(self, x, y, z):
         """
@@ -77,6 +138,20 @@ class Vector3(object):
         self._positions[0] = x
         self._positions[1] = y
         self._positions[2] = z
+
+    def normalize(self):
+        """
+        | Normalizes this vector and returns itself.
+
+        :return: This vector, now normalized.
+        :rtype: :class:`~nanome.util.Vector3`
+        """
+        length = self.magnitude
+        if length > 0:
+            self.x /= length
+            self.y /= length
+            self.z /= length
+        return self
 
     @property
     def x(self):
@@ -116,6 +191,26 @@ class Vector3(object):
     @z.setter
     def z(self, value):
         self._positions[2] = float(value)
+
+    @property
+    def magnitude(self):
+        """
+        | The magnitude of this vector
+
+        :type: :class:`float`
+        """
+        return math.sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)
+
+    @property
+    def normalized(self):
+        """
+        | The normalized version of this vector
+
+        :type: :class:`~nanome.util.Vector3`
+        """
+        if self.magnitude > 0:
+            return self / self.magnitude
+        return self
 
     def _inverse_handedness(self):
         """
