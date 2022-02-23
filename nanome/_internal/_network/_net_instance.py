@@ -61,7 +61,8 @@ class _NetInstance(object):
                 raise
 
     def disconnect(self):
-        self._connection.close()
+        if self._connection is not None:
+            self._connection.close()
 
     def receive(self):
         try:
@@ -70,6 +71,7 @@ class _NetInstance(object):
             time.sleep(0.01)
         except ssl.SSLEOFError:
             Logs.error("Connection closed by plugin server")
+            self._connection = None
             return False
         except KeyboardInterrupt:
             raise
@@ -77,6 +79,7 @@ class _NetInstance(object):
             msg = "Uncaught {}: {}".format(type(e).__name__, e.reason)
             Logs.error(msg)
             time.sleep(0.1)
+            self._connection = None
             return False
         else:
             if len(data) == 0:
