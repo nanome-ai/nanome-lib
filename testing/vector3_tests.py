@@ -5,89 +5,121 @@ from nanome.util import Vector3
 
 
 class Vector3TestCase(unittest.TestCase):
-    def setUp(self):
-        super(Vector3TestCase, self).setUp()
-        self.v1 = Vector3(0, 1, 2)
-        self.v2 = Vector3(2, 4, 8)
-        self.v3 = Vector3(2, 0, 0)
-
     def test_getitem(self):
-        self.assertEqual(self.v1[0], 0)
-        self.assertEqual(self.v1[1], 1)
-        self.assertEqual(self.v1[2], 2)
+        v = Vector3(0, 1, 2)
+        self.assertEqual(v[0], 0)
+        self.assertEqual(v[1], 1)
+        self.assertEqual(v[2], 2)
 
     def test_setitem(self):
         v = Vector3()
         v[0] = 1
         v[1] = 2
         v[2] = 3
-        self.assertEqual(v, Vector3(1, 2, 3))
+        expected = Vector3(1, 2, 3)
+        self.assertEqual(v, expected)
 
     def test_repr(self):
-        self.assertEqual(repr(self.v1), "Vector3(x=0.0, y=1.0, z=2.0)")
+        v = Vector3(0, 1, 2)
+        expected = "Vector3(x=0.0, y=1.0, z=2.0)"
+        self.assertEqual(repr(v), expected)
 
     def test_str(self):
-        self.assertEqual(str(self.v1), "0.0 1.0 2.0")
+        v = Vector3(0, 1, 2)
+        expected = "0.0 1.0 2.0"
+        self.assertEqual(str(v), expected)
 
     def test_iter(self):
-        i = self.v1.__iter__()
+        v = Vector3(0, 1, 2)
+        i = v.__iter__()
         self.assertEqual(next(i), 0)
         self.assertEqual(next(i), 1)
         self.assertEqual(next(i), 2)
 
     def test_eq(self):
-        self.assertEqual(self.v1, Vector3(0, 1, 2))
-        self.assertIs(self.v1 == 0, False)
+        v = Vector3(0, 1, 2)
+        expected = Vector3(0, 1, 2)
+        self.assertEqual(v, expected)
+        self.assertIs(v == 0, False)
 
     def test_neq(self):
-        self.assertNotEqual(self.v1, Vector3(0, 1, 3))
-        self.assertIs(self.v1 != 0, True)
+        v = Vector3(0, 1, 2)
+        expected = Vector3(0, 1, 3)
+        self.assertNotEqual(v, expected)
+        self.assertIs(v != 0, True)
 
     def test_pos(self):
-        self.assertEqual(+self.v1, self.v1)
+        v = Vector3(0, 1, 2)
+        self.assertEqual(+v, v)
 
     def test_neg(self):
-        self.assertEqual(-self.v1, Vector3(-0, -1, -2))
+        v = Vector3(0, 1, 2)
+        expected = Vector3(-0, -1, -2)
+        self.assertEqual(-v, expected)
 
     def test_abs(self):
-        self.assertEqual(abs(-self.v1), self.v1)
+        v = Vector3(0, 1, 2)
+        self.assertEqual(abs(-v), v)
 
     def test_add(self):
-        self.assertEqual(self.v1 + self.v2, Vector3(2, 5, 10))
+        v1 = Vector3(0, 1, 2)
+        v2 = Vector3(2, 4, 8)
+        expected = Vector3(2, 5, 10)
+        self.assertEqual(v1 + v2, expected)
 
     def test_sub(self):
-        self.assertEqual(self.v1 - self.v2, Vector3(-2, -3, -6))
+        v1 = Vector3(0, 1, 2)
+        v2 = Vector3(2, 4, 8)
+        expected = Vector3(-2, -3, -6)
+        self.assertEqual(v1 - v2, expected)
 
     def test_mul(self):
-        self.assertEqual(self.v1 * 2, Vector3(0, 2, 4))
+        v = Vector3(0, 1, 2)
+        expected = Vector3(0, 2, 4)
+        self.assertEqual(v * 2, expected)
 
     def test_div(self):
-        self.assertEqual(self.v2 / 2, Vector3(1, 2, 4))
+        v = Vector3(2, 4, 8)
+        expected = Vector3(1, 2, 4)
+        self.assertEqual(v / 2, expected)
 
     def test_cross(self):
-        self.assertEqual(Vector3.cross(self.v1, self.v2), Vector3(0, 4, -2))
+        v1 = Vector3(0, 1, 2)
+        v2 = Vector3(2, 4, 8)
+        expected = Vector3(0, 4, -2)
+        self.assertEqual(Vector3.cross(v1, v2), expected)
 
     def test_dot(self):
-        self.assertEqual(Vector3.dot(self.v1, self.v2), 20)
+        v1 = Vector3(0, 1, 2)
+        v2 = Vector3(2, 4, 8)
+        self.assertEqual(Vector3.dot(v1, v2), 20)
 
     def test_distance(self):
-        self.assertEqual(Vector3.distance(self.v1, self.v2), 7)
+        v1 = Vector3(0, 1, 2)
+        v2 = Vector3(2, 4, 8)
+        self.assertEqual(Vector3.distance(v1, v2), 7)
 
     def test_magnitude(self):
-        self.assertEqual(self.v3.magnitude, 2)
+        v = Vector3(2, 0, 0)
+        self.assertEqual(v.magnitude, 2)
 
     def test_normalized(self):
-        self.assertEqual(self.v3.normalized, Vector3(1, 0, 0))
+        v = Vector3(2, 0, 0)
+        expected = Vector3(1, 0, 0)
+        self.assertEqual(v.normalized, expected)
 
     def test_normalize(self):
-        v = self.v3.get_copy()
+        v = Vector3(2, 0, 0)
         v.normalize()
-        self.assertEqual(v, Vector3(1, 0, 0))
+        expected = Vector3(1, 0, 0)
+        self.assertEqual(v, expected)
 
     def test_unpack(self):
-        self.assertEqual(self.v1.unpack(), (0, 1, 2))
+        v = Vector3(0, 1, 2)
+        self.assertEqual(v.unpack(), (0, 1, 2))
 
     def test_set(self):
         v = Vector3()
         v.set(1, 2, 3)
-        self.assertEqual(v, Vector3(1, 2, 3))
+        expected = Vector3(1, 2, 3)
+        self.assertEqual(v, expected)
