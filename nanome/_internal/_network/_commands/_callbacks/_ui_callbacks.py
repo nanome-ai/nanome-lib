@@ -21,7 +21,7 @@ def _menu_toggled(network, arg, request_id):
         elif enabled == False:
             active_menu._on_closed_callback()
     else:
-        Logs.error("Can't find Menu for callback")
+        Logs.warning("Can't find Menu for callback")
 
 
 def _slider_released(network, arg, request_id):
@@ -33,7 +33,7 @@ def _slider_released(network, arg, request_id):
         active_slider.current_value = slider_value
         active_slider._on_slider_released()
     else:
-        Logs.error("Can't find UI content for callback")
+        Logs.warning("Can't find UI content for callback")
 
 
 def _slider_changed(network, arg, request_id):
@@ -45,7 +45,7 @@ def _slider_changed(network, arg, request_id):
         active_slider.current_value = slider_value
         active_slider._on_slider_changed()
     else:
-        Logs.error("Can't find UI content for callback")
+        Logs.warning("Can't find UI content for callback")
 
 
 def _text_submit(network, arg, request_id):
@@ -57,7 +57,7 @@ def _text_submit(network, arg, request_id):
         active_txt.input_text = text_value
         active_txt._on_text_submitted()
     else:
-        Logs.error("Can't find UI content for callback")
+        Logs.warning("Can't find UI content for callback")
 
 
 def _text_changed(network, arg, request_id):
@@ -69,7 +69,7 @@ def _text_changed(network, arg, request_id):
         active_txt.input_text = text_value
         active_txt._on_text_changed()
     else:
-        Logs.error("Can't find UI content for callback")
+        Logs.warning("Can't find UI content for callback")
 
 
 def _button_pressed(network, arg, request_id):
@@ -80,7 +80,7 @@ def _button_pressed(network, arg, request_id):
             btn._selected = arg[1]
         btn._on_button_pressed()
     else:
-        Logs.error("Can't find UI content for callback")
+        Logs.warning("Can't find UI content for callback")
 
 
 def _button_hover(network, arg, request_id):
@@ -90,7 +90,7 @@ def _button_hover(network, arg, request_id):
     if btn != None:
         btn._on_button_hover(state)
     else:
-        Logs.error("Can't find UI content for callback")
+        Logs.warning("Can't find UI content for callback")
 
 
 def _image_pressed(network, arg, request_id):
@@ -101,7 +101,7 @@ def _image_pressed(network, arg, request_id):
     if img != None:
         img._on_image_pressed(x, y)
     else:
-        Logs.error("Can't find UI content for callback")
+        Logs.warning("Can't find UI content for callback")
 
 
 def _image_held(network, arg, request_id):
@@ -112,7 +112,7 @@ def _image_held(network, arg, request_id):
     if img != None:
         img._on_image_held(x, y)
     else:
-        Logs.error("Can't find UI content for callback")
+        Logs.warning("Can't find UI content for callback")
 
 
 def _image_released(network, arg, request_id):
@@ -123,7 +123,7 @@ def _image_released(network, arg, request_id):
     if img != None:
         img._on_image_released(x, y)
     else:
-        Logs.error("Can't find UI content for callback")
+        Logs.warning("Can't find UI content for callback")
 
 
 def _dropdown_item_clicked(network, arg, request_id):
@@ -138,4 +138,4 @@ def _dropdown_item_clicked(network, arg, request_id):
         clickedItem._selected = True
         dropdown._on_item_clicked(clickedItem)
     else:
-        Logs.error("Can't find UI content for callback")
+        Logs.warning("Can't find UI content for callback")
