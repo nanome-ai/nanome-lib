@@ -57,7 +57,7 @@ class _Shape(object):
             if done_callback is not None:
                 done_callback(indices)
 
-        id = nanome._internal._network._ProcessNetwork._instance._send(nanome._internal._network._commands._callbacks._Messages.delete_shape, [self._index], False)
+        id = nanome._internal._network._ProcessNetwork._instance._send(nanome._internal._network._commands._callbacks._Messages.delete_shape, [self._index], True)
         result = nanome.PluginInstance._save_callback(id, set_callback if done_callback else None)
         if done_callback is None and nanome.PluginInstance._instance.is_async:
             result.real_set_result = result.set_result
