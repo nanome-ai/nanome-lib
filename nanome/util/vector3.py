@@ -15,6 +15,9 @@ class Vector3(object):
     def __setitem__(self, i, value):
         self._positions[i] = float(value)
 
+    def __repr__(self):
+        return 'Vector3(x={}, y={}, z={})'.format(*self._positions)
+
     def __str__(self):
         s = ' '.join([str(self.x), str(self.y), str(self.z)])
         return s
