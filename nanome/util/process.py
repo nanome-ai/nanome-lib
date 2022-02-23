@@ -21,10 +21,11 @@ class Process():
             self.executable_path = ""
             self.args = []
             self.encoding = None  # "utf-8" if stdout and err are text
+            self.bufsize = 1
             self.cwd_path = None
             self.id = 0
 
-    def __init__(self, executable_path=None, args=None, output_text=None):
+    def __init__(self, executable_path=None, args=None, output_text=None, buffer_lines=True):
         self.on_queued = lambda: None
         self.on_queue_position_change = lambda _: None
         self.on_start = lambda: None
@@ -40,6 +41,7 @@ class Process():
             self.args = args
         if output_text is not None:
             self.output_text = output_text
+        self.buffer_lines = buffer_lines
 
     @property
     def executable_path(self):
@@ -84,15 +86,27 @@ class Process():
     def output_text(self):
         """
         | Whether or not the process will produce text output.
+
+        :type: :class:`bool`
         """
         return self.__request.encoding == "utf-8"
 
     @output_text.setter
     def output_text(self, value):
-        if value:
-            self.__request.encoding = "utf-8"
-        else:
-            self.__request.encoding = None
+        self.__request.encoding = "utf-8" if value else None
+
+    @property
+    def buffer_lines(self):
+        """
+        | Whether or not to buffer output by lines.
+
+        :type: :class:`bool`
+        """
+        return self.__request.bufsize == 1
+
+    @buffer_lines.setter
+    def buffer_lines(self, value):
+        self.__request.bufsize = 1 if value else 0
 
     @property
     def _id(self):

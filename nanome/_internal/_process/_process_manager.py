@@ -1,4 +1,5 @@
 from collections import deque
+from functools import partial
 import subprocess
 import traceback
 import sys
@@ -60,18 +61,19 @@ class _ProcessManager():
         args = [request.executable_path] + request.args
         has_text = entry.output_text
 
-        def enqueue_output(pipe, queue, text):
+        def enqueue_output(pipe, queue, text, bufsize):
             if text:
                 sentinel = ''
             else:
                 sentinel = b''
 
-            for line in iter(pipe.readline, sentinel):
-                queue.put(line)
+            read_fn = pipe.readline if bufsize == 1 else partial(pipe.read, 1)
+            for data in iter(read_fn, sentinel):
+                queue.put(data)
             pipe.close()
 
         try:
-            entry.process = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, cwd=request.cwd_path, universal_newlines=has_text, close_fds=POSIX)
+            entry.process = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=request.bufsize, cwd=request.cwd_path, encoding=request.encoding, universal_newlines=has_text, close_fds=POSIX)
             Logs.debug("Process started:", request.executable_path, "for session", entry.session._session_id)
         except:
             Logs.error("Couldn't execute process", request.executable_path, "Please check if executable is present and has permissions:\n", traceback.format_exc())
@@ -79,8 +81,8 @@ class _ProcessManager():
             return
         entry.stdout_queue = Queue()
         entry.stderr_queue = Queue()
-        thread_out = Thread(target=enqueue_output, args=(entry.process.stdout, entry.stdout_queue, has_text), daemon=True)
-        thread_err = Thread(target=enqueue_output, args=(entry.process.stderr, entry.stderr_queue, has_text), daemon=True)
+        thread_out = Thread(target=enqueue_output, args=(entry.process.stdout, entry.stdout_queue, has_text, request.bufsize), daemon=True)
+        thread_err = Thread(target=enqueue_output, args=(entry.process.stderr, entry.stderr_queue, has_text, request.bufsize), daemon=True)
         thread_out.start()
         thread_err.start()
         self.__running.append(entry)
