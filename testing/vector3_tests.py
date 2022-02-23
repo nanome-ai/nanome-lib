@@ -61,7 +61,7 @@ class Vector3TestCase(unittest.TestCase):
         self.assertEqual(self.v1 * 2, Vector3(0, 2, 4))
 
     def test_div(self):
-        self.assertEqual(self.v2 / 2, Vector3(1, 2, 4))
+        self.assertEqual(self.v2.__truediv__(2), Vector3(1, 2, 4))
 
     def test_cross(self):
         self.assertEqual(Vector3.cross(self.v1, self.v2), Vector3(0, 4, -2))
