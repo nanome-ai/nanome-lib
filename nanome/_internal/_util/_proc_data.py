@@ -5,7 +5,6 @@ class _DataType(IntEnum):
     """Enum of types of data the ProcessNetwork Pipe can handle"""
 
     process = auto()
-    log = auto()
 
 
 class _ProcData():
