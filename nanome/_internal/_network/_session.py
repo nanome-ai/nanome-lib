@@ -12,6 +12,7 @@ class _Session(object):
         try:
             has_net_data = not self._net_queue_in.empty()
             has_proc_data = self._proc_plugin_pipe.poll()
+            self._logs_manager.poll_for_logs()
         except Exception:
             Logs.error("Plugin encountered an error, please check the logs.", traceback.format_exc())
             return False
@@ -27,9 +28,6 @@ class _Session(object):
                 request = self._proc_plugin_pipe.recv()
                 if request._type == _DataType.process:
                     self._process_manager._received_request(request._data, self)
-                elif request._type == _DataType.log:
-                    record = request._data
-                    self._logs_manager.log_record(record)
 
         except EOFError:
             Logs.error("Plugin encountered an error, please check the logs.", traceback.format_exc())

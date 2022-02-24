@@ -38,9 +38,10 @@ class _PluginInstance(object):
         self._custom_data = None
         self._permissions = None
 
-    def _setup_networking(self, session_id, queue_net_in, queue_net_out, proc_pipe, serializer, plugin_id, version_table, original_version_table, custom_data, permissions):
+    def _setup_networking(self, session_id, queue_net_in, queue_net_out, proc_pipe, log_pipe_conn, serializer, plugin_id, version_table, original_version_table, custom_data, permissions):
         self._network = _ProcessNetwork(self, session_id, queue_net_in, queue_net_out, serializer, plugin_id, version_table)
         self._process_manager = _ProcessManagerInstance(proc_pipe)
+        self._log_pipe_conn = log_pipe_conn
         self._network._send_connect(_Messages.connect, [_Packet._compression_type(), original_version_table])
         Logs.debug("Plugin constructed for session", session_id)
         self._custom_data = custom_data
