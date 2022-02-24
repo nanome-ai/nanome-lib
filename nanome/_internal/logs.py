@@ -143,7 +143,7 @@ class LogsManager():
         self.remote_logging = remote_logging
         self.main_pipe_conn = None
         self.child_pipe_conn = None
-        
+
     def configure_main_process(self, plugin_class):
         self.main_pipe_conn, self.child_pipe_conn = Pipe()
         logging_level = logging.INFO
