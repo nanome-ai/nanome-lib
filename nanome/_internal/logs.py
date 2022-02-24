@@ -18,20 +18,25 @@ class PipeHandler(logging.Handler):
     """Send log records through pipe to main process.
 
     Resolves issues with logging from multiple processes.
+    Also stores presenter info from PluginInstance, and adds to Logs before piping.
     """
 
     def __init__(self, pipe_conn, plugin_instance):
         super(PipeHandler, self).__init__()
         self.pipe_conn = pipe_conn
         self.org_name = None
+        self.org_id = None
         self.account_id = None
+        self.account_name = None
         # On instantiation, get presenter info to add to all future logs.
         self.set_presenter_info(plugin_instance)
 
     def handle(self, record):
         # Add account id and org name to record
         record.org_name = self.org_name
+        record.org_id = self.org_id
         record.account_id = self.account_id
+        record.account_name = self.account_name
         super(PipeHandler, self).handle(record)
 
     def emit(self, record):
@@ -49,8 +54,10 @@ class PipeHandler(logging.Handler):
         plugin_instance.request_presenter_info(self._presenter_info_callback)
 
     def _presenter_info_callback(self, info):
+        self.org_id = info.org_id
         self.org_name = info.org_name
         self.account_id = info.account_id
+        self.account_name = info.account_name
 
 
 class NTSLoggingHandler(graypy.handler.BaseGELFHandler):
@@ -172,8 +179,9 @@ class LogsManager():
             os.environ['TZ'] = 'UTC'
 
     @staticmethod
-    def configure_child_process(pipe_conn, plugin_instance):
+    def configure_child_process(plugin_instance):
         """Set up a PipeHandler that forwards all Logs to the main Process."""
+        pipe_conn = plugin_instance._process_manager._pipe
         # reset loggers on nanome-lib.
         nanome_logger = logging.getLogger("nanome")
         nanome_logger.handlers = []

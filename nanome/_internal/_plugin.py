@@ -318,8 +318,8 @@ class _Plugin(object):
     @classmethod
     def _launch_plugin(cls, plugin_class, session_id, queue_net_in, queue_net_out, pipe_proc, serializer, plugin_id, version_table, original_version_table, custom_data, permissions):
         plugin_instance = plugin_class()
-        plugin_instance._setup_network(session_id, queue_net_in, queue_net_out, pipe_proc, serializer, plugin_id, version_table, original_version_table, custom_data, permissions)
-        LogsManager.configure_child_process(pipe_proc, plugin_instance)
+        plugin_instance._setup_networking(session_id, queue_net_in, queue_net_out, pipe_proc, serializer, plugin_id, version_table, original_version_table, custom_data, permissions)
+        LogsManager.configure_child_process(plugin_instance)
         logger.debug("Starting plugin")
         plugin_instance._run()
 
