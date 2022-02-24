@@ -134,7 +134,6 @@ class LogsManager():
     When a child process is created, the child_pipe_conn is passed to the child process.
     The child process then uses a PipeHandler to send log records through the pipe to
     the main process.
-
     """
 
     def __init__(self, filename=None, plugin=None, write_log_file=True, remote_logging=False):
