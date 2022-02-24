@@ -317,11 +317,11 @@ class _Plugin(object):
 
     @classmethod
     def _launch_plugin(cls, plugin_class, session_id, queue_net_in, queue_net_out, pipe_proc, serializer, plugin_id, version_table, original_version_table, custom_data, permissions):
-        plugin = plugin_class()
-        _PluginInstance.__init__(plugin, session_id, queue_net_in, queue_net_out, pipe_proc, serializer, plugin_id, version_table, original_version_table, custom_data, permissions)
+        plugin_instance = plugin_class()
+        plugin_instance._setup_network(session_id, queue_net_in, queue_net_out, pipe_proc, serializer, plugin_id, version_table, original_version_table, custom_data, permissions)
         LogsManager.configure_child_process(pipe_proc, plugin_class)
         logger.debug("Starting plugin")
-        plugin._run()
+        plugin_instance._run()
 
     def __init__(self, name, description, tags=None, has_advanced=False, permissions=None, integrations=None):
         tags = tags or []

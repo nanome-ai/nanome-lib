@@ -27,18 +27,36 @@ class _PluginInstance(object):
     __complex_updated_callbacks = dict()
     __selection_changed_callbacks = dict()
 
-    @classmethod
-    def _save_callback(cls, id, callback):
+    def __init__(self):
+        self._menus = {}
+        self._run_text = "Run"
+        self._run_usable = True
+        self._advanced_settings_text = "Advanced Settings"
+        self._advanced_settings_usable = True
+        self._network = None
+        self._process_manager = None
+        self._custom_data = None
+        self._permissions = None
+
+    def _setup_network(self, session_id, queue_net_in, queue_net_out, proc_pipe, serializer, plugin_id, version_table, original_version_table, custom_data, permissions):
+        self._network = _ProcessNetwork(self, session_id, queue_net_in, queue_net_out, serializer, plugin_id, version_table)
+        self._process_manager = _ProcessManagerInstance(proc_pipe)
+        self._network._send_connect(_Messages.connect, [_Packet._compression_type(), original_version_table])
+        Logs.debug("Plugin constructed for session", session_id)
+        self._custom_data = custom_data
+        self._permissions = permissions
+
+    def _save_callback(self, id, callback):
         if callback is None:
-            if asyncio and nanome.PluginInstance._instance.is_async:
+            if asyncio and self.is_async:
                 loop = asyncio.get_event_loop()
                 future = loop.create_future()
-                cls.__futures[id] = future
+                self.__futures[id] = future
                 return future
             else:
-                cls.__callbacks[id] = lambda *_: None
+                self.__callbacks[id] = lambda *_: None
         else:
-            cls.__callbacks[id] = callback
+            self.__callbacks[id] = callback
 
     def _call(self, id, *args):
         callbacks = self.__callbacks
@@ -121,18 +139,3 @@ class _PluginInstance(object):
 
     def _has_permission(self, permission):
         return _Hashes.PermissionRequestHashes[permission] in self._permissions
-
-    def __init__(self, session_id, queue_net_in, queue_net_out, proc_pipe, serializer, plugin_id, version_table, original_version_table, custom_data, permissions):
-        self._menus = {}
-
-        self._network = _ProcessNetwork(self, session_id, queue_net_in, queue_net_out, serializer, plugin_id, version_table)
-        self._process_manager = _ProcessManagerInstance(proc_pipe)
-
-        Logs.debug("Plugin constructed for session", session_id)
-        self._network._send_connect(_Messages.connect, [_Packet._compression_type(), original_version_table])
-        self._run_text = "Run"
-        self._run_usable = True
-        self._advanced_settings_text = "Advanced Settings"
-        self._advanced_settings_usable = True
-        self._custom_data = custom_data
-        self._permissions = permissions

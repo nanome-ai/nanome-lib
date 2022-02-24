@@ -24,22 +24,13 @@ class PluginInstance(_PluginInstance):
     is_async = False
 
     def __init__(self):
-        # important: do not delete and leave empty to prevent double init.
-        pass
-
-    def __pseudo_init__(self):
+        super(PluginInstance, self).__init__()
         self.__menu = Menu()  # deprecated
         self.room = Room()
         self.integration = Integration()
         self.files = Files(self)
         self.__set_first = False
         self.PluginListButtonType = PluginListButtonType
-        PluginInstance._instance = self
-
-    def __new__(cls):
-        n = super(PluginInstance, cls).__new__(cls)
-        n.__pseudo_init__()
-        return n
 
     def start(self):
         """
