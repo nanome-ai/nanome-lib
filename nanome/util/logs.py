@@ -18,7 +18,7 @@ class Logs(object):
         info = auto()
 
     @classmethod
-    def error(cls, *args):
+    def error(cls, *args, extra=None):
         """
         | Prints an error
 
@@ -29,10 +29,10 @@ class Logs(object):
         logger = logging.getLogger(module)
         msg = ' '.join(map(str, args))
         use_exc_info = sys.exc_info()[0] is not None
-        logger.error(msg, exc_info=use_exc_info)
+        logger.error(msg, exc_info=use_exc_info, extra=extra)
 
     @classmethod
-    def warning(cls, *args):
+    def warning(cls, *args, extra=None):
         """
         | Prints a warning
 
@@ -42,10 +42,10 @@ class Logs(object):
         module = cls.caller_name()
         logger = logging.getLogger(module)
         msg = ' '.join(map(str, args))
-        logger.warning(msg)
+        logger.warning(msg, extra=extra)
 
     @classmethod
-    def message(cls, *args):
+    def message(cls, *args, extra=None):
         """
         | Prints a message
 
@@ -55,10 +55,10 @@ class Logs(object):
         module = cls.caller_name()
         logger = logging.getLogger(module)
         msg = ' '.join(map(str, args))
-        logger.info(msg)
+        logger.info(msg, extra=extra)
 
     @classmethod
-    def debug(cls, *args):
+    def debug(cls, *args, extra=None):
         """
         | Prints a debug message
         | Prints only if plugin started in verbose mode (with -v argument)
@@ -69,7 +69,7 @@ class Logs(object):
         module = cls.caller_name()
         logger = logging.getLogger(module)
         msg = ' '.join(map(str, args))
-        logger.debug(msg)
+        logger.debug(msg, extra=extra)
 
     @staticmethod
     def deprecated(new_func=None, msg=""):
