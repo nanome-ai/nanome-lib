@@ -275,7 +275,7 @@ class _Plugin(object):
             target=self._launch_plugin,
             args=(
                 self._plugin_class, session_id, main_conn_net, process_conn_net,
-                process_conn_proc,  log_pipe_conn, self.__serializer, self._plugin_id,
+                process_conn_proc, log_pipe_conn, self.__serializer, self._plugin_id,
                 version_table, _TypeSerializer.get_version_table(),
                 self._custom_data, permissions
             )
