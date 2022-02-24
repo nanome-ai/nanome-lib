@@ -272,7 +272,7 @@ class _Plugin(object):
         permissions = self._description["permissions"]
         log_pipe_conn = self._logs_manager.child_pipe_conn
         process = Process(
-            target=self._launch_plugin,
+            target=self._run_plugin_instance,
             args=(
                 self._plugin_class, session_id, main_conn_net, process_conn_net,
                 process_conn_proc, log_pipe_conn, self.__serializer, self._plugin_id,
@@ -308,19 +308,18 @@ class _Plugin(object):
         packet.set(0, Network._Packet.packet_type_logs_request, 0)
         packet.write_string(json.dumps(response))
 
-    @classmethod
-    def _launch_plugin_profile(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
-        cProfile.runctx('_Plugin._launch_plugin(plugin_class, session_id, pipe_net, pipe_proc, serializer, '
-                        'plugin_id, version_table, original_version_table, verbose, custom_data,'
-                        'permissions)', globals(), locals(), 'profile.out')
-
-    @classmethod
-    def _launch_plugin(cls, plugin_class, session_id, queue_net_in, queue_net_out, pipe_proc, log_pipe_conn, serializer, plugin_id, version_table, original_version_table, custom_data, permissions):
+    @staticmethod
+    def _run_plugin_instance(
+        plugin_class, session_id, queue_net_in, queue_net_out, pipe_proc,
+        log_pipe_conn, serializer, plugin_id, version_table, original_version_table,
+            custom_data, permissions):
+        """Setup and run plugin instance."""
         plugin_instance = plugin_class()
-        plugin_instance._setup_networking(
-            session_id, queue_net_in, queue_net_out, pipe_proc, log_pipe_conn,
-            serializer, plugin_id, version_table, original_version_table, custom_data,
-            permissions)
+        plugin_instance._setup(pipe_proc, log_pipe_conn, custom_data, permissions)
+        plugin_instance._setup_process_network(
+            session_id, queue_net_in, queue_net_out, serializer, plugin_id,
+            version_table, original_version_table)
+        logger.debug("Plugin constructed for session", session_id)
         LogsManager.configure_child_process(plugin_instance)
         logger.debug("Starting plugin")
         plugin_instance._run()
