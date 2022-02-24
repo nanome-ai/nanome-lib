@@ -40,7 +40,7 @@ def text_submitted_callback(textInput):
     Logs.message("text input submitted: " + str(textInput.input_text))
 
 
-class UIPlugin(nanome.AsyncPluginInstance):
+class UIPlugin(nanome.PluginInstance):
 
     def create_callbacks(self):
         def spawn_menu_callback(button):
@@ -81,7 +81,6 @@ class UIPlugin(nanome.AsyncPluginInstance):
     def import_file(self, request):
         self.on_run()
 
-    @async_callback
     async def on_run(self):
         Logs.message("Run UI Plugin")
         menu = self.rebuild_menu()
