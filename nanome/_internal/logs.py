@@ -31,11 +31,13 @@ class PipeHandler(logging.Handler):
         self.set_presenter_info(plugin_instance)
 
     def handle(self, record):
-        # Add account and org name to record
-        record.org_name = self.org_name
-        record.org_id = self.org_id
-        record.account_id = self.account_id
-        record.account_name = self.account_name
+        # Add account and org info to record
+        record.__dict__.update({
+            'org_name': self.org_name,
+            'org_id': self.org_id,
+            'account_id': self.account_id,
+            'account_name': self.account_name,
+        })
         super(PipeHandler, self).handle(record)
 
     def emit(self, record):
@@ -65,25 +67,25 @@ class NTSLoggingHandler(graypy.handler.BaseGELFHandler):
     def __init__(self, plugin):
         super(NTSLoggingHandler, self).__init__()
         self._plugin = plugin
-
-    def make_gelf_dict(self, record):
-        gelf_dict = self._make_gelf_dict(record)
-        gelf_dict.update({
+    
+    def handle(self, record):
+        # Add extra fields to the record.
+        record.__dict__.update({
             'plugin_name': self._plugin.name,
             'plugin_class': self._plugin.plugin_class.__name__,
             'plugin_id': self._plugin._plugin_id,
             'nts_host': self._plugin.host
         })
-        return gelf_dict
-
+        return super(NTSLoggingHandler, self).handle(record)
+        
     def emit(self, record):
-        gelf_dict = self.make_gelf_dict(record)
+        gelf_dict = self._make_gelf_dict(record)
         packet = _Packet()
         packet.set(0, _Packet.packet_type_live_logs, 0)
         packet.write_string(json.dumps(gelf_dict))
         if self._plugin and self._plugin.connected:
             self._plugin._network.send(packet)
-
+        
 
 class ColorFormatter(logging.Formatter):
     """Print log outputs in color.
