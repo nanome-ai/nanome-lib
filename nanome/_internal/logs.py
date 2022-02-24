@@ -32,7 +32,7 @@ class PipeHandler(logging.Handler):
         self.set_presenter_info(plugin_instance)
 
     def handle(self, record):
-        # Add account id and org name to record
+        # Add account and org name to record
         record.org_name = self.org_name
         record.org_id = self.org_id
         record.account_id = self.account_id
