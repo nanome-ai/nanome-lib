@@ -65,6 +65,3 @@ class _ProcessManagerInstance():
         to_send = _ProcData()
         to_send._data = [type, data]
         self.__pipe.send(to_send)
-
-    def get_pipe(self):
-        return self.__pipe

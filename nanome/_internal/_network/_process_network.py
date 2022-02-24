@@ -1,5 +1,7 @@
 from nanome.util import Logs
 from nanome._internal._util._serializers import _CachedImageSerializer
+from nanome._internal.logs import LogsManager
+
 from . import _Packet
 
 stop_bytes = bytearray("CLOSEPIPE", "utf-8")
@@ -26,6 +28,8 @@ class _ProcessNetwork(object):
         self._plugin.on_complex_removed()
 
     def _on_presenter_change(self):
+        # Reconfigure child process logs so presenter_info is refreshed.
+        LogsManager.configure_child_process(self)
         self._plugin.on_presenter_change()
 
     def _call(self, request_id, *args):
