@@ -33,10 +33,10 @@ class PipeHandler(logging.Handler):
     def handle(self, record):
         # Add account and org info to record
         record.__dict__.update({
-            'org_name': self.org_name,
-            'org_id': self.org_id,
-            'account_id': self.account_id,
-            'account_name': self.account_name,
+            'org-name': self.org_name,
+            'org-id': self.org_id,
+            'user-id': self.account_id,
+            'username': self.account_name,
         })
         super(PipeHandler, self).handle(record)
 
