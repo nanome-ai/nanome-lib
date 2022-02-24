@@ -1,6 +1,5 @@
 import nanome
 from nanome.util import Logs
-from nanome.util.asyncio import async_callback
 
 # Config
 
@@ -81,7 +80,7 @@ class UIPlugin(nanome.PluginInstance):
     def import_file(self, request):
         self.on_run()
 
-    async def on_run(self):
+    def on_run(self):
         Logs.message("Run UI Plugin")
         menu = self.rebuild_menu()
         self.update_menu(menu)
