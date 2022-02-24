@@ -24,8 +24,5 @@ class HBonds(nanome.PluginInstance):
     def print_callback(self):
         Logs.message("hbonds complete")
 
-    def __init__(self):
-        pass
-
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, HBonds)

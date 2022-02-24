@@ -121,8 +121,5 @@ class MacroPlugin(nanome.PluginInstance):
         else:
             self.macro.save()
 
-    def __init__(self):
-        pass
-
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, MacroPlugin)

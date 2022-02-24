@@ -39,8 +39,5 @@ class UpdateWorkspace(nanome.PluginInstance):
     def on_run(self):
         self.request_workspace(self.on_workspace_received)
 
-    def __init__(self):
-        pass
-
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, UpdateWorkspace)

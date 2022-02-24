@@ -157,8 +157,5 @@ class ControllerTrackingPlugin(nanome.PluginInstance):
         self.update_structures_shallow([self.head_complex, self.left_complex, self.right_complex])
         self.request_controller_transforms(self.received)
 
-    def __init__(self):
-        pass
-
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, ControllerTrackingPlugin)
