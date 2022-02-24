@@ -28,7 +28,6 @@ class PipeHandler(logging.Handler):
         self.org_id = None
         self.account_id = None
         self.account_name = None
-        # On instantiation, get presenter info to add to all future logs.
         self.set_presenter_info(plugin_instance)
 
     def handle(self, record):
