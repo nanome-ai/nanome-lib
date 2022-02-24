@@ -20,9 +20,19 @@ class PipeHandler(logging.Handler):
     Resolves issues with logging from multiple processes.
     """
 
-    def __init__(self, pipe_conn):
+    def __init__(self, pipe_conn, plugin_instance):
         super(PipeHandler, self).__init__()
         self.pipe_conn = pipe_conn
+        self.org_name = None
+        self.account_id = None
+        # On instantiation, get presenter info to add to all future logs.
+        self.set_presenter_info(plugin_instance)
+
+    def handle(self, record):
+        # Add account id and org name to record
+        record.org_name = self.org_name
+        record.account_id = self.account_id
+        super(PipeHandler, self).handle(record)
 
     def emit(self, record):
         to_send = _ProcData()
@@ -33,6 +43,14 @@ class PipeHandler(logging.Handler):
         except BrokenPipeError:
             # Connection has been closed.
             pass
+
+    def set_presenter_info(self, plugin_instance):
+        """Get presenter info from plugin instance and store on handler."""
+        plugin_instance.request_presenter_info(self._presenter_info_callback)
+
+    def _presenter_info_callback(self, info):
+        self.org_name = info.org_name
+        self.account_id = info.account_id
 
 
 class NTSLoggingHandler(graypy.handler.BaseGELFHandler):
@@ -154,7 +172,7 @@ class LogsManager():
             os.environ['TZ'] = 'UTC'
 
     @staticmethod
-    def configure_child_process(pipe_conn, plugin_class):
+    def configure_child_process(pipe_conn, plugin_instance):
         """Set up a PipeHandler that forwards all Logs to the main Process."""
         # reset loggers on nanome-lib.
         nanome_logger = logging.getLogger("nanome")
@@ -162,14 +180,14 @@ class LogsManager():
         nanome_logger.setLevel(logging.DEBUG)
 
         # make sure plugin module is logged
-        plugin_module = plugin_class.__module__.split('.')[0]
+        plugin_module = plugin_instance.__class__.__module__.split('.')[0]
         plugin_logger = logging.getLogger(plugin_module)
         plugin_logger.handlers = []
         plugin_logger.setLevel(logging.DEBUG)
 
         # Pipe should send all logs to main process
         # If debug logs are disabled, they will be filtered in main process.
-        pipe_handler = PipeHandler(pipe_conn)
+        pipe_handler = PipeHandler(pipe_conn, plugin_instance)
         pipe_handler.level = logging.DEBUG
 
         nanome_logger.addHandler(pipe_handler)

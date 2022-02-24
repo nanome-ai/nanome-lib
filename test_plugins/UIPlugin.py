@@ -1,5 +1,6 @@
 import nanome
 from nanome.util import Logs
+from nanome.util.asyncio import async_callback
 
 # Config
 
@@ -39,7 +40,8 @@ def text_submitted_callback(textInput):
     Logs.message("text input submitted: " + str(textInput.input_text))
 
 
-class UIPlugin(nanome.PluginInstance):
+class UIPlugin(nanome.AsyncPluginInstance):
+
     def create_callbacks(self):
         def spawn_menu_callback(button):
             Logs.message("button pressed: " + button.text.value.idle)
@@ -79,7 +81,8 @@ class UIPlugin(nanome.PluginInstance):
     def import_file(self, request):
         self.on_run()
 
-    def on_run(self):
+    @async_callback
+    async def on_run(self):
         Logs.message("Run UI Plugin")
         menu = self.rebuild_menu()
         self.update_menu(menu)
@@ -393,9 +396,6 @@ class UIPlugin(nanome.PluginInstance):
         self.tab_button2 = tab_button_node2.add_new_button("tab2")
         self.tab_button2.register_pressed_callback(tab2_callback)
         return ln
-
-    def __init__(self):
-        pass
 
 
 permissions = [nanome.util.enums.Permissions.local_files_access]
