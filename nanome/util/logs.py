@@ -18,58 +18,70 @@ class Logs(object):
         info = auto()
 
     @classmethod
-    def error(cls, *args, extra=None):
+    def error(cls, *args, **kwargs):
         """
         | Prints an error
 
         :param args: Variable length argument list
         :type args: Anything printable
+
+        :param kwargs: Keyword arguments to pass to python logging module.
+        For options, see https://github.com/python/cpython/blob/main/Lib/logging/__init__.py#L1604
         """
         module = cls.caller_name()
         logger = logging.getLogger(module)
         msg = ' '.join(map(str, args))
         use_exc_info = sys.exc_info()[0] is not None
-        logger.error(msg, exc_info=use_exc_info, extra=extra)
+        logger.error(msg, exc_info=use_exc_info, **kwargs)
 
     @classmethod
-    def warning(cls, *args, extra=None):
+    def warning(cls, *args, **kwargs):
         """
         | Prints a warning
 
         :param args: Variable length argument list
         :type args: Anything printable
+
+        :param kwargs: Keyword arguments to pass to python logging module.
+        For options, see https://github.com/python/cpython/blob/main/Lib/logging/__init__.py#L1604
         """
         module = cls.caller_name()
         logger = logging.getLogger(module)
         msg = ' '.join(map(str, args))
-        logger.warning(msg, extra=extra)
+        logger.warning(msg, **kwargs)
 
     @classmethod
-    def message(cls, *args, extra=None):
+    def message(cls, *args, **kwargs):
         """
         | Prints a message
 
         :param args: Variable length argument list
         :type args: Anything printable
+
+        :param kwargs: Keyword arguments to pass to python logging module.
+        For options, see https://github.com/python/cpython/blob/main/Lib/logging/__init__.py#L1604
         """
         module = cls.caller_name()
         logger = logging.getLogger(module)
         msg = ' '.join(map(str, args))
-        logger.info(msg, extra=extra)
+        logger.info(msg, **kwargs)
 
     @classmethod
-    def debug(cls, *args, extra=None):
+    def debug(cls, *args, **kwargs):
         """
         | Prints a debug message
         | Prints only if plugin started in verbose mode (with -v argument)
 
         :param args: Variable length argument list
         :type args: Anything printable
+
+        :param kwargs: Keyword arguments to pass to python logging module.
+        For options, see https://github.com/python/cpython/blob/main/Lib/logging/__init__.py#L1604
         """
         module = cls.caller_name()
         logger = logging.getLogger(module)
         msg = ' '.join(map(str, args))
-        logger.debug(msg, extra=extra)
+        logger.debug(msg, **kwargs)
 
     @staticmethod
     def deprecated(new_func=None, msg=""):
