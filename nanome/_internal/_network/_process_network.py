@@ -29,7 +29,7 @@ class _ProcessNetwork(object):
 
     def _on_presenter_change(self):
         # Reconfigure child process logs so presenter_info is refreshed.
-        LogsManager.configure_child_process(self)
+        LogsManager.configure_child_process(self._plugin)
         self._plugin.on_presenter_change()
 
     def _call(self, request_id, *args):
