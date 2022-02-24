@@ -21,9 +21,9 @@ class PipeHandler(logging.Handler):
     Also stores presenter info from PluginInstance, and adds to Logs before piping.
     """
 
-    def __init__(self, plugin_instance, pipe_conn):
+    def __init__(self, plugin_instance):
         super(PipeHandler, self).__init__()
-        self.pipe_conn = pipe_conn
+        self.pipe_conn = plugin_instance._log_pipe_conn
         self.org_name = None
         self.org_id = None
         self.account_id = None
@@ -187,7 +187,7 @@ class LogsManager():
             os.environ['TZ'] = 'UTC'
 
     @staticmethod
-    def configure_child_process(plugin_instance, log_pipe_conn):
+    def configure_child_process(plugin_instance):
         """Set up a PipeHandler that forwards all Logs to the main Process."""
         # reset loggers on nanome-lib.
         nanome_logger = logging.getLogger("nanome")
@@ -202,7 +202,7 @@ class LogsManager():
 
         # Pipe should send all logs to main process
         # If debug logs are disabled, they will be filtered in main process.
-        pipe_handler = PipeHandler(plugin_instance, log_pipe_conn)
+        pipe_handler = PipeHandler(plugin_instance)
         pipe_handler.level = logging.DEBUG
 
         nanome_logger.addHandler(pipe_handler)

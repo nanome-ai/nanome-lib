@@ -81,7 +81,7 @@ class PluginInstance(_PluginInstance):
         | Called when room's presenter changes.
         """
         # Reconfigure child process logs so presenter_info is refreshed.
-        LogsManager.configure_child_process(self, self._log_pipe_conn)
+        LogsManager.configure_child_process(self)
 
     def request_workspace(self, callback=None):
         """
