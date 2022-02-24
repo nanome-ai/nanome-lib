@@ -67,7 +67,7 @@ class NTSLoggingHandler(graypy.handler.BaseGELFHandler):
     def __init__(self, plugin):
         super(NTSLoggingHandler, self).__init__()
         self._plugin = plugin
-    
+
     def handle(self, record):
         # Add extra fields to the record.
         record.__dict__.update({
@@ -77,7 +77,7 @@ class NTSLoggingHandler(graypy.handler.BaseGELFHandler):
             'nts_host': self._plugin.host
         })
         return super(NTSLoggingHandler, self).handle(record)
-        
+
     def emit(self, record):
         gelf_dict = self._make_gelf_dict(record)
         packet = _Packet()
@@ -85,7 +85,7 @@ class NTSLoggingHandler(graypy.handler.BaseGELFHandler):
         packet.write_string(json.dumps(gelf_dict))
         if self._plugin and self._plugin.connected:
             self._plugin._network.send(packet)
-        
+
 
 class ColorFormatter(logging.Formatter):
     """Print log outputs in color.
