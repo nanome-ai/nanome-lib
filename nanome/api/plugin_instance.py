@@ -32,6 +32,7 @@ class PluginInstance(_PluginInstance):
         self.files = Files(self)
         self.__set_first = False
         self.PluginListButtonType = PluginListButtonType
+        PluginInstance._instance = self
 
     def start(self):
         """

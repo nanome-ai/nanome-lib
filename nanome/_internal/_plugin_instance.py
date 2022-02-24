@@ -46,17 +46,18 @@ class _PluginInstance(object):
         self._custom_data = custom_data
         self._permissions = permissions
 
-    def _save_callback(self, id, callback):
+    @classmethod
+    def _save_callback(cls, id, callback):
         if callback is None:
-            if asyncio and self.is_async:
+            if asyncio and nanome.PluginInstance._instance.is_async:
                 loop = asyncio.get_event_loop()
                 future = loop.create_future()
-                self.__futures[id] = future
+                cls.__futures[id] = future
                 return future
             else:
-                self.__callbacks[id] = lambda *_: None
+                cls.__callbacks[id] = lambda *_: None
         else:
-            self.__callbacks[id] = callback
+            cls.__callbacks[id] = callback
 
     def _call(self, id, *args):
         callbacks = self.__callbacks
