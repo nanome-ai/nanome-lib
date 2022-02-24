@@ -6,23 +6,23 @@ from collections import deque
 
 class _ProcessManagerInstance():
     def __init__(self, pipe):
-        self._pipe = pipe
+        self.__pipe = pipe
         Process._manager = self
         self.__pending_start = deque()
         self.__processes = dict()
 
     def _close(self):
         try:
-            self._pipe.close()
+            self.__pipe.close()
         except BrokenPipeError:
             pass
 
     def update(self):
         has_data = None
         try:
-            has_data = self._pipe.poll()
+            has_data = self.__pipe.poll()
             if has_data:
-                data = self._pipe.recv()
+                data = self.__pipe.recv()
         except BrokenPipeError:
             Logs.debug("Pipe has been closed, exiting process")
             return False
@@ -64,4 +64,7 @@ class _ProcessManagerInstance():
         from nanome._internal._util import _ProcData
         to_send = _ProcData()
         to_send._data = [type, data]
-        self._pipe.send(to_send)
+        self.__pipe.send(to_send)
+
+    def get_pipe(self):
+        return self.__pipe
