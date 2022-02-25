@@ -24,7 +24,7 @@ class PluginInstanceTestCase(unittest.TestCase):
         session_id = queue_net_in = queue_net_out = proc_pipe = log_pipe_conn = \
             serializer = plugin_id = version_table = original_version_table = \
             permissions = MagicMock()
-        self.plugin_instance._setup_networking(
+        self.plugin_instance._setup(
             session_id, queue_net_in, queue_net_out, proc_pipe, log_pipe_conn, serializer,
             plugin_id, version_table, original_version_table, self.custom_data, permissions)
         self.plugin_instance._network = MagicMock()

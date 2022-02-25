@@ -308,22 +308,23 @@ class _Plugin(object):
         packet.set(0, Network._Packet.packet_type_logs_request, 0)
         packet.write_string(json.dumps(response))
 
-    @classmethod
-    def _launch_plugin_profile(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
-        cProfile.runctx('_Plugin._launch_plugin(plugin_class, session_id, pipe_net, pipe_proc, serializer, '
-                        'plugin_id, version_table, original_version_table, verbose, custom_data,'
-                        'permissions)', globals(), locals(), 'profile.out')
 
     @classmethod
     def _launch_plugin(cls, plugin_class, session_id, queue_net_in, queue_net_out, pipe_proc, log_pipe_conn, serializer, plugin_id, version_table, original_version_table, custom_data, permissions):
         plugin_instance = plugin_class()
-        plugin_instance._setup_networking(
+        plugin_instance._setup(
             session_id, queue_net_in, queue_net_out, pipe_proc, log_pipe_conn,
             serializer, plugin_id, version_table, original_version_table, custom_data,
             permissions)
         LogsManager.configure_child_process(plugin_instance)
         logger.debug("Starting plugin")
         plugin_instance._run()
+
+    @classmethod
+    def _launch_plugin_profile(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
+        cProfile.runctx('_Plugin._launch_plugin(plugin_class, session_id, pipe_net, pipe_proc, serializer, '
+                        'plugin_id, version_table, original_version_table, verbose, custom_data,'
+                        'permissions)', globals(), locals(), 'profile.out')
 
     def __init__(self, name, description, tags=None, has_advanced=False, permissions=None, integrations=None):
         tags = tags or []
