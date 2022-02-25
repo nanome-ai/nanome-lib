@@ -24,10 +24,8 @@ class _Session(object):
                     return False
                 self._net_plugin.send(packet)
             if has_proc_data:
-                from nanome._internal._util import _DataType
                 request = self._proc_plugin_pipe.recv()
-                if request._type == _DataType.process:
-                    self._process_manager._received_request(request._data, self)
+                self._process_manager._received_request(request._data, self)
 
         except EOFError:
             Logs.error("Plugin encountered an error, please check the logs.", traceback.format_exc())
