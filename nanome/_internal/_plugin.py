@@ -308,7 +308,6 @@ class _Plugin(object):
         packet.set(0, Network._Packet.packet_type_logs_request, 0)
         packet.write_string(json.dumps(response))
 
-
     @classmethod
     def _launch_plugin(cls, plugin_class, session_id, queue_net_in, queue_net_out, pipe_proc, log_pipe_conn, serializer, plugin_id, version_table, original_version_table, custom_data, permissions):
         plugin_instance = plugin_class()
