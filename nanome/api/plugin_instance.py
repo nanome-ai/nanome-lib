@@ -512,7 +512,7 @@ class PluginInstance(_PluginInstance):
         # _setup is called by the Plugin during the process launch. If init hasn't been properly run,
         # call it here.
         if not hasattr(self, 'integration'):
-            # Call base class init first, and then re-init the child classes
+            # Call base class init first.
             PluginInstance.__init__(self)
             # re-init child classes, so that their overrides take priority
             self.__init__()
