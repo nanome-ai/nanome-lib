@@ -32,7 +32,6 @@ class PluginInstance(_PluginInstance):
         self.files = Files(self)
         self.__set_first = False
         self.PluginListButtonType = PluginListButtonType
-        PluginInstance._instance = self
 
     def start(self):
         """
@@ -505,6 +504,11 @@ class PluginInstance(_PluginInstance):
     @Logs.deprecated("create_writing_stream")
     def create_atom_stream(self, atom_indices_list, stream_type, callback):
         self.create_writing_stream(atom_indices_list, stream_type, callback)
+
+    def _setup(self, session_id, queue_net_in, queue_net_out, proc_pipe, log_pipe_conn, serializer, plugin_id, version_table, original_version_table, custom_data, permissions):
+        # Make sure PluginInstance singleton is set.
+        super()._setup(session_id, queue_net_in, queue_net_out, proc_pipe, log_pipe_conn, serializer, plugin_id, version_table, original_version_table, custom_data, permissions)
+        PluginInstance._instance = self
 
 
 class AsyncPluginInstance(PluginInstance):
