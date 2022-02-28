@@ -24,7 +24,6 @@ class PluginInstance(_PluginInstance):
     is_async = False
 
     def __init__(self):
-        super(PluginInstance, self).__init__()
         self.__menu = Menu()  # deprecated
         self.room = Room()
         self.integration = Integration()
@@ -513,7 +512,11 @@ class PluginInstance(_PluginInstance):
         # _setup is called by the Plugin during the process launch. If init hasn't been properly run,
         # call it here.
         if not hasattr(self, 'integration'):
+            # Call base class init first, and then re-init the child classes
+            PluginInstance.__init__(self)
+            # re-init child classes, so that their overrides take priority
             self.__init__()
+
         super()._setup(
             session_id, queue_net_in, queue_net_out, proc_pipe, log_pipe_conn,
             serializer, plugin_id, version_table, original_version_table, custom_data,
