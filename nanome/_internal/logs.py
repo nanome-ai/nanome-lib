@@ -33,9 +33,9 @@ class PipeHandler(logging.Handler):
     def handle(self, record):
         # Add account and org info to record
         record.__dict__.update({
-            'org-name': self.org_name,
-            'org-id': self.org_id,
-            'user-id': self.account_id,
+            'org_name': self.org_name,
+            'org_id': self.org_id,
+            'user_id': self.account_id,
             'username': self.account_name,
         })
         super(PipeHandler, self).handle(record)
@@ -71,7 +71,8 @@ class NTSLoggingHandler(graypy.handler.BaseGELFHandler):
             'plugin_name': self._plugin.name,
             'plugin_class': self._plugin.plugin_class.__name__,
             'plugin_id': self._plugin._plugin_id,
-            'nts_host': self._plugin.host
+            'nts_host': self._plugin.host,
+            'source_type': 'Plugin'
         })
         return super(NTSLoggingHandler, self).handle(record)
 
