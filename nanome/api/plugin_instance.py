@@ -24,12 +24,12 @@ class PluginInstance(_PluginInstance):
     is_async = False
 
     def __init__(self):
-        self.__menu = Menu()  # deprecated
         self.room = Room()
         self.integration = Integration()
         self.files = Files(self)
-        self.__set_first = False
         self.PluginListButtonType = PluginListButtonType
+        self.__set_first = False
+        self.__menu = Menu()  # deprecated
 
     def start(self):
         """
@@ -507,7 +507,12 @@ class PluginInstance(_PluginInstance):
         self, session_id, queue_net_in, queue_net_out, proc_pipe, log_pipe_conn,
         serializer, plugin_id, version_table, original_version_table, custom_data,
             permissions):
-        # We assume that scientist creating their own plugin should not have to remember
+        super(PluginInstance, self)._setup(
+            session_id, queue_net_in, queue_net_out, proc_pipe, log_pipe_conn,
+            serializer, plugin_id, version_table, original_version_table, custom_data,
+            permissions)
+
+        # We assume that a scientist creating their own plugin should not have to remember
         # to call super()
         # _setup is called by the Plugin during the process launch. If init hasn't been properly run,
         # call it here.
@@ -516,11 +521,6 @@ class PluginInstance(_PluginInstance):
             PluginInstance.__init__(self)
             # re-init child classes, so that their overrides take priority
             self.__init__()
-
-        super()._setup(
-            session_id, queue_net_in, queue_net_out, proc_pipe, log_pipe_conn,
-            serializer, plugin_id, version_table, original_version_table, custom_data,
-            permissions)
         # Make sure PluginInstance singleton is set.
         PluginInstance._instance = self
 
