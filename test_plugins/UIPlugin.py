@@ -40,6 +40,7 @@ def text_submitted_callback(textInput):
 
 
 class UIPlugin(nanome.PluginInstance):
+
     def create_callbacks(self):
         def spawn_menu_callback(button):
             Logs.message("button pressed: " + button.text.value.idle)
@@ -393,9 +394,6 @@ class UIPlugin(nanome.PluginInstance):
         self.tab_button2 = tab_button_node2.add_new_button("tab2")
         self.tab_button2.register_pressed_callback(tab2_callback)
         return ln
-
-    def __init__(self):
-        pass
 
 
 permissions = [nanome.util.enums.Permissions.local_files_access]

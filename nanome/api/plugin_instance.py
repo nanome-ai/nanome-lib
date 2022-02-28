@@ -4,6 +4,7 @@ import os
 from nanome.util import Logs, config
 from nanome.util.enums import StreamDirection, PluginListButtonType
 from nanome._internal import _PluginInstance
+from nanome._internal.logs import LogsManager
 from nanome._internal._process import _Bonding, _Dssp
 from nanome._internal._network._commands._callbacks import _Messages
 from nanome.api.structure import Complex
@@ -24,10 +25,7 @@ class PluginInstance(_PluginInstance):
     is_async = False
 
     def __init__(self):
-        # important: do not delete and leave empty to prevent double init.
-        pass
-
-    def __pseudo_init__(self):
+        super(PluginInstance, self).__init__()
         self.__menu = Menu()  # deprecated
         self.room = Room()
         self.integration = Integration()
@@ -35,11 +33,6 @@ class PluginInstance(_PluginInstance):
         self.__set_first = False
         self.PluginListButtonType = PluginListButtonType
         PluginInstance._instance = self
-
-    def __new__(cls):
-        n = super(PluginInstance, cls).__new__(cls)
-        n.__pseudo_init__()
-        return n
 
     def start(self):
         """

@@ -4,9 +4,9 @@ import os
 import sys
 import graypy
 from logging.handlers import RotatingFileHandler
+from multiprocessing import Pipe
 
 from nanome._internal._network import _Packet
-from nanome._internal._util import _DataType, _ProcData
 from tblib import pickling_support
 
 pickling_support.install()
@@ -18,21 +18,44 @@ class PipeHandler(logging.Handler):
     """Send log records through pipe to main process.
 
     Resolves issues with logging from multiple processes.
+    Also stores presenter info from PluginInstance, and adds to Logs before piping.
     """
 
-    def __init__(self, pipe_conn):
+    def __init__(self, plugin_instance):
         super(PipeHandler, self).__init__()
-        self.pipe_conn = pipe_conn
+        self.pipe_conn = plugin_instance._log_pipe_conn
+        self.org_name = None
+        self.org_id = None
+        self.account_id = None
+        self.account_name = None
+        self.set_presenter_info(plugin_instance)
+
+    def handle(self, record):
+        # Add account and org info to record
+        record.__dict__.update({
+            'org_name': self.org_name,
+            'org_id': self.org_id,
+            'user_id': self.account_id,
+            'username': self.account_name,
+        })
+        super(PipeHandler, self).handle(record)
 
     def emit(self, record):
-        to_send = _ProcData()
-        to_send._type = _DataType.log
-        to_send._data = record
         try:
-            self.pipe_conn.send(to_send)
+            self.pipe_conn.send(record)
         except BrokenPipeError:
             # Connection has been closed.
             pass
+
+    def set_presenter_info(self, plugin_instance):
+        """Get presenter info from plugin instance and store on handler."""
+        plugin_instance.request_presenter_info(self._presenter_info_callback)
+
+    def _presenter_info_callback(self, info):
+        self.org_id = info.org_id
+        self.org_name = info.org_name
+        self.account_id = info.account_id
+        self.account_name = info.account_name
 
 
 class NTSLoggingHandler(graypy.handler.BaseGELFHandler):
@@ -42,18 +65,19 @@ class NTSLoggingHandler(graypy.handler.BaseGELFHandler):
         super(NTSLoggingHandler, self).__init__()
         self._plugin = plugin
 
-    def make_gelf_dict(self, record):
-        gelf_dict = self._make_gelf_dict(record)
-        gelf_dict.update({
+    def handle(self, record):
+        # Add extra fields to the record.
+        record.__dict__.update({
             'plugin_name': self._plugin.name,
             'plugin_class': self._plugin.plugin_class.__name__,
             'plugin_id': self._plugin._plugin_id,
-            'nts_host': self._plugin.host
+            'nts_host': self._plugin.host,
+            'source_type': 'Plugin'
         })
-        return gelf_dict
+        return super(NTSLoggingHandler, self).handle(record)
 
     def emit(self, record):
-        gelf_dict = self.make_gelf_dict(record)
+        gelf_dict = self._make_gelf_dict(record)
         packet = _Packet()
         packet.set(0, _Packet.packet_type_live_logs, 0)
         packet.write_string(json.dumps(gelf_dict))
@@ -104,6 +128,13 @@ class LogsManager():
     - Every log manager has a console_handler, which outputs messages to the console.
     - If write_log_file is set to True, log_file_handler will write messages to file.
     - If remote_logging is True, Logs are forwarded to NTS.
+
+    The LogsManager running in the main process has 2 pipe connections:
+    main_pipe_conn and child_pipe_conn.
+
+    When a child process is created, the child_pipe_conn is passed to the child process.
+    The child process then uses a PipeHandler to send log records through the pipe to
+    the main process.
     """
 
     def __init__(self, filename=None, plugin=None, write_log_file=True, remote_logging=False):
@@ -111,8 +142,11 @@ class LogsManager():
         self.plugin = plugin
         self.write_log_file = write_log_file
         self.remote_logging = remote_logging
+        self.main_pipe_conn = None
+        self.child_pipe_conn = None
 
     def configure_main_process(self, plugin_class):
+        self.main_pipe_conn, self.child_pipe_conn = Pipe()
         logging_level = logging.INFO
         if self.plugin and self.plugin.verbose:
             logging_level = logging.DEBUG
@@ -154,7 +188,7 @@ class LogsManager():
             os.environ['TZ'] = 'UTC'
 
     @staticmethod
-    def configure_child_process(pipe_conn, plugin_class):
+    def configure_child_process(plugin_instance):
         """Set up a PipeHandler that forwards all Logs to the main Process."""
         # reset loggers on nanome-lib.
         nanome_logger = logging.getLogger("nanome")
@@ -162,14 +196,14 @@ class LogsManager():
         nanome_logger.setLevel(logging.DEBUG)
 
         # make sure plugin module is logged
-        plugin_module = plugin_class.__module__.split('.')[0]
+        plugin_module = plugin_instance.__class__.__module__.split('.')[0]
         plugin_logger = logging.getLogger(plugin_module)
         plugin_logger.handlers = []
         plugin_logger.setLevel(logging.DEBUG)
 
         # Pipe should send all logs to main process
         # If debug logs are disabled, they will be filtered in main process.
-        pipe_handler = PipeHandler(pipe_conn)
+        pipe_handler = PipeHandler(plugin_instance)
         pipe_handler.level = logging.DEBUG
 
         nanome_logger.addHandler(pipe_handler)
@@ -199,8 +233,9 @@ class LogsManager():
         handler.setFormatter(color_formatter)
         return handler
 
-    @staticmethod
-    def log_record(record):
-        """When a log record is received through the PipeHandler, log it."""
-        record_logger = logging.getLogger(record.name)
-        record_logger.handle(record)
+    def poll_for_logs(self):
+        has_data = self.main_pipe_conn.poll()
+        if has_data:
+            record = self.main_pipe_conn.recv()
+            record_logger = logging.getLogger(record.name)
+            record_logger.handle(record)

@@ -1,4 +1,3 @@
-from . import _PluginInstance
 from nanome._internal import _network as Network
 from nanome._internal._process import _ProcessManager
 from nanome._internal._network._commands._callbacks._commands_enums import _Hashes
@@ -271,12 +270,12 @@ class _Plugin(object):
             session_id, self._network, self._process_manager, self._logs_manager,
             main_conn_net, process_conn_net, main_conn_proc)
         permissions = self._description["permissions"]
-
+        log_pipe_conn = self._logs_manager.child_pipe_conn
         process = Process(
             target=self._launch_plugin,
             args=(
                 self._plugin_class, session_id, main_conn_net, process_conn_net,
-                process_conn_proc, self.__serializer, self._plugin_id,
+                process_conn_proc, log_pipe_conn, self.__serializer, self._plugin_id,
                 version_table, _TypeSerializer.get_version_table(),
                 self._custom_data, permissions
             )
@@ -310,18 +309,21 @@ class _Plugin(object):
         packet.write_string(json.dumps(response))
 
     @classmethod
+    def _launch_plugin(cls, plugin_class, session_id, queue_net_in, queue_net_out, pipe_proc, log_pipe_conn, serializer, plugin_id, version_table, original_version_table, custom_data, permissions):
+        plugin_instance = plugin_class()
+        plugin_instance._setup(
+            session_id, queue_net_in, queue_net_out, pipe_proc, log_pipe_conn,
+            serializer, plugin_id, version_table, original_version_table, custom_data,
+            permissions)
+        LogsManager.configure_child_process(plugin_instance)
+        logger.debug("Starting plugin")
+        plugin_instance._run()
+
+    @classmethod
     def _launch_plugin_profile(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
         cProfile.runctx('_Plugin._launch_plugin(plugin_class, session_id, pipe_net, pipe_proc, serializer, '
                         'plugin_id, version_table, original_version_table, verbose, custom_data,'
                         'permissions)', globals(), locals(), 'profile.out')
-
-    @classmethod
-    def _launch_plugin(cls, plugin_class, session_id, queue_net_in, queue_net_out, pipe_proc, serializer, plugin_id, version_table, original_version_table, custom_data, permissions):
-        plugin = plugin_class()
-        _PluginInstance.__init__(plugin, session_id, queue_net_in, queue_net_out, pipe_proc, serializer, plugin_id, version_table, original_version_table, custom_data, permissions)
-        LogsManager.configure_child_process(pipe_proc, plugin_class)
-        logger.debug("Starting plugin")
-        plugin._run()
 
     def __init__(self, name, description, tags=None, has_advanced=False, permissions=None, integrations=None):
         tags = tags or []

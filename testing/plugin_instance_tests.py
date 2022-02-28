@@ -20,15 +20,13 @@ class PluginInstanceTestCase(unittest.TestCase):
     def setUp(self):
         self.custom_data = {'a': 'b'}
         self.plugin_instance = PluginInstance()
-
-        # Attributes normally set by _PluginInstance Network Instantiation
-        self.plugin_instance._run_text = "Run"
-        self.plugin_instance._run_usable = True
-        self.plugin_instance._advanced_settings_text = "Advanced Settings"
-        self.plugin_instance._advanced_settings_usable = True
-        self.plugin_instance._custom_data = self.custom_data
-        self.plugin_instance._permissions = []
-        self.plugin_instance._menus = {}
+        # Mock args that are passed to setup plugin instance networking
+        session_id = queue_net_in = queue_net_out = proc_pipe = log_pipe_conn = \
+            serializer = plugin_id = version_table = original_version_table = \
+            permissions = MagicMock()
+        self.plugin_instance._setup(
+            session_id, queue_net_in, queue_net_out, proc_pipe, log_pipe_conn, serializer,
+            plugin_id, version_table, original_version_table, self.custom_data, permissions)
         self.plugin_instance._network = MagicMock()
 
     def test_on_advanced_settings(self):

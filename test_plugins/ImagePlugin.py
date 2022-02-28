@@ -13,8 +13,6 @@ HAS_ADVANCED_OPTIONS = False
 
 
 class ImagePlugin(nanome.PluginInstance):
-    def __init__(self):
-        pass
     # Function called when Nanome connects to the Plugin, after its instantiation
 
     def start(self):

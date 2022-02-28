@@ -101,8 +101,5 @@ class SubstructuresPlugin(nanome.PluginInstance):
             name, length, type = s
             print(name, length, type, unique[s])
 
-    def __init__(self):
-        pass
-
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, SubstructuresPlugin)
