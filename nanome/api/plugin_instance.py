@@ -524,6 +524,7 @@ class PluginInstance(_PluginInstance):
         # Make sure PluginInstance singleton is set.
         PluginInstance._instance = self
 
+
 class AsyncPluginInstance(PluginInstance):
     """
     | Base class of any asynchronous plugin.
