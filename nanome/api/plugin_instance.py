@@ -4,7 +4,6 @@ import os
 from nanome.util import Logs, config
 from nanome.util.enums import StreamDirection, PluginListButtonType
 from nanome._internal import _PluginInstance
-from nanome._internal.logs import LogsManager
 from nanome._internal._process import _Bonding, _Dssp
 from nanome._internal._network._commands._callbacks import _Messages
 from nanome.api.structure import Complex
@@ -25,14 +24,12 @@ class PluginInstance(_PluginInstance):
     is_async = False
 
     def __init__(self):
-        super(PluginInstance, self).__init__()
-        self.__menu = Menu()  # deprecated
         self.room = Room()
         self.integration = Integration()
         self.files = Files(self)
-        self.__set_first = False
         self.PluginListButtonType = PluginListButtonType
-        PluginInstance._instance = self
+        self.__set_first = False
+        self.__menu = Menu()  # deprecated
 
     def start(self):
         """
@@ -505,6 +502,27 @@ class PluginInstance(_PluginInstance):
     @Logs.deprecated("create_writing_stream")
     def create_atom_stream(self, atom_indices_list, stream_type, callback):
         self.create_writing_stream(atom_indices_list, stream_type, callback)
+
+    def _setup(
+        self, session_id, queue_net_in, queue_net_out, proc_pipe, log_pipe_conn,
+        serializer, plugin_id, version_table, original_version_table, custom_data,
+            permissions):
+        super(PluginInstance, self)._setup(
+            session_id, queue_net_in, queue_net_out, proc_pipe, log_pipe_conn,
+            serializer, plugin_id, version_table, original_version_table, custom_data,
+            permissions)
+
+        # We assume that a scientist creating their own plugin should not have to remember
+        # to call super()
+        # _setup is called by the Plugin during the process launch. If init hasn't been properly run,
+        # call it here.
+        if not hasattr(self, 'integration'):
+            # Call base class init first.
+            PluginInstance.__init__(self)
+            # re-init child classes, so that their overrides take priority
+            self.__init__()
+        # Make sure PluginInstance singleton is set.
+        PluginInstance._instance = self
 
 
 class AsyncPluginInstance(PluginInstance):
