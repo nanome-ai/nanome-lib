@@ -33,7 +33,6 @@ class PluginInstance(_PluginInstance):
         # Make sure PluginInstance singleton is set.
         PluginInstance._instance = self
 
-
     def start(self):
         """
         | Called when user "Activates" the plugin
