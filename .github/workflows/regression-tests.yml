@@ -1,0 +1,24 @@
+name: Unittests
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  python3:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Python 3
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7.12
+      - name: Run Chemical Interactions tests
+        run: |
+          docker run --rm \
+          -v /home/mike/workspace/nanome-lib/nanome:/opt/conda/lib/python3.7/site-packages/nanome \
+          public.ecr.aws/h7r1e4h2/chemical-interactions \
+          python run_tests.py
