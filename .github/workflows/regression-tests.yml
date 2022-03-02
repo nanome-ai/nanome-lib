@@ -23,17 +23,17 @@ jobs:
           $image_uri \
           python run_tests.py
 
-    docking-smina-unittests:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2
-        - name: Pull Latest docking-smina image
-          run: |
-            image_uri=public.ecr.aws/h7r1e4h2/docking-smina
-            docker pull $image_uri
-        - name: Run docking-smina tests with newest lib
-          run: |
-            docker run --rm \
-            -v $(pwd)/nanome:/opt/conda/lib/python3.7/site-packages/nanome \
-            $image_uri \
-            python -m unittest discover tests.smina
+  docking-smina-unittests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Pull Latest docking-smina image
+        run: |
+          image_uri=public.ecr.aws/h7r1e4h2/docking-smina
+          docker pull $image_uri
+      - name: Run docking-smina tests with newest lib
+        run: |
+          docker run --rm \
+          -v $(pwd)/nanome:/opt/conda/lib/python3.7/site-packages/nanome \
+          $image_uri \
+          python -m unittest discover tests.smina
