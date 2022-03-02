@@ -10,30 +10,32 @@ on:
 jobs:
   chemical-interactions-unittests:
     runs-on: ubuntu-latest
+    env:
+      IMAGE_URI: public.ecr.aws/h7r1e4h2/chemical-interactions:latest
     steps:
       - uses: actions/checkout@v2
       - name: Pull Latest chemical-interactions image
         run: |
-          image_uri=public.ecr.aws/h7r1e4h2/chemical-interactions
-          docker pull $image_uri
+          docker pull ${{ env.IMAGE_URI }}
       - name: Run chemical-interactions tests with newest lib
         run: |
           docker run --rm \
           -v $(pwd)/nanome:/opt/conda/lib/python3.7/site-packages/nanome \
-          $image_uri \
+          ${{ env.IMAGE_URI }} \
           python run_tests.py
 
   docking-smina-unittests:
     runs-on: ubuntu-latest
+    env:
+      IMAGE_URI: public.ecr.aws/h7r1e4h2/docking-smina:latest
     steps:
       - uses: actions/checkout@v2
       - name: Pull Latest docking-smina image
         run: |
-          image_uri=public.ecr.aws/h7r1e4h2/docking-smina
-          docker pull $image_uri
+          docker pull ${{ env.IMAGE_URI }}
       - name: Run docking-smina tests with newest lib
         run: |
           docker run --rm \
           -v $(pwd)/nanome:/opt/conda/lib/python3.7/site-packages/nanome \
-          $image_uri \
+          ${{ env.IMAGE_URI }} \
           python -m unittest discover tests.smina
