@@ -18,7 +18,9 @@ jobs:
           python-version: 3.7.12
       - name: Run Chemical Interactions tests
         run: |
+          image_uri=public.ecr.aws/h7r1e4h2/chemical-interactions
+          docker pull $image_uri
           docker run --rm \
           -v $(pwd)/nanome:/opt/conda/lib/python3.7/site-packages/nanome \
-          public.ecr.aws/h7r1e4h2/chemical-interactions \
+          $image_uri \
           python run_tests.py
