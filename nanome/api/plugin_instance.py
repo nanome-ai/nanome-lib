@@ -24,7 +24,6 @@ class PluginInstance(_PluginInstance):
     is_async = False
 
     def __init__(self):
-        raise Exception("Make sure regression tests fail!")
         self.room = Room()
         self.integration = Integration()
         self.files = Files(self)
