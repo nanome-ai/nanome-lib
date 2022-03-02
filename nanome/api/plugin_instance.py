@@ -30,6 +30,9 @@ class PluginInstance(_PluginInstance):
         self.PluginListButtonType = PluginListButtonType
         self.__set_first = False
         self.__menu = Menu()  # deprecated
+        # Make sure PluginInstance singleton is set.
+        PluginInstance._instance = self
+
 
     def start(self):
         """
@@ -521,8 +524,6 @@ class PluginInstance(_PluginInstance):
             PluginInstance.__init__(self)
             # re-init child classes, so that their overrides take priority
             self.__init__()
-        # Make sure PluginInstance singleton is set.
-        PluginInstance._instance = self
 
 
 class AsyncPluginInstance(PluginInstance):
