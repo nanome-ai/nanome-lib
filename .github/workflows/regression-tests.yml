@@ -1,4 +1,4 @@
-name: Unittests
+name: Regression Tests
 on:
   push:
     branches:
