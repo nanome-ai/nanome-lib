@@ -147,10 +147,11 @@ class _Plugin(object):
             break_signal = signal.SIGTERM
 
         sub_args = [x for x in sys.argv if x != '-r' and x != "--auto-reload"]
-
+        popen_environ = dict(os.environ)
+        popen_environ.pop('PLUGIN_AUTO_RELOAD', None)
         try:
             sub_args = [sys.executable] + sub_args
-            process = subprocess.Popen(sub_args, **sub_kwargs)
+            process = subprocess.Popen(sub_args, **sub_kwargs, env=popen_environ)
         except Exception:
             logger.error("Couldn't find a suitable python executable")
             sys.exit(1)
