@@ -24,6 +24,7 @@ logger = logging.getLogger(__name__)
 MAX_RECONNECT_WAIT = 20.0
 KEEP_ALIVE_TIME_INTERVAL = 60.0
 KEEP_ALIVE_TIMEOUT = 15.0
+CHECK_MONITORING_INTERVAL = 2.0
 
 __metaclass__ = type
 
@@ -186,6 +187,7 @@ class _Plugin(object):
             self.connected = True
             self.__reconnect_attempt = 0
             self.__last_keep_alive = timer()
+            self.__last_check_monitoring = timer()
             for session in self._sessions.values():
                 session._net_plugin = self._network
             return True
@@ -229,6 +231,10 @@ class _Plugin(object):
                     packet = Network._Packet()
                     packet.set(self._plugin_id, Network._Packet.packet_type_keep_alive, 0)
                     self._network.send(packet)
+
+                if now - self.__last_check_monitoring >= CHECK_MONITORING_INTERVAL:
+                    self._network.check_monitoring()
+                    self.__last_check_monitoring = now
 
                 del to_remove[:]
                 for id, session in self._sessions.items():

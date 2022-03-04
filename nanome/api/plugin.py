@@ -73,6 +73,7 @@ class Plugin(_Plugin):
         self.remote_logging = settings.get('remote_logging') or False
         self.has_autoreload = settings.get('auto_reload')
         self.verbose = settings.get('verbose')
+        self.monitoring_port = settings.get('monitoring_port')
 
         if settings.get('ignore'):
             to_ignore = settings.get('ignore').split(",")
@@ -185,6 +186,14 @@ class Plugin(_Plugin):
     @to_ignore.setter
     def to_ignore(self, value):
         setattr(self, '_to_ignore', value)
+
+    @property
+    def monitoring_port(self):
+        return getattr(self, '_monitoring_port')
+
+    @monitoring_port.setter
+    def monitoring_port(self, value):
+        setattr(self, '_monitoring_port', value)
 
     @property
     def plugin_class(self):

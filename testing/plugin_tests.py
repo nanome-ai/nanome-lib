@@ -58,12 +58,14 @@ class PluginTestCase(unittest.TestCase):
         remote_logging = "false"
         ignore = 'fake_file.py'
         name = 'custom plugin name'
+        monitoring_port = 8010
         testargs = [
             'run.py',
             '--auto-reload',
             '--write-log-file', write_log_file,
             '--remote-logging', remote_logging,
             '--ignore', ignore,
+            '--monitoring_port', monitoring_port,
             '--name', name,
             '--verbose'
         ]
@@ -73,6 +75,7 @@ class PluginTestCase(unittest.TestCase):
         self.assertEqual(self.plugin.write_log_file, True)
         self.assertEqual(self.plugin.remote_logging, False)
         self.assertEqual(self.plugin.to_ignore, [ignore])
+        self.assertEqual(self.plugin.monitoring_port, [monitoring_port])
         self.assertEqual(self.plugin.name, name)
         self.assertEqual(self.plugin.verbose, True)
         autoreload_mock.assert_called_once()
@@ -148,6 +151,7 @@ class PluginTestCase(unittest.TestCase):
         env_remote_logging = 'False'
         env_auto_reload = 'True'
         env_ignore = '/app/fakefile1,/app/fakefile2'
+        monitoring_port = '8011'
 
         environ_dict = {
             'NTS_HOST': env_host,
@@ -158,7 +162,8 @@ class PluginTestCase(unittest.TestCase):
             'PLUGIN_WRITE_LOG_FILE': env_write_log_file,
             'PLUGIN_REMOTE_LOGGING': env_remote_logging,
             'PLUGIN_AUTO_RELOAD': env_auto_reload,
-            'PLUGIN_IGNORE': env_ignore
+            'PLUGIN_IGNORE': env_ignore,
+            'PLUGIN_MONITORING_PORT': monitoring_port
         }
 
         with patch.dict('os.environ', environ_dict):
@@ -174,6 +179,7 @@ class PluginTestCase(unittest.TestCase):
         self.assertEqual(self.plugin.write_log_file, bool(strtobool(env_write_log_file)))
         self.assertEqual(self.plugin.has_autoreload, bool(strtobool(env_auto_reload)))
         self.assertEqual(self.plugin.to_ignore, env_ignore.split(','))
+        self.assertEqual(self.plugin.monitoring_port, int(monitoring_port))
 
         # CLI args should take precedent over environment variables.
         cli_host = 'cli_host'
@@ -182,11 +188,13 @@ class PluginTestCase(unittest.TestCase):
         cli_write_log_file = 'false'
         cli_name = 'cli-plugin-name'
         cli_ignore = 'cli_ignore.py'
+        cli_monitoring_port = 8012
         cli_remote_logging = 'y'
         testargs = [
             'run.py',
             '--write-log-file', cli_write_log_file,
             '--ignore', cli_ignore,
+            '--monitoring_port', cli_monitoring_port,
             '--name', cli_name,
             '--key', cli_key,
             '--verbose',
@@ -198,6 +206,7 @@ class PluginTestCase(unittest.TestCase):
             self.plugin.run()
         self.assertEqual(self.plugin.write_log_file, False)
         self.assertEqual(self.plugin.to_ignore, [cli_ignore])
+        self.assertEqual(self.plugin.monitoring_port, [cli_monitoring_port])
         self.assertEqual(self.plugin.name, cli_name)
         self.assertEqual(self.plugin.verbose, True)
         self.assertEqual(self.plugin.remote_logging, True)

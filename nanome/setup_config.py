@@ -29,6 +29,9 @@ def create_parser():
         default=False,
         type=lambda x: (str(x).lower() in ['true', 'yes', '1']),
         help='Enable or disable .log file writing')
+    parser.add_argument('-m', '--monitoring-port',
+        type=int, dest='monitoring_port',
+        help='If specified, listens on a port for monitoring purposes')
     return parser
 
 

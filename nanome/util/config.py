@@ -24,6 +24,7 @@ remote_logging  Toggle whether or not logs should be forwarded to NTS.
 auto_reload     Restart plugin automatically if a .py or .json file in current directory changes
 ignore          To use with auto-reload. All paths matching this pattern will be ignored,
                 use commas to specify several. Supports */?/[seq]/[!seq]
+monitoring-port Specifies if the plugin needs to listen on a port for monitoring purposes
 
 Environment Variable settings keys.
 NTS_HOST
@@ -35,6 +36,7 @@ PLUGIN_WRITE_LOG_FILE
 PLUGIN_REMOTE_LOGGING
 PLUGIN_AUTO_RELOAD
 PLUGIN_IGNORE
+PLUGIN_MONITORING_PORT
 """
 
 __all__ = ['load_settings', 'fetch', 'set', 'create_parser']
@@ -55,6 +57,7 @@ def create_parser():
     parser.add_argument('--remote-logging', type=str2bool, default=None, dest='remote_logging', help='Toggle whether or not logs should be forwarded to NTS.')
     parser.add_argument('-r', '--auto-reload', action='store_true', default=None, dest='auto_reload', help='Restart plugin automatically if a .py or .json file in current directory changes')
     parser.add_argument('-i', '--ignore', help='To use with auto-reload. All paths matching this pattern will be ignored, use commas to specify several. Supports */?/[seq]/[!seq]', default='')
+    parser.add_argument('-m', '--monitoring-port', type=int, help='If specified, listens on a port for monitoring purposes')
     return parser
 
 
@@ -132,6 +135,7 @@ def _get_environ_dict():
         'remote_logging': os.environ.get('PLUGIN_REMOTE_LOGGING'),
         'auto_reload': os.environ.get('PLUGIN_AUTO_RELOAD'),
         'ignore': os.environ.get('PLUGIN_IGNORE'),
+        'monitoring_port': os.environ.get('PLUGIN_MONITORING_PORT'),
     }
     serialized_dict = _serialize_dict_with_parser(environ_dict)
     return serialized_dict

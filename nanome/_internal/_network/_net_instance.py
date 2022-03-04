@@ -25,6 +25,12 @@ class _NetInstance(object):
         self._state = _NetInstance.header_state
         self._current_packet = _Packet()
 
+        if instance.monitoring_port:
+            self._monitoring_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self._monitoring_socket.setblocking(False)
+            self._monitoring_socket.bind(("127.0.0.1", instance.monitoring_port))
+            self._monitoring_socket.listen()
+
     def connect(self, host, port):
         try:
             Logs.message("Connecting to server", host, port)
@@ -103,3 +109,13 @@ class _NetInstance(object):
                     self._on_received_packet(self._instance, self._current_packet)
                 else:
                     self._processing = False
+
+    def check_monitoring(self):
+        if self._monitoring_socket == None:
+            return
+
+        try:
+            conn, _ = self._monitoring_socket.accept()
+            conn.close()
+        except:
+            pass # No connection
