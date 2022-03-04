@@ -58,14 +58,14 @@ class PluginTestCase(unittest.TestCase):
         remote_logging = "false"
         ignore = 'fake_file.py'
         name = 'custom plugin name'
-        monitoring_port = 8010
+        monitoring_port = '8010'
         testargs = [
             'run.py',
             '--auto-reload',
             '--write-log-file', write_log_file,
             '--remote-logging', remote_logging,
             '--ignore', ignore,
-            '--monitoring_port', monitoring_port,
+            '--monitoring-port', monitoring_port,
             '--name', name,
             '--verbose'
         ]
@@ -75,7 +75,7 @@ class PluginTestCase(unittest.TestCase):
         self.assertEqual(self.plugin.write_log_file, True)
         self.assertEqual(self.plugin.remote_logging, False)
         self.assertEqual(self.plugin.to_ignore, [ignore])
-        self.assertEqual(self.plugin.monitoring_port, [monitoring_port])
+        self.assertEqual(self.plugin.monitoring_port, int(monitoring_port))
         self.assertEqual(self.plugin.name, name)
         self.assertEqual(self.plugin.verbose, True)
         autoreload_mock.assert_called_once()
@@ -194,7 +194,7 @@ class PluginTestCase(unittest.TestCase):
             'run.py',
             '--write-log-file', cli_write_log_file,
             '--ignore', cli_ignore,
-            '--monitoring_port', str(cli_monitoring_port),
+            '--monitoring-port', str(cli_monitoring_port),
             '--name', cli_name,
             '--key', cli_key,
             '--verbose',
@@ -206,7 +206,7 @@ class PluginTestCase(unittest.TestCase):
             self.plugin.run()
         self.assertEqual(self.plugin.write_log_file, False)
         self.assertEqual(self.plugin.to_ignore, [cli_ignore])
-        self.assertEqual(self.plugin.monitoring_port, [cli_monitoring_port])
+        self.assertEqual(self.plugin.monitoring_port, cli_monitoring_port)
         self.assertEqual(self.plugin.name, cli_name)
         self.assertEqual(self.plugin.verbose, True)
         self.assertEqual(self.plugin.remote_logging, True)
