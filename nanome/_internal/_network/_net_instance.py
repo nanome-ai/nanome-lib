@@ -118,4 +118,4 @@ class _NetInstance(object):
             conn, _ = self._monitoring_socket.accept()
             conn.close()
         except:
-            pass # No connection
+            pass  # No connection
