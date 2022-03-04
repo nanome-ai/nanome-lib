@@ -30,6 +30,8 @@ class _NetInstance(object):
             self._monitoring_socket.setblocking(False)
             self._monitoring_socket.bind(("127.0.0.1", instance.monitoring_port))
             self._monitoring_socket.listen()
+        else:
+            self._monitoring_socket = None
 
     def connect(self, host, port):
         try:
