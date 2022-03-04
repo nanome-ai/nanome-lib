@@ -194,7 +194,7 @@ class PluginTestCase(unittest.TestCase):
             'run.py',
             '--write-log-file', cli_write_log_file,
             '--ignore', cli_ignore,
-            '--monitoring_port', cli_monitoring_port,
+            '--monitoring_port', str(cli_monitoring_port),
             '--name', cli_name,
             '--key', cli_key,
             '--verbose',
