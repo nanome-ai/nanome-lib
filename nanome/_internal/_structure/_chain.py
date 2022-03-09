@@ -17,8 +17,9 @@ class _Chain(_Base):
         residue._parent = self
 
     def _remove_residue(self, residue):
-        self._residues.remove(residue)
-        residue._parent = None
+        if residue in self._residues:
+            self._residues.remove(residue)
+            residue._parent = None
 
     def _set_residues(self, residues):
         self._residues = residues

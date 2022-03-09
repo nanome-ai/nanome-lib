@@ -37,9 +37,10 @@ class _Residue(_Base):
         atom._parent = self
 
     def _remove_atom(self, atom):
-        atom.index = -1
-        self._atoms.remove(atom)
-        atom._parent = None
+        if atom in self._atoms:
+            atom.index = -1
+            self._atoms.remove(atom)
+            atom._parent = None
 
     def _add_bond(self, bond):
         bond.index = -1
@@ -47,9 +48,10 @@ class _Residue(_Base):
         bond._parent = self
 
     def _remove_bond(self, bond):
-        bond.index = -1
-        self._bonds.remove(bond)
-        bond._parent = None
+        if bond in self._bonds:
+            bond.index = -1
+            self._bonds.remove(bond)
+            bond._parent = None
 
     def _set_atoms(self, atoms):
         self._atoms = atoms

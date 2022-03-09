@@ -19,8 +19,9 @@ class _Workspace(_Base):
         complex._parent = self
 
     def _remove_complex(self, complex):
-        self._complexes.remove(complex)
-        complex._parent = None
+        if complex in self._complexes:
+            self._complexes.remove(complex)
+            complex._parent = None
 
     @Logs.deprecated()
     def get_atom_iterator(self):
