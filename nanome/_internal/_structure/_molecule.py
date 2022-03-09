@@ -23,8 +23,9 @@ class _Molecule(_Base):
         chain._parent = self
 
     def _remove_chain(self, chain):
-        self._chains.remove(chain)
-        chain._parent = None
+        if chain in self._chains:
+            self._chains.remove(chain)
+            chain._parent = None
 
     def _set_chains(self, chains):
         self._chains = chains

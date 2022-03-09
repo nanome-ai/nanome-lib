@@ -37,8 +37,9 @@ class _Complex(_Base):
         molecule._parent = self
 
     def _remove_molecule(self, molecule):
-        self._molecules.remove(molecule)
-        molecule._parent = None
+        if molecule in self._molecules:
+            self._molecules.remove(molecule)
+            molecule._parent = None
 
     def _set_molecules(self, molecules):
         self._molecules = molecules
