@@ -3,6 +3,7 @@ from functools import partial
 import subprocess
 import traceback
 import sys
+import time
 from threading import Thread
 try:
     from queue import Queue, Empty
@@ -16,6 +17,7 @@ POSIX = 'posix' in sys.builtin_module_names
 
 
 class _ProcessManager():
+
     class _DataType(IntEnum):
         queued = auto()
         position_changed = auto()
@@ -73,8 +75,24 @@ class _ProcessManager():
             pipe.close()
 
         try:
-            entry.process = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=request.bufsize, cwd=request.cwd_path, encoding=request.encoding, universal_newlines=has_text, close_fds=POSIX)
-            Logs.debug("Process started:", request.executable_path, "for session", entry.session._session_id)
+            entry.process = subprocess.Popen(
+                args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=request.bufsize,
+                cwd=request.cwd_path, encoding=request.encoding, universal_newlines=has_text,
+                close_fds=POSIX)
+            entry.start_time = time.time()
+
+            # Log process settings
+            exec_path = request.executable_path
+            session_id = entry.session._session_id
+            extra = {
+                'process_args': args,
+                'executable_path': exec_path,
+                'session_id': session_id,
+                'request_id': request.id
+            }
+            msg = "Process Started: {} for Session {}".format(
+                request.executable_path, session_id)
+            Logs.message(msg, extra=extra)
         except:
             Logs.error("Couldn't execute process", request.executable_path, "Please check if executable is present and has permissions:\n", traceback.format_exc())
             entry.send(_ProcessManager._DataType.done, [-1])
@@ -120,6 +138,22 @@ class _ProcessManager():
         return_value = entry.process.poll()
         if return_value is not None:
             # Finish process
+            # Log completion data
+            end_time = time.time()
+            elapsed_time = round(end_time - entry.start_time, 3)
+            exec_path = entry.request.executable_path
+            request_id = entry.request.id
+            session_id = entry.session._session_id
+            message = "Process Completed: {} returned exit code {} in {} seconds".format(
+                exec_path, return_value, elapsed_time)
+            log_extra = {
+                'request_id': request_id,
+                'executable_path': exec_path,
+                'process_time': elapsed_time,
+                'exit_code': return_value,
+                'session_id': session_id
+            }
+            Logs.message(message, extra=log_extra)
             entry.send(_ProcessManager._DataType.done, [return_value])
             return False
         return True
