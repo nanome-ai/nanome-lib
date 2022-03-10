@@ -10,6 +10,7 @@ class _ProcessEntry():
         self.__output_text = request.encoding != None
         self.stdout_queue = None
         self.stderr_queue = None
+        self.start_time = None
 
     def send(self, type, data):
         self.__session.send_process_data([type, self.__request.id] + data)

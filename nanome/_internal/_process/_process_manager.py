@@ -3,6 +3,7 @@ from functools import partial
 import subprocess
 import traceback
 import sys
+import time
 from threading import Thread
 try:
     from queue import Queue, Empty
@@ -16,6 +17,7 @@ POSIX = 'posix' in sys.builtin_module_names
 
 
 class _ProcessManager():
+
     class _DataType(IntEnum):
         queued = auto()
         position_changed = auto()
@@ -73,8 +75,16 @@ class _ProcessManager():
             pipe.close()
 
         try:
-            entry.process = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=request.bufsize, cwd=request.cwd_path, encoding=request.encoding, universal_newlines=has_text, close_fds=POSIX)
-            Logs.debug("Process started:", request.executable_path, "for session", entry.session._session_id)
+            entry.process = subprocess.Popen(
+                args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=request.bufsize,
+                cwd=request.cwd_path, encoding=request.encoding, universal_newlines=has_text,
+                close_fds=POSIX)
+            start_time = time.time()
+            entry.start_time = start_time
+            extra = {'process_args': args}
+            msg = "Process started: Entry {} {} for session {}".format(
+                request.id, request.executable_path, entry.session._session_id)
+            Logs.message(msg, extra=extra)
         except:
             Logs.error("Couldn't execute process", request.executable_path, "Please check if executable is present and has permissions:\n", traceback.format_exc())
             entry.send(_ProcessManager._DataType.done, [-1])
@@ -120,6 +130,14 @@ class _ProcessManager():
         return_value = entry.process.poll()
         if return_value is not None:
             # Finish process
+            # Log completion data
+            end_time = time.time()
+            elapsed_time = round(end_time - entry.start_time, 3)
+            session_id = entry.session._session_id
+            entry_id = entry.request.id
+            Logs.message(
+                f"Process Completed: Entry {entry_id} returned exit code {return_value} in {elapsed_time} seconds",
+                extra={'process_time': elapsed_time, 'exit_code': return_value})
             entry.send(_ProcessManager._DataType.done, [return_value])
             return False
         return True
