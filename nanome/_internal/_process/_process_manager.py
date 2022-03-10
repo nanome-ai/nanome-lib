@@ -153,10 +153,7 @@ class _ProcessManager():
                 'exit_code': return_value,
                 'session_id': session_id
             }
-
-            Logs.message(
-                message,
-                extra=log_extra)
+            Logs.message(message,extra=log_extra)
             entry.send(_ProcessManager._DataType.done, [return_value])
             return False
         return True
