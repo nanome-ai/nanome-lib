@@ -7,6 +7,8 @@ from nanome._internal.logs import LogsManager
 import logging
 
 import multiprocessing
+import random
+import string
 from multiprocessing import Process, Pipe, Queue, current_process
 from timeit import default_timer as timer
 import sys
@@ -283,7 +285,10 @@ class _Plugin(object):
                 self._custom_data, permissions
             )
         )
-        process.name = "Session-{}".format(session_id)
+
+        # Appending random string to process name makes tracking unique sessions easier
+        random_str = ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))
+        process.name = "Session-{}-{}".format(session_id, random_str)
         process.start()
         session.plugin_process = process
         self._sessions[session_id] = session
