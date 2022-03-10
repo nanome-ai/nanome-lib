@@ -80,9 +80,18 @@ class _ProcessManager():
                 cwd=request.cwd_path, encoding=request.encoding, universal_newlines=has_text,
                 close_fds=POSIX)
             entry.start_time = time.time()
-            extra = {'process_args': args}
-            msg = "Process Started: Entry {} {} for session {}".format(
-                request.id, request.executable_path, entry.session._session_id)
+
+            # Log process settings
+            exec_path = request.executable_path
+            session_id = entry.session._session_id
+            extra = {
+                'process_args': args,
+                'executable_path': exec_path,
+                'session_id': session_id,
+                'request_id': request.id
+            }
+            msg = "Process Started: {} for Session {}".format(
+                request.executable_path, session_id)
             Logs.message(msg, extra=extra)
         except:
             Logs.error("Couldn't execute process", request.executable_path, "Please check if executable is present and has permissions:\n", traceback.format_exc())
@@ -132,12 +141,22 @@ class _ProcessManager():
             # Log completion data
             end_time = time.time()
             elapsed_time = round(end_time - entry.start_time, 3)
-            entry_id = entry.request.id
-            message = "Process Completed: Entry {} returned exit code {} in {} seconds".format(
-                entry_id, return_value, elapsed_time)
+            exec_path = entry.request.executable_path
+            request_id = entry.request.id
+            session_id = entry.session._session_id
+            message = "Process Completed: {} returned exit code {} in {} seconds".format(
+                exec_path, return_value, elapsed_time)
+            log_extra = {
+                'request_id': request_id,
+                'executable_path': exec_path,
+                'process_time': elapsed_time,
+                'exit_code': return_value,
+                'session_id': session_id
+            }
+
             Logs.message(
                 message,
-                extra={'process_time': elapsed_time, 'exit_code': return_value})
+                extra=log_extra)
             entry.send(_ProcessManager._DataType.done, [return_value])
             return False
         return True
