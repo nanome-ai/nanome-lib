@@ -82,7 +82,7 @@ class _ProcessManager():
             start_time = time.time()
             entry.start_time = start_time
             extra = {'process_args': args}
-            msg = "Process started: Entry {} {} for session {}".format(
+            msg = "Process Started: Entry {} {} for session {}".format(
                 request.id, request.executable_path, entry.session._session_id)
             Logs.message(msg, extra=extra)
         except:
@@ -133,7 +133,6 @@ class _ProcessManager():
             # Log completion data
             end_time = time.time()
             elapsed_time = round(end_time - entry.start_time, 3)
-            session_id = entry.session._session_id
             entry_id = entry.request.id
             Logs.message(
                 f"Process Completed: Entry {entry_id} returned exit code {return_value} in {elapsed_time} seconds",
