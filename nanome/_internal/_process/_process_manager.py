@@ -133,8 +133,10 @@ class _ProcessManager():
             end_time = time.time()
             elapsed_time = round(end_time - entry.start_time, 3)
             entry_id = entry.request.id
+            message = "Process Completed: Entry {} returned exit code {} in {} seconds".format(
+                entry_id, return_value, elapsed_time)
             Logs.message(
-                f"Process Completed: Entry {entry_id} returned exit code {return_value} in {elapsed_time} seconds",
+                message,
                 extra={'process_time': elapsed_time, 'exit_code': return_value})
             entry.send(_ProcessManager._DataType.done, [return_value])
             return False
