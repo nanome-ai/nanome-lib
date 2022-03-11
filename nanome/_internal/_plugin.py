@@ -36,6 +36,47 @@ class _Plugin(object):
     _plugin_id = -1
     _custom_data = None
 
+    def __init__(self, name, description, tags=None, has_advanced=False, permissions=None, integrations=None):
+        tags = tags or []
+        permissions = permissions or []
+        integrations = integrations or []
+        self._sessions = dict()
+
+        if isinstance(tags, str):
+            tags = [tags]
+
+        category = ""
+        if len(tags) > 0:
+            category = tags[0]
+
+        for i in range(0, len(permissions)):
+            permissions[i] = _Hashes.PermissionRequestHashes[permissions[i]]
+
+        for i in range(0, len(integrations)):
+            integrations[i] = _Hashes.IntegrationRequestHashes[integrations[i]]
+
+        self._description = {
+            'name': name,
+            'description': description,
+            'category': category,
+            'tags': tags,
+            'hasAdvanced': has_advanced,
+            'auth': None,
+            'permissions': permissions,
+            'integrations': integrations
+        }
+        self._plugin_class = None
+        self.connected = False
+        self._host = ''
+        self._key = ''
+        self._port = None
+        self._pre_run = None
+        self._post_run = None
+        self._write_log_file = True
+        self._remote_logging = False
+        self._to_ignore = []
+        self.__waiting_keep_alive = False
+
     def _run(self):
         # set_start_method ensures consistent process behavior between Windows and Linux
         if sys.version_info.major >= 3 and sys.version_info.minor >= 4:
@@ -278,7 +319,7 @@ class _Plugin(object):
         permissions = self._description["permissions"]
         log_pipe_conn = self._logs_manager.child_pipe_conn
         process = Process(
-            target=self._launch_plugin,
+            target=self.run_plugin_instance,
             args=(
                 self._plugin_class, session_id, main_conn_net, process_conn_net,
                 process_conn_proc, log_pipe_conn, self.__serializer, self._plugin_id,
@@ -318,55 +359,34 @@ class _Plugin(object):
         packet.write_string(json.dumps(response))
 
     @classmethod
-    def _launch_plugin(cls, plugin_class, session_id, queue_net_in, queue_net_out, pipe_proc, log_pipe_conn, serializer, plugin_id, version_table, original_version_table, custom_data, permissions):
-        plugin_instance = plugin_class()
-        process_network = _ProcessNetwork(plugin_instance, session_id, queue_net_in, queue_net_out, serializer, plugin_id, version_table)
+    def run_plugin_instance(
+        cls, plugin_instance_class, session_id, queue_net_in, queue_net_out,
+        pipe_proc, log_pipe_conn, serializer, plugin_id, version_table,
+            original_version_table, custom_data, permissions):
+        """Set up the plugin and start running loop.
+        
+        :arg plugin_instance_class: The Plugininstance class to be instantiated.
+        :arg session_id: The session ID registered with NTS.
+        :arg queue_net_in: The network input queue.
+        :arg queue_net_out: The network output queue.
+        :arg pipe_proc: The pipe to communicate with the process manager.
+        :arg log_pipe_conn: The pipe to communicate with the logs manager.
+        :arg serializer: The serializer to use to create NTS message payloads.
+        :arg plugin_id: The plugin ID registered with NTS.
+        :arg version_table: The version table of the plugin, used to setup the serializer.
+        :arg original_version_table: The original version table of the plugin, used to setup the serializer.
+        :arg custom_data: Arbitrary data that can be passed to each instantiated PluginInstance
+        :arg permissions: The permissions of the plugin.
+        """
+        plugin_instance = plugin_instance_class()
+        process_network = _ProcessNetwork(
+            plugin_instance, session_id, queue_net_in, queue_net_out,
+            serializer, plugin_id, version_table)
         plugin_instance._setup(
             session_id, process_network, pipe_proc, log_pipe_conn, original_version_table, custom_data, permissions)
         LogsManager.configure_child_process(plugin_instance)
         logger.debug("Starting plugin")
         plugin_instance._run()
-
-    def __init__(self, name, description, tags=None, has_advanced=False, permissions=None, integrations=None):
-        tags = tags or []
-        permissions = permissions or []
-        integrations = integrations or []
-        self._sessions = dict()
-
-        if isinstance(tags, str):
-            tags = [tags]
-
-        category = ""
-        if len(tags) > 0:
-            category = tags[0]
-
-        for i in range(0, len(permissions)):
-            permissions[i] = _Hashes.PermissionRequestHashes[permissions[i]]
-
-        for i in range(0, len(integrations)):
-            integrations[i] = _Hashes.IntegrationRequestHashes[integrations[i]]
-
-        self._description = {
-            'name': name,
-            'description': description,
-            'category': category,
-            'tags': tags,
-            'hasAdvanced': has_advanced,
-            'auth': None,
-            'permissions': permissions,
-            'integrations': integrations
-        }
-        self._plugin_class = None
-        self.connected = False
-        self._host = ''
-        self._key = ''
-        self._port = None
-        self._pre_run = None
-        self._post_run = None
-        self._write_log_file = True
-        self._remote_logging = False
-        self._to_ignore = []
-        self.__waiting_keep_alive = False
 
     @staticmethod
     def _is_process():
