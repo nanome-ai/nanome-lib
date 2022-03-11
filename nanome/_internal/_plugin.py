@@ -1,5 +1,6 @@
 from nanome._internal import _network as Network
 from nanome._internal._process import _ProcessManager
+from nanome._internal._network import _ProcessNetwork
 from nanome._internal._network._commands._callbacks._commands_enums import _Hashes
 from nanome._internal._network._serialization._serializer import Serializer
 from nanome._internal._util._serializers import _TypeSerializer
@@ -319,19 +320,12 @@ class _Plugin(object):
     @classmethod
     def _launch_plugin(cls, plugin_class, session_id, queue_net_in, queue_net_out, pipe_proc, log_pipe_conn, serializer, plugin_id, version_table, original_version_table, custom_data, permissions):
         plugin_instance = plugin_class()
+        process_network = _ProcessNetwork(plugin_instance, session_id, queue_net_in, queue_net_out, serializer, plugin_id, version_table)
         plugin_instance._setup(
-            session_id, queue_net_in, queue_net_out, pipe_proc, log_pipe_conn,
-            serializer, plugin_id, version_table, original_version_table, custom_data,
-            permissions)
+            session_id, process_network, pipe_proc, log_pipe_conn, original_version_table, custom_data, permissions)
         LogsManager.configure_child_process(plugin_instance)
         logger.debug("Starting plugin")
         plugin_instance._run()
-
-    @classmethod
-    def _launch_plugin_profile(cls, plugin_class, session_id, pipe_net, pipe_proc, serializer, plugin_id, version_table, original_version_table, verbose, custom_data, permissions):
-        cProfile.runctx('_Plugin._launch_plugin(plugin_class, session_id, pipe_net, pipe_proc, serializer, '
-                        'plugin_id, version_table, original_version_table, verbose, custom_data,'
-                        'permissions)', globals(), locals(), 'profile.out')
 
     def __init__(self, name, description, tags=None, has_advanced=False, permissions=None, integrations=None):
         tags = tags or []
