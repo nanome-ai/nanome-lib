@@ -14,7 +14,6 @@ from multiprocessing import Process, Pipe, Queue, current_process
 from timeit import default_timer as timer
 import sys
 import json
-import cProfile
 import time
 import os
 import fnmatch
@@ -41,6 +40,7 @@ class _Plugin(object):
         permissions = permissions or []
         integrations = integrations or []
         self._sessions = dict()
+        self._process_manager = _ProcessManager()
 
         if isinstance(tags, str):
             tags = [tags]
@@ -78,10 +78,6 @@ class _Plugin(object):
         self.__waiting_keep_alive = False
 
     def _run(self):
-        # set_start_method ensures consistent process behavior between Windows and Linux
-        if sys.version_info.major >= 3 and sys.version_info.minor >= 4:
-            multiprocessing.set_start_method('spawn', force=True)
-
         if os.name == "nt":
             signal.signal(signal.SIGBREAK, self.__on_termination_signal)
         else:
@@ -91,11 +87,44 @@ class _Plugin(object):
             self._pre_run()
 
         self._description['auth'] = self.__read_key()
-        self._process_manager = _ProcessManager()
-
         self.__reconnect_attempt = 0
         self.__connect()
         self._loop()
+
+    @classmethod
+    def run_plugin_instance(
+        cls, plugin_instance_class, session_id, queue_net_in, queue_net_out,
+        pipe_proc, log_pipe_conn, serializer, plugin_id, version_table,
+            original_version_table, custom_data, permissions):
+        """When user activates a plugin, this function is run to begin the new process.
+        
+        :arg plugin_instance_class: The Plugininstance class to be instantiated.
+        :arg session_id: The session ID registered with NTS.
+        :arg queue_net_in: The network input queue.
+        :arg queue_net_out: The network output queue.
+        :arg pipe_proc: The pipe to communicate with the process manager.
+        :arg log_pipe_conn: The pipe to communicate with the logs manager.
+        :arg serializer: The serializer to use to create NTS message payloads.
+        :arg plugin_id: The plugin ID registered with NTS.
+        :arg version_table: The version table of the plugin, used to setup the serializer.
+        :arg original_version_table: The original version table of the plugin, used to setup the serializer.
+        :arg custom_data: Arbitrary data that can be passed to each instantiated PluginInstance
+        :arg permissions: The permissions of the plugin.
+        """
+        # set_start_method ensures consistent process behavior between Windows and Linux
+        if sys.version_info.major >= 3 and sys.version_info.minor >= 4:
+            multiprocessing.set_start_method('spawn', force=True)
+
+        plugin_instance = plugin_instance_class()
+        process_network = _ProcessNetwork(
+            plugin_instance, session_id, queue_net_in, queue_net_out,
+            serializer, plugin_id, version_table)
+        plugin_instance._setup(
+            session_id, process_network, pipe_proc, log_pipe_conn,
+            original_version_table, custom_data, permissions)
+        LogsManager.configure_child_process(plugin_instance)
+        logger.debug("Starting plugin")
+        plugin_instance._run()
 
     def __read_key(self):
         if not self._key:
@@ -357,36 +386,6 @@ class _Plugin(object):
         packet = Network._Packet()
         packet.set(0, Network._Packet.packet_type_logs_request, 0)
         packet.write_string(json.dumps(response))
-
-    @classmethod
-    def run_plugin_instance(
-        cls, plugin_instance_class, session_id, queue_net_in, queue_net_out,
-        pipe_proc, log_pipe_conn, serializer, plugin_id, version_table,
-            original_version_table, custom_data, permissions):
-        """Set up the plugin and start running loop.
-        
-        :arg plugin_instance_class: The Plugininstance class to be instantiated.
-        :arg session_id: The session ID registered with NTS.
-        :arg queue_net_in: The network input queue.
-        :arg queue_net_out: The network output queue.
-        :arg pipe_proc: The pipe to communicate with the process manager.
-        :arg log_pipe_conn: The pipe to communicate with the logs manager.
-        :arg serializer: The serializer to use to create NTS message payloads.
-        :arg plugin_id: The plugin ID registered with NTS.
-        :arg version_table: The version table of the plugin, used to setup the serializer.
-        :arg original_version_table: The original version table of the plugin, used to setup the serializer.
-        :arg custom_data: Arbitrary data that can be passed to each instantiated PluginInstance
-        :arg permissions: The permissions of the plugin.
-        """
-        plugin_instance = plugin_instance_class()
-        process_network = _ProcessNetwork(
-            plugin_instance, session_id, queue_net_in, queue_net_out,
-            serializer, plugin_id, version_table)
-        plugin_instance._setup(
-            session_id, process_network, pipe_proc, log_pipe_conn, original_version_table, custom_data, permissions)
-        LogsManager.configure_child_process(plugin_instance)
-        logger.debug("Starting plugin")
-        plugin_instance._run()
 
     @staticmethod
     def _is_process():
