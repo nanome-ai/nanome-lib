@@ -92,7 +92,7 @@ class _Plugin(object):
         self._loop()
 
     @classmethod
-    def run_plugin_instance(
+    def _run_plugin_instance(
         cls, plugin_instance_class, session_id, queue_net_in, queue_net_out,
         pipe_proc, log_pipe_conn, serializer, plugin_id, version_table,
             original_version_table, custom_data, permissions):
@@ -353,7 +353,7 @@ class _Plugin(object):
         permissions = self._description["permissions"]
         log_pipe_conn = self._logs_manager.child_pipe_conn
         process = Process(
-            target=self.run_plugin_instance,
+            target=self._run_plugin_instance,
             args=(
                 self._plugin_class, session_id, main_conn_net, process_conn_net,
                 process_conn_proc, log_pipe_conn, self.__serializer, self._plugin_id,
