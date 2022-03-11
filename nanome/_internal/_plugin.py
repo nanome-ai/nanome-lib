@@ -140,9 +140,9 @@ class _Plugin(object):
             return None
 
     def _on_packet_received(self, packet):
+        """When packet received, identify Packet type, and call appropriate function."""
         if packet.packet_type == Network._Packet.packet_type_message_to_plugin:
             session_id = packet.session_id
-
             # Always look if we're trying to register a session
             #   Fix 5/27/2021 - Jeremie: We need to always check for session registration in order to fix timeout issues
             #   When NTS forces disconnection because of plugin list change, session_id still exists in self._sessions,
@@ -246,6 +246,7 @@ class _Plugin(object):
                 break
 
     def __connect(self):
+        """Create network Connection to NTS, and start listening for packets."""
         self._network = Network._NetInstance(self, self.__class__._on_packet_received)
         if self._network.connect(self._host, self._port):
             if self._plugin_id >= 0:
@@ -335,6 +336,10 @@ class _Plugin(object):
         sys.exit(0)
 
     def __on_client_connection(self, session_id, version_table):
+        self._start_session_process(session_id, version_table)
+
+    def _start_session_process(self, session_id, version_table):
+        """Setup Pipes and networking for Plugininstance, run session process."""
         if session_id in self._sessions:  # If session_id already exists, close it first ()
             logger.info("Closing session ID {} because a new session connected with the same ID".format(session_id))
             self._sessions[session_id].signal_and_close_pipes()
