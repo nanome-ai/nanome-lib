@@ -37,7 +37,7 @@ class _PluginInstance(object):
         self._advanced_settings_usable = True
         self._custom_data = custom_data
         self._permissions = permissions
-        
+
         self._network = process_network
         self._process_manager = _ProcessManagerInstance(proc_pipe)
         self._log_pipe_conn = log_pipe_conn

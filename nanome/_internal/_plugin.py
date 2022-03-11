@@ -97,7 +97,7 @@ class _Plugin(object):
         pipe_proc, log_pipe_conn, serializer, plugin_id, version_table,
             original_version_table, custom_data, permissions):
         """When user activates a plugin, this function is run to begin the new process.
-        
+
         :arg plugin_instance_class: The Plugininstance class to be instantiated.
         :arg session_id: The session ID registered with NTS.
         :arg queue_net_in: The network input queue.
