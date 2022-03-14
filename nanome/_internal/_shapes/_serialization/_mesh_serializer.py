@@ -45,10 +45,9 @@ class _MeshSerializer(_TypeSerializer):
         context.write_byte_array(texture_bytes)
         if len(texture_bytes) > 0:
             Logs.debug("Sending texture:", value.texture_path)
-        
+
         if version >= 1:
             context.write_bool(value.unlit)
-        
 
     def create_texture_file(self, texture_path, texture_bytes):
         with open(texture_path, "wb") as f:
@@ -65,7 +64,7 @@ class _MeshSerializer(_TypeSerializer):
 
         if version >= 1:
             result.unlit = context.read_bool()
-        
+
         if len(texture_bytes) > 0:
             temp_texture = tempfile.NamedTemporaryFile(delete=False, suffix='png')
             self.create_texture_file(temp_texture.name, texture_bytes)
