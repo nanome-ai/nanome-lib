@@ -1,6 +1,7 @@
+from nanome.util.enums import ShapeType
+
 from ._anchor import _Anchor
 from ._shape import _Shape
-from nanome.util.enums import ShapeType
 
 
 class _Mesh(_Shape):
@@ -13,6 +14,7 @@ class _Mesh(_Shape):
         self._triangles = []
         self._uv = []
         self._texture_path = ""
+        self._unlit = False
 
     @classmethod
     def _create(cls):
