@@ -6,9 +6,7 @@ asyncio = False
 if sys.version_info >= (3, 7):
     try:
         import asyncio
-        from concurrent.futures._base import CancelledError
     except ImportError:
-        CancelledError = Exception
         pass
 
 
@@ -136,10 +134,8 @@ class Process():
             self.on_error(result.stderr)
             self._future.set_result(result.returncode)
         else:
-            try:
-                Process._manager.start_process(self, self.__request)
-            except CancelledError:
-                nanome.util.Logs.message("Process was cancelled by the user.")
+            Process._manager.start_process(self, self.__request)
+            
         return self._future
 
     def stop(self):

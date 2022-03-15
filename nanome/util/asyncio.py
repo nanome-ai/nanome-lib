@@ -2,6 +2,8 @@ import asyncio
 import inspect
 import logging
 import sys
+from concurrent.futures._base import CancelledError
+from . import Logs
 
 
 async def handle_exception(exc_type, exc_value, exc_traceback):
@@ -32,6 +34,9 @@ async def exception_wrapper(fn, args, kwargs):
     """
     try:
         await fn(*args, **kwargs)
+    except CancelledError:
+        # A user exiting and cancelling the request should not be logged as an error.
+        Logs.message("Request was cancelled by the user.")
     except Exception:
         exc_type, exc_value, exc_traceback = sys.exc_info()
         await handle_exception(exc_type, exc_value, exc_traceback)
