@@ -135,7 +135,6 @@ class Process():
             self._future.set_result(result.returncode)
         else:
             Process._manager.start_process(self, self.__request)
-            
         return self._future
 
     def stop(self):
