@@ -24,7 +24,10 @@ class _ProcessManagerInstance():
             if has_data:
                 data = self.__pipe.recv()
         except BrokenPipeError:
-            Logs.debug("Pipe has been closed, exiting process")
+            Logs.message("Pipe has been closed, exiting process")
+            return False
+        except EOFError:
+            Logs.message("Pipe has been closed by user, exiting process")
             return False
         if has_data:
             self.__received_data(data)
