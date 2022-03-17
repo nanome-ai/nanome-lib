@@ -52,6 +52,7 @@ class Plugin(_Plugin):
         | Starts the plugin by connecting to the server specified.
         | If arguments (-a, -p) are given when starting plugin, host/port will be ignored.
         | Function will return only when plugin exits.
+
         :param host: NTS IP address if plugin started without -a option
         :param port: NTS port if plugin started without -p option
         :type host: str

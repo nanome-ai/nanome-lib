@@ -170,6 +170,7 @@ class Files(_Files):
     def mkdir(self, target, callback=None):
         """
         | Create all directories along the path provided
+
         :param target: pathname of the final directory to create
         :type target: str
         :param callback: called when operation has completed, potentially with errors
