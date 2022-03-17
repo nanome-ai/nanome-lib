@@ -85,7 +85,8 @@ class PluginInstance(_PluginInstance):
         """
         | Request the entire workspace, in deep mode
 
-        callback: Callable[[Workspace], None]
+        :param callback: Callback to receive workspace.
+        :type callback: Callable[[Workspace], None]
         """
         expects_response = callback is not None or self.is_async
         id = self._network._send(_Messages.workspace_request, None, expects_response)
@@ -94,7 +95,9 @@ class PluginInstance(_PluginInstance):
     def request_complex_list(self, callback=None):
         """
         | Request the list of all complexes in the workspace, in shallow mode
-        kwarg callback: Callable[[List[Complex]], None]
+
+        :param callback: Callback to receive list of complexes.
+        :type callback: Callable[[List[Complex]], None]
         """
         expects_response = callback is not None or self.is_async
         id = self._network._send(_Messages.complex_list_request, None, expects_response)
@@ -107,7 +110,8 @@ class PluginInstance(_PluginInstance):
 
         :param id_list: List of indices
         :type id_list: list of :class:`int`
-        :callback: Callable[[List[Complex]], None]
+        :param callback: Callback to receive list of complexes.
+        :type callback: Callable[[List[Complex]], None]
         """
         expects_response = callback is not None or self.is_async
         id = self._network._send(_Messages.complexes_request, id_list, expects_response)
@@ -127,7 +131,7 @@ class PluginInstance(_PluginInstance):
         | Send a notification to the user
 
         :param type: Type of notification to send.
-        :type workspace: :class:`~nanome.util.enums.NotificationTypes`
+        :type type: :class:`~nanome.util.enums.NotificationTypes`
         :param message: Text to display to the user.
         :type message: str
         """
@@ -143,8 +147,8 @@ class PluginInstance(_PluginInstance):
 
         :param structures: List of molecular structures to update.
         :type structures: list of :class:`~nanome.structure.Base`
-
-        callback: Callable[[], None]
+        :param callback: Callback when update is done.
+        :type callback: Callable[[], None]
         """
         expects_response = callback is not None or self.is_async
         id = self._network._send(_Messages.structures_deep_update, structures, expects_response)
@@ -167,7 +171,8 @@ class PluginInstance(_PluginInstance):
 
         :param structures: Molecular structure(s) to update.
         :type structures: list of :class:`~nanome.structure.Base`
-        :kwarg callback: Callable[[], None]
+        :param callback: Callback when zoom is done.
+        :type callback: Callable[[], None]
         """
         expects_response = callback is not None or self.is_async
         id = self._network._send(_Messages.structures_zoom, structures, expects_response)
@@ -180,7 +185,8 @@ class PluginInstance(_PluginInstance):
 
         :param structures: Molecular structure(s) to update.
         :type structures: list of :class:`~nanome.structure.Base`
-        :kwarg callback: Callable[[], None]
+        :param callback: Callback when center is done.
+        :type callback: Callable[[], None]
         """
         expects_response = callback is not None or self.is_async
         id = self._network._send(_Messages.structures_center, structures, expects_response)
@@ -192,6 +198,8 @@ class PluginInstance(_PluginInstance):
 
         :param complex_list: List of Complexes to add
         :type complex_list: list of :class:`~nanome.structure.Complex`
+        :param callback: Callback when request is done.
+        :type callback: Callable[[], None]
         """
         expects_response = callback is not None or self.is_async
         id = self._network._send(_Messages.add_to_workspace, complex_list, expects_response)
@@ -203,6 +211,8 @@ class PluginInstance(_PluginInstance):
 
         :param complex_list: List of Complexes to remove
         :type complex_list: list of :class:`~nanome.structure.Complex`
+        :param callback: Callback when request is done.
+        :type callback: Callable[[], None]
         """
         empty_complexes = []
         for complex in complex_list:
@@ -274,8 +284,8 @@ class PluginInstance(_PluginInstance):
 
         :param index: Index of the menu you wish to read
         :type index: int
-
-        callback: Callable[[Vector3, Quaternion, Vector3], None]
+        :param callback: Callback to receive the menu's position, rotation, and scale.
+        :type callback: Callable[[Vector3, Quaternion, Vector3], None]
         """
         expects_response = callback is not None or self.is_async
         id = self._network._send(_Messages.menu_transform_request, index, expects_response)
@@ -287,7 +297,8 @@ class PluginInstance(_PluginInstance):
 
         :param file_list: List of files to save with their content
         :type file_list: list of :class:`~nanome.util.file.FileSaveData`
-        :kwarg callable: Callable[[List[FileSaveData]], None]
+        :param callback: Callback to receive save file results.
+        :type callable: Callable[[List[FileSaveData]], None]
         """
         expects_response = callback is not None or self.is_async
         id = self._network._send(_Messages.file_save, file_list, expects_response)
@@ -301,8 +312,8 @@ class PluginInstance(_PluginInstance):
         :type indices_list: list of :class:`int`
         :param stream_type: Type of stream to create
         :type stream_type: list of :class:`~nanome.streams.Stream.Type`
-
-        :param callback: Callable[[Stream, StreamCreationError], None]
+        :param callback: Callback to receive the created stream.
+        :type callback: Callable[[Stream, StreamCreationError], None]
         """
         expects_response = callback is not None or self.is_async
         id = self._network._send(_Messages.stream_create, (stream_type, indices_list, StreamDirection.writing), expects_response)
@@ -316,7 +327,8 @@ class PluginInstance(_PluginInstance):
         :type indices_list: list of :class:`int`
         :param stream_type: Type of stream to create
         :type stream_type: list of :class:`~nanome.streams.Stream.Type`
-        :param callable: Callable[[Stream, StreamCreationError], None]
+        :param callback: Callback to receive the created stream.
+        :type callback: Callable[[Stream, StreamCreationError], None]
         """
         expects_response = callback is not None or self.is_async
         id = self._network._send(_Messages.stream_create, (stream_type, indices_list, StreamDirection.reading), expects_response)
@@ -329,7 +341,8 @@ class PluginInstance(_PluginInstance):
 
         :param complex_list: List of complexes to add bonds to
         :type complex_list: list of :class:`~nanome.structure.Complex`
-        :param callback: Callable[[List[Complex]], None]
+        :param callback: Callback when bonds are calculated.
+        :type callback: Callable[[List[Complex]], None]
         """
         bonding = _Bonding(self, complex_list, callback, fast_mode)
         return bonding._start()
@@ -340,7 +353,8 @@ class PluginInstance(_PluginInstance):
 
         :param complex_list: List of complexes to add ribbons to
         :type complex_list: list of :class:`~nanome.structure.Complex`
-        :param callback: Callable[[List[Complex]], None]
+        :param callback: Callback when DSSP is calculated.
+        :type callback: Callable[[List[Complex]], None]
         """
         dssp = _Dssp(self, complex_list, callback)
         return dssp._start()
@@ -356,6 +370,8 @@ class PluginInstance(_PluginInstance):
 
         :param url: url to open
         :type url: str
+        :param desktop_browser: Whether to open the URL in the default web browser or in the Nanome session
+        :type desktop_browser: bool
         """
         url = url.strip()
         if '://' not in url:
@@ -366,7 +382,8 @@ class PluginInstance(_PluginInstance):
         """
         | Requests presenter account info (unique ID, name, email)
 
-        callback: Callable[[PresenterInfo], None]
+        :param callback: Callback to receive the presenter account info.
+        :type callback: Callable[[PresenterInfo], None]
         """
         expects_response = callback is not None or self.is_async
         id = self._network._send(_Messages.presenter_info_request, None, expects_response)
@@ -376,7 +393,8 @@ class PluginInstance(_PluginInstance):
         """
         | Requests presenter controller info (head position, head rotation, left controller position, left controller rotation, right controller position, right controller rotation)
 
-        param callback: Callable[[Vector3, Quaternion, Vector3, Quaternion, Vector3, Quaternion], None]
+        :param callback: Callback to receive the presenter controller info.
+        :type callback: Callable[[Vector3, Quaternion, Vector3, Quaternion, Vector3, Quaternion], None]
         """
         expects_response = callback is not None or self.is_async
         id = self._network._send(_Messages.controller_transforms_request, None, expects_response)
@@ -418,6 +436,8 @@ class PluginInstance(_PluginInstance):
 
         :param files_list: List of files to load
         :type files_list: list of or unique object of type :class:`str` or (:class:`str`, :class:`str`)
+        :param callback: Callback when files are loaded.
+        :type callback: Callable[[], None]
         """
         files = []
         if not isinstance(files_list, list):
@@ -447,7 +467,8 @@ class PluginInstance(_PluginInstance):
         :type format: :class:`~nanome.util.enums.ExportFormats`
         :param entities: Entities to export (complexes to send, or indices if referencing complexes in workspace, or a workspace, or nothing if exporting Nanome workspace)
         :type entities: list of or unique object of type :class:`~nanome.structure.Workspace` or :class:`~nanome.structure.Complex`, or None, or list of or unique :class:`int`
-        :kwarg callback: Callable[[Union[str, bytes]], None]
+        :param callback: Callback when file is exported.
+        :type callback: Callable[[Union[str, bytes]], None]
         """
         if entities is not None and not isinstance(entities, list):
             entities = [entities]
@@ -478,7 +499,7 @@ class PluginInstance(_PluginInstance):
     @property
     def custom_data(self):
         """
-        Get custom data set with Plugin.set_custom_data
+        | Get custom data set with Plugin.set_custom_data
 
         :type: tuple of objects or None if no data has been set
         """
