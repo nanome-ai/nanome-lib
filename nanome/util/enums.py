@@ -324,6 +324,7 @@ class Integrations(_CommandEnum):
     import_file = auto()
     analysis = auto()
     interactions = auto()
+    smiles = auto()
 
 
 class Permissions(_CommandEnum):

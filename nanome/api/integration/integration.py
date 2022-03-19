@@ -13,6 +13,8 @@ class Integration():
         self.export_locations = None
         self.generate_molecule_image = None
         self.import_file = None
+        self.export_smiles = None
+        self.import_smiles = None
 
     def _call(self, name, request):
         callback = getattr(self, name, None)

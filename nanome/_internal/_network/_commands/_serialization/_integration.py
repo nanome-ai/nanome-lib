@@ -15,6 +15,8 @@ class _Integration(_TypeSerializer):
         _Hashes.IntegrationHashes[_Integrations.export_file]: Serializers._ExportFile(),
         _Hashes.IntegrationHashes[_Integrations.import_file]: Serializers._ImportFile(),
         _Hashes.IntegrationHashes[_Integrations.generate_molecule_image]: Serializers._GenerateMoleculeImage(),
+        _Hashes.IntegrationHashes[_Integrations.export_smiles]: Serializers._ExportSmiles(),
+        _Hashes.IntegrationHashes[_Integrations.import_smiles]: Serializers._ImportSmiles()
     }
 
     def __init__(self):

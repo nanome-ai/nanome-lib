@@ -10,3 +10,5 @@ from ._export_locations import _ExportLocations
 from ._export_file import _ExportFile
 from ._import_file import _ImportFile
 from ._generate_molecule_image import _GenerateMoleculeImage
+from ._export_smiles import _ExportSmiles
+from ._import_smiles import _ImportSmiles
