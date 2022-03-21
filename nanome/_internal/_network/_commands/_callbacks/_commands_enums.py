@@ -186,6 +186,8 @@ class _Integrations(_CommandEnum):
     generate_molecule_image = auto()
     export_file = auto()
     import_file = auto()
+    export_smiles = auto()
+    import_smiles = auto()
 
 
 class _Hashes():
