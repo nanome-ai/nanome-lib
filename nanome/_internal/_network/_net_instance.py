@@ -76,11 +76,9 @@ class _NetInstance(object):
         except KeyboardInterrupt:
             raise
         except Exception as e:
-            error_type = type(e).__name__
-            error_message = ' '.join(e.args)
-            msg = "Uncaught {}: {}".format(error_type, error_message)
+            msg = "Uncaught {}: {}".format(type(e).__name__, e)
             Logs.error(msg)
-            time.sleep(0.1)
+            time.sleep(0.1) 
             self._connection = None
             return False
         else:
