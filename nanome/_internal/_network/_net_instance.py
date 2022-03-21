@@ -78,7 +78,7 @@ class _NetInstance(object):
         except Exception as e:
             msg = "Uncaught {}: {}".format(type(e).__name__, e)
             Logs.error(msg)
-            time.sleep(0.1) 
+            time.sleep(0.1)
             self._connection = None
             return False
         else:
