@@ -259,6 +259,7 @@ class _Plugin(object):
             self._network.send(packet)
             self.connected = True
             self.__reconnect_attempt = 0
+            self.__waiting_keep_alive = False
             self.__last_keep_alive = timer()
             for session in self._sessions.values():
                 session._net_plugin = self._network
