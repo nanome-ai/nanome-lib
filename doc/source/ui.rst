@@ -43,7 +43,7 @@ Download
 ========
 
 - `Windows <https://nanome.s3.us-west-1.amazonaws.com/installers/StackStudio/StackStudio_v0.54_Windows.zip>`_
-- `Mac <https://nanome.s3-us-west-1.amazonaws.com/installers/StackStudio/StackStudio_v0.54_Mac.zip>`_
+- `Mac <https://nanome.s3.us-west-1.amazonaws.com/installers/StackStudio/StackStudio_v0.54_Mac.zip>`_
 
 .. image:: assets/stackstudio.png
   :width: 800
