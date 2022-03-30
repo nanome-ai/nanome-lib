@@ -213,6 +213,7 @@ def _get_atom_hash(sb, atom, off):  # StringBuilder, Data.Atom, int -> int
     sb.append(atom._residue._serial)
     sb.append_string(atom._residue._name)
     sb.append_string(atom._residue._chain._name)
+    sb.append(atom.formal_charge)
     return _get_hash_code(sb.to_string(":"))
 
 
