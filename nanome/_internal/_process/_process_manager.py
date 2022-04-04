@@ -158,7 +158,7 @@ class _ProcessManager():
             if exit_code == 0:
                 Logs.message(message, extra=log_extra)
             else:
-                Logs.error(message, extra=log_extra)
+                Logs.warning(message, extra=log_extra)
             entry.send(_ProcessManager._DataType.done, [exit_code])
             return False
         return True
