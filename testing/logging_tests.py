@@ -2,7 +2,6 @@ import logging
 import sys
 import unittest
 
-from nanome._internal.logs import NTSLoggingHandler
 from nanome import Plugin, PluginInstance
 from nanome.util import Logs
 
