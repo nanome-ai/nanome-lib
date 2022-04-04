@@ -13,7 +13,7 @@ class AsyncTest(nanome.AsyncPluginInstance):
 
     @async_callback
     async def on_run(self):
-        p = Process(label="AsyncProcessTest")
+        p = Process(label="echo hello world")
         p.executable_path = '/bin/echo'
         p.args = ['hello world']
         p.output_text = True

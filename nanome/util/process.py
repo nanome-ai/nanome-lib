@@ -26,7 +26,7 @@ class Process():
             self.cwd_path = None
             self.id = 0
 
-    def __init__(self, executable_path=None, args=None, output_text=None, buffer_lines=True, label=None):
+    def __init__(self, executable_path=None, args=None, output_text=None, buffer_lines=True, label=""):
         self.on_queued = lambda: None
         self.on_queue_position_change = lambda _: None
         self.on_start = lambda: None
@@ -117,22 +117,6 @@ class Process():
     @_id.setter
     def _id(self, value):
         self.__request.id = value
-
-    @property
-    def name(self):
-        """Name used to identify process.
-        
-        Not necessarily unique
-        """
-        return self.__request.name
-    
-    @name.setter
-    def name(self, value):
-        """Name used to identify process.
-        
-        Not necessarily unique
-        """
-        self.__request.name = value
 
     def start(self):
         """
