@@ -25,7 +25,6 @@ class Process():
             self.bufsize = 1
             self.cwd_path = None
             self.id = 0
-            self.label = ""
 
     def __init__(self, executable_path=None, args=None, output_text=None, buffer_lines=True, label=None):
         self.on_queued = lambda: None
