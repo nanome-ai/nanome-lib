@@ -18,7 +18,7 @@ class AsyncTest(nanome.AsyncPluginInstance):
         p.args = ['hello world']
         p.output_text = True
         p.on_error = Logs.error
-        p.on_output = Logs.warning
+        p.on_output = Logs.message
         p.on_done = Logs.message
 
         ret = await p.start()
