@@ -89,7 +89,7 @@ class _ProcessManager():
                 'executable_path': exec_path,
                 'session_id': session_id,
                 'request_id': request.id,
-                'proc_label': request.label
+                'process_label': request.label
             }
             msg = "Process Started: {} for Session {}".format(
                 request.executable_path, session_id)
@@ -153,7 +153,7 @@ class _ProcessManager():
                 'process_time': elapsed_time,
                 'exit_code': exit_code,
                 'session_id': session_id,
-                'proc_type': entry.request.name
+                'process_label': entry.request.label
             }
             if exit_code == 0:
                 Logs.message(message, extra=log_extra)

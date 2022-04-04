@@ -17,14 +17,14 @@ class Process():
     _manager = None
 
     class _ProcessRequest():
-        def __init__(self):
+        def __init__(self, label=None):
+            self.label = label or ""
             self.executable_path = ""
             self.args = []
             self.encoding = None  # "utf-8" if stdout and err are text
             self.bufsize = 1
             self.cwd_path = None
             self.id = 0
-            self.label = ""
 
     def __init__(self, executable_path=None, args=None, output_text=None, buffer_lines=True, label=None):
         self.on_queued = lambda: None
@@ -34,7 +34,7 @@ class Process():
         self.on_error = lambda _: None
         self.on_output = lambda _: None
         self._future = None
-        self.__request = Process._ProcessRequest()
+        self.__request = Process._ProcessRequest(label=label)
         self.label = label
 
         if executable_path is not None:
