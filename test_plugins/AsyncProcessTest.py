@@ -19,14 +19,9 @@ class AsyncTest(nanome.AsyncPluginInstance):
         p.output_text = True
         p.on_error = Logs.error
         p.on_output = Logs.message
-        p.on_done = Logs.message
-
-        ret = await p.start()
-        Logs.message('returned', ret)
-
+        await p.start()
         # test executing process second time
-        ret = await p.start()
-        Logs.message('returned', ret)
+        await p.start()
 
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, False, AsyncTest)
