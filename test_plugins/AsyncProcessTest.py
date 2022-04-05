@@ -13,20 +13,15 @@ class AsyncTest(nanome.AsyncPluginInstance):
 
     @async_callback
     async def on_run(self):
-        p = Process()
+        p = Process(label="echo hello world")
         p.executable_path = '/bin/echo'
         p.args = ['hello world']
         p.output_text = True
         p.on_error = Logs.error
-        p.on_output = Logs.warning
-        p.on_done = Logs.message
-
-        ret = await p.start()
-        Logs.message('returned', ret)
-
+        p.on_output = Logs.message
+        await p.start()
         # test executing process second time
-        ret = await p.start()
-        Logs.message('returned', ret)
+        await p.start()
 
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, False, AsyncTest)

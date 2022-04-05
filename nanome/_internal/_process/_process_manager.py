@@ -88,7 +88,8 @@ class _ProcessManager():
                 'process_args': args,
                 'executable_path': exec_path,
                 'session_id': session_id,
-                'request_id': request.id
+                'request_id': request.id,
+                'process_label': request.label
             }
             msg = "Process Started: {} for Session {}".format(
                 request.executable_path, session_id)
@@ -135,8 +136,8 @@ class _ProcessManager():
             entry.send(_ProcessManager._DataType.output, [output])
 
         # Check if process finished
-        return_value = entry.process.poll()
-        if return_value is not None:
+        exit_code = entry.process.poll()
+        if exit_code is not None:
             # Finish process
             # Log completion data
             end_time = time.time()
@@ -145,16 +146,20 @@ class _ProcessManager():
             request_id = entry.request.id
             session_id = entry.session._session_id
             message = "Process Completed: {} returned exit code {} in {} seconds".format(
-                exec_path, return_value, elapsed_time)
+                exec_path, exit_code, elapsed_time)
             log_extra = {
                 'request_id': request_id,
                 'executable_path': exec_path,
                 'process_time': elapsed_time,
-                'exit_code': return_value,
-                'session_id': session_id
+                'exit_code': exit_code,
+                'session_id': session_id,
+                'process_label': entry.request.label
             }
-            Logs.message(message, extra=log_extra)
-            entry.send(_ProcessManager._DataType.done, [return_value])
+            if exit_code == 0:
+                Logs.message(message, extra=log_extra)
+            else:
+                Logs.warning(message, extra=log_extra)
+            entry.send(_ProcessManager._DataType.done, [exit_code])
             return False
         return True
 

@@ -17,7 +17,8 @@ class Process():
     _manager = None
 
     class _ProcessRequest():
-        def __init__(self):
+        def __init__(self, label=None):
+            self.label = label or ""
             self.executable_path = ""
             self.args = []
             self.encoding = None  # "utf-8" if stdout and err are text
@@ -25,7 +26,7 @@ class Process():
             self.cwd_path = None
             self.id = 0
 
-    def __init__(self, executable_path=None, args=None, output_text=None, buffer_lines=True):
+    def __init__(self, executable_path=None, args=None, output_text=None, buffer_lines=True, label=""):
         self.on_queued = lambda: None
         self.on_queue_position_change = lambda _: None
         self.on_start = lambda: None
@@ -33,7 +34,8 @@ class Process():
         self.on_error = lambda _: None
         self.on_output = lambda _: None
         self._future = None
-        self.__request = Process._ProcessRequest()
+        self.__request = Process._ProcessRequest(label=label)
+        self.label = label
 
         if executable_path is not None:
             self.executable_path = executable_path
