@@ -14,6 +14,7 @@ class Process():
     """
     | A command-line process wrapper.
     """
+
     _manager = None
 
     class _ProcessRequest():
