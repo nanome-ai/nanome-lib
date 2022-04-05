@@ -8,7 +8,6 @@ HAS_ADVANCED_OPTIONS = False
 
 
 class AsyncTest(nanome.AsyncPluginInstance):
-
     def start(self):
         self.on_run()
 
@@ -19,13 +18,15 @@ class AsyncTest(nanome.AsyncPluginInstance):
         p.args = ['hello world']
         p.output_text = True
         p.on_error = Logs.error
-        p.on_output = Logs.message
+        p.on_output = Logs.warning
         p.on_done = Logs.message
 
-        await p.start()
+        ret = await p.start()
+        Logs.message('returned', ret)
 
         # test executing process second time
-        await p.start()
+        ret = await p.start()
+        Logs.message('returned', ret)
 
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, False, AsyncTest)
