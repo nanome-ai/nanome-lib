@@ -34,7 +34,6 @@ def main():
     name = ' '.join(w.title() if w.islower() else w for w in fields['name'].split())
     fields['name'] = name
     fields['class'] = re.sub(r'\W', '', name)
-    fields['folder'] = 'nanome_' + re.sub(r'\s', '_', name.lower())
     fields['command'] = re.sub(r'\s', '-', name.lower())
     fields['year'] = str(datetime.datetime.today().year)
 
@@ -56,10 +55,8 @@ def main():
                 perm = os.stat(file_path).st_mode
                 os.chmod(file_path, perm | 0o111)
 
-    plugin_path = os.path.join(path, 'nanome_plugin', fields['class'] + '.py')
-    os.rename(os.path.join(path, 'nanome_plugin', 'Plugin.py'), plugin_path)
-    folder_path = os.path.join(path, fields['folder'])
-    os.rename(os.path.join(path, 'nanome_plugin'), folder_path)
+    plugin_path = os.path.join(path, 'plugin', fields['class'] + '.py')
+    os.rename(os.path.join(path, 'plugin', 'Plugin.py'), plugin_path)
 
 
 if __name__ == '__main__':
