@@ -85,7 +85,7 @@ class _ProcessManager():
             # Log process settings
             exec_path = request.executable_path
             session_id = entry.session._session_id
-            id = request.label if request.label else exec_path
+            id = request.label or exec_path
             extra = {
                 'process_args': args,
                 'executable_path': exec_path,
