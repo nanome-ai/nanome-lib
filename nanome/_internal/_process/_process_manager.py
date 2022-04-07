@@ -147,7 +147,7 @@ class _ProcessManager():
             request_id = entry.request.id
             session_id = entry.session._session_id
             label = entry.request.label
-            id = label if label else exec_path
+            id = label or exec_path
             message = "Process Completed: {} returned exit code {} in {} seconds".format(
                 id, exit_code, elapsed_time)
             log_extra = {
