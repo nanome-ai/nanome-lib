@@ -5,6 +5,7 @@ import traceback
 import sys
 import time
 from threading import Thread
+
 try:
     from queue import Queue, Empty
 except ImportError:
@@ -84,6 +85,7 @@ class _ProcessManager():
             # Log process settings
             exec_path = request.executable_path
             session_id = entry.session._session_id
+            id = request.label if request.label else exec_path
             extra = {
                 'process_args': args,
                 'executable_path': exec_path,
@@ -91,11 +93,10 @@ class _ProcessManager():
                 'request_id': request.id,
                 'process_label': request.label
             }
-            msg = "Process Started: {} for Session {}".format(
-                request.executable_path, session_id)
+            msg = "Process Started: {} for Session {}".format(id, session_id)
             Logs.message(msg, extra=extra)
         except:
-            Logs.error("Couldn't execute process", request.executable_path, "Please check if executable is present and has permissions:\n", traceback.format_exc())
+            Logs.error("Couldn't execute process", exec_path, "Please check if executable is present and has permissions:\n", traceback.format_exc())
             entry.send(_ProcessManager._DataType.done, [-1])
             return
         entry.stdout_queue = Queue()
@@ -145,15 +146,17 @@ class _ProcessManager():
             exec_path = entry.request.executable_path
             request_id = entry.request.id
             session_id = entry.session._session_id
+            label = entry.request.label
+            id = label if label else exec_path
             message = "Process Completed: {} returned exit code {} in {} seconds".format(
-                exec_path, exit_code, elapsed_time)
+                id, exit_code, elapsed_time)
             log_extra = {
                 'request_id': request_id,
                 'executable_path': exec_path,
                 'process_time': elapsed_time,
                 'exit_code': exit_code,
                 'session_id': session_id,
-                'process_label': entry.request.label
+                'process_label': label
             }
             if exit_code == 0:
                 Logs.message(message, extra=log_extra)
