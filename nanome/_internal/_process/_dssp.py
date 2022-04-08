@@ -53,8 +53,7 @@ class _Dssp():
         self.__output = tempfile.NamedTemporaryFile(delete=False, suffix='.dssp')
         self.__current_complex_result = []
 
-        self.__proc = Process()
-        self.__proc.executable_path = DSSP_PATH
+        self.__proc = Process(DSSP_PATH, label='dssp')
         self.__proc.args = ['-i', self.__input.name, '-o', self.__output.name]
         self.__proc.output_text = True
         self.__proc.on_error = self.__on_error

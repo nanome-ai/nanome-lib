@@ -53,9 +53,11 @@ class _Bonding():
         self.__proc.on_done = self.__bonding_done
 
         if NANOBABEL_PATH:
+            self.__proc.label = 'nanobabel'
             self.__proc.executable_path = NANOBABEL_PATH
             self.__proc.args += ['bonding', '-i', self.__input.name, '-o', self.__output.name]
         elif OBABEL_PATH:
+            self.__proc.label = 'obabel'
             self.__proc.executable_path = OBABEL_PATH
             self.__proc.args += ['-ipdb', self.__input.name, '-osdf', '-O' + self.__output.name]
         else:
