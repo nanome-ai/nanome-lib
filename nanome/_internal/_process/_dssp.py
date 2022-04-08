@@ -107,7 +107,6 @@ class _Dssp():
         with open(self.__output.name) as f:
             lines = f.readlines()
         secondary = self.__parse_dssp(lines)
-        Logs.debug(secondary)
         self.__current_complex_result.append(secondary)
         self.__next()
 
