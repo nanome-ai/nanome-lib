@@ -33,7 +33,7 @@ async def exception_wrapper(fn, args, kwargs):
     https://docs.python.org/3.6/library/asyncio-dev.html?highlight=exception#detect-exceptions-never-consumed
     """
     try:
-        await fn(*args, **kwargs)
+        return await fn(*args, **kwargs)
     except CancelledError:
         # A user exiting and cancelling the request should not be logged as an error.
         Logs.message("Request was cancelled by the user.")
