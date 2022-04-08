@@ -40,7 +40,7 @@ class _Bonding():
     def _start(self):
         if len(self.__complexes) == 0:
             self.__done()
-            return
+            return self.__future
 
         self.__complex_idx = 0
         self.__molecule_idx = -1

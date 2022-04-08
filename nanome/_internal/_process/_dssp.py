@@ -45,7 +45,7 @@ class _Dssp():
         if DSSP_PATH == None:
             Logs.error("Unsupported platform, cannot call DSSP")
             self.__done()
-            return
+            return self.__future
 
         self.__complex_idx = 0
         self.__molecule_idx = -1
