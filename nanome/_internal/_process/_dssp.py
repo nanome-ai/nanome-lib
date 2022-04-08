@@ -71,17 +71,26 @@ class _Dssp():
         self.__molecule_idx += 1
         # first frame if conformer, all frames if in frames (may change)
         if self.__molecule_idx >= len(complex._molecules):
-            self.__update_secondary_structure(complex)
-            del self.__current_complex_result[:]
+            if self.__current_complex_result:
+                self.__update_secondary_structure(complex)
+                del self.__current_complex_result[:]
+
             self.__complex_idx += 1
             if self.__complex_idx >= len(self.__complexes):
                 self.__done()
                 return
-            complex = self.__complexes[self.__complex_idx]
+
             framed_complex = self.__framed_complexes[self.__complex_idx]
             self.__molecule_idx = 0
 
         molecule = framed_complex._molecules[self.__molecule_idx]
+
+        # skip molecule if it only contains hetatoms
+        has_only_het = all(a.is_het for a in molecule.atoms)
+        if has_only_het:
+            self.__next()
+            return
+
         single_frame = _Complex._create()
         single_frame._add_molecule(molecule)
         _pdb.to_file(self.__input.name, single_frame)
