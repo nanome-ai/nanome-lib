@@ -45,7 +45,7 @@ class _Dssp():
         if DSSP_PATH == None:
             Logs.error("Unsupported platform, cannot call DSSP")
             self.__done()
-            return
+            return self.__future
 
         self.__complex_idx = 0
         self.__molecule_idx = -1
@@ -53,8 +53,7 @@ class _Dssp():
         self.__output = tempfile.NamedTemporaryFile(delete=False, suffix='.dssp')
         self.__current_complex_result = []
 
-        self.__proc = Process()
-        self.__proc.executable_path = DSSP_PATH
+        self.__proc = Process(DSSP_PATH, label='dssp')
         self.__proc.args = ['-i', self.__input.name, '-o', self.__output.name]
         self.__proc.output_text = True
         self.__proc.on_error = self.__on_error
@@ -71,17 +70,26 @@ class _Dssp():
         self.__molecule_idx += 1
         # first frame if conformer, all frames if in frames (may change)
         if self.__molecule_idx >= len(complex._molecules):
-            self.__update_secondary_structure(complex)
-            del self.__current_complex_result[:]
+            if self.__current_complex_result:
+                self.__update_secondary_structure(complex)
+                del self.__current_complex_result[:]
+
             self.__complex_idx += 1
             if self.__complex_idx >= len(self.__complexes):
                 self.__done()
                 return
-            complex = self.__complexes[self.__complex_idx]
+
             framed_complex = self.__framed_complexes[self.__complex_idx]
             self.__molecule_idx = 0
 
         molecule = framed_complex._molecules[self.__molecule_idx]
+
+        # skip molecule if it only contains hetatoms
+        has_only_het = all(a.is_het for a in molecule.atoms)
+        if has_only_het:
+            self.__next()
+            return
+
         single_frame = _Complex._create()
         single_frame._add_molecule(molecule)
         _pdb.to_file(self.__input.name, single_frame)
@@ -99,7 +107,6 @@ class _Dssp():
         with open(self.__output.name) as f:
             lines = f.readlines()
         secondary = self.__parse_dssp(lines)
-        Logs.debug(secondary)
         self.__current_complex_result.append(secondary)
         self.__next()
 

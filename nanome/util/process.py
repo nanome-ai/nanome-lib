@@ -111,6 +111,19 @@ class Process():
         self.__request.bufsize = 1 if value else 0
 
     @property
+    def label(self):
+        """
+        | The label for this process to show in logs.
+
+        :type: :class:`str`
+        """
+        return self.__request.label
+
+    @label.setter
+    def label(self, value):
+        self.__request.label = value
+
+    @property
     def _id(self):
         return self.__request.id
 

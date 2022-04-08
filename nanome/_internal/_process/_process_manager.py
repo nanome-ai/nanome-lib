@@ -148,8 +148,8 @@ class _ProcessManager():
             session_id = entry.session._session_id
             label = entry.request.label
             id = label or exec_path
-            message = "Process Completed: {} returned exit code {} in {} seconds".format(
-                id, exit_code, elapsed_time)
+            message = "Process Completed: {} for Session {} returned exit code {} in {}s".format(
+                id, session_id, exit_code, elapsed_time)
             log_extra = {
                 'request_id': request_id,
                 'executable_path': exec_path,
