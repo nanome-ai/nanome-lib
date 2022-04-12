@@ -17,7 +17,7 @@ class ProcessManagerInstance():
         self.send(ProcessManager.CommandType.start, request)
 
     def stop_process(self, process):
-        self.send(ProcessManager.CommandType.stop, process._id)
+        self.send(ProcessManager.CommandType.stop, process.id)
 
     def send(self, type, data):
         from nanome._internal._util import ProcData
@@ -46,7 +46,7 @@ class ProcessManagerInstance():
         if type == ProcessManager.DataType.queued:
             process = self.__pending_start.popleft()
             process.on_queued()
-            process._id = data[1].id
+            process.id = data[1].id
             self.__processes[data[1].id] = process
         elif type == ProcessManager.DataType.position_changed:
             self.__processes[data[1]].on_queue_position_change(data[2])

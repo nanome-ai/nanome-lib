@@ -126,14 +126,6 @@ class Process():
         self.__request.label = value
 
     @property
-    def id(self):
-        return self.__request.id
-
-    @id.setter
-    def id(self, value):
-        self.__request.id = value
-
-    @property
     def timeout(self):
         """
         | The timeout in seconds for this process to be killed.
@@ -173,3 +165,11 @@ class Process():
         | Stops the process.
         """
         Process.manager.stop_process(self)
+    
+    @property
+    def id(self):
+        return self.__request.id
+
+    @id.setter
+    def id(self, value):
+        self.__request.id = value
