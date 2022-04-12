@@ -27,7 +27,7 @@ class ProcessManager():
         output = auto()
         done = auto()
 
-    class _CommandType(IntEnum):
+    class CommandType(IntEnum):
         start = auto()
         stop = auto()
 

@@ -126,11 +126,11 @@ class Process():
         self.__request.label = value
 
     @property
-    def _id(self):
+    def id(self):
         return self.__request.id
 
-    @_id.setter
-    def _id(self, value):
+    @id.setter
+    def id(self, value):
         self.__request.id = value
 
     @property
@@ -165,11 +165,11 @@ class Process():
             self.on_error(result.stderr)
             self._future.set_result(result.returncode)
         else:
-            Process._manager.start_process(self, self.__request)
+            Process.manager.start_process(self, self.__request)
         return self._future
 
     def stop(self):
         """
         | Stops the process.
         """
-        Process._manager.stop_process(self)
+        Process.manager.stop_process(self)

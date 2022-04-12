@@ -5,17 +5,25 @@ from collections import deque
 
 
 class ProcessManagerInstance():
+
     def __init__(self, pipe):
         self.__pipe = pipe
-        Process._manager = self
+        Process.manager = self
         self.__pending_start = deque()
         self.__processes = dict()
 
-    def _close(self):
-        try:
-            self.__pipe.close()
-        except BrokenPipeError:
-            pass
+    def start_process(self, process, request):
+        self.__pending_start.append(process)
+        self.send(ProcessManager.CommandType.start, request)
+
+    def stop_process(self, process):
+        self.send(ProcessManager.CommandType.stop, process._id)
+
+    def send(self, type, data):
+        from nanome._internal._util import ProcData
+        to_send = ProcData()
+        to_send._data = [type, data]
+        self.__pipe.send(to_send)
 
     def update(self):
         has_data = None
@@ -55,14 +63,9 @@ class ProcessManagerInstance():
             self.__processes[data[1]].on_output(data[2])
         else:
             Logs.error("Received unknown process data type")
-
-    def start_process(self, process, request):
-        self.__pending_start.append(process)
-        self.send(ProcessManager._CommandType.start, request)
-
-    def stop_process(self, process):
-        self.send(ProcessManager._CommandType.stop, process._id)
-
-    def send(self, type, data):
-        to_send = [type, data]
-        self.__pipe.send(to_send)
+    
+    def _close(self):
+        try:
+            self.__pipe.close()
+        except BrokenPipeError:
+            pass
