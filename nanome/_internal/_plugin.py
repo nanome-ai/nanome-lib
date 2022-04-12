@@ -1,5 +1,5 @@
 from nanome._internal import _network as Network
-from nanome._internal._process import _ProcessManager
+from nanome._internal._process import ProcessManager
 from nanome._internal._network._commands._callbacks._commands_enums import _Hashes
 from nanome._internal._network._serialization._serializer import Serializer
 from nanome._internal._util._serializers import _TypeSerializer
@@ -49,7 +49,7 @@ class _Plugin(object):
             self._pre_run()
 
         self._description['auth'] = self.__read_key()
-        self._process_manager = _ProcessManager()
+        self._process_manager = ProcessManager()
 
         self.__reconnect_attempt = 0
         self.__connect()

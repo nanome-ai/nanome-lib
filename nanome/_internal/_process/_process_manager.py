@@ -11,15 +11,15 @@ try:
 except ImportError:
     from Queue import Queue, Empty  # python 2.x
 
-from nanome._internal._process import _ProcessEntry
+from nanome._internal._process import ProcessEntry
 from nanome.util import Logs, IntEnum, auto
 
 POSIX = 'posix' in sys.builtin_module_names
 
 
-class _ProcessManager():
+class ProcessManager():
 
-    class _DataType(IntEnum):
+    class DataType(IntEnum):
         queued = auto()
         position_changed = auto()
         starting = auto()
@@ -44,7 +44,7 @@ class _ProcessManager():
                 if self.__update_process(proc) == False:
                     del self.__running[i]
 
-            spawn_count = min(_ProcessManager._max_process_count - len(self.__running), len(self.__pending))
+            spawn_count = min(ProcessManager._max_process_count - len(self.__running), len(self.__pending))
             if spawn_count > 0:
                 while spawn_count > 0:
                     self.__start_process()
@@ -52,14 +52,14 @@ class _ProcessManager():
 
                 count_before_exec = 1
                 for entry in self.__pending:
-                    entry.send(_ProcessManager._DataType.position_changed, [count_before_exec])
+                    entry.send(ProcessManager.DataType.position_changed, [count_before_exec])
                     count_before_exec += 1
         except:
             Logs.error("Exception in process manager update:\n", traceback.format_exc())
 
     def __start_process(self):
         entry = self.__pending.popleft()
-        entry.send(_ProcessManager._DataType.starting, [])
+        entry.send(ProcessManager.DataType.starting, [])
         request = entry.request
         args = [request.executable_path] + request.args
         has_text = entry.output_text
@@ -97,7 +97,7 @@ class _ProcessManager():
             Logs.message(msg, extra=extra)
         except:
             Logs.error("Couldn't execute process", exec_path, "Please check if executable is present and has permissions:\n", traceback.format_exc())
-            entry.send(_ProcessManager._DataType.done, [-1])
+            entry.send(ProcessManager.DataType.done, [-1])
             return
         entry.stdout_queue = Queue()
         entry.stderr_queue = Queue()
@@ -127,10 +127,10 @@ class _ProcessManager():
             pass
 
         if error:
-            entry.send(_ProcessManager._DataType.error, [error])
+            entry.send(ProcessManager.DataType.error, [error])
 
         if output:
-            entry.send(_ProcessManager._DataType.output, [output])
+            entry.send(ProcessManager.DataType.output, [output])
 
         # Check if timeout occurred
         timeout = getattr(entry.request, 'timeout')
@@ -165,7 +165,7 @@ class _ProcessManager():
                 Logs.message(message, extra=log_extra)
             else:
                 Logs.warning(message, extra=log_extra)
-            entry.send(_ProcessManager._DataType.done, [exit_code])
+            entry.send(ProcessManager.DataType.done, [exit_code])
             return False
         return True
 
@@ -188,13 +188,12 @@ class _ProcessManager():
 
     def received_request(self, data, session):
         type = data[0]
-        process_request = data[1]
-        if type == _ProcessManager._CommandType.start:
-            request = process_request
-            entry = _ProcessEntry(request, session)
+        if type == ProcessManager._CommandType.start:
+            request = data[1]
+            entry = ProcessEntry(request, session)
             self.__pending.append(entry)
-            session.send_process_data([_ProcessManager._DataType.queued, request])
-        elif type == _ProcessManager._CommandType.stop:
-            self.__stop_process(process_request)
+            session.send_process_data([ProcessManager.DataType.queued, request])
+        elif type == ProcessManager._CommandType.stop:
+            self.__stop_process(data[1])
         else:
             Logs.error("Received unknown process command type")

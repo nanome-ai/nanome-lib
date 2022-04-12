@@ -3,7 +3,7 @@ import sys
 from . import _DefaultPlugin
 from nanome._internal import _Plugin
 from nanome._internal.logs import LogsManager
-from nanome._internal._process import _ProcessManager
+from nanome._internal._process import ProcessManager
 from nanome.util.logs import Logs
 from nanome.util import config
 
@@ -121,7 +121,7 @@ class Plugin(_Plugin):
 
     @staticmethod
     def set_maximum_processes_count(max_process_nb):
-        _ProcessManager._max_process_count = max_process_nb
+        ProcessManager._max_process_count = max_process_nb
 
     @property
     def host(self):
