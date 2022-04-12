@@ -63,6 +63,8 @@ class _ProcessManager():
         request = entry.request
         args = [request.executable_path] + request.args
         has_text = entry.output_text
+        default_timeout = 60
+        timeout = getattr(entry.request, 'timeout', default_timeout)
 
         def enqueue_output(pipe, queue, text, bufsize):
             if text:
