@@ -23,10 +23,7 @@ class AsyncProcessTest(nanome.AsyncPluginInstance):
         p.on_output = Logs.message
         exit_code = await p.start()
         expected_code = 0
-        assert (
-            exit_code == expected_code,
-            f"Process returned {exit_code} instead of {expected_code}"
-        )
+        assert exit_code == expected_code, f"Process returned {exit_code} instead of {expected_code}"
 
         # test that timeout works
         proc = Process(label="sleep", timeout=1)
@@ -35,9 +32,6 @@ class AsyncProcessTest(nanome.AsyncPluginInstance):
         proc.args = ['2']
         exit_code = await proc.start()
         expected_code = -9
-        assert (
-            exit_code == expected_code,
-            f"Process return {exit_code} instead of {expected_code}"
-        )
+        assert exit_code == expected_code, f"Process return {exit_code} instead of {expected_code}"
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, False, AsyncProcessTest)
