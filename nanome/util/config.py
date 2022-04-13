@@ -40,6 +40,18 @@ PLUGIN_IGNORE
 __all__ = ['load_settings', 'fetch', 'set', 'create_parser']
 
 
+def str2bool(v):
+    """Accept various truthy/falsey values as boolean arguments."""
+    if isinstance(v, bool):
+        return v
+    if v.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    else:
+        raise argparse.ArgumentTypeError('Boolean value expected.')
+
+
 def create_parser():
     """Command Line Interface for Plugins.
 
@@ -127,12 +139,15 @@ def _get_environ_dict():
         'port': os.environ.get('NTS_PORT'),
         'key': os.environ.get('NTS_KEY'),
         'name': os.environ.get('PLUGIN_NAME'),
-        'verbose': os.environ.get('PLUGIN_VERBOSE'),
         'write_log_file': os.environ.get('PLUGIN_WRITE_LOG_FILE'),
         'remote_logging': os.environ.get('PLUGIN_REMOTE_LOGGING'),
         'auto_reload': os.environ.get('PLUGIN_AUTO_RELOAD'),
         'ignore': os.environ.get('PLUGIN_IGNORE'),
     }
+    # Only add verbose key if it is explicitly true (its a store_true arg)
+    verbose = str2bool(os.environ.get('PLUGIN_VERBOSE', False))
+    if verbose:
+        environ_dict['verbose'] = verbose
     serialized_dict = _serialize_dict_with_parser(environ_dict)
     return serialized_dict
 
@@ -198,15 +213,3 @@ def _serialize_dict_with_parser(args_dict):
             args_dict[field_name] = getattr(ns, field_name)
     args_dict = {k: v for k, v in args_dict.items() if v not in [None, '']}
     return args_dict
-
-
-def str2bool(v):
-    """Accept various truthy/falsey values as boolean arguments."""
-    if isinstance(v, bool):
-        return v
-    if v.lower() in ('yes', 'true', 't', 'y', '1'):
-        return True
-    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
-        return False
-    else:
-        raise argparse.ArgumentTypeError('Boolean value expected.')
