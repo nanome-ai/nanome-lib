@@ -136,7 +136,8 @@ class Process():
     @property
     def timeout(self):
         """
-        | The timeout for this process to be killed.
+        | The timeout in seconds for this process to be killed.
+        | Set to `None` for no timeout.
 
         :type: :class:`int`
         """
