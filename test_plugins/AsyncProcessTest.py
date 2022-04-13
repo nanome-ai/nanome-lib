@@ -14,7 +14,6 @@ class AsyncProcessTest(nanome.AsyncPluginInstance):
 
     @async_callback
     async def on_run(self):
-        Logs.debug("DEBUG MESSAGE")
         # Test basic process creation
         p = Process(label="echo hello world")
         p.executable_path = '/bin/echo'
