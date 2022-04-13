@@ -110,7 +110,8 @@ class _Plugin(object):
                 id = packet.session_id
                 self._sessions[id].signal_and_close_pipes()
                 del self._sessions[id]
-                logger.info("Session {} disconnected".format(id))
+                extra = {'session_id': id}
+                logger.info("Session {} disconnected".format(id), extra=extra)
             except Exception:
                 pass
         elif packet.packet_type == Network._Packet.packet_type_keep_alive:
@@ -293,7 +294,8 @@ class _Plugin(object):
         process.start()
         session.plugin_process = process
         self._sessions[session_id] = session
-        logger.info("Registered new session: {}".format(session_id))
+        extra = {'session_id': session_id}
+        logger.info("Registered new session: {}".format(session_id), extra=extra)
 
     def __logs_request(self, packet):
         try:
