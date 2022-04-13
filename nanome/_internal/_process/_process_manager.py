@@ -137,7 +137,7 @@ class ProcessManager():
         if timeout and time.time() - entry.start_time > timeout:
             entry.process.kill()
             message = "Process timed out after {} seconds".format(timeout)
-            entry.send(_ProcessManager._DataType.error, [message])
+            entry.send(ProcessManager.DataType.error, [message])
 
         # Check if process finished
         exit_code = entry.process.poll()
