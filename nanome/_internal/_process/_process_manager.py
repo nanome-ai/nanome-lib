@@ -183,7 +183,7 @@ class ProcessManager():
             self.__pending.remove(entry)
 
         for entry in running:
-            entry.process.terminate()
+            entry.process.kill()
             self.__running.remove(entry)
 
     def received_request(self, data, session):
