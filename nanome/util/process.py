@@ -136,9 +136,9 @@ class Process():
     @property
     def timeout(self):
         """
-        | The timeout for this process to show in logs.
+        | The timeout for this process to be killed.
 
-        :type: :class:`str`
+        :type: :class:`int`
         """
         return self.__request.timeout
 
