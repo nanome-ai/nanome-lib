@@ -35,24 +35,25 @@ class _ProcessManagerInstance():
 
     def __received_data(self, data):
         type = data[0]
-        if type == _ProcessManager._DataType.queued:
+        process_request = data[1]
+        if type == _ProcessManager.DataType.queued:
             process = self.__pending_start.popleft()
             process.on_queued()
-            process._id = data[1].id
-            self.__processes[data[1].id] = process
-        elif type == _ProcessManager._DataType.position_changed:
-            self.__processes[data[1]].on_queue_position_change(data[2])
-        elif type == _ProcessManager._DataType.starting:
-            self.__processes[data[1]].on_start()
-        elif type == _ProcessManager._DataType.done:
-            process = self.__processes[data[1]]
+            process.id = process_request.id
+            self.__processes[process_request.id] = process
+        elif type == _ProcessManager.DataType.position_changed:
+            self.__processes[process_request].on_queue_position_change(data[2])
+        elif type == _ProcessManager.DataType.starting:
+            self.__processes[process_request].on_start()
+        elif type == _ProcessManager.DataType.done:
+            process = self.__processes[process_request]
             if process._future is not None:
                 process._future.set_result(data[2])
             process.on_done(data[2])
-        elif type == _ProcessManager._DataType.error:
-            self.__processes[data[1]].on_error(data[2])
-        elif type == _ProcessManager._DataType.output:
-            self.__processes[data[1]].on_output(data[2])
+        elif type == _ProcessManager.DataType.error:
+            self.__processes[process_request].on_error(data[2])
+        elif type == _ProcessManager.DataType.output:
+            self.__processes[process_request].on_output(data[2])
         else:
             Logs.error("Received unknown process data type")
 
