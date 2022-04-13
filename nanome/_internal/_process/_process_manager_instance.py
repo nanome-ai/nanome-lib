@@ -36,24 +36,28 @@ class _ProcessManagerInstance():
     def __received_data(self, data):
         type = data[0]
         process_request = data[1]
+        output = None
+        if len(data) > 2:
+            output = data[2]
+
         if type == _ProcessManager.DataType.queued:
             process = self.__pending_start.popleft()
             process.on_queued()
             process.id = process_request.id
             self.__processes[process_request.id] = process
         elif type == _ProcessManager.DataType.position_changed:
-            self.__processes[process_request].on_queue_position_change(data[2])
+            self.__processes[process_request].on_queue_position_change(output)
         elif type == _ProcessManager.DataType.starting:
             self.__processes[process_request].on_start()
         elif type == _ProcessManager.DataType.done:
             process = self.__processes[process_request]
             if process._future is not None:
-                process._future.set_result(data[2])
-            process.on_done(data[2])
+                process._future.set_result(output)
+            process.on_done(output)
         elif type == _ProcessManager.DataType.error:
-            self.__processes[process_request].on_error(data[2])
+            self.__processes[process_request].on_error(output)
         elif type == _ProcessManager.DataType.output:
-            self.__processes[process_request].on_output(data[2])
+            self.__processes[process_request].on_output(output)
         else:
             Logs.error("Received unknown process data type")
 

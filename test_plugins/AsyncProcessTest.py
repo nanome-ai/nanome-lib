@@ -8,6 +8,7 @@ HAS_ADVANCED_OPTIONS = False
 
 
 class AsyncTest(nanome.AsyncPluginInstance):
+
     def start(self):
         self.on_run()
 
@@ -19,9 +20,19 @@ class AsyncTest(nanome.AsyncPluginInstance):
         p.output_text = True
         p.on_error = Logs.error
         p.on_output = Logs.message
-        await p.start()
-        # test executing process second time
-        await p.start()
+        exit_code = await p.start()
+        assert exit_code == 0, "Process did not return 0"
 
+        # test that timeout works
+        proc = Process(label="sleep", timeout=1)
+        proc.on_error = Logs.error
+        proc.executable_path = '/bin/sleep'
+        proc.args = ['2']
+        exit_code = await proc.start()
+        assert exit_code == -9, f"Process return exit code {exit_code} instead of -9"
+
+        # test executing process second time
+        exit_code = await p.start()
+        assert exit_code == 0, "Process did not return 0"
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, False, AsyncTest)

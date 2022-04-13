@@ -128,15 +128,18 @@ class _ProcessManager():
         except Empty:
             pass
 
-        # error = error[entry._processed_error:]
-        # entry._processed_error += len(error)
         if error:
             entry.send(_ProcessManager._DataType.error, [error])
 
-        # output = output[entry._processed_output:]
-        # entry._processed_output += len(output)
         if output:
             entry.send(_ProcessManager._DataType.output, [output])
+
+        # Check if timeout occurred
+        timeout = getattr(entry.request, 'timeout')
+        if time.time() - entry.start_time > timeout:
+            entry.process.kill()
+            message = "Process timed out after {} seconds".format(timeout)
+            entry.send(ProcessManager.DataType.error, [message])
 
         # Check if process finished
         exit_code = entry.process.poll()
