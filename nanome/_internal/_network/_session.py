@@ -24,8 +24,8 @@ class _Session(object):
                     return False
                 self._net_plugin.send(packet)
             if has_proc_data:
-                request = self._proc_plugin_pipe.recv()
-                self._process_manager._received_request(request._data, self)
+                proc_data = self._proc_plugin_pipe.recv()
+                self._process_manager.received_request(proc_data, self)
 
         except EOFError:
             Logs.error("Plugin encountered an error, please check the logs.", traceback.format_exc())

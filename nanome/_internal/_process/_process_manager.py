@@ -126,15 +126,18 @@ class _ProcessManager():
         except Empty:
             pass
 
-        # error = error[entry._processed_error:]
-        # entry._processed_error += len(error)
         if error:
             entry.send(_ProcessManager._DataType.error, [error])
 
-        # output = output[entry._processed_output:]
-        # entry._processed_output += len(output)
         if output:
             entry.send(_ProcessManager._DataType.output, [output])
+
+        # Check if timeout occurred
+        timeout = getattr(entry.request, 'timeout')
+        if timeout and time.time() - entry.start_time > timeout:
+            entry.process.kill()
+            message = "Process timed out after {} seconds".format(timeout)
+            entry.send(_ProcessManager._DataType.error, [message])
 
         # Check if process finished
         exit_code = entry.process.poll()
@@ -183,14 +186,15 @@ class _ProcessManager():
             entry.process.kill()
             self.__running.remove(entry)
 
-    def _received_request(self, data, session):
+    def received_request(self, data, session):
         type = data[0]
+        process_request = data[1]
         if type == _ProcessManager._CommandType.start:
-            request = data[1]
+            request = process_request
             entry = _ProcessEntry(request, session)
             self.__pending.append(entry)
             session.send_process_data([_ProcessManager._DataType.queued, request])
         elif type == _ProcessManager._CommandType.stop:
-            self.__stop_process(data[1])
+            self.__stop_process(process_request)
         else:
             Logs.error("Received unknown process command type")

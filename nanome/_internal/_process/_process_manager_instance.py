@@ -35,24 +35,29 @@ class _ProcessManagerInstance():
 
     def __received_data(self, data):
         type = data[0]
+        process_request = data[1]
+        output = None
+        if len(data) > 2:
+            output = data[2]
+
         if type == _ProcessManager._DataType.queued:
             process = self.__pending_start.popleft()
             process.on_queued()
-            process._id = data[1].id
-            self.__processes[data[1].id] = process
+            process.id = process_request.id
+            self.__processes[process_request.id] = process
         elif type == _ProcessManager._DataType.position_changed:
-            self.__processes[data[1]].on_queue_position_change(data[2])
+            self.__processes[process_request].on_queue_position_change(output)
         elif type == _ProcessManager._DataType.starting:
-            self.__processes[data[1]].on_start()
+            self.__processes[process_request].on_start()
         elif type == _ProcessManager._DataType.done:
-            process = self.__processes[data[1]]
+            process = self.__processes[process_request]
             if process._future is not None:
-                process._future.set_result(data[2])
-            process.on_done(data[2])
+                process._future.set_result(output)
+            process.on_done(output)
         elif type == _ProcessManager._DataType.error:
-            self.__processes[data[1]].on_error(data[2])
+            self.__processes[process_request].on_error(output)
         elif type == _ProcessManager._DataType.output:
-            self.__processes[data[1]].on_output(data[2])
+            self.__processes[process_request].on_output(output)
         else:
             Logs.error("Received unknown process data type")
 
@@ -64,7 +69,5 @@ class _ProcessManagerInstance():
         self.send(_ProcessManager._CommandType.stop, process._id)
 
     def send(self, type, data):
-        from nanome._internal._util import _ProcData
-        to_send = _ProcData()
-        to_send._data = [type, data]
+        to_send = [type, data]
         self.__pipe.send(to_send)

@@ -25,8 +25,9 @@ class Process():
             self.bufsize = 1
             self.cwd_path = None
             self.id = 0
+            self.timeout = None
 
-    def __init__(self, executable_path=None, args=None, output_text=None, buffer_lines=True, label=""):
+    def __init__(self, executable_path=None, args=None, output_text=None, buffer_lines=True, label="", timeout=300):
         self.on_queued = lambda: None
         self.on_queue_position_change = lambda _: None
         self.on_start = lambda: None
@@ -44,6 +45,7 @@ class Process():
         if output_text is not None:
             self.output_text = output_text
         self.buffer_lines = buffer_lines
+        self.timeout = timeout
 
     @property
     def executable_path(self):
@@ -130,6 +132,20 @@ class Process():
     @_id.setter
     def _id(self, value):
         self.__request.id = value
+
+    @property
+    def timeout(self):
+        """
+        | The timeout in seconds for this process to be killed.
+        | Set to `None` for no timeout.
+
+        :type: :class:`int`
+        """
+        return self.__request.timeout
+
+    @timeout.setter
+    def timeout(self, value):
+        self.__request.timeout = value
 
     def start(self):
         """
