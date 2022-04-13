@@ -139,15 +139,15 @@ def _get_environ_dict():
         'port': os.environ.get('NTS_PORT'),
         'key': os.environ.get('NTS_KEY'),
         'name': os.environ.get('PLUGIN_NAME'),
-        'verbose': str2bool(os.environ.get('PLUGIN_VERBOSE', False)),
         'write_log_file': os.environ.get('PLUGIN_WRITE_LOG_FILE'),
         'remote_logging': os.environ.get('PLUGIN_REMOTE_LOGGING'),
         'auto_reload': os.environ.get('PLUGIN_AUTO_RELOAD'),
         'ignore': os.environ.get('PLUGIN_IGNORE'),
     }
-    # If verbose is set to false, it must be removed entirely from dict (because it's a store_true arg type)
-    if 'verbose' in environ_dict and environ_dict['verbose'] is False:
-        environ_dict.pop('verbose')
+    # Only add verbose key if it is explicitly true (its a store_true arg)
+    verbose = str2bool(os.environ.get('PLUGIN_VERBOSE', False))
+    if verbose:
+        environ_dict['verbose'] = verbose
     serialized_dict = _serialize_dict_with_parser(environ_dict)
     return serialized_dict
 
