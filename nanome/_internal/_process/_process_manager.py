@@ -188,12 +188,13 @@ class ProcessManager():
 
     def received_request(self, data, session):
         type = data[0]
+        process_request = data[1]
         if type == ProcessManager.CommandType.start:
-            request = data[1]
+            request = process_request
             entry = ProcessEntry(request, session)
             self.__pending.append(entry)
             session.send_process_data([ProcessManager.DataType.queued, request])
         elif type == ProcessManager.CommandType.stop:
-            self.__stop_process(data[1])
+            self.__stop_process(process_request)
         else:
             Logs.error("Received unknown process command type")
