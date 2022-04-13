@@ -241,7 +241,7 @@ class _Plugin(object):
                 for id in to_remove:
                     self._sessions[id]._send_disconnection_message(self._plugin_id)
                     del self._sessions[id]
-                self._process_manager._update()
+                self._process_manager.update()
         except KeyboardInterrupt:
             self.__exit()
 

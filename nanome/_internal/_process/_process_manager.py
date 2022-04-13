@@ -37,7 +37,7 @@ class ProcessManager():
         self.__pending = deque()
         self.__running = []
 
-    def _update(self):
+    def update(self):
         try:
             for i in range(len(self.__running) - 1, -1, -1):
                 proc = self.__running[i]
