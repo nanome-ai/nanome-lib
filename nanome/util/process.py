@@ -165,7 +165,7 @@ class Process():
         | Stops the process.
         """
         Process.manager.stop_process(self)
-    
+
     @property
     def id(self):
         return self.__request.id

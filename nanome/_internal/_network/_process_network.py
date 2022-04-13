@@ -12,7 +12,7 @@ stop_bytes = bytearray("CLOSEPIPE", "utf-8")
 class NetworkProcess(object):
 
     _instance = None
-    
+
     def __init__(self, plugin, session_id, queue_net_in, queue_net_out, serializer, plugin_id, version_table):
         self._plugin = plugin
         self._session_id = session_id
@@ -27,7 +27,6 @@ class NetworkProcess(object):
         _CachedImageSerializer.session = session_id
 
         NetworkProcess._instance = self
-
 
     def _on_run(self):
         Logs.message("on_run called")

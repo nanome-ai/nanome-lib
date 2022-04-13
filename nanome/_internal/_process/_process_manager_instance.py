@@ -62,7 +62,7 @@ class ProcessManagerInstance():
             self.__processes[process_request].on_output(data[2])
         else:
             Logs.error("Received unknown process data type")
-    
+
     def _close(self):
         try:
             self.__pipe.close()
