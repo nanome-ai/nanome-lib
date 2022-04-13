@@ -7,13 +7,14 @@ CATEGORY = "testing"
 HAS_ADVANCED_OPTIONS = False
 
 
-class AsyncTest(nanome.AsyncPluginInstance):
+class AsyncProcessTest(nanome.AsyncPluginInstance):
 
     def start(self):
         self.on_run()
 
     @async_callback
     async def on_run(self):
+        # Test basic process creation
         p = Process(label="echo hello world")
         p.executable_path = '/bin/echo'
         p.args = ['hello world']
@@ -21,7 +22,11 @@ class AsyncTest(nanome.AsyncPluginInstance):
         p.on_error = Logs.error
         p.on_output = Logs.message
         exit_code = await p.start()
-        assert exit_code == 0, "Process did not return 0"
+        expected_code = 0
+        assert (
+            exit_code == expected_code,
+            f"Process returned {exit_code} instead of {expected_code}"
+        )
 
         # test that timeout works
         proc = Process(label="sleep", timeout=1)
@@ -29,10 +34,10 @@ class AsyncTest(nanome.AsyncPluginInstance):
         proc.executable_path = '/bin/sleep'
         proc.args = ['2']
         exit_code = await proc.start()
-        assert exit_code == -9, f"Process return exit code {exit_code} instead of -9"
+        expected_code = -9
+        assert (
+            exit_code == expected_code,
+            f"Process return {exit_code} instead of {expected_code}"
+        )
 
-        # test executing process second time
-        exit_code = await p.start()
-        assert exit_code == 0, "Process did not return 0"
-
-nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, False, AsyncTest)
+nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, False, AsyncProcessTest)
