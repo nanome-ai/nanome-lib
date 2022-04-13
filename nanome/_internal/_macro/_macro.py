@@ -1,7 +1,7 @@
 import nanome
 import string
 import random
-from nanome._internal._network import NetworkProcess
+from nanome._internal._network import PluginNetwork
 from nanome._internal._network._commands._callbacks import _Messages
 
 
@@ -18,22 +18,22 @@ class _Macro(object):
         return cls()
 
     def _save(self, all_users=False):
-        NetworkProcess._send(_Messages.save_macro, (self, all_users, _Macro._plugin_identifier), False)
+        PluginNetwork._send(_Messages.save_macro, (self, all_users, _Macro._plugin_identifier), False)
 
     def _run(self, callback=None):
         expects_response = callback is not None or nanome.PluginInstance._instance.is_async
-        id = NetworkProcess._send(_Messages.run_macro, self, expects_response)
+        id = PluginNetwork._send(_Messages.run_macro, self, expects_response)
         return nanome.PluginInstance._save_callback(id, callback)
 
     def _delete(self, all_users=False):
-        NetworkProcess._send(_Messages.delete_macro, (self, all_users, _Macro._plugin_identifier), False)
+        PluginNetwork._send(_Messages.delete_macro, (self, all_users, _Macro._plugin_identifier), False)
 
     @classmethod
     def _stop(cls):
-        NetworkProcess._send(_Messages.stop_macro, None, False)
+        PluginNetwork._send(_Messages.stop_macro, None, False)
 
     @classmethod
     def _get_live(cls, callback=None):
         expects_response = callback is not None or nanome.PluginInstance._instance.is_async
-        id = NetworkProcess._send(_Messages.get_macros, _Macro._plugin_identifier, expects_response)
+        id = PluginNetwork._send(_Messages.get_macros, _Macro._plugin_identifier, expects_response)
         return nanome.PluginInstance._save_callback(id, callback)

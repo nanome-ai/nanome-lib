@@ -46,7 +46,7 @@ class _Button(_UIBase):
         if func == None and self._hover_callback == None:  # Low hanging filter but there may be others
             return
         try:
-            nanome._internal._network.NetworkProcess._instance._send(
+            nanome._internal._network.PluginNetwork._instance._send(
                 nanome._internal._network._commands._callbacks._Messages.hook_ui_callback,
                 (nanome._internal._network._commands._serialization._UIHook.Type.button_hover, self._content_id),
                 False)

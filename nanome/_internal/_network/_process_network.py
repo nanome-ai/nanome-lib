@@ -9,7 +9,7 @@ stop_bytes = bytearray("CLOSEPIPE", "utf-8")
 # Plugin networking class, used from the instance processes
 
 
-class NetworkProcess(object):
+class PluginNetwork(object):
 
     _instance = None
 
@@ -26,7 +26,7 @@ class NetworkProcess(object):
 
         _CachedImageSerializer.session = session_id
 
-        NetworkProcess._instance = self
+        PluginNetwork._instance = self
 
     def _on_run(self):
         Logs.message("on_run called")
