@@ -32,7 +32,7 @@ class AsyncProcessTest(nanome.AsyncPluginInstance):
         proc.args = ['2']
         exit_code = await proc.start()
         expected_code = -9
-        assert exit_code == expected_code, f"Process return {exit_code} instead of {expected_code}"
+        assert exit_code == expected_code, f"Process returned {exit_code} instead of {expected_code}"
 
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, False, AsyncProcessTest)
