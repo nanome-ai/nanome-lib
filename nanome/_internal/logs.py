@@ -161,7 +161,7 @@ class LogsManager():
 
         existing_handler_types = set([type(hdlr) for hdlr in lib_logger.handlers])
 
-        self.console_handler = self.create_console_handler()
+        self.console_handler = self.create_console_handler(logging_level)
         self.log_file_handler = logging.NullHandler()
         self.nts_handler = logging.NullHandler()
 
@@ -177,7 +177,7 @@ class LogsManager():
                 plugin_logger.addHandler(self.log_file_handler)
 
         if self.remote_logging:
-            self.nts_handler = self.create_nts_handler(self.plugin)
+            self.nts_handler = self.create_nts_handler(self.plugin, logging_level)
             self.nts_handler.setLevel(logging_level)
             if type(self.nts_handler) not in existing_handler_types:
                 lib_logger.addHandler(self.nts_handler)
@@ -219,15 +219,17 @@ class LogsManager():
         return handler
 
     @staticmethod
-    def create_nts_handler(plugin=None):
+    def create_nts_handler(plugin=None, logging_level=logging.NOTSET):
         """Return handler that forwards logs to NTS."""
         handler = NTSLoggingHandler(plugin)
+        handler.setLevel(logging_level)
         return handler
 
     @staticmethod
-    def create_console_handler():
+    def create_console_handler(logging_level=logging.NOTSET):
         """Return handler that writes log to console."""
         handler = logging.StreamHandler()
+        handler.setLevel(logging_level)
         fmt = "%(message)s"
         color_formatter = ColorFormatter(fmt)
         handler.setFormatter(color_formatter)
