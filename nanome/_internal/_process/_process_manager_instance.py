@@ -40,23 +40,23 @@ class _ProcessManagerInstance():
         if len(data) > 2:
             output = data[2]
 
-        if type == _ProcessManager.DataType.queued:
+        if type == _ProcessManager._DataType.queued:
             process = self.__pending_start.popleft()
             process.on_queued()
             process.id = process_request.id
             self.__processes[process_request.id] = process
-        elif type == _ProcessManager.DataType.position_changed:
+        elif type == _ProcessManager._DataType.position_changed:
             self.__processes[process_request].on_queue_position_change(output)
-        elif type == _ProcessManager.DataType.starting:
+        elif type == _ProcessManager._DataType.starting:
             self.__processes[process_request].on_start()
-        elif type == _ProcessManager.DataType.done:
+        elif type == _ProcessManager._DataType.done:
             process = self.__processes[process_request]
             if process._future is not None:
                 process._future.set_result(output)
             process.on_done(output)
-        elif type == _ProcessManager.DataType.error:
+        elif type == _ProcessManager._DataType.error:
             self.__processes[process_request].on_error(output)
-        elif type == _ProcessManager.DataType.output:
+        elif type == _ProcessManager._DataType.output:
             self.__processes[process_request].on_output(output)
         else:
             Logs.error("Received unknown process data type")
@@ -69,7 +69,5 @@ class _ProcessManagerInstance():
         self.send(_ProcessManager._CommandType.stop, process._id)
 
     def send(self, type, data):
-        from nanome._internal._util import _ProcData
-        to_send = _ProcData()
-        to_send._data = [type, data]
+        to_send = [type, data]
         self.__pipe.send(to_send)

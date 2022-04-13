@@ -25,8 +25,9 @@ class Process():
             self.bufsize = 1
             self.cwd_path = None
             self.id = 0
+            self.timeout = None
 
-    def __init__(self, executable_path=None, args=None, output_text=None, buffer_lines=True, label="", timeout=60):
+    def __init__(self, executable_path=None, args=None, output_text=None, buffer_lines=True, label="", timeout=300):
         self.on_queued = lambda: None
         self.on_queue_position_change = lambda _: None
         self.on_start = lambda: None
