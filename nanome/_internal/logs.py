@@ -162,6 +162,7 @@ class LogsManager():
         existing_handler_types = set([type(hdlr) for hdlr in lib_logger.handlers])
 
         self.console_handler = self.create_console_handler()
+        self.console_handler.setLevel(logging_level)
         self.log_file_handler = logging.NullHandler()
         self.nts_handler = logging.NullHandler()
 
