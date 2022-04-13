@@ -149,7 +149,7 @@ class Process():
             future = loop.create_future()
             self._future = future
 
-        if self.manager is None:
+        if self._manager is None:
             nanome.util.Logs.warning("Running process outside of ProcessManager. This should only happen during unittests.")
             cmd = [self.executable_path] + self.args
             result = subprocess.run(cmd, capture_output=True, text=self.output_text)
@@ -157,14 +157,14 @@ class Process():
             self.on_error(result.stderr)
             self._future.set_result(result.returncode)
         else:
-            Process.manager.start_process(self, self.__request)
+            Process._manager.start_process(self, self.__request)
         return self._future
 
     def stop(self):
         """
         | Stops the process.
         """
-        Process.manager.stop_process(self)
+        Process._manager.stop_process(self)
 
     @property
     def id(self):
