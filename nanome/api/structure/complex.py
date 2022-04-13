@@ -1,6 +1,6 @@
 from nanome._internal._structure._complex import _Complex
 from nanome._internal import _PluginInstance
-from nanome._internal._network import _ProcessNetwork
+from nanome._internal._network import NetworkProcess
 from nanome._internal._network._commands._callbacks import _Messages
 from nanome.util import Matrix, Logs
 from .io import ComplexIO
@@ -284,12 +284,12 @@ class Complex(_Complex, Base):
     def register_complex_updated_callback(self, callback):
         self._complex_updated_callback = callback
         _PluginInstance._hook_complex_updated(self.index, callback)
-        _ProcessNetwork._send(_Messages.hook_complex_updated, self.index, False)
+        NetworkProcess._send(_Messages.hook_complex_updated, self.index, False)
 
     def register_selection_changed_callback(self, callback):
         self._selection_changed_callback = callback
         _PluginInstance._hook_selection_changed(self.index, callback)
-        _ProcessNetwork._send(_Messages.hook_selection_changed, self.index, False)
+        NetworkProcess._send(_Messages.hook_selection_changed, self.index, False)
 
     @staticmethod
     def align_origins(target_complex, *other_complexes):

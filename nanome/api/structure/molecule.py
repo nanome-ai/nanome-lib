@@ -1,7 +1,6 @@
 import nanome
 from nanome._internal._structure._molecule import _Molecule
-from nanome._internal._network import _ProcessNetwork
-from nanome._internal import _PluginInstance
+from nanome._internal._network import NetworkProcess
 from nanome._internal._network._commands._callbacks import _Messages
 
 from nanome.util import Logs
@@ -172,22 +171,22 @@ class Molecule(_Molecule, Base):
 
     def get_substructures(self, callback=None):
         expects_response = callback is not None or nanome.PluginInstance._instance.is_async
-        id = _ProcessNetwork._send(_Messages.substructure_request, (self.index, nanome.util.enums.SubstructureType.Unkown), expects_response)
+        id = NetworkProcess._send(_Messages.substructure_request, (self.index, nanome.util.enums.SubstructureType.Unkown), expects_response)
         return nanome.PluginInstance._save_callback(id, callback)
 
     def get_ligands(self, callback=None):
         expects_response = callback is not None or nanome.PluginInstance._instance.is_async
-        id = _ProcessNetwork._send(_Messages.substructure_request, (self.index, nanome.util.enums.SubstructureType.Ligand), expects_response)
+        id = NetworkProcess._send(_Messages.substructure_request, (self.index, nanome.util.enums.SubstructureType.Ligand), expects_response)
         return nanome.PluginInstance._save_callback(id, callback)
 
     def get_proteins(self, callback=None):
         expects_response = callback is not None or nanome.PluginInstance._instance.is_async
-        id = _ProcessNetwork._send(_Messages.substructure_request, (self.index, nanome.util.enums.SubstructureType.Protein), expects_response)
+        id = NetworkProcess._send(_Messages.substructure_request, (self.index, nanome.util.enums.SubstructureType.Protein), expects_response)
         return nanome.PluginInstance._save_callback(id, callback)
 
     def get_solvents(self, callback=None):
         expects_response = callback is not None or nanome.PluginInstance._instance.is_async
-        id = _ProcessNetwork._send(_Messages.substructure_request, (self.index, nanome.util.enums.SubstructureType.Solvent), expects_response)
+        id = NetworkProcess._send(_Messages.substructure_request, (self.index, nanome.util.enums.SubstructureType.Solvent), expects_response)
         return nanome.PluginInstance._save_callback(id, callback)
 
     # region deprecated

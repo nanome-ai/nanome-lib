@@ -20,7 +20,7 @@ class ProcessManagerInstance():
         self.send(ProcessManager.CommandType.stop, process.id)
 
     def send(self, type, data):
-        from nanome._internal._util import ProcData
+        from nanome._internal._util._proc_data import ProcData
         to_send = ProcData()
         to_send._data = [type, data]
         self.__pipe.send(to_send)
