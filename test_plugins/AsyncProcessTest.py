@@ -31,7 +31,7 @@ class AsyncProcessTest(nanome.AsyncPluginInstance):
         proc.executable_path = '/bin/sleep'
         proc.args = ['2']
         exit_code = await proc.start()
-        expected_code = -9
+        expected_code = Process.TIMEOUT_CODE
         assert exit_code == expected_code, f"Process returned {exit_code} instead of {expected_code}"
 
 
