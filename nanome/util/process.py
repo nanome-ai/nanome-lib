@@ -15,6 +15,7 @@ class Process():
     | A command-line process wrapper.
     """
     _manager = None
+    TIMEOUT_CODE = -9  # Exit code raised when process time out
 
     class _ProcessRequest():
         def __init__(self, label=None):
