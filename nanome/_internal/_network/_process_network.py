@@ -9,9 +9,24 @@ stop_bytes = bytearray("CLOSEPIPE", "utf-8")
 # Plugin networking class, used from the instance processes
 
 
-class _ProcessNetwork(object):
+class PluginNetwork(object):
 
     _instance = None
+
+    def __init__(self, plugin, session_id, queue_net_in, queue_net_out, serializer, plugin_id, version_table):
+        self._plugin = plugin
+        self._session_id = session_id
+        self._queue_net_in = queue_net_in
+        self._queue_net_out = queue_net_out
+        self._serializer = serializer
+        self._serializer._plugin_id = plugin_id
+        self._plugin_id = plugin_id
+        self._command_id = 0
+        self.__version_table = version_table
+
+        _CachedImageSerializer.session = session_id
+
+        PluginNetwork._instance = self
 
     def _on_run(self):
         Logs.message("on_run called")
@@ -92,18 +107,3 @@ class _ProcessNetwork(object):
                 return True
             callback(self, received_object, request_id)
         return True
-
-    def __init__(self, plugin, session_id, queue_net_in, queue_net_out, serializer, plugin_id, version_table):
-        self._plugin = plugin
-        self._session_id = session_id
-        self._queue_net_in = queue_net_in
-        self._queue_net_out = queue_net_out
-        self._serializer = serializer
-        self._serializer._plugin_id = plugin_id
-        self._plugin_id = plugin_id
-        self._command_id = 0
-        self.__version_table = version_table
-
-        _CachedImageSerializer.session = session_id
-
-        _ProcessNetwork._instance = self

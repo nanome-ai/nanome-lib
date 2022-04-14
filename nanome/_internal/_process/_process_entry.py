@@ -1,9 +1,9 @@
-class _ProcessEntry():
+class ProcessEntry():
     _current_process_id = 0
 
     def __init__(self, request, session):
-        request.id = _ProcessEntry._current_process_id
-        _ProcessEntry._current_process_id += 1
+        request.id = ProcessEntry._current_process_id
+        ProcessEntry._current_process_id += 1
         self.__request = request
         self.__session = session
         self.__process = None

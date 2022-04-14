@@ -1,7 +1,7 @@
 import nanome
 from nanome.util import Logs
-from nanome._internal._network import _ProcessNetwork, _Packet
-from nanome._internal._process import _ProcessManagerInstance
+from nanome._internal._network import PluginNetwork, _Packet
+from nanome._internal._process import ProcessManagerInstance
 from nanome._internal._network._commands._callbacks import _Messages
 from nanome._internal._network._commands._callbacks._commands_enums import _Hashes
 
@@ -36,8 +36,8 @@ class _PluginInstance(object):
         self._custom_data = custom_data
         self._permissions = permissions
 
-        self._network = _ProcessNetwork(self, session_id, queue_net_in, queue_net_out, serializer, plugin_id, version_table)
-        self._process_manager = _ProcessManagerInstance(proc_pipe)
+        self._network = PluginNetwork(self, session_id, queue_net_in, queue_net_out, serializer, plugin_id, version_table)
+        self._process_manager = ProcessManagerInstance(proc_pipe)
         self._log_pipe_conn = log_pipe_conn
         self._network._send_connect(_Messages.connect, [_Packet._compression_type(), original_version_table])
         Logs.debug("Plugin constructed for session", session_id)

@@ -4,7 +4,7 @@ import sys
 import unittest
 
 from nanome import Plugin, PluginInstance
-from nanome._internal._process import _ProcessManager
+from nanome._internal._process import ProcessManager
 from nanome.util import config
 
 if sys.version_info.major >= 3:
@@ -101,7 +101,7 @@ class PluginTestCase(unittest.TestCase):
     def test_set_maximum_processes_count(self):
         new_value = 5
         self.plugin.set_maximum_processes_count(new_value)
-        self.assertEqual(_ProcessManager._max_process_count, new_value)
+        self.assertEqual(ProcessManager._max_process_count, new_value)
 
     def test_pre_and_post_run(self):
         def test_callback_fn():

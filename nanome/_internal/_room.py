@@ -1,5 +1,5 @@
 import nanome
-from nanome._internal._network import _ProcessNetwork
+from nanome._internal._network import PluginNetwork
 from nanome._internal._network._commands._callbacks import _Messages
 
 
@@ -10,4 +10,4 @@ class _Room():
         pass
 
     def _set_skybox(self, skybox):
-        _ProcessNetwork._send(_Messages.set_skybox, skybox, False)
+        PluginNetwork._send(_Messages.set_skybox, skybox, False)

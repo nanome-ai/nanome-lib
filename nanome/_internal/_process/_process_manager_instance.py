@@ -1,21 +1,27 @@
 from nanome.util import Process, Logs
-from . import _ProcessManager
+from . import ProcessManager
 
 from collections import deque
 
 
-class _ProcessManagerInstance():
+class ProcessManagerInstance():
+
     def __init__(self, pipe):
         self.__pipe = pipe
         Process._manager = self
         self.__pending_start = deque()
         self.__processes = dict()
 
-    def _close(self):
-        try:
-            self.__pipe.close()
-        except BrokenPipeError:
-            pass
+    def start_process(self, process, request):
+        self.__pending_start.append(process)
+        self.send(ProcessManager.CommandType.start, request)
+
+    def stop_process(self, process):
+        self.send(ProcessManager.CommandType.stop, process.id)
+
+    def send(self, type, data):
+        proc_data = [type, data]
+        self.__pipe.send(proc_data)
 
     def update(self):
         has_data = None
@@ -40,34 +46,29 @@ class _ProcessManagerInstance():
         if len(data) > 2:
             output = data[2]
 
-        if type == _ProcessManager._DataType.queued:
+        if type == ProcessManager.DataType.queued:
             process = self.__pending_start.popleft()
             process.on_queued()
             process.id = process_request.id
             self.__processes[process_request.id] = process
-        elif type == _ProcessManager._DataType.position_changed:
+        elif type == ProcessManager.DataType.position_changed:
             self.__processes[process_request].on_queue_position_change(output)
-        elif type == _ProcessManager._DataType.starting:
+        elif type == ProcessManager.DataType.starting:
             self.__processes[process_request].on_start()
-        elif type == _ProcessManager._DataType.done:
+        elif type == ProcessManager.DataType.done:
             process = self.__processes[process_request]
             if process._future is not None:
                 process._future.set_result(output)
             process.on_done(output)
-        elif type == _ProcessManager._DataType.error:
+        elif type == ProcessManager.DataType.error:
             self.__processes[process_request].on_error(output)
-        elif type == _ProcessManager._DataType.output:
+        elif type == ProcessManager.DataType.output:
             self.__processes[process_request].on_output(output)
         else:
             Logs.error("Received unknown process data type")
 
-    def start_process(self, process, request):
-        self.__pending_start.append(process)
-        self.send(_ProcessManager._CommandType.start, request)
-
-    def stop_process(self, process):
-        self.send(_ProcessManager._CommandType.stop, process._id)
-
-    def send(self, type, data):
-        to_send = [type, data]
-        self.__pipe.send(to_send)
+    def _close(self):
+        try:
+            self.__pipe.close()
+        except BrokenPipeError:
+            pass
