@@ -76,15 +76,16 @@ class ProcessManager():
             pipe.close()
 
         try:
+            # Log process settings
+            exec_path = request.executable_path
+            session_id = entry.session._session_id
+
             entry.process = subprocess.Popen(
                 args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=request.bufsize,
                 cwd=request.cwd_path, encoding=request.encoding, universal_newlines=has_text,
                 close_fds=POSIX)
             entry.start_time = time.time()
 
-            # Log process settings
-            exec_path = request.executable_path
-            session_id = entry.session._session_id
             id = request.label or exec_path
             extra = {
                 'process_args': args,
