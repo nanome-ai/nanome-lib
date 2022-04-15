@@ -78,6 +78,10 @@ class _Plugin(object):
         self.__waiting_keep_alive = False
 
     def _run(self):
+        # set_start_method ensures consistent process behavior between Windows and Linux
+        if sys.version_info.major >= 3 and sys.version_info.minor >= 4:
+            multiprocessing.set_start_method('spawn', force=True)
+
         if os.name == "nt":
             signal.signal(signal.SIGBREAK, self.__on_termination_signal)
         else:
@@ -113,10 +117,6 @@ class _Plugin(object):
         :arg custom_data: Arbitrary data that can be passed to each instantiated PluginInstance
         :arg permissions: The permissions of the plugin.
         """
-        # set_start_method ensures consistent process behavior between Windows and Linux
-        if sys.version_info.major >= 3 and sys.version_info.minor >= 4:
-            multiprocessing.set_start_method('spawn', force=True)
-
         plugin_instance = plugin_instance_class()
         plugin_network = PluginNetwork(
             plugin_instance, session_id, queue_net_in, queue_net_out,
