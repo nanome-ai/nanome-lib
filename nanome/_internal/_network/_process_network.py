@@ -25,7 +25,6 @@ class PluginNetwork(object):
         self.__version_table = version_table
 
         _CachedImageSerializer.session = session_id
-
         PluginNetwork._instance = self
 
     def _on_run(self):
