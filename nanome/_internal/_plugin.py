@@ -1,5 +1,6 @@
 from nanome._internal import _network as Network
 from nanome._internal._process import ProcessManager
+from nanome._internal._network import PluginNetwork
 from nanome._internal._network._commands._callbacks._commands_enums import _Hashes
 from nanome._internal._network._serialization._serializer import Serializer
 from nanome._internal._util._serializers import _TypeSerializer
@@ -39,7 +40,7 @@ class _Plugin(object):
         permissions = permissions or []
         integrations = integrations or []
         self._sessions = dict()
-        self._process_manager = _ProcessManager()
+        self._process_manager = ProcessManager()
 
         if isinstance(tags, str):
             tags = [tags]
@@ -117,11 +118,11 @@ class _Plugin(object):
             multiprocessing.set_start_method('spawn', force=True)
 
         plugin_instance = plugin_instance_class()
-        process_network = _ProcessNetwork(
+        plugin_network = PluginNetwork(
             plugin_instance, session_id, queue_net_in, queue_net_out,
             serializer, plugin_id, version_table)
         plugin_instance._setup(
-            session_id, process_network, pipe_proc, log_pipe_conn,
+            session_id, plugin_network, pipe_proc, log_pipe_conn,
             original_version_table, custom_data, permissions)
         LogsManager.configure_child_process(plugin_instance)
         logger.debug("Starting plugin")
