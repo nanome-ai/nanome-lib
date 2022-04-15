@@ -27,7 +27,9 @@ class _PluginInstance(object):
     __complex_updated_callbacks = dict()
     __selection_changed_callbacks = dict()
 
-    def _setup(self, session_id, queue_net_in, queue_net_out, proc_pipe, log_pipe_conn, serializer, plugin_id, version_table, original_version_table, custom_data, permissions):
+    def _setup(
+        self, session_id, process_network, proc_pipe, log_pipe_conn,
+            original_version_table, custom_data, permissions):
         self._menus = {}
         self._run_text = "Run"
         self._run_usable = True
