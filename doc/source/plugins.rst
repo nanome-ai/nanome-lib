@@ -173,6 +173,7 @@ Event Handlers
 * ``on_advanced_settings``: Called when user presses "Advanced Settings"
 * ``on_complex_added``: Called whenever a complex is added to the workspace.
 * ``on_complex_removed``: Called whenever a complex is removed from the workspace.
+* ``on_complex_list_changed``: Called whenever a complex is added or removed from the workspace.
 * ``on_presenter_changed``: Called when room's presenter changes.
 
 Spatial Actions
