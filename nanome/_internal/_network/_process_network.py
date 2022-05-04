@@ -37,9 +37,11 @@ class PluginNetwork(object):
 
     def on_complex_added(self):
         self._plugin.on_complex_added()
+        self._plugin.on_complex_list_changed()
 
     def on_complex_removed(self):
         self._plugin.on_complex_removed()
+        self._plugin.on_complex_list_changed()
 
     def _on_presenter_change(self):
         # Reconfigure child process logs so presenter_info is refreshed.

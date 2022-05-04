@@ -75,6 +75,12 @@ class PluginInstance(_PluginInstance):
         """
         pass
 
+    def on_complex_list_changed(self):
+        """
+        | Called whenever a complex is added or removed from the workspace.
+        """
+        pass
+
     def on_presenter_change(self):
         """
         | Called when room's presenter changes.
