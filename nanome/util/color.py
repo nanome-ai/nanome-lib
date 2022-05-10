@@ -195,7 +195,7 @@ class Color(object):
 
         :rtype: class:`str`
         """
-        return hex(self._color)
+        return '#' + hex(self._color)[2:].rjust(8, '0')
 
     @property
     def rgb(self):
