@@ -56,6 +56,18 @@ class Color(object):
         self._color = r << 24 | g << 16 | b << 8 | a
 
     @classmethod
+    def from_hex(cls, value):
+        """
+        | Set color from hex after initializing.
+
+        :param value: Hex value of the color e.g. #ffffffff
+        :type value: :class:`str`
+        """
+        color = Color()
+        color.hex = value
+        return color
+
+    @classmethod
     def from_int(cls, value):
         """
         | Set color from int after initializing.
@@ -189,13 +201,30 @@ class Color(object):
         """
         return Color(whole_num=self._color)
 
-    def to_string_hex(self):
+    @property
+    def hex(self):
         """
-        | Returns a hex string representing the color.
+        | Hex string representing the RGBA color.
+        | e.g. #ffffffff
 
         :rtype: class:`str`
         """
-        return hex(self._color)
+        return '#' + hex(self._color)[2:].rjust(8, '0')
+
+    @hex.setter
+    def hex(self, value):
+        v = value.lower()
+        if v.startswith('#'):
+            v = v[1:]
+        if len(v) not in [3, 4, 6, 8]:
+            raise ValueError('Invalid hex value: ' + value)
+        if len(v) == 3:  # rgb -> rrggbb
+            v = v[0] + v[0] + v[1] + v[1] + v[2] + v[2]
+        if len(v) == 4:  # rgba -> rrggbbaa
+            v = v[0] + v[0] + v[1] + v[1] + v[2] + v[2] + v[3] + v[3]
+        if len(v) == 6:  # rrggbb -> rrggbbaa
+            v += 'ff'
+        self._color = int(v, 16)
 
     @property
     def rgb(self):
