@@ -1,9 +1,11 @@
-from datetime import date
-from pprint import pprint
+import logging
 
 from marshmallow import Schema, fields, post_load
 
-from nanome.api.structure import Complex
+from nanome.api import structure
+
+logging = logging.getLogger(__name__)
+
 
 class QuaternionSchema(Schema):
     x = fields.Float(required=True)
@@ -35,7 +37,18 @@ class ChainSchema(Schema):
 
 
 class MoleculeSchema(Schema):
-    id = fields.Integer(required=True)
+    index = fields.Integer(required=True)
+
+    @post_load
+    def make_molecule(self, data, **kwargs):
+        new_obj = structure.Molecule()
+        for key in data:
+            try:
+                setattr(new_obj, key, data[key])
+            except AttributeError:
+                logging.warning('Could not set attribute {}'.format(key))
+                pass
+        return new_obj
 
 
 class ComplexSchema(Schema):
@@ -55,12 +68,12 @@ class ComplexSchema(Schema):
 
     @post_load
     def make_complex(self, data, **kwargs):
-        comp = Complex()
+        new_obj = structure.Complex()
         for key in data:
             try:
-                setattr(comp, key, data[key])
+                setattr(new_obj, key, data[key])
             except AttributeError:
-                print(key)
+                logging.warning('Could not set attribute {}'.format(key))
                 pass
-        return comp
+        return new_obj
         
