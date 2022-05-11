@@ -1,19 +1,15 @@
 import os
+from nanome.api.ui import Menu
+from nanome.api.ui import LayoutNode
+from testing.utilities import *
 import unittest
-
-from nanome.api.ui import Menu, LayoutNode
 import tempfile
 
-from testing.utilities import *
-
-
 test_assets = os.getcwd() + ("/testing/test_assets")
-test_output_dir = "/tmp/testing/test_outputs"
+test_output_dir = os.getcwd() + ("/testing/test_outputs")
 
-BASE_DIR = os.path.join(os.path.dirname(__file__))
 
 class JsonTestCase(unittest.TestCase):
-
     def test_menu_json(self):
         test_path = test_assets + "/test_menu.json"
         output_path = tempfile.NamedTemporaryFile(suffix='.json').name
