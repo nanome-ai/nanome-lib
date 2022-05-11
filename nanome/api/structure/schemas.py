@@ -105,7 +105,6 @@ class MoleculeSchema(Schema):
                 setattr(new_obj, key, data[key])
             except AttributeError:
                 raise AttributeError('Could not set attribute {}'.format(key))
-
         return new_obj
 
 
