@@ -22,6 +22,34 @@ class Vector3Schema(Schema):
 
 class AtomSchema(Schema):
     index = fields.Integer(required=True)
+    selected = fields.Boolean()
+    labeled = fields.Boolean()
+    atom_rendering = fields.Boolean()
+    surface_rendering = fields.Boolean()
+    exists = fields.Boolean()
+    is_het = fields.Boolean()
+    occupancy = fields.Boolean()
+    bfactor = fields.Boolean()
+    acceptor = fields.Boolean()
+    donor = fields.Boolean()
+    polar_hydrogen = fields.Boolean()
+    in_conformer = fields.Boolean()
+    atom_mode = fields.Integer()  # Enum, see nanome.util.enums.AtomRenderingMode
+    serial = fields.Integer()
+    current_conformer = fields.Integer()
+    conformer_count = fields.Integer()
+    positions = fields.Integer()
+    label_text = fields.String()
+    atom_color = fields.String()
+    atom_scale = fields.Float()
+    surface_color = fields.Str()  # Hex color
+    symbol = fields.Str()
+    name = fields.Str()
+    position = fields.List(fields.Float, min=3, max=3)
+    formal_charge = fields.Float()
+    partial_charge = fields.Float()
+    vdw_radius = fields.Float()
+    alt_loc = fields.Str(max=1)
 
     @post_load
     def make_atom(self, data, **kwargs):
@@ -38,11 +66,12 @@ class BondSchema(Schema):
     index = fields.Integer(required=True)
     atom1 = fields.Integer()
     atom2 = fields.Integer()
+    kind = fields.Integer()  # Enum, see nanome.util.enums.Kind
 
     @post_load
     def make_bond(self, data, **kwargs):
         new_obj = structure.Bond()
-        # Manually create atom objects with provided index set
+        # Manually create atom objects with provided atoms set
         atom1 = structure.Atom()
         atom1.index = data.pop('atom1')
         atom2 = structure.Atom()
@@ -61,6 +90,17 @@ class ResidueSchema(Schema):
     index = fields.Integer(required=True)
     atoms = fields.List(fields.Nested(AtomSchema))
     bonds = fields.List(fields.Nested(BondSchema))
+    ribboned = fields.Boolean()
+    ribbon_size = fields.Float()
+    ribbon_mode = fields.Integer()  # Enum, see nanome.util.enums.RibbonMode
+    ribbon_color = fields.Str() # hex code
+    labeled = fields.Boolean()
+    label_text = fields.Str()
+    type = fields.Str()
+    serial = fields.Integer()
+    name = fields.Str()
+    secondary_structure = fields.Integer() # Enum, see nanome.util.enums.SecondaryStructure
+    ignored_alt_locs = fields.List(fields.Str())
 
     @post_load
     def make_residue(self, data, **kwargs):
