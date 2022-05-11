@@ -49,11 +49,6 @@ class Molecule(_Molecule, Base):
     
     @chains.setter
     def chains(self, chain_list):
-        """
-        | The chains of this complex
-
-        :type: :class:`generator` <:class:`~nanome.structure.Chain`>
-        """
         self._chains = chain_list
 
     @property
