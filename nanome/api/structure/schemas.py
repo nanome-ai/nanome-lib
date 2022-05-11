@@ -30,11 +30,12 @@ class AtomSchema(Schema):
             try:
                 setattr(new_obj, key, data[key])
             except AttributeError:
-                logging.warning('Could not set attribute {}'.format(key))
+                raise AttributeError('Could not set attribute {}'.format(key))
         return new_obj
 
+
 class BondSchema(Schema):
-    index = fields.Integer()
+    index = fields.Integer(required=True)
     atom1 = fields.Integer()
     atom2 = fields.Integer()
 
@@ -45,7 +46,7 @@ class BondSchema(Schema):
             try:
                 setattr(new_obj, key, data[key])
             except AttributeError:
-                logging.warning('Could not set attribute {}'.format(key))
+                raise AttributeError('Could not set attribute {}'.format(key))
         return new_obj
 
 class ResidueSchema(Schema):
@@ -60,7 +61,7 @@ class ResidueSchema(Schema):
             try:
                 setattr(new_obj, key, data[key])
             except AttributeError:
-                logging.warning('Could not set attribute {}'.format(key))
+                raise AttributeError('Could not set attribute {}'.format(key))
         return new_obj
 
 
@@ -76,7 +77,7 @@ class ChainSchema(Schema):
             try:
                 setattr(new_obj, key, data[key])
             except AttributeError:
-                logging.warning('Could not set attribute {}'.format(key))
+                raise AttributeError('Could not set attribute {}'.format(key))
         return new_obj
 
 
