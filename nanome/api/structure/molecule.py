@@ -46,6 +46,15 @@ class Molecule(_Molecule, Base):
         """
         for chain in self._chains:
             yield chain
+    
+    @chains.setter
+    def chains(self, chain_list):
+        """
+        | The chains of this complex
+
+        :type: :class:`generator` <:class:`~nanome.structure.Chain`>
+        """
+        self._chains = chain_list
 
     @property
     def residues(self):
@@ -155,6 +164,11 @@ class Molecule(_Molecule, Base):
     @property
     def current_conformer(self):
         return self._current_conformer
+    
+    @current_conformer.setter
+    def current_conformer(self, value: int):
+        self._current_conformer = value
+    
 
     def create_conformer(self, index):
         self._create_conformer(index)

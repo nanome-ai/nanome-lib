@@ -23,21 +23,70 @@ class Vector3Schema(Schema):
 class AtomSchema(Schema):
     index = fields.Integer(required=True)
 
+    @post_load
+    def make_atom(self, data, **kwargs):
+        new_obj = structure.Atom()
+        for key in data:
+            try:
+                setattr(new_obj, key, data[key])
+            except AttributeError:
+                logging.warning('Could not set attribute {}'.format(key))
+        return new_obj
 
 class BondSchema(Schema):
-    index = fields.Integer(required=True)
+    index = fields.Integer()
+    atom1 = fields.Integer()
+    atom2 = fields.Integer()
 
+    @post_load
+    def make_bond(self, data, **kwargs):
+        new_obj = structure.Bond()
+        for key in data:
+            try:
+                setattr(new_obj, key, data[key])
+            except AttributeError:
+                logging.warning('Could not set attribute {}'.format(key))
+        return new_obj
 
 class ResidueSchema(Schema):
     index = fields.Integer(required=True)
+    atoms = fields.List(fields.Nested(AtomSchema))
+    bonds = fields.List(fields.Nested(BondSchema))
+
+    @post_load
+    def make_residue(self, data, **kwargs):
+        new_obj = structure.Residue()
+        for key in data:
+            try:
+                setattr(new_obj, key, data[key])
+            except AttributeError:
+                logging.warning('Could not set attribute {}'.format(key))
+        return new_obj
 
 
 class ChainSchema(Schema):
     index = fields.Integer(required=True)
+    name = fields.Str()
+    residues = fields.Nested(ResidueSchema, many=True)
+
+    @post_load
+    def make_chain(self, data, **kwargs):
+        new_obj = structure.Chain()
+        for key in data:
+            try:
+                setattr(new_obj, key, data[key])
+            except AttributeError:
+                logging.warning('Could not set attribute {}'.format(key))
+        return new_obj
 
 
 class MoleculeSchema(Schema):
-    index = fields.Integer(required=True)
+    index = fields.Integer(default=-1)
+    chains = fields.List(fields.Nested(ChainSchema))
+    name = fields.Str()
+    associated = fields.List(fields.Str())
+    conformer_count = fields.Integer()
+    current_conformer = fields.Integer()
 
     @post_load
     def make_molecule(self, data, **kwargs):
@@ -46,8 +95,8 @@ class MoleculeSchema(Schema):
             try:
                 setattr(new_obj, key, data[key])
             except AttributeError:
-                logging.warning('Could not set attribute {}'.format(key))
-                pass
+                raise AttributeError('Could not set attribute {}'.format(key))
+
         return new_obj
 
 
