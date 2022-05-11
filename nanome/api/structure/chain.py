@@ -41,6 +41,10 @@ class Chain(_Chain, Base):
         for residue in self._residues:
             yield residue
 
+    @residues.setter
+    def residues(self, residue_list):
+        self._residues = residue_list
+
     @property
     def atoms(self):
         """

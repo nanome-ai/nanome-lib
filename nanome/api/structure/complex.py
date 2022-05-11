@@ -49,6 +49,10 @@ class Complex(_Complex, Base):
         for molecule in self._molecules:
             yield molecule
 
+    @molecules.setter
+    def molecules(self, molecule_list):
+        self._molecules = molecule_list
+
     @property
     def chains(self):
         """
