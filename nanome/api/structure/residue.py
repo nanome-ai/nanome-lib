@@ -73,6 +73,14 @@ class Residue(_Residue, Base):
         """
         for atom in self._atoms:
             yield atom
+    
+    @atoms.setter
+    def atoms(self, atom_list):
+        """
+        | The list of atoms within this residue
+        """
+        self._atoms = atom_list
+    
 
     @property
     def bonds(self):
@@ -81,6 +89,13 @@ class Residue(_Residue, Base):
         """
         for bond in self._bonds:
             yield bond
+    
+    @bonds.setter
+    def bonds(self, bond_list):
+        """
+        | The list of bonds within this residue
+        """
+        self._bonds = bond_list
     # endregion
 
     # region connections

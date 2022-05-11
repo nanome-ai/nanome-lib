@@ -42,6 +42,14 @@ class BondSchema(Schema):
     @post_load
     def make_bond(self, data, **kwargs):
         new_obj = structure.Bond()
+        # Manually create atom objects with provided index set
+        atom1 = structure.Atom()
+        atom1.index = data.pop('atom1')
+        atom2 = structure.Atom()
+        atom2.index = data.pop('atom2')
+        new_obj.atom1 = atom1
+        new_obj.atom2 = atom2
+
         for key in data:
             try:
                 setattr(new_obj, key, data[key])
