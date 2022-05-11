@@ -73,11 +73,10 @@ class Residue(_Residue, Base):
         """
         for atom in self._atoms:
             yield atom
-    
+
     @atoms.setter
     def atoms(self, atom_list):
         self._atoms = atom_list
-    
 
     @property
     def bonds(self):
@@ -86,7 +85,7 @@ class Residue(_Residue, Base):
         """
         for bond in self._bonds:
             yield bond
-    
+
     @bonds.setter
     def bonds(self, bond_list):
         self._bonds = bond_list
@@ -343,6 +342,7 @@ class Residue(_Residue, Base):
         @secondary_structure.setter
         def secondary_structure(self, value):
             self.parent.secondary_structure = value
+
 
     # endregion
 _Residue._create = Residue
