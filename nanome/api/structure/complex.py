@@ -51,9 +51,6 @@ class Complex(_Complex, Base):
     
     @molecules.setter
     def molecules(self, molecule_list):
-        """
-        | The list of molecules within this complex
-        """
         self._molecules = molecule_list
 
     @property

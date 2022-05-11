@@ -1,3 +1,4 @@
+import itertools
 import logging
 
 from marshmallow import Schema, fields, post_load
@@ -86,6 +87,7 @@ class BondSchema(Schema):
                 raise AttributeError('Could not set attribute {}'.format(key))
         return new_obj
 
+
 class ResidueSchema(Schema):
     index = fields.Integer(required=True)
     atoms = fields.List(fields.Nested(AtomSchema))
@@ -110,6 +112,9 @@ class ResidueSchema(Schema):
                 setattr(new_obj, key, data[key])
             except AttributeError:
                 raise AttributeError('Could not set attribute {}'.format(key))
+        for child in itertools.chain(new_obj.atoms, new_obj.bonds):
+            child._parent = new_obj
+
         return new_obj
 
 
@@ -126,6 +131,8 @@ class ChainSchema(Schema):
                 setattr(new_obj, key, data[key])
             except AttributeError:
                 raise AttributeError('Could not set attribute {}'.format(key))
+        for child in new_obj.residues:
+            child._parent = new_obj
         return new_obj
 
 
@@ -145,6 +152,8 @@ class MoleculeSchema(Schema):
                 setattr(new_obj, key, data[key])
             except AttributeError:
                 raise AttributeError('Could not set attribute {}'.format(key))
+        for child in new_obj.chains:
+            child._parent = new_obj
         return new_obj
 
 
@@ -162,7 +171,7 @@ class ComplexSchema(Schema):
     position = fields.List(fields.Float, min=3, max=3)
     rotation = fields.List(fields.Float, min=4, max=4)
     molecules = fields.List(fields.Nested(MoleculeSchema))
-
+        
     @post_load
     def make_complex(self, data, **kwargs):
         new_obj = structure.Complex()
@@ -172,5 +181,7 @@ class ComplexSchema(Schema):
             except AttributeError:
                 logging.warning('Could not set attribute {}'.format(key))
                 pass
+        for child in new_obj.molecules:
+            child._parent = new_obj
         return new_obj
         

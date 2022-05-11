@@ -68,18 +68,22 @@ class ComplexSchemaTestCase(unittest.TestCase):
         
         mol = next(new_comp.molecules)
         self.assertEqual(mol.index, molecule_dict['index'])
-
+        self.assertEqual(mol.complex, new_comp)
+        
         chain = next(mol.chains)
         self.assertEqual(chain.index, chain_dict['index'])
+        self.assertEqual(chain.molecule, mol)
 
         residue = next(chain.residues)
         self.assertEqual(residue.index, residue_dict['index'])
+        self.assertEqual(residue.chain, chain)
 
         atom = next(residue.atoms)
         self.assertEqual(atom.index, atom1_dict['index'])
+        self.assertEqual(atom.residue, residue)
 
         bond = next(residue.bonds)
         self.assertEqual(bond.atom1.index, bond_dict['atom1'])
         self.assertEqual(bond.atom2.index, bond_dict['atom2'])
-        
-
+        self.assertEqual(bond.residue, residue)
+        self.assertEqual(atom.complex, new_comp)
