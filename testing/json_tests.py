@@ -3,7 +3,6 @@ from nanome.api.ui import Menu
 from nanome.api.ui import LayoutNode
 from testing.utilities import *
 import unittest
-import tempfile
 
 test_assets = os.getcwd() + ("/testing/test_assets")
 test_output_dir = os.getcwd() + ("/testing/test_outputs")
