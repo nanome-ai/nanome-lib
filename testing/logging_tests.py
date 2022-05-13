@@ -12,7 +12,7 @@ else:
     from mock import MagicMock, patch
 
 
-class LoggingTestCase(unittest.TestCase):
+class PluginLoggingTestCase(unittest.TestCase):
 
     def setUp(self):
         self.plugin = Plugin('Test Plugin', 'Unit Test Plugin')
@@ -32,14 +32,13 @@ class LoggingTestCase(unittest.TestCase):
     def tearDownClass(cls):
         # Make sure remote logging always off after test.
         # Without this teardown, logging configs persist to tests run after this.
-        super(LoggingTestCase, cls).tearDownClass()
+        super(PluginLoggingTestCase, cls).tearDownClass()
         nanome_logger = logging.getLogger("nanome")
-        testing_logger = logging.getLogger('logging_tests')
-
+        testing_logger = logging.getLogger(__name__)
         nanome_logger.handlers = []
         testing_logger.handlers = []
 
-    @patch('nanome._internal._plugin._Plugin._loop')
+    @patch('nanome._internal._plugin._Plugin._run')
     @patch('nanome._internal._plugin.Network._NetInstance')
     @patch('nanome._internal.logs.NTSLoggingHandler.handle')
     def test_nts_handler_called(self, handle_mock, netinstance_mock, loop_mock):
@@ -120,37 +119,6 @@ class LoggingTestCase(unittest.TestCase):
         send_mock.assert_called()
 
     @patch('nanome._internal._plugin._Plugin._loop')
-    @patch('nanome._internal._plugin.Network._NetInstance.connect')
-    @patch('nanome._internal._plugin.Network._NetInstance.send')
-    def test_log_types(self, send_mock, connect_mock, loop_mock):
-        with patch.object(sys, 'argv', ['run.py', '-v', '--remote-logging', 'True', '--write-log-file', 'True']):
-            self.plugin.run(self.host, self.port, self.key)
-    
-        with self.assertLogs() as captured:
-            message = "This is a warning"
-            Logs.warning(message)
-            self.assertEqual(len(captured.records), 1) # check that there is only one log message
-            self.assertEqual(captured.records[0].getMessage(), message) # and it is the proper one
-
-        with self.assertLogs() as captured:
-            message = "This is an error"
-            Logs.error(message)
-            self.assertEqual(len(captured.records), 1) # check that there is only one log message
-            self.assertEqual(captured.records[0].getMessage(), message) # and it is the proper one
-
-        with self.assertLogs() as captured:
-            message = "This is a debug message"
-            Logs.debug(message)
-            self.assertEqual(len(captured.records), 1) # check that there is only one log message
-            self.assertEqual(captured.records[0].getMessage(), message) # and it is the proper one
-
-        with self.assertLogs() as captured:
-            message = "This is a regular messge"
-            Logs.message(message)
-            self.assertEqual(len(captured.records), 1) # check that there is only one log message
-            self.assertEqual(captured.records[0].getMessage(), message) # and it is the proper one
-
-    @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance')
     def test_console_handler_called(self, netinstance_mock, loop_mock):
         """Assert logs are always logged to the console."""
@@ -166,3 +134,38 @@ class LoggingTestCase(unittest.TestCase):
             with patch.object(console_handler, 'handle') as handle_mock:
                 Logs.message("Should be printed to console")
                 handle_mock.assert_called()
+
+
+class LogUtilTestCase(unittest.TestCase):
+    
+    def setUp(self):
+        self.logger = logging.getLogger(__name__)
+        self.logger.level = logging.DEBUG
+
+    def test_log_warning(self):
+        with self.assertLogs(self.logger, logging.WARNING) as captured:
+            message = "This is a warning"
+            Logs.warning(message)
+            self.assertEqual(len(captured.records), 1) # check that there is only one log message
+            self.assertEqual(captured.records[0].getMessage(), message) # and it is the proper one
+
+    def test_log_error(self):
+        with self.assertLogs(self.logger, logging.ERROR) as captured:
+            message = "This is an error"
+            Logs.error(message)
+            self.assertEqual(len(captured.records), 1) # check that there is only one log message
+            self.assertEqual(captured.records[0].getMessage(), message) # and it is the proper one
+
+    def test_log_debug(self):
+        with self.assertLogs(self.logger, logging.DEBUG) as captured:
+            message = "This is a debug message"
+            Logs.debug(message)
+            self.assertEqual(len(captured.records), 1) # check that there is only one log message
+            self.assertEqual(captured.records[0].getMessage(), message) # and it is the proper one
+
+    def test_log_message(self):
+        with self.assertLogs(self.logger, logging.INFO) as captured:
+            message = "This is a regular messge"
+            Logs.message(message)
+            self.assertEqual(len(captured.records), 1) # check that there is only one log message
+            self.assertEqual(captured.records[0].getMessage(), message) # and it is the proper one
