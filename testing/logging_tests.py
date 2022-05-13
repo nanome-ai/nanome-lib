@@ -23,7 +23,7 @@ class LoggingTestCase(unittest.TestCase):
         self.key = ''
 
         # Make it so that Logs logged in this module are handled the same as "nanome"
-        testing_logger = logging.getLogger(__name__)
+        testing_logger = logging.getLogger('logging_tests')
         nanome_logger = logging.getLogger('nanome')
         testing_logger.handlers = nanome_logger.handlers
         testing_logger.setLevel(logging.DEBUG)
@@ -34,7 +34,7 @@ class LoggingTestCase(unittest.TestCase):
         # Without this teardown, logging configs persist to tests run after this.
         super(LoggingTestCase, cls).tearDownClass()
         nanome_logger = logging.getLogger("nanome")
-        testing_logger = logging.getLogger('logging_tests')
+        testing_logger = logging.getLogger(__name__)
 
         nanome_logger.handlers = []
         testing_logger.handlers = []
@@ -122,14 +122,64 @@ class LoggingTestCase(unittest.TestCase):
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance.connect')
     @patch('nanome._internal._plugin.Network._NetInstance.send')
-    def test_log_types(self, send_mock, connect_mock, loop_mock):
-        with patch.object(sys, 'argv', ['run.py', '-v', '--remote-logging', 'True', '--write-log-file', 'True']):
+    def test_log_warning(self, *args):
+        with patch.object(sys, 'argv', ['run.py']):
             self.plugin.run(self.host, self.port, self.key)
 
-        Logs.warning("This is a warning")
-        Logs.error("This is an error")
-        Logs.debug("This is a debug message")
-        Logs.message("This is a regular message")
+        with self.assertLogs() as captured:
+            message = "This is a warning"
+            Logs.warning(message)
+            self.assertEqual(len(captured.records), 1) # check that there is only one log message
+            self.assertEqual(captured.records[0].getMessage(), message) # and it is the proper one
+
+    @patch('nanome._internal._plugin._Plugin._loop')
+    @patch('nanome._internal._plugin.Network._NetInstance.connect')
+    @patch('nanome._internal._plugin.Network._NetInstance.send')
+    def test_log_error(self, *args):
+        with patch.object(sys, 'argv', ['run.py']):
+            self.plugin.run(self.host, self.port, self.key)
+
+        with self.assertLogs() as captured:
+            message = "This is an error"
+            Logs.error(message)
+            self.assertEqual(len(captured.records), 1) # check that there is only one log message
+
+            self.assertEqual(captured.records[0].getMessage(), message) # and it is the proper one
+
+    @patch('nanome._internal._plugin._Plugin._loop')
+    @patch('nanome._internal._plugin.Network._NetInstance.connect')
+    @patch('nanome._internal._plugin.Network._NetInstance.send')
+    def test_log_debug(self, *args):
+        # -v flag not set, so debug messages should not be logged
+        with patch.object(sys, 'argv', ['run.py']):
+            self.plugin.run(self.host, self.port, self.key)
+        with self.assertLogs() as captured:
+            message = "This debug message should not be logged"
+            Logs.debug(message)
+            self.assertEqual(len(captured.records), 0) # check that there is only one log message
+        
+        # This time we should get the debug log
+        with patch.object(sys, 'argv', ['run.py', '-v']):
+            self.plugin.run(self.host, self.port, self.key)
+        
+        with self.assertLogs() as captured:
+            message = "This is a debug message"
+            Logs.debug(message)
+            self.assertEqual(len(captured.records), 1) # check that there is only one log message
+            self.assertEqual(captured.records[0].getMessage(), message) # and it is the proper one
+
+    @patch('nanome._internal._plugin._Plugin._loop')
+    @patch('nanome._internal._plugin.Network._NetInstance.connect')
+    @patch('nanome._internal._plugin.Network._NetInstance.send')
+    def test_log_message(self, *args):
+        with patch.object(sys, 'argv', ['run.py']):
+            self.plugin.run(self.host, self.port, self.key)
+
+        with self.assertLogs() as captured:
+            message = "This is a regular messge"
+            Logs.message(message)
+            self.assertEqual(len(captured.records), 1) # check that there is only one log message
+            self.assertEqual(captured.records[0].getMessage(), message) # and it is the proper one
 
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance')
