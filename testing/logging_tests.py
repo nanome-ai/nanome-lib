@@ -26,7 +26,11 @@ class PluginLoggingTestCase(unittest.TestCase):
         testing_logger = logging.getLogger(__name__)
         nanome_logger = logging.getLogger('nanome')
         testing_logger.handlers = nanome_logger.handlers
-        testing_logger.setLevel(logging.DEBUG)
+        testing_logger.setLevel(logging.INFO)
+        nanome_logger.setLevel(logging.WARNING)
+
+        # Hides noisy "Starting Plugin" output
+        logging.getLogger('nanome.api.plugin.Plugin.run').setLevel(logging.ERROR)
 
     @classmethod
     def tearDownClass(cls):
@@ -56,7 +60,7 @@ class PluginLoggingTestCase(unittest.TestCase):
         Logs.message('This should be forwarded to NTS.')
         handle_mock.assert_called()
 
-    @patch('nanome._internal._plugin._Plugin._loop')
+    @patch('nanome._internal._plugin._Plugin._run')
     @patch('nanome._internal._plugin.Network._NetInstance')
     @patch('nanome._internal.logs.NTSLoggingHandler.handle')
     def test_nts_handler_not_called(self, *args):
@@ -77,7 +81,7 @@ class PluginLoggingTestCase(unittest.TestCase):
         nts_handler = self.plugin._logs_manager.nts_handler
         self.assertTrue(isinstance(nts_handler, logging.NullHandler))
 
-    @patch('nanome._internal._plugin._Plugin._loop')
+    @patch('nanome._internal._plugin._Plugin._run')
     @patch('nanome._internal._plugin.Network._NetInstance')
     def test_file_handler_called(self, *args):
         """Assert if write_log_file is True, the log_file_handler is utilized."""
@@ -94,7 +98,7 @@ class PluginLoggingTestCase(unittest.TestCase):
         Logs.message('Log file handler should be called.')
         self.plugin._logs_manager.log_file_handler.handle.assert_called()
 
-    @patch('nanome._internal._plugin._Plugin._loop')
+    @patch('nanome._internal._plugin._Plugin._run')
     @patch('nanome._internal._plugin.Network._NetInstance')
     def test_file_handler_not_called(self, *args):
         """Assert if write_log_file is False, the log_file_handler is not utilized."""
@@ -118,7 +122,7 @@ class PluginLoggingTestCase(unittest.TestCase):
             self.plugin.run(self.host, self.port, self.key)
         send_mock.assert_called()
 
-    @patch('nanome._internal._plugin._Plugin._loop')
+    @patch('nanome._internal._plugin._Plugin._run')
     @patch('nanome._internal._plugin.Network._NetInstance')
     def test_console_handler_called(self, *args):
         """Assert logs are always logged to the console."""
@@ -140,7 +144,7 @@ class LogUtilTestCase(unittest.TestCase):
     
     def setUp(self):
         self.logger = logging.getLogger(__name__)
-        self.logger.level = logging.DEBUG
+        self.logger.setLevel(logging.INFO)
 
     def test_log_warning(self):
         with self.assertLogs(self.logger, logging.WARNING) as captured:
