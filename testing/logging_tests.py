@@ -141,7 +141,7 @@ class PluginLoggingTestCase(unittest.TestCase):
 
 
 class LogUtilTestCase(unittest.TestCase):
-    
+
     def setUp(self):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.INFO)
