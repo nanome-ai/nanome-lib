@@ -128,7 +128,6 @@ class LoggingTestCase(unittest.TestCase):
 
         Logs.warning("This is a warning")
         Logs.error("This is an error")
-        breakpoint()
         Logs.debug("This is a debug message")
         Logs.message("This is a regular message")
 
