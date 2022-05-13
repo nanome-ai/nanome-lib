@@ -42,7 +42,6 @@ class LoggingTestCase(unittest.TestCase):
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance')
     @patch('nanome._internal.logs.NTSLoggingHandler.handle')
-    @unittest.skip('')
     def test_nts_handler_called(self, handle_mock, netinstance_mock, loop_mock):
         """Assert logs get forwarded to NTS."""
         remote_logging = "True"
@@ -61,7 +60,6 @@ class LoggingTestCase(unittest.TestCase):
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance')
     @patch('nanome._internal.logs.NTSLoggingHandler.handle')
-    @unittest.skip('')
     def test_nts_handler_not_called(self, handle_mock, netinstance_mock, loop_mock):
         """Assert logs don't get forwarded to NTS if remote-logging is False."""
         remote_logging = False
@@ -82,7 +80,6 @@ class LoggingTestCase(unittest.TestCase):
 
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance')
-    @unittest.skip('')
     def test_file_handler_called(self, netinstance_mock, loop_mock):
         """Assert if write_log_file is True, the log_file_handler is utilized."""
         write_log_file = "True"
@@ -100,7 +97,6 @@ class LoggingTestCase(unittest.TestCase):
 
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance')
-    @unittest.skip('')
     def test_file_handler_not_called(self, netinstance_mock, loop_mock):
         """Assert if write_log_file is False, the log_file_handler is not utilized."""
         write_log_file = False
@@ -117,7 +113,6 @@ class LoggingTestCase(unittest.TestCase):
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance.connect')
     @patch('nanome._internal._plugin.Network._NetInstance.send')
-    @unittest.skip('')
     def test_nts_logger_handler(self, send_mock, connect_mock, loop_mock):
         """Ensure NTSLoggingHandler.handle() triggers a network request."""
         with patch.object(sys, 'argv', ['run.py', '--remote-logging', 'True']):
@@ -139,7 +134,6 @@ class LoggingTestCase(unittest.TestCase):
 
     @patch('nanome._internal._plugin._Plugin._loop')
     @patch('nanome._internal._plugin.Network._NetInstance')
-    @unittest.skip('')
     def test_console_handler_called(self, netinstance_mock, loop_mock):
         """Assert logs are always logged to the console."""
         testargs = [
