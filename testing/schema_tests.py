@@ -3,16 +3,13 @@ import unittest
 import json
 
 from nanome.api import structure
-from nanome._internal._structure._io._pdb.structure import structure
 
 # Schemas requirements are optional, so don't run tests if they are not installed.
-reqs_installed = False
+reqs_installed = True
 try:
     from nanome.api import schemas
 except ModuleNotFoundError:
-    pass
-else:
-    reqs_installed = True
+    reqs_installed = False
 
 test_assets = os.path.join(os.getcwd(), "testing/test_assets")
 workspace_json = os.path.join(test_assets, "serialized_data/benzene_workspace.json")
