@@ -192,20 +192,20 @@ class LayoutNode(_LayoutNode):
     
     @property
     def content(self):
-        return self.get_content()
+        return self._content
     
     @content.setter
     def content(self, ui_content):
-        self.set_content(ui_content)
+        self._content = ui_content
 
     def get_content(self):
-        return self._get_content()
+        return self.content
 
     def set_content(self, ui_content):
-        self._set_content(ui_content)
+        self.content = ui_content
 
     def remove_content(self):
-        self._remove_content()
+        self.content = None
 
     def add_child(self, child_node):
         self._add_child(child_node)

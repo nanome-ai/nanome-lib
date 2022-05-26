@@ -105,15 +105,16 @@ class _LayoutNode(object):
                 return found_val
         return None
 
-    def _append_all_content(self, all_content=None):
-        all_content = all_content or []
+    def _append_all_content(self, all_content):
+        """Recursively update all_content list with nested content."""
         if (self._content != None):
             all_content.append(self._content)
         for child in self._children:
             child._append_all_content(all_content)
         return all_content
 
-    def _append_all_nodes(self, all_nodes=[]):
+    def _append_all_nodes(self, all_nodes):
+        """Recursively update all_nodes list with nested nodes."""
         all_nodes.append(self)
         for child in self._children:
             child._append_all_nodes(all_nodes)

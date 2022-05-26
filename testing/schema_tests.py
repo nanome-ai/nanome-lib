@@ -47,8 +47,14 @@ class UISchemaTestCase(unittest.TestCase):
         self.assertTrue(isinstance(menu, ui.Menu))
         self.assertTrue(isinstance(menu.root, ui.LayoutNode))
 
-        # Make sure all content was generated the same way.
+        # Make sure all content was loaded.
         menu_content_types = [
             content.__class__ for content in menu.get_all_content()]
+        self.assertTrue(menu_content_types)
         test_menu_content_types = [content.__class__ for content in test_menu.get_all_content()]
         self.assertEqual(menu_content_types, test_menu_content_types)
+
+        # Test that multi state variables loaded correctly.
+        # test_menu_btn = next(content for content in test_menu.get_all_content() if isinstance(content, ui.Button))
+        # menu_btn = next(content for content in menu.get_all_content() if isinstance(content, ui.Button))
+        # pass
