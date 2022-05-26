@@ -17,7 +17,7 @@ pdb_file = os.path.join(test_assets, "pdb/1tyl.pdb")
 
 
 @unittest.skipIf(not reqs_installed, "Marshmallow not installed")
-class SerializerTestCase(unittest.TestCase):
+class StructureSchemaTestCase(unittest.TestCase):
 
     def test_load_workspace(self):
         with open(workspace_json, 'r') as f:
@@ -32,4 +32,3 @@ class SerializerTestCase(unittest.TestCase):
         self.assertTrue(isinstance(comp, structure.Complex))
         comp_json = schemas.ComplexSchema().dump(comp)
         self.assertTrue(isinstance(comp_json, dict))
-        

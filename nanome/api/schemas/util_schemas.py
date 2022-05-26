@@ -15,11 +15,6 @@ class EnumField(fields.Field):
         return self.enum(value)
 
 
-class StreamSchema(Schema):
-    stream_id = fields.Integer(required=True)
-    error = fields.Integer()
-
-
 class QuaternionField(fields.Field):
 
     def _serialize(self, value: Vector3, attr, obj, **kwargs):
