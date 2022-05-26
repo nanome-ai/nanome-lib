@@ -66,7 +66,6 @@ class LayoutNode(_LayoutNode):
     @padding_type.setter
     def padding_type(self, value):
         self._padding_type = value
-        self._save_changes()
 
     @property
     def layer(self):
@@ -80,7 +79,6 @@ class LayoutNode(_LayoutNode):
     @layer.setter
     def layer(self, value):
         self._layer = value
-        self._save_changes()
 
     @property
     def layout_orientation(self):
@@ -94,7 +92,6 @@ class LayoutNode(_LayoutNode):
     @layout_orientation.setter
     def layout_orientation(self, value):
         self._layout_orientation = value
-        self._save_changes()
 
     @property
     def sizing_type(self):
@@ -108,7 +105,6 @@ class LayoutNode(_LayoutNode):
     @sizing_type.setter
     def sizing_type(self, value):
         self._sizing_type = value
-        self._save_changes()
 
     @property
     def sizing_value(self):
@@ -123,7 +119,6 @@ class LayoutNode(_LayoutNode):
     @sizing_value.setter
     def sizing_value(self, value):
         self._sizing_value = value
-        self._save_changes()
 
     @property
     def forward_dist(self):
@@ -137,7 +132,6 @@ class LayoutNode(_LayoutNode):
     @forward_dist.setter
     def forward_dist(self, value):
         self._forward_dist = value
-        self._save_changes()
 
     @property
     def padding(self):
@@ -146,7 +140,6 @@ class LayoutNode(_LayoutNode):
     @padding.setter
     def padding(self, value):
         self._padding = value
-        self._save_changes()
 
     @property
     def parent(self):
@@ -188,6 +181,22 @@ class LayoutNode(_LayoutNode):
 
     def get_children(self):
         return self._get_children()
+
+    @property
+    def children(self):
+        return self._children
+    
+    @children.setter
+    def children(self, value):
+        self._children = value
+    
+    @property
+    def content(self):
+        return self.get_content()
+    
+    @content.setter
+    def content(self, ui_content):
+        self.set_content(ui_content)
 
     def get_content(self):
         return self._get_content()
