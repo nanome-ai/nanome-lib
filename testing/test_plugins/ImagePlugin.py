@@ -10,6 +10,7 @@ CATEGORY = "Test"
 HAS_ADVANCED_OPTIONS = False
 
 # Plugin
+TEST_ASSETS = os.path.join('testing', 'test_assets')
 
 
 class ImagePlugin(nanome.PluginInstance):
@@ -30,7 +31,8 @@ class ImagePlugin(nanome.PluginInstance):
         self.update_menu(self.menu)
 
     def create_image_menu(self):
-        self.menu = nanome.ui.Menu.io.from_json("ImageMenu.json")
+        menu_path = os.path.join(TEST_ASSETS, 'ImageMenu.json')
+        self.menu = nanome.ui.Menu.io.from_json(menu_path)
         root = self.menu.root
         image_node = root.find_node("ImageNode")
         self.image = image_node.add_new_image(os.path.expanduser("~/Desktop/png.png"))
