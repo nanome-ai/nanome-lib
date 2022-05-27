@@ -39,9 +39,9 @@ class StructureSchemaTestCase(unittest.TestCase):
 class UISchemaTestCase(unittest.TestCase):
 
     def test_load_menu(self):
+        """Ensure loading menu with serializers equivalent to Menu.io.from_json."""
         test_menu = ui.Menu.io.from_json(path=test_menu_json)
         with open(test_menu_json, 'r') as f:
-            """Deserialize a workspace from JSON."""
             menu_dict = json.load(f)
         menu = schemas.MenuSchema().load(menu_dict)
         self.assertTrue(isinstance(menu, ui.Menu))
@@ -55,6 +55,18 @@ class UISchemaTestCase(unittest.TestCase):
         self.assertEqual(menu_content_types, test_menu_content_types)
 
         # Test that multi state variables loaded correctly.
-        # test_menu_btn = next(content for content in test_menu.get_all_content() if isinstance(content, ui.Button))
-        # menu_btn = next(content for content in menu.get_all_content() if isinstance(content, ui.Button))
-        # pass
+        test_menu_btn = next(content for content in test_menu.get_all_content() if isinstance(content, ui.Button))
+        menu_btn = next(content for content in menu.get_all_content() if isinstance(content, ui.Button)) 
+        self.assertEqual(menu_btn.text.value.idle, test_menu_btn.text.value.idle)
+        self.assertEqual(menu_btn.text.value.highlighted, test_menu_btn.text.value.highlighted)
+        self.assertEqual(menu_btn.text.value.selected, test_menu_btn.text.value.selected)
+        self.assertEqual(menu_btn.text.value.unusable, test_menu_btn.text.value.unusable)
+        # Test outline values
+        self.assertEqual(menu_btn.outline.color.idle.hex, test_menu_btn.outline.color.idle.hex)
+        self.assertEqual(menu_btn.outline.color.highlighted.hex, test_menu_btn.outline.color.highlighted.hex)
+        self.assertEqual(menu_btn.outline.color.selected.hex, test_menu_btn.outline.color.selected.hex)
+        self.assertEqual(menu_btn.outline.color.unusable.hex, test_menu_btn.outline.color.unusable.hex)
+        self.assertEqual(menu_btn.outline.size.idle, test_menu_btn.outline.size.idle)
+        self.assertEqual(menu_btn.outline.size.highlighted, test_menu_btn.outline.size.highlighted)
+        self.assertEqual(menu_btn.outline.size.selected, test_menu_btn.outline.size.selected)
+        self.assertEqual(menu_btn.outline.size.unusable, test_menu_btn.outline.size.unusable)

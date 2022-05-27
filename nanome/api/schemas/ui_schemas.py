@@ -1,6 +1,6 @@
 from marshmallow import fields, Schema, post_load
 from .util_schemas import EnumField
-from nanome.util import enums
+from nanome.util import enums, Color
 from nanome.api import ui
 
 
@@ -10,8 +10,95 @@ class PositionSchema(Schema):
     z = fields.Float()
 
 
-class ColorField(fields.Int):
-    pass
+class ColorField(fields.Field):
+
+    def _serialize(self, value: Color, attr, obj, **kwargs):
+        return value.whole_num
+
+    def _deserialize(self, value, attr, data, **kwargs):
+        return Color.from_int(value)
+
+
+class MultiStateVariableSchema(Schema):
+    idle = fields.Field()
+    selected = fields.Field()
+    highlighted = fields.Field()
+    selected_highlighted = fields.Field()
+    unusable = fields.Field()
+    default = fields.Field()
+
+class MultiStateColorSchema(MultiStateVariableSchema):
+    idle = ColorField()
+    selected = ColorField()
+    highlighted = ColorField()
+    selected_highlighted = ColorField()
+    unusable = ColorField()
+    default = ColorField()
+
+
+class ButtonTextSchema(Schema):
+    value = fields.Nested(MultiStateVariableSchema)
+    bold = fields.Boolean()
+    color = ColorField()
+    active = fields.Boolean()
+    auto_size = fields.Boolean()
+    min_size = fields.Float()
+    max_size = fields.Float()
+    size = fields.Float()
+    underlined = fields.Boolean()
+    ellipsis = fields.Boolean()
+    padding_top = fields.Float()
+    padding_bottom = fields.Float()
+    padding_left = fields.Float()
+    padding_right = fields.Float()
+    line_spacing = fields.Float()
+    vertical_align = EnumField(enum=enums.VertAlignOptions)
+    horizontal_align = EnumField(enum=enums.HorizAlignOptions)
+
+
+class ButtonIconSchema(Schema):
+    value = fields.Nested(MultiStateVariableSchema)
+    color = ColorField()
+    active = fields.Boolean()
+    sharpness = fields.Float(min=0, max=1)
+    size = fields.Boolean()
+    ratio = fields.Float(min=0, max=1)
+    position = fields.List(fields.Float(min=0, max=1))
+    rotation = fields.List(fields.Float())
+    min_size = fields.Float()
+    max_size = fields.Float()
+    size = fields.Float()
+    padding_top = fields.Float()
+    padding_bottom = fields.Float()
+    padding_left = fields.Float()
+    padding_right = fields.Float()
+    vertical_align = EnumField(enum=enums.VertAlignOptions)
+    horizontal_align = EnumField(enum=enums.HorizAlignOptions)
+
+
+class ButtonMeshSchema(Schema):
+    color = ColorField()
+    enabled = MultiStateVariableSchema()
+    active = fields.Boolean()
+
+
+class ButtonOutlineSchema(Schema):
+    size = MultiStateVariableSchema()
+    color = ColorField()
+    active = fields.Boolean()
+
+
+class ButtonSwitchSchema(Schema):
+    active = fields.Boolean()
+    on_color = ColorField()
+    off_color = ColorField()
+
+
+class ButtonToolTipSchema(Schema):
+    title = fields.String()
+    content = fields.String()
+    bounds = fields.List(fields.Float(), min=3, max=3)
+    positioning_target = EnumField(enum=enums.ToolTipPositioning)
 
 
 class ButtonSchema(Schema):
@@ -39,11 +126,11 @@ class ButtonSchema(Schema):
     text_bold_highlighted = fields.Bool()
     text_bold_selected_highlighted = fields.Bool()
     text_bold_unusable = fields.Bool()
-    text_color_idle = fields.Int()
-    text_color_selected = fields.Int()
-    text_color_highlighted = fields.Int()
-    text_color_selected_highlighted = fields.Int()
-    text_color_unusable = fields.Int()
+    text_color_idle = ColorField()
+    text_color_selected = ColorField()
+    text_color_highlighted = ColorField()
+    text_color_selected_highlighted = ColorField()
+    text_color_unusable = ColorField()
     text_padding_top = fields.Float()
     text_padding_bottom = fields.Float()
     text_padding_left = fields.Float()
@@ -51,11 +138,11 @@ class ButtonSchema(Schema):
     text_line_spacing = fields.Float()
 
     icon_active = fields.Bool()
-    icon_color_idle = fields.Int()
-    icon_color_selected = fields.Int()
-    icon_color_highlighted = fields.Int()
-    icon_color_selected_highlighted = fields.Int()
-    icon_color_unusable = fields.Int()
+    icon_color_idle = ColorField()
+    icon_color_selected = ColorField()
+    icon_color_highlighted = ColorField()
+    icon_color_selected_highlighted = ColorField()
+    icon_color_unusable = ColorField()
     icon_sharpness = fields.Float()
     icon_size = fields.Float()
     icon_ratio = fields.Float()
@@ -90,6 +177,41 @@ class ButtonSchema(Schema):
     tooltip_positioning_target = fields.Integer()
     tooltip_positioning_origin = fields.Integer()
 
+    def load(self, data, *args, **kwargs):
+        text_values = {
+            'idle': data.pop('text_value_idle'),
+            'selected': data.pop('text_value_selected'),
+            'highlighted': data.pop('text_value_highlighted'),
+            'selected_highlighted': data.pop('text_value_selected_highlighted'),
+            'unusable': data.pop('text_value_unusable'),
+        }
+        outline_data = any([key.startswith('outline') for key in data.keys()])
+        if outline_data:
+            outline_values = {
+                'active': data.pop('outline_active'),
+                'size': {
+                    'idle': data.pop('outline_size_idle'),
+                    'selected': data.pop('outline_size_selected'),
+                    'highlighted': data.pop('outline_size_highlighted'),
+                    'selected_highlighted': data.pop('outline_size_selected_highlighted'),
+                    'unusable': data.pop('outline_size_unusable'),
+                },
+                'color': {
+                    'idle': data.pop('outline_color_idle'),
+                    'selected': data.pop('outline_color_selected'),
+                    'highlighted': data.pop('outline_color_highlighted'),
+                    'selected_highlighted': data.pop('outline_color_selected_highlighted'),
+                    'unusable': data.pop('outline_color_unusable'),
+                }
+            }
+        btn = super().load(data, *args, **kwargs)
+        btn.text.value.set_each(**text_values)
+        if outline_data:
+            btn.outline.size.set_each(**outline_values['size'])
+            multi_state_color = MultiStateColorSchema().load(outline_values['color'])
+            btn.outline.color.set_each(**multi_state_color)
+        return btn
+
     @post_load
     def make_obj(self, data, **kwargs):
         new_obj = ui.Button()
@@ -99,6 +221,7 @@ class ButtonSchema(Schema):
             except AttributeError:
                 raise AttributeError('Could not set attribute {}'.format(key))
         return new_obj
+
 
 class MeshSchema(Schema):
     type_name = fields.String(required=True)

@@ -1,5 +1,4 @@
 from nanome.util.enums import HorizAlignOptions, VertAlignOptions
-from nanome.util import Vector3, Color
 from nanome._internal._ui import _Button
 
 
