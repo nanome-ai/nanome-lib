@@ -185,15 +185,15 @@ class LayoutNode(_LayoutNode):
     @property
     def children(self):
         return self._children
-    
+
     @children.setter
     def children(self, value):
         self._children = value
-    
+
     @property
     def content(self):
         return self._content
-    
+
     @content.setter
     def content(self, ui_content):
         self._content = ui_content
