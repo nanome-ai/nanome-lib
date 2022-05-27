@@ -178,7 +178,6 @@ class ButtonSchema(Schema):
         multi_state_text = schema.load(text_values)
         btn.text.value.set_all("")  # Makes default empty string.
         btn.text.value.set_each(**multi_state_text)
-        assert btn.text.value.idle == multi_state_text['idle']
         if outline_data:
             multi_state_color = create_multi_state_schema(ColorField).load(outline_values['color'])
             multi_state_size = create_multi_state_schema(FloatRounded).load(outline_values['size'])
