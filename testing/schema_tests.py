@@ -1,16 +1,10 @@
 import json
 import os
 import unittest
-
-from nanome.api import structure, ui
-
 import difflib
 import pprint
 
-def compare_dicts(d1, d2):
-    return ('\n' + '\n'.join(difflib.ndiff(
-                   pprint.pformat(d1).splitlines(),
-                   pprint.pformat(d2).splitlines())))
+from nanome.api import structure, ui
 
 # Schemas requirements are optional, so don't run tests if they are not installed.
 reqs_installed = True
@@ -88,5 +82,4 @@ class UISchemaTestCase(unittest.TestCase):
         menu_dump = schemas.MenuSchema().dump(menu)
         second_menu = schemas.MenuSchema().load(menu_dump)
         second_menu_dump = schemas.MenuSchema().dump(second_menu)
-        # print(compare_dicts(menu_dump, second_menu_dump))
         self.assertEqual(menu_dump, second_menu_dump)
