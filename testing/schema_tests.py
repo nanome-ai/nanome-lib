@@ -1,6 +1,5 @@
 import json
 import os
-import tempfile
 import unittest
 
 from nanome.api import structure, ui
@@ -23,7 +22,7 @@ except ModuleNotFoundError:
 test_assets = os.path.join(os.getcwd(), "testing/test_assets")
 workspace_json = os.path.join(test_assets, "serialized_data/benzene_workspace.json")
 pdb_file = os.path.join(test_assets, "pdb/1tyl.pdb")
-test_menu_json = os.path.join(test_assets, "test_menu_1_btn.json")
+test_menu_json = os.path.join(test_assets, "test_menu_smina.json")
 
 
 @unittest.skipIf(not reqs_installed, "Marshmallow not installed")
@@ -65,7 +64,7 @@ class UISchemaTestCase(unittest.TestCase):
 
         # Test that multi state variables loaded correctly.
         test_menu_btn = next(content for content in test_menu.get_all_content() if isinstance(content, ui.Button))
-        menu_btn = next(content for content in menu.get_all_content() if isinstance(content, ui.Button)) 
+        menu_btn = next(content for content in menu.get_all_content() if isinstance(content, ui.Button))
         self.assertEqual(menu_btn.text.value.idle, test_menu_btn.text.value.idle)
         self.assertEqual(menu_btn.text.value.highlighted, test_menu_btn.text.value.highlighted)
         self.assertEqual(menu_btn.text.value.selected, test_menu_btn.text.value.selected)

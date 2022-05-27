@@ -1,7 +1,9 @@
 from marshmallow import fields, Schema, post_load
-from .util_schemas import EnumField
+from operator import attrgetter
+
 from nanome.util import enums, Color
 from nanome.api import ui
+from .util_schemas import EnumField
 
 
 class FloatRounded(fields.Float):
@@ -162,9 +164,10 @@ class ButtonSchema(Schema):
             }
         btn = super().load(data, *args, **kwargs)
         multi_state_text = MultiStateStringSchema().load(text_values)
+        btn.text.value.set_all("")  # Makes default empty string.
         btn.text.value.set_each(**multi_state_text)
+        assert btn.text.value.idle == multi_state_text['idle']
         if outline_data:
-            btn.outline.size.set_each(**outline_values['size'])
             multi_state_color = MultiStateColorSchema().load(outline_values['color'])
             multi_state_size = MultiStateFloatSchema().load(outline_values['size'])
             btn.outline.color.set_each(**multi_state_color)
@@ -188,7 +191,8 @@ class ButtonSchema(Schema):
         a way that you can replace underscores with dots to access them 
         from the root button
         """
-        from operator import attrgetter
+        if attr == 'text_value_idle':
+            breakpoint()
         if hasattr(obj, attr):
             return getattr(obj, attr)
         dotted_path = attr.replace('_', '.')
@@ -214,6 +218,7 @@ class ButtonSchema(Schema):
 
 class MeshSchema(Schema):
     type_name = fields.String(required=True)
+    mesh_color = ColorField()
 
     @post_load
     def make_obj(self, data, **kwargs):
@@ -228,6 +233,9 @@ class MeshSchema(Schema):
 
 class ImageSchema(Schema):
     type_name = fields.String(required=True)
+    color = ColorField()
+    file_path = fields.String()
+    scaling_option = EnumField(enum=enums.ScalingOptions)
     
     @post_load
     def make_obj(self, data, **kwargs):
@@ -260,6 +268,17 @@ class LoadingBarSchema(Schema):
 
 class LabelSchema(Schema):
     type_name = fields.String(required=True)
+    text = fields.String(attribute='text_value')
+    text_vertical_align = EnumField(enum=enums.VertAlignOptions)
+    text_horizontal_align = EnumField(enum=enums.HorizAlignOptions)
+    text_auto_size = fields.Bool()
+    text_max_size = FloatRounded()
+    text_min_size = FloatRounded()
+    text_size = FloatRounded()
+    text_color = ColorField()
+    text_bold = fields.Bool()
+    text_italics = fields.Bool()
+    text_underlined = fields.Bool()
 
     @post_load
     def make_obj(self, data, **kwargs):
@@ -276,6 +295,19 @@ class TextInputSchema(Schema):
     type_name = fields.String(required=True)
     max_length = fields.Int()
     placeholder_text = fields.Str()
+    placeholder_text_color = ColorField()
+    text_color = ColorField()
+    background_color = ColorField()
+    text_size = FloatRounded()
+    text_horizontal_align = EnumField(enum=enums.HorizAlignOptions)
+    text_vertical_align = EnumField(enum=enums.VertAlignOptions)
+    padding_left = FloatRounded()
+    padding_right = FloatRounded()
+    padding_top = FloatRounded()
+    padding_bottom = FloatRounded()
+    password = fields.Bool()
+    number = fields.Bool()
+    multi_line = fields.Bool()
     input_text = fields.Str()
 
     @post_load
@@ -307,8 +339,19 @@ class SliderSchema(Schema):
         return new_obj
 
 
+class DropdownItemSchema(Schema):
+    name = fields.String()
+    close_on_selected = fields.Bool()
+    selected = fields.Bool()
+
+
 class DropdownSchema(Schema):
     type_name = fields.String(required=True)
+    permanent_title = fields.String()
+    use_permanent_title = fields.Bool()
+    max_displayed_items = fields.Integer(min=0)
+    items = fields.List(fields.Nested(DropdownItemSchema))
+    unusable = fields.Bool()
 
     @post_load
     def make_obj(self, data, **kwargs):
@@ -321,9 +364,6 @@ class DropdownSchema(Schema):
         return new_obj
 
 
-class DropdownItemSchema(Schema):
-    type_name = fields.String(required=True)
-    pass
 
 
 class UIListSchema(Schema):
@@ -352,9 +392,9 @@ class ContentSchema(Schema):
         'Image': ImageSchema(),
         'Label': LabelSchema(),
         'Text Input': TextInputSchema(),
+        'TextInput': TextInputSchema(),
         'Slider': SliderSchema(),
         'Dropdown': DropdownSchema(),
-        'DropdownItem': DropdownItemSchema(),
         'List': UIListSchema(),
         'LoadingBar': LoadingBarSchema()
     }
