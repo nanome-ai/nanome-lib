@@ -1,0 +1,35 @@
+from marshmallow import Schema, fields, post_load
+from nanome.util import enums
+from .util_schemas import EnumField, ColorField, Vector3Field
+
+
+class AnchorSchema(Schema):
+    anchor_type = EnumField(enum=enums.ShapeAnchorType)
+    target = fields.Integer()
+    local_offset = Vector3Field()
+    global_offset = Vector3Field()
+
+
+class ShapeSchema(Schema):
+    index = fields.String()
+    shape_type = EnumField(enum=enums.ShapeType)
+    color = ColorField()
+    anchors = fields.List(fields.Nested('AnchorSchema'))
+
+
+class LabelSchema(ShapeSchema):
+    text = fields.String()
+    font_size = fields.Integer()
+    text = fields.String()
+    font_size = fields.Float()
+
+
+class MeshSchema(ShapeSchema):
+    vertices = fields.List(fields.Float)
+    normals = fields.List(fields.Float)
+    triangles = fields.List(fields.Int)
+    colors = fields.List(fields.Int)
+
+
+class SphereSchema(ShapeSchema):
+    radius = fields.Float()

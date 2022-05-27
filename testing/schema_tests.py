@@ -1,10 +1,9 @@
 import json
 import os
 import unittest
-import difflib
-import pprint
 
-from nanome.api import structure, ui
+from nanome.api import structure, ui, shapes
+from nanome.util import Vector3, enums, Color
 
 # Schemas requirements are optional, so don't run tests if they are not installed.
 reqs_installed = True
@@ -83,3 +82,65 @@ class UISchemaTestCase(unittest.TestCase):
         second_menu = schemas.MenuSchema().load(menu_dump)
         second_menu_dump = schemas.MenuSchema().dump(second_menu)
         self.assertEqual(menu_dump, second_menu_dump)
+
+
+@unittest.skipIf(not reqs_installed, "Marshmallow not installed")
+class ShapeSchemaTestCase(unittest.TestCase):
+
+    def test_dump_sphere(self):
+        radius = 5
+        color = Color.Blue()
+        sphere1_position = Vector3(25, 100, 50)
+        # Serialize sphere anchored to point in Workspace
+        sphere1 = shapes.Sphere()
+        sphere1.radius = radius
+        sphere1.color = color
+        anchor1 = sphere1.anchors[0]
+        anchor1.anchor_type == enums.ShapeAnchorType.Workspace
+        anchor1.local_offset = sphere1_position
+        schema = schemas.SphereSchema()
+        sphere1_dict = schema.dump(sphere1)
+        self.assertEqual(sphere1_dict['radius'], radius)
+        self.assertEqual(sphere1_dict['color'], list(color.rgba))
+        anchor_dict = sphere1_dict['anchors'][0]
+        anchor1.anchor_type == enums.ShapeAnchorType.Workspace
+        self.assertEqual(
+            anchor_dict['local_offset'],
+            list(sphere1_position.unpack()))
+
+    def test_dump_label(self):
+        # Lets add a label that's centered on the line.
+        label = shapes.Label()
+        label.text = 'Label'
+        anchor = label.anchors[0]
+        for anchor in label.anchors:
+            anchor.viewer_offset = Vector3(0, 0, -.1)
+        label_dict = schemas.LabelSchema().dump(label)
+        self.assertEqual(label_dict['text'], label.text)
+
+    def test_dump_mesh(self):
+        mesh = shapes.Mesh()
+        # Create a cube
+        mesh.vertices = [
+        0.0, 20.0, 20.0,  0.0, 0.0, 20.0,  20.0, 0.0, 20.0,  20.0, 20.0, 20.0,
+        0.0, 20.0, 0.0,  0.0, 0.0, 0.0,  20.0, 0.0, 0.0,  20.0, 20.0, 0.0]
+        mesh.normals = [
+        -0.408, 0.408, 0.817,  -0.667, -0.667, 0.333,  0.408, -0.408, 0.817,
+        0.667, 0.667, 0.333,  -0.667, 0.667, -0.333,  -0.408, -0.408, -0.817,
+        0.667, -0.667, -0.333,  0.408, 0.408, -0.817]
+        mesh.triangles = [
+        0,1,2, 0,2,3, 7,6,5, 7,5,4, 3,2,6, 3,6,7, 4,0,3, 4,3,7, 4,5,1,
+        4,1,0, 1,5,6, 1,6,2]
+
+        mesh.anchors[0].anchor_type = enums.ShapeAnchorType.Workspace
+        mesh.anchors[0].position = Vector3(0, 0, 0)
+        mesh.color = Color(255, 255, 255, 255)
+        mesh.colors = [
+                1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0,
+                0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0,
+                0.0, 0.0, 1.0, 1.0]
+        mesh_dict = schemas.MeshSchema().dump(mesh)
+        self.assertEqual(mesh_dict['vertices'], mesh.vertices)
+        self.assertEqual(mesh_dict['normals'], mesh.normals)
+        self.assertEqual(mesh_dict['triangles'], mesh.triangles)
+        self.assertEqual(mesh_dict['colors'], mesh.colors)

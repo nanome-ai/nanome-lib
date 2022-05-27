@@ -4,6 +4,7 @@ from . import Shape
 
 
 class Label(_Label, Shape):
+
     def __init__(self):
         Shape.__init__(self, ShapeType.Label)
         _Label.__init__(self)
