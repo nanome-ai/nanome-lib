@@ -7,6 +7,7 @@ from nanome.util import ComplexUtils
 
 test_assets = os.path.join(os.getcwd(), 'testing', 'test_assets')
 
+
 class ComplexUtilsTestCase(unittest.TestCase):
     def setUp(self):
         super(ComplexUtilsTestCase, self).setUp()
