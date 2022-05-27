@@ -3,7 +3,7 @@ import os
 
 from nanome.api import structure as struct
 from nanome._internal._structure._helpers import _conformer_helper as conformer
-from testing.utilities import TestOptions, create_full_tree, assert_equal
+from testing.unit.utilities import TestOptions, create_full_tree, assert_equal
 import unittest
 from nanome.util import Logs, Vector3
 

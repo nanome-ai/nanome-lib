@@ -3,7 +3,7 @@ import tempfile
 import unittest
 
 from nanome.api import structure as struct
-from testing.utilities import assert_equal, assert_not_equal, TestOptions
+from testing.unit.utilities import assert_equal, assert_not_equal, TestOptions
 
 
 test_assets = os.getcwd() + ("/testing/test_assets")

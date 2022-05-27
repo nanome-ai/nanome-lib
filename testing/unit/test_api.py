@@ -1,7 +1,7 @@
 import os
 from nanome._internal import _ui, _structure
 from nanome.api import ui, structure
-from testing.utilities import assert_equal
+from testing.unit.utilities import assert_equal
 
 import unittest
 

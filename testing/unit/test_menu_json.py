@@ -1,7 +1,7 @@
 import os
 from nanome.api.ui import Menu
 from nanome.api.ui import LayoutNode
-from testing.utilities import *
+from testing.unit.utilities import *
 import unittest
 import tempfile
 
