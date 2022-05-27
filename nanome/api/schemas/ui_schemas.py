@@ -3,11 +3,18 @@ from .util_schemas import EnumField
 from nanome.util import enums, Color
 from nanome.api import ui
 
+class FloatRounded(fields.Float):
+    """If decimal part of float is 0, round to int."""
+    def _serialize(self, value, attr, obj, **kwargs):
+        if value % 1 == 0:
+            return int(value)
+        else:
+            return value
 
 class PositionSchema(Schema):
-    x = fields.Float()
-    y = fields.Float()
-    z = fields.Float()
+    x = FloatRounded()
+    y = FloatRounded()
+    z = FloatRounded()
 
 
 class ColorField(fields.Field):
@@ -29,12 +36,12 @@ class MultiStateColorSchema(Schema):
 
 
 class MultiStateFloatSchema(Schema):
-    idle = fields.Float()
-    selected = fields.Float()
-    highlighted = fields.Float()
-    selected_highlighted = fields.Float()
-    unusable = fields.Float()
-    default = fields.Float()
+    idle = FloatRounded()
+    selected = FloatRounded()
+    highlighted = FloatRounded()
+    selected_highlighted = FloatRounded()
+    unusable = FloatRounded()
+    default = FloatRounded()
 
 class MultiStateStringSchema(Schema):
     idle = fields.String()
@@ -56,9 +63,9 @@ class ButtonSchema(Schema):
     text_value_selected_highlighted = fields.String()
     text_value_unusable = fields.String()
     text_auto_size = fields.Bool()
-    text_min_size = fields.Float()
-    text_max_size = fields.Float()
-    text_size = fields.Float()
+    text_min_size = FloatRounded()
+    text_max_size = FloatRounded()
+    text_size = FloatRounded()
     text_underlined = fields.Bool()
     text_bolded = fields.Bool()
     text_vertical_align = EnumField(enum=enums.VertAlignOptions)
@@ -75,11 +82,11 @@ class ButtonSchema(Schema):
     text_color_highlighted = ColorField()
     text_color_selected_highlighted = ColorField()
     text_color_unusable = ColorField()
-    text_padding_top = fields.Float()
-    text_padding_bottom = fields.Float()
-    text_padding_left = fields.Float()
-    text_padding_right = fields.Float()
-    text_line_spacing = fields.Float()
+    text_padding_top = FloatRounded()
+    text_padding_bottom = FloatRounded()
+    text_padding_left = FloatRounded()
+    text_padding_right = FloatRounded()
+    text_line_spacing = FloatRounded()
 
     icon_active = fields.Bool()
     icon_color_idle = ColorField()
@@ -87,9 +94,9 @@ class ButtonSchema(Schema):
     icon_color_highlighted = ColorField()
     icon_color_selected_highlighted = ColorField()
     icon_color_unusable = ColorField()
-    icon_sharpness = fields.Float()
-    icon_size = fields.Float()
-    icon_ratio = fields.Float()
+    icon_sharpness = FloatRounded()
+    icon_size = FloatRounded()
+    icon_ratio = FloatRounded()
     icon_position = fields.Nested(PositionSchema)
     icon_rotation = fields.Nested(PositionSchema)
 
@@ -105,11 +112,11 @@ class ButtonSchema(Schema):
     mesh_color_selected_highlighted = ColorField()
     mesh_color_unusable = ColorField()
     outline_active = fields.Boolean()
-    outline_size_idle = fields.Float()
-    outline_size_selected = fields.Float()
-    outline_size_highlighted = fields.Float()
-    outline_size_selected_highlighted = fields.Float()
-    outline_size_unusable = fields.Float()
+    outline_size_idle = FloatRounded()
+    outline_size_selected = FloatRounded()
+    outline_size_highlighted = FloatRounded()
+    outline_size_selected_highlighted = FloatRounded()
+    outline_size_unusable = FloatRounded()
     outline_color_idle = ColorField()
     outline_color_selected = ColorField()
     outline_color_highlighted = ColorField()
@@ -235,7 +242,7 @@ class ImageSchema(Schema):
 
 class LoadingBarSchema(Schema):
     type_name = fields.String(required=True)
-    percentage = fields.Float()
+    percentage = FloatRounded()
     title = fields.Str()
     description = fields.Str()
     failure = fields.Bool()
@@ -284,9 +291,9 @@ class TextInputSchema(Schema):
 
 class SliderSchema(Schema):
     type_name = fields.String(required=True)
-    current_value = fields.Float()
-    min_value = fields.Float()
-    max_value = fields.Float()
+    current_value = FloatRounded()
+    min_value = FloatRounded()
+    max_value = FloatRounded()
     type_name = fields.String()
 
     @post_load
@@ -369,13 +376,13 @@ class LayoutNodeSchema(Schema):
     layer = fields.Int()
     layout_orientation = EnumField(enum=enums.LayoutTypes)
     sizing_type = EnumField(enum=enums.SizingTypes)
-    sizing_value = fields.Float()
-    forward_dist = fields.Float()
+    sizing_value = FloatRounded()
+    forward_dist = FloatRounded()
     padding_type = EnumField(enum=enums.PaddingTypes)
-    padding_x = fields.Float()
-    padding_y = fields.Float()
-    padding_z = fields.Float()
-    padding_w = fields.Float()
+    padding_x = FloatRounded()
+    padding_y = FloatRounded()
+    padding_z = FloatRounded()
+    padding_w = FloatRounded()
     children = fields.List(fields.Nested(lambda: LayoutNodeSchema()))
     content = fields.Nested(lambda: ContentSchema(), allow_none=True)
 
