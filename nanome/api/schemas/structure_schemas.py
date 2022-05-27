@@ -5,6 +5,7 @@ from nanome.util import enums
 
 from .util_schemas import ColorField, EnumField, QuaternionField, Vector3Field
 
+
 class StructureSchema(Schema):
     index = fields.Integer(default=-1)
 
@@ -173,4 +174,3 @@ class WorkspaceSchema(Schema):
             except AttributeError:
                 raise AttributeError('Could not set attribute {}'.format(key))
         return new_obj
-

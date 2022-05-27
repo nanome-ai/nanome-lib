@@ -4,6 +4,7 @@ from nanome.util import Vector3, Quaternion, Color
 
 class EnumField(fields.Field):
     """Marshmallow field for enum type"""
+
     def __init__(self, *args, enum=None, **kwargs):
         super().__init__(*args, **kwargs)
         if not enum:
@@ -12,7 +13,7 @@ class EnumField(fields.Field):
 
     def _deserialize(self, value, attr, data, **kwargs):
         return self.enum(value)
-    
+
     def _serialize(self, enum_opt, attr, data, **kwargs):
         return enum_opt.value
 

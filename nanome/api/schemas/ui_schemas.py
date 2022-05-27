@@ -8,6 +8,7 @@ from .util_schemas import EnumField
 
 class FloatRoundedField(fields.Float):
     """If decimal part of float is 0, round to int."""
+
     def _serialize(self, value, attr, obj, **kwargs):
         if value % 1 == 0:
             return int(value)
@@ -29,6 +30,7 @@ class ColorField(fields.Field):
     def _deserialize(self, value, attr, data, **kwargs):
         return Color.from_int(value)
 
+
 def create_multi_state_schema(field_class):
     return Schema.from_dict({
         'idle': field_class(),
@@ -38,7 +40,6 @@ def create_multi_state_schema(field_class):
         'unusable': field_class(),
         'default': field_class(),
     })()
-
 
 
 class MultiStateColorSchema(Schema):
@@ -197,7 +198,7 @@ class ButtonSchema(Schema):
 
     def get_attribute(self, obj, attr, default):
         """If attr doesn't exist, search for it in nested objects.
-        
+
         This works because the nested multi state values were named in 
         a way that you can replace underscores with dots to access them 
         from the root button
@@ -222,7 +223,6 @@ class ButtonSchema(Schema):
                 dotted_path = dotted_path.replace(field_name, proper_field_name)
         output = attrgetter(dotted_path)(obj)
         return output
-        
 
 
 class MeshSchema(Schema):
@@ -245,7 +245,7 @@ class ImageSchema(Schema):
     color = ColorField()
     file_path = fields.String()
     scaling_option = EnumField(enum=enums.ScalingOptions)
-    
+
     @post_load
     def make_obj(self, data, **kwargs):
         new_obj = ui.Image()
@@ -373,8 +373,6 @@ class DropdownSchema(Schema):
         return new_obj
 
 
-
-
 class UIListSchema(Schema):
     type_name = fields.String(required=True)
     display_columns = fields.Int()
@@ -391,6 +389,7 @@ class UIListSchema(Schema):
             except AttributeError:
                 raise AttributeError('Could not set attribute {}'.format(key))
         return new_obj
+
 
 class ContentSchema(Schema):
     """Uses the type_name field to identify the type of content to be loaded/dumped."""
@@ -412,7 +411,7 @@ class ContentSchema(Schema):
         type_name = data['type_name']
         correct_schema = self.type_name_schemas[type_name]
         return correct_schema.load(data, *args, **kwargs)
-    
+
     def dump(self, obj, *args, **kwargs):
         type_name = obj.type_name
         correct_schema = self.type_name_schemas[type_name]
