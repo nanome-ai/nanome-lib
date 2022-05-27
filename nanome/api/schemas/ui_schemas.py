@@ -19,86 +19,13 @@ class ColorField(fields.Field):
         return Color.from_int(value)
 
 
-class MultiStateVariableSchema(Schema):
-    idle = fields.Field()
-    selected = fields.Field()
-    highlighted = fields.Field()
-    selected_highlighted = fields.Field()
-    unusable = fields.Field()
-    default = fields.Field()
-
-class MultiStateColorSchema(MultiStateVariableSchema):
+class MultiStateColorSchema(Schema):
     idle = ColorField()
     selected = ColorField()
     highlighted = ColorField()
     selected_highlighted = ColorField()
     unusable = ColorField()
     default = ColorField()
-
-
-class ButtonTextSchema(Schema):
-    value = fields.Nested(MultiStateVariableSchema)
-    bold = fields.Boolean()
-    color = ColorField()
-    active = fields.Boolean()
-    auto_size = fields.Boolean()
-    min_size = fields.Float()
-    max_size = fields.Float()
-    size = fields.Float()
-    underlined = fields.Boolean()
-    ellipsis = fields.Boolean()
-    padding_top = fields.Float()
-    padding_bottom = fields.Float()
-    padding_left = fields.Float()
-    padding_right = fields.Float()
-    line_spacing = fields.Float()
-    vertical_align = EnumField(enum=enums.VertAlignOptions)
-    horizontal_align = EnumField(enum=enums.HorizAlignOptions)
-
-
-class ButtonIconSchema(Schema):
-    value = fields.Nested(MultiStateVariableSchema)
-    color = ColorField()
-    active = fields.Boolean()
-    sharpness = fields.Float(min=0, max=1)
-    size = fields.Boolean()
-    ratio = fields.Float(min=0, max=1)
-    position = fields.List(fields.Float(min=0, max=1))
-    rotation = fields.List(fields.Float())
-    min_size = fields.Float()
-    max_size = fields.Float()
-    size = fields.Float()
-    padding_top = fields.Float()
-    padding_bottom = fields.Float()
-    padding_left = fields.Float()
-    padding_right = fields.Float()
-    vertical_align = EnumField(enum=enums.VertAlignOptions)
-    horizontal_align = EnumField(enum=enums.HorizAlignOptions)
-
-
-class ButtonMeshSchema(Schema):
-    color = ColorField()
-    enabled = MultiStateVariableSchema()
-    active = fields.Boolean()
-
-
-class ButtonOutlineSchema(Schema):
-    size = MultiStateVariableSchema()
-    color = ColorField()
-    active = fields.Boolean()
-
-
-class ButtonSwitchSchema(Schema):
-    active = fields.Boolean()
-    on_color = ColorField()
-    off_color = ColorField()
-
-
-class ButtonToolTipSchema(Schema):
-    title = fields.String()
-    content = fields.String()
-    bounds = fields.List(fields.Float(), min=3, max=3)
-    positioning_target = EnumField(enum=enums.ToolTipPositioning)
 
 
 class ButtonSchema(Schema):
@@ -374,6 +301,11 @@ class ContentSchema(Schema):
         type_name = data['type_name']
         correct_schema = self.type_name_schemas[type_name]
         return correct_schema.load(data, *args, **kwargs)
+    
+    def dump(self, obj, *args, **kwargs):
+        type_name = obj.type_name
+        correct_schema = self.type_name_schemas[type_name]
+        return correct_schema.dump(obj, *args, **kwargs)
 
 
 class LayoutNodeSchema(Schema):

@@ -13,6 +13,9 @@ class EnumField(fields.Field):
 
     def _deserialize(self, value, attr, data, **kwargs):
         return self.enum(value)
+    
+    def _serialize(self, enum_opt, attr, data, **kwargs):
+        return enum_opt.value
 
 
 class QuaternionField(fields.Field):

@@ -1,6 +1,7 @@
-import os
-import unittest
 import json
+import os
+import tempfile
+import unittest
 
 from nanome.api import structure, ui
 
@@ -70,3 +71,15 @@ class UISchemaTestCase(unittest.TestCase):
         self.assertEqual(menu_btn.outline.size.highlighted, test_menu_btn.outline.size.highlighted)
         self.assertEqual(menu_btn.outline.size.selected, test_menu_btn.outline.size.selected)
         self.assertEqual(menu_btn.outline.size.unusable, test_menu_btn.outline.size.unusable)
+
+    @unittest.skip("Not ready")
+    def test_dump_menu(self):
+        """Ensure that dumping menu from serializers returns same input json."""
+        self.maxDiff = None
+        with open(test_menu_json, 'r') as f:
+            input_dict = json.load(f)
+
+        menu = schemas.MenuSchema().load(input_dict)
+        breakpoint()
+        menu_output_json = schemas.MenuSchema().dump(menu)
+        self.assertEqual(input_dict, menu_output_json)
