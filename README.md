@@ -2,7 +2,7 @@
 
 This library allows users to create Python plugins for Nanome VR Molecular Design Software (https://nanome.ai/)
 
-![gif-1](https://media.giphy.com/media/y6SIb1JQdaoaGF0KPJ/giphy-downsized.gif)
+![gif-1](https://media.giphy.com/media/Muj1GqHTnH9HZP0ZWU/giphy-downsized.gif)
 
 
 ### Examples
