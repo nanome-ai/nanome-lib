@@ -29,6 +29,17 @@ class ColorField(fields.Field):
     def _deserialize(self, value, attr, data, **kwargs):
         return Color.from_int(value)
 
+def create_multi_state_schema(field_class):
+    return Schema.from_dict({
+        'idle': field_class(),
+        'selected': field_class(),
+        'highlighted': field_class(),
+        'selected_highlighted': field_class(),
+        'unusable': field_class(),
+        'default': field_class(),
+    })()
+
+
 
 class MultiStateColorSchema(Schema):
     idle = ColorField()
@@ -163,13 +174,14 @@ class ButtonSchema(Schema):
                 }
             }
         btn = super().load(data, *args, **kwargs)
-        multi_state_text = MultiStateStringSchema().load(text_values)
+        schema = create_multi_state_schema(fields.String)
+        multi_state_text = schema.load(text_values)
         btn.text.value.set_all("")  # Makes default empty string.
         btn.text.value.set_each(**multi_state_text)
         assert btn.text.value.idle == multi_state_text['idle']
         if outline_data:
-            multi_state_color = MultiStateColorSchema().load(outline_values['color'])
-            multi_state_size = MultiStateFloatSchema().load(outline_values['size'])
+            multi_state_color = create_multi_state_schema(ColorField).load(outline_values['color'])
+            multi_state_size = create_multi_state_schema(FloatRounded).load(outline_values['size'])
             btn.outline.color.set_each(**multi_state_color)
             btn.outline.size.set_each(**multi_state_size)
         return btn
@@ -191,8 +203,6 @@ class ButtonSchema(Schema):
         a way that you can replace underscores with dots to access them 
         from the root button
         """
-        if attr == 'text_value_idle':
-            breakpoint()
         if hasattr(obj, attr):
             return getattr(obj, attr)
         dotted_path = attr.replace('_', '.')
