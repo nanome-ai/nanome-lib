@@ -1,5 +1,6 @@
 import json
 import os
+import tempfile
 import unittest
 
 from nanome.api import structure, ui
@@ -84,8 +85,9 @@ class UISchemaTestCase(unittest.TestCase):
         # self.maxDiff = None
         with open(test_menu_json, 'r') as f:
             input_dict = json.load(f)
-
         menu = schemas.MenuSchema().load(input_dict)
-        menu_output_json = schemas.MenuSchema().dump(menu)
-        print(compare_dicts(input_dict, menu_output_json))
-        self.assertEqual(input_dict, menu_output_json)
+        menu_dump = schemas.MenuSchema().dump(menu)
+        second_menu = schemas.MenuSchema().load(menu_dump)
+        second_menu_dump = schemas.MenuSchema().dump(second_menu)
+        # print(compare_dicts(menu_dump, second_menu_dump))
+        self.assertEqual(menu_dump, second_menu_dump)

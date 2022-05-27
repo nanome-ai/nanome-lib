@@ -3,13 +3,15 @@ from .util_schemas import EnumField
 from nanome.util import enums, Color
 from nanome.api import ui
 
+
 class FloatRounded(fields.Float):
     """If decimal part of float is 0, round to int."""
     def _serialize(self, value, attr, obj, **kwargs):
         if value % 1 == 0:
             return int(value)
         else:
-            return value
+            return round(value, 5)
+
 
 class PositionSchema(Schema):
     x = FloatRounded()
@@ -43,6 +45,7 @@ class MultiStateFloatSchema(Schema):
     unusable = FloatRounded()
     default = FloatRounded()
 
+
 class MultiStateStringSchema(Schema):
     idle = fields.String()
     selected = fields.String()
@@ -50,6 +53,7 @@ class MultiStateStringSchema(Schema):
     selected_highlighted = fields.String()
     unusable = fields.String()
     default = fields.String()
+
 
 class ButtonSchema(Schema):
     name = fields.String()
@@ -129,6 +133,7 @@ class ButtonSchema(Schema):
     tooltip_positioning_origin = fields.Integer()
 
     def load(self, data, *args, **kwargs):
+        data = dict(data)
         text_values = {
             'idle': data.pop('text_value_idle'),
             'selected': data.pop('text_value_selected'),
@@ -202,12 +207,7 @@ class ButtonSchema(Schema):
             if field_name in dotted_path:
                 proper_field_name = field_name.replace('.', '_')
                 dotted_path = dotted_path.replace(field_name, proper_field_name)
-
-        try:
-            output = attrgetter(dotted_path)(obj)
-        except AttributeError:
-            breakpoint()
-            print('huh')
+        output = attrgetter(dotted_path)(obj)
         return output
         
 
@@ -402,8 +402,8 @@ class LayoutNodeSchema(Schema):
 class MenuSchema(Schema):
     is_menu = fields.Bool(default=True)
     title = fields.String()
-    width = fields.Float(max=1.0)
-    height = fields.Float(max=1.0)
+    width = FloatRounded(max=1.0)
+    height = FloatRounded(max=1.0)
     version = fields.Int(default=0)
     effective_root = fields.Nested(LayoutNodeSchema, attribute='root')
 
