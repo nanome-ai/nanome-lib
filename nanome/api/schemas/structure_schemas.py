@@ -31,6 +31,7 @@ class AtomSchema(StructureSchema):
     atom_color = ColorField()
     atom_scale = fields.Float()
     surface_color = ColorField()
+    surface_opacity = fields.Float()
     symbol = fields.Str()
     name = fields.Str()
     position = Vector3Field()
