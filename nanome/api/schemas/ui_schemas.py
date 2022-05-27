@@ -13,7 +13,7 @@ class PositionSchema(Schema):
 class ColorField(fields.Field):
 
     def _serialize(self, value: Color, attr, obj, **kwargs):
-        return value.whole_num
+        return value._color
 
     def _deserialize(self, value, attr, data, **kwargs):
         return Color.from_int(value)
@@ -26,6 +26,7 @@ class MultiStateColorSchema(Schema):
     selected_highlighted = ColorField()
     unusable = ColorField()
     default = ColorField()
+
 
 class MultiStateFloatSchema(Schema):
     idle = fields.Float()
@@ -44,6 +45,7 @@ class MultiStateStringSchema(Schema):
     default = fields.String()
 
 class ButtonSchema(Schema):
+    name = fields.String()
     type_name = fields.String(required=True)
     selected = fields.Bool()
     unusable = fields.Bool()
@@ -166,6 +168,41 @@ class ButtonSchema(Schema):
             except AttributeError:
                 raise AttributeError('Could not set attribute {}'.format(key))
         return new_obj
+
+    def get_attribute(self, obj, attr, default):
+        """If attr doesn't exist, search for it in nested objects.
+        
+        This works because the nested multi state values were named in 
+        a way that you can replace underscores with dots to access them 
+        from the root button
+        """
+        from operator import attrgetter
+        if hasattr(obj, attr):
+            return getattr(obj, attr)
+        dotted_path = attr.replace('_', '.')
+        # Field names that contain underscores need to be switched back from dots.
+        underscore_fields = [
+            'selected.highlighted',
+            'line.spacing',
+            'positioning.target',
+            'positioning.origin',
+            'padding.top',
+            'padding.bottom',
+            'padding.left',
+            'padding.right',
+        ]
+        for field_name in underscore_fields:
+            if field_name in dotted_path:
+                proper_field_name = field_name.replace('.', '_')
+                dotted_path = dotted_path.replace(field_name, proper_field_name)
+
+        try:
+            output = attrgetter(dotted_path)(obj)
+        except AttributeError:
+            breakpoint()
+            print('huh')
+        return output
+        
 
 
 class MeshSchema(Schema):

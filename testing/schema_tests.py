@@ -1,9 +1,16 @@
 import json
 import os
-import tempfile
 import unittest
 
 from nanome.api import structure, ui
+
+import difflib
+import pprint
+
+def compare_dicts(d1, d2):
+    return ('\n' + '\n'.join(difflib.ndiff(
+                   pprint.pformat(d1).splitlines(),
+                   pprint.pformat(d2).splitlines())))
 
 # Schemas requirements are optional, so don't run tests if they are not installed.
 reqs_installed = True
@@ -15,7 +22,7 @@ except ModuleNotFoundError:
 test_assets = os.path.join(os.getcwd(), "testing/test_assets")
 workspace_json = os.path.join(test_assets, "serialized_data/benzene_workspace.json")
 pdb_file = os.path.join(test_assets, "pdb/1tyl.pdb")
-test_menu_json = os.path.join(test_assets, "test_menu.json")
+test_menu_json = os.path.join(test_assets, "test_menu_1_btn.json")
 
 
 @unittest.skipIf(not reqs_installed, "Marshmallow not installed")
@@ -72,14 +79,13 @@ class UISchemaTestCase(unittest.TestCase):
         self.assertEqual(menu_btn.outline.size.selected, test_menu_btn.outline.size.selected)
         self.assertEqual(menu_btn.outline.size.unusable, test_menu_btn.outline.size.unusable)
 
-    @unittest.skip("Not ready")
     def test_dump_menu(self):
         """Ensure that dumping menu from serializers returns same input json."""
-        self.maxDiff = None
+        # self.maxDiff = None
         with open(test_menu_json, 'r') as f:
             input_dict = json.load(f)
 
         menu = schemas.MenuSchema().load(input_dict)
-        breakpoint()
         menu_output_json = schemas.MenuSchema().dump(menu)
+        print(compare_dicts(input_dict, menu_output_json))
         self.assertEqual(input_dict, menu_output_json)
