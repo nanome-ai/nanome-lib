@@ -27,6 +27,21 @@ class MultiStateColorSchema(Schema):
     unusable = ColorField()
     default = ColorField()
 
+class MultiStateFloatSchema(Schema):
+    idle = fields.Float()
+    selected = fields.Float()
+    highlighted = fields.Float()
+    selected_highlighted = fields.Float()
+    unusable = fields.Float()
+    default = fields.Float()
+
+class MultiStateStringSchema(Schema):
+    idle = fields.String()
+    selected = fields.String()
+    highlighted = fields.String()
+    selected_highlighted = fields.String()
+    unusable = fields.String()
+    default = fields.String()
 
 class ButtonSchema(Schema):
     type_name = fields.String(required=True)
@@ -132,11 +147,14 @@ class ButtonSchema(Schema):
                 }
             }
         btn = super().load(data, *args, **kwargs)
-        btn.text.value.set_each(**text_values)
+        multi_state_text = MultiStateStringSchema().load(text_values)
+        btn.text.value.set_each(**multi_state_text)
         if outline_data:
             btn.outline.size.set_each(**outline_values['size'])
             multi_state_color = MultiStateColorSchema().load(outline_values['color'])
+            multi_state_size = MultiStateFloatSchema().load(outline_values['size'])
             btn.outline.color.set_each(**multi_state_color)
+            btn.outline.size.set_each(**multi_state_size)
         return btn
 
     @post_load
