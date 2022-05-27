@@ -1,6 +1,6 @@
 # Nanome
 
-This library allows users to create powerful plugins for Nanome (https://nanome.ai/), using a simple Python API.
+This library allows users to create Python plugins for Nanome VR Molecular Design Software (https://nanome.ai/)
 
 ### Examples
 
@@ -15,9 +15,15 @@ To install the library, run:
 $ pip install nanome
 ```
 
+As of version 0.38.0, we provide schemas for serializing nanome API objects in JSON. To use these, install with:
+```sh
+$ pip install nanome[schemas]
+```
+
 ### Documentation
 
 All documentation needed to use this package is available at [Read The Docs](https://nanome.readthedocs.io/en/latest/)
+
 
 ### License
 
