@@ -5,14 +5,13 @@ from nanome.api.structure import Complex
 from nanome.util import ComplexUtils
 
 
-BASE_DIR = os.path.join(os.path.dirname(__file__))
-
+test_assets = os.path.join(os.getcwd(), 'testing', 'test_assets')
 
 class ComplexUtilsTestCase(unittest.TestCase):
     def setUp(self):
         super(ComplexUtilsTestCase, self).setUp()
-        complex_1_pdb = BASE_DIR + '/test_assets/pdb/1a9l.pdb'
-        complex_2_pdb = BASE_DIR + '/test_assets/pdb/1fsv.pdb'
+        complex_1_pdb = os.path.join(test_assets, 'pdb', '1a9l.pdb')
+        complex_2_pdb = os.path.join(test_assets, 'pdb', '1fsv.pdb')
         self.complex1 = Complex.io.from_pdb(path=complex_1_pdb)
         self.complex2 = Complex.io.from_pdb(path=complex_2_pdb)
 
