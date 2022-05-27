@@ -24,6 +24,7 @@ jobs:
         run: coverage run --source=nanome --omit=nanome/util/py2_enum.py -m unittest discover -s testing --pattern *_tests.py
       - name: print coverage percentage
         run: coverage report | grep TOTAL
+
   python2:
     runs-on: ubuntu-latest
     if: ${{ false }} # disable for now
