@@ -1,6 +1,5 @@
 import nanome
 import os
-import sys
 
 # Config
 
@@ -10,15 +9,15 @@ CATEGORY = "Test"
 HAS_ADVANCED_OPTIONS = False
 
 # Plugin
-TEST_ASSETS = os.path.join('testing', 'test_assets')
+TEST_ASSETS = os.path.join(
+    os.path.dirname(os.path.dirname(__file__)), 'test_assets'
+)
 
 
 class ImagePlugin(nanome.PluginInstance):
-    # Function called when Nanome connects to the Plugin, after its instantiation
 
     def start(self):
         self.create_image_menu()
-    # Function called when user clicks on the "Run" button in Nanome
 
     def on_run(self):
         self.open_menu()
@@ -35,7 +34,8 @@ class ImagePlugin(nanome.PluginInstance):
         self.menu = nanome.ui.Menu.io.from_json(menu_path)
         root = self.menu.root
         image_node = root.find_node("ImageNode")
-        self.image = image_node.add_new_image(os.path.expanduser("~/Desktop/png.png"))
+        image_path = os.path.join(TEST_ASSETS, 'images', '1.png')
+        self.image = image_node.add_new_image(os.path.expanduser(image_path))
 
         width_node = root.find_node("WidthNode")
         height_node = root.find_node("HeightNode")
