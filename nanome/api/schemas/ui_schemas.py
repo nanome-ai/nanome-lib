@@ -42,33 +42,6 @@ def create_multi_state_schema(field_class):
     })()
 
 
-class MultiStateColorSchema(Schema):
-    idle = ColorField()
-    selected = ColorField()
-    highlighted = ColorField()
-    selected_highlighted = ColorField()
-    unusable = ColorField()
-    default = ColorField()
-
-
-class MultiStateFloatSchema(Schema):
-    idle = FloatRoundedField()
-    selected = FloatRoundedField()
-    highlighted = FloatRoundedField()
-    selected_highlighted = FloatRoundedField()
-    unusable = FloatRoundedField()
-    default = FloatRoundedField()
-
-
-class MultiStateStringSchema(Schema):
-    idle = fields.String()
-    selected = fields.String()
-    highlighted = fields.String()
-    selected_highlighted = fields.String()
-    unusable = fields.String()
-    default = fields.String()
-
-
 class ButtonSchema(Schema):
     name = fields.String()
     type_name = fields.String(required=True)
