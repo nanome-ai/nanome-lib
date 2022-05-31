@@ -74,7 +74,6 @@ class UISchemaTestCase(unittest.TestCase):
 
     def test_dump_menu(self):
         """Ensure that dumping menu from serializers returns same input json."""
-        # self.maxDiff = None
         with open(test_menu_json, 'r') as f:
             input_dict = json.load(f)
         menu = schemas.MenuSchema().load(input_dict)
