@@ -82,6 +82,16 @@ class UISchemaTestCase(unittest.TestCase):
         self.assertEqual(menu_btn.outline.size.highlighted, test_menu_btn.outline.size.highlighted)
         self.assertEqual(menu_btn.outline.size.selected, test_menu_btn.outline.size.selected)
         self.assertEqual(menu_btn.outline.size.unusable, test_menu_btn.outline.size.unusable)
+        # assert mesh colors
+        self.assertEqual(menu_btn.mesh.active, test_menu_btn.mesh.active)
+        self.assertEqual(menu_btn.mesh.color.unusable.hex, test_menu_btn.mesh.color.unusable.hex)
+        self.assertEqual(menu_btn.mesh.color.unusable.hex, test_menu_btn.mesh.color.unusable.hex)
+        # tooltip
+        self.assertEqual(menu_btn.tooltip.title, test_menu_btn.tooltip.title)
+        self.assertEqual(menu_btn.tooltip.content, test_menu_btn.tooltip.content)
+        self.assertEqual(menu_btn.tooltip.bounds, test_menu_btn.tooltip.bounds)
+        self.assertEqual(menu_btn.tooltip.positioning_target, test_menu_btn.tooltip.positioning_target)
+        self.assertEqual(menu_btn.tooltip.positioning_origin, test_menu_btn.tooltip.positioning_origin)
 
     def test_dump_menu(self):
         """Ensure that dumping menu from serializers returns same input json."""

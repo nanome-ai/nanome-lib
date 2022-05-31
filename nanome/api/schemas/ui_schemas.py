@@ -1,7 +1,7 @@
 from marshmallow import fields, Schema, post_load
 from operator import attrgetter
 
-from nanome.util import enums, Color
+from nanome.util import enums, Color, Vector3
 from nanome.api import ui
 from .util_schemas import EnumField
 
@@ -30,6 +30,16 @@ class PositionSchema(Schema):
     z = FloatRoundedField()
 
 
+class Vector3Schema(Schema):
+    x = FloatRoundedField()
+    y = FloatRoundedField()
+    z = FloatRoundedField()
+
+    @post_load
+    def make_vector3(self, data, **kwargs):
+        new_obj = Vector3(**data)
+        return new_obj
+
 class ColorField(fields.Field):
 
     def _serialize(self, value: Color, attr, obj, **kwargs):
@@ -49,6 +59,71 @@ def create_multi_state_schema(field_class):
         'unusable': field_class(),
         'default': field_class(),
     })()
+
+class ButtonTextSchema(Schema):
+    value = create_multi_state_schema(fields.String)
+    bold = fields.Boolean()
+    color = ColorField()
+    active = fields.Boolean()
+    auto_size = fields.Boolean()
+    min_size = fields.Float()
+    max_size = fields.Float()
+    size = fields.Float()
+    underlined = fields.Boolean()
+    ellipsis = fields.Boolean()
+    padding_top = fields.Float()
+    padding_bottom = fields.Float()
+    padding_left = fields.Float()
+    padding_right = fields.Float()
+    line_spacing = fields.Float()
+    vertical_align = EnumField(enum=enums.VertAlignOptions)
+    horizontal_align = EnumField(enum=enums.HorizAlignOptions)
+
+
+class ButtonIconSchema(Schema):
+    value = create_multi_state_schema(fields.String)
+    color = create_multi_state_schema(ColorField)
+    active = fields.Boolean()
+    sharpness = fields.Float(min=0, max=1)
+    size = fields.Boolean()
+    ratio = fields.Float(min=0, max=1)
+    position = fields.Nested(PositionSchema)
+    rotation = fields.Nested(PositionSchema)
+    min_size = fields.Float()
+    max_size = fields.Float()
+    size = fields.Float()
+    padding_top = fields.Float()
+    padding_bottom = fields.Float()
+    padding_left = fields.Float()
+    padding_right = fields.Float()
+    vertical_align = EnumField(enum=enums.VertAlignOptions)
+    horizontal_align = EnumField(enum=enums.HorizAlignOptions)
+
+
+class ButtonMeshSchema(Schema):
+    color = ColorField()
+    enabled = create_multi_state_schema(fields.Boolean)
+    active = fields.Boolean()
+
+
+class ButtonOutlineSchema(Schema):
+    size = create_multi_state_schema(FloatRoundedField)
+    color = ColorField()
+    active = fields.Boolean()
+
+
+class ButtonSwitchSchema(Schema):
+    active = fields.Boolean()
+    on_color = ColorField()
+    off_color = ColorField()
+
+
+class ButtonToolTipSchema(Schema):
+    title = fields.String()
+    content = fields.String()
+    bounds = fields.Nested(Vector3Schema())
+    positioning_target = EnumField(enum=enums.ToolTipPositioning)
+    positioning_origin = EnumField(enum=enums.ToolTipPositioning)
 
 
 class ButtonSchema(Schema):
@@ -134,6 +209,8 @@ class ButtonSchema(Schema):
         self.load_text_values(data, btn)
         self.load_outline_values(data, btn)
         self.load_icon_values(data, btn)
+        self.load_mesh_values(data, btn)
+        self.load_tooltip_values(data, btn)
         return btn
 
     def load_text_values(self, data: dict, btn: ui.Button):
@@ -184,6 +261,10 @@ class ButtonSchema(Schema):
                 'ratio': data.pop('icon_ratio'),
                 'position': data.pop('icon_position'),
                 'rotation': data.pop('icon_rotation'),
+                'padding_left': data.pop('icon_padding_left', 0),
+                'padding_right': data.pop('icon_padding_right', 0),
+                'padding_top': data.pop('icon_padding_top', 0),
+                'padding_bottom': data.pop('icon_padding_bottom', 0),
             }
             icon_color ={
                 'idle': data.pop('icon_color_idle'),
@@ -198,6 +279,47 @@ class ButtonSchema(Schema):
             icon_color = create_multi_state_schema(ColorField).load(icon_color)
             btn.icon.color.set_each(**icon_color)
 
+    def load_mesh_values(self, data, btn):
+        has_mesh_data = any([key.startswith('mesh') for key in data.keys()])
+        if has_mesh_data:
+            mesh_data = {
+                'active': data.pop('mesh_active'),
+            }
+            mesh_enabled= {
+                'idle': data.pop('mesh_enabled_idle'),
+                'selected': data.pop('mesh_enabled_selected'),
+                'highlighted': data.pop('mesh_enabled_highlighted'),
+                'selected_highlighted': data.pop('mesh_enabled_selected_highlighted'),
+                'unusable': data.pop('mesh_enabled_unusable'),
+            }
+            mesh_color = {
+                'idle': data.pop('mesh_color_idle'),
+                'selected': data.pop('mesh_color_selected'),
+                'highlighted': data.pop('mesh_color_highlighted'),
+                'selected_highlighted': data.pop('mesh_color_selected_highlighted'),
+                'unusable': data.pop('mesh_color_unusable'),
+            }
+            for key, value in mesh_data.items():
+                setattr(btn.mesh, key, value)
+            multi_state_color = create_multi_state_schema(ColorField).load(mesh_color)
+            multi_state_enabled = create_multi_state_schema(fields.Boolean).load(mesh_enabled)
+            btn.mesh.color.set_each(**multi_state_color)
+            btn.mesh.enabled.set_each(**multi_state_enabled)
+    
+    def load_tooltip_values(self, data, btn):
+        has_tooltip_data = any([key.startswith('tooltip') for key in data.keys()])
+        if has_tooltip_data:
+            # bounds_data = data.pop()
+            tooltip_data = {
+                'title': data.pop('tooltip_title'),
+                'content': data.pop('tooltip_content'),
+                'bounds': data.pop('tooltip_bounds'),
+                'positioning_target': data.pop('tooltip_positioning_target'),
+                'positioning_origin': data.pop('tooltip_positioning_origin'),
+            }
+            validated_data = ButtonToolTipSchema().load(tooltip_data)
+            for key, value in validated_data.items():
+                setattr(btn.tooltip, key, value)
 
     @post_load
     def make_obj(self, data, **kwargs):
@@ -287,7 +409,7 @@ class LabelSchema(Schema):
     text_size = FloatRoundedField()
     text_color = ColorField()
     text_bold = fields.Bool()
-    text_italics = fields.Bool()
+    text_italic = fields.Bool(data_key='text_italics')
     text_underlined = fields.Bool()
 
     @post_load
@@ -430,7 +552,10 @@ class MenuSchema(Schema):
     width = FloatRoundedField(max=1.0)
     height = FloatRoundedField(max=1.0)
     version = fields.Int(default=0)
-    effective_root = fields.Nested(LayoutNodeSchema, attribute='root')
+    root = fields.Nested(LayoutNodeSchema, data_key='effective_root')
+    enabled = fields.Boolean()
+    index = fields.Int()
+    locked = fields.Boolean()
 
     @post_load
     def make_menu(self, data, **kwargs):
