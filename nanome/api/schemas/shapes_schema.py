@@ -27,6 +27,7 @@ class MeshSchema(ShapeSchema):
     normals = fields.List(fields.Float)
     triangles = fields.List(fields.Int)
     colors = fields.List(fields.Int)
+    texture_path = fields.String()
 
 
 class SphereSchema(ShapeSchema):

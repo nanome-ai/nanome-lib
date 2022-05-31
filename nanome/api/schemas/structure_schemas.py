@@ -39,6 +39,8 @@ class AtomSchema(StructureSchema):
     partial_charge = fields.Float()
     vdw_radius = fields.Float(load_only=True)
     alt_loc = fields.Str(max=1)
+    is_het = fields.Boolean()
+    in_conformer = fields.Boolean()
 
     @post_load
     def make_atom(self, data, **kwargs):
@@ -145,6 +147,7 @@ class ComplexSchema(StructureSchema):
     position = Vector3Field()
     rotation = QuaternionField()
     molecules = fields.List(fields.Nested(MoleculeSchema))
+    current_frame = fields.Integer()
 
     @post_load
     def make_complex(self, data, **kwargs):
