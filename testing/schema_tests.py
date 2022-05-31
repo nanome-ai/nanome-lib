@@ -15,6 +15,7 @@ except ModuleNotFoundError:
 test_assets = os.path.join(os.getcwd(), "testing/test_assets")
 workspace_json = os.path.join(test_assets, "serialized_data/benzene_workspace.json")
 pdb_file = os.path.join(test_assets, "pdb/1tyl.pdb")
+conformer_pdb = os.path.join(test_assets, "pdb/thrombine_conformer.pdb")
 test_menu_json = os.path.join(test_assets, "test_menu_smina.json")
 
 
@@ -34,6 +35,16 @@ class StructureSchemaTestCase(unittest.TestCase):
         self.assertTrue(isinstance(comp, structure.Complex))
         comp_json = schemas.ComplexSchema().dump(comp)
         self.assertTrue(isinstance(comp_json, dict))
+
+    def test_load_conformer_complex(self):
+        comp = structure.Complex.io.from_pdb(path=conformer_pdb)
+        mol = next(comp.molecules)
+        conformer_count = mol.conformer_count
+        self.assertEqual(conformer_count, 5)
+        comp_json = schemas.ComplexSchema().dump(comp)
+        loaded_comp = schemas.ComplexSchema().load(comp_json)
+        loaded_mol = next(loaded_comp.molecules)
+        self.assertEqual(loaded_mol.conformer_count, 5)
 
 
 @unittest.skipIf(not reqs_installed, "Marshmallow not installed")

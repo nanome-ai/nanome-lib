@@ -40,7 +40,8 @@ class AtomSchema(StructureSchema):
     vdw_radius = fields.Float(load_only=True)
     alt_loc = fields.Str(max=1)
     is_het = fields.Boolean()
-    in_conformer = fields.Boolean()
+    in_conformer = fields.List(fields.Boolean())
+    het_surfaced = fields.Boolean()
 
     @post_load
     def make_atom(self, data, **kwargs):
@@ -57,6 +58,8 @@ class BondSchema(StructureSchema):
     atom1 = AtomSchema(only=('index',))
     atom2 = AtomSchema(only=('index',))
     kind = EnumField(enum=enums.Kind)
+    in_conformer = fields.List(fields.Boolean())
+    kinds = fields.List(fields.Nested(lambda: EnumField(enum=enums.Kind)))
 
     @post_load
     def make_bond(self, data, **kwargs):
@@ -119,12 +122,17 @@ class MoleculeSchema(StructureSchema):
     chains = fields.List(fields.Nested(ChainSchema))
     name = fields.Str()
     associated = fields.Dict()
-    conformer_count = fields.Integer(load_only=True)
+    conformer_count = fields.Integer()
     current_conformer = fields.Integer()
+    names = fields.List(fields.Str())
+    associateds = fields.List(fields.Dict())
 
     @post_load
     def make_molecule(self, data, **kwargs):
         new_obj = structure.Molecule()
+        # Set conformer specific attributes first conformer_count first
+        if 'conformer_count' in data:
+            new_obj._conformer_count = data.pop('conformer_count')
         for key in data:
             try:
                 setattr(new_obj, key, data[key])

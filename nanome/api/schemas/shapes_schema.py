@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, post_load
+from marshmallow import Schema, fields
 from nanome.util import enums
 from .util_schemas import EnumField, ColorField, Vector3Field
 
