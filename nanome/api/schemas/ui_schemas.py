@@ -137,16 +137,6 @@ class ButtonSchema(Schema):
     text_value_highlighted = fields.String()
     text_value_selected_highlighted = fields.String()
     text_value_unusable = fields.String()
-    text_auto_size = fields.Bool()
-    text_min_size = FloatRoundedField()
-    text_max_size = FloatRoundedField()
-    text_size = FloatRoundedField()
-    text_underlined = fields.Bool()
-    text_bolded = fields.Bool()
-    text_vertical_align = EnumField(enum=enums.VertAlignOptions)
-    text_horizontal_align = EnumField(enum=enums.HorizAlignOptions)
-    type_name = fields.String()
-    text_ellipsis = fields.Boolean()
     text_bold_idle = fields.Bool()
     text_bold_selected = fields.Bool()
     text_bold_highlighted = fields.Bool()
@@ -157,6 +147,16 @@ class ButtonSchema(Schema):
     text_color_highlighted = ColorField()
     text_color_selected_highlighted = ColorField()
     text_color_unusable = ColorField()
+    text_auto_size = fields.Bool()
+    text_min_size = FloatRoundedField()
+    text_max_size = FloatRoundedField()
+    text_size = FloatRoundedField()
+    text_underlined = fields.Bool()
+    text_bolded = fields.Bool()
+    text_vertical_align = EnumField(enum=enums.VertAlignOptions)
+    text_horizontal_align = EnumField(enum=enums.HorizAlignOptions)
+    type_name = fields.String()
+    text_ellipsis = fields.Boolean()
     text_padding_top = FloatRoundedField()
     text_padding_bottom = FloatRoundedField()
     text_padding_left = FloatRoundedField()
@@ -221,10 +221,32 @@ class ButtonSchema(Schema):
             'selected_highlighted': data.pop('text_value_selected_highlighted'),
             'unusable': data.pop('text_value_unusable'),
         }
-        schema = create_multi_state_schema(fields.String)
-        multi_state_text = schema.load(text_values)
+        text_color = {
+            'idle': data.pop('text_color_idle'),
+            'selected': data.pop('text_color_selected'),
+            'highlighted': data.pop('text_color_highlighted'),
+            'selected_highlighted': data.pop('text_color_selected_highlighted'),
+            'unusable': data.pop('text_color_unusable'),
+        }
+        text_bold = {
+            'idle': data.pop('text_bold_idle'),
+            'selected': data.pop('text_bold_selected'),
+            'highlighted': data.pop('text_bold_highlighted'),
+            'selected_highlighted': data.pop('text_bold_selected_highlighted'),
+            'unusable': data.pop('text_bold_unusable'),
+        }
+        string_schema = create_multi_state_schema(fields.String)
+        values_data = string_schema.load(text_values)
         btn.text.value.set_all("")  # Makes default empty string.
-        btn.text.value.set_each(**multi_state_text)
+        btn.text.value.set_each(**values_data)
+        
+        color_schema = create_multi_state_schema(ColorField)
+        colors_data = color_schema.load(text_color)
+        btn.text.color.set_each(**colors_data)
+
+        bold_schema = create_multi_state_schema(fields.Bool)
+        bolds_data = bold_schema.load(text_bold)
+        btn.text.bold.set_each(**bolds_data)
     
     def load_outline_values(self, data, btn):
         has_outline_data = any([key.startswith('outline') for key in data.keys()])
@@ -330,34 +352,6 @@ class ButtonSchema(Schema):
             except AttributeError:
                 raise AttributeError('Could not set attribute {}'.format(key))
         return new_obj
-
-    def get_attribute(self, obj, attr, default):
-        """If attr doesn't exist, search for it in nested objects.
-
-        This works because the nested multi state values were named in 
-        a way that you can replace underscores with dots to access them 
-        from the root button
-        """
-        if hasattr(obj, attr):
-            return getattr(obj, attr)
-        dotted_path = attr.replace('_', '.')
-        # Field names that contain underscores need to be switched back from dots.
-        underscore_fields = [
-            'selected.highlighted',
-            'line.spacing',
-            'positioning.target',
-            'positioning.origin',
-            'padding.top',
-            'padding.bottom',
-            'padding.left',
-            'padding.right',
-        ]
-        for field_name in underscore_fields:
-            if field_name in dotted_path:
-                proper_field_name = field_name.replace('.', '_')
-                dotted_path = dotted_path.replace(field_name, proper_field_name)
-        output = attrgetter(dotted_path)(obj)
-        return output
 
 
 class MeshSchema(Schema):

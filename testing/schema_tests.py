@@ -66,13 +66,22 @@ class UISchemaTestCase(unittest.TestCase):
         test_menu_content_types = [content.__class__ for content in test_menu.get_all_content()]
         self.assertEqual(menu_content_types, test_menu_content_types)
 
-        # Test that multi state variables loaded correctly.
         test_menu_btn = next(content for content in test_menu.get_all_content() if isinstance(content, ui.Button))
         menu_btn = next(content for content in menu.get_all_content() if isinstance(content, ui.Button))
+        # Test that multi state variables loaded correctly.
         self.assertEqual(menu_btn.text.value.idle, test_menu_btn.text.value.idle)
         self.assertEqual(menu_btn.text.value.highlighted, test_menu_btn.text.value.highlighted)
         self.assertEqual(menu_btn.text.value.selected, test_menu_btn.text.value.selected)
         self.assertEqual(menu_btn.text.value.unusable, test_menu_btn.text.value.unusable)
+        self.assertEqual(menu_btn.text.bold.idle, test_menu_btn.text.bold.idle)
+        self.assertEqual(menu_btn.text.bold.highlighted, test_menu_btn.text.bold.highlighted)
+        self.assertEqual(menu_btn.text.bold.selected, test_menu_btn.text.bold.selected)
+        self.assertEqual(menu_btn.text.bold.unusable, test_menu_btn.text.bold.unusable)
+        self.assertEqual(menu_btn.text.color.idle.hex, test_menu_btn.text.color.idle.hex)
+        self.assertEqual(menu_btn.text.color.highlighted.hex, test_menu_btn.text.color.highlighted.hex)
+        self.assertEqual(menu_btn.text.color.selected.hex, test_menu_btn.text.color.selected.hex)
+        self.assertEqual(menu_btn.text.color.unusable.hex, test_menu_btn.text.color.unusable.hex)
+        
         # Test outline values
         self.assertEqual(menu_btn.outline.color.idle.hex, test_menu_btn.outline.color.idle.hex)
         self.assertEqual(menu_btn.outline.color.highlighted.hex, test_menu_btn.outline.color.highlighted.hex)
