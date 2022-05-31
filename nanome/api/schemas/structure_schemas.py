@@ -144,6 +144,7 @@ class ComplexSchema(StructureSchema):
     rotation = QuaternionField()
     molecules = fields.List(fields.Nested(MoleculeSchema))
     current_frame = fields.Integer()
+    remarks = fields.Dict()
 
     @post_load
     def make_complex(self, data, **kwargs):

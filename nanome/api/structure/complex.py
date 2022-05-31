@@ -272,6 +272,19 @@ class Complex(_Complex, Base):
     def rotation(self, value):
         self._rotation = value
 
+    @property
+    def remarks(self):
+        """
+        | remarks section of the complex file
+
+        :type: :class: dict
+        """
+        return self._remarks
+
+    @remarks.setter
+    def remarks(self, value):
+        self._remarks = value
+
     def get_workspace_to_complex_matrix(self):
         return self.get_complex_to_workspace_matrix().get_inverse()
 
