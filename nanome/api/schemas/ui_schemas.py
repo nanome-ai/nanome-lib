@@ -125,11 +125,18 @@ class ButtonSchema(Schema):
     tooltip_title = fields.String()
     tooltip_content = fields.String()
     tooltip_bounds = fields.Nested(PositionSchema)
-    tooltip_positioning_target = fields.Integer()
-    tooltip_positioning_origin = fields.Integer()
+    tooltip_positioning_target = EnumField(enum=enums.ToolTipPositioning)
+    tooltip_positioning_origin = EnumField(enum=enums.ToolTipPositioning)
 
     def load(self, data, *args, **kwargs):
         data = dict(data)
+        btn = super().load(data, *args, **kwargs)
+        self.load_text_values(data, btn)
+        self.load_outline_values(data, btn)
+        self.load_icon_values(data, btn)
+        return btn
+
+    def load_text_values(self, data: dict, btn: ui.Button):
         text_values = {
             'idle': data.pop('text_value_idle'),
             'selected': data.pop('text_value_selected'),
@@ -137,9 +144,15 @@ class ButtonSchema(Schema):
             'selected_highlighted': data.pop('text_value_selected_highlighted'),
             'unusable': data.pop('text_value_unusable'),
         }
-        outline_data = any([key.startswith('outline') for key in data.keys()])
-        if outline_data:
-            outline_values = {
+        schema = create_multi_state_schema(fields.String)
+        multi_state_text = schema.load(text_values)
+        btn.text.value.set_all("")  # Makes default empty string.
+        btn.text.value.set_each(**multi_state_text)
+    
+    def load_outline_values(self, data, btn):
+        has_outline_data = any([key.startswith('outline') for key in data.keys()])
+        if has_outline_data:
+            outline_data = {
                 'active': data.pop('outline_active'),
                 'size': {
                     'idle': data.pop('outline_size_idle'),
@@ -156,17 +169,35 @@ class ButtonSchema(Schema):
                     'unusable': data.pop('outline_color_unusable'),
                 }
             }
-        btn = super().load(data, *args, **kwargs)
-        schema = create_multi_state_schema(fields.String)
-        multi_state_text = schema.load(text_values)
-        btn.text.value.set_all("")  # Makes default empty string.
-        btn.text.value.set_each(**multi_state_text)
-        if outline_data:
-            multi_state_color = create_multi_state_schema(ColorField).load(outline_values['color'])
-            multi_state_size = create_multi_state_schema(FloatRoundedField).load(outline_values['size'])
+            multi_state_color = create_multi_state_schema(ColorField).load(outline_data['color'])
+            multi_state_size = create_multi_state_schema(FloatRoundedField).load(outline_data['size'])
             btn.outline.color.set_each(**multi_state_color)
             btn.outline.size.set_each(**multi_state_size)
-        return btn
+
+    def load_icon_values(self, data, btn):
+        has_icon_data = any([key.startswith('icon') for key in data.keys()])
+        if has_icon_data:
+            icon_data = {
+                'active': data.pop('icon_active'),
+                'sharpness': data.pop('icon_sharpness'),
+                'size': data.pop('icon_size'),
+                'ratio': data.pop('icon_ratio'),
+                'position': data.pop('icon_position'),
+                'rotation': data.pop('icon_rotation'),
+            }
+            icon_color ={
+                'idle': data.pop('icon_color_idle'),
+                'selected': data.pop('icon_color_selected'),
+                'highlighted': data.pop('icon_color_highlighted'),
+                'selected_highlighted': data.pop('icon_color_selected_highlighted'),
+                'unusable': data.pop('icon_color_unusable')
+            }
+            validated_icon_data = ButtonIconSchema().load(icon_data)
+            for key, value in validated_icon_data.items():
+                setattr(btn.icon, key, value)
+            icon_color = create_multi_state_schema(ColorField).load(icon_color)
+            btn.icon.color.set_each(**icon_color)
+
 
     @post_load
     def make_obj(self, data, **kwargs):
