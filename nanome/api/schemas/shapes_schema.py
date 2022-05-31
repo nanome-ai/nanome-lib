@@ -19,8 +19,6 @@ class ShapeSchema(Schema):
 
 class LabelSchema(ShapeSchema):
     text = fields.String()
-    font_size = fields.Integer()
-    text = fields.String()
     font_size = fields.Float()
 
 
