@@ -42,6 +42,7 @@ class AtomSchema(StructureSchema):
     is_het = fields.Boolean()
     in_conformer = fields.List(fields.Boolean())
     het_surfaced = fields.Boolean()
+    display_mode = fields.Integer()
 
     @post_load
     def make_atom(self, data, **kwargs):
