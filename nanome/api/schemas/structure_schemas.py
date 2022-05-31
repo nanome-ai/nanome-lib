@@ -17,8 +17,8 @@ class AtomSchema(StructureSchema):
     surface_rendering = fields.Boolean()
     exists = fields.Boolean()
     is_het = fields.Boolean()
-    occupancy = fields.Boolean()
-    bfactor = fields.Boolean()
+    occupancy = fields.Float()
+    bfactor = fields.Float()
     acceptor = fields.Boolean()
     donor = fields.Boolean()
     polar_hydrogen = fields.Boolean()
@@ -82,7 +82,7 @@ class ResidueSchema(StructureSchema):
     serial = fields.Integer()
     name = fields.Str()
     secondary_structure = EnumField(enum=enums.SecondaryStructure)
-    ignored_alt_locs = fields.List(fields.Str())
+    ignored_alt_locs = fields.List(fields.Str(max=1))
 
     @post_load
     def make_residue(self, data, **kwargs):

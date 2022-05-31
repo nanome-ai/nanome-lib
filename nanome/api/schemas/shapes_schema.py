@@ -23,10 +23,12 @@ class LabelSchema(ShapeSchema):
 
 
 class MeshSchema(ShapeSchema):
-    vertices = fields.List(fields.Float)
-    normals = fields.List(fields.Float)
-    triangles = fields.List(fields.Int)
-    colors = fields.List(fields.Int)
+    vertices = fields.List(fields.Float())
+    normals = fields.List(fields.Float())
+    colors = fields.List(fields.Float())
+    triangles = fields.List(fields.Int())
+    uv = fields.List(fields.Float())
+    unlit = fields.Boolean()
     texture_path = fields.String()
 
 
