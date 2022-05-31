@@ -6,6 +6,14 @@ from nanome.util import enums
 from .util_schemas import ColorField, EnumField, QuaternionField, Vector3Field
 
 
+def init_object(obj, data: dict):
+    for key in data:
+        try:
+            setattr(obj, key, data[key])
+        except AttributeError:
+            raise AttributeError('Could not set attribute {}'.format(key))
+
+
 class StructureSchema(Schema):
     index = fields.Integer(default=-1)
 
@@ -47,11 +55,7 @@ class AtomSchema(StructureSchema):
     @post_load
     def make_atom(self, data, **kwargs):
         new_obj = structure.Atom()
-        for key in data:
-            try:
-                setattr(new_obj, key, data[key])
-            except AttributeError:
-                raise AttributeError('Could not set attribute {}'.format(key))
+        init_object(new_obj, data)
         return new_obj
 
 
@@ -65,11 +69,7 @@ class BondSchema(StructureSchema):
     @post_load
     def make_bond(self, data, **kwargs):
         new_obj = structure.Bond()
-        for key in data:
-            try:
-                setattr(new_obj, key, data[key])
-            except AttributeError:
-                raise AttributeError('Could not set attribute {}'.format(key))
+        init_object(new_obj, data)
         return new_obj
 
 
@@ -91,14 +91,9 @@ class ResidueSchema(StructureSchema):
     @post_load
     def make_residue(self, data, **kwargs):
         new_obj = structure.Residue()
-        for key in data:
-            try:
-                setattr(new_obj, key, data[key])
-            except AttributeError:
-                raise AttributeError('Could not set attribute {}'.format(key))
+        init_object(new_obj, data)
         for child in itertools.chain(new_obj.atoms, new_obj.bonds):
             child._parent = new_obj
-
         return new_obj
 
 
@@ -109,11 +104,7 @@ class ChainSchema(StructureSchema):
     @post_load
     def make_chain(self, data, **kwargs):
         new_obj = structure.Chain()
-        for key in data:
-            try:
-                setattr(new_obj, key, data[key])
-            except AttributeError:
-                raise AttributeError('Could not set attribute {}'.format(key))
+        init_object(new_obj, data)
         for child in new_obj.residues:
             child._parent = new_obj
         return new_obj
@@ -134,11 +125,7 @@ class MoleculeSchema(StructureSchema):
         # Set conformer specific attributes first conformer_count first
         if 'conformer_count' in data:
             new_obj._conformer_count = data.pop('conformer_count')
-        for key in data:
-            try:
-                setattr(new_obj, key, data[key])
-            except AttributeError:
-                raise AttributeError('Could not set attribute {}'.format(key))
+        init_object(new_obj, data)
         for child in new_obj.chains:
             child._parent = new_obj
         return new_obj
@@ -161,12 +148,7 @@ class ComplexSchema(StructureSchema):
     @post_load
     def make_complex(self, data, **kwargs):
         new_obj = structure.Complex()
-        for key in data:
-            try:
-                setattr(new_obj, key, data[key])
-            except AttributeError:
-                raise AttributeError('Could not set attribute {}'.format(key))
-
+        init_object(new_obj, data)
         for child in new_obj.molecules:
             child._parent = new_obj
         return new_obj
@@ -181,9 +163,5 @@ class WorkspaceSchema(Schema):
     @post_load
     def make_workspace(self, data, **kwargs):
         new_obj = structure.Workspace()
-        for key in data:
-            try:
-                setattr(new_obj, key, data[key])
-            except AttributeError:
-                raise AttributeError('Could not set attribute {}'.format(key))
+        init_object(new_obj, data)
         return new_obj

@@ -6,6 +6,14 @@ from nanome.api import ui
 from .util_schemas import EnumField
 
 
+def init_object(obj, data: dict):
+    for key in data:
+        try:
+            setattr(obj, key, data[key])
+        except AttributeError:
+            raise AttributeError('Could not set attribute {}'.format(key))
+
+
 class FloatRoundedField(fields.Float):
     """If decimal part of float is 0, round to int."""
 
@@ -32,6 +40,7 @@ class ColorField(fields.Field):
 
 
 def create_multi_state_schema(field_class):
+    """Create a schema that can serialize a MultiStateVariable  the provided type."""
     return Schema.from_dict({
         'idle': field_class(),
         'selected': field_class(),
@@ -205,11 +214,7 @@ class MeshSchema(Schema):
     @post_load
     def make_obj(self, data, **kwargs):
         new_obj = ui.Mesh()
-        for key in data:
-            try:
-                setattr(new_obj, key, data[key])
-            except AttributeError:
-                raise AttributeError('Could not set attribute {}'.format(key))
+        init_object(new_obj, data)
         return new_obj
 
 
@@ -222,11 +227,7 @@ class ImageSchema(Schema):
     @post_load
     def make_obj(self, data, **kwargs):
         new_obj = ui.Image()
-        for key in data:
-            try:
-                setattr(new_obj, key, data[key])
-            except AttributeError:
-                raise AttributeError('Could not set attribute {}'.format(key))
+        init_object(new_obj, data)
         return new_obj
 
 
@@ -240,11 +241,7 @@ class LoadingBarSchema(Schema):
     @post_load
     def make_obj(self, data, **kwargs):
         new_obj = ui.LoadingBar()
-        for key in data:
-            try:
-                setattr(new_obj, key, data[key])
-            except AttributeError:
-                raise AttributeError('Could not set attribute {}'.format(key))
+        init_object(new_obj, data)
         return new_obj
 
 
@@ -265,11 +262,7 @@ class LabelSchema(Schema):
     @post_load
     def make_obj(self, data, **kwargs):
         new_obj = ui.Label()
-        for key in data:
-            try:
-                setattr(new_obj, key, data[key])
-            except AttributeError:
-                raise AttributeError('Could not set attribute {}'.format(key))
+        init_object(new_obj, data)
         return new_obj
 
 
@@ -295,11 +288,7 @@ class TextInputSchema(Schema):
     @post_load
     def make_obj(self, data, **kwargs):
         new_obj = ui.TextInput()
-        for key in data:
-            try:
-                setattr(new_obj, key, data[key])
-            except AttributeError:
-                raise AttributeError('Could not set attribute {}'.format(key))
+        init_object(new_obj, data)
         return new_obj
 
 
@@ -313,11 +302,7 @@ class SliderSchema(Schema):
     @post_load
     def make_obj(self, data, **kwargs):
         new_obj = ui.Slider()
-        for key in data:
-            try:
-                setattr(new_obj, key, data[key])
-            except AttributeError:
-                raise AttributeError('Could not set attribute {}'.format(key))
+        init_object(new_obj, data)
         return new_obj
 
 
@@ -338,11 +323,7 @@ class DropdownSchema(Schema):
     @post_load
     def make_obj(self, data, **kwargs):
         new_obj = ui.Dropdown()
-        for key in data:
-            try:
-                setattr(new_obj, key, data[key])
-            except AttributeError:
-                raise AttributeError('Could not set attribute {}'.format(key))
+        init_object(new_obj, data)
         return new_obj
 
 
@@ -356,11 +337,7 @@ class UIListSchema(Schema):
     @post_load
     def make_obj(self, data, **kwargs):
         new_obj = ui.UIList()
-        for key in data:
-            try:
-                setattr(new_obj, key, data[key])
-            except AttributeError:
-                raise AttributeError('Could not set attribute {}'.format(key))
+        init_object(new_obj, data)
         return new_obj
 
 
@@ -410,11 +387,7 @@ class LayoutNodeSchema(Schema):
     @post_load
     def make_obj(self, data, **kwargs):
         new_obj = ui.LayoutNode()
-        for key in data:
-            try:
-                setattr(new_obj, key, data[key])
-            except AttributeError:
-                raise AttributeError('Could not set attribute {}'.format(key))
+        init_object(new_obj, data)
         for child in new_obj.children:
             child._parent = new_obj
         return new_obj
@@ -431,10 +404,5 @@ class MenuSchema(Schema):
     @post_load
     def make_menu(self, data, **kwargs):
         new_obj = ui.Menu()
-        for key in data:
-            try:
-                setattr(new_obj, key, data[key])
-            except AttributeError:
-                raise AttributeError('Could not set attribute {}'.format(key))
-        # new_obj.root = new_obj.effective_root
+        init_object(new_obj, data)
         return new_obj
