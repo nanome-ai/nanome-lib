@@ -64,7 +64,7 @@ class BondSchema(StructureSchema):
     atom2 = AtomSchema(only=('index',))
     kind = EnumField(enum=enums.Kind)
     in_conformer = fields.List(fields.Boolean())
-    kinds = fields.List(fields.Nested(lambda: EnumField(enum=enums.Kind)))
+    kinds = fields.List(fields.Nested(EnumField(enum=enums.Kind)))
 
     @post_load
     def make_bond(self, data, **kwargs):
