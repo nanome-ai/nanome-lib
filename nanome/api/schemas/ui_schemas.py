@@ -40,6 +40,7 @@ class Vector3Schema(Schema):
         new_obj = Vector3(**data)
         return new_obj
 
+
 class ColorField(fields.Field):
 
     def _serialize(self, value: Color, attr, obj, **kwargs):
@@ -59,6 +60,7 @@ def create_multi_state_schema(field_class):
         'unusable': field_class(),
         'default': field_class(),
     })()
+
 
 class ButtonTextSchema(Schema):
     value = create_multi_state_schema(fields.String)
@@ -239,7 +241,7 @@ class ButtonSchema(Schema):
         values_data = string_schema.load(text_values)
         btn.text.value.set_all("")  # Makes default empty string.
         btn.text.value.set_each(**values_data)
-        
+
         color_schema = create_multi_state_schema(ColorField)
         colors_data = color_schema.load(text_color)
         btn.text.color.set_each(**colors_data)
@@ -247,7 +249,7 @@ class ButtonSchema(Schema):
         bold_schema = create_multi_state_schema(fields.Bool)
         bolds_data = bold_schema.load(text_bold)
         btn.text.bold.set_each(**bolds_data)
-    
+
     def load_outline_values(self, data, btn):
         has_outline_data = any([key.startswith('outline') for key in data.keys()])
         if has_outline_data:
@@ -288,7 +290,7 @@ class ButtonSchema(Schema):
                 'padding_top': data.pop('icon_padding_top', 0),
                 'padding_bottom': data.pop('icon_padding_bottom', 0),
             }
-            icon_color ={
+            icon_color = {
                 'idle': data.pop('icon_color_idle'),
                 'selected': data.pop('icon_color_selected'),
                 'highlighted': data.pop('icon_color_highlighted'),
@@ -307,7 +309,7 @@ class ButtonSchema(Schema):
             mesh_data = {
                 'active': data.pop('mesh_active'),
             }
-            mesh_enabled= {
+            mesh_enabled = {
                 'idle': data.pop('mesh_enabled_idle'),
                 'selected': data.pop('mesh_enabled_selected'),
                 'highlighted': data.pop('mesh_enabled_highlighted'),
@@ -327,7 +329,7 @@ class ButtonSchema(Schema):
             multi_state_enabled = create_multi_state_schema(fields.Boolean).load(mesh_enabled)
             btn.mesh.color.set_each(**multi_state_color)
             btn.mesh.enabled.set_each(**multi_state_enabled)
-    
+
     def load_tooltip_values(self, data, btn):
         has_tooltip_data = any([key.startswith('tooltip') for key in data.keys()])
         if has_tooltip_data:
