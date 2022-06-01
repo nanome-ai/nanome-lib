@@ -444,7 +444,6 @@ class SliderSchema(Schema):
     current_value = FloatRoundedField()
     min_value = FloatRoundedField()
     max_value = FloatRoundedField()
-    type_name = fields.String()
 
     @post_load
     def make_obj(self, data, **kwargs):
