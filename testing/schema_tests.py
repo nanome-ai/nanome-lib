@@ -81,7 +81,6 @@ class UISchemaTestCase(unittest.TestCase):
         self.assertEqual(menu_btn.text.color.highlighted.hex, test_menu_btn.text.color.highlighted.hex)
         self.assertEqual(menu_btn.text.color.selected.hex, test_menu_btn.text.color.selected.hex)
         self.assertEqual(menu_btn.text.color.unusable.hex, test_menu_btn.text.color.unusable.hex)
-        
         # Test outline values
         self.assertEqual(menu_btn.outline.color.idle.hex, test_menu_btn.outline.color.idle.hex)
         self.assertEqual(menu_btn.outline.color.highlighted.hex, test_menu_btn.outline.color.highlighted.hex)
@@ -93,7 +92,9 @@ class UISchemaTestCase(unittest.TestCase):
         self.assertEqual(menu_btn.outline.size.unusable, test_menu_btn.outline.size.unusable)
         # assert mesh colors
         self.assertEqual(menu_btn.mesh.active, test_menu_btn.mesh.active)
-        self.assertEqual(menu_btn.mesh.color.unusable.hex, test_menu_btn.mesh.color.unusable.hex)
+        self.assertEqual(menu_btn.mesh.color.idle.hex, test_menu_btn.mesh.color.idle.hex)
+        self.assertEqual(menu_btn.mesh.color.highlighted.hex, test_menu_btn.mesh.color.highlighted.hex)
+        self.assertEqual(menu_btn.mesh.color.selected.hex, test_menu_btn.mesh.color.selected.hex)
         self.assertEqual(menu_btn.mesh.color.unusable.hex, test_menu_btn.mesh.color.unusable.hex)
         # tooltip
         self.assertEqual(menu_btn.tooltip.title, test_menu_btn.tooltip.title)
