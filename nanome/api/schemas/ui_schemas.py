@@ -1,5 +1,4 @@
 from marshmallow import fields, Schema, post_load
-from operator import attrgetter
 
 from nanome.util import enums, Color, Vector3
 from nanome.api import ui
