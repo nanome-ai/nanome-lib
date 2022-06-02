@@ -259,7 +259,7 @@ class ButtonSchema(Schema):
         btn.text.bold.set_each(**bolds_data)
 
     def load_outline_values(self, data, btn):
-        has_outline_data = any([key.startswith('outline') for key in data.keys()])
+        has_outline_data = any(key.startswith('outline') for key in data.keys())
         if has_outline_data:
             outline_data = {
                 'active': data.pop('outline_active'),
@@ -284,7 +284,7 @@ class ButtonSchema(Schema):
             btn.outline.size.set_each(**multi_state_size)
 
     def load_icon_values(self, data, btn):
-        has_icon_data = any([key.startswith('icon') for key in data.keys()])
+        has_icon_data = any(key.startswith('icon') for key in data.keys())
         if has_icon_data:
             icon_data = {
                 'active': data.pop('icon_active'),
@@ -306,7 +306,7 @@ class ButtonSchema(Schema):
                 'unusable': data.pop('icon_color_unusable')
             }
             # Icon values aren't present in json exported directly from StackStudio
-            if any([key.startswith('icon_value') for key in data.keys()]):
+            if any(key.startswith('icon_value') for key in data.keys()):
                 icon_values = {
                     'idle': data.pop('icon_value_idle'),
                     'selected': data.pop('icon_value_selected'),
@@ -323,7 +323,7 @@ class ButtonSchema(Schema):
             btn.icon.color.set_each(**loaded_icon_color)
 
     def load_mesh_values(self, data, btn):
-        has_mesh_data = any([key.startswith('mesh') for key in data.keys()])
+        has_mesh_data = any(key.startswith('mesh') for key in data.keys())
         if has_mesh_data:
             mesh_data = {
                 'active': data.pop('mesh_active'),
@@ -350,7 +350,7 @@ class ButtonSchema(Schema):
             btn.mesh.enabled.set_each(**multi_state_enabled)
 
     def load_tooltip_values(self, data, btn):
-        has_tooltip_data = any([key.startswith('tooltip') for key in data.keys()])
+        has_tooltip_data = any(key.startswith('tooltip') for key in data.keys())
         if has_tooltip_data:
             tooltip_data = {
                 'title': data.pop('tooltip_title'),
