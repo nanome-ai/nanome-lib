@@ -465,7 +465,6 @@ class DropdownSchema(Schema):
     use_permanent_title = fields.Bool()
     max_displayed_items = fields.Integer(min=0)
     items = fields.List(fields.Nested(DropdownItemSchema))
-    unusable = fields.Bool(default=False)
 
     @post_load
     def make_obj(self, data, **kwargs):
