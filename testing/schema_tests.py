@@ -1,5 +1,6 @@
 import json
 import os
+import tempfile
 import unittest
 
 from nanome.api import structure, ui, shapes
@@ -58,14 +59,22 @@ class UISchemaTestCase(unittest.TestCase):
         menu = schemas.MenuSchema().load(menu_dict)
         self.assertTrue(isinstance(menu, ui.Menu))
         self.assertTrue(isinstance(menu.root, ui.LayoutNode))
+        
+        # Make sure menu can be serialized back to json.
+        test_export = tempfile.NamedTemporaryFile(mode='w+', delete=False)
+        menu.io.to_json(test_export.name)
+        with open(test_export.name, 'r') as f:
+            exported_data = json.loads(f.read())
+            self.assertTrue(isinstance(exported_data, dict))
+        test_export.close()
 
-        # Make sure all content was loaded.
+        # Make sure all content in reference menu was loaded
         menu_content_types = [
             content.__class__ for content in menu.get_all_content()]
         self.assertTrue(menu_content_types)
         reference_menu_content_types = [content.__class__ for content in reference_menu.get_all_content()]
         self.assertEqual(menu_content_types, reference_menu_content_types)
-
+        # Check that values match the reference menu
         reference_menu_btn = next(content for content in reference_menu.get_all_content() if isinstance(content, ui.Button))
         menu_btn = next(content for content in menu.get_all_content() if isinstance(content, ui.Button))
         # Test that multi state variables loaded correctly.
@@ -102,6 +111,17 @@ class UISchemaTestCase(unittest.TestCase):
         self.assertEqual(menu_btn.tooltip.bounds, reference_menu_btn.tooltip.bounds)
         self.assertEqual(menu_btn.tooltip.positioning_target, reference_menu_btn.tooltip.positioning_target)
         self.assertEqual(menu_btn.tooltip.positioning_origin, reference_menu_btn.tooltip.positioning_origin)
+        # icons
+        self.assertEqual(menu_btn.icon.active, reference_menu_btn.icon.active)
+        self.assertEqual(menu_btn.icon.color.idle.hex, reference_menu_btn.icon.color.idle.hex)
+        self.assertEqual(menu_btn.icon.color.highlighted.hex, reference_menu_btn.icon.color.highlighted.hex)
+        self.assertEqual(menu_btn.icon.color.selected.hex, reference_menu_btn.icon.color.selected.hex)
+        self.assertEqual(menu_btn.icon.color.unusable.hex, reference_menu_btn.icon.color.unusable.hex)
+        self.assertEqual(menu_btn.icon.value.idle, reference_menu_btn.icon.value.idle)
+        self.assertEqual(menu_btn.icon.value.highlighted, reference_menu_btn.icon.value.highlighted)
+        self.assertEqual(menu_btn.icon.value.selected, reference_menu_btn.icon.value.selected)
+        self.assertEqual(menu_btn.icon.value.unusable, reference_menu_btn.icon.value.unusable)
+        
 
     def test_dump_menu(self):
         """Ensure that dumping menu from serializers returns same input json."""

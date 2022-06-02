@@ -132,6 +132,7 @@ class ButtonSchema(Schema):
     type_name = fields.String(required=True)
     selected = fields.Bool()
     unusable = fields.Bool()
+    # ButtonText
     text_active = fields.Bool()
     text_value_idle = fields.String()
     text_value_selected = fields.String()
@@ -162,8 +163,13 @@ class ButtonSchema(Schema):
     text_padding_left = FloatRoundedField()
     text_padding_right = FloatRoundedField()
     text_line_spacing = FloatRoundedField()
-
+    # Icon fields
     icon_active = fields.Bool()
+    icon_value_idle = fields.Str()
+    icon_value_selected = fields.Str()
+    icon_value_highlighted = fields.Str()
+    icon_value_selected_highlighted = fields.Str()
+    icon_value_unusable = fields.Str()
     icon_color_idle = ColorField()
     icon_color_selected = ColorField()
     icon_color_highlighted = ColorField()
@@ -174,7 +180,7 @@ class ButtonSchema(Schema):
     icon_ratio = FloatRoundedField()
     icon_position = fields.Nested(PositionSchema)
     icon_rotation = fields.Nested(PositionSchema)
-
+    # Mesh Fields
     mesh_active = fields.Boolean()
     mesh_enabled_idle = fields.Boolean()
     mesh_enabled_selected = fields.Boolean()
@@ -186,6 +192,7 @@ class ButtonSchema(Schema):
     mesh_color_highlighted = ColorField()
     mesh_color_selected_highlighted = ColorField()
     mesh_color_unusable = ColorField()
+    # Outline fields
     outline_active = fields.Boolean()
     outline_size_idle = FloatRoundedField()
     outline_size_selected = FloatRoundedField()
@@ -197,6 +204,7 @@ class ButtonSchema(Schema):
     outline_color_highlighted = ColorField()
     outline_color_selected_highlighted = ColorField()
     outline_color_unusable = ColorField()
+    # Tooltip fields
     tooltip_title = fields.String()
     tooltip_content = fields.String()
     tooltip_bounds = fields.Nested(PositionSchema)
@@ -295,11 +303,22 @@ class ButtonSchema(Schema):
                 'selected_highlighted': data.pop('icon_color_selected_highlighted'),
                 'unusable': data.pop('icon_color_unusable')
             }
+            # Icon values aren't present in json exported directly from StackStudio
+            if any([key.startswith('icon_value') for key in data.keys()]):
+                icon_values = {
+                    'idle': data.pop('icon_value_idle'),
+                    'selected': data.pop('icon_value_selected'),
+                    'highlighted': data.pop('icon_value_highlighted'),
+                    'selected_highlighted': data.pop('icon_value_selected_highlighted'),
+                    'unusable': data.pop('icon_value_unusable')
+                }
+                loaded_icon_values = create_multi_state_schema(fields.Str).load(icon_values)
+                btn.icon.value.set_each(**loaded_icon_values)
             validated_icon_data = ButtonIconSchema().load(icon_data)
             for key, value in validated_icon_data.items():
                 setattr(btn.icon, key, value)
-            icon_color = create_multi_state_schema(ColorField).load(icon_color)
-            btn.icon.color.set_each(**icon_color)
+            loaded_icon_color = create_multi_state_schema(ColorField).load(icon_color)
+            btn.icon.color.set_each(**loaded_icon_color)
 
     def load_mesh_values(self, data, btn):
         has_mesh_data = any([key.startswith('mesh') for key in data.keys()])
@@ -331,7 +350,6 @@ class ButtonSchema(Schema):
     def load_tooltip_values(self, data, btn):
         has_tooltip_data = any([key.startswith('tooltip') for key in data.keys()])
         if has_tooltip_data:
-            # bounds_data = data.pop()
             tooltip_data = {
                 'title': data.pop('tooltip_title'),
                 'content': data.pop('tooltip_content'),
@@ -457,6 +475,11 @@ class DropdownItemSchema(Schema):
     close_on_selected = fields.Bool()
     selected = fields.Bool()
 
+    @post_load
+    def make_obj(self, data, **kwargs):
+        new_obj = ui.DropdownItem()
+        init_object(new_obj, data)
+        return new_obj
 
 class DropdownSchema(Schema):
     type_name = fields.String(required=True)
