@@ -126,7 +126,7 @@ class UISchemaTestCase(unittest.TestCase):
         self.assertEqual(menu_btn.icon.value.unusable, reference_menu_btn.icon.value.unusable)
 
     def test_button_dump(self):
-        """Test all the values"""
+        """Test that all the nested values of a Button are dumped correctly."""
         menu = ui.Menu.io.from_json(test_menu_json)
         menu_dump = schemas.MenuSchema().dump(menu)
         menu_btn = next(
