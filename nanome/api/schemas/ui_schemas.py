@@ -212,6 +212,29 @@ class ButtonSchema(Schema):
     tooltip_bounds = fields.Nested(PositionSchema)
     tooltip_positioning_target = EnumField(enum=enums.ToolTipPositioning)
     tooltip_positioning_origin = EnumField(enum=enums.ToolTipPositioning)
+    # Switch fields
+    disable_on_press = fields.Bool()
+    toggle_on_press = fields.Bool()
+    switch_active = fields.Bool()
+    switch_on_color = ColorField()
+    switch_off_color = ColorField()
+    # backwards compatibility
+    text_bolded = fields.Bool()
+
+    def dump(self, obj, *args, **kwargs):
+        # Add nested fields we want to serialize
+        obj.switch_active = obj.switch.active
+        obj.switch_on_color = obj.switch.on_color
+        obj.switch_off_color = obj.switch.off_color
+        obj.icon_value_idle = obj.icon.value.idle
+        obj.icon_value_selected = obj.icon.value.selected
+        obj.icon_value_highlighted = obj.icon.value.highlighted
+        obj.icon_value_selected_highlighted = obj.icon.value.selected_highlighted
+        obj.icon_value_unusable = obj.icon.value.unusable
+        # icon image
+
+        dump_data = super().dump(obj, *args, **kwargs)
+        return dump_data
 
     def load(self, data, *args, **kwargs):
         data = dict(data)
@@ -231,32 +254,34 @@ class ButtonSchema(Schema):
             'selected_highlighted': data.pop('text_value_selected_highlighted'),
             'unusable': data.pop('text_value_unusable'),
         }
-        text_color = {
-            'idle': data.pop('text_color_idle'),
-            'selected': data.pop('text_color_selected'),
-            'highlighted': data.pop('text_color_highlighted'),
-            'selected_highlighted': data.pop('text_color_selected_highlighted'),
-            'unusable': data.pop('text_color_unusable'),
-        }
-        text_bold = {
-            'idle': data.pop('text_bold_idle'),
-            'selected': data.pop('text_bold_selected'),
-            'highlighted': data.pop('text_bold_highlighted'),
-            'selected_highlighted': data.pop('text_bold_selected_highlighted'),
-            'unusable': data.pop('text_bold_unusable'),
-        }
+        if any(key.startswith('text_color') for key in data.keys()):
+            text_color = {
+                'idle': data.pop('text_color_idle'),
+                'selected': data.pop('text_color_selected'),
+                'highlighted': data.pop('text_color_highlighted'),
+                'selected_highlighted': data.pop('text_color_selected_highlighted'),
+                'unusable': data.pop('text_color_unusable'),
+            }
+            color_schema = create_multi_state_schema(ColorField)
+            colors_data = color_schema.load(text_color)
+            btn.text.color.set_each(**colors_data)
+
+        if any(key.startswith('text_bold_') for key in data.keys()):
+            text_bold = {
+                'idle': data.pop('text_bold_idle'),
+                'selected': data.pop('text_bold_selected'),
+                'highlighted': data.pop('text_bold_highlighted'),
+                'selected_highlighted': data.pop('text_bold_selected_highlighted'),
+                'unusable': data.pop('text_bold_unusable'),
+            }
+            bold_schema = create_multi_state_schema(fields.Bool)
+            bolds_data = bold_schema.load(text_bold)
+            btn.text.bold.set_each(**bolds_data)
+
         string_schema = create_multi_state_schema(fields.String)
         values_data = string_schema.load(text_values)
         btn.text.value.set_all("")  # Makes default empty string.
         btn.text.value.set_each(**values_data)
-
-        color_schema = create_multi_state_schema(ColorField)
-        colors_data = color_schema.load(text_color)
-        btn.text.color.set_each(**colors_data)
-
-        bold_schema = create_multi_state_schema(fields.Bool)
-        bolds_data = bold_schema.load(text_bold)
-        btn.text.bold.set_each(**bolds_data)
 
     def load_outline_values(self, data, btn):
         has_outline_data = any(key.startswith('outline') for key in data.keys())
@@ -362,6 +387,18 @@ class ButtonSchema(Schema):
             validated_data = ButtonToolTipSchema().load(tooltip_data)
             for key, value in validated_data.items():
                 setattr(btn.tooltip, key, value)
+    
+    def load_switch_values(self, data, btn):
+        has_switch_data = any(key.startswith('switch') for key in data.keys())
+        if has_switch_data:
+            switch_data = {
+                'active': data.pop('switch_active'),
+                'on_color': data.pop('switch_on_color'),
+                'off_color': data.pop('switch_off_color'),
+            }
+            validated_data = ButtonSwitchSchema().load(switch_data)
+            for key, value in validated_data.items():
+                setattr(btn.switch, key, value)
 
     @post_load
     def make_obj(self, data, **kwargs):
@@ -525,6 +562,7 @@ class ContentSchema(Schema):
         'Slider': SliderSchema(),
         'Dropdown': DropdownSchema(),
         'List': UIListSchema(),
+        'UIList': UIListSchema(),
         'LoadingBar': LoadingBarSchema()
     }
 
@@ -538,6 +576,7 @@ class ContentSchema(Schema):
         schema = self.type_name_schemas[type_name]
         dump_data = schema.dump(obj, *args, **kwargs)
         dump_data['type_name'] = type_name
+        return dump_data
 
 
 class LayoutNodeSchema(Schema):

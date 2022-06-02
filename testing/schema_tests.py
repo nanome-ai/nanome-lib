@@ -17,7 +17,9 @@ test_assets = os.path.join(os.getcwd(), "testing/test_assets")
 workspace_json = os.path.join(test_assets, "serialized_data/benzene_workspace.json")
 pdb_file = os.path.join(test_assets, "pdb/1tyl.pdb")
 conformer_pdb = os.path.join(test_assets, "pdb/thrombine_conformer.pdb")
-test_menu_json = os.path.join(test_assets, "test_menu_smina.json")
+smina_menu_json = os.path.join(test_assets, "test_menu_smina.json")
+test_menu_json = os.path.join(test_assets, "test_menu.json")
+
 
 
 @unittest.skipIf(not reqs_installed, "Marshmallow not installed")
@@ -53,8 +55,8 @@ class UISchemaTestCase(unittest.TestCase):
 
     def test_load_menu(self):
         """Ensure loading menu with serializers equivalent to Menu.io.from_json."""
-        reference_menu = ui.Menu.io.from_json(path=test_menu_json)
-        with open(test_menu_json, 'r') as f:
+        reference_menu = ui.Menu.io.from_json(path=smina_menu_json)
+        with open(smina_menu_json, 'r') as f:
             menu_dict = json.load(f)
         menu = schemas.MenuSchema().load(menu_dict)
         self.assertTrue(isinstance(menu, ui.Menu))
@@ -74,10 +76,11 @@ class UISchemaTestCase(unittest.TestCase):
         self.assertTrue(menu_content_types)
         reference_menu_content_types = [content.__class__ for content in reference_menu.get_all_content()]
         self.assertEqual(menu_content_types, reference_menu_content_types)
-        # Check that values match the reference menu
+        
+        # Check that Button values match the reference menu
         reference_menu_btn = next(content for content in reference_menu.get_all_content() if isinstance(content, ui.Button))
         menu_btn = next(content for content in menu.get_all_content() if isinstance(content, ui.Button))
-        # Test that multi state variables loaded correctly.
+        # ButtonText fields
         self.assertEqual(menu_btn.text.value.idle, reference_menu_btn.text.value.idle)
         self.assertEqual(menu_btn.text.value.highlighted, reference_menu_btn.text.value.highlighted)
         self.assertEqual(menu_btn.text.value.selected, reference_menu_btn.text.value.selected)
@@ -121,17 +124,50 @@ class UISchemaTestCase(unittest.TestCase):
         self.assertEqual(menu_btn.icon.value.highlighted, reference_menu_btn.icon.value.highlighted)
         self.assertEqual(menu_btn.icon.value.selected, reference_menu_btn.icon.value.selected)
         self.assertEqual(menu_btn.icon.value.unusable, reference_menu_btn.icon.value.unusable)
-        
 
     def test_dump_menu(self):
         """Ensure that dumping menu from serializers returns same input json."""
-        with open(test_menu_json, 'r') as f:
+        with open(smina_menu_json, 'r') as f:
             input_dict = json.load(f)
         menu = schemas.MenuSchema().load(input_dict)
         menu_dump = schemas.MenuSchema().dump(menu)
         second_menu = schemas.MenuSchema().load(menu_dump)
         second_menu_dump = schemas.MenuSchema().dump(second_menu)
         self.assertEqual(menu_dump, second_menu_dump)
+    
+    def test_btn_switch_fields(self):
+        """Test btn switch values that are not included in StackStudio exports."""
+        with open(test_menu_json, 'r') as f:
+            input_dict = json.load(f)
+        menu = schemas.MenuSchema().load(input_dict)
+        menu_btn = next(
+            content for content in menu.get_all_content()
+            if isinstance(content, ui.Button))
+        menu_btn.switch.active = True
+        menu_btn.switch.on_color = Color.Red()
+        menu_btn.switch.off_color = Color.Blue()
+        menu_dump = schemas.MenuSchema().dump(menu)
+        btn_data = menu_dump['effective_root']['children'][0]['children'][0]['content']
+        self.assertEqual(btn_data.get('switch_active'), menu_btn.switch.active)
+        self.assertEqual(btn_data.get('switch_on_color'), menu_btn.switch.on_color._color)
+        self.assertEqual(btn_data.get('switch_off_color'), menu_btn.switch.off_color._color)
+    
+    def test_btn_icon_value_fields(self):
+        """Test icon values that are not included in StackStudio exports, but we actually want."""
+        with open(test_menu_json, 'r') as f:
+            input_dict = json.load(f)
+        menu = schemas.MenuSchema().load(input_dict)
+        menu_btn = next(
+            content for content in menu.get_all_content()
+            if isinstance(content, ui.Button))
+        menu_btn.icon.value.set_all("/path/to/icon.png")
+        menu_dump = schemas.MenuSchema().dump(menu)
+        btn_data = menu_dump['effective_root']['children'][0]['children'][0]['content']
+        self.assertEqual(btn_data.get('icon_value_idle'), menu_btn.icon.value.idle)
+        self.assertEqual(btn_data.get('icon_value_selected'), menu_btn.icon.value.selected)
+        self.assertEqual(btn_data.get('icon_value_highlighted'), menu_btn.icon.value.highlighted)
+        self.assertEqual(btn_data.get('icon_value_selected_highlighted'), menu_btn.icon.value.selected_highlighted)
+        self.assertEqual(btn_data.get('icon_value_unusable'), menu_btn.icon.value.unusable)
 
 
 @unittest.skipIf(not reqs_installed, "Marshmallow not installed")
