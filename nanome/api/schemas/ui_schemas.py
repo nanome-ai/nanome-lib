@@ -231,8 +231,7 @@ class ButtonSchema(Schema):
         obj.icon_value_highlighted = obj.icon.value.highlighted
         obj.icon_value_selected_highlighted = obj.icon.value.selected_highlighted
         obj.icon_value_unusable = obj.icon.value.unusable
-        # icon image
-
+        breakpoint()
         dump_data = super().dump(obj, *args, **kwargs)
         return dump_data
 
@@ -284,8 +283,7 @@ class ButtonSchema(Schema):
         btn.text.value.set_each(**values_data)
 
     def load_outline_values(self, data, btn):
-        has_outline_data = any(key.startswith('outline') for key in data.keys())
-        if has_outline_data:
+        if any(key.startswith('outline') for key in data.keys()):
             outline_data = {
                 'active': data.pop('outline_active'),
                 'size': {

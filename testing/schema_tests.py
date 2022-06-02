@@ -125,7 +125,35 @@ class UISchemaTestCase(unittest.TestCase):
         self.assertEqual(menu_btn.icon.value.selected, reference_menu_btn.icon.value.selected)
         self.assertEqual(menu_btn.icon.value.unusable, reference_menu_btn.icon.value.unusable)
 
-    def test_dump_menu(self):
+    def test_button_dump(self):
+        """Test all the values"""
+        with open(test_menu_json, 'r') as f:
+            input_dict = json.load(f)
+        menu = schemas.MenuSchema().load(input_dict)
+        menu_dump = schemas.MenuSchema().dump(menu)
+        menu_btn = next(
+            content for content in menu.get_all_content()
+            if isinstance(content, ui.Button))
+        menu = schemas.MenuSchema().load(input_dict)
+        btn_data = menu_dump['effective_root']['children'][0]['children'][0]['content']
+        # Test outline data
+        self.assertEqual(
+            round(btn_data['outline_size_idle'], 2),
+            round(menu_btn.outline.size.idle, 2))
+        self.assertEqual(
+            round(btn_data['outline_size_selected'], 2),
+            round(menu_btn.outline.size.selected, 2))
+        self.assertEqual(
+            round(btn_data['outline_size_highlighted'], 2),
+            round(menu_btn.outline.size.highlighted, 2))
+        self.assertEqual(
+            round(btn_data['outline_size_selected_highlighted'], 2),
+            round(menu_btn.outline.size.selected_highlighted, 2))
+        self.assertEqual(
+            round(btn_data['outline_size_unusable'], 2),
+            round(menu_btn.outline.size.unusable, 2))
+        
+    def test_dump_menu_idempotent(self):
         """Ensure that dumping menu from serializers returns same input json."""
         with open(smina_menu_json, 'r') as f:
             input_dict = json.load(f)
