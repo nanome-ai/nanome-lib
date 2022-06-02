@@ -246,17 +246,17 @@ class ButtonSchema(Schema):
             'icon_value_selected_highlighted': obj.icon.value.selected_highlighted,
             'icon_value_unusable': obj.icon.value.unusable,
             # Outline fields.
-            'outline_active':  obj.outline.active,
-            'outline_size_idle':  obj.outline.size.idle,
-            'outline_size_selected':  obj.outline.size.selected,
-            'outline_size_highlighted':  obj.outline.size.highlighted,
-            'outline_size_selected_highlighted':  obj.outline.size.selected_highlighted,
-            'outline_size_unusable':  obj.outline.size.unusable,
-            'outline_color_idle':  obj.outline.color.idle,
-            'outline_color_selected':  obj.outline.color.selected,
-            'outline_color_highlighted':  obj.outline.color.highlighted,
-            'outline_color_selected_highlighted':  obj.outline.color.selected_highlighted,
-            'outline_color_unusable':  obj.outline.color.unusable,
+            'outline_active': obj.outline.active,
+            'outline_size_idle': obj.outline.size.idle,
+            'outline_size_selected': obj.outline.size.selected,
+            'outline_size_highlighted': obj.outline.size.highlighted,
+            'outline_size_selected_highlighted': obj.outline.size.selected_highlighted,
+            'outline_size_unusable': obj.outline.size.unusable,
+            'outline_color_idle': obj.outline.color.idle,
+            'outline_color_selected': obj.outline.color.selected,
+            'outline_color_highlighted': obj.outline.color.highlighted,
+            'outline_color_selected_highlighted': obj.outline.color.selected_highlighted,
+            'outline_color_unusable': obj.outline.color.unusable,
             # ButtonText fields
             'text_value_idle': obj.text.value.idle,
             'text_value_highlighted': obj.text.value.highlighted,
@@ -458,7 +458,7 @@ class ButtonSchema(Schema):
             validated_data = ButtonToolTipSchema().load(tooltip_data)
             for key, value in validated_data.items():
                 setattr(btn.tooltip, key, value)
-    
+
     def load_switch_values(self, data, btn):
         has_switch_data = any(key.startswith('switch') for key in data.keys())
         if has_switch_data:

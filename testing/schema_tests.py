@@ -21,7 +21,6 @@ smina_menu_json = os.path.join(test_assets, "test_menu_smina.json")
 test_menu_json = os.path.join(test_assets, "test_menu.json")
 
 
-
 @unittest.skipIf(not reqs_installed, "Marshmallow not installed")
 class StructureSchemaTestCase(unittest.TestCase):
 
@@ -76,7 +75,7 @@ class UISchemaTestCase(unittest.TestCase):
         self.assertTrue(menu_content_types)
         reference_menu_content_types = [content.__class__ for content in reference_menu.get_all_content()]
         self.assertEqual(menu_content_types, reference_menu_content_types)
-        
+
         # Check that Button values match the reference menu
         reference_menu_btn = next(content for content in reference_menu.get_all_content() if isinstance(content, ui.Button))
         menu_btn = next(content for content in menu.get_all_content() if isinstance(content, ui.Button))
@@ -205,7 +204,7 @@ class UISchemaTestCase(unittest.TestCase):
         second_menu = schemas.MenuSchema().load(menu_dump)
         second_menu_dump = schemas.MenuSchema().dump(second_menu)
         self.assertEqual(menu_dump, second_menu_dump)
-    
+
     def test_btn_switch_fields(self):
         """Test btn switch values that are not included in StackStudio exports."""
         with open(test_menu_json, 'r') as f:
@@ -222,7 +221,7 @@ class UISchemaTestCase(unittest.TestCase):
         self.assertEqual(btn_data.get('switch_active'), menu_btn.switch.active)
         self.assertEqual(btn_data.get('switch_on_color'), menu_btn.switch.on_color._color)
         self.assertEqual(btn_data.get('switch_off_color'), menu_btn.switch.off_color._color)
-    
+
     def test_btn_icon_value_fields(self):
         """Test icon values that are not included in StackStudio exports, but we actually want."""
         with open(test_menu_json, 'r') as f:
