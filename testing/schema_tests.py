@@ -52,7 +52,7 @@ class UISchemaTestCase(unittest.TestCase):
 
     def test_load_menu(self):
         """Ensure loading menu with serializers equivalent to Menu.io.from_json."""
-        test_menu = ui.Menu.io.from_json(path=test_menu_json)
+        reference_menu = ui.Menu.io.from_json(path=test_menu_json)
         with open(test_menu_json, 'r') as f:
             menu_dict = json.load(f)
         menu = schemas.MenuSchema().load(menu_dict)
@@ -63,45 +63,45 @@ class UISchemaTestCase(unittest.TestCase):
         menu_content_types = [
             content.__class__ for content in menu.get_all_content()]
         self.assertTrue(menu_content_types)
-        test_menu_content_types = [content.__class__ for content in test_menu.get_all_content()]
-        self.assertEqual(menu_content_types, test_menu_content_types)
+        reference_menu_content_types = [content.__class__ for content in reference_menu.get_all_content()]
+        self.assertEqual(menu_content_types, reference_menu_content_types)
 
-        test_menu_btn = next(content for content in test_menu.get_all_content() if isinstance(content, ui.Button))
+        reference_menu_btn = next(content for content in reference_menu.get_all_content() if isinstance(content, ui.Button))
         menu_btn = next(content for content in menu.get_all_content() if isinstance(content, ui.Button))
         # Test that multi state variables loaded correctly.
-        self.assertEqual(menu_btn.text.value.idle, test_menu_btn.text.value.idle)
-        self.assertEqual(menu_btn.text.value.highlighted, test_menu_btn.text.value.highlighted)
-        self.assertEqual(menu_btn.text.value.selected, test_menu_btn.text.value.selected)
-        self.assertEqual(menu_btn.text.value.unusable, test_menu_btn.text.value.unusable)
-        self.assertEqual(menu_btn.text.bold.idle, test_menu_btn.text.bold.idle)
-        self.assertEqual(menu_btn.text.bold.highlighted, test_menu_btn.text.bold.highlighted)
-        self.assertEqual(menu_btn.text.bold.selected, test_menu_btn.text.bold.selected)
-        self.assertEqual(menu_btn.text.bold.unusable, test_menu_btn.text.bold.unusable)
-        self.assertEqual(menu_btn.text.color.idle.hex, test_menu_btn.text.color.idle.hex)
-        self.assertEqual(menu_btn.text.color.highlighted.hex, test_menu_btn.text.color.highlighted.hex)
-        self.assertEqual(menu_btn.text.color.selected.hex, test_menu_btn.text.color.selected.hex)
-        self.assertEqual(menu_btn.text.color.unusable.hex, test_menu_btn.text.color.unusable.hex)
+        self.assertEqual(menu_btn.text.value.idle, reference_menu_btn.text.value.idle)
+        self.assertEqual(menu_btn.text.value.highlighted, reference_menu_btn.text.value.highlighted)
+        self.assertEqual(menu_btn.text.value.selected, reference_menu_btn.text.value.selected)
+        self.assertEqual(menu_btn.text.value.unusable, reference_menu_btn.text.value.unusable)
+        self.assertEqual(menu_btn.text.bold.idle, reference_menu_btn.text.bold.idle)
+        self.assertEqual(menu_btn.text.bold.highlighted, reference_menu_btn.text.bold.highlighted)
+        self.assertEqual(menu_btn.text.bold.selected, reference_menu_btn.text.bold.selected)
+        self.assertEqual(menu_btn.text.bold.unusable, reference_menu_btn.text.bold.unusable)
+        self.assertEqual(menu_btn.text.color.idle.hex, reference_menu_btn.text.color.idle.hex)
+        self.assertEqual(menu_btn.text.color.highlighted.hex, reference_menu_btn.text.color.highlighted.hex)
+        self.assertEqual(menu_btn.text.color.selected.hex, reference_menu_btn.text.color.selected.hex)
+        self.assertEqual(menu_btn.text.color.unusable.hex, reference_menu_btn.text.color.unusable.hex)
         # Test outline values
-        self.assertEqual(menu_btn.outline.color.idle.hex, test_menu_btn.outline.color.idle.hex)
-        self.assertEqual(menu_btn.outline.color.highlighted.hex, test_menu_btn.outline.color.highlighted.hex)
-        self.assertEqual(menu_btn.outline.color.selected.hex, test_menu_btn.outline.color.selected.hex)
-        self.assertEqual(menu_btn.outline.color.unusable.hex, test_menu_btn.outline.color.unusable.hex)
-        self.assertEqual(menu_btn.outline.size.idle, test_menu_btn.outline.size.idle)
-        self.assertEqual(menu_btn.outline.size.highlighted, test_menu_btn.outline.size.highlighted)
-        self.assertEqual(menu_btn.outline.size.selected, test_menu_btn.outline.size.selected)
-        self.assertEqual(menu_btn.outline.size.unusable, test_menu_btn.outline.size.unusable)
+        self.assertEqual(menu_btn.outline.color.idle.hex, reference_menu_btn.outline.color.idle.hex)
+        self.assertEqual(menu_btn.outline.color.highlighted.hex, reference_menu_btn.outline.color.highlighted.hex)
+        self.assertEqual(menu_btn.outline.color.selected.hex, reference_menu_btn.outline.color.selected.hex)
+        self.assertEqual(menu_btn.outline.color.unusable.hex, reference_menu_btn.outline.color.unusable.hex)
+        self.assertEqual(menu_btn.outline.size.idle, reference_menu_btn.outline.size.idle)
+        self.assertEqual(menu_btn.outline.size.highlighted, reference_menu_btn.outline.size.highlighted)
+        self.assertEqual(menu_btn.outline.size.selected, reference_menu_btn.outline.size.selected)
+        self.assertEqual(menu_btn.outline.size.unusable, reference_menu_btn.outline.size.unusable)
         # assert mesh colors
-        self.assertEqual(menu_btn.mesh.active, test_menu_btn.mesh.active)
-        self.assertEqual(menu_btn.mesh.color.idle.hex, test_menu_btn.mesh.color.idle.hex)
-        self.assertEqual(menu_btn.mesh.color.highlighted.hex, test_menu_btn.mesh.color.highlighted.hex)
-        self.assertEqual(menu_btn.mesh.color.selected.hex, test_menu_btn.mesh.color.selected.hex)
-        self.assertEqual(menu_btn.mesh.color.unusable.hex, test_menu_btn.mesh.color.unusable.hex)
+        self.assertEqual(menu_btn.mesh.active, reference_menu_btn.mesh.active)
+        self.assertEqual(menu_btn.mesh.color.idle.hex, reference_menu_btn.mesh.color.idle.hex)
+        self.assertEqual(menu_btn.mesh.color.highlighted.hex, reference_menu_btn.mesh.color.highlighted.hex)
+        self.assertEqual(menu_btn.mesh.color.selected.hex, reference_menu_btn.mesh.color.selected.hex)
+        self.assertEqual(menu_btn.mesh.color.unusable.hex, reference_menu_btn.mesh.color.unusable.hex)
         # tooltip
-        self.assertEqual(menu_btn.tooltip.title, test_menu_btn.tooltip.title)
-        self.assertEqual(menu_btn.tooltip.content, test_menu_btn.tooltip.content)
-        self.assertEqual(menu_btn.tooltip.bounds, test_menu_btn.tooltip.bounds)
-        self.assertEqual(menu_btn.tooltip.positioning_target, test_menu_btn.tooltip.positioning_target)
-        self.assertEqual(menu_btn.tooltip.positioning_origin, test_menu_btn.tooltip.positioning_origin)
+        self.assertEqual(menu_btn.tooltip.title, reference_menu_btn.tooltip.title)
+        self.assertEqual(menu_btn.tooltip.content, reference_menu_btn.tooltip.content)
+        self.assertEqual(menu_btn.tooltip.bounds, reference_menu_btn.tooltip.bounds)
+        self.assertEqual(menu_btn.tooltip.positioning_target, reference_menu_btn.tooltip.positioning_target)
+        self.assertEqual(menu_btn.tooltip.positioning_origin, reference_menu_btn.tooltip.positioning_origin)
 
     def test_dump_menu(self):
         """Ensure that dumping menu from serializers returns same input json."""
