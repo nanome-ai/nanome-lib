@@ -153,7 +153,6 @@ class ButtonSchema(Schema):
     text_max_size = FloatRoundedField()
     text_size = FloatRoundedField()
     text_underlined = fields.Bool()
-    text_bolded = fields.Bool()
     text_vertical_align = EnumField(enum=enums.VertAlignOptions)
     text_horizontal_align = EnumField(enum=enums.HorizAlignOptions)
     type_name = fields.String()
