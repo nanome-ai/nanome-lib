@@ -130,6 +130,7 @@ class ButtonToolTipSchema(Schema):
 
 
 class ButtonSchema(Schema):
+    type_name = fields.String()
     name = fields.String()
     selected = fields.Bool()
     unusable = fields.Bool()
@@ -485,7 +486,7 @@ class ButtonSchema(Schema):
 
 
 class MeshSchema(Schema):
-    type_name = fields.String(required=True)
+    type_name = fields.String()
     mesh_color = ColorField()
 
     @post_load
@@ -496,7 +497,7 @@ class MeshSchema(Schema):
 
 
 class ImageSchema(Schema):
-    type_name = fields.String(required=True)
+    type_name = fields.String()
     color = ColorField()
     file_path = fields.String()
     scaling_option = EnumField(enum=enums.ScalingOptions)
@@ -509,7 +510,7 @@ class ImageSchema(Schema):
 
 
 class LoadingBarSchema(Schema):
-    type_name = fields.String(required=True)
+    type_name = fields.String()
     percentage = FloatRoundedField()
     title = fields.Str()
     description = fields.Str()
@@ -523,7 +524,7 @@ class LoadingBarSchema(Schema):
 
 
 class LabelSchema(Schema):
-    type_name = fields.String(required=True)
+    type_name = fields.String()
     text = fields.String(attribute='text_value')
     text_vertical_align = EnumField(enum=enums.VertAlignOptions)
     text_horizontal_align = EnumField(enum=enums.HorizAlignOptions)
@@ -544,7 +545,7 @@ class LabelSchema(Schema):
 
 
 class TextInputSchema(Schema):
-    type_name = fields.String(required=True)
+    type_name = fields.String()
     max_length = fields.Int()
     placeholder_text = fields.Str()
     placeholder_text_color = ColorField()
@@ -570,7 +571,7 @@ class TextInputSchema(Schema):
 
 
 class SliderSchema(Schema):
-    type_name = fields.String(required=True)
+    type_name = fields.String()
     current_value = FloatRoundedField()
     min_value = FloatRoundedField()
     max_value = FloatRoundedField()
@@ -595,7 +596,7 @@ class DropdownItemSchema(Schema):
 
 
 class DropdownSchema(Schema):
-    type_name = fields.String(required=True)
+    type_name = fields.String()
     permanent_title = fields.String()
     use_permanent_title = fields.Bool()
     max_displayed_items = fields.Integer(min=0)
@@ -610,7 +611,7 @@ class DropdownSchema(Schema):
 
 
 class UIListSchema(Schema):
-    type_name = fields.String(required=True)
+    type_name = fields.String()
     display_columns = fields.Int()
     display_rows = fields.Int()
     total_columns = fields.Int()
@@ -625,7 +626,7 @@ class UIListSchema(Schema):
 
 class ContentSchema(Schema):
     """Uses the type_name field to identify the type of content to be loaded/dumped."""
-    type_name = fields.String(required=True)
+    type_name = fields.String()
     type_name_schemas = {
         'Button': ButtonSchema(),
         'Mesh': MeshSchema(),
