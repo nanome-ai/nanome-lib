@@ -149,9 +149,13 @@ class Complex(_Complex, Base):
         """
         return self._current_frame
 
-    def set_current_frame(self, value):
+    @current_frame.setter
+    def current_frame(self, value):
         value = max(0, min(value, len(self._molecules) - 1))
         self._current_frame = value
+
+    def set_current_frame(self, value):
+        self.current_frame = value
 
     # returns true if the complex is selected on nanome.
     def get_selected(self):
@@ -272,6 +276,19 @@ class Complex(_Complex, Base):
     def rotation(self, value):
         self._rotation = value
 
+    @property
+    def remarks(self):
+        """
+        | remarks section of the complex file
+
+        :type: :class: dict
+        """
+        return self._remarks
+
+    @remarks.setter
+    def remarks(self, value):
+        self._remarks = value
+
     def get_workspace_to_complex_matrix(self):
         return self.get_complex_to_workspace_matrix().get_inverse()
 
@@ -302,10 +319,6 @@ class Complex(_Complex, Base):
             complex.rotation = target_complex.rotation.get_copy()
 
     # region deprecated
-    @current_frame.setter
-    @Logs.deprecated()
-    def current_frame(self, value):
-        self._current_frame = value
 
     @property
     @Logs.deprecated()

@@ -22,6 +22,11 @@ setup(
         'tblib==1.7.0',
         'graypy==2.1.0'
     ],
+    extras_require={
+        'schemas': [
+            'marshmallow==3.15.0'
+        ]
+    },
     classifiers=[
         'Development Status :: 3 - Alpha',
 

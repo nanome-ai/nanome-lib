@@ -1,7 +1,5 @@
 from .. import _Menu
 from . import _layout_node_json
-from nanome.util import Logs
-import json
 
 
 def parse_json(menu_json):

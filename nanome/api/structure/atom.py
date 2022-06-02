@@ -391,6 +391,15 @@ class Atom(_Atom, Base):
                 raise ValueError("Length of in_conformer must match the conformer count of the parent molecule.")
         self._in_conformer = value
 
+    @property
+    def het_surfaced(self):
+        return self._het_surfaced
+
+    @het_surfaced.setter
+    def het_surfaced(self, value):
+        """Boolean."""
+        self._het_surfaced = value
+
     # endregion
 
     # region deprecated

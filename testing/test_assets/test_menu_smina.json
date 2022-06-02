@@ -1,0 +1,1990 @@
+{
+    "title": "Smina Docking",
+    "version": 1,
+    "width": 0.829999983310699,
+    "height": 0.600000023841858,
+    "is_menu": true,
+    "effective_root":
+    {
+        "name": "Root",
+        "enabled": true,
+        "layer": 0,
+        "layout_orientation": 1,
+        "sizing_type": 0,
+        "sizing_value": 1,
+        "forward_dist": 0,
+        "padding_type": 1,
+        "padding_x": -1,
+        "padding_y": 0,
+        "padding_z": 0,
+        "padding_w": 0.0500000007450581,
+        "content":
+        {
+            "text": "",
+            "text_vertical_align": 1,
+            "text_horizontal_align": 1,
+            "text_auto_size": false,
+            "text_min_size": 0,
+            "text_max_size": 72,
+            "text_size": 1,
+            "text_color": -1,
+            "text_bold": true,
+            "text_italics": false,
+            "text_underlined": false,
+            "type_name": "Label"
+        },
+        "children":
+        [
+            {
+                "name": "LeftSide",
+                "enabled": true,
+                "layer": 0,
+                "layout_orientation": 0,
+                "sizing_type": 2,
+                "sizing_value": 0.899999976158142,
+                "forward_dist": 0,
+                "padding_type": 0,
+                "padding_x": 0,
+                "padding_y": 0.0199999995529652,
+                "padding_z": 0.0299999993294477,
+                "padding_w": 0,
+                "content": null,
+                "children":
+                [
+                    {
+                        "name": "Top",
+                        "enabled": true,
+                        "layer": 0,
+                        "layout_orientation": 0,
+                        "sizing_type": 2,
+                        "sizing_value": 0.699999988079071,
+                        "forward_dist": 0,
+                        "padding_type": 0,
+                        "padding_x": 0,
+                        "padding_y": 0,
+                        "padding_z": 0,
+                        "padding_w": 0,
+                        "content": null,
+                        "children":
+                        [
+                            {
+                                "name": "LigandData",
+                                "enabled": true,
+                                "layer": 0,
+                                "layout_orientation": 1,
+                                "sizing_type": 2,
+                                "sizing_value": 1,
+                                "forward_dist": 0,
+                                "padding_type": 0,
+                                "padding_x": 0,
+                                "padding_y": 0,
+                                "padding_z": 0,
+                                "padding_w": 0,
+                                "content": null,
+                                "children":
+                                [
+                                    {
+                                        "name": "LigandText",
+                                        "enabled": true,
+                                        "layer": 0,
+                                        "layout_orientation": 0,
+                                        "sizing_type": 2,
+                                        "sizing_value": 1,
+                                        "forward_dist": 0,
+                                        "padding_type": 0,
+                                        "padding_x": 0.0199999995529652,
+                                        "padding_y": 0,
+                                        "padding_z": 0,
+                                        "padding_w": 0,
+                                        "content":
+                                        {
+                                            "text": "Ligand(s):",
+                                            "text_vertical_align": 1,
+                                            "text_horizontal_align": 0,
+                                            "text_auto_size": false,
+                                            "text_min_size": 0,
+                                            "text_max_size": 72,
+                                            "text_size": 0.300000011920929,
+                                            "text_color": -1,
+                                            "text_bold": true,
+                                            "text_italics": false,
+                                            "text_underlined": false,
+                                            "type_name": "Label"
+                                        },
+                                        "children":
+                                        []
+                                    },
+                                    {
+                                        "name": "LigandDropdown",
+                                        "enabled": true,
+                                        "layer": 0,
+                                        "layout_orientation": 0,
+                                        "sizing_type": 2,
+                                        "sizing_value": 0.899999976158142,
+                                        "forward_dist": 0.00350000010803342,
+                                        "padding_type": 0,
+                                        "padding_x": 0,
+                                        "padding_y": 0,
+                                        "padding_z": 0.00999999977648258,
+                                        "padding_w": 0.00999999977648258,
+                                        "content":
+                                        {
+                                            "use_permanent_title": false,
+                                            "permanent_title": "None",
+                                            "max_displayed_items": 3,
+                                            "unusable": false,
+                                            "items":
+                                            [],
+                                            "type_name": "Dropdown"
+                                        },
+                                        "children":
+                                        []
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "RecepeterData",
+                                "enabled": true,
+                                "layer": 0,
+                                "layout_orientation": 1,
+                                "sizing_type": 2,
+                                "sizing_value": 1,
+                                "forward_dist": 0,
+                                "padding_type": 0,
+                                "padding_x": 0,
+                                "padding_y": 0,
+                                "padding_z": 0,
+                                "padding_w": 0,
+                                "content": null,
+                                "children":
+                                [
+                                    {
+                                        "name": "ReceptorText",
+                                        "enabled": true,
+                                        "layer": 0,
+                                        "layout_orientation": 0,
+                                        "sizing_type": 2,
+                                        "sizing_value": 1,
+                                        "forward_dist": 0,
+                                        "padding_type": 0,
+                                        "padding_x": 0.0199999995529652,
+                                        "padding_y": 0,
+                                        "padding_z": 0,
+                                        "padding_w": 0,
+                                        "content":
+                                        {
+                                            "text": "Receptor:",
+                                            "text_vertical_align": 1,
+                                            "text_horizontal_align": 0,
+                                            "text_auto_size": false,
+                                            "text_min_size": 0,
+                                            "text_max_size": 72,
+                                            "text_size": 0.300000011920929,
+                                            "text_color": -1,
+                                            "text_bold": true,
+                                            "text_italics": false,
+                                            "text_underlined": false,
+                                            "type_name": "Label"
+                                        },
+                                        "children":
+                                        []
+                                    },
+                                    {
+                                        "name": "ReceptorDropdown",
+                                        "enabled": true,
+                                        "layer": 0,
+                                        "layout_orientation": 0,
+                                        "sizing_type": 2,
+                                        "sizing_value": 0.899999976158142,
+                                        "forward_dist": 0.00300000002607703,
+                                        "padding_type": 0,
+                                        "padding_x": 0,
+                                        "padding_y": 0,
+                                        "padding_z": 0.00999999977648258,
+                                        "padding_w": 0.00999999977648258,
+                                        "content":
+                                        {
+                                            "use_permanent_title": false,
+                                            "permanent_title": "None",
+                                            "max_displayed_items": 3,
+                                            "unusable": false,
+                                            "items":
+                                            [],
+                                            "type_name": "Dropdown"
+                                        },
+                                        "children":
+                                        []
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "SiteData",
+                                "enabled": true,
+                                "layer": 0,
+                                "layout_orientation": 1,
+                                "sizing_type": 2,
+                                "sizing_value": 1,
+                                "forward_dist": 0,
+                                "padding_type": 0,
+                                "padding_x": 0,
+                                "padding_y": 0,
+                                "padding_z": 0,
+                                "padding_w": 0,
+                                "content": null,
+                                "children":
+                                [
+                                    {
+                                        "name": "SiteIcon",
+                                        "enabled": false,
+                                        "layer": 0,
+                                        "layout_orientation": 0,
+                                        "sizing_type": 2,
+                                        "sizing_value": 0.119999997317791,
+                                        "forward_dist": 0,
+                                        "padding_type": 0,
+                                        "padding_x": 0,
+                                        "padding_y": 0.00999999977648258,
+                                        "padding_z": 0.00999999977648258,
+                                        "padding_w": 0.00999999977648258,
+                                        "content": null,
+                                        "children":
+                                        []
+                                    },
+                                    {
+                                        "name": "SiteText",
+                                        "enabled": true,
+                                        "layer": 0,
+                                        "layout_orientation": 0,
+                                        "sizing_type": 2,
+                                        "sizing_value": 1,
+                                        "forward_dist": 0,
+                                        "padding_type": 0,
+                                        "padding_x": 0.0199999995529652,
+                                        "padding_y": 0,
+                                        "padding_z": 0,
+                                        "padding_w": 0,
+                                        "content":
+                                        {
+                                            "text": "Docking Site:",
+                                            "text_vertical_align": 1,
+                                            "text_horizontal_align": 0,
+                                            "text_auto_size": false,
+                                            "text_min_size": 0,
+                                            "text_max_size": 72,
+                                            "text_size": 0.300000011920929,
+                                            "text_color": -1,
+                                            "text_bold": true,
+                                            "text_italics": false,
+                                            "text_underlined": false,
+                                            "type_name": "Label"
+                                        },
+                                        "children":
+                                        []
+                                    },
+                                    {
+                                        "name": "SiteDropdown",
+                                        "enabled": true,
+                                        "layer": 0,
+                                        "layout_orientation": 0,
+                                        "sizing_type": 2,
+                                        "sizing_value": 0.899999976158142,
+                                        "forward_dist": 0.00249999994412065,
+                                        "padding_type": 0,
+                                        "padding_x": 0,
+                                        "padding_y": 0,
+                                        "padding_z": 0.00999999977648258,
+                                        "padding_w": 0.00999999977648258,
+                                        "content":
+                                        {
+                                            "use_permanent_title": false,
+                                            "permanent_title": "None",
+                                            "max_displayed_items": 3,
+                                            "unusable": false,
+                                            "items":
+                                            [
+                                                {
+                                                    "name": "Option 1",
+                                                    "close_on_selected": true,
+                                                    "selected": false
+                                                },
+                                                {
+                                                    "name": "Option 2",
+                                                    "close_on_selected": true,
+                                                    "selected": false
+                                                },
+                                                {
+                                                    "name": "Option 3",
+                                                    "close_on_selected": true,
+                                                    "selected": false
+                                                },
+                                                {
+                                                    "name": "Option 4",
+                                                    "close_on_selected": true,
+                                                    "selected": false
+                                                },
+                                                {
+                                                    "name": "Option 5",
+                                                    "close_on_selected": true,
+                                                    "selected": false
+                                                }
+                                            ],
+                                            "type_name": "Dropdown"
+                                        },
+                                        "children":
+                                        []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Bot2",
+                        "enabled": true,
+                        "layer": 0,
+                        "layout_orientation": 0,
+                        "sizing_type": 2,
+                        "sizing_value": 1,
+                        "forward_dist": 0,
+                        "padding_type": 0,
+                        "padding_x": 0,
+                        "padding_y": 0,
+                        "padding_z": 0,
+                        "padding_w": 0,
+                        "content": null,
+                        "children":
+                        [
+                            {
+                                "name": "Location",
+                                "enabled": true,
+                                "layer": 0,
+                                "layout_orientation": 0,
+                                "sizing_type": 2,
+                                "sizing_value": 1,
+                                "forward_dist": 0,
+                                "padding_type": 0,
+                                "padding_x": 0,
+                                "padding_y": 0,
+                                "padding_z": 0,
+                                "padding_w": 0,
+                                "content": null,
+                                "children":
+                                [
+                                    {
+                                        "name": "LocationTitle",
+                                        "enabled": true,
+                                        "layer": 0,
+                                        "layout_orientation": 1,
+                                        "sizing_type": 2,
+                                        "sizing_value": 0.300000011920929,
+                                        "forward_dist": 0,
+                                        "padding_type": 0,
+                                        "padding_x": 0,
+                                        "padding_y": 0,
+                                        "padding_z": 0,
+                                        "padding_w": 0,
+                                        "content": null,
+                                        "children":
+                                        [
+                                            {
+                                                "name": "LocationText",
+                                                "enabled": true,
+                                                "layer": 0,
+                                                "layout_orientation": 0,
+                                                "sizing_type": 2,
+                                                "sizing_value": 0.300000011920929,
+                                                "forward_dist": 0.0020000000949949,
+                                                "padding_type": 0,
+                                                "padding_x": 0.0199999995529652,
+                                                "padding_y": 0,
+                                                "padding_z": 0,
+                                                "padding_w": 0,
+                                                "content":
+                                                {
+                                                    "text": "Location",
+                                                    "text_vertical_align": 1,
+                                                    "text_horizontal_align": 0,
+                                                    "text_auto_size": false,
+                                                    "text_min_size": 0,
+                                                    "text_max_size": 72,
+                                                    "text_size": 0.25,
+                                                    "text_color": -1,
+                                                    "text_bold": true,
+                                                    "text_italics": false,
+                                                    "text_underlined": false,
+                                                    "type_name": "Label"
+                                                },
+                                                "children":
+                                                []
+                                            },
+                                            {
+                                                "name": "RefreshSuite",
+                                                "enabled": true,
+                                                "layer": 0,
+                                                "layout_orientation": 0,
+                                                "sizing_type": 2,
+                                                "sizing_value": 0.025000000372529,
+                                                "forward_dist": 0,
+                                                "padding_type": 0,
+                                                "padding_x": 0,
+                                                "padding_y": 0,
+                                                "padding_z": 0,
+                                                "padding_w": 0,
+                                                "content": null,
+                                                "children":
+                                                [
+                                                    {
+                                                        "name": "LocationRefresh",
+                                                        "enabled": true,
+                                                        "layer": 0,
+                                                        "layout_orientation": 0,
+                                                        "sizing_type": 2,
+                                                        "sizing_value": 1,
+                                                        "forward_dist": 0.0020000000949949,
+                                                        "padding_type": 0,
+                                                        "padding_x": 0,
+                                                        "padding_y": 0,
+                                                        "padding_z": 0,
+                                                        "padding_w": 0,
+                                                        "content":
+                                                        {
+                                                            "name": "newButton",
+                                                            "selected": false,
+                                                            "unusable": false,
+                                                            "text_active": true,
+                                                            "text_value_idle": "",
+                                                            "text_value_selected": "",
+                                                            "text_value_highlighted": "",
+                                                            "text_value_selected_highlighted": "",
+                                                            "text_value_unusable": "",
+                                                            "text_auto_size": false,
+                                                            "text_min_size": 0,
+                                                            "text_max_size": 72,
+                                                            "text_size": 1,
+                                                            "text_ellipsis": false,
+                                                            "text_underlined": false,
+                                                            "text_bold_idle": true,
+                                                            "text_bold_selected": true,
+                                                            "text_bold_highlighted": true,
+                                                            "text_bold_selected_highlighted": true,
+                                                            "text_bold_unusable": true,
+                                                            "text_color_idle": -185271809,
+                                                            "text_color_selected": 15056895,
+                                                            "text_color_highlighted": 802930687,
+                                                            "text_color_selected_highlighted": 16371967,
+                                                            "text_color_unusable": 2139062271,
+                                                            "text_padding_top": 0,
+                                                            "text_padding_bottom": 0,
+                                                            "text_padding_left": 0,
+                                                            "text_padding_right": 0,
+                                                            "text_line_spacing": 0,
+                                                            "text_vertical_align": 1,
+                                                            "text_horizontal_align": 1,
+                                                            "icon_active": false,
+                                                            "icon_value_idle":  "/path/to/image",
+                                                            "icon_value_selected": "/path/to/image",
+                                                            "icon_value_highlighted": "/path/to/image",
+                                                            "icon_value_selected_highlighted": "/path/to/image",
+                                                            "icon_value_unusable": "/path/to/image",
+                                                            "icon_color_idle": -184942593,
+                                                            "icon_color_selected": 15056895,
+                                                            "icon_color_highlighted": 802930687,
+                                                            "icon_color_selected_highlighted": 16371967,
+                                                            "icon_color_unusable": 2139062271,
+                                                            "icon_sharpness": 0.5,
+                                                            "icon_size": 1,
+                                                            "icon_ratio": 0.5,
+                                                            "icon_position":
+                                                            {
+                                                                "x": 0,
+                                                                "y": 0,
+                                                                "z": 0
+                                                            },
+                                                            "icon_rotation":
+                                                            {
+                                                                "x": 0,
+                                                                "y": 0,
+                                                                "z": 0
+                                                            },
+                                                            "mesh_active": false,
+                                                            "mesh_enabled_idle": true,
+                                                            "mesh_enabled_selected": true,
+                                                            "mesh_enabled_highlighted": true,
+                                                            "mesh_enabled_selected_highlighted": true,
+                                                            "mesh_enabled_unusable": true,
+                                                            "mesh_color_idle": -1,
+                                                            "mesh_color_selected": -16776961,
+                                                            "mesh_color_highlighted": 16711935,
+                                                            "mesh_color_selected_highlighted": 65535,
+                                                            "mesh_color_unusable": 2139062271,
+                                                            "outline_active": true,
+                                                            "outline_size_idle": 0.300000011920929,
+                                                            "outline_size_selected": 0.300000011920929,
+                                                            "outline_size_highlighted": 0.300000011920929,
+                                                            "outline_size_selected_highlighted": 0.300000011920929,
+                                                            "outline_size_unusable": 0.300000011920929,
+                                                            "outline_color_idle": -184942593,
+                                                            "outline_color_selected": 15056895,
+                                                            "outline_color_highlighted": 802930687,
+                                                            "outline_color_selected_highlighted": 16371967,
+                                                            "outline_color_unusable": 2139062271,
+                                                            "tooltip_title": "",
+                                                            "tooltip_content": "",
+                                                            "tooltip_bounds":
+                                                            {
+                                                                "x": 1.20000004768372,
+                                                                "y": 0.449999988079071,
+                                                                "z": 0.0500000007450581
+                                                            },
+                                                            "tooltip_positioning_target": 7,
+                                                            "tooltip_positioning_origin": 2,
+                                                            "type_name": "Button"
+                                                        },
+                                                        "children":
+                                                        []
+                                                    },
+                                                    {
+                                                        "name": "RefreshIcon",
+                                                        "enabled": true,
+                                                        "layer": 1,
+                                                        "layout_orientation": 0,
+                                                        "sizing_type": 2,
+                                                        "sizing_value": 1,
+                                                        "forward_dist": 0.0020000000949949,
+                                                        "padding_type": 0,
+                                                        "padding_x": 0.00100000004749745,
+                                                        "padding_y": 0.00100000004749745,
+                                                        "padding_z": 0.00100000004749745,
+                                                        "padding_w": 0.00100000004749745,
+                                                        "content":
+                                                        {
+                                                            "color": -1,
+                                                            "file_path": "",
+                                                            "scaling_option": 0,
+                                                            "type_name": "Image"
+                                                        },
+                                                        "children":
+                                                        []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "LocationSetting",
+                                        "enabled": true,
+                                        "layer": 0,
+                                        "layout_orientation": 1,
+                                        "sizing_type": 2,
+                                        "sizing_value": 1,
+                                        "forward_dist": 0,
+                                        "padding_type": 0,
+                                        "padding_x": 0.00999999977648258,
+                                        "padding_y": 0,
+                                        "padding_z": 0,
+                                        "padding_w": 0,
+                                        "content": null,
+                                        "children":
+                                        [
+                                            {
+                                                "name": "LocXSetting",
+                                                "enabled": true,
+                                                "layer": 0,
+                                                "layout_orientation": 1,
+                                                "sizing_type": 2,
+                                                "sizing_value": 1,
+                                                "forward_dist": 0,
+                                                "padding_type": 0,
+                                                "padding_x": 0,
+                                                "padding_y": 0,
+                                                "padding_z": 0,
+                                                "padding_w": 0,
+                                                "content": null,
+                                                "children":
+                                                [
+                                                    {
+                                                        "name": "LocXText",
+                                                        "enabled": true,
+                                                        "layer": 0,
+                                                        "layout_orientation": 0,
+                                                        "sizing_type": 2,
+                                                        "sizing_value": 1,
+                                                        "forward_dist": 0.0020000000949949,
+                                                        "padding_type": 0,
+                                                        "padding_x": 0,
+                                                        "padding_y": 0,
+                                                        "padding_z": 0,
+                                                        "padding_w": 0,
+                                                        "content":
+                                                        {
+                                                            "text": "X:",
+                                                            "text_vertical_align": 1,
+                                                            "text_horizontal_align": 1,
+                                                            "text_auto_size": false,
+                                                            "text_min_size": 0,
+                                                            "text_max_size": 72,
+                                                            "text_size": 0.300000011920929,
+                                                            "text_color": -1,
+                                                            "text_bold": true,
+                                                            "text_italics": false,
+                                                            "text_underlined": false,
+                                                            "type_name": "Label"
+                                                        },
+                                                        "children":
+                                                        []
+                                                    },
+                                                    {
+                                                        "name": "LocXInput",
+                                                        "enabled": true,
+                                                        "layer": 0,
+                                                        "layout_orientation": 0,
+                                                        "sizing_type": 2,
+                                                        "sizing_value": 1.79999995231628,
+                                                        "forward_dist": 0.0020000000949949,
+                                                        "padding_type": 0,
+                                                        "padding_x": 0,
+                                                        "padding_y": 0,
+                                                        "padding_z": 0.0299999993294477,
+                                                        "padding_w": 0.0299999993294477,
+                                                        "content":
+                                                        {
+                                                            "max_length": 0,
+                                                            "placeholder_text": "",
+                                                            "input_text": "27.32",
+                                                            "password": false,
+                                                            "number": false,
+                                                            "placeholder_text_color": 858993663,
+                                                            "text_color": 255,
+                                                            "background_color": -185271809,
+                                                            "text_size": 0.200000002980232,
+                                                            "text_horizontal_align": 1,
+                                                            "multi_line": false,
+                                                            "padding_left": 0.0149999996647239,
+                                                            "padding_right": 0.00999999977648258,
+                                                            "padding_top": 0,
+                                                            "padding_bottom": 0,
+                                                            "type_name": "TextInput"
+                                                        },
+                                                        "children":
+                                                        []
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "name": "LocYSetting",
+                                                "enabled": true,
+                                                "layer": 0,
+                                                "layout_orientation": 1,
+                                                "sizing_type": 2,
+                                                "sizing_value": 1,
+                                                "forward_dist": 0,
+                                                "padding_type": 0,
+                                                "padding_x": 0,
+                                                "padding_y": 0,
+                                                "padding_z": 0,
+                                                "padding_w": 0,
+                                                "content": null,
+                                                "children":
+                                                [
+                                                    {
+                                                        "name": "LocYText",
+                                                        "enabled": true,
+                                                        "layer": 0,
+                                                        "layout_orientation": 0,
+                                                        "sizing_type": 2,
+                                                        "sizing_value": 1,
+                                                        "forward_dist": 0.0020000000949949,
+                                                        "padding_type": 0,
+                                                        "padding_x": 0,
+                                                        "padding_y": 0,
+                                                        "padding_z": 0,
+                                                        "padding_w": 0,
+                                                        "content":
+                                                        {
+                                                            "text": "Y:",
+                                                            "text_vertical_align": 1,
+                                                            "text_horizontal_align": 1,
+                                                            "text_auto_size": false,
+                                                            "text_min_size": 0,
+                                                            "text_max_size": 72,
+                                                            "text_size": 0.300000011920929,
+                                                            "text_color": -1,
+                                                            "text_bold": true,
+                                                            "text_italics": false,
+                                                            "text_underlined": false,
+                                                            "type_name": "Label"
+                                                        },
+                                                        "children":
+                                                        []
+                                                    },
+                                                    {
+                                                        "name": "LocYInput",
+                                                        "enabled": true,
+                                                        "layer": 0,
+                                                        "layout_orientation": 0,
+                                                        "sizing_type": 2,
+                                                        "sizing_value": 1.79999995231628,
+                                                        "forward_dist": 0.0020000000949949,
+                                                        "padding_type": 0,
+                                                        "padding_x": 0,
+                                                        "padding_y": 0,
+                                                        "padding_z": 0.0299999993294477,
+                                                        "padding_w": 0.0299999993294477,
+                                                        "content":
+                                                        {
+                                                            "max_length": 0,
+                                                            "placeholder_text": "",
+                                                            "input_text": "12",
+                                                            "password": false,
+                                                            "number": false,
+                                                            "placeholder_text_color": 858993663,
+                                                            "text_color": 255,
+                                                            "background_color": -185271809,
+                                                            "text_size": 0.200000002980232,
+                                                            "text_horizontal_align": 1,
+                                                            "multi_line": false,
+                                                            "padding_left": 0.0149999996647239,
+                                                            "padding_right": 0.00999999977648258,
+                                                            "padding_top": 0,
+                                                            "padding_bottom": 0,
+                                                            "type_name": "TextInput"
+                                                        },
+                                                        "children":
+                                                        []
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "name": "LocZSetting",
+                                                "enabled": true,
+                                                "layer": 0,
+                                                "layout_orientation": 1,
+                                                "sizing_type": 2,
+                                                "sizing_value": 1,
+                                                "forward_dist": 0,
+                                                "padding_type": 0,
+                                                "padding_x": 0,
+                                                "padding_y": 0,
+                                                "padding_z": 0,
+                                                "padding_w": 0,
+                                                "content": null,
+                                                "children":
+                                                [
+                                                    {
+                                                        "name": "LocZText",
+                                                        "enabled": true,
+                                                        "layer": 0,
+                                                        "layout_orientation": 0,
+                                                        "sizing_type": 2,
+                                                        "sizing_value": 1,
+                                                        "forward_dist": 0.0020000000949949,
+                                                        "padding_type": 0,
+                                                        "padding_x": 0,
+                                                        "padding_y": 0,
+                                                        "padding_z": 0,
+                                                        "padding_w": 0,
+                                                        "content":
+                                                        {
+                                                            "text": "Z:",
+                                                            "text_vertical_align": 1,
+                                                            "text_horizontal_align": 1,
+                                                            "text_auto_size": false,
+                                                            "text_min_size": 0,
+                                                            "text_max_size": 72,
+                                                            "text_size": 0.300000011920929,
+                                                            "text_color": -1,
+                                                            "text_bold": true,
+                                                            "text_italics": false,
+                                                            "text_underlined": false,
+                                                            "type_name": "Label"
+                                                        },
+                                                        "children":
+                                                        []
+                                                    },
+                                                    {
+                                                        "name": "LocZInput",
+                                                        "enabled": true,
+                                                        "layer": 0,
+                                                        "layout_orientation": 0,
+                                                        "sizing_type": 2,
+                                                        "sizing_value": 1.79999995231628,
+                                                        "forward_dist": 0.0020000000949949,
+                                                        "padding_type": 0,
+                                                        "padding_x": 0,
+                                                        "padding_y": 0,
+                                                        "padding_z": 0.0299999993294477,
+                                                        "padding_w": 0.0299999993294477,
+                                                        "content":
+                                                        {
+                                                            "max_length": 0,
+                                                            "placeholder_text": "",
+                                                            "input_text": "00",
+                                                            "password": false,
+                                                            "number": false,
+                                                            "placeholder_text_color": 858993663,
+                                                            "text_color": 255,
+                                                            "background_color": -185271809,
+                                                            "text_size": 0.200000002980232,
+                                                            "text_horizontal_align": 1,
+                                                            "multi_line": false,
+                                                            "padding_left": 0.0149999996647239,
+                                                            "padding_right": 0.00999999977648258,
+                                                            "padding_top": 0,
+                                                            "padding_bottom": 0,
+                                                            "type_name": "TextInput"
+                                                        },
+                                                        "children":
+                                                        []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Size",
+                                "enabled": true,
+                                "layer": 0,
+                                "layout_orientation": 0,
+                                "sizing_type": 2,
+                                "sizing_value": 1,
+                                "forward_dist": 0,
+                                "padding_type": 0,
+                                "padding_x": 0,
+                                "padding_y": 0,
+                                "padding_z": 0,
+                                "padding_w": 0,
+                                "content": null,
+                                "children":
+                                [
+                                    {
+                                        "name": "SizeInfo",
+                                        "enabled": true,
+                                        "layer": 0,
+                                        "layout_orientation": 1,
+                                        "sizing_type": 2,
+                                        "sizing_value": 0.300000011920929,
+                                        "forward_dist": 0.0020000000949949,
+                                        "padding_type": 0,
+                                        "padding_x": 0.0199999995529652,
+                                        "padding_y": 0,
+                                        "padding_z": 0,
+                                        "padding_w": 0,
+                                        "content": null,
+                                        "children":
+                                        [
+                                            {
+                                                "name": "SizeText",
+                                                "enabled": true,
+                                                "layer": 0,
+                                                "layout_orientation": 0,
+                                                "sizing_type": 2,
+                                                "sizing_value": 0.800000011920929,
+                                                "forward_dist": 0.0020000000949949,
+                                                "padding_type": 0,
+                                                "padding_x": 0.0199999995529652,
+                                                "padding_y": 0,
+                                                "padding_z": 0,
+                                                "padding_w": 0,
+                                                "content":
+                                                {
+                                                    "text": "Size(angstroms)",
+                                                    "text_vertical_align": 1,
+                                                    "text_horizontal_align": 0,
+                                                    "text_auto_size": false,
+                                                    "text_min_size": 0,
+                                                    "text_max_size": 72,
+                                                    "text_size": 0.25,
+                                                    "text_color": -1,
+                                                    "text_bold": true,
+                                                    "text_italics": false,
+                                                    "text_underlined": false,
+                                                    "type_name": "Label"
+                                                },
+                                                "children":
+                                                []
+                                            },
+                                            {
+                                                "name": "SizeDisplay",
+                                                "enabled": true,
+                                                "layer": 0,
+                                                "layout_orientation": 1,
+                                                "sizing_type": 2,
+                                                "sizing_value": 0.150000005960464,
+                                                "forward_dist": 0,
+                                                "padding_type": 0,
+                                                "padding_x": 0,
+                                                "padding_y": 0,
+                                                "padding_z": 0,
+                                                "padding_w": 0,
+                                                "content": null,
+                                                "children":
+                                                [
+                                                    {
+                                                        "name": "SizeOval",
+                                                        "enabled": true,
+                                                        "layer": 0,
+                                                        "layout_orientation": 0,
+                                                        "sizing_type": 2,
+                                                        "sizing_value": 1,
+                                                        "forward_dist": 0.0020000000949949,
+                                                        "padding_type": 0,
+                                                        "padding_x": 0,
+                                                        "padding_y": 0,
+                                                        "padding_z": 0,
+                                                        "padding_w": 0,
+                                                        "content": null,
+                                                        "children":
+                                                        []
+                                                    },
+                                                    {
+                                                        "name": "SizeValue",
+                                                        "enabled": true,
+                                                        "layer": 1,
+                                                        "layout_orientation": 0,
+                                                        "sizing_type": 2,
+                                                        "sizing_value": 1,
+                                                        "forward_dist": 0.00400000018998981,
+                                                        "padding_type": 0,
+                                                        "padding_x": 0,
+                                                        "padding_y": 0,
+                                                        "padding_z": 0,
+                                                        "padding_w": 0,
+                                                        "content":
+                                                        {
+                                                            "text": "4",
+                                                            "text_vertical_align": 1,
+                                                            "text_horizontal_align": 1,
+                                                            "text_auto_size": false,
+                                                            "text_min_size": 0,
+                                                            "text_max_size": 72,
+                                                            "text_size": 0.230000004172325,
+                                                            "text_color": -1,
+                                                            "text_bold": true,
+                                                            "text_italics": false,
+                                                            "text_underlined": false,
+                                                            "type_name": "Label"
+                                                        },
+                                                        "children":
+                                                        []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "SizeSetting",
+                                        "enabled": true,
+                                        "layer": 0,
+                                        "layout_orientation": 0,
+                                        "sizing_type": 2,
+                                        "sizing_value": 1,
+                                        "forward_dist": 0,
+                                        "padding_type": 0,
+                                        "padding_x": 0,
+                                        "padding_y": 0,
+                                        "padding_z": 0,
+                                        "padding_w": 0,
+                                        "content": null,
+                                        "children":
+                                        [
+                                            {
+                                                "name": "SizeXSetting",
+                                                "enabled": false,
+                                                "layer": 0,
+                                                "layout_orientation": 1,
+                                                "sizing_type": 2,
+                                                "sizing_value": 1,
+                                                "forward_dist": 0,
+                                                "padding_type": 0,
+                                                "padding_x": 0,
+                                                "padding_y": 0,
+                                                "padding_z": 0,
+                                                "padding_w": 0,
+                                                "content": null,
+                                                "children":
+                                                [
+                                                    {
+                                                        "name": "SizeXText",
+                                                        "enabled": true,
+                                                        "layer": 0,
+                                                        "layout_orientation": 0,
+                                                        "sizing_type": 2,
+                                                        "sizing_value": 1,
+                                                        "forward_dist": 0.0020000000949949,
+                                                        "padding_type": 0,
+                                                        "padding_x": 0,
+                                                        "padding_y": 0,
+                                                        "padding_z": 0,
+                                                        "padding_w": 0,
+                                                        "content":
+                                                        {
+                                                            "text": "X",
+                                                            "text_vertical_align": 1,
+                                                            "text_horizontal_align": 1,
+                                                            "text_auto_size": false,
+                                                            "text_min_size": 0,
+                                                            "text_max_size": 72,
+                                                            "text_size": 0.300000011920929,
+                                                            "text_color": -1,
+                                                            "text_bold": true,
+                                                            "text_italics": false,
+                                                            "text_underlined": false,
+                                                            "type_name": "Label"
+                                                        },
+                                                        "children":
+                                                        []
+                                                    },
+                                                    {
+                                                        "name": "SizeXInput",
+                                                        "enabled": true,
+                                                        "layer": 0,
+                                                        "layout_orientation": 0,
+                                                        "sizing_type": 2,
+                                                        "sizing_value": 1,
+                                                        "forward_dist": 0.0020000000949949,
+                                                        "padding_type": 0,
+                                                        "padding_x": 0,
+                                                        "padding_y": 0,
+                                                        "padding_z": 0.00999999977648258,
+                                                        "padding_w": 0.00999999977648258,
+                                                        "content":
+                                                        {
+                                                            "max_length": 0,
+                                                            "placeholder_text": "",
+                                                            "input_text": "",
+                                                            "password": false,
+                                                            "number": false,
+                                                            "placeholder_text_color": 858993663,
+                                                            "text_color": 255,
+                                                            "background_color": -185271809,
+                                                            "text_size": 1,
+                                                            "text_horizontal_align": 0,
+                                                            "multi_line": false,
+                                                            "padding_left": 0.0149999996647239,
+                                                            "padding_right": 0.00999999977648258,
+                                                            "padding_top": 0,
+                                                            "padding_bottom": 0,
+                                                            "type_name": "TextInput"
+                                                        },
+                                                        "children":
+                                                        []
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "name": "SizeYSetting",
+                                                "enabled": false,
+                                                "layer": 0,
+                                                "layout_orientation": 1,
+                                                "sizing_type": 2,
+                                                "sizing_value": 1,
+                                                "forward_dist": 0,
+                                                "padding_type": 0,
+                                                "padding_x": 0,
+                                                "padding_y": 0,
+                                                "padding_z": 0,
+                                                "padding_w": 0,
+                                                "content": null,
+                                                "children":
+                                                [
+                                                    {
+                                                        "name": "SizeYText",
+                                                        "enabled": true,
+                                                        "layer": 0,
+                                                        "layout_orientation": 0,
+                                                        "sizing_type": 2,
+                                                        "sizing_value": 1,
+                                                        "forward_dist": 0.0020000000949949,
+                                                        "padding_type": 0,
+                                                        "padding_x": 0,
+                                                        "padding_y": 0,
+                                                        "padding_z": 0,
+                                                        "padding_w": 0,
+                                                        "content":
+                                                        {
+                                                            "text": "Y",
+                                                            "text_vertical_align": 1,
+                                                            "text_horizontal_align": 1,
+                                                            "text_auto_size": false,
+                                                            "text_min_size": 0,
+                                                            "text_max_size": 72,
+                                                            "text_size": 0.300000011920929,
+                                                            "text_color": -1,
+                                                            "text_bold": true,
+                                                            "text_italics": false,
+                                                            "text_underlined": false,
+                                                            "type_name": "Label"
+                                                        },
+                                                        "children":
+                                                        []
+                                                    },
+                                                    {
+                                                        "name": "SizeYInput",
+                                                        "enabled": true,
+                                                        "layer": 0,
+                                                        "layout_orientation": 0,
+                                                        "sizing_type": 2,
+                                                        "sizing_value": 1,
+                                                        "forward_dist": 0.0020000000949949,
+                                                        "padding_type": 0,
+                                                        "padding_x": 0,
+                                                        "padding_y": 0,
+                                                        "padding_z": 0.00999999977648258,
+                                                        "padding_w": 0.00999999977648258,
+                                                        "content":
+                                                        {
+                                                            "max_length": 0,
+                                                            "placeholder_text": "",
+                                                            "input_text": "",
+                                                            "password": false,
+                                                            "number": false,
+                                                            "placeholder_text_color": 858993663,
+                                                            "text_color": 255,
+                                                            "background_color": -185271809,
+                                                            "text_size": 1,
+                                                            "text_horizontal_align": 0,
+                                                            "multi_line": false,
+                                                            "padding_left": 0.0149999996647239,
+                                                            "padding_right": 0.00999999977648258,
+                                                            "padding_top": 0,
+                                                            "padding_bottom": 0,
+                                                            "type_name": "TextInput"
+                                                        },
+                                                        "children":
+                                                        []
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "name": "SizeZSetting",
+                                                "enabled": false,
+                                                "layer": 0,
+                                                "layout_orientation": 1,
+                                                "sizing_type": 2,
+                                                "sizing_value": 1,
+                                                "forward_dist": 0,
+                                                "padding_type": 0,
+                                                "padding_x": 0,
+                                                "padding_y": 0,
+                                                "padding_z": 0,
+                                                "padding_w": 0,
+                                                "content": null,
+                                                "children":
+                                                [
+                                                    {
+                                                        "name": "SizeZText",
+                                                        "enabled": true,
+                                                        "layer": 0,
+                                                        "layout_orientation": 0,
+                                                        "sizing_type": 2,
+                                                        "sizing_value": 1,
+                                                        "forward_dist": 0.0020000000949949,
+                                                        "padding_type": 0,
+                                                        "padding_x": 0,
+                                                        "padding_y": 0,
+                                                        "padding_z": 0,
+                                                        "padding_w": 0,
+                                                        "content":
+                                                        {
+                                                            "text": "Z",
+                                                            "text_vertical_align": 1,
+                                                            "text_horizontal_align": 1,
+                                                            "text_auto_size": false,
+                                                            "text_min_size": 0,
+                                                            "text_max_size": 72,
+                                                            "text_size": 0.300000011920929,
+                                                            "text_color": -1,
+                                                            "text_bold": true,
+                                                            "text_italics": false,
+                                                            "text_underlined": false,
+                                                            "type_name": "Label"
+                                                        },
+                                                        "children":
+                                                        []
+                                                    },
+                                                    {
+                                                        "name": "SizeZInput",
+                                                        "enabled": true,
+                                                        "layer": 0,
+                                                        "layout_orientation": 0,
+                                                        "sizing_type": 2,
+                                                        "sizing_value": 1,
+                                                        "forward_dist": 0.0020000000949949,
+                                                        "padding_type": 0,
+                                                        "padding_x": 0,
+                                                        "padding_y": 0,
+                                                        "padding_z": 0.00999999977648258,
+                                                        "padding_w": 0.00999999977648258,
+                                                        "content":
+                                                        {
+                                                            "max_length": 0,
+                                                            "placeholder_text": "",
+                                                            "input_text": "",
+                                                            "password": false,
+                                                            "number": false,
+                                                            "placeholder_text_color": 858993663,
+                                                            "text_color": 255,
+                                                            "background_color": -185271809,
+                                                            "text_size": 1,
+                                                            "text_horizontal_align": 0,
+                                                            "multi_line": false,
+                                                            "padding_left": 0.0149999996647239,
+                                                            "padding_right": 0.00999999977648258,
+                                                            "padding_top": 0,
+                                                            "padding_bottom": 0,
+                                                            "type_name": "TextInput"
+                                                        },
+                                                        "children":
+                                                        []
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "name": "Slider",
+                                                "enabled": true,
+                                                "layer": 0,
+                                                "layout_orientation": 0,
+                                                "sizing_type": 2,
+                                                "sizing_value": 1,
+                                                "forward_dist": 0.0020000000949949,
+                                                "padding_type": 0,
+                                                "padding_x": 0,
+                                                "padding_y": 0,
+                                                "padding_z": 0.0199999995529652,
+                                                "padding_w": 0,
+                                                "content":
+                                                {
+                                                    "current_value": 3.57581400871277,
+                                                    "min_value": 0,
+                                                    "max_value": 10,
+                                                    "type_name": "Slider"
+                                                },
+                                                "children":
+                                                []
+                                            },
+                                            {
+                                                "name": "SliderScale",
+                                                "enabled": true,
+                                                "layer": 0,
+                                                "layout_orientation": 0,
+                                                "sizing_type": 2,
+                                                "sizing_value": 1,
+                                                "forward_dist": 0.0020000000949949,
+                                                "padding_type": 0,
+                                                "padding_x": 0,
+                                                "padding_y": 0,
+                                                "padding_z": 0.0199999995529652,
+                                                "padding_w": 0,
+                                                "content":
+                                                {
+                                                    "text": " 0                                      10",
+                                                    "text_vertical_align": 1,
+                                                    "text_horizontal_align": 1,
+                                                    "text_auto_size": false,
+                                                    "text_min_size": 0,
+                                                    "text_max_size": 72,
+                                                    "text_size": 0.280000001192093,
+                                                    "text_color": -1,
+                                                    "text_bold": true,
+                                                    "text_italics": false,
+                                                    "text_underlined": false,
+                                                    "type_name": "Label"
+                                                },
+                                                "children":
+                                                []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "MiddleLine",
+                "enabled": true,
+                "layer": 0,
+                "layout_orientation": 0,
+                "sizing_type": 2,
+                "sizing_value": 0.0500000007450581,
+                "forward_dist": 0.0020000000949949,
+                "padding_type": 0,
+                "padding_x": 0.0109999999403954,
+                "padding_y": 0.0109999999403954,
+                "padding_z": 0.0199999995529652,
+                "padding_w": 0,
+                "content":
+                {
+                    "mesh_color": 607404031,
+                    "type_name": "Mesh"
+                },
+                "children":
+                []
+            },
+            {
+                "name": "RightSide",
+                "enabled": true,
+                "layer": 0,
+                "layout_orientation": 0,
+                "sizing_type": 2,
+                "sizing_value": 0.75,
+                "forward_dist": 0,
+                "padding_type": 0,
+                "padding_x": 0,
+                "padding_y": 0,
+                "padding_z": 0,
+                "padding_w": 0,
+                "content": null,
+                "children":
+                [
+                    {
+                        "name": "DockingPoses",
+                        "enabled": true,
+                        "layer": 0,
+                        "layout_orientation": 0,
+                        "sizing_type": 2,
+                        "sizing_value": 0.5,
+                        "forward_dist": 0.0020000000949949,
+                        "padding_type": 0,
+                        "padding_x": 0,
+                        "padding_y": 0,
+                        "padding_z": 0.0199999995529652,
+                        "padding_w": 0.0500000007450581,
+                        "content": null,
+                        "children":
+                        [
+                            {
+                                "name": "ModesText",
+                                "enabled": true,
+                                "layer": 0,
+                                "layout_orientation": 0,
+                                "sizing_type": 2,
+                                "sizing_value": 0.5,
+                                "forward_dist": 0.0020000000949949,
+                                "padding_type": 0,
+                                "padding_x": 0,
+                                "padding_y": 0,
+                                "padding_z": 0,
+                                "padding_w": 0,
+                                "content":
+                                {
+                                    "text": "Max Poses:",
+                                    "text_vertical_align": 1,
+                                    "text_horizontal_align": 1,
+                                    "text_auto_size": false,
+                                    "text_min_size": 0,
+                                    "text_max_size": 72,
+                                    "text_size": 0.389999985694885,
+                                    "text_color": -1,
+                                    "text_bold": true,
+                                    "text_italics": false,
+                                    "text_underlined": false,
+                                    "type_name": "Label"
+                                },
+                                "children":
+                                []
+                            },
+                            {
+                                "name": "PoseSetting",
+                                "enabled": true,
+                                "layer": 0,
+                                "layout_orientation": 1,
+                                "sizing_type": 2,
+                                "sizing_value": 0.400000005960464,
+                                "forward_dist": 0,
+                                "padding_type": 0,
+                                "padding_x": 0.0199999995529652,
+                                "padding_y": 0.0199999995529652,
+                                "padding_z": 0,
+                                "padding_w": 0,
+                                "content": null,
+                                "children":
+                                [
+                                    {
+                                        "name": "PoseSub",
+                                        "enabled": true,
+                                        "layer": 0,
+                                        "layout_orientation": 0,
+                                        "sizing_type": 2,
+                                        "sizing_value": 0.150000005960464,
+                                        "forward_dist": 0.0020000000949949,
+                                        "padding_type": 0,
+                                        "padding_x": 0,
+                                        "padding_y": 0,
+                                        "padding_z": 0,
+                                        "padding_w": 0,
+                                        "content":
+                                        {
+                                            "name": "newButton",
+                                            "selected": false,
+                                            "unusable": false,
+                                            "text_active": true,
+                                            "text_value_idle": "-",
+                                            "text_value_selected": "-",
+                                            "text_value_highlighted": "-",
+                                            "text_value_selected_highlighted": "-",
+                                            "text_value_unusable": "-",
+                                            "text_auto_size": false,
+                                            "text_min_size": 0,
+                                            "text_max_size": 72,
+                                            "text_size": 0.400000005960464,
+                                            "text_ellipsis": false,
+                                            "text_underlined": false,
+                                            "text_bold_idle": true,
+                                            "text_bold_selected": true,
+                                            "text_bold_highlighted": true,
+                                            "text_bold_selected_highlighted": true,
+                                            "text_bold_unusable": true,
+                                            "text_color_idle": -185271809,
+                                            "text_color_selected": 15056895,
+                                            "text_color_highlighted": 802930687,
+                                            "text_color_selected_highlighted": 16371967,
+                                            "text_color_unusable": 2139062271,
+                                            "text_padding_top": 0,
+                                            "text_padding_bottom": 0,
+                                            "text_padding_left": 0,
+                                            "text_padding_right": 0,
+                                            "text_line_spacing": 0,
+                                            "text_vertical_align": 1,
+                                            "text_horizontal_align": 1,
+                                            "icon_active": false,
+                                            "icon_color_idle": -184942593,
+                                            "icon_color_selected": 15056895,
+                                            "icon_color_highlighted": 802930687,
+                                            "icon_color_selected_highlighted": 16371967,
+                                            "icon_color_unusable": 2139062271,
+                                            "icon_sharpness": 0.5,
+                                            "icon_size": 1,
+                                            "icon_ratio": 0.5,
+                                            "icon_position":
+                                            {
+                                                "x": 0,
+                                                "y": 0,
+                                                "z": 0
+                                            },
+                                            "icon_rotation":
+                                            {
+                                                "x": 0,
+                                                "y": 0,
+                                                "z": 0
+                                            },
+                                            "mesh_active": false,
+                                            "mesh_enabled_idle": true,
+                                            "mesh_enabled_selected": true,
+                                            "mesh_enabled_highlighted": true,
+                                            "mesh_enabled_selected_highlighted": true,
+                                            "mesh_enabled_unusable": true,
+                                            "mesh_color_idle": -1,
+                                            "mesh_color_selected": -16776961,
+                                            "mesh_color_highlighted": 16711935,
+                                            "mesh_color_selected_highlighted": 65535,
+                                            "mesh_color_unusable": 2139062271,
+                                            "outline_active": true,
+                                            "outline_size_idle": 0.300000011920929,
+                                            "outline_size_selected": 0.300000011920929,
+                                            "outline_size_highlighted": 0.300000011920929,
+                                            "outline_size_selected_highlighted": 0.300000011920929,
+                                            "outline_size_unusable": 0.300000011920929,
+                                            "outline_color_idle": -184942593,
+                                            "outline_color_selected": 15056895,
+                                            "outline_color_highlighted": 802930687,
+                                            "outline_color_selected_highlighted": 16371967,
+                                            "outline_color_unusable": 2139062271,
+                                            "tooltip_title": "",
+                                            "tooltip_content": "",
+                                            "tooltip_bounds":
+                                            {
+                                                "x": 1.20000004768372,
+                                                "y": 0.449999988079071,
+                                                "z": 0.0500000007450581
+                                            },
+                                            "tooltip_positioning_target": 7,
+                                            "tooltip_positioning_origin": 2,
+                                            "type_name": "Button"
+                                        },
+                                        "children":
+                                        []
+                                    },
+                                    {
+                                        "name": "ModesInput",
+                                        "enabled": true,
+                                        "layer": 0,
+                                        "layout_orientation": 0,
+                                        "sizing_type": 2,
+                                        "sizing_value": 0.699999988079071,
+                                        "forward_dist": 0.0020000000949949,
+                                        "padding_type": 0,
+                                        "padding_x": 0,
+                                        "padding_y": 0,
+                                        "padding_z": 0,
+                                        "padding_w": 0,
+                                        "content":
+                                        {
+                                            "max_length": 0,
+                                            "placeholder_text": "",
+                                            "input_text": "5",
+                                            "password": false,
+                                            "number": false,
+                                            "placeholder_text_color": 858993663,
+                                            "text_color": 255,
+                                            "background_color": -185271809,
+                                            "text_size": 0.400000005960464,
+                                            "text_horizontal_align": 1,
+                                            "multi_line": false,
+                                            "padding_left": 0.0149999996647239,
+                                            "padding_right": 0.00999999977648258,
+                                            "padding_top": 0,
+                                            "padding_bottom": 0,
+                                            "type_name": "TextInput"
+                                        },
+                                        "children":
+                                        []
+                                    },
+                                    {
+                                        "name": "PoseAdd",
+                                        "enabled": true,
+                                        "layer": 0,
+                                        "layout_orientation": 0,
+                                        "sizing_type": 2,
+                                        "sizing_value": 0.150000005960464,
+                                        "forward_dist": 0.0020000000949949,
+                                        "padding_type": 0,
+                                        "padding_x": 0,
+                                        "padding_y": 0,
+                                        "padding_z": 0,
+                                        "padding_w": 0,
+                                        "content":
+                                        {
+                                            "name": "newButton",
+                                            "selected": false,
+                                            "unusable": false,
+                                            "text_active": true,
+                                            "text_value_idle": "+",
+                                            "text_value_selected": "+",
+                                            "text_value_highlighted": "+",
+                                            "text_value_selected_highlighted": "+",
+                                            "text_value_unusable": "+",
+                                            "text_auto_size": false,
+                                            "text_min_size": 0,
+                                            "text_max_size": 72,
+                                            "text_size": 0.400000005960464,
+                                            "text_ellipsis": false,
+                                            "text_underlined": false,
+                                            "text_bold_idle": true,
+                                            "text_bold_selected": true,
+                                            "text_bold_highlighted": true,
+                                            "text_bold_selected_highlighted": true,
+                                            "text_bold_unusable": true,
+                                            "text_color_idle": -185271809,
+                                            "text_color_selected": 15056895,
+                                            "text_color_highlighted": 802930687,
+                                            "text_color_selected_highlighted": 16371967,
+                                            "text_color_unusable": 2139062271,
+                                            "text_padding_top": 0,
+                                            "text_padding_bottom": 0,
+                                            "text_padding_left": 0,
+                                            "text_padding_right": 0,
+                                            "text_line_spacing": 0,
+                                            "text_vertical_align": 1,
+                                            "text_horizontal_align": 1,
+                                            "icon_active": false,
+                                            "icon_color_idle": -184942593,
+                                            "icon_color_selected": 15056895,
+                                            "icon_color_highlighted": 802930687,
+                                            "icon_color_selected_highlighted": 16371967,
+                                            "icon_color_unusable": 2139062271,
+                                            "icon_sharpness": 0.5,
+                                            "icon_size": 1,
+                                            "icon_ratio": 0.5,
+                                            "icon_position":
+                                            {
+                                                "x": 0,
+                                                "y": 0,
+                                                "z": 0
+                                            },
+                                            "icon_rotation":
+                                            {
+                                                "x": 0,
+                                                "y": 0,
+                                                "z": 0
+                                            },
+                                            "mesh_active": false,
+                                            "mesh_enabled_idle": true,
+                                            "mesh_enabled_selected": true,
+                                            "mesh_enabled_highlighted": true,
+                                            "mesh_enabled_selected_highlighted": true,
+                                            "mesh_enabled_unusable": true,
+                                            "mesh_color_idle": -1,
+                                            "mesh_color_selected": -16776961,
+                                            "mesh_color_highlighted": 16711935,
+                                            "mesh_color_selected_highlighted": 65535,
+                                            "mesh_color_unusable": 2139062271,
+                                            "outline_active": true,
+                                            "outline_size_idle": 0.300000011920929,
+                                            "outline_size_selected": 0.300000011920929,
+                                            "outline_size_highlighted": 0.300000011920929,
+                                            "outline_size_selected_highlighted": 0.300000011920929,
+                                            "outline_size_unusable": 0.300000011920929,
+                                            "outline_color_idle": -184942593,
+                                            "outline_color_selected": 15056895,
+                                            "outline_color_highlighted": 802930687,
+                                            "outline_color_selected_highlighted": 16371967,
+                                            "outline_color_unusable": 2139062271,
+                                            "tooltip_title": "",
+                                            "tooltip_content": "",
+                                            "tooltip_bounds":
+                                            {
+                                                "x": 1.20000004768372,
+                                                "y": 0.449999988079071,
+                                                "z": 0.0500000007450581
+                                            },
+                                            "tooltip_positioning_target": 7,
+                                            "tooltip_positioning_origin": 2,
+                                            "type_name": "Button"
+                                        },
+                                        "children":
+                                        []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Diagram",
+                        "enabled": true,
+                        "layer": 0,
+                        "layout_orientation": 1,
+                        "sizing_type": 2,
+                        "sizing_value": 0.5,
+                        "forward_dist": 0,
+                        "padding_type": 0,
+                        "padding_x": 0.0199999995529652,
+                        "padding_y": 0.0199999995529652,
+                        "padding_z": 0.0149999996647239,
+                        "padding_w": 0.0149999996647239,
+                        "content": null,
+                        "children":
+                        [
+                            {
+                                "name": "LigandDiagram",
+                                "enabled": true,
+                                "layer": 0,
+                                "layout_orientation": 0,
+                                "sizing_type": 2,
+                                "sizing_value": 0.180000007152557,
+                                "forward_dist": 0,
+                                "padding_type": 0,
+                                "padding_x": 0,
+                                "padding_y": 0,
+                                "padding_z": 0,
+                                "padding_w": 0,
+                                "content": null,
+                                "children":
+                                [
+                                    {
+                                        "name": "LigandIcon",
+                                        "enabled": true,
+                                        "layer": 0,
+                                        "layout_orientation": 0,
+                                        "sizing_type": 2,
+                                        "sizing_value": 0.699999988079071,
+                                        "forward_dist": 0.0020000000949949,
+                                        "padding_type": 0,
+                                        "padding_x": 0,
+                                        "padding_y": 0,
+                                        "padding_z": 0,
+                                        "padding_w": 0,
+                                        "content":
+                                        {
+                                            "color": -1,
+                                            "file_path": "",
+                                            "scaling_option": 0,
+                                            "type_name": "Image"
+                                        },
+                                        "children":
+                                        []
+                                    },
+                                    {
+                                        "name": "LigandName",
+                                        "enabled": true,
+                                        "layer": 0,
+                                        "layout_orientation": 0,
+                                        "sizing_type": 2,
+                                        "sizing_value": 0.300000011920929,
+                                        "forward_dist": 0.0020000000949949,
+                                        "padding_type": 0,
+                                        "padding_x": 0,
+                                        "padding_y": 0,
+                                        "padding_z": 0,
+                                        "padding_w": 0,
+                                        "content":
+                                        {
+                                            "text": "ligand",
+                                            "text_vertical_align": 1,
+                                            "text_horizontal_align": 1,
+                                            "text_auto_size": false,
+                                            "text_min_size": 0,
+                                            "text_max_size": 72,
+                                            "text_size": 0.200000002980232,
+                                            "text_color": -1,
+                                            "text_bold": true,
+                                            "text_italics": false,
+                                            "text_underlined": false,
+                                            "type_name": "Label"
+                                        },
+                                        "children":
+                                        []
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "CheckArrow",
+                                "enabled": true,
+                                "layer": 0,
+                                "layout_orientation": 0,
+                                "sizing_type": 2,
+                                "sizing_value": 0.200000002980232,
+                                "forward_dist": 0.0020000000949949,
+                                "padding_type": 0,
+                                "padding_x": 0,
+                                "padding_y": 0,
+                                "padding_z": 0.0649999976158142,
+                                "padding_w": 0.0649999976158142,
+                                "content":
+                                {
+                                    "color": -1,
+                                    "file_path": "",
+                                    "scaling_option": 0,
+                                    "type_name": "Image"
+                                },
+                                "children":
+                                []
+                            },
+                            {
+                                "name": "ReceptorDiagram",
+                                "enabled": true,
+                                "layer": 0,
+                                "layout_orientation": 0,
+                                "sizing_type": 2,
+                                "sizing_value": 0.180000007152557,
+                                "forward_dist": 0,
+                                "padding_type": 0,
+                                "padding_x": 0,
+                                "padding_y": 0,
+                                "padding_z": 0,
+                                "padding_w": 0,
+                                "content": null,
+                                "children":
+                                [
+                                    {
+                                        "name": "ReceptorIcon",
+                                        "enabled": true,
+                                        "layer": 0,
+                                        "layout_orientation": 0,
+                                        "sizing_type": 2,
+                                        "sizing_value": 0.699999988079071,
+                                        "forward_dist": 0.0020000000949949,
+                                        "padding_type": 0,
+                                        "padding_x": 0,
+                                        "padding_y": 0,
+                                        "padding_z": 0,
+                                        "padding_w": 0,
+                                        "content":
+                                        {
+                                            "color": -1,
+                                            "file_path": "",
+                                            "scaling_option": 0,
+                                            "type_name": "Image"
+                                        },
+                                        "children":
+                                        []
+                                    },
+                                    {
+                                        "name": "ReceptorName",
+                                        "enabled": true,
+                                        "layer": 0,
+                                        "layout_orientation": 0,
+                                        "sizing_type": 2,
+                                        "sizing_value": 0.300000011920929,
+                                        "forward_dist": 0.0020000000949949,
+                                        "padding_type": 0,
+                                        "padding_x": 0,
+                                        "padding_y": 0,
+                                        "padding_z": 0,
+                                        "padding_w": 0,
+                                        "content":
+                                        {
+                                            "text": "Receptor",
+                                            "text_vertical_align": 1,
+                                            "text_horizontal_align": 1,
+                                            "text_auto_size": false,
+                                            "text_min_size": 0,
+                                            "text_max_size": 72,
+                                            "text_size": 0.200000002980232,
+                                            "text_color": -1,
+                                            "text_bold": true,
+                                            "text_italics": false,
+                                            "text_underlined": false,
+                                            "type_name": "Label"
+                                        },
+                                        "children":
+                                        []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Run",
+                        "enabled": true,
+                        "layer": 0,
+                        "layout_orientation": 0,
+                        "sizing_type": 2,
+                        "sizing_value": 0.300000011920929,
+                        "forward_dist": 0.0020000000949949,
+                        "padding_type": 0,
+                        "padding_x": 0,
+                        "padding_y": 0,
+                        "padding_z": 0,
+                        "padding_w": 0,
+                        "content": null,
+                        "children":
+                        [
+                            {
+                                "name": "RunButton",
+                                "enabled": true,
+                                "layer": 0,
+                                "layout_orientation": 0,
+                                "sizing_type": 0,
+                                "sizing_value": 0.200000002980232,
+                                "forward_dist": 0.00300000002607703,
+                                "padding_type": 0,
+                                "padding_x": 0.0199999995529652,
+                                "padding_y": 0.0199999995529652,
+                                "padding_z": 0.0199999995529652,
+                                "padding_w": 0.0199999995529652,
+                                "content":
+                                {
+                                    "name": "newButton",
+                                    "selected": false,
+                                    "unusable": false,
+                                    "text_active": true,
+                                    "text_value_idle": "Run Dock",
+                                    "text_value_selected": "Run Dock",
+                                    "text_value_highlighted": "Run Dock",
+                                    "text_value_selected_highlighted": "Run Dock",
+                                    "text_value_unusable": "Running...",
+                                    "text_auto_size": false,
+                                    "text_min_size": 0,
+                                    "text_max_size": 72,
+                                    "text_size": 0.349999994039536,
+                                    "text_ellipsis": false,
+                                    "text_underlined": false,
+                                    "text_bold_idle": true,
+                                    "text_bold_selected": true,
+                                    "text_bold_highlighted": true,
+                                    "text_bold_selected_highlighted": true,
+                                    "text_bold_unusable": true,
+                                    "text_color_idle": -185271809,
+                                    "text_color_selected": 15056895,
+                                    "text_color_highlighted": 802930687,
+                                    "text_color_selected_highlighted": 16371967,
+                                    "text_color_unusable": 2139062271,
+                                    "text_padding_top": 0,
+                                    "text_padding_bottom": 0,
+                                    "text_padding_left": 0,
+                                    "text_padding_right": 0,
+                                    "text_line_spacing": 0,
+                                    "text_vertical_align": 1,
+                                    "text_horizontal_align": 1,
+                                    "icon_active": false,
+                                    "icon_color_idle": -184942593,
+                                    "icon_color_selected": 15056895,
+                                    "icon_color_highlighted": 802930687,
+                                    "icon_color_selected_highlighted": 16371967,
+                                    "icon_color_unusable": 2139062271,
+                                    "icon_sharpness": 0.5,
+                                    "icon_size": 1,
+                                    "icon_ratio": 0.5,
+                                    "icon_position":
+                                    {
+                                        "x": 0,
+                                        "y": 0,
+                                        "z": 0
+                                    },
+                                    "icon_rotation":
+                                    {
+                                        "x": 0,
+                                        "y": 0,
+                                        "z": 0
+                                    },
+                                    "mesh_active": true,
+                                    "mesh_enabled_idle": true,
+                                    "mesh_enabled_selected": true,
+                                    "mesh_enabled_highlighted": true,
+                                    "mesh_enabled_selected_highlighted": true,
+                                    "mesh_enabled_unusable": true,
+                                    "mesh_color_idle": 514891007,
+                                    "mesh_color_selected": 514891007,
+                                    "mesh_color_highlighted": 953071359,
+                                    "mesh_color_selected_highlighted": 953071359,
+                                    "mesh_color_unusable": 2139062271,
+                                    "outline_active": false,
+                                    "outline_size_idle": 0.300000011920929,
+                                    "outline_size_selected": 0.300000011920929,
+                                    "outline_size_highlighted": 0.300000011920929,
+                                    "outline_size_selected_highlighted": 0.300000011920929,
+                                    "outline_size_unusable": 0.300000011920929,
+                                    "outline_color_idle": -184942593,
+                                    "outline_color_selected": 15056895,
+                                    "outline_color_highlighted": 802930687,
+                                    "outline_color_selected_highlighted": 16371967,
+                                    "outline_color_unusable": 2139062271,
+                                    "tooltip_title": "",
+                                    "tooltip_content": "",
+                                    "tooltip_bounds":
+                                    {
+                                        "x": 1.20000004768372,
+                                        "y": 0.449999988079071,
+                                        "z": 0.0500000007450581
+                                    },
+                                    "tooltip_positioning_target": 7,
+                                    "tooltip_positioning_origin": 2,
+                                    "type_name": "Button"
+                                },
+                                "children":
+                                []
+                            },
+                            {
+                                "name": "LoadingBar",
+                                "enabled": false,
+                                "layer": 1,
+                                "layout_orientation": 0,
+                                "sizing_type": 0,
+                                "sizing_value": 0.200000002980232,
+                                "forward_dist": 0.00400000018998981,
+                                "padding_type": 0,
+                                "padding_x": 0.0199999995529652,
+                                "padding_y": 0.0199999995529652,
+                                "padding_z": 0.0900000035762787,
+                                "padding_w": 0,
+                                "content":
+                                {
+                                    "percentage": 0,
+                                    "title": "",
+                                    "description": "",
+                                    "failure": false,
+                                    "type_name": "LoadingBar"
+                                },
+                                "children":
+                                []
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}
