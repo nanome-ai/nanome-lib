@@ -8,6 +8,8 @@ from .util_schemas import ColorField, EnumField, QuaternionField, Vector3Field
 
 def init_object(obj, data: dict):
     for key in data:
+        if not hasattr(obj, key):
+            continue
         try:
             setattr(obj, key, data[key])
         except AttributeError:
