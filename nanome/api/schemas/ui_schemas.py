@@ -7,6 +7,8 @@ from .util_schemas import EnumField
 
 def init_object(obj, data: dict):
     for key in data:
+        if not hasattr(obj, key):
+            continue
         try:
             setattr(obj, key, data[key])
         except AttributeError:
@@ -527,14 +529,15 @@ class ContentSchema(Schema):
     }
 
     def load(self, data, *args, **kwargs):
-        type_name = data['type_name']
+        type_name = data.pop('type_name')
         correct_schema = self.type_name_schemas[type_name]
         return correct_schema.load(data, *args, **kwargs)
 
     def dump(self, obj, *args, **kwargs):
-        type_name = obj.type_name
-        correct_schema = self.type_name_schemas[type_name]
-        return correct_schema.dump(obj, *args, **kwargs)
+        type_name = obj.__class__.__name__
+        schema = self.type_name_schemas[type_name]
+        dump_data = schema.dump(obj, *args, **kwargs)
+        dump_data['type_name'] = type_name
 
 
 class LayoutNodeSchema(Schema):
@@ -556,6 +559,13 @@ class LayoutNodeSchema(Schema):
     @post_load
     def make_obj(self, data, **kwargs):
         new_obj = ui.LayoutNode()
+        padding_data = {
+            'left': data.pop('padding_x', None),
+            'right': data.pop('padding_y', None),
+            'top': data.pop('padding_z', None),
+            'down': data.pop('padding_w', None)
+        }
+        new_obj.set_padding(**padding_data)
         init_object(new_obj, data)
         for child in new_obj.children:
             child._parent = new_obj
