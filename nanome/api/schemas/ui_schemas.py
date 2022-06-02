@@ -1,4 +1,4 @@
-from marshmallow import fields, Schema, post_load
+from marshmallow import fields, Schema, post_load, pre_dump
 
 from nanome.util import enums, Color, Vector3
 from nanome.api import ui
@@ -220,8 +220,9 @@ class ButtonSchema(Schema):
     # backwards compatibility
     text_bolded = fields.Bool()
 
-    def dump(self, obj, *args, **kwargs):
-        # Add nested fields we want to serialize
+    @pre_dump
+    def flatten_attributes(self, obj, *args, **kwargs):
+        """Add flattened attributes from nested fields to object."""
         key_map = {
             # Switch fields
             'switch_active': obj.switch.active,
@@ -305,11 +306,7 @@ class ButtonSchema(Schema):
         }
         for key, value in key_map.items():
             setattr(obj, key, value)
-
-        # Outline fields
-        # ButtonTextFields
-        dump_data = super().dump(obj, *args, **kwargs)
-        return dump_data
+        return obj
 
     def load(self, data, *args, **kwargs):
         data = dict(data)
