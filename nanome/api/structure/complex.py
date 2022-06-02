@@ -149,9 +149,13 @@ class Complex(_Complex, Base):
         """
         return self._current_frame
 
-    def set_current_frame(self, value):
+    @current_frame.setter
+    def current_frame(self, value):
         value = max(0, min(value, len(self._molecules) - 1))
         self._current_frame = value
+
+    def set_current_frame(self, value):
+        self.current_frame = value
 
     # returns true if the complex is selected on nanome.
     def get_selected(self):
@@ -313,12 +317,8 @@ class Complex(_Complex, Base):
         for complex in other_complexes:
             complex.position = target_complex.position.get_copy()
             complex.rotation = target_complex.rotation.get_copy()
-
+    
     # region deprecated
-    @current_frame.setter
-    @Logs.deprecated()
-    def current_frame(self, value):
-        self._current_frame = value
 
     @property
     @Logs.deprecated()
