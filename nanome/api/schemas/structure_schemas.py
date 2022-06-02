@@ -143,7 +143,6 @@ class ComplexSchema(StructureSchema):
     position = Vector3Field()
     rotation = QuaternionField()
     molecules = fields.List(fields.Nested(MoleculeSchema))
-    current_frame = fields.Integer()
     remarks = fields.Dict()
 
     @post_load
