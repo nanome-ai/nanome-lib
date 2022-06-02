@@ -127,32 +127,75 @@ class UISchemaTestCase(unittest.TestCase):
 
     def test_button_dump(self):
         """Test all the values"""
-        with open(test_menu_json, 'r') as f:
-            input_dict = json.load(f)
-        menu = schemas.MenuSchema().load(input_dict)
+        menu = ui.Menu.io.from_json(test_menu_json)
         menu_dump = schemas.MenuSchema().dump(menu)
         menu_btn = next(
             content for content in menu.get_all_content()
             if isinstance(content, ui.Button))
-        menu = schemas.MenuSchema().load(input_dict)
         btn_data = menu_dump['effective_root']['children'][0]['children'][0]['content']
         # Test outline data
-        self.assertEqual(
-            round(btn_data['outline_size_idle'], 2),
-            round(menu_btn.outline.size.idle, 2))
-        self.assertEqual(
-            round(btn_data['outline_size_selected'], 2),
-            round(menu_btn.outline.size.selected, 2))
-        self.assertEqual(
-            round(btn_data['outline_size_highlighted'], 2),
-            round(menu_btn.outline.size.highlighted, 2))
-        self.assertEqual(
-            round(btn_data['outline_size_selected_highlighted'], 2),
-            round(menu_btn.outline.size.selected_highlighted, 2))
-        self.assertEqual(
-            round(btn_data['outline_size_unusable'], 2),
-            round(menu_btn.outline.size.unusable, 2))
-        
+        self.assertEqual(round(btn_data['outline_size_idle'], 2), round(menu_btn.outline.size.idle, 2))
+        self.assertEqual(round(btn_data['outline_size_selected'], 2), round(menu_btn.outline.size.selected, 2))
+        self.assertEqual(round(btn_data['outline_size_highlighted'], 2), round(menu_btn.outline.size.highlighted, 2))
+        self.assertEqual(round(btn_data['outline_size_selected_highlighted'], 2), round(menu_btn.outline.size.selected_highlighted, 2))
+        self.assertEqual(round(btn_data['outline_size_unusable'], 2), round(menu_btn.outline.size.unusable, 2))
+        # ButtonText data
+        self.assertEqual(btn_data['text_value_idle'], menu_btn.text.value.idle)
+        self.assertEqual(btn_data['text_value_highlighted'], menu_btn.text.value.highlighted)
+        self.assertEqual(btn_data['text_value_selected'], menu_btn.text.value.selected)
+        self.assertEqual(btn_data['text_value_selected_highlighted'], menu_btn.text.value.selected_highlighted)
+        self.assertEqual(btn_data['text_value_unusable'], menu_btn.text.value.unusable)
+        self.assertEqual(btn_data['text_bold_idle'], menu_btn.text.bold.idle)
+        self.assertEqual(btn_data['text_bold_highlighted'], menu_btn.text.bold.highlighted)
+        self.assertEqual(btn_data['text_bold_selected'], menu_btn.text.bold.selected)
+        self.assertEqual(btn_data['text_bold_unusable'], menu_btn.text.bold.unusable)
+        self.assertEqual(btn_data['text_color_idle'], menu_btn.text.color.idle._color)
+        self.assertEqual(btn_data['text_color_highlighted'], menu_btn.text.color.highlighted._color)
+        self.assertEqual(btn_data['text_color_selected'], menu_btn.text.color.selected._color)
+        self.assertEqual(btn_data['text_color_unusable'], menu_btn.text.color.unusable._color)
+        self.assertEqual(btn_data['text_min_size'], menu_btn.text.min_size)
+        self.assertEqual(btn_data['text_max_size'], menu_btn.text.max_size)
+        self.assertEqual(btn_data['text_size'], menu_btn.text_size)
+        self.assertEqual(btn_data['text_underlined'], menu_btn.text_underlined)
+        self.assertEqual(btn_data['text_vertical_align'], menu_btn.text_vertical_align)
+        self.assertEqual(btn_data['text_horizontal_align'], menu_btn.text_horizontal_align)
+        self.assertEqual(btn_data['text_ellipsis'], menu_btn.text.ellipsis)
+        self.assertEqual(btn_data['text_padding_top'], menu_btn.text_padding_top)
+        self.assertEqual(btn_data['text_padding_bottom'], menu_btn.text_padding_bottom)
+        self.assertEqual(btn_data['text_padding_left'], menu_btn.text_padding_left)
+        self.assertEqual(btn_data['text_padding_right'], menu_btn.text_padding_right)
+        self.assertEqual(btn_data['text_line_spacing'], menu_btn.text.line_spacing)
+        # Icons
+        self.assertEqual(btn_data['icon_active'], menu_btn.icon.active)
+        self.assertEqual(btn_data['icon_color_idle'], menu_btn.icon.color.idle._color)
+        self.assertEqual(btn_data['icon_color_highlighted'], menu_btn.icon.color.highlighted._color)
+        self.assertEqual(btn_data['icon_color_selected'], menu_btn.icon.color.selected._color)
+        self.assertEqual(btn_data['icon_color_unusable'], menu_btn.icon.color.unusable._color)
+        self.assertEqual(btn_data['icon_value_idle'], menu_btn.icon.value.idle)
+        self.assertEqual(btn_data['icon_value_highlighted'], menu_btn.icon.value.highlighted)
+        self.assertEqual(btn_data['icon_value_selected'], menu_btn.icon.value.selected)
+        self.assertEqual(btn_data['icon_value_unusable'], menu_btn.icon.value.unusable)
+        # Meshes
+        self.assertEqual(btn_data['mesh_active'], menu_btn.mesh.active)
+        self.assertEqual(btn_data['mesh_enabled_idle'], menu_btn.mesh.enabled.idle)
+        self.assertEqual(btn_data['mesh_enabled_selected'], menu_btn.mesh.enabled.selected)
+        self.assertEqual(btn_data['mesh_enabled_highlighted'], menu_btn.mesh.enabled.highlighted)
+        self.assertEqual(btn_data['mesh_enabled_selected_highlighted'], menu_btn.mesh.enabled.selected_highlighted)
+        self.assertEqual(btn_data['mesh_enabled_unusable'], menu_btn.mesh.enabled.unusable)
+        self.assertEqual(btn_data['mesh_color_idle'], menu_btn.mesh.color.idle._color)
+        self.assertEqual(btn_data['mesh_color_selected'], menu_btn.mesh.color.selected._color)
+        self.assertEqual(btn_data['mesh_color_highlighted'], menu_btn.mesh.color.highlighted._color)
+        self.assertEqual(btn_data['mesh_color_selected_highlighted'], menu_btn.mesh.color.selected_highlighted._color)
+        self.assertEqual(btn_data['mesh_color_unusable'], menu_btn.mesh.color.unusable._color)
+        # Tooltips
+        self.assertEqual(btn_data['tooltip_title'], menu_btn.tooltip.title)
+        self.assertEqual(btn_data['tooltip_content'], menu_btn.tooltip.content)
+        self.assertEqual(round(btn_data['tooltip_bounds']['x'], 2), round(menu_btn.tooltip.bounds.x, 2))
+        self.assertEqual(round(btn_data['tooltip_bounds']['y'], 2), round(menu_btn.tooltip.bounds.y, 2))
+        self.assertEqual(round(btn_data['tooltip_bounds']['z'], 2), round(menu_btn.tooltip.bounds.z, 2))
+        self.assertEqual(btn_data['tooltip_positioning_target'], menu_btn.tooltip.positioning_target)
+        self.assertEqual(btn_data['tooltip_positioning_origin'], menu_btn.tooltip.positioning_origin)
+
     def test_dump_menu_idempotent(self):
         """Ensure that dumping menu from serializers returns same input json."""
         with open(smina_menu_json, 'r') as f:

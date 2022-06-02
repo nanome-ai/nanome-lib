@@ -131,7 +131,6 @@ class ButtonToolTipSchema(Schema):
 
 class ButtonSchema(Schema):
     name = fields.String()
-    type_name = fields.String(required=True)
     selected = fields.Bool()
     unusable = fields.Bool()
     # ButtonText
@@ -158,7 +157,6 @@ class ButtonSchema(Schema):
     text_underlined = fields.Bool()
     text_vertical_align = EnumField(enum=enums.VertAlignOptions)
     text_horizontal_align = EnumField(enum=enums.HorizAlignOptions)
-    type_name = fields.String()
     text_ellipsis = fields.Boolean()
     text_padding_top = FloatRoundedField()
     text_padding_bottom = FloatRoundedField()
@@ -223,15 +221,92 @@ class ButtonSchema(Schema):
 
     def dump(self, obj, *args, **kwargs):
         # Add nested fields we want to serialize
-        obj.switch_active = obj.switch.active
-        obj.switch_on_color = obj.switch.on_color
-        obj.switch_off_color = obj.switch.off_color
-        obj.icon_value_idle = obj.icon.value.idle
-        obj.icon_value_selected = obj.icon.value.selected
-        obj.icon_value_highlighted = obj.icon.value.highlighted
-        obj.icon_value_selected_highlighted = obj.icon.value.selected_highlighted
-        obj.icon_value_unusable = obj.icon.value.unusable
-        breakpoint()
+        key_map = {
+            # Switch fields
+            'switch_active': obj.switch.active,
+            'switch_on_color': obj.switch.on_color,
+            'switch_off_color': obj.switch.off_color,
+            # icon fields
+            'icon_color_idle': obj.icon.color.idle,
+            'icon_color_selected': obj.icon.color.selected,
+            'icon_color_highlighted': obj.icon.color.highlighted,
+            'icon_color_selected_highlighted': obj.icon.color.selected_highlighted,
+            'icon_color_unusable': obj.icon.color.unusable,
+            'icon_sharpness': obj.icon.sharpness,
+            'icon_active': obj.icon.active,
+            'icon_size': obj.icon.size,
+            'icon_ratio': obj.icon.ratio,
+            'icon_position': obj.icon.position,
+            'icon_rotation': obj.icon.rotation,
+            'icon_value_idle': obj.icon.value.idle,
+            'icon_value_selected': obj.icon.value.selected,
+            'icon_value_highlighted': obj.icon.value.highlighted,
+            'icon_value_selected_highlighted': obj.icon.value.selected_highlighted,
+            'icon_value_unusable': obj.icon.value.unusable,
+            # Outline fields.
+            'outline_active':  obj.outline.active,
+            'outline_size_idle':  obj.outline.size.idle,
+            'outline_size_selected':  obj.outline.size.selected,
+            'outline_size_highlighted':  obj.outline.size.highlighted,
+            'outline_size_selected_highlighted':  obj.outline.size.selected_highlighted,
+            'outline_size_unusable':  obj.outline.size.unusable,
+            'outline_color_idle':  obj.outline.color.idle,
+            'outline_color_selected':  obj.outline.color.selected,
+            'outline_color_highlighted':  obj.outline.color.highlighted,
+            'outline_color_selected_highlighted':  obj.outline.color.selected_highlighted,
+            'outline_color_unusable':  obj.outline.color.unusable,
+            # ButtonText fields
+            'text_value_idle': obj.text.value.idle,
+            'text_value_highlighted': obj.text.value.highlighted,
+            'text_value_selected': obj.text.value.selected,
+            'text_value_unusable': obj.text.value.unusable,
+            'text_value_selected_highlighted': obj.text.value.selected_highlighted,
+            'text_bold_idle': obj.text.bold.idle,
+            'text_bold_highlighted': obj.text.bold.highlighted,
+            'text_bold_selected': obj.text.bold.selected,
+            'text_bold_selected_highlighted': obj.text.bold.selected_highlighted,
+            'text_bold_unusable': obj.text.bold.unusable,
+            'text_color_idle': obj.text.color.idle,
+            'text_color_highlighted': obj.text.color.highlighted,
+            'text_color_selected': obj.text.color.selected,
+            'text_color_selected_highlighted': obj.text.color.selected_highlighted,
+            'text_color_unusable': obj.text.color.unusable,
+            'text_min_size': obj.text.min_size,
+            'text_max_size': obj.text.max_size,
+            'text_size': obj.text.size,
+            'text_underlined': obj.text.underlined,
+            'text_vertical_align': obj.text.vertical_align,
+            'text_horizontal_align': obj.text.horizontal_align,
+            'text_ellipsis': obj.text.ellipsis,
+            'text_padding_top': obj.text.padding_top,
+            'text_padding_bottom': obj.text.padding_bottom,
+            'text_padding_left': obj.text.padding_left,
+            'text_padding_right': obj.text.padding_right,
+            'text_line_spacing': obj.text.line_spacing,
+            # Mesh
+            'mesh_active': obj.mesh.active,
+            'mesh_enabled_idle': obj.mesh.enabled.idle,
+            'mesh_enabled_selected': obj.mesh.enabled.selected,
+            'mesh_enabled_highlighted': obj.mesh.enabled.highlighted,
+            'mesh_enabled_selected_highlighted': obj.mesh.enabled.selected_highlighted,
+            'mesh_enabled_unusable': obj.mesh.enabled.unusable,
+            'mesh_color_idle': obj.mesh.color.idle,
+            'mesh_color_selected': obj.mesh.color.selected,
+            'mesh_color_highlighted': obj.mesh.color.highlighted,
+            'mesh_color_selected_highlighted': obj.mesh.color.selected_highlighted,
+            'mesh_color_unusable': obj.mesh.color.unusable,
+            # Tooltip
+            'tooltip_title': obj.tooltip.title,
+            'tooltip_content': obj.tooltip.content,
+            'tooltip_bounds': obj.tooltip.bounds,
+            'tooltip_positioning_target': obj.tooltip.positioning_target,
+            'tooltip_positioning_origin': obj.tooltip.positioning_origin,
+        }
+        for key, value in key_map.items():
+            setattr(obj, key, value)
+
+        # Outline fields
+        # ButtonTextFields
         dump_data = super().dump(obj, *args, **kwargs)
         return dump_data
 
