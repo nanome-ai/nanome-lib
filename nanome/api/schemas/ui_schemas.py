@@ -529,7 +529,7 @@ class ContentSchema(Schema):
     }
 
     def load(self, data, *args, **kwargs):
-        type_name = data.pop('type_name')
+        type_name = data['type_name']
         correct_schema = self.type_name_schemas[type_name]
         return correct_schema.load(data, *args, **kwargs)
 
