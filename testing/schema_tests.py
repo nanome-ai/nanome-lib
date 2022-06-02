@@ -59,7 +59,7 @@ class UISchemaTestCase(unittest.TestCase):
         menu = schemas.MenuSchema().load(menu_dict)
         self.assertTrue(isinstance(menu, ui.Menu))
         self.assertTrue(isinstance(menu.root, ui.LayoutNode))
-        
+
         # Make sure menu can be serialized back to json.
         test_export = tempfile.NamedTemporaryFile(mode='w+', delete=False)
         menu.io.to_json(test_export.name)
@@ -121,7 +121,6 @@ class UISchemaTestCase(unittest.TestCase):
         self.assertEqual(menu_btn.icon.value.highlighted, reference_menu_btn.icon.value.highlighted)
         self.assertEqual(menu_btn.icon.value.selected, reference_menu_btn.icon.value.selected)
         self.assertEqual(menu_btn.icon.value.unusable, reference_menu_btn.icon.value.unusable)
-        
 
     def test_dump_menu(self):
         """Ensure that dumping menu from serializers returns same input json."""

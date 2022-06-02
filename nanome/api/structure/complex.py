@@ -317,7 +317,7 @@ class Complex(_Complex, Base):
         for complex in other_complexes:
             complex.position = target_complex.position.get_copy()
             complex.rotation = target_complex.rotation.get_copy()
-    
+
     # region deprecated
 
     @property
