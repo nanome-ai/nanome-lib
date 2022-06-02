@@ -61,7 +61,7 @@ class UISchemaTestCase(unittest.TestCase):
         menu = schemas.MenuSchema().load(menu_dict)
         self.assertTrue(isinstance(menu, ui.Menu))
         self.assertTrue(isinstance(menu.root, ui.LayoutNode))
-        
+
         # Make sure menu can be serialized back to json.
         test_export = tempfile.NamedTemporaryFile(mode='w+', delete=False)
         menu.io.to_json(test_export.name)

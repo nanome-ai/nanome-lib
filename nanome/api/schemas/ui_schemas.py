@@ -520,6 +520,7 @@ class DropdownItemSchema(Schema):
         init_object(new_obj, data)
         return new_obj
 
+
 class DropdownSchema(Schema):
     type_name = fields.String(required=True)
     permanent_title = fields.String()
