@@ -69,3 +69,11 @@ class Stream(object):
                 self.__warning_displayed = True
             return
         self.__update_received(data)
+
+    @property
+    def id(self):
+        return self.__id
+    
+    @id.setter
+    def id(self, value):
+        self.__id = value
