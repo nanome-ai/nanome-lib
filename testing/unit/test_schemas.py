@@ -312,7 +312,7 @@ class ShapeSchemaTestCase(unittest.TestCase):
 @unittest.skipIf(not reqs_installed, "Marshmallow not installed")
 class StreamSchemaTestCase(unittest.TestCase):
 
-    def test_stream(self):
+    def test_stream_dump(self):
         network = MagicMock()
         stream_id = 5
         data_type = enums.StreamDataType.string
@@ -320,3 +320,6 @@ class StreamSchemaTestCase(unittest.TestCase):
         stream = streams.Stream(network, stream_id, data_type, direction)
         stream_dump = schemas.StreamSchema().dump(stream)
         self.assertEqual(stream_dump['id'], stream_id)
+        self.assertEqual(stream_dump['data_type'], data_type.value)
+        self.assertEqual(stream_dump['direction'], direction.value)
+
