@@ -1,10 +1,7 @@
 import nanome
-import sys
-import os
-import testing.utilities
+import testing.unit.utilities
 
 from nanome.util import Logs
-from nanome.api.structure import Complex, Workspace
 
 # Config
 
@@ -21,7 +18,7 @@ class EMPlugin(nanome.PluginInstance):
         print("Start Load File")
 
     def on_run(self):
-        path = testing.utilities.get_test_assets() + "volumetric\\cryo_em\\0170.map.gz"
+        path = testing.unit.utilities.get_test_assets() + "volumetric\\cryo_em\\0170.map.gz"
         self.upload_cryo_em(path, self.on_em_uploaded)
 
     def on_advanced_settings(self):
