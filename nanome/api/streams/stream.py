@@ -29,23 +29,23 @@ class Stream(object):
     @property
     def id(self):
         return self.__id
-    
+
     @id.setter
     def id(self, value):
         self.__id = value
-    
+
     @property
     def data_type(self):
         return self.__data_type
-    
+
     @data_type.setter
     def data_type(self, value):
         self.__data_type = value
-    
+
     @property
     def direction(self):
         return self.__direction
-    
+
     @direction.setter
     def direction(self, value):
         self.__direction = value

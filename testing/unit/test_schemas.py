@@ -322,4 +322,3 @@ class StreamSchemaTestCase(unittest.TestCase):
         self.assertEqual(stream_dump['id'], stream_id)
         self.assertEqual(stream_dump['data_type'], data_type.value)
         self.assertEqual(stream_dump['direction'], direction.value)
-
