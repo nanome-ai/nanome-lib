@@ -70,21 +70,33 @@ class StructureSchemaTestCase(unittest.TestCase):
 
         comp_data = schema.dump(comp)
         self.assertTrue(isinstance(comp_data, dict))
+        reloaded_comp = schema.load(comp_data)
+        self.assertTrue(isinstance(reloaded_comp, structure.Complex))
 
         mol_data = schema.dump(mol)
         self.assertTrue(isinstance(mol_data, dict))
+        reloaded_mol = schema.load(mol_data)
+        self.assertTrue(isinstance(reloaded_mol, structure.Molecule))
 
         chain_data = schema.dump(chain)
         self.assertTrue(isinstance(chain_data, dict))
+        reloaded_chain = schema.load(chain_data)
+        self.assertTrue(isinstance(reloaded_chain, structure.Chain))
 
         residue_data = schema.dump(residue)
         self.assertTrue(isinstance(residue_data, dict))
+        reloaded_residue = schema.load(residue_data)
+        self.assertTrue(isinstance(reloaded_residue, structure.Residue))
 
         bond_data = schema.dump(bond)
         self.assertTrue(isinstance(bond_data, dict))
+        reloaded_bond = schema.load(bond_data)
+        self.assertTrue(isinstance(reloaded_bond, structure.Bond))
 
         atom_data = schema.dump(atom)
         self.assertTrue(isinstance(atom_data, dict))
+        reloaded_atom = schema.load(atom_data)
+        self.assertTrue(isinstance(reloaded_atom, structure.Atom))
 
     def test_structure_schema_load(self):
         """Make sure StructureSchema can parse the correct structure type."""
