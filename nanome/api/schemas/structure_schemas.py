@@ -183,7 +183,18 @@ class StructureSchema(Schema):
         structure.Complex: ComplexSchema(),
     }
 
+    def dump(self, obj, *args, **kwargs):
+        obj_class = obj.__class__
+        schema = self.structure_schema_map[obj_class]
+        dump_data = schema.dump(obj, *args, **kwargs)
+        return dump_data
+
+    def load(self, data, *args, **kwargs):
+        correct_schema = self.determine_structure_schema(data)
+        return correct_schema.load(data, *args, **kwargs)
+
     def determine_structure_schema(self, data):
+        """Use unique fields to determine schema to use for provided data."""
         complex_fields = list(ComplexSchema._declared_fields.keys())
         molecule_fields = list(MoleculeSchema._declared_fields.keys())
         chain_fields = list(ChainSchema._declared_fields.keys())
@@ -228,13 +239,3 @@ class StructureSchema(Schema):
         if not schema:
             raise ValueError('Could not determine structure schema')
         return schema
-
-    def dump(self, obj, *args, **kwargs):
-        obj_class = obj.__class__
-        schema = self.structure_schema_map[obj_class]
-        dump_data = schema.dump(obj, *args, **kwargs)
-        return dump_data
-
-    def load(self, data, *args, **kwargs):
-        correct_schema = self.determine_structure_schema(data)
-        return correct_schema.load(data, *args, **kwargs)
