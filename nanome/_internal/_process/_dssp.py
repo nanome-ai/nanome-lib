@@ -101,7 +101,7 @@ class _Dssp():
 
     def __dssp_done(self, result_code):
         if result_code != 0:
-            Logs.error("DSSP failed, code:", result_code)
+            Logs.warning("DSSP failed, code:", result_code)
             self.__done()
             return
         with open(self.__output.name) as f:
