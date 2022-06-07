@@ -1,10 +1,17 @@
 import json
 import os
+import sys
 import tempfile
 import unittest
 
-from nanome.api import structure, ui, shapes
+from nanome.api import structure, ui, shapes, streams
 from nanome.util import Vector3, enums, Color
+
+if sys.version_info.major >= 3:
+    from unittest.mock import MagicMock, patch
+else:
+    # Python 2.7 way of getting magicmock. Requires pip install mock
+    from mock import MagicMock, patch
 
 # Schemas requirements are optional, so don't run tests if they are not installed.
 reqs_installed = True
@@ -300,3 +307,18 @@ class ShapeSchemaTestCase(unittest.TestCase):
         self.assertEqual(mesh_dict['normals'], mesh.normals)
         self.assertEqual(mesh_dict['triangles'], mesh.triangles)
         self.assertEqual(mesh_dict['colors'], mesh.colors)
+
+
+@unittest.skipIf(not reqs_installed, "Marshmallow not installed")
+class StreamSchemaTestCase(unittest.TestCase):
+
+    def test_stream_dump(self):
+        network = MagicMock()
+        stream_id = 5
+        data_type = enums.StreamDataType.string
+        direction = enums.StreamDirection.writing
+        stream = streams.Stream(network, stream_id, data_type, direction)
+        stream_dump = schemas.StreamSchema().dump(stream)
+        self.assertEqual(stream_dump['id'], stream_id)
+        self.assertEqual(stream_dump['data_type'], data_type.value)
+        self.assertEqual(stream_dump['direction'], direction.value)

@@ -17,14 +17,38 @@ class Stream(object):
     Direction = nanome.util.enums.StreamDirection
 
     def __init__(self, network, id, data_type, direction):
+        self.id = id
+        self.data_type = data_type
+        self.direction = direction
         self.__network = network
-        self.__id = id
-        self.__data_type = data_type
-        self.__direction = direction
         self.__interrupt_callback = lambda _: None
         self.__update_received = lambda _: None
         self.__warning_displayed = False
         Stream._streams[id] = self
+
+    @property
+    def id(self):
+        return self.__id
+
+    @id.setter
+    def id(self, value):
+        self.__id = value
+
+    @property
+    def data_type(self):
+        return self.__data_type
+
+    @data_type.setter
+    def data_type(self, value):
+        self.__data_type = value
+
+    @property
+    def direction(self):
+        return self.__direction
+
+    @direction.setter
+    def direction(self, value):
+        self.__direction = value
 
     def update(self, data, done_callback=None):
         """
