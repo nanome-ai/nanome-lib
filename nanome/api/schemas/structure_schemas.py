@@ -195,30 +195,18 @@ class StructureSchema(Schema):
 
     def determine_structure_schema(self, data):
         """Use unique fields to determine schema to use for provided data."""
-        complex_fields = list(ComplexSchema._declared_fields.keys())
-        molecule_fields = list(MoleculeSchema._declared_fields.keys())
-        chain_fields = list(ChainSchema._declared_fields.keys())
-        residue_fields = list(ResidueSchema._declared_fields.keys())
-        atom_fields = list(AtomSchema._declared_fields.keys())
-        bond_fields = list(BondSchema._declared_fields.keys())
-        unique_complex_fields = [
-            field for field in complex_fields
-            if field not in set(molecule_fields + chain_fields + residue_fields + atom_fields + bond_fields)]
-        unique_molecule_fields = [
-            field for field in molecule_fields
-            if field not in set(complex_fields + chain_fields + residue_fields + atom_fields + bond_fields)]
-        unique_chain_fields = [
-            field for field in chain_fields
-            if field not in set(complex_fields + molecule_fields + residue_fields + atom_fields + bond_fields)]
-        unique_residue_fields = [
-            field for field in residue_fields
-            if field not in set(complex_fields + molecule_fields + chain_fields + atom_fields + bond_fields)]
-        unique_bond_fields = [
-            field for field in bond_fields
-            if field not in set(complex_fields + molecule_fields + chain_fields + residue_fields + atom_fields)]
-        unique_atom_fields = [
-            field for field in atom_fields
-            if field not in set(complex_fields + molecule_fields + chain_fields + residue_fields + bond_fields)]
+        complex_fields = set(ComplexSchema._declared_fields.keys())
+        molecule_fields = set(MoleculeSchema._declared_fields.keys())
+        chain_fields = set(ChainSchema._declared_fields.keys())
+        residue_fields = set(ResidueSchema._declared_fields.keys())
+        atom_fields = set(AtomSchema._declared_fields.keys())
+        bond_fields = set(BondSchema._declared_fields.keys())
+        unique_complex_fields = complex_fields - molecule_fields - chain_fields - residue_fields - atom_fields - bond_fields
+        unique_molecule_fields = molecule_fields - complex_fields - chain_fields - residue_fields - atom_fields - bond_fields
+        unique_chain_fields = chain_fields - complex_fields - molecule_fields - residue_fields - atom_fields - bond_fields
+        unique_residue_fields = residue_fields - complex_fields - molecule_fields - chain_fields - atom_fields - bond_fields
+        unique_bond_fields = bond_fields - complex_fields - molecule_fields - chain_fields - residue_fields - atom_fields
+        unique_atom_fields = atom_fields - complex_fields - molecule_fields - chain_fields - residue_fields - bond_fields
 
         schema = None
         if any(data.get(key) for key in unique_complex_fields):
