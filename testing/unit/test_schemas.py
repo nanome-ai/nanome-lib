@@ -55,6 +55,79 @@ class StructureSchemaTestCase(unittest.TestCase):
         loaded_mol = next(loaded_comp.molecules)
         self.assertEqual(loaded_mol.conformer_count, 5)
 
+    def test_structure_schema_dump(self):
+        """Make sure StructureSchema can parse the correct structure type."""
+        with open(workspace_json, 'r') as f:
+            workspace_data = json.load(f)
+        workspace = schemas.WorkspaceSchema().load(workspace_data)
+        comp = workspace.complexes[0]
+        mol = next(comp.molecules)
+        chain = next(comp.chains)
+        residue = next(comp.residues)
+        atom = next(comp.atoms)
+        bond = next(comp.bonds)
+        schema = schemas.StructureSchema()
+
+        comp_data = schema.dump(comp)
+        self.assertTrue(isinstance(comp_data, dict))
+        reloaded_comp = schema.load(comp_data)
+        self.assertTrue(isinstance(reloaded_comp, structure.Complex))
+
+        mol_data = schema.dump(mol)
+        self.assertTrue(isinstance(mol_data, dict))
+        reloaded_mol = schema.load(mol_data)
+        self.assertTrue(isinstance(reloaded_mol, structure.Molecule))
+
+        chain_data = schema.dump(chain)
+        self.assertTrue(isinstance(chain_data, dict))
+        reloaded_chain = schema.load(chain_data)
+        self.assertTrue(isinstance(reloaded_chain, structure.Chain))
+
+        residue_data = schema.dump(residue)
+        self.assertTrue(isinstance(residue_data, dict))
+        reloaded_residue = schema.load(residue_data)
+        self.assertTrue(isinstance(reloaded_residue, structure.Residue))
+
+        bond_data = schema.dump(bond)
+        self.assertTrue(isinstance(bond_data, dict))
+        reloaded_bond = schema.load(bond_data)
+        self.assertTrue(isinstance(reloaded_bond, structure.Bond))
+
+        atom_data = schema.dump(atom)
+        self.assertTrue(isinstance(atom_data, dict))
+        reloaded_atom = schema.load(atom_data)
+        self.assertTrue(isinstance(reloaded_atom, structure.Atom))
+
+    def test_structure_schema_load(self):
+        """Make sure StructureSchema can parse the correct structure type."""
+        with open(workspace_json, 'r') as f:
+            workspace_data = json.load(f)
+        struct_schema = schemas.StructureSchema()
+
+        comp_data = workspace_data['complexes'][0]
+        comp = struct_schema.load(comp_data)
+        self.assertTrue(isinstance(comp, structure.Complex))
+
+        mol_data = comp_data['molecules'][0]
+        mol = struct_schema.load(mol_data)
+        self.assertTrue(isinstance(mol, structure.Molecule))
+
+        chain_data = mol_data['chains'][0]
+        chain = struct_schema.load(chain_data)
+        self.assertTrue(isinstance(chain, structure.Chain))
+
+        residue_data = chain_data['residues'][0]
+        residue = struct_schema.load(residue_data)
+        self.assertTrue(isinstance(residue, structure.Residue))
+
+        bond_data = residue_data['bonds'][0]
+        bond = struct_schema.load(bond_data)
+        self.assertTrue(isinstance(bond, structure.Bond))
+
+        atom_data = residue_data['atoms'][0]
+        atom = struct_schema.load(atom_data)
+        self.assertTrue(isinstance(atom, structure.Atom))
+
 
 @unittest.skipIf(not reqs_installed, "Marshmallow not installed")
 class UISchemaTestCase(unittest.TestCase):

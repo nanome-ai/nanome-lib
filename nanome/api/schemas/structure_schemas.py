@@ -16,11 +16,8 @@ def init_object(obj, data: dict):
             raise AttributeError('Could not set attribute {}'.format(key))
 
 
-class StructureSchema(Schema):
+class AtomSchema(Schema):
     index = fields.Integer(default=-1)
-
-
-class AtomSchema(StructureSchema):
     selected = fields.Boolean()
     labeled = fields.Boolean()
     atom_rendering = fields.Boolean()
@@ -61,12 +58,13 @@ class AtomSchema(StructureSchema):
         return new_obj
 
 
-class BondSchema(StructureSchema):
-    atom1 = AtomSchema(only=('index',))
-    atom2 = AtomSchema(only=('index',))
+class BondSchema(Schema):
+    index = fields.Integer(default=-1)
+    atom1 = fields.Nested(AtomSchema(only=('index',)))
+    atom2 = fields.Nested(AtomSchema(only=('index',)))
     kind = EnumField(enum=enums.Kind)
     in_conformer = fields.List(fields.Boolean())
-    kinds = fields.List(fields.Nested(EnumField(enum=enums.Kind)))
+    kinds = fields.List(EnumField(enum=enums.Kind))
 
     @post_load
     def make_bond(self, data, **kwargs):
@@ -75,7 +73,8 @@ class BondSchema(StructureSchema):
         return new_obj
 
 
-class ResidueSchema(StructureSchema):
+class ResidueSchema(Schema):
+    index = fields.Integer(default=-1)
     atoms = fields.List(fields.Nested(AtomSchema))
     bonds = fields.List(fields.Nested(BondSchema))
     ribboned = fields.Boolean()
@@ -99,7 +98,8 @@ class ResidueSchema(StructureSchema):
         return new_obj
 
 
-class ChainSchema(StructureSchema):
+class ChainSchema(Schema):
+    index = fields.Integer(default=-1)
     name = fields.Str()
     residues = fields.Nested(ResidueSchema, many=True)
 
@@ -112,7 +112,8 @@ class ChainSchema(StructureSchema):
         return new_obj
 
 
-class MoleculeSchema(StructureSchema):
+class MoleculeSchema(Schema):
+    index = fields.Integer(default=-1)
     chains = fields.List(fields.Nested(ChainSchema))
     name = fields.Str()
     associated = fields.Dict()
@@ -133,7 +134,8 @@ class MoleculeSchema(StructureSchema):
         return new_obj
 
 
-class ComplexSchema(StructureSchema):
+class ComplexSchema(Schema):
+    index = fields.Integer(default=-1)
     boxed = fields.Boolean()
     locked = fields.Boolean()
     visible = fields.Boolean()
@@ -168,3 +170,60 @@ class WorkspaceSchema(Schema):
         new_obj = structure.Workspace()
         init_object(new_obj, data)
         return new_obj
+
+
+class StructureSchema(Schema):
+
+    structure_schema_map = {
+        structure.Atom: AtomSchema(),
+        structure.Bond: BondSchema(),
+        structure.Residue: ResidueSchema(),
+        structure.Chain: ChainSchema(),
+        structure.Molecule: MoleculeSchema(),
+        structure.Complex: ComplexSchema(),
+    }
+
+    def dump(self, obj, *args, **kwargs):
+        obj_class = obj.__class__
+        schema = self.structure_schema_map[obj_class]
+        dump_data = schema.dump(obj, *args, **kwargs)
+        return dump_data
+
+    def load(self, data, *args, **kwargs):
+        correct_schema = self.determine_structure_schema(data)
+        return correct_schema.load(data, *args, **kwargs)
+
+    def determine_structure_schema(self, data):
+        """Use unique fields to determine schema to use for provided data."""
+        complex_fields = set(ComplexSchema._declared_fields.keys())
+        molecule_fields = set(MoleculeSchema._declared_fields.keys())
+        chain_fields = set(ChainSchema._declared_fields.keys())
+        residue_fields = set(ResidueSchema._declared_fields.keys())
+        atom_fields = set(AtomSchema._declared_fields.keys())
+        bond_fields = set(BondSchema._declared_fields.keys())
+        unique_complex_fields = complex_fields - molecule_fields - chain_fields - residue_fields - atom_fields - bond_fields
+        unique_molecule_fields = molecule_fields - complex_fields - chain_fields - residue_fields - atom_fields - bond_fields
+        unique_chain_fields = chain_fields - complex_fields - molecule_fields - residue_fields - atom_fields - bond_fields
+        unique_residue_fields = residue_fields - complex_fields - molecule_fields - chain_fields - atom_fields - bond_fields
+        unique_bond_fields = bond_fields - complex_fields - molecule_fields - chain_fields - residue_fields - atom_fields
+        unique_atom_fields = atom_fields - complex_fields - molecule_fields - chain_fields - residue_fields - bond_fields
+
+        schema = None
+        if any(data.get(key) for key in unique_complex_fields):
+            schema = ComplexSchema()
+        elif any(data.get(key) for key in unique_molecule_fields):
+            schema = MoleculeSchema()
+        # Shallow versions of chains have no unique values,
+        # so if only name and possibly index is provided, assume its chain data
+        elif any(data.get(key) for key in unique_chain_fields) \
+                or 'name' in data and len(data) <= 2:
+            schema = ChainSchema()
+        elif any(data.get(key) for key in unique_residue_fields):
+            schema = ResidueSchema()
+        elif any(data.get(key) for key in unique_atom_fields):
+            schema = AtomSchema()
+        elif any(data.get(key) for key in unique_bond_fields):
+            schema = BondSchema()
+        if not schema:
+            raise ValueError('Could not determine structure schema')
+        return schema
