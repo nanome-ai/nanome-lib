@@ -14,7 +14,7 @@ CATEGORY = 'Testing'
 
 
 class SerializeWorkspace(nanome.AsyncPluginInstance):
-    
+
     @async_callback
     async def start(self):
         ws = await self.request_workspace()
@@ -23,5 +23,6 @@ class SerializeWorkspace(nanome.AsyncPluginInstance):
         file_path = os.path.join(os.getcwd(), 'serialized_workspace.json')
         with open(file_path, 'w') as f:
             f.write(json_data)
+
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, SerializeWorkspace)

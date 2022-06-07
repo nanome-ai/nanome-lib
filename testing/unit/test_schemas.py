@@ -107,15 +107,15 @@ class StructureSchemaTestCase(unittest.TestCase):
         comp_data = workspace_data['complexes'][0]
         comp = struct_schema.load(comp_data)
         self.assertTrue(isinstance(comp, structure.Complex))
-        
+
         mol_data = comp_data['molecules'][0]
         mol = struct_schema.load(mol_data)
         self.assertTrue(isinstance(mol, structure.Molecule))
-        
+
         chain_data = mol_data['chains'][0]
         chain = struct_schema.load(chain_data)
         self.assertTrue(isinstance(chain, structure.Chain))
-        
+
         residue_data = chain_data['residues'][0]
         residue = struct_schema.load(residue_data)
         self.assertTrue(isinstance(residue, structure.Residue))
