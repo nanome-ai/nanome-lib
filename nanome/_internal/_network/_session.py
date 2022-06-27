@@ -11,7 +11,7 @@ class _Session(object):
     def _read_from_plugin(self):
         try:
             has_net_data = not self._net_queue_in.empty()
-            has_proc_data = self._proc_plugin_pipe.poll()
+            has_proc_data = not self._pm_queue_in.empty()
             self._logs_manager.poll_for_logs()
         except Exception:
             Logs.error("Plugin encountered an error, please check the logs.", traceback.format_exc())
@@ -24,7 +24,7 @@ class _Session(object):
                     return False
                 self._net_plugin.send(packet)
             if has_proc_data:
-                proc_data = self._proc_plugin_pipe.recv()
+                proc_data = self._pm_queue_in.get()
                 self._process_manager.received_request(proc_data, self)
 
         except EOFError:
@@ -40,7 +40,7 @@ class _Session(object):
 
     def send_process_data(self, data):
         try:
-            self._proc_plugin_pipe.send(data)
+            self._pm_queue_out.put(data)
         except Exception:
             Logs.error("Cannot deliver process info to plugin", self._session_id, "Did it crash?")
 
@@ -56,16 +56,17 @@ class _Session(object):
 
     def close_pipes(self):
         self._net_queue_out.close()
-        self._proc_plugin_pipe.close()
+        self._pm_queue_out.close()
         self._process_manager._remove_session_processes(self._session_id)
 
-    def __init__(self, session_id, net_plugin, process_manager, logs_manager, net_queue_out, net_queue_in, proc_pipe):
+    def __init__(self, session_id, net_plugin, process_manager, logs_manager, net_queue_out, net_queue_in, pm_queue_out, pm_queue_in):
         self._session_id = session_id
         self._net_plugin = net_plugin
         self._process_manager = process_manager
         self._logs_manager = logs_manager
         self._net_queue_out = net_queue_out
         self._net_queue_in = net_queue_in
-        self._proc_plugin_pipe = proc_pipe
+        self._pm_queue_out = pm_queue_out
+        self._pm_queue_in = pm_queue_in
         self.plugin_process = None
         self._closed = False

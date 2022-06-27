@@ -6,8 +6,9 @@ from collections import deque
 
 class ProcessManagerInstance():
 
-    def __init__(self, pipe):
-        self.__pipe = pipe
+    def __init__(self, queue_in, queue_out):
+        self.__queue_in = queue_in
+        self.__queue_out = queue_out
         Process._manager = self
         self.__pending_start = deque()
         self.__processes = dict()
@@ -21,19 +22,16 @@ class ProcessManagerInstance():
 
     def send(self, type, data):
         proc_data = [type, data]
-        self.__pipe.send(proc_data)
+        self.__queue_out.put(proc_data)
 
     def update(self):
         has_data = None
         try:
-            has_data = self.__pipe.poll()
+            has_data = not self.__queue_in.empty()
             if has_data:
-                data = self.__pipe.recv()
-        except BrokenPipeError:
-            Logs.message("Pipe has been closed, exiting process")
-            return False
-        except EOFError:
-            Logs.message("Pipe has been closed by user, exiting process")
+                data = self.__queue_in.get()
+        except Exception:
+            Logs.message("Queue has been closed, exiting process")
             return False
         if has_data:
             self.__received_data(data)
@@ -69,6 +67,6 @@ class ProcessManagerInstance():
 
     def _close(self):
         try:
-            self.__pipe.close()
-        except BrokenPipeError:
+            self.__queue_out.close()
+        except Exception:
             pass

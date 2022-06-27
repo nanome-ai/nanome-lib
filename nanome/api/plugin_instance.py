@@ -533,11 +533,11 @@ class PluginInstance(_PluginInstance):
         self.create_writing_stream(atom_indices_list, stream_type, callback)
 
     def _setup(
-            self, session_id, plugin_network, proc_pipe, log_pipe_conn,
-            original_version_table, custom_data, permissions):
+            self, session_id, plugin_network, pm_queue_in, pm_queue_out,
+            log_pipe_conn, original_version_table, custom_data, permissions):
         super(PluginInstance, self)._setup(
-            session_id, plugin_network, proc_pipe, log_pipe_conn,
-            original_version_table, custom_data, permissions)
+            session_id, plugin_network, pm_queue_in, pm_queue_out,
+            log_pipe_conn, original_version_table, custom_data, permissions)
         # We assume that a scientist creating their own plugin should not have to remember
         # to call super()
         # _setup is called by the Plugin during the process launch. If init hasn't been properly run,
