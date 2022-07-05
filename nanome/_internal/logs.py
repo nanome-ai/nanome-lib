@@ -6,7 +6,6 @@ import graypy
 from logging.handlers import RotatingFileHandler
 from multiprocessing import Pipe
 
-from nanome import __version__
 from nanome._internal._network import _Packet
 from tblib import pickling_support
 
@@ -73,8 +72,7 @@ class NTSLoggingHandler(graypy.handler.BaseGELFHandler):
             'plugin_class': self._plugin.plugin_class.__name__,
             'plugin_id': self._plugin._plugin_id,
             'nts_host': self._plugin.host,
-            'source_type': 'Plugin',
-            'version': __version__
+            'source_type': 'Plugin'
         })
         return super(NTSLoggingHandler, self).handle(record)
 
