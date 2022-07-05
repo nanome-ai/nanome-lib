@@ -28,7 +28,7 @@ class _PluginInstance(object):
     __selection_changed_callbacks = dict()
 
     def _setup(
-        self, session_id, plugin_network, proc_pipe, log_pipe_conn,
+        self, session_id, plugin_network, pm_queue_in, pm_queue_out, log_pipe_conn,
             original_version_table, custom_data, permissions):
         self._menus = {}
         self._run_text = "Run"
@@ -39,7 +39,7 @@ class _PluginInstance(object):
         self._permissions = permissions
 
         self._network = plugin_network
-        self._process_manager = ProcessManagerInstance(proc_pipe)
+        self._process_manager = ProcessManagerInstance(pm_queue_in, pm_queue_out)
         self._log_pipe_conn = log_pipe_conn
         self._network._send_connect(_Messages.connect, [_Packet._compression_type(), original_version_table])
         Logs.debug("Plugin constructed for session", session_id)

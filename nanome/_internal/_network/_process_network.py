@@ -13,11 +13,11 @@ class PluginNetwork(object):
 
     _instance = None
 
-    def __init__(self, plugin, session_id, queue_net_in, queue_net_out, serializer, plugin_id, version_table):
+    def __init__(self, plugin, session_id, queue_in, queue_out, serializer, plugin_id, version_table):
         self._plugin = plugin
         self._session_id = session_id
-        self._queue_net_in = queue_net_in
-        self._queue_net_out = queue_net_out
+        self._queue_in = queue_in
+        self._queue_out = queue_out
         self._serializer = serializer
         self._serializer._plugin_id = plugin_id
         self._plugin_id = plugin_id
@@ -52,8 +52,8 @@ class PluginNetwork(object):
         self._plugin._call(request_id, *args)
 
     def _close(self):
-        self._queue_net_out.put(stop_bytes)
-        self._queue_net_out.close()
+        self._queue_out.put(stop_bytes)
+        self._queue_out.close()
 
     @classmethod
     def _send_connect(cls, code, arg):
@@ -74,8 +74,8 @@ class PluginNetwork(object):
         # if code != 0: # Messages.connect
         #     packet.compress()
         try:
-            self._queue_net_out.put(packet)
-        except BrokenPipeError:
+            self._queue_out.put(packet)
+        except Exception:
             pass  # Ignore, as it will be closed later on, during _receive
         self._command_id = (command_id + 1) % 4294967295  # Cap by uint max
         return command_id
@@ -83,10 +83,10 @@ class PluginNetwork(object):
     def _receive(self):
         payload = None
         try:
-            has_data = not self._queue_net_in.empty()
+            has_data = not self._queue_in.empty()
             if has_data:
-                payload = self._queue_net_in.get()
-        except BrokenPipeError:
+                payload = self._queue_in.get()
+        except Exception:
             Logs.debug("Pipe has been closed, exiting process")
             self._plugin._on_stop()
             return False

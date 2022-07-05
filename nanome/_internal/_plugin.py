@@ -99,16 +99,17 @@ class _Plugin(object):
 
     @classmethod
     def _run_plugin_instance(
-        cls, plugin_instance_class, session_id, queue_net_in, queue_net_out,
-        pipe_proc, log_pipe_conn, serializer, plugin_id, version_table,
-            original_version_table, custom_data, permissions):
+        cls, plugin_instance_class, session_id, net_queue_in, net_queue_out,
+        pm_queue_in, pm_queue_out, log_pipe_conn, serializer, plugin_id,
+            version_table, original_version_table, custom_data, permissions):
         """When user activates a plugin, this function is run to begin the new process.
 
         :arg plugin_instance_class: The Plugininstance class to be instantiated.
         :arg session_id: The session ID registered with NTS.
-        :arg queue_net_in: The network input queue.
-        :arg queue_net_out: The network output queue.
-        :arg pipe_proc: The pipe to communicate with the process manager.
+        :arg net_queue_in: The network input queue.
+        :arg net_queue_out: The network output queue.
+        :arg pm_queue_in: The process manager input queue.
+        :arg pm_queue_out: The process manager output queue.
         :arg log_pipe_conn: The pipe to communicate with the logs manager.
         :arg serializer: The serializer to use to create NTS message payloads.
         :arg plugin_id: The plugin ID registered with NTS.
@@ -119,11 +120,11 @@ class _Plugin(object):
         """
         plugin_instance = plugin_instance_class()
         plugin_network = PluginNetwork(
-            plugin_instance, session_id, queue_net_in, queue_net_out,
+            plugin_instance, session_id, net_queue_in, net_queue_out,
             serializer, plugin_id, version_table)
         plugin_instance._setup(
-            session_id, plugin_network, pipe_proc, log_pipe_conn,
-            original_version_table, custom_data, permissions)
+            session_id, plugin_network, pm_queue_in, pm_queue_out,
+            log_pipe_conn, original_version_table, custom_data, permissions)
         LogsManager.configure_child_process(plugin_instance)
         logger.debug("Starting plugin")
         plugin_instance._run()
@@ -343,25 +344,26 @@ class _Plugin(object):
         self._start_session_process(session_id, version_table)
 
     def _start_session_process(self, session_id, version_table):
-        """Setup Pipes and networking for Plugininstance, run session process."""
+        """Setup Queues and networking for PluginInstance, run session process."""
         if session_id in self._sessions:  # If session_id already exists, close it first ()
             logger.info("Closing session ID {} because a new session connected with the same ID".format(session_id))
             self._sessions[session_id].signal_and_close_pipes()
 
-        main_conn_net = Queue()
-        process_conn_net = Queue()
-        main_conn_proc, process_conn_proc = Pipe()
+        net_queue_in = Queue()
+        net_queue_out = Queue()
+        pm_queue_in = Queue()
+        pm_queue_out = Queue()
         session = Network._Session(
             session_id, self._network, self._process_manager, self._logs_manager,
-            main_conn_net, process_conn_net, main_conn_proc)
+            net_queue_in, net_queue_out, pm_queue_in, pm_queue_out)
         permissions = self._description["permissions"]
         log_pipe_conn = self._logs_manager.child_pipe_conn
         process = Process(
             target=self._run_plugin_instance,
             args=(
-                self._plugin_class, session_id, main_conn_net, process_conn_net,
-                process_conn_proc, log_pipe_conn, self.__serializer, self._plugin_id,
-                version_table, _TypeSerializer.get_version_table(),
+                self._plugin_class, session_id, net_queue_in, net_queue_out,
+                pm_queue_in, pm_queue_out, log_pipe_conn, self.__serializer,
+                self._plugin_id, version_table, _TypeSerializer.get_version_table(),
                 self._custom_data, permissions
             )
         )

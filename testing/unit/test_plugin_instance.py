@@ -21,11 +21,11 @@ class PluginInstanceTestCase(unittest.TestCase):
         self.custom_data = {'a': 'b'}
         self.plugin_instance = PluginInstance()
         # Mock args that are passed to setup plugin instance networking
-        session_id = plugin_network = proc_pipe = log_pipe_conn = \
-            original_version_table = permissions = MagicMock()
+        session_id = plugin_network = pm_queue_in = pm_queue_out = \
+            log_pipe_conn = original_version_table = permissions = MagicMock()
 
         self.plugin_instance._setup(
-            session_id, plugin_network, proc_pipe, log_pipe_conn,
+            session_id, plugin_network, pm_queue_in, pm_queue_out, log_pipe_conn,
             original_version_table, self.custom_data, permissions
         )
         self.plugin_instance._network = MagicMock()
