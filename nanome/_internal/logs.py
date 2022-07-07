@@ -74,7 +74,7 @@ class NTSLoggingHandler(graypy.handler.BaseGELFHandler):
             'plugin_id': self._plugin._plugin_id,
             'nts_host': self._plugin.host,
             'source_type': 'Plugin',
-            'version': __version__
+            'version': self._plugin.version
         })
         return super(NTSLoggingHandler, self).handle(record)
 

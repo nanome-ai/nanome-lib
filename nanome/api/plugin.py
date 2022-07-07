@@ -17,7 +17,7 @@ class Plugin(_Plugin):
     connected to the user's Nanome session.
     """
 
-    def __init__(self, name, description, tags=None, has_advanced=False, permissions=None, integrations=None):
+    def __init__(self, name, description, tags=None, has_advanced=False, permissions=None, integrations=None, version=None):
         """
         :param name: Name of the plugin to display
         :type name: :class:`str`
@@ -27,6 +27,8 @@ class Plugin(_Plugin):
         :type tags: :class:`list` <:class:`str`>
         :param has_advanced: If true, plugin will display an "Advanced Settings" button
         :type has_advanced: :class:`bool`
+        :param version: Semantic version number of plugin. Used for logging.
+        :type version: :class:`str`
         """
         tags = tags or []
         permissions = permissions or []
@@ -35,6 +37,7 @@ class Plugin(_Plugin):
             name, description, tags=tags, has_advanced=has_advanced,
             permissions=permissions, integrations=integrations)
         self.plugin_class = _DefaultPlugin
+        self.version = version
 
     @staticmethod
     def create_parser():
@@ -102,7 +105,6 @@ class Plugin(_Plugin):
     @classmethod
     def setup(cls, name, description, tags, has_advanced, plugin_class, host=None,
               port=None, key=None, permissions=None, integrations=None):
-
         permissions = permissions or []
         integrations = integrations or []
         if not cls._is_process():
