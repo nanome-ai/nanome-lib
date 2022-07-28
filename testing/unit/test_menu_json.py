@@ -10,7 +10,7 @@ test_output_dir = os.getcwd() + ("/testing/test_outputs")
 
 
 class JsonTestCase(unittest.TestCase):
-    
+
     def test_menu_json(self):
         test_path = test_assets + "/test_menu.json"
         output_path = tempfile.NamedTemporaryFile(suffix='.json').name
