@@ -14,7 +14,6 @@ class _LayoutNode(object):
     id_gen = 0
 
     def __init__(self, name="node"):
-        # type: (str)
         # protocol vars
         self._id = _LayoutNode.id_gen
         self._enabled = True
@@ -63,16 +62,12 @@ class _LayoutNode(object):
             child._parent = None
         self._children = []
 
-    # copies node formatting but not children or content
     def copy_values_shallow(self, other):
-        self._layer = other._layer
-        self._layout_orientation = other._layout_orientation
-        self._sizing_type = other._sizing_type
-        self._sizing_value = other._sizing_value
-        self._forward_dist = other._forward_dist
-        self._padding_type = other._padding_type
-        self._padding = other._padding
-        self._name = other._name
+        """Copy node formatting, but ignore children or content."""
+        exclude_fields = ["_children", "_content", "_id", "_parent", 'io']
+        for field in other.__dict__:
+            if field not in exclude_fields:
+                setattr(self, field, getattr(other, field))
 
     def _copy_values_deep(self, other):
         self.copy_values_shallow(other)

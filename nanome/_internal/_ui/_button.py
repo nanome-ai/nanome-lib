@@ -147,6 +147,7 @@ class _Button(_UIBase):
         self._selected = other._selected
         self._unusable = other._unusable
         self._disable_on_press = other._disable_on_press
+        self._toggle_on_press = other._toggle_on_press
         # Text
         self._text._active = other._text._active
         self._text._value._copy(other._text._value)
@@ -188,6 +189,10 @@ class _Button(_UIBase):
         self._tooltip._bounds = other._tooltip._bounds
         self._tooltip._positioning_target = other._tooltip._positioning_target
         self._tooltip._positioning_origin = other._tooltip._positioning_origin
+        # Switch
+        self._switch._active = other._switch._active
+        self._switch._on_color = other._switch._on_color
+        self._switch._off_color = other._switch._off_color
         # Callbacks
         self._pressed_callback = other._pressed_callback
         self._register_hover_callback(other._hover_callback)
