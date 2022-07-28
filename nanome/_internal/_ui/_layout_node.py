@@ -73,6 +73,7 @@ class _LayoutNode(object):
         self._padding_type = other._padding_type
         self._padding = other._padding
         self._name = other._name
+        self._enabled = other._enabled
 
     def _copy_values_deep(self, other):
         self.copy_values_shallow(other)
