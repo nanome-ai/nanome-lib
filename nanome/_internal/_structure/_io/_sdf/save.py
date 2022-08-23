@@ -1,6 +1,5 @@
 import nanome
-from nanome._internal._structure import _Complex, _Molecule, _Chain, _Residue, _Atom, _Bond
-from nanome.util import Logs
+from nanome._internal._structure import _Complex
 
 Options = nanome.util.complex_save_options.SDFSaveOptions
 
