@@ -10,13 +10,13 @@ class Results(object):
         self.saved_bonds = []
 
     class SavedAtom(object):
-        def __init(self):
+        def __init__(self):
             self.serial = 0
             self.atom = None
             self.model_number = 0
 
     class SavedBond(object):
-        def __init(self):
+        def __init__(self):
             self.serial_atom1 = 0
             self.serial_atom2 = 0
             self.bond = None
