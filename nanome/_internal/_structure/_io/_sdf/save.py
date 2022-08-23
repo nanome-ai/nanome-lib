@@ -1,6 +1,5 @@
 import nanome
-from nanome._internal._structure import _Complex, _Molecule, _Chain, _Residue, _Atom, _Bond
-from nanome.util import Logs
+from nanome._internal._structure import _Complex
 
 Options = nanome.util.complex_save_options.SDFSaveOptions
 
@@ -11,13 +10,13 @@ class Results(object):
         self.saved_bonds = []
 
     class SavedAtom(object):
-        def __init(self):
+        def __init__(self):
             self.serial = 0
             self.atom = None
             self.model_number = 0
 
     class SavedBond(object):
-        def __init(self):
+        def __init__(self):
             self.serial_atom1 = 0
             self.serial_atom2 = 0
             self.bond = None
@@ -60,6 +59,8 @@ def to_file(path, complex, options=None):
             if (options.write_all_bonds) or (options.write_het_bonds and chain._name[0] == 'H'):
                 for residue in chain._residues:
                     for bond in residue._bonds:
+                        if not bond.atom1 or not bond.atom2:
+                            continue
                         if bond.atom1._unique_identifier in serial_by_atom_unique and bond.atom2._unique_identifier in serial_by_atom_unique:
                             saved_bond = Results.SavedBond()
                             saved_bond.serial_atom1 = serial_by_atom_unique[bond.atom1._unique_identifier]

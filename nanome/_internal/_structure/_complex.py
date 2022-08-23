@@ -111,8 +111,3 @@ class _Complex(_Base):
     def _convert_to_frames(self, old_to_new_atoms=None):
         result = _helpers._conformer_helper.convert_to_frames(self, old_to_new_atoms)
         return result
-
-    def __copy_received_complex(self, new_complex):
-        if new_complex != None:
-            new_complex._shallow_copy(self)
-            self._molecules = new_complex._molecules
