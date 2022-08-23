@@ -60,6 +60,8 @@ def to_file(path, complex, options=None):
             if (options.write_all_bonds) or (options.write_het_bonds and chain._name[0] == 'H'):
                 for residue in chain._residues:
                     for bond in residue._bonds:
+                        if not bond.atom1 or not bond.atom2:
+                            continue
                         if bond.atom1._unique_identifier in serial_by_atom_unique and bond.atom2._unique_identifier in serial_by_atom_unique:
                             saved_bond = Results.SavedBond()
                             saved_bond.serial_atom1 = serial_by_atom_unique[bond.atom1._unique_identifier]
