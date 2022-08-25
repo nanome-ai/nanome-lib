@@ -116,8 +116,6 @@ class Complex(_Complex, Base):
     @locked.setter
     def locked(self, value):
         self._locked = value
-        if (value):
-            self._boxed = True
 
     @property
     def visible(self):
@@ -354,8 +352,6 @@ class Complex(_Complex, Base):
         @locked.setter
         def locked(self, value):
             self.parent.locked = value
-            if (value):
-                self.parent.boxed = True
 
         @property
         def visible(self):
