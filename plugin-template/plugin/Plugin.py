@@ -1,9 +1,10 @@
 import nanome
 from nanome.api.ui import Menu
-from nanome.util import Logs
+from nanome.util import async_callback, Logs
 
 
-class {{class}}(nanome.PluginInstance):
+class {{class}}(nanome.AsyncPluginInstance):
+
     def start(self):
         self.menu = Menu()
         self.menu.title = '{{name}}'
@@ -15,7 +16,10 @@ class {{class}}(nanome.PluginInstance):
         node.add_new_label(msg)
         Logs.message(msg)
 
-    def on_run(self):
+    @async_callback
+    async def on_run(self):
+        comps = await self.request_complex_list()
+        Logs.message(f'{len(comps)} Complexes in Workspace')
         self.menu.enabled = True
         self.update_menu(self.menu)
 
