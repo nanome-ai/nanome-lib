@@ -19,7 +19,7 @@ class {{class}}(nanome.AsyncPluginInstance):
     @async_callback
     async def on_run(self):
         # Print the number of complexes in the workspace
-        # in the Menu.
+        # to the Menu.
         comps = await self.request_complex_list()
         msg = f'{len(comps)} Complex(es) in Workspace'
         Logs.message(msg)
