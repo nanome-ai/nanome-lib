@@ -1,10 +1,11 @@
 import nanome
 from nanome.util import Logs
-from nanome._internal._network import PluginNetwork, _Packet
+from nanome._internal._network import _Packet
 from nanome._internal._process import ProcessManagerInstance
 from nanome._internal._network._commands._callbacks import _Messages
 from nanome._internal._network._commands._callbacks._commands_enums import _Hashes
 
+import os
 import traceback
 import time
 from timeit import default_timer as timer
@@ -17,6 +18,12 @@ except ImportError:
 
 UPDATE_RATE = 1.0 / 60.0
 MINIMUM_SLEEP = 0.001
+
+# End session after 12 hours by default
+# This should be long enough to indicate
+# a runaway session that wasn't closed by NTS
+SESSION_TIMEOUT = os.environ.get("SESSION_TIMEOUT", 60 * 60 * 12)
+
 
 __metaclass__ = type
 
@@ -37,6 +44,7 @@ class _PluginInstance(object):
         self._advanced_settings_usable = True
         self._custom_data = custom_data
         self._permissions = permissions
+        self._session_timeout = SESSION_TIMEOUT
 
         self._network = plugin_network
         self._process_manager = ProcessManagerInstance(pm_queue_in, pm_queue_out)
@@ -106,6 +114,7 @@ class _PluginInstance(object):
     def _update_loop(self):
         try:
             self.start()
+            loop_start_time = timer()
             last_update = timer()
             while self._network._receive() and self._process_manager.update():
                 self.update()
@@ -114,9 +123,19 @@ class _PluginInstance(object):
                 sleep_time = max(UPDATE_RATE - dt, MINIMUM_SLEEP)
                 time.sleep(sleep_time)
                 last_update = timer()
-
+                if last_update - loop_start_time > self._session_timeout:
+                    Logs.warning("Session timed out")
+                    raise TimeoutError()
         except KeyboardInterrupt:
             self._on_stop()
+            return
+        except TimeoutError:
+            Logs.warning("Session timed out")
+            plugin_name = self.__class__.__name__
+            self.send_notification(3, f"{plugin_name} Session Timed out")
+            self._on_stop()
+            self._process_manager._close()
+            self._network._close()
             return
         except Exception as e:
             text = ' '.join(map(str, e.args))
