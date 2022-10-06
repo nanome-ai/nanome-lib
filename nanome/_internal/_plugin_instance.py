@@ -22,7 +22,12 @@ MINIMUM_SLEEP = 0.001
 # End session after 12 hours by default
 # This should be long enough to indicate
 # a runaway session that wasn't closed by NTS
-SESSION_TIMEOUT = os.environ.get("SESSION_TIMEOUT", 60 * 60 * 12)
+default_session_timeout = 12 * 60 * 60
+env_var_session_timeout = os.environ.get('SESSION_TIMEOUT')
+if env_var_session_timeout and env_var_session_timeout.isdigit():
+    SESSION_TIMEOUT = int(env_var_session_timeout)
+else:
+    SESSION_TIMEOUT = default_session_timeout
 
 
 __metaclass__ = type
@@ -124,7 +129,6 @@ class _PluginInstance(object):
                 time.sleep(sleep_time)
                 last_update = timer()
                 if last_update - loop_start_time > self._session_timeout:
-                    Logs.warning("Session timed out")
                     raise TimeoutError()
         except KeyboardInterrupt:
             self._on_stop()

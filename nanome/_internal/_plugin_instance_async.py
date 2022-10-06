@@ -20,7 +20,6 @@ async def async_update_loop(plugin_instance, UPDATE_RATE, MINIMUM_SLEEP):
             await asyncio.sleep(sleep_time)
             last_update = timer()
             if last_update - loop_start_time > plugin_instance._session_timeout:
-                Logs.warning("Session timed out")
                 raise TimeoutError()
 
     except KeyboardInterrupt:
