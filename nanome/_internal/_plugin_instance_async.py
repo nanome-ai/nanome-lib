@@ -9,7 +9,7 @@ from nanome.util.asyncio import handle_exception
 # End session after 12 hours
 # This should be long enough to indicate
 # a runaway session that wasn't closed by NTS
-SESSION_TIMEOUT = 60 * 60 * 12 
+SESSION_TIMEOUT = 60 * 60 * 12
 
 
 async def async_update_loop(plugin_instance, UPDATE_RATE, MINIMUM_SLEEP):
