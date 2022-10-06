@@ -135,8 +135,6 @@ class _PluginInstance(object):
             return
         except TimeoutError:
             Logs.warning("Session timed out")
-            plugin_name = self.__class__.__name__
-            self.send_notification(3, f"{plugin_name} Session Timed out")
             self._on_stop()
             self._process_manager._close()
             self._network._close()

@@ -27,8 +27,6 @@ async def async_update_loop(plugin_instance, UPDATE_RATE, MINIMUM_SLEEP):
         return
     except TimeoutError:
         Logs.warning("Session timed out")
-        plugin_name = plugin_instance.__class__.__name__
-        plugin_instance.send_notification(3, f"{plugin_name} Session Timed out")
         plugin_instance._on_stop()
         plugin_instance._process_manager._close()
         plugin_instance._network._close()
