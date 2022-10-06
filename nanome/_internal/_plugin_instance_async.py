@@ -1,4 +1,5 @@
 import asyncio
+import os
 import sys
 import traceback
 from timeit import default_timer as timer
@@ -6,10 +7,10 @@ from timeit import default_timer as timer
 from nanome.util import Logs
 from nanome.util.asyncio import handle_exception
 
-# End session after 12 hours
+# End session after 12 hours by default
 # This should be long enough to indicate
 # a runaway session that wasn't closed by NTS
-SESSION_TIMEOUT = 60 * 60 * 12
+SESSION_TIMEOUT = os.environ.get("SESSION_TIMEOUT", 60 * 60 * 12)
 
 
 async def async_update_loop(plugin_instance, UPDATE_RATE, MINIMUM_SLEEP):
