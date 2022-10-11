@@ -111,7 +111,7 @@ def parse_model(lines):
                                     model.bonds.append(bond)
                 if line[0] == '>':
                     regexpression = re.compile(r">\s+<(.+?)>")
-                    title = re.match(regexpression, line).group(0)
+                    title = re.match(regexpression, line).group(1)
                     line_counter = line_counter + 1
                     data = ""
                     # read line until you see another comment or the end of the molecule
