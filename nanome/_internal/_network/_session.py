@@ -20,7 +20,6 @@ class _Session(object):
             if has_net_data:
                 packet = self._net_queue_in.get()
                 if packet == stop_bytes:
-                    Logs.error("Plugin encountered an error")
                     return False
                 self._net_plugin.send(packet)
             if has_proc_data:
