@@ -392,7 +392,8 @@ class ShapeSchemaTestCase(unittest.TestCase):
         line_dict = schema.dump(line)
         self.assertEqual(line_dict['thickness'], thickness)
         self.assertEqual(line_dict['color'], list(color.rgba))
-        
+
+
 @unittest.skipIf(not reqs_installed, "Marshmallow not installed")
 class StreamSchemaTestCase(unittest.TestCase):
 
