@@ -381,7 +381,18 @@ class ShapeSchemaTestCase(unittest.TestCase):
         self.assertEqual(mesh_dict['triangles'], mesh.triangles)
         self.assertEqual(mesh_dict['colors'], mesh.colors)
 
-
+    def test_dump_line(self):
+        thickness = 0.8
+        color = Color.Green()
+        # Serialize Line
+        line = shapes.Line()
+        line.thickness = thickness
+        line.color = color
+        schema = schemas.LineSchema()
+        line_dict = schema.dump(line)
+        self.assertEqual(line_dict['thickness'], thickness)
+        self.assertEqual(line_dict['color'], list(color.rgba))
+        
 @unittest.skipIf(not reqs_installed, "Marshmallow not installed")
 class StreamSchemaTestCase(unittest.TestCase):
 
