@@ -34,3 +34,11 @@ class MeshSchema(ShapeSchema):
 
 class SphereSchema(ShapeSchema):
     radius = fields.Float()
+
+
+class LineSchema(ShapeSchema):
+
+    anchors = fields.List(fields.Nested('AnchorSchema'), min=2)
+    thickness = fields.Float()
+    dash_length = fields.Float()
+    dash_distance = fields.Float()

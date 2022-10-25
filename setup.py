@@ -24,7 +24,7 @@ setup(
     ],
     extras_require={
         'schemas': [
-            'marshmallow==3.15.0'
+            'marshmallow==3.18.0'
         ]
     },
     classifiers=[
