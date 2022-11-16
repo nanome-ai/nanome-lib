@@ -52,7 +52,7 @@ Starting a plugin is fairly easy. Copy this snippet into a file HelloNanomePlugi
 .. code-block:: python
 
   import nanome
-  from nanome.api import Plugin, PluginInstance
+  from nanome.api import Plugin, AsyncPluginInstance
   from nanome.util import async_callback, Logs
 
 
