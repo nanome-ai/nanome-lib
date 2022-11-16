@@ -53,13 +53,14 @@ Starting a plugin is fairly easy. Copy this snippet into a file HelloNanomePlugi
 
   import nanome
   from nanome.api import Plugin, PluginInstance
-  from nanome.util import Logs
+  from nanome.util import async_callback, Logs
 
 
-  class HelloNanomePlugin(PluginInstance):
+  class HelloNanomePlugin(AsyncPluginInstance):
       """Get most basic plugin running."""
 
-      def on_run(self):
+      @async_callback
+      async def on_run(self):
           message = "Hello Nanome!"
           self.send_notification(nanome.util.enums.NotificationTypes.success, message)
           Logs.message(message)
@@ -114,6 +115,7 @@ Example of using callback functions to manipulate a Complex.
 
     import nanome
     from nanome.util import Logs
+
 
     class ComplexMoverPlugin(nanome.PluginInstance):
         """Move complex's position by 1 unit, using callback functions."""
