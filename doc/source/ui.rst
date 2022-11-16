@@ -184,5 +184,5 @@ In Depth API usage
 
 A fun example of how to set up callback functions for most UI Elements.
 
-.. literalinclude:: ../../test_plugins/UIPlugin.py
+.. literalinclude:: ../../testing/test_plugins/UIPlugin.py
    :language: python
