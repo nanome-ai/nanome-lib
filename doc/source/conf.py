@@ -15,8 +15,8 @@ import os
 
 def run_apidoc(_):
     dirname = os.path.dirname
-    output_folder = os.path.join(dirname(__file__))
-    source_code = os.path.join(dirname(dirname(dirname(__file__))), 'nanome')
+    output_folder = dirname(__file__)
+    source_code = os.path.join(dirname(dirname(output_folder)), 'nanome')
     argv = [
         "-M",
         "-l",
