@@ -116,7 +116,6 @@ Example of using callback functions to manipulate a Complex.
     import nanome
     from nanome.util import Logs
 
-
     class ComplexMoverPlugin(nanome.PluginInstance):
         """Move complex's position by 1 unit, using callback functions."""
 
