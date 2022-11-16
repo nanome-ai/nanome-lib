@@ -27,6 +27,12 @@ $ pip install nanome[schemas]
 
 All documentation needed to use this package is available at [Read The Docs](https://nanome.readthedocs.io/en/latest/)
 
+#### Building Docs
+```sh
+pip install sphinx sphinx_rtd_theme
+cd doc
+make html
+```
 
 ### License
 

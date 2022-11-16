@@ -14,13 +14,16 @@ import os
 
 
 def run_apidoc(_):
+    dirname = os.path.dirname
+    output_folder = dirname(__file__)
+    source_code = os.path.join(dirname(dirname(output_folder)), 'nanome')
     argv = [
         "-M",
         "-l",
         "-f",
         "-e",
-        "-o", "../source/",
-        "../../nanome"
+        "-o", output_folder,
+        source_code
     ]
 
     try:
