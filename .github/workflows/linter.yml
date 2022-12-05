@@ -27,7 +27,7 @@ jobs:
             fi
           done
           echo "Changed Python Files: ${changed_python_files}"
-          echo "::set-output name=file_list::$changed_python_files"
+          echo "file_list=$changed_python_files" >> $GITHUB_OUTPUT
 
       - name: autopep8
         if: ${{ steps.changed_python_files.outputs.file_list != '' }}
