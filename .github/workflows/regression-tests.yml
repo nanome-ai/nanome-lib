@@ -13,7 +13,7 @@ jobs:
     env:
       IMAGE_URI: public.ecr.aws/h7r1e4h2/chemical-interactions:latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Pull Latest chemical-interactions image
         run: |
           docker pull ${{ env.IMAGE_URI }}
@@ -29,7 +29,7 @@ jobs:
     env:
       IMAGE_URI: public.ecr.aws/h7r1e4h2/docking-smina:latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Pull Latest docking-smina image
         run: |
           docker pull ${{ env.IMAGE_URI }}
