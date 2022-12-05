@@ -11,7 +11,7 @@ jobs:
   python3:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install Python 3
         uses: actions/setup-python@v1
         with:
@@ -21,7 +21,7 @@ jobs:
           python -m pip install --upgrade pip coverage
           pip install -e .['schemas']
       - name: Run tests.py
-        run: coverage run --source=nanome --omit=nanome/util/py2_enum.py -m unittest discover -s testing --pattern *_tests.py
+        run: coverage run --source=nanome --omit=nanome/util/py2_enum.py -m unittest discover -s testing
       - name: print coverage percentage
         run: coverage report | grep TOTAL
 
@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ false }} # disable for now
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install Python 2
         uses: actions/setup-python@v1
         with:
