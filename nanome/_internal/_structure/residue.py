@@ -104,4 +104,4 @@ class _Residue(_Base):
         return residue
 
     def _deep_copy(self, conformer_number=None):
-        return _helpers._copy._deep_copy_residue(self, conformer_number)
+        return _helpers.copy._deep_copy_residue(self, conformer_number)

@@ -4,7 +4,7 @@ import time
 
 from nanome.util import Color, Logs, Matrix, Quaternion, Vector3
 from nanome.api import structure as struct
-from nanome._internal._network._serialization._context import _ContextDeserialization, _ContextSerialization
+from nanome._internal._network._serialization.context import _ContextDeserialization, _ContextSerialization
 from nanome._internal._network._commands._serialization import _UpdateWorkspace, _ReceiveWorkspace
 from testing.unit.utilities import assert_equal, assert_not_equal, TestOptions
 import unittest
