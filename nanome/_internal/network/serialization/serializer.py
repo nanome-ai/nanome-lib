@@ -1,6 +1,6 @@
 from . import _ContextSerialization, _ContextDeserialization
-from .._commands import _callbacks as CommandCallbacks
-from .._commands import _serialization as CommandSerializers
+from ..commands import callbacks as CommandCallbacks
+from ..commands import serialization as CommandSerializers
 from nanome._internal.network import _Data
 from nanome._internal.util import _serializers as Serializers
 from nanome.util import Logs

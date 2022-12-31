@@ -1,4 +1,4 @@
-from nanome._internal.network._serialization import _ContextDeserialization, _ContextSerialization
+from nanome._internal.network.serialization import _ContextDeserialization, _ContextSerialization
 from nanome._internal.volumetric._serialization import _VolumeDataSerializer, _VolumePropertiesSerializer
 from nanome._internal.util._serializers import _TypeSerializer, _LongSerializer, _DictionarySerializer
 from nanome._internal.structure._serialization import _ComplexSerializer, _AtomSerializer

@@ -1,4 +1,4 @@
-from nanome._internal.network._commands._callbacks import _Messages
+from nanome._internal.network.commands.callbacks import _Messages
 import nanome
 from nanome.util import Logs
 

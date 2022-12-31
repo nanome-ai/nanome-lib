@@ -1,4 +1,4 @@
-from nanome._internal.network._commands._callbacks.commands_enums import _Hashes
+from nanome._internal.network.commands.callbacks.commands_enums import _Hashes
 
 
 def _integration(network, args, request_id):

@@ -2,7 +2,7 @@ import nanome
 import string
 import random
 from nanome._internal.network import PluginNetwork
-from nanome._internal.network._commands._callbacks import _Messages
+from nanome._internal.network.commands.callbacks import _Messages
 
 
 class _Macro(object):

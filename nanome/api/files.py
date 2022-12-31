@@ -1,7 +1,7 @@
 from nanome._internal.files import _Files
 from nanome.util import FileErrorCode
 from nanome.util.enums import Permissions
-from nanome._internal.network._commands._callbacks import _Messages
+from nanome._internal.network.commands.callbacks import _Messages
 
 
 class Files(_Files):

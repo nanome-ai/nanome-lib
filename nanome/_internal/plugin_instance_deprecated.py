@@ -1,6 +1,6 @@
 import nanome
 from . import _PluginInstance
-from nanome._internal.network._commands._callbacks import _Messages
+from nanome._internal.network.commands.callbacks import _Messages
 from nanome.util import DirectoryRequestOptions
 from nanome.util.enums import ShapeType
 from nanome._internal import shapes as internal_shapes

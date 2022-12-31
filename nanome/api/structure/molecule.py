@@ -1,7 +1,7 @@
 import nanome
 from nanome._internal.structure.molecule import _Molecule
 from nanome._internal.network import PluginNetwork
-from nanome._internal.network._commands._callbacks import _Messages
+from nanome._internal.network.commands.callbacks import _Messages
 
 from nanome.util import Logs
 from . import Base

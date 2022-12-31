@@ -1,5 +1,5 @@
 from nanome._internal.util._serializers import _TypeSerializer
-from nanome._internal.network._commands._callbacks.commands_enums import _Hashes, _Integrations
+from nanome._internal.network.commands.callbacks.commands_enums import _Hashes, _Integrations
 from nanome._internal.integration import _serialization as Serializers
 
 
