@@ -1,5 +1,5 @@
 from . import UIBase
-from nanome._internal._ui import _Dropdown
+from nanome._internal.ui import _Dropdown
 
 
 class Dropdown(_Dropdown, UIBase):

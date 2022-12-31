@@ -1,7 +1,7 @@
 import json
 from nanome.util import Logs
-from nanome._internal._ui._io.json_helper import _JsonHelper
-from nanome._internal._ui._io import layout_node_json
+from nanome._internal.ui._io.json_helper import _JsonHelper
+from nanome._internal.ui._io import layout_node_json
 from nanome._internal import _Addon
 
 

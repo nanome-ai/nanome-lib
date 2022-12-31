@@ -1,5 +1,5 @@
 import nanome
-from nanome._internal._structure.atom import _Atom
+from nanome._internal.structure.atom import _Atom
 from nanome.util import Logs
 from . import Base
 

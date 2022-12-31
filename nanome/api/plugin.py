@@ -3,7 +3,7 @@ import sys
 from . import _DefaultPlugin
 from nanome._internal import _Plugin
 from nanome._internal.logs import LogsManager
-from nanome._internal._process import ProcessManager
+from nanome._internal.process import ProcessManager
 from nanome.util.logs import Logs
 from nanome.util import config
 

@@ -1,6 +1,6 @@
 import nanome
 from . import UIBase
-from nanome._internal._ui import _Image
+from nanome._internal.ui import _Image
 
 
 class Image(_Image, UIBase):

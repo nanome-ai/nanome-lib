@@ -6,7 +6,7 @@ import graypy
 from logging.handlers import RotatingFileHandler
 from multiprocessing import Pipe
 
-from nanome._internal._network import _Packet
+from nanome._internal.network import _Packet
 from tblib import pickling_support
 
 pickling_support.install()

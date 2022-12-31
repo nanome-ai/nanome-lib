@@ -2,7 +2,7 @@ import nanome
 # from nanome import UI
 import nanome.api.ui as UI
 # from nanome.serialization.commands import ReceiveMenu, UpdateMenu
-from nanome._internal._ui._serialization import _LayoutNodeSerializer, _UIBaseSerializer
+from nanome._internal.ui._serialization import _LayoutNodeSerializer, _UIBaseSerializer
 from testing.unit.utilities import (
     alter_object, assert_equal, rand_string, create_test, test_serializer, TestOptions)
 import unittest

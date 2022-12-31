@@ -1,6 +1,6 @@
 from copy import deepcopy
 import nanome
-from nanome._internal._ui import _Button
+from nanome._internal.ui import _Button
 from . import UIBase
 
 

@@ -1,12 +1,12 @@
 from . import *  # noqa F401
 # folders
-from . import _util  # noqa F401
-from . import _shapes  # noqa F401
-from . import _structure  # noqa F401
-from . import _ui  # noqa F401
-from . import _network  # noqa F401
-from . import _volumetric  # noqa F401
-from . import _macro  # noqa F401
+from . import util  # noqa F401
+from . import shapes  # noqa F401
+from . import structure  # noqa F401
+from . import ui  # noqa F401
+from . import network  # noqa F401
+from . import volumetric  # noqa F401
+from . import macro  # noqa F401
 # classes
 from .addon import _Addon  # noqa F401
 from .plugin_instance import _PluginInstance  # noqa F401

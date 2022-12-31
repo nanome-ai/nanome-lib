@@ -4,7 +4,7 @@ import sys
 import unittest
 
 from nanome import Plugin, PluginInstance
-from nanome._internal._process import ProcessManager
+from nanome._internal.process import ProcessManager
 from nanome.util import config
 
 if sys.version_info.major >= 3:

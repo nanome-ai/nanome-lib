@@ -1,9 +1,9 @@
 import nanome
 from . import _PluginInstance
-from nanome._internal._network._commands._callbacks import _Messages
+from nanome._internal.network._commands._callbacks import _Messages
 from nanome.util import DirectoryRequestOptions
 from nanome.util.enums import ShapeType
-from nanome._internal import _shapes
+from nanome._internal import shapes as internal_shapes
 
 
 @nanome.util.Logs.deprecated("files.ls")
@@ -44,9 +44,9 @@ _PluginInstance.request_files = _request_files
 @nanome.util.Logs.deprecated()
 def _create_shape(self, shape_type):
     if shape_type == ShapeType.Sphere:
-        return _shapes._Sphere._create()
+        return internal_shapes._Sphere._create()
     if shape_type == ShapeType.Line:
-        return _shapes._Line._create()
+        return internal_shapes._Line._create()
 
     raise ValueError('Parameter shape_type must be a value of nanome.util.enums.ShapeType')
 

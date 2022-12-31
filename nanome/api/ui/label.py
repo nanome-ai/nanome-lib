@@ -1,5 +1,5 @@
 import nanome
-from nanome._internal._ui import _Label
+from nanome._internal.ui import _Label
 from . import UIBase
 
 

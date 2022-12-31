@@ -4,8 +4,8 @@ import os
 from nanome.util import Logs, config
 from nanome.util.enums import StreamDirection, PluginListButtonType
 from nanome._internal import _PluginInstance
-from nanome._internal._process import _Bonding, _Dssp
-from nanome._internal._network._commands._callbacks import _Messages
+from nanome._internal.process import _Bonding, _Dssp
+from nanome._internal.network._commands._callbacks import _Messages
 from nanome.api.structure import Complex
 from nanome.api.integration import Integration
 from nanome.api.ui import Menu

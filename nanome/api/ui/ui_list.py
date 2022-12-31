@@ -1,4 +1,4 @@
-from nanome._internal._ui import _UIList
+from nanome._internal.ui import _UIList
 from . import UIBase
 
 

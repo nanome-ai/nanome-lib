@@ -1,6 +1,6 @@
 import struct
 import random
-from nanome._internal._network import _Data
+from nanome._internal.network import _Data
 import unittest
 
 

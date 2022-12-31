@@ -1,5 +1,5 @@
 import nanome
-from nanome._internal._shapes.shape import _Shape
+from nanome._internal.shapes.shape import _Shape
 from nanome.util import Logs
 
 try:
