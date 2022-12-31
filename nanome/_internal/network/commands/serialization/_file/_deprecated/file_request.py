@@ -1,5 +1,5 @@
-from nanome._internal.util._serializers import _StringSerializer, _ArraySerializer, _FileDataSerializer
-from nanome._internal.util._serializers import _TypeSerializer
+from nanome._internal.util.serializers import _StringSerializer, _ArraySerializer, _FileDataSerializer
+from nanome._internal.util.serializers import _TypeSerializer
 
 
 class _FileRequest(_TypeSerializer):

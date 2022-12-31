@@ -1,10 +1,10 @@
-from nanome._internal.util._serializers import _StringSerializer, _ColorSerializer, _Vector3Serializer
+from nanome._internal.util.serializers import _StringSerializer, _ColorSerializer, _Vector3Serializer
 from .. import _Atom
 
 # Requires a dictionary of Atoms.
 # Serializes the atoms serial instead of the whole atom but adds it to the dict
 # Deserializes the ID and returns the atom from the dict with that ID.
-from nanome._internal.util._serializers import _TypeSerializer
+from nanome._internal.util.serializers import _TypeSerializer
 
 
 class _AtomSerializerID(_TypeSerializer):

@@ -1,6 +1,6 @@
 from . import _UIBaseSerializer
 from .. import _DropdownItem
-from nanome._internal.util._serializers import _StringSerializer, _TypeSerializer
+from nanome._internal.util.serializers import _StringSerializer, _TypeSerializer
 
 
 class _DropdownItemSerializer(_TypeSerializer):

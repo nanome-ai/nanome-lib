@@ -1,8 +1,8 @@
-from nanome._internal.util._serializers import _StringSerializer
+from nanome._internal.util.serializers import _StringSerializer
 from .. import _Menu
 from . import _LayoutNodeSerializer
 
-from nanome._internal.util._serializers import _TypeSerializer
+from nanome._internal.util.serializers import _TypeSerializer
 
 
 class _MenuSerializer(_TypeSerializer):

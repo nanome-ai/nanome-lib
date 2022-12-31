@@ -1,8 +1,8 @@
-from nanome._internal.util._serializers import _ArraySerializer
+from nanome._internal.util.serializers import _ArraySerializer
 from .. import _LayoutNode
 from . import _UIBaseSerializer
 
-from nanome._internal.util._serializers import _TypeSerializer
+from nanome._internal.util.serializers import _TypeSerializer
 
 
 class _LayoutNodeSerializerDeep(_TypeSerializer):

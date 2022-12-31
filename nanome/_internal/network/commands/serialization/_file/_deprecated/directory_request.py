@@ -1,7 +1,7 @@
-from nanome._internal.util._serializers import _StringSerializer, _ArraySerializer, _DirectoryEntrySerializer
+from nanome._internal.util.serializers import _StringSerializer, _ArraySerializer, _DirectoryEntrySerializer
 from nanome.util import DirectoryRequestResult, DirectoryErrorCode
 
-from nanome._internal.util._serializers import _TypeSerializer
+from nanome._internal.util.serializers import _TypeSerializer
 
 
 class _DirectoryRequest(_TypeSerializer):

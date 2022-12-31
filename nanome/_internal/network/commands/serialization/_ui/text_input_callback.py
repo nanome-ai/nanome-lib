@@ -1,4 +1,4 @@
-from nanome._internal.util._serializers import _TypeSerializer, _TupleSerializer, _IntSerializer, _StringSerializer
+from nanome._internal.util.serializers import _TypeSerializer, _TupleSerializer, _IntSerializer, _StringSerializer
 
 
 class _TextInputCallback(_TypeSerializer):

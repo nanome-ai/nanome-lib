@@ -1,5 +1,5 @@
 from nanome._internal.network.serialization import _ContextDeserialization, _ContextSerialization
-from nanome._internal.util._serializers import _TypeSerializer
+from nanome._internal.util.serializers import _TypeSerializer
 
 
 class _ApplyColorScheme(_TypeSerializer):

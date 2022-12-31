@@ -1,4 +1,4 @@
-from nanome._internal.util._serializers import _TypeSerializer
+from nanome._internal.util.serializers import _TypeSerializer
 from nanome.util.enums import StreamDataType, StreamDirection
 
 

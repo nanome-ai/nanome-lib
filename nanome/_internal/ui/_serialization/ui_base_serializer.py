@@ -1,6 +1,6 @@
 from nanome.util import Logs, IntEnum
 
-from nanome._internal.util._serializers import _TypeSerializer
+from nanome._internal.util.serializers import _TypeSerializer
 
 
 class _UIBaseSerializer(_TypeSerializer):

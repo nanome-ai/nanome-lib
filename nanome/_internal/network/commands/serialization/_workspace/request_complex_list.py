@@ -1,6 +1,6 @@
-from nanome._internal.util._serializers import _ArraySerializer, _LongSerializer
+from nanome._internal.util.serializers import _ArraySerializer, _LongSerializer
 
-from nanome._internal.util._serializers import _TypeSerializer
+from nanome._internal.util.serializers import _TypeSerializer
 
 
 class _RequestComplexList(_TypeSerializer):

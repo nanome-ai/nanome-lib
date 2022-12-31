@@ -1,9 +1,9 @@
 from nanome.util import IntEnum
 from .. import _TextInput
-from nanome._internal.util._serializers import _StringSerializer, _ColorSerializer
+from nanome._internal.util.serializers import _StringSerializer, _ColorSerializer
 from . import _UIBaseSerializer
 
-from nanome._internal.util._serializers import _TypeSerializer
+from nanome._internal.util.serializers import _TypeSerializer
 
 
 class _TextInputSerializer(_TypeSerializer):

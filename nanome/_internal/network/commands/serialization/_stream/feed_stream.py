@@ -1,4 +1,4 @@
-from nanome._internal.util._serializers import _TypeSerializer, _ArraySerializer, _StringSerializer
+from nanome._internal.util.serializers import _TypeSerializer, _ArraySerializer, _StringSerializer
 
 
 class _FeedStream(_TypeSerializer):

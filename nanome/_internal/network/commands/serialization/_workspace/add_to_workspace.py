@@ -1,7 +1,7 @@
 from nanome._internal.network.serialization import _ContextSerialization
-from nanome._internal.util._serializers import _ArraySerializer, _DictionarySerializer, _LongSerializer
+from nanome._internal.util.serializers import _ArraySerializer, _DictionarySerializer, _LongSerializer
 from nanome._internal.structure._serialization import _ComplexSerializer, _AtomSerializer
-from nanome._internal.util._serializers import _TypeSerializer
+from nanome._internal.util.serializers import _TypeSerializer
 
 
 class _AddToWorkspace(_TypeSerializer):

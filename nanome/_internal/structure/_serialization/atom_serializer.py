@@ -1,6 +1,6 @@
-from nanome._internal.util._serializers import _StringSerializer, _CharSerializer, _ColorSerializer, _Vector3Serializer, _ArraySerializer, _BoolSerializer, _DictionarySerializer
+from nanome._internal.util.serializers import _StringSerializer, _CharSerializer, _ColorSerializer, _Vector3Serializer, _ArraySerializer, _BoolSerializer, _DictionarySerializer
 from .. import _Atom
-from nanome._internal.util._serializers import _TypeSerializer
+from nanome._internal.util.serializers import _TypeSerializer
 from nanome.util import Logs
 
 

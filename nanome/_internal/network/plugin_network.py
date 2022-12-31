@@ -1,5 +1,5 @@
 from nanome.util import Logs
-from nanome._internal.util._serializers import _CachedImageSerializer
+from nanome._internal.util.serializers import _CachedImageSerializer
 from nanome._internal.logs import LogsManager
 
 from . import _Packet

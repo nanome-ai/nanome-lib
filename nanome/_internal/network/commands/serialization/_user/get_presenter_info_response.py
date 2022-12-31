@@ -1,4 +1,4 @@
-from nanome._internal.util._serializers import _TypeSerializer, _StringSerializer
+from nanome._internal.util.serializers import _TypeSerializer, _StringSerializer
 
 
 class _GetPresenterInfoResponse(_TypeSerializer):
