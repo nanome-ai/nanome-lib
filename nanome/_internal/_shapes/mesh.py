@@ -1,7 +1,7 @@
 from nanome.util.enums import ShapeType
 
-from ._anchor import _Anchor
-from ._shape import _Shape
+from .anchor import _Anchor
+from .shape import _Shape
 
 
 class _Mesh(_Shape):

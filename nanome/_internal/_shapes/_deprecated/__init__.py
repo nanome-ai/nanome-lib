@@ -1,1 +1,1 @@
-from . import _shape_deprecated
+from . import shape_deprecated

@@ -1,2 +1,2 @@
 from . import *
-from ._macro_serializer import _MacroSerializer
+from .macro_serializer import _MacroSerializer

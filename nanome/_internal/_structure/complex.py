@@ -102,12 +102,12 @@ class _Complex(_Base):
         return complex
 
     def _deep_copy(self):
-        return _helpers._copy._deep_copy_complex(self)
+        return _helpers.copy._deep_copy_complex(self)
 
     def _convert_to_conformers(self, force_conformers=None):
-        result = _helpers._conformer_helper.convert_to_conformers(self, None)
+        result = _helpers.conformer_helper.convert_to_conformers(self, None)
         return result
 
     def _convert_to_frames(self, old_to_new_atoms=None):
-        result = _helpers._conformer_helper.convert_to_frames(self, old_to_new_atoms)
+        result = _helpers.conformer_helper.convert_to_frames(self, old_to_new_atoms)
         return result

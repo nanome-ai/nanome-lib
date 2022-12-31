@@ -1,4 +1,4 @@
-from nanome._internal._network._commands._callbacks._commands_enums import _Messages
+from nanome._internal._network._commands._callbacks.commands_enums import _Messages
 
 
 class IntegrationRequest():

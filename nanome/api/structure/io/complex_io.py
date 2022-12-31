@@ -1,5 +1,5 @@
 import nanome
-from nanome._internal._addon import _Addon
+from nanome._internal.addon import _Addon
 from nanome._internal._structure._io import _pdb, _sdf, _mmcif
 
 

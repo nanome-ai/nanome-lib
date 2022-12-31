@@ -81,10 +81,10 @@ from ._workspace import _UpdateStructuresDeepDone
 from ._workspace import _UpdateWorkspace
 from ._workspace import _RequestSubstructure
 
-from ._load_file import _LoadFile
-from ._load_file_done import _LoadFileDone
-from ._integration import _Integration
-from ._open_url import _OpenURL
-from ._send_notification import _SendNotification
-from ._set_skybox import _SetSkybox
-from ._apply_color_scheme import _ApplyColorScheme
+from .load_file import _LoadFile
+from .load_file_done import _LoadFileDone
+from .integration import _Integration
+from .open_url import _OpenURL
+from .send_notification import _SendNotification
+from .set_skybox import _SetSkybox
+from .apply_color_scheme import _ApplyColorScheme

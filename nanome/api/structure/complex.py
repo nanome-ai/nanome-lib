@@ -1,4 +1,4 @@
-from nanome._internal._structure._complex import _Complex
+from nanome._internal._structure.complex import _Complex
 from nanome._internal import _PluginInstance
 from nanome._internal._network import PluginNetwork
 from nanome._internal._network._commands._callbacks import _Messages

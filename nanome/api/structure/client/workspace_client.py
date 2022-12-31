@@ -1,5 +1,5 @@
 import nanome
-from nanome._internal._addon import _Addon
+from nanome._internal.addon import _Addon
 from nanome._internal._network import PluginNetwork
 from nanome._internal._network._commands._callbacks import _Messages
 

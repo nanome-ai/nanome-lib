@@ -1,4 +1,4 @@
-from nanome._internal._shapes._mesh import _Mesh
+from nanome._internal._shapes.mesh import _Mesh
 from nanome.util.enums import ShapeType
 
 from . import Shape

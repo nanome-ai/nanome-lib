@@ -1,7 +1,7 @@
 import json
 from nanome.util import Logs
-from nanome._internal._ui._io._json_helper import _JsonHelper
-from nanome._internal._ui._io import _menu_json
+from nanome._internal._ui._io.json_helper import _JsonHelper
+from nanome._internal._ui._io import menu_json
 from nanome._internal import _Addon
 
 
@@ -17,7 +17,7 @@ class MenuIO(_Addon):
         :type path: :class:`str`
         """
         helper = _JsonHelper()
-        _menu_json.write_json(helper, self.base_object)
+        menu_json.write_json(helper, self.base_object)
         menu_string = json.dumps(helper.get_dict())
         try:
             with open(path, "w") as f:
@@ -42,7 +42,7 @@ class MenuIO(_Addon):
             raise
         try:
             json_helper = _JsonHelper(menu_json)
-            return _menu_json.parse_json(json_helper)
+            return menu_json.parse_json(json_helper)
         except:
             Logs.error("Json does not correctly represent a menu.")
             raise

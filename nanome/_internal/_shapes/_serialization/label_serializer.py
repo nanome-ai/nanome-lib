@@ -1,5 +1,5 @@
 from nanome._internal._util._serializers import _TypeSerializer, _StringSerializer
-from nanome._internal._shapes._label import _Label
+from nanome._internal._shapes.label import _Label
 
 
 class _LabelSerializer(_TypeSerializer):

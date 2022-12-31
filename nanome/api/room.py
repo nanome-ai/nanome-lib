@@ -1,5 +1,5 @@
 import nanome
-from nanome._internal._room import _Room
+from nanome._internal.room import _Room
 
 
 class Room(_Room):

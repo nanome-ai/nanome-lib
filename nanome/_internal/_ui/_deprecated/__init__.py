@@ -1,1 +1,1 @@
-from . import _button_deprecated
+from . import button_deprecated

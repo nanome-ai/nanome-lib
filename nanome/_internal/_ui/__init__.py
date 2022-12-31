@@ -1,18 +1,18 @@
 # classes
-from ._ui_base import _UIBase
-from ._mesh import _Mesh
-from ._image import _Image
-from ._loading_bar import _LoadingBar
-from ._label import _Label
-from ._text_input import _TextInput
-from ._slider import _Slider
-from ._button import _Button
-from ._dropdown import _Dropdown
-from ._dropdown_item import _DropdownItem
-from ._ui_list import _UIList
+from .ui_base import _UIBase
+from .mesh import _Mesh
+from .image import _Image
+from .loading_bar import _LoadingBar
+from .label import _Label
+from .text_input import _TextInput
+from .slider import _Slider
+from .button import _Button
+from .dropdown import _Dropdown
+from .dropdown_item import _DropdownItem
+from .ui_list import _UIList
 
-from ._layout_node import _LayoutNode
-from ._menu import _Menu
+from .layout_node import _LayoutNode
+from .menu import _Menu
 
 # folders
 from . import *

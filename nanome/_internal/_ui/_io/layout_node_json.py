@@ -1,5 +1,5 @@
 from .. import _LayoutNode
-from . import _ui_base_json
+from . import ui_base_json
 from nanome.util import Logs
 import json
 
@@ -20,7 +20,7 @@ def parse_json(node_json):
                      node_json.read("padding_w", node._padding[3]))
     content_json = node_json.read_object("content")
     if content_json is not None:
-        content_obj = _ui_base_json.parse_json(content_json)
+        content_obj = ui_base_json.parse_json(content_json)
         node._set_content(content_obj)
     child_list = node_json.read_objects("children")
     for child_obj in child_list:
@@ -51,5 +51,5 @@ def write_json(helper, node):
     helper.write("children", children)
     # convert all contents
     content = helper.make_instance()
-    _ui_base_json.write_json(content, node._get_content())
+    ui_base_json.write_json(content, node._get_content())
     helper.write("content", content)

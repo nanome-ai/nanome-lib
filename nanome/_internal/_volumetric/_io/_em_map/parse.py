@@ -1,4 +1,4 @@
-from ..._volume_data import _VolumeData
+from ...volume_data import _VolumeData
 from nanome.util import Logs
 import os
 import gzip

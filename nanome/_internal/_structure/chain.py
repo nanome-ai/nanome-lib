@@ -46,4 +46,4 @@ class _Chain(_Base):
         return chain
 
     def _deep_copy(self, conformer_number=None):
-        return _helpers._copy._deep_copy_chain(self, conformer_number)
+        return _helpers.copy._deep_copy_chain(self, conformer_number)

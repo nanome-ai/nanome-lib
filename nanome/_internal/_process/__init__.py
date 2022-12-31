@@ -1,7 +1,7 @@
 from . import *
 # classes
-from ._process_entry import ProcessEntry
-from ._process_manager import ProcessManager
-from ._process_manager_instance import ProcessManagerInstance
-from ._bonding import _Bonding
-from ._dssp import _Dssp
+from .process_entry import ProcessEntry
+from .process_manager import ProcessManager
+from .process_manager_instance import ProcessManagerInstance
+from .bonding import _Bonding
+from .dssp import _Dssp

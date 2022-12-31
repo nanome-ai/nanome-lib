@@ -1,10 +1,10 @@
 from . import *
 # classes
-from ._data import _Data
-from ._packet import _Packet
-from ._net_instance import _NetInstance
-from ._plugin_network import PluginNetwork
-from ._session import _Session
+from .data import _Data
+from .packet import _Packet
+from .net_instance import _NetInstance
+from .plugin_network import PluginNetwork
+from .session import _Session
 # folders
 from . import _serialization
 from . import _commands
