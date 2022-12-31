@@ -4,5 +4,5 @@ from .volume_layer import _VolumeLayer
 from .volume_properties import _VolumeProperties
 
 # folders
-from . import _io
-from . import _serialization
+from . import io
+from . import serialization

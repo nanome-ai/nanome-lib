@@ -1,5 +1,5 @@
 from nanome._internal.util.serializers import _TypeSerializer, _StringSerializer, _ArraySerializer
-from nanome._internal.network.commands.serialization._file.file_meta import _FileMeta
+from nanome._internal.network.commands.serialization.file.file_meta import _FileMeta
 from nanome.util import FileError
 
 

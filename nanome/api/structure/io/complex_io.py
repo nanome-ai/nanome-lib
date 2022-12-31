@@ -1,6 +1,6 @@
 import nanome
 from nanome._internal.addon import _Addon
-from nanome._internal.structure._io import _pdb, _sdf, _mmcif
+from nanome._internal.structure.io import _pdb, _sdf, _mmcif
 
 
 class ComplexIO(_Addon):

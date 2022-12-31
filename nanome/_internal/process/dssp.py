@@ -1,6 +1,6 @@
 from nanome.util import Process, Logs
 from nanome._internal.structure import _Complex, _Residue
-from nanome._internal.structure._io import _pdb
+from nanome._internal.structure.io import _pdb
 
 import tempfile
 import os

@@ -1,5 +1,5 @@
 from nanome._internal.structure import _Complex, _Workspace
-from nanome._internal.structure._serialization import _ComplexSerializer, _AtomSerializer
+from nanome._internal.structure.serialization import _ComplexSerializer, _AtomSerializer
 from nanome._internal.util.serializers import _ArraySerializer, _TypeSerializer, _StringSerializer, _LongSerializer, _DictionarySerializer
 
 

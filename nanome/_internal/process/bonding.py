@@ -1,6 +1,6 @@
 from nanome.util import Process, Logs
 from nanome._internal.structure import _Complex, _Bond
-from nanome._internal.structure._io import _pdb, _sdf
+from nanome._internal.structure.io import _pdb, _sdf
 
 import tempfile
 import os

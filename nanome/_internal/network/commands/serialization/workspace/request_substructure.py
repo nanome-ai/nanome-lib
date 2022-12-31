@@ -1,5 +1,5 @@
 from nanome._internal.util.serializers import _TypeSerializer, _ArraySerializer, _DictionarySerializer, _LongSerializer
-from nanome._internal.structure._serialization import _SubstructureSerializer, _AtomSerializer, _MoleculeSerializer
+from nanome._internal.structure.serialization import _SubstructureSerializer, _AtomSerializer, _MoleculeSerializer
 
 
 class _RequestSubstructure(_TypeSerializer):

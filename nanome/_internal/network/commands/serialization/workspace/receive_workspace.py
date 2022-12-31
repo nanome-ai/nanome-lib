@@ -1,4 +1,4 @@
-from nanome._internal.structure._serialization import _WorkspaceSerializer, _AtomSerializer
+from nanome._internal.structure.serialization import _WorkspaceSerializer, _AtomSerializer
 from nanome._internal.util.serializers import _DictionarySerializer, _LongSerializer
 
 from nanome._internal.util.serializers import _TypeSerializer

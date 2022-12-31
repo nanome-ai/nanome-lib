@@ -1,85 +1,85 @@
 from . import *
 # classes
-from ._control import _AdvancedSettings
-from ._control import _Connect
-from ._control import _Run
-from ._control import _SetPluginListButton
+from .control import _AdvancedSettings
+from .control import _Connect
+from .control import _Run
+from .control import _SetPluginListButton
 
-from ._file import _PWD
-from ._file import _CD
-from ._file import _LS
-from ._file import _MV
-from ._file import _CP
-from ._file import _Get
-from ._file import _Put
-from ._file import _RM
-from ._file import _RMDir
-from ._file import _MKDir
-from ._file import _ExportFiles
+from .file import _PWD
+from .file import _CD
+from .file import _LS
+from .file import _MV
+from .file import _CP
+from .file import _Get
+from .file import _Put
+from .file import _RM
+from .file import _RMDir
+from .file import _MKDir
+from .file import _ExportFiles
 
-from ._file._deprecated import _DirectoryRequest
-from ._file._deprecated import _FileRequest
-from ._file._deprecated import _FileSave
+from .file._deprecated import _DirectoryRequest
+from .file._deprecated import _FileRequest
+from .file._deprecated import _FileSave
 
-from ._macro import _DeleteMacro
-from ._macro import _GetMacros
-from ._macro import _GetMacrosResponse
-from ._macro import _RunMacro
-from ._macro import _SaveMacro
-from ._macro import _StopMacro
+from .macro import _DeleteMacro
+from .macro import _GetMacros
+from .macro import _GetMacrosResponse
+from .macro import _RunMacro
+from .macro import _SaveMacro
+from .macro import _StopMacro
 
-from ._shapes import _DeleteShape
-from ._shapes import _SetShape
+from .shapes import _DeleteShape
+from .shapes import _SetShape
 
-from ._stream import _CreateStream
-from ._stream import _CreateStreamResult
-from ._stream import _DestroyStream
-from ._stream import _FeedStream
-from ._stream import _FeedStreamDone
-from ._stream import _InterruptStream
+from .stream import _CreateStream
+from .stream import _CreateStreamResult
+from .stream import _DestroyStream
+from .stream import _FeedStream
+from .stream import _FeedStreamDone
+from .stream import _InterruptStream
 
-from ._ui import _ButtonCallback
-from ._ui import _GetMenuTransform
-from ._ui import _GetMenuTransformResponse
-from ._ui import _ImageCallback
-from ._ui import _DropdownCallback
-from ._ui import _MenuCallback
-from ._ui import _SetMenuTransform
-from ._ui import _SliderCallback
-from ._ui import _TextInputCallback
-from ._ui import _UIHook
-from ._ui import _UpdateContent
-from ._ui import _UpdateMenu
-from ._ui import _UpdateNode
+from .ui import _ButtonCallback
+from .ui import _GetMenuTransform
+from .ui import _GetMenuTransformResponse
+from .ui import _ImageCallback
+from .ui import _DropdownCallback
+from .ui import _MenuCallback
+from .ui import _SetMenuTransform
+from .ui import _SliderCallback
+from .ui import _TextInputCallback
+from .ui import _UIHook
+from .ui import _UpdateContent
+from .ui import _UpdateMenu
+from .ui import _UpdateNode
 
-from ._user import _GetControllerTransforms
-from ._user import _GetControllerTransformsResponse
-from ._user import _GetPresenterInfo
-from ._user import _GetPresenterInfoResponse
-from ._user import _PresenterChange
+from .user import _GetControllerTransforms
+from .user import _GetControllerTransformsResponse
+from .user import _GetPresenterInfo
+from .user import _GetPresenterInfoResponse
+from .user import _PresenterChange
 
-from ._volumes import _AddVolume
-from ._volumes import _AddVolumeDone
+from .volumes import _AddVolume
+from .volumes import _AddVolumeDone
 
-from ._workspace import _AddBonds
-from ._workspace import _AddDSSP
-from ._workspace import _AddToWorkspace
-from ._workspace import _ComplexAddedRemoved
-from ._workspace import _ComplexUpdated
-from ._workspace import _ComplexUpdatedHook
-from ._workspace import _ComputeHBonds
-from ._workspace import _PositionStructures
-from ._workspace import _PositionStructuresDone
-from ._workspace import _ReceiveComplexList, _ReceiveComplexes
-from ._workspace import _ReceiveWorkspace
-from ._workspace import _RequestComplexList, _RequestComplexes
-from ._workspace import _RequestWorkspace
-from ._workspace import _SelectionChanged
-from ._workspace import _SelectionChangedHook
-from ._workspace import _UpdateStructures
-from ._workspace import _UpdateStructuresDeepDone
-from ._workspace import _UpdateWorkspace
-from ._workspace import _RequestSubstructure
+from .workspace import _AddBonds
+from .workspace import _AddDSSP
+from .workspace import _AddToWorkspace
+from .workspace import _ComplexAddedRemoved
+from .workspace import _ComplexUpdated
+from .workspace import _ComplexUpdatedHook
+from .workspace import _ComputeHBonds
+from .workspace import _PositionStructures
+from .workspace import _PositionStructuresDone
+from .workspace import _ReceiveComplexList, _ReceiveComplexes
+from .workspace import _ReceiveWorkspace
+from .workspace import _RequestComplexList, _RequestComplexes
+from .workspace import _RequestWorkspace
+from .workspace import _SelectionChanged
+from .workspace import _SelectionChangedHook
+from .workspace import _UpdateStructures
+from .workspace import _UpdateStructuresDeepDone
+from .workspace import _UpdateWorkspace
+from .workspace import _RequestSubstructure
 
 from .load_file import _LoadFile
 from .load_file_done import _LoadFileDone
