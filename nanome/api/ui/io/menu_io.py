@@ -36,12 +36,12 @@ class MenuIO(_Addon):
         try:
             with open(path, "r") as f:
                 menu_string = f.read()
-                menu_json = json.loads(menu_string)
+                loaded_menu_string = json.loads(menu_string)
         except:
             Logs.error("Could not read json file: " + path)
             raise
         try:
-            json_helper = _JsonHelper(menu_json)
+            json_helper = _JsonHelper(loaded_menu_string)
             return menu_json.parse_json(json_helper)
         except:
             Logs.error("Json does not correctly represent a menu.")

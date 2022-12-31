@@ -36,6 +36,7 @@ class PluginTestCase(unittest.TestCase):
         parser = Plugin.create_parser()
         self.assertTrue(isinstance(parser, argparse.ArgumentParser))
 
+    @patch('nanome._internal.plugin._Plugin._autoreload')
     @patch('nanome._internal.plugin._Plugin._loop')
     @patch('nanome._internal.plugin.Network._NetInstance.connect')
     @patch('nanome._internal.plugin.Network._NetInstance.send')
