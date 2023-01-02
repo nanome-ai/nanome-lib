@@ -1,3 +1,4 @@
+# classes
 from nanome._internal.util.serializers import TypeSerializer, _ArraySerializer, _StringSerializer
 from nanome._internal.macro.serialization import _MacroSerializer
 
