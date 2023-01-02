@@ -3,7 +3,7 @@ from nanome.util import Logs
 from nanome._internal.network import Packet
 from nanome._internal.process import ProcessManagerInstance
 from nanome._internal.network.commands.callbacks import Messages
-from nanome._internal.network.commands.callbacks.commands_enums import _Hashes
+from nanome._internal.network.commands.callbacks.commands_enums import Hashes
 
 import os
 import traceback
@@ -158,4 +158,4 @@ class _PluginInstance(object):
             self._update_loop()
 
     def _has_permission(self, permission):
-        return _Hashes.PermissionRequestHashes[permission] in self._permissions
+        return Hashes.PermissionRequestHashes[permission] in self._permissions

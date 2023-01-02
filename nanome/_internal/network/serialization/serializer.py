@@ -19,7 +19,7 @@ class Serializer(object):
     def serialize_message(self, request_id, message_type, arg, version_table, expects_response):
         context = _ContextSerialization(self._plugin_id, version_table, packet_debugging)
         context.write_uint(request_id)
-        command_hash = CommandCallbacks._Hashes.MessageHashes[message_type]
+        command_hash = CommandCallbacks.Hashes.MessageHashes[message_type]
         context.write_uint(command_hash)
         if version_table is not None:
             if version_table.get(MESSAGE_VERSION_KEY, 0) >= 1:
@@ -71,7 +71,7 @@ class Serializer(object):
 
     def try_register_session(self, payload):
         command_hash = Data.uint_unpack(payload, 4)[0]
-        return command_hash == CommandCallbacks._Hashes.CommandHashes[CommandCallbacks.Commands.connect]
+        return command_hash == CommandCallbacks.Hashes.CommandHashes[CommandCallbacks.Commands.connect]
 
     def __init__(self):
         self._plugin_id = 0
@@ -81,8 +81,8 @@ class Serializer(object):
 
 
 def add_command(command, serializer, callback):
-    Serializer._commands[CommandCallbacks._Hashes.CommandHashes[command]] = serializer
-    Serializer._command_callbacks[CommandCallbacks._Hashes.CommandHashes[command]] = callback
+    Serializer._commands[CommandCallbacks.Hashes.CommandHashes[command]] = serializer
+    Serializer._command_callbacks[CommandCallbacks.Hashes.CommandHashes[command]] = callback
 
 
 # control
@@ -164,7 +164,7 @@ add_command(CommandCallbacks.Commands.integration, CommandSerializers._Integrati
 
 
 def add_message(command, serializer):
-    Serializer._messages[CommandCallbacks._Hashes.MessageHashes[command]] = serializer
+    Serializer._messages[CommandCallbacks.Hashes.MessageHashes[command]] = serializer
 
 
 Serializers.type_serializer.TypeSerializer.register_string_raw(MESSAGE_VERSION_KEY, 1)

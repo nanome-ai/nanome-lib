@@ -190,7 +190,7 @@ class Integrations(CommandEnum):
     import_smiles = auto()
 
 
-class _Hashes():
+class Hashes():
     CommandHashes = [None] * len(Commands)
     MessageHashes = [None] * len(Messages)
     IntegrationHashes = [None] * len(Integrations)
@@ -229,7 +229,7 @@ def init_hashes():
             Logs.error("Command hash collision detected:", command.name, "and", hashes[hash])
             continue
         hashes[hash] = command.name
-        _Hashes.CommandHashes[i] = hash
+        Hashes.CommandHashes[i] = hash
 
     hashes.clear()
     i = -1
@@ -241,7 +241,7 @@ def init_hashes():
             Logs.error("Message hash collision detected:", command.name, "and", hashes[hash])
             continue
         hashes[hash] = command.name
-        _Hashes.MessageHashes[i] = hash
+        Hashes.MessageHashes[i] = hash
 
     hashes.clear()
     i = -1
@@ -253,8 +253,8 @@ def init_hashes():
             Logs.error("Integration hash collision detected:", command.name, "and", hashes[hash])
             continue
         hashes[hash] = command.name
-        _Hashes.IntegrationHashes[i] = hash
-        _Hashes.HashToIntegrationName[hash] = command.name
+        Hashes.IntegrationHashes[i] = hash
+        Hashes.HashToIntegrationName[hash] = command.name
 
     hashes.clear()
     i = -1
@@ -266,7 +266,7 @@ def init_hashes():
             Logs.error("Integration request hash collision detected:", command.name, "and", hashes[hash])
             continue
         hashes[hash] = command.name
-        _Hashes.IntegrationRequestHashes[i] = hash
+        Hashes.IntegrationRequestHashes[i] = hash
 
     hashes.clear()
     i = -1
@@ -278,7 +278,7 @@ def init_hashes():
             Logs.error("Permission request hash collision detected:", command.name, "and", hashes[hash])
             continue
         hashes[hash] = command.name
-        _Hashes.PermissionRequestHashes[i] = hash
+        Hashes.PermissionRequestHashes[i] = hash
 
 
 init_hashes()

@@ -1,7 +1,7 @@
 from nanome._internal import network as Network
 from nanome._internal.process import ProcessManager
 from nanome._internal.network import PluginNetwork
-from nanome._internal.network.commands.callbacks.commands_enums import _Hashes
+from nanome._internal.network.commands.callbacks.commands_enums import Hashes
 from nanome._internal.network.serialization.serializer import Serializer
 from nanome._internal.util.serializers import TypeSerializer
 from nanome._internal.logs import LogsManager
@@ -50,10 +50,10 @@ class _Plugin(object):
             category = tags[0]
 
         for i in range(0, len(permissions)):
-            permissions[i] = _Hashes.PermissionRequestHashes[permissions[i]]
+            permissions[i] = Hashes.PermissionRequestHashes[permissions[i]]
 
         for i in range(0, len(integrations)):
-            integrations[i] = _Hashes.IntegrationRequestHashes[integrations[i]]
+            integrations[i] = Hashes.IntegrationRequestHashes[integrations[i]]
 
         self._description = {
             'name': name,
