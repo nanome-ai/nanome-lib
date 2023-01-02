@@ -16,10 +16,10 @@ from .file import _RM
 from .file import _RMDir
 from .file import _MKDir
 from .file import _ExportFiles
-
-from .file._deprecated import _DirectoryRequest
-from .file._deprecated import _FileRequest
-from .file._deprecated import _FileSave
+# Deprecated
+from .file import _DirectoryRequest
+from .file import _FileRequest
+from .file import _FileSave
 
 from .macro import _DeleteMacro
 from .macro import _GetMacros
