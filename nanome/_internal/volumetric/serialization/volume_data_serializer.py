@@ -1,10 +1,10 @@
 from .. import _VolumeData
-from nanome._internal.util.type_serializers import TypeSerializer, _StringSerializer
+from nanome._internal.util.type_serializers import TypeSerializer, StringSerializer
 from . import _UnitCellSerializer
 
 
 class _VolumeDataSerializer(TypeSerializer):
-    __string = _StringSerializer()
+    __string = StringSerializer()
     __cell = _UnitCellSerializer()
 
     def __init__(self):

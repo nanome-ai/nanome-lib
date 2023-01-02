@@ -1,4 +1,4 @@
-from nanome._internal.util.type_serializers import _ArraySerializer, _DictionarySerializer, _LongSerializer
+from nanome._internal.util.type_serializers import ArraySerializer, DictionarySerializer, LongSerializer
 from nanome._internal.structure.serialization import _ComplexSerializer, _AtomSerializer
 
 from nanome._internal.util.type_serializers import TypeSerializer
@@ -6,11 +6,11 @@ from nanome._internal.util.type_serializers import TypeSerializer
 
 class _StructurePrep(TypeSerializer):
     def __init__(self):
-        self.array_serializer = _ArraySerializer()
+        self.array_serializer = ArraySerializer()
         self.array_serializer.set_type(_ComplexSerializer())
         atom_serializer = _AtomSerializer()
-        long_serializer = _LongSerializer()
-        self.dict = _DictionarySerializer()
+        long_serializer = LongSerializer()
+        self.dict = DictionarySerializer()
         self.dict.set_types(long_serializer, atom_serializer)
 
     def version(self):

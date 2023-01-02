@@ -1,4 +1,4 @@
-from nanome._internal.util.type_serializers import TypeSerializer, _StringSerializer, _ColorSerializer, _Vector3Serializer, CachedImageSerializer
+from nanome._internal.util.type_serializers import TypeSerializer, StringSerializer, ColorSerializer, Vector3Serializer, CachedImageSerializer
 from nanome.util.enums import VertAlignOptions, HorizAlignOptions, ToolTipPositioning
 from . import _UIBaseSerializer
 from .. import _Button
@@ -6,9 +6,9 @@ from .. import _Button
 
 class _ButtonSerializer(TypeSerializer):
     def __init__(self):
-        self.string = _StringSerializer()
-        self.color = _ColorSerializer()
-        self.vector = _Vector3Serializer()
+        self.string = StringSerializer()
+        self.color = ColorSerializer()
+        self.vector = Vector3Serializer()
         self.cached_image = CachedImageSerializer()
 
     def version(self):

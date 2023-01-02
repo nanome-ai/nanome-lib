@@ -1,4 +1,4 @@
-from nanome._internal.util.type_serializers import TypeSerializer, _StringSerializer
+from nanome._internal.util.type_serializers import TypeSerializer, StringSerializer
 from nanome._internal.shapes.line import _Line
 
 

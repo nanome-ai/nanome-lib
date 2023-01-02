@@ -1,4 +1,4 @@
-from nanome._internal.util.type_serializers import _ArraySerializer, _StringSerializer, _ColorSerializer, _CharSerializer
+from nanome._internal.util.type_serializers import ArraySerializer, StringSerializer, ColorSerializer, CharSerializer
 from . import _AtomSerializerID
 from . import _BondSerializer
 from .. import _Residue
@@ -10,12 +10,12 @@ from nanome._internal.util.type_serializers import TypeSerializer
 class _ResidueSerializer(TypeSerializer):
     def __init__(self, shallow=False):
         self.shallow = shallow
-        self.array = _ArraySerializer()
+        self.array = ArraySerializer()
         self.atom = _AtomSerializerID()
         self.bond = _BondSerializer()
-        self.color = _ColorSerializer()
-        self.string = _StringSerializer()
-        self.char = _CharSerializer()
+        self.color = ColorSerializer()
+        self.string = StringSerializer()
+        self.char = CharSerializer()
 
     def version(self):
         # Version 0 corresponds to Nanome release 1.10

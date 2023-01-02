@@ -1,4 +1,4 @@
-from nanome._internal.util.type_serializers import _ArraySerializer, _UnityPositionSerializer, _UnityRotationSerializer, _Vector3Serializer
+from nanome._internal.util.type_serializers import ArraySerializer, UnityPositionSerializer, UnityRotationSerializer, Vector3Serializer
 from . import _ComplexSerializer
 from .. import _Workspace
 
@@ -7,11 +7,11 @@ from nanome._internal.util.type_serializers import TypeSerializer
 
 class _WorkspaceSerializer(TypeSerializer):
     def __init__(self):
-        self.array = _ArraySerializer()
+        self.array = ArraySerializer()
         self.array.set_type(_ComplexSerializer())
-        self.vec = _Vector3Serializer()
-        self.pos = _UnityPositionSerializer()
-        self.rot = _UnityRotationSerializer()
+        self.vec = Vector3Serializer()
+        self.pos = UnityPositionSerializer()
+        self.rot = UnityRotationSerializer()
 
     def version(self):
         return 0

@@ -1,4 +1,4 @@
-from nanome._internal.util.type_serializers import _ArraySerializer, _IntSerializer
+from nanome._internal.util.type_serializers import ArraySerializer, IntSerializer
 from .. import _LayoutNode
 
 from nanome._internal.util.type_serializers import TypeSerializer

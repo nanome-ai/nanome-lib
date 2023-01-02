@@ -1,10 +1,10 @@
 from .. import _DropdownItem
-from nanome._internal.util.type_serializers import _StringSerializer, TypeSerializer
+from nanome._internal.util.type_serializers import StringSerializer, TypeSerializer
 
 
 class _DropdownItemSerializer(TypeSerializer):
     def __init__(self):
-        self.string = _StringSerializer()
+        self.string = StringSerializer()
 
     def version(self):
         return 0

@@ -9,10 +9,10 @@ from nanome._internal.structure import _Atom, _Bond, _Residue, _Chain, _Molecule
 from nanome._internal.structure.serialization import _ComplexSerializer, _MoleculeSerializer, _ChainSerializer, _ResidueSerializer, _BondSerializer, _AtomSerializer, _AtomSerializerID, _SubstructureSerializer, _AtomSerializer, _MoleculeSerializer, _WorkspaceSerializer
 from nanome._internal.ui._serialization import _LayoutNodeSerializer, _UIBaseSerializer, _MenuSerializer, _LayoutNodeSerializerDeep
 from nanome._internal.util.type_serializers import (
-    _ArraySerializer, _LongSerializer, TypeSerializer,
-    _DictionarySerializer, _LongSerializer, _TupleSerializer, _IntSerializer,
-    _UnityPositionSerializer, _UnityRotationSerializer, _Vector3Serializer, _StringSerializer,
-    _ColorSerializer, _DirectoryEntrySerializer, _FileDataSerializer, _FileSaveDataSerializer, _ByteSerializer)
+    ArraySerializer, LongSerializer, TypeSerializer,
+    DictionarySerializer, LongSerializer, TupleSerializer, IntSerializer,
+    UnityPositionSerializer, UnityRotationSerializer, Vector3Serializer, StringSerializer,
+    ColorSerializer, DirectoryEntrySerializer, FileDataSerializer, FileSaveDataSerializer, ByteSerializer)
 from nanome._internal.volumetric.serialization import _VolumeDataSerializer, _VolumePropertiesSerializer
 from nanome.util import DirectoryRequestResult, DirectoryErrorCode, FileError, IntEnum, Quaternion, Logs
 from nanome.util.enums import LoadFileErrorCode, ShapeType,StreamDataType, StreamDirection,StreamType as SType
@@ -58,8 +58,8 @@ class AdvancedSettings(TypeSerializer):
 
 class Connect(TypeSerializer):
     def __init__(self):
-        self.__dictionary = _DictionarySerializer()
-        self.__dictionary.set_types(_StringSerializer(), _ByteSerializer())
+        self.__dictionary = DictionarySerializer()
+        self.__dictionary.set_types(StringSerializer(), ByteSerializer())
 
     def version(self):
         return 0
@@ -95,7 +95,7 @@ class Run(TypeSerializer):
 
 class SetPluginListButton(TypeSerializer):
     def __init__(self):
-        self.__string = _StringSerializer()
+        self.__string = StringSerializer()
 
     def version(self):
         return 0
@@ -114,7 +114,7 @@ class SetPluginListButton(TypeSerializer):
 
 class CD(TypeSerializer):
     def __init__(self):
-        self.__string = _StringSerializer()
+        self.__string = StringSerializer()
 
     def version(self):
         return 0
@@ -131,7 +131,7 @@ class CD(TypeSerializer):
 
 class CP(TypeSerializer):
     def __init__(self):
-        self.__string = _StringSerializer()
+        self.__string = StringSerializer()
 
     def version(self):
         return 0
@@ -150,9 +150,9 @@ class CP(TypeSerializer):
 class ExportFilesItem(TypeSerializer):
     def __init__(self):
         self.__complex = _ComplexSerializer()
-        self.__string = _StringSerializer()
-        self.__dict = _DictionarySerializer()
-        self.__dict.set_types(_LongSerializer(), _AtomSerializer())
+        self.__string = StringSerializer()
+        self.__dict = DictionarySerializer()
+        self.__dict.set_types(LongSerializer(), _AtomSerializer())
 
     def version(self):
         return 0
@@ -189,7 +189,7 @@ class ExportFilesItem(TypeSerializer):
 
 class ExportFiles(TypeSerializer):
     def __init__(self):
-        self.__array = _ArraySerializer()
+        self.__array = ArraySerializer()
         self.__array.set_type(ExportFilesItem())
 
     def version(self):
@@ -212,7 +212,7 @@ class ExportFiles(TypeSerializer):
 
 class FileMeta(TypeSerializer):
     def __init__(self):
-        self.__string = _StringSerializer()
+        self.__string = StringSerializer()
 
     def version(self):
         return 0
@@ -237,7 +237,7 @@ class FileMeta(TypeSerializer):
 
 class Get(TypeSerializer):
     def __init__(self):
-        self.__string = _StringSerializer()
+        self.__string = StringSerializer()
 
     def version(self):
         return 0
@@ -257,8 +257,8 @@ class Get(TypeSerializer):
 
 class LS(TypeSerializer):
     def __init__(self):
-        self.__string = _StringSerializer()
-        self.__array = _ArraySerializer()
+        self.__string = StringSerializer()
+        self.__array = ArraySerializer()
         self.__array.set_type(FileMeta())
 
     def version(self):
@@ -278,7 +278,7 @@ class LS(TypeSerializer):
 
 class MKDir(TypeSerializer):
     def __init__(self):
-        self.__string = _StringSerializer()
+        self.__string = StringSerializer()
 
     def version(self):
         return 0
@@ -295,7 +295,7 @@ class MKDir(TypeSerializer):
 
 class MV(TypeSerializer):
     def __init__(self):
-        self.__string = _StringSerializer()
+        self.__string = StringSerializer()
 
     def version(self):
         return 0
@@ -313,7 +313,7 @@ class MV(TypeSerializer):
 
 class Put(TypeSerializer):
     def __init__(self):
-        self.__string = _StringSerializer()
+        self.__string = StringSerializer()
 
     def version(self):
         return 0
@@ -332,7 +332,7 @@ class Put(TypeSerializer):
 
 class PWD(TypeSerializer):
     def __init__(self):
-        self.__string = _StringSerializer()
+        self.__string = StringSerializer()
 
     def version(self):
         return 0
@@ -351,7 +351,7 @@ class PWD(TypeSerializer):
 
 class RM(TypeSerializer):
     def __init__(self):
-        self.__string = _StringSerializer()
+        self.__string = StringSerializer()
 
     def version(self):
         return 0
@@ -368,7 +368,7 @@ class RM(TypeSerializer):
 
 class RMDir(TypeSerializer):
     def __init__(self):
-        self.__string = _StringSerializer()
+        self.__string = StringSerializer()
 
     def version(self):
         return 0
@@ -386,9 +386,9 @@ class RMDir(TypeSerializer):
 class DirectoryRequest(TypeSerializer):
     # Deprecated
     def __init__(self):
-        self.__string = _StringSerializer()
-        self.__directory_entry_array = _ArraySerializer()
-        self.__directory_entry_array.set_type(_DirectoryEntrySerializer())
+        self.__string = StringSerializer()
+        self.__directory_entry_array = ArraySerializer()
+        self.__directory_entry_array.set_type(DirectoryEntrySerializer())
 
     def version(self):
         return 0
@@ -411,10 +411,10 @@ class DirectoryRequest(TypeSerializer):
 class FileRequest(TypeSerializer):
     # Deprecated
     def __init__(self):
-        self.__string_array = _ArraySerializer()
-        self.__string_array.set_type(_StringSerializer())
-        self.__file_data_array = _ArraySerializer()
-        self.__file_data_array.set_type(_FileDataSerializer())
+        self.__string_array = ArraySerializer()
+        self.__string_array.set_type(StringSerializer())
+        self.__file_data_array = ArraySerializer()
+        self.__file_data_array.set_type(FileDataSerializer())
 
     def version(self):
         return 0
@@ -432,8 +432,8 @@ class FileRequest(TypeSerializer):
 class FileSave(TypeSerializer):
     # Deprecated
     def __init__(self):
-        self.__file_data_array = _ArraySerializer()
-        self.__file_data_array.set_type(_FileSaveDataSerializer())
+        self.__file_data_array = ArraySerializer()
+        self.__file_data_array.set_type(FileSaveDataSerializer())
 
     def version(self):
         return 0
@@ -489,7 +489,7 @@ class Integration(TypeSerializer):
 
 class LoadFileInfo(TypeSerializer):
     def __init__(self):
-        self.string = _StringSerializer()
+        self.string = StringSerializer()
 
     def version(self):
         return 0
@@ -507,7 +507,7 @@ class LoadFileInfo(TypeSerializer):
 
 class LoadFile(TypeSerializer):
     def __init__(self):
-        self.array = _ArraySerializer()
+        self.array = ArraySerializer()
         self.array.set_type(LoadFileInfo())
 
     def version(self):
@@ -546,7 +546,7 @@ class LoadFileDoneInfo(TypeSerializer):
 
 class LoadFileDone(TypeSerializer):
     def __init__(self):
-        self.array = _ArraySerializer()
+        self.array = ArraySerializer()
         self.array.set_type(LoadFileDoneInfo())
 
     def version(self):
@@ -565,7 +565,7 @@ class LoadFileDone(TypeSerializer):
 
 
 macro_serializer = _MacroSerializer()
-string_serializer = _StringSerializer()
+string_serializer = StringSerializer()
 
 
 class SaveMacro(TypeSerializer):
@@ -659,7 +659,7 @@ class GetMacrosResponse(TypeSerializer):
     _string_serializer = string_serializer
 
     def __init__(self):
-        self._array_serializer = _ArraySerializer()
+        self._array_serializer = ArraySerializer()
         self._array_serializer.set_type(self._macro_serializer)
 
     def version(self):
@@ -697,7 +697,7 @@ class StopMacro(TypeSerializer):
 
 class OpenURL(TypeSerializer):
     def __init__(self):
-        self.string = _StringSerializer()
+        self.string = StringSerializer()
 
     def version(self):
         return 1
@@ -716,7 +716,7 @@ class OpenURL(TypeSerializer):
 
 class SendNotification(TypeSerializer):
     def __init__(self):
-        self.string = _StringSerializer()
+        self.string = StringSerializer()
 
     def version(self):
         return 0
@@ -778,15 +778,15 @@ class DeleteShape(TypeSerializer):
 
 class SetShape(TypeSerializer):
     def __init__(self):
-        self._position = _UnityPositionSerializer()
-        self._rotation = _UnityRotationSerializer()
-        self._color = _ColorSerializer()
+        self._position = UnityPositionSerializer()
+        self._rotation = UnityRotationSerializer()
+        self._color = ColorSerializer()
         self._sphere = _SphereSerializer()
         self._line = _LineSerializer()
         self._label = _LabelSerializer()
         self._mesh = _MeshSerializer()
         self._shape = _ShapeSerializer()
-        self._shape_array = _ArraySerializer()
+        self._shape_array = ArraySerializer()
         self._shape_array.set_type(self._shape)
 
     def version(self):
@@ -908,8 +908,8 @@ class DestroyStream(TypeSerializer):
 
 class FeedStream(TypeSerializer):
     def __init__(self):
-        self.__array = _ArraySerializer()
-        self.__array.set_type(_StringSerializer())
+        self.__array = ArraySerializer()
+        self.__array.set_type(StringSerializer())
 
     def version(self):
         return 2
@@ -1056,9 +1056,9 @@ class GetMenuTransform(TypeSerializer):
 
 class GetMenuTransformResponse(TypeSerializer):
     def __init__(self):
-        self.pos = _UnityPositionSerializer()
-        self.rot = _UnityRotationSerializer()
-        self.vec3 = _Vector3Serializer()
+        self.pos = UnityPositionSerializer()
+        self.rot = UnityRotationSerializer()
+        self.vec3 = Vector3Serializer()
 
     def version(self):
         return 0
@@ -1133,9 +1133,9 @@ class MenuCallback(TypeSerializer):
 
 class SetMenuTransform(TypeSerializer):
     def __init__(self):
-        self.pos = _UnityPositionSerializer()
-        self.rot = _UnityRotationSerializer()
-        self.vec3 = _Vector3Serializer()
+        self.pos = UnityPositionSerializer()
+        self.rot = UnityRotationSerializer()
+        self.vec3 = Vector3Serializer()
 
     def version(self):
         return 0
@@ -1178,7 +1178,7 @@ class SliderCallback(TypeSerializer):
 
 class TextInputCallback(TypeSerializer):
     def __init__(self):
-        self.__tuple = _TupleSerializer(_IntSerializer(), _StringSerializer())
+        self.__tuple = TupleSerializer(IntSerializer(), StringSerializer())
 
     def version(self):
         return 1
@@ -1226,7 +1226,7 @@ class UIHook(TypeSerializer):
 
 class UpdateContent(TypeSerializer):
     def __init__(self):
-        self._array = _ArraySerializer()
+        self._array = ArraySerializer()
         self._content = _UIBaseSerializer()
         self._array.set_type(self._content)
 
@@ -1249,7 +1249,7 @@ class UpdateContent(TypeSerializer):
 class UpdateMenu(TypeSerializer):
     def __init__(self):
         self.menu = _MenuSerializer()
-        self.array = _ArraySerializer()
+        self.array = ArraySerializer()
         self.layout = _LayoutNodeSerializer()
         self.content = _UIBaseSerializer()
 
@@ -1283,7 +1283,7 @@ class UpdateMenu(TypeSerializer):
 
 class UpdateNode(TypeSerializer):
     def __init__(self):
-        self._array = _ArraySerializer()
+        self._array = ArraySerializer()
         self._node_serializer = _LayoutNodeSerializerDeep()
         self._array.set_type(self._node_serializer)
 
@@ -1322,8 +1322,8 @@ class GetControllerTransforms(TypeSerializer):
 
 class GetControllerTransformsResponse(TypeSerializer):
     def __init__(self):
-        self.pos = _UnityPositionSerializer()
-        self.rot = _UnityRotationSerializer()
+        self.pos = UnityPositionSerializer()
+        self.rot = UnityRotationSerializer()
 
     def version(self):
         return 0
@@ -1366,7 +1366,7 @@ class GetPresenterInfo(TypeSerializer):
 
 class GetPresenterInfoResponse(TypeSerializer):
     def __init__(self):
-        self.string = _StringSerializer()
+        self.string = StringSerializer()
 
     def version(self):
         return 1
@@ -1413,8 +1413,8 @@ class AddVolume(TypeSerializer):
     def __init__(self):
         self.__complex = _ComplexSerializer()
         atom_serializer = _AtomSerializer()
-        long_serializer = _LongSerializer()
-        self.__dict = _DictionarySerializer()
+        long_serializer = LongSerializer()
+        self.__dict = DictionarySerializer()
         self.__dict.set_types(long_serializer, atom_serializer)
         self.__data = _VolumeDataSerializer()
         self.__properties = _VolumePropertiesSerializer()
@@ -1459,10 +1459,10 @@ class AddVolumeDone(TypeSerializer):
 
 class AddBonds(TypeSerializer):
     def __init__(self):
-        self.__array = _ArraySerializer()
+        self.__array = ArraySerializer()
         self.__array.set_type(_ComplexSerializer())
-        self.__dict = _DictionarySerializer()
-        self.__dict.set_types(_LongSerializer(), _AtomSerializer())
+        self.__dict = DictionarySerializer()
+        self.__dict.set_types(LongSerializer(), _AtomSerializer())
 
     def version(self):
         return 0
@@ -1487,10 +1487,10 @@ class AddBonds(TypeSerializer):
 
 class AddDSSP(TypeSerializer):
     def __init__(self):
-        self.__array = _ArraySerializer()
+        self.__array = ArraySerializer()
         self.__array.set_type(_ComplexSerializer())
-        self.__dict = _DictionarySerializer()
-        self.__dict.set_types(_LongSerializer(), _AtomSerializer())
+        self.__dict = DictionarySerializer()
+        self.__dict.set_types(LongSerializer(), _AtomSerializer())
 
     def version(self):
         return 0
@@ -1515,11 +1515,11 @@ class AddDSSP(TypeSerializer):
 
 class AddToWorkspace(TypeSerializer):
     def __init__(self):
-        self.__array = _ArraySerializer()
+        self.__array = ArraySerializer()
         self.__array.set_type(_ComplexSerializer())
         atom_serializer = _AtomSerializer()
-        long_serializer = _LongSerializer()
-        self.dict = _DictionarySerializer()
+        long_serializer = LongSerializer()
+        self.dict = DictionarySerializer()
         self.dict.set_types(long_serializer, atom_serializer)
 
     def version(self):
@@ -1562,8 +1562,8 @@ class ComplexUpdated(TypeSerializer):
     def __init__(self):
         self.complex_serializer = _ComplexSerializer()
         atom_serializer = _AtomSerializer()
-        long_serializer = _LongSerializer()
-        self.dict = _DictionarySerializer()
+        long_serializer = LongSerializer()
+        self.dict = DictionarySerializer()
         self.dict.set_types(long_serializer, atom_serializer)
 
     def version(self):
@@ -1682,7 +1682,7 @@ class PositionStructuresDone(TypeSerializer):
 
 class ReceiveComplexList(TypeSerializer):
     def __init__(self):
-        self.array_serializer = _ArraySerializer()
+        self.array_serializer = ArraySerializer()
         self.array_serializer.set_type(_ComplexSerializer())
 
     def version(self):
@@ -1705,11 +1705,11 @@ class ReceiveComplexList(TypeSerializer):
 
 class ReceiveComplexes(TypeSerializer):
     def __init__(self):
-        self.array_serializer = _ArraySerializer()
+        self.array_serializer = ArraySerializer()
         self.array_serializer.set_type(_ComplexSerializer())
         atom_serializer = _AtomSerializer()
-        long_serializer = _LongSerializer()
-        self.dict = _DictionarySerializer()
+        long_serializer = LongSerializer()
+        self.dict = DictionarySerializer()
         self.dict.set_types(long_serializer, atom_serializer)
 
     def version(self):
@@ -1732,8 +1732,8 @@ class ReceiveWorkspace(TypeSerializer):
     def __init__(self):
         self.workspace = _WorkspaceSerializer()
         atom_serializer = _AtomSerializer()
-        long_serializer = _LongSerializer()
-        self.dict = _DictionarySerializer()
+        long_serializer = LongSerializer()
+        self.dict = DictionarySerializer()
         self.dict.set_types(long_serializer, atom_serializer)
 
     def version(self):
@@ -1787,10 +1787,10 @@ class RequestComplexes(TypeSerializer):
 
 class RequestSubstructure(TypeSerializer):
     def __init__(self):
-        self.array = _ArraySerializer()
+        self.array = ArraySerializer()
         self.array.set_type(_SubstructureSerializer())
-        self.dict = _DictionarySerializer()
-        self.dict.set_types(_LongSerializer(), _AtomSerializer())
+        self.dict = DictionarySerializer()
+        self.dict.set_types(LongSerializer(), _AtomSerializer())
         self.molecule = _MoleculeSerializer()
 
     def version(self):
@@ -1839,8 +1839,8 @@ class SelectionChanged(TypeSerializer):
     def __init__(self):
         self.complex_serializer = _ComplexSerializer()
         atom_serializer = _AtomSerializer()
-        long_serializer = _LongSerializer()
-        self.dict = _DictionarySerializer()
+        long_serializer = LongSerializer()
+        self.dict = DictionarySerializer()
         self.dict.set_types(long_serializer, atom_serializer)
 
     def version(self):
@@ -1886,7 +1886,7 @@ class SelectionChangedHook(TypeSerializer):
 
 class UpdateStructures(TypeSerializer):
     def __init__(self, shallow):
-        self.array_serializer = _ArraySerializer()
+        self.array_serializer = ArraySerializer()
         # setting the shallow flag
         self.complex_serializer = _ComplexSerializer(shallow)
         self.molecule_serializer = _MoleculeSerializer(shallow)
@@ -1895,8 +1895,8 @@ class UpdateStructures(TypeSerializer):
         self.bond_serializer = _BondSerializer(shallow)
         self.atom_serializer = _AtomSerializerID(shallow)
         # atom dict only used by deep
-        self.dict = _DictionarySerializer()
-        self.dict.set_types(_LongSerializer(), _AtomSerializer())
+        self.dict = DictionarySerializer()
+        self.dict.set_types(LongSerializer(), _AtomSerializer())
 
     def name(self):
         return "UpdateStructures"
@@ -1975,8 +1975,8 @@ class UpdateWorkspace(TypeSerializer):
     def __init__(self):
         self.workspace = _WorkspaceSerializer()
         atom_serializer = _AtomSerializer()
-        long_serializer = _LongSerializer()
-        self.dict = _DictionarySerializer()
+        long_serializer = LongSerializer()
+        self.dict = DictionarySerializer()
         self.dict.set_types(long_serializer, atom_serializer)
 
     def version(self):

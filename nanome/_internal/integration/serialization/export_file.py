@@ -1,8 +1,8 @@
-from nanome._internal.util.type_serializers import TypeSerializer, _StringSerializer
+from nanome._internal.util.type_serializers import TypeSerializer, StringSerializer
 
 
 class _ExportFile(TypeSerializer):
-    _String = _StringSerializer()
+    _String = StringSerializer()
 
     def version(self):
         return 0

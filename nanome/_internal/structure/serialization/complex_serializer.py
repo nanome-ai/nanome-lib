@@ -1,5 +1,5 @@
-from nanome._internal.util.type_serializers import _ArraySerializer, _DictionarySerializer, _StringSerializer
-from nanome._internal.util.type_serializers import _Vector3Serializer, _QuaternionSerializer, _UnityPositionSerializer, _UnityRotationSerializer
+from nanome._internal.util.type_serializers import ArraySerializer, DictionarySerializer, StringSerializer
+from nanome._internal.util.type_serializers import Vector3Serializer, QuaternionSerializer, UnityPositionSerializer, UnityRotationSerializer
 from . import _MoleculeSerializer
 from .. import _Complex
 
@@ -10,17 +10,17 @@ from nanome.util import Quaternion, Vector3
 class _ComplexSerializer(TypeSerializer):
     def __init__(self, shallow=False):
         self.shallow = shallow
-        self.array = _ArraySerializer()
+        self.array = ArraySerializer()
         self.array.set_type(_MoleculeSerializer())
-        self.string = _StringSerializer()
+        self.string = StringSerializer()
 
-        self.dictionary = _DictionarySerializer()
+        self.dictionary = DictionarySerializer()
         self.dictionary.set_types(self.string, self.string)
 
-        self.vector = _Vector3Serializer()
-        self.quaternion = _QuaternionSerializer()
-        self.pos = _UnityPositionSerializer()
-        self.rot = _UnityRotationSerializer()
+        self.vector = Vector3Serializer()
+        self.quaternion = QuaternionSerializer()
+        self.pos = UnityPositionSerializer()
+        self.rot = UnityRotationSerializer()
 
     def version(self):
         return 3

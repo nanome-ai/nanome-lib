@@ -1,16 +1,16 @@
-from nanome._internal.util.type_serializers import TypeSerializer, _ArraySerializer, _DictionarySerializer, _LongSerializer, _StringSerializer
+from nanome._internal.util.type_serializers import TypeSerializer, ArraySerializer, DictionarySerializer, LongSerializer, StringSerializer
 from nanome._internal.structure.serialization import _ComplexSerializer, _AtomSerializer
 
 
 class _ImportSmiles(TypeSerializer):
     def __init__(self):
-        self.complex_array = _ArraySerializer()
+        self.complex_array = ArraySerializer()
         self.complex_array.set_type(_ComplexSerializer())
-        self.string_array = _ArraySerializer()
-        self.string_array.set_type(_StringSerializer())
+        self.string_array = ArraySerializer()
+        self.string_array.set_type(StringSerializer())
 
-        self.dict = _DictionarySerializer()
-        self.dict.set_types(_LongSerializer(), _AtomSerializer())
+        self.dict = DictionarySerializer()
+        self.dict.set_types(LongSerializer(), _AtomSerializer())
 
     def version(self):
         return 0

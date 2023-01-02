@@ -1,4 +1,4 @@
-from nanome._internal.util.type_serializers import TypeSerializer, _UnityPositionSerializer, _ColorSerializer, _ArraySerializer
+from nanome._internal.util.type_serializers import TypeSerializer, UnityPositionSerializer, ColorSerializer, ArraySerializer
 from nanome._internal.shapes.serialization import _SphereSerializer, _AnchorSerializer, _LineSerializer, _LabelSerializer, _MeshSerializer
 
 from nanome.util.enums import ShapeType
@@ -6,13 +6,13 @@ from nanome.util.enums import ShapeType
 
 class _ShapeSerializer(TypeSerializer):
     def __init__(self):
-        self._position = _UnityPositionSerializer()
-        self._color = _ColorSerializer()
+        self._position = UnityPositionSerializer()
+        self._color = ColorSerializer()
         self._sphere = _SphereSerializer()
         self._line = _LineSerializer()
         self._label = _LabelSerializer()
         self._mesh = _MeshSerializer()
-        self._anchor_array = _ArraySerializer()
+        self._anchor_array = ArraySerializer()
         self._anchor_array.set_type(_AnchorSerializer())
 
     def version(self):

@@ -1,4 +1,4 @@
-from nanome._internal.util.type_serializers import _ArraySerializer, _StringSerializer
+from nanome._internal.util.type_serializers import ArraySerializer, StringSerializer
 from . import _ResidueSerializer
 from .. import _Chain
 
@@ -8,9 +8,9 @@ from nanome._internal.util.type_serializers import TypeSerializer
 class _ChainSerializer(TypeSerializer):
     def __init__(self, shallow=False):
         self.shallow = shallow
-        self.array_serializer = _ArraySerializer()
+        self.array_serializer = ArraySerializer()
         self.array_serializer.set_type(_ResidueSerializer())
-        self.string = _StringSerializer()
+        self.string = StringSerializer()
 
     def version(self):
         return 0

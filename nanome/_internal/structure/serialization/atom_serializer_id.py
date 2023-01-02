@@ -1,4 +1,4 @@
-from nanome._internal.util.type_serializers import _StringSerializer, _ColorSerializer, _Vector3Serializer
+from nanome._internal.util.type_serializers import StringSerializer, ColorSerializer, Vector3Serializer
 from .. import _Atom
 
 # Requires a dictionary of Atoms.

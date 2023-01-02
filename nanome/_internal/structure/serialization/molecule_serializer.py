@@ -1,16 +1,16 @@
 from . import _ChainSerializer
 from .. import _Molecule
 
-from nanome._internal.util.type_serializers import _ArraySerializer, _DictionarySerializer, _StringSerializer
+from nanome._internal.util.type_serializers import ArraySerializer, DictionarySerializer, StringSerializer
 from nanome._internal.util.type_serializers import TypeSerializer
 
 
 class _MoleculeSerializer(TypeSerializer):
     def __init__(self, shallow=False):
         self.shallow = shallow
-        self.array = _ArraySerializer()
-        self.string = _StringSerializer()
-        self.dictionary = _DictionarySerializer()
+        self.array = ArraySerializer()
+        self.string = StringSerializer()
+        self.dictionary = DictionarySerializer()
         self.dictionary.set_types(self.string, self.string)
 
     def version(self):

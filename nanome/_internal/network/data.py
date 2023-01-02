@@ -126,8 +126,8 @@ class Data(object):
         self.expand_data(byte_size)
         pack_into(self._received_bytes, pre, *data)
 
-# endregion
-# region read Data
+    # endregion
+    # region read Data
     def consume_data(self, size):
         self._buffered_bytes -= size
         self._buffered_computed += size

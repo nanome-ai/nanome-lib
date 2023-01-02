@@ -1,7 +1,7 @@
 from . import _AtomSerializerID
 from .. import _Bond
 
-from nanome._internal.util.type_serializers import TypeSerializer, _ArraySerializer, _BoolSerializer, _ByteSerializer
+from nanome._internal.util.type_serializers import TypeSerializer, ArraySerializer, BoolSerializer, ByteSerializer
 from nanome.util import Logs
 
 
@@ -9,9 +9,9 @@ class _BondSerializer(TypeSerializer):
     def __init__(self, shallow=False):
         self.shallow = shallow
         self.atom_serializer = _AtomSerializerID()
-        self.array = _ArraySerializer()
-        self.bool = _BoolSerializer()
-        self.byte = _ByteSerializer()
+        self.array = ArraySerializer()
+        self.bool = BoolSerializer()
+        self.byte = ByteSerializer()
 
     def version(self):
         # Version 0 corresponds to Nanome release 1.12

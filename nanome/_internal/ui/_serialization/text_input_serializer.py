@@ -1,6 +1,6 @@
 from nanome.util import IntEnum
 from .. import _TextInput
-from nanome._internal.util.type_serializers import _StringSerializer, _ColorSerializer
+from nanome._internal.util.type_serializers import StringSerializer, ColorSerializer
 from . import _UIBaseSerializer
 
 from nanome._internal.util.type_serializers import TypeSerializer
@@ -8,8 +8,8 @@ from nanome._internal.util.type_serializers import TypeSerializer
 
 class _TextInputSerializer(TypeSerializer):
     def __init__(self):
-        self.string = _StringSerializer()
-        self.color = _ColorSerializer()
+        self.string = StringSerializer()
+        self.color = ColorSerializer()
 
     def version(self):
         return 3
