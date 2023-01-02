@@ -1,6 +1,4 @@
-from .. import _Data
-import struct
-from nanome.util import Logs
+from .. import Data
 
 
 class PacketDebuggingException(Exception):
@@ -25,7 +23,7 @@ class PacketDebuggingException(Exception):
 class _ContextSerialization(object):
     # pylint: disable=method-hidden
     def __init__(self, plugin_id, version_table=None, packet_debugging=False):
-        self._data = _Data()
+        self._data = Data()
         self.payload = {}
         self.__version_table = version_table
         if packet_debugging:
@@ -136,7 +134,7 @@ class _ContextSerialization(object):
 class _ContextDeserialization(object):
     # pylint: disable=method-hidden
     def __init__(self, bytes, version_table=None, packet_debugging=False):
-        self._data = _Data()
+        self._data = Data()
         self._data.received_data(bytes)
         self.payload = {}
         self.__version_table = version_table

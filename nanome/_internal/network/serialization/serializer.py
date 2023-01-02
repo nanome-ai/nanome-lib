@@ -1,7 +1,7 @@
 from . import _ContextSerialization, _ContextDeserialization
 from ..commands import callbacks as CommandCallbacks
 from ..commands import serialization as CommandSerializers
-from nanome._internal.network import _Data
+from nanome._internal.network import Data
 from nanome._internal.util import serializers as Serializers
 from nanome.util import Logs
 import struct
@@ -70,7 +70,7 @@ class Serializer(object):
         return received_object, command_hash, request_id
 
     def try_register_session(self, payload):
-        command_hash = _Data.uint_unpack(payload, 4)[0]
+        command_hash = Data.uint_unpack(payload, 4)[0]
         return command_hash == CommandCallbacks._Hashes.CommandHashes[CommandCallbacks._Commands.connect]
 
     def __init__(self):

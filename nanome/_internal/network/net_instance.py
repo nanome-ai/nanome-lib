@@ -1,4 +1,4 @@
-from . import _Data
+from . import Data
 from . import Packet
 from nanome.util import Logs
 
@@ -20,7 +20,7 @@ class _NetInstance(object):
         self._context = ssl.SSLContext(ssl.PROTOCOL_TLS)
         self._context.verify_mode = ssl.CERT_NONE
         self._connection = self._context.wrap_socket(self._socket, server_hostname="nanome.ai", suppress_ragged_eofs=False)
-        self._data = _Data()
+        self._data = Data()
         self._processing = False
         self._state = _NetInstance.header_state
         self._current_packet = Packet()

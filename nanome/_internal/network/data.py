@@ -4,7 +4,7 @@ expand_size = 1048576  # 1 MB
 expand_buffer = bytearray(expand_size)
 
 
-class _Data(object):
+class Data(object):
     bool_pack = struct.Struct('<?').pack_into
     float_pack = struct.Struct('<f').pack_into
     long_pack = struct.Struct('<q').pack_into
@@ -49,31 +49,31 @@ class _Data(object):
 
         pre = self._buffered_bytes + self._buffered_computed
         self.expand_data(1)
-        _Data.bool_pack(self._received_bytes, pre, value)
+        Data.bool_pack(self._received_bytes, pre, value)
 
     def write_float(self, value):
 
         pre = self._buffered_bytes + self._buffered_computed
         self.expand_data(4)
-        _Data.float_pack(self._received_bytes, pre, value)
+        Data.float_pack(self._received_bytes, pre, value)
 
     def write_long(self, value):
 
         pre = self._buffered_bytes + self._buffered_computed
         self.expand_data(8)
-        _Data.long_pack(self._received_bytes, pre, value)
+        Data.long_pack(self._received_bytes, pre, value)
 
     def write_int(self, value):
 
         pre = self._buffered_bytes + self._buffered_computed
         self.expand_data(4)
-        _Data.int_pack(self._received_bytes, pre, value)
+        Data.int_pack(self._received_bytes, pre, value)
 
     def write_uint(self, value):
 
         pre = self._buffered_bytes + self._buffered_computed
         self.expand_data(4)
-        _Data.uint_pack(self._received_bytes, pre, value)
+        Data.uint_pack(self._received_bytes, pre, value)
 
     def write_byte(self, value):
         pre = self._buffered_bytes + self._buffered_computed
@@ -150,31 +150,31 @@ class _Data(object):
 
     def read_bool(self):
         pre = self._buffered_computed
-        result = _Data.bool_unpack(self._received_bytes, pre)[0]
+        result = Data.bool_unpack(self._received_bytes, pre)[0]
         self.consume_data(1)
         return result
 
     def read_float(self):
         pre = self._buffered_computed
-        result = _Data.float_unpack(self._received_bytes, pre)[0]
+        result = Data.float_unpack(self._received_bytes, pre)[0]
         self.consume_data(4)
         return result
 
     def read_long(self):
         pre = self._buffered_computed
-        result = _Data.long_unpack(self._received_bytes, pre)[0]
+        result = Data.long_unpack(self._received_bytes, pre)[0]
         self.consume_data(8)
         return result
 
     def read_int(self):
         pre = self._buffered_computed
-        result = _Data.int_unpack(self._received_bytes, pre)[0]
+        result = Data.int_unpack(self._received_bytes, pre)[0]
         self.consume_data(4)
         return result
 
     def read_uint(self):
         pre = self._buffered_computed
-        result = _Data.uint_unpack(self._received_bytes, pre)[0]
+        result = Data.uint_unpack(self._received_bytes, pre)[0]
         self.consume_data(4)
         return result
 

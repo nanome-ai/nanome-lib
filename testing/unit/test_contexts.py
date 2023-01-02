@@ -1,6 +1,6 @@
 import struct
 import random
-from nanome._internal.network import _Data
+from nanome._internal.network import Data
 import unittest
 
 
@@ -45,7 +45,7 @@ class ContextTestCase(unittest.TestCase):
             longs_in.append(rand_positive_long())
             longs_in.append(rand_negative_long())
 
-        buffer = _Data()
+        buffer = Data()
         buffer.write_int_array(ints_in)
         buffer.write_float_array(floats_in)
         buffer.write_long_array(longs_in)
@@ -58,7 +58,7 @@ class ContextTestCase(unittest.TestCase):
         assert(tuple(longs_in) == longs_out)
 
     def test_primitive(self):
-        buffer = _Data()
+        buffer = Data()
         test_values = []
         # bool
         test_values.append(True)
