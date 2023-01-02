@@ -171,7 +171,7 @@ class Messages(CommandEnum):
     apply_color_scheme = auto()
 
 
-class _Integrations(CommandEnum):
+class Integrations(CommandEnum):
     # Reset enum counter for Python 2.7
     reset_auto()
 
@@ -193,7 +193,7 @@ class _Integrations(CommandEnum):
 class _Hashes():
     CommandHashes = [None] * len(Commands)
     MessageHashes = [None] * len(Messages)
-    IntegrationHashes = [None] * len(_Integrations)
+    IntegrationHashes = [None] * len(Integrations)
     IntegrationRequestHashes = [None] * len(Integrations)
     PermissionRequestHashes = [None] * len(Permissions)
     HashToIntegrationName = dict()
@@ -246,7 +246,7 @@ def init_hashes():
     hashes.clear()
     i = -1
 
-    for command in _Integrations:
+    for command in Integrations:
         i += 1
         hash = hash_command(command.name)
         if hash in hashes:
