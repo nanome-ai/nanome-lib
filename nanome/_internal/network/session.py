@@ -7,7 +7,7 @@ stop_bytes = bytearray("CLOSEPIPE", "utf-8")
 
 
 # Plugin networking representation, used from the main process
-class _Session(object):
+class Session(object):
     def _read_from_plugin(self):
         try:
             has_net_data = not self._net_queue_in.empty()

@@ -10,7 +10,7 @@ import logging
 import multiprocessing
 import random
 import string
-from multiprocessing import Process, Pipe, Queue, current_process
+from multiprocessing import Process, Queue, current_process
 from timeit import default_timer as timer
 import sys
 import json
@@ -353,7 +353,7 @@ class _Plugin(object):
         net_queue_out = Queue()
         pm_queue_in = Queue()
         pm_queue_out = Queue()
-        session = Network._Session(
+        session = Network.Session(
             session_id, self._network, self._process_manager, self._logs_manager,
             net_queue_in, net_queue_out, pm_queue_in, pm_queue_out)
         permissions = self._description["permissions"]
