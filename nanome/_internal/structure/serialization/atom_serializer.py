@@ -97,7 +97,7 @@ class _AtomSerializer(TypeSerializer):
             context.write_using_serializer(self.char, value._alt_loc)
 
     def deserialize(self, version, context):
-        # type: (_Atom, _ContextDeserialization) -> _Atom
+        # type: (_Atom, ContextDeserialization) -> _Atom
         atom = _Atom._create()
         index = context.read_long()
         if index >= 0:

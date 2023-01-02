@@ -1,4 +1,4 @@
 from . import *
 # classes
-from .context import _ContextSerialization, _ContextDeserialization
+from .context import ContextSerialization, ContextDeserialization
 from .serializer import Serializer

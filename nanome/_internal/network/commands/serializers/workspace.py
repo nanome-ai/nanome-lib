@@ -1,8 +1,8 @@
 from nanome._internal.util.serializers import _ArraySerializer, _LongSerializer
 from nanome._internal.structure.serialization import _WorkspaceSerializer, _AtomSerializer
 from nanome._internal.structure import _Atom, _Bond, _Residue, _Chain, _Molecule, _Complex, _Base
-from nanome._internal.network.serialization import _ContextDeserialization, _ContextSerialization
-from nanome._internal.network.serialization import _ContextSerialization
+from nanome._internal.network.serialization import ContextDeserialization, ContextSerialization
+from nanome._internal.network.serialization import ContextSerialization
 from nanome._internal.structure.serialization import _ComplexSerializer, _MoleculeSerializer, _ChainSerializer, _ResidueSerializer, _BondSerializer, _AtomSerializer, _AtomSerializerID
 from nanome._internal.util.serializers import _ArraySerializer, _DictionarySerializer, _LongSerializer, TypeSerializer
 from nanome._internal.structure.serialization import _SubstructureSerializer, _AtomSerializer, _MoleculeSerializer

@@ -1,4 +1,4 @@
-from . import _ContextSerialization, _ContextDeserialization
+from . import ContextSerialization, ContextDeserialization
 from ..commands import callbacks as CommandCallbacks
 from ..commands import serializers as CommandSerializers
 from nanome._internal.network import Data
@@ -17,7 +17,7 @@ class Serializer(object):
     _command_callbacks = dict()
 
     def serialize_message(self, request_id, message_type, arg, version_table, expects_response):
-        context = _ContextSerialization(
+        context = ContextSerialization(
             self._plugin_id, version_table, packet_debugging)
         context.write_uint(request_id)
         command_hash = CommandCallbacks.Hashes.MessageHashes[message_type]
@@ -39,7 +39,7 @@ class Serializer(object):
         return context.to_array()
 
     def deserialize_command(self, payload, version_table):
-        context = _ContextDeserialization(
+        context = ContextDeserialization(
             payload, version_table, packet_debugging)
         try:
             request_id = context.read_uint()

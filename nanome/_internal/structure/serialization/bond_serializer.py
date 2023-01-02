@@ -39,7 +39,7 @@ class _BondSerializer(TypeSerializer):
         context.write_using_serializer(self.atom_serializer, value._atom2)
 
     def deserialize(self, version, context):
-        # type: (_Atom, _ContextDeserialization) -> _Bond
+        # type: (_Atom, ContextDeserialization) -> _Bond
         bond = _Bond._create()
         bond._index = context.read_long()
         if version >= 1:

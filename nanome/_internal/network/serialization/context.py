@@ -20,7 +20,7 @@ class PacketDebuggingException(Exception):
         raise self
 
 
-class _ContextSerialization(object):
+class ContextSerialization(object):
     # pylint: disable=method-hidden
     def __init__(self, plugin_id, version_table=None, packet_debugging=False):
         self._data = Data()
@@ -127,12 +127,12 @@ class _ContextSerialization(object):
         return self.__packet_debugging
 
     def create_sub_context(self):
-        sub_context = _ContextSerialization(
+        sub_context = ContextSerialization(
             self._plugin_id, self.__version_table, self.__packet_debugging)
         return sub_context
 
 
-class _ContextDeserialization(object):
+class ContextDeserialization(object):
     # pylint: disable=method-hidden
     def __init__(self, bytes, version_table=None, packet_debugging=False):
         self._data = Data()
@@ -256,4 +256,4 @@ class _ContextDeserialization(object):
         return self.__packet_debugging
 
     def create_sub_context(self):
-        return _ContextDeserialization(self.__version_table, self.__packet_debugging)
+        return ContextDeserialization(self.__version_table, self.__packet_debugging)
