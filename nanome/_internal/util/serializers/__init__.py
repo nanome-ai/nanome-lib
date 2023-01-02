@@ -18,4 +18,4 @@ from .long_serializer import _LongSerializer
 from .byte_array_serializer import _ByteArraySerializer
 from .quaternion_serializer import _QuaternionSerializer, _UnityRotationSerializer
 from .vector3_serializer import _Vector3Serializer, _UnityPositionSerializer
-from .cached_image_serializer import _CachedImageSerializer
+from .cached_image_serializer import CachedImageSerializer

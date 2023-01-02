@@ -2,7 +2,7 @@ from . import _StringSerializer
 from nanome._internal.util.serializers import _TypeSerializer
 
 
-class _CachedImageSerializer(_TypeSerializer):
+class CachedImageSerializer(_TypeSerializer):
     cache = set()
     session = 0
 
@@ -16,14 +16,14 @@ class _CachedImageSerializer(_TypeSerializer):
         return "CachedImage"
 
     def serialize(self, version, value, context):
-        session = _CachedImageSerializer.session
+        session = CachedImageSerializer.session
         if value == None or value == "":
             context.write_bool(False)
             context.write_using_serializer(self._string, str(session) + "-")
             context.write_byte_array([])
             return
 
-        if value in _CachedImageSerializer.cache:
+        if value in CachedImageSerializer.cache:
             context.write_bool(True)
             context.write_using_serializer(self._string, str(session) + "-" + value)
         else:
@@ -32,7 +32,7 @@ class _CachedImageSerializer(_TypeSerializer):
             context.write_bool(False)
             context.write_using_serializer(self._string, str(session) + "-" + value)
             context.write_byte_array(data)
-            _CachedImageSerializer.cache.add(value)
+            CachedImageSerializer.cache.add(value)
 
     def deserialize(self, version, context):
         # This function is only used by unit tests

@@ -1,7 +1,7 @@
 from nanome.util import IntEnum
 from . import _UIBaseSerializer
 from .. import _Image
-from nanome._internal.util.serializers import _ColorSerializer, _ArraySerializer, _ByteSerializer, _StringSerializer, _TypeSerializer, _CachedImageSerializer
+from nanome._internal.util.serializers import _ColorSerializer, _ArraySerializer, _ByteSerializer, _StringSerializer, _TypeSerializer, CachedImageSerializer
 
 
 class _ImageSerializer(_TypeSerializer):
@@ -10,7 +10,7 @@ class _ImageSerializer(_TypeSerializer):
         self.data.set_type(_ByteSerializer())
         self.color = _ColorSerializer()
         self.string = _StringSerializer()
-        self.cached_image = _CachedImageSerializer()
+        self.cached_image = CachedImageSerializer()
 
     def version(self):
         return 2
