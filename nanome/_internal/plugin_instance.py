@@ -1,6 +1,6 @@
 import nanome
 from nanome.util import Logs
-from nanome._internal.network import _Packet
+from nanome._internal.network import Packet
 from nanome._internal.process import ProcessManagerInstance
 from nanome._internal.network.commands.callbacks import _Messages
 from nanome._internal.network.commands.callbacks.commands_enums import _Hashes
@@ -54,7 +54,7 @@ class _PluginInstance(object):
         self._network = plugin_network
         self._process_manager = ProcessManagerInstance(pm_queue_in, pm_queue_out)
         self._log_pipe_conn = log_pipe_conn
-        self._network._send_connect(_Messages.connect, [_Packet._compression_type(), original_version_table])
+        self._network._send_connect(_Messages.connect, [Packet._compression_type(), original_version_table])
         Logs.debug("Plugin constructed for session", session_id)
 
     @classmethod

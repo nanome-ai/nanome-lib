@@ -144,7 +144,7 @@ class _Plugin(object):
 
     def _on_packet_received(self, packet):
         """When packet received, identify Packet type, and call appropriate function."""
-        if packet.packet_type == Network._Packet.packet_type_message_to_plugin:
+        if packet.packet_type == Network.Packet.packet_type_message_to_plugin:
             session_id = packet.session_id
             # Always look if we're trying to register a session
             #   Fix 5/27/2021 - Jeremie: We need to always check for session registration in order to fix timeout issues
@@ -164,11 +164,11 @@ class _Plugin(object):
             # Doesn't register? It's an error
             logger.warning("Received a command from an unregistered session {}".format(session_id))
 
-        elif packet.packet_type == Network._Packet.packet_type_plugin_connection:
+        elif packet.packet_type == Network.Packet.packet_type_plugin_connection:
             self._plugin_id = packet.plugin_id
             logger.info("Registered with plugin ID {}\n=======================================\n".format(str(self._plugin_id)))
 
-        elif packet.packet_type == Network._Packet.packet_type_plugin_disconnection:
+        elif packet.packet_type == Network.Packet.packet_type_plugin_disconnection:
             if self._plugin_id == -1:
                 if self._description['auth'] is None:
                     logger.error("Connection refused by NTS. Are you missing a security key file?")
@@ -179,7 +179,7 @@ class _Plugin(object):
                 logger.info("Connection ended by NTS")
                 sys.exit(0)
 
-        elif packet.packet_type == Network._Packet.packet_type_client_disconnection:
+        elif packet.packet_type == Network.Packet.packet_type_client_disconnection:
             try:
                 id = packet.session_id
                 self._sessions[id].signal_and_close_pipes()
@@ -188,9 +188,9 @@ class _Plugin(object):
                 logger.info("Session {} disconnected".format(id), extra=extra)
             except Exception:
                 pass
-        elif packet.packet_type == Network._Packet.packet_type_keep_alive:
+        elif packet.packet_type == Network.Packet.packet_type_keep_alive:
             self.__waiting_keep_alive = False
-        elif packet.packet_type == Network._Packet.packet_type_logs_request:
+        elif packet.packet_type == Network.Packet.packet_type_logs_request:
             self.__logs_request(packet)
         else:
             logger.warning("Received a packet of unknown type {}. Ignoring".format(packet.packet_type))
@@ -257,8 +257,8 @@ class _Plugin(object):
                 plugin_id = self._plugin_id
             else:
                 plugin_id = 0
-            packet = Network._Packet()
-            packet.set(0, Network._Packet.packet_type_plugin_connection, plugin_id)
+            packet = Network.Packet()
+            packet.set(0, Network.Packet.packet_type_plugin_connection, plugin_id)
             packet.write_string(json.dumps(self._description))
             self._network.send(packet)
             self.connected = True
@@ -305,8 +305,8 @@ class _Plugin(object):
                 elif now - self.__last_keep_alive >= KEEP_ALIVE_TIME_INTERVAL and self._plugin_id >= 0:
                     self.__last_keep_alive = now
                     self.__waiting_keep_alive = True
-                    packet = Network._Packet()
-                    packet.set(self._plugin_id, Network._Packet.packet_type_keep_alive, 0)
+                    packet = Network.Packet()
+                    packet.set(self._plugin_id, Network.Packet.packet_type_keep_alive, 0)
                     self._network.send(packet)
 
                 del to_remove[:]
@@ -395,8 +395,8 @@ class _Plugin(object):
             'logs': content
         }
 
-        packet = Network._Packet()
-        packet.set(0, Network._Packet.packet_type_logs_request, 0)
+        packet = Network.Packet()
+        packet.set(0, Network.Packet.packet_type_logs_request, 0)
         packet.write_string(json.dumps(response))
 
     @staticmethod

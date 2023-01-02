@@ -1,10 +1,9 @@
-from nanome.util import ImportUtils
 import struct
 
 import zlib
 
 
-class _Packet(object):
+class Packet(object):
     packet_header_length = 15
     protocol_version = 0
     packet_type_plugin_list = 0
@@ -36,12 +35,12 @@ class _Packet(object):
         self.payload.extend(data)
 
     def pack(self):
-        packed = _Packet.header_pack(self.version, self.session_id, self.packet_type, self.plugin_id, self.payload_length)
+        packed = Packet.header_pack(self.version, self.session_id, self.packet_type, self.plugin_id, self.payload_length)
         packed += self.payload
         return packed
 
     def compress(self):
-        self.payload = _Packet.__compress_obj.compress(self.payload) + _Packet.__compress_obj.flush(zlib.Z_FULL_FLUSH)
+        self.payload = Packet.__compress_obj.compress(self.payload) + Packet.__compress_obj.flush(zlib.Z_FULL_FLUSH)
         self.payload_length = len(self.payload)
 
     def decompress(self):
@@ -49,9 +48,9 @@ class _Packet(object):
         self.payload_length = len(self.payload)
 
     def get_header(self, data):
-        if data.has_enough(_Packet.packet_header_length):
-            bytes = data.read_bytes(_Packet.packet_header_length)
-            unpacked = _Packet.header_unpack(bytes)
+        if data.has_enough(Packet.packet_header_length):
+            bytes = data.read_bytes(Packet.packet_header_length)
+            unpacked = Packet.header_unpack(bytes)
             self.version = unpacked[0]
             self.session_id = unpacked[1]
             self.packet_type = unpacked[2]
@@ -73,12 +72,12 @@ class _Packet(object):
         self.plugin_id = plugin_id
 
     def __len__(self):
-        return self.payload_length + _Packet.packet_header_length
+        return self.payload_length + Packet.packet_header_length
 
     def __init__(self):
-        self.version = _Packet.protocol_version
+        self.version = Packet.protocol_version
         self.session_id = 0
-        self.packet_type = _Packet.packet_type_plugin_list
+        self.packet_type = Packet.packet_type_plugin_list
         self.plugin_id = 0
         self.payload_length = 0
         self.payload = bytearray()

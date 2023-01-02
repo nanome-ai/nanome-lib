@@ -1,5 +1,5 @@
 from nanome.util import Logs
-from . import _Packet
+from . import Packet
 import traceback
 
 
@@ -44,8 +44,8 @@ class _Session(object):
             Logs.error("Cannot deliver process info to plugin", self._session_id, "Did it crash?")
 
     def _send_disconnection_message(self, plugin_id):
-        packet = _Packet()
-        packet.set(self._session_id, _Packet.packet_type_plugin_disconnection, plugin_id)
+        packet = Packet()
+        packet.set(self._session_id, Packet.packet_type_plugin_disconnection, plugin_id)
         self._net_plugin.send(packet)
 
     def signal_and_close_pipes(self):

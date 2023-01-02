@@ -1,5 +1,5 @@
 from . import _Data
-from . import _Packet
+from . import Packet
 from nanome.util import Logs
 
 import socket
@@ -23,7 +23,7 @@ class _NetInstance(object):
         self._data = _Data()
         self._processing = False
         self._state = _NetInstance.header_state
-        self._current_packet = _Packet()
+        self._current_packet = Packet()
 
     def connect(self, host, port):
         try:

@@ -6,7 +6,7 @@ import graypy
 from logging.handlers import RotatingFileHandler
 from multiprocessing import Pipe
 
-from nanome._internal.network import _Packet
+from nanome._internal.network import Packet
 from tblib import pickling_support
 
 pickling_support.install()
@@ -79,8 +79,8 @@ class NTSLoggingHandler(graypy.handler.BaseGELFHandler):
 
     def emit(self, record):
         gelf_dict = self._make_gelf_dict(record)
-        packet = _Packet()
-        packet.set(0, _Packet.packet_type_live_logs, 0)
+        packet = Packet()
+        packet.set(0, Packet.packet_type_live_logs, 0)
         packet.write_string(json.dumps(gelf_dict))
         if self._plugin and self._plugin.connected:
             self._plugin._network.send(packet)

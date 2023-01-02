@@ -3,7 +3,7 @@ import struct
 from nanome.util import Logs
 
 
-class _PacketDebuggingException(Exception):
+class PacketDebuggingException(Exception):
     def __init__(self):
         self.__stack = []
 
@@ -141,7 +141,7 @@ class _ContextDeserialization(object):
         self.payload = {}
         self.__version_table = version_table
         if packet_debugging:
-            self.__packet_debugging_exception = _PacketDebuggingException()
+            self.__packet_debugging_exception = PacketDebuggingException()
             self.read_bool = self.read_bool_debug
             self.read_byte = self.read_byte_debug
             self.read_bytes = self.read_bytes_debug

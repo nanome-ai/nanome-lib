@@ -2,7 +2,7 @@ from nanome.util import Logs
 from nanome._internal.util.serializers import _CachedImageSerializer
 from nanome._internal.logs import LogsManager
 
-from . import _Packet
+from . import Packet
 
 stop_bytes = bytearray("CLOSEPIPE", "utf-8")
 
@@ -68,8 +68,8 @@ class PluginNetwork(object):
         self = cls._instance
         command_id = self._command_id
         to_send = self._serializer.serialize_message(command_id, code, arg, version_table, expects_response)
-        packet = _Packet()
-        packet.set(self._session_id, _Packet.packet_type_message_to_client, self._plugin_id)
+        packet = Packet()
+        packet.set(self._session_id, Packet.packet_type_message_to_client, self._plugin_id)
         packet.write(to_send)
         # if code != 0: # Messages.connect
         #     packet.compress()
