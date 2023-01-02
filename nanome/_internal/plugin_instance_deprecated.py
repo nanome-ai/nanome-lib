@@ -1,6 +1,6 @@
 import nanome
 from . import _PluginInstance
-from nanome._internal.network.commands.callbacks import _Messages
+from nanome._internal.network.commands.callbacks import Messages
 from nanome.util import DirectoryRequestOptions
 from nanome.util.enums import ShapeType
 from nanome._internal import shapes as internal_shapes
@@ -19,7 +19,7 @@ def _request_directory(self, path, callback=None, pattern="*"):
     options = DirectoryRequestOptions()
     options._directory_name = path
     options._pattern = pattern
-    id = self._network._send(_Messages.directory_request, options, callback != None)
+    id = self._network._send(Messages.directory_request, options, callback != None)
     self._save_callback(id, callback)
 
 
@@ -34,7 +34,7 @@ def _request_files(self, file_list, callback=None):
     :param file_list: List of file name (with path) to read. E.g. ["a.sdf", "../b.sdf"] will read a.sdf in running directory, b.sdf in parent directory, and return them
     :type file_list: list of :class:`str`
     """
-    id = self._network._send(_Messages.file_request, file_list, callback != None)
+    id = self._network._send(Messages.file_request, file_list, callback != None)
     self._save_callback(id, callback)
 
 

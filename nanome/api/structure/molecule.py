@@ -1,7 +1,7 @@
 import nanome
 from nanome._internal.structure.molecule import _Molecule
 from nanome._internal.network import PluginNetwork
-from nanome._internal.network.commands.callbacks import _Messages
+from nanome._internal.network.commands.callbacks import Messages
 
 from nanome.util import Logs
 from . import Base
@@ -179,22 +179,22 @@ class Molecule(_Molecule, Base):
 
     def get_substructures(self, callback=None):
         expects_response = callback is not None or nanome.PluginInstance._instance.is_async
-        id = PluginNetwork._send(_Messages.substructure_request, (self.index, nanome.util.enums.SubstructureType.Unkown), expects_response)
+        id = PluginNetwork._send(Messages.substructure_request, (self.index, nanome.util.enums.SubstructureType.Unkown), expects_response)
         return nanome.PluginInstance._save_callback(id, callback)
 
     def get_ligands(self, callback=None):
         expects_response = callback is not None or nanome.PluginInstance._instance.is_async
-        id = PluginNetwork._send(_Messages.substructure_request, (self.index, nanome.util.enums.SubstructureType.Ligand), expects_response)
+        id = PluginNetwork._send(Messages.substructure_request, (self.index, nanome.util.enums.SubstructureType.Ligand), expects_response)
         return nanome.PluginInstance._save_callback(id, callback)
 
     def get_proteins(self, callback=None):
         expects_response = callback is not None or nanome.PluginInstance._instance.is_async
-        id = PluginNetwork._send(_Messages.substructure_request, (self.index, nanome.util.enums.SubstructureType.Protein), expects_response)
+        id = PluginNetwork._send(Messages.substructure_request, (self.index, nanome.util.enums.SubstructureType.Protein), expects_response)
         return nanome.PluginInstance._save_callback(id, callback)
 
     def get_solvents(self, callback=None):
         expects_response = callback is not None or nanome.PluginInstance._instance.is_async
-        id = PluginNetwork._send(_Messages.substructure_request, (self.index, nanome.util.enums.SubstructureType.Solvent), expects_response)
+        id = PluginNetwork._send(Messages.substructure_request, (self.index, nanome.util.enums.SubstructureType.Solvent), expects_response)
         return nanome.PluginInstance._save_callback(id, callback)
 
     # region deprecated

@@ -52,7 +52,7 @@ class _Image(_UIBase):
     def _send_hook(self, hook_type):
         try:
             nanome._internal._network.PluginNetwork._instance._send(
-                nanome._internal._network._commands._callbacks._Messages.hook_ui_callback,
+                nanome._internal._network._commands._callbacks.Messages.hook_ui_callback,
                 (hook_type, self._content_id),
                 False)
         except:

@@ -1,6 +1,6 @@
 from . import *
 # classes
-from .commands_enums import _Commands, _Messages, _Hashes
+from .commands_enums import _Commands, Messages, _Hashes
 # functions
 from .advanced_settings import _advanced_settings
 from .complex_list import _receive_complexes

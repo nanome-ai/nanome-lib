@@ -1,7 +1,7 @@
 import nanome
 from nanome._internal.addon import _Addon
 from nanome._internal.network import PluginNetwork
-from nanome._internal.network.commands.callbacks import _Messages
+from nanome._internal.network.commands.callbacks import Messages
 
 
 class WorkspaceClient(_Addon):
@@ -11,5 +11,5 @@ class WorkspaceClient(_Addon):
     @classmethod
     def compute_hbonds(cls, callback=None):
         expects_response = callback is not None or nanome.PluginInstance._instance.is_async
-        id = PluginNetwork._send(_Messages.compute_hbonds, None, expects_response)
+        id = PluginNetwork._send(Messages.compute_hbonds, None, expects_response)
         return nanome.PluginInstance._save_callback(id, callback)

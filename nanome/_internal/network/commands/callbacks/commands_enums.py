@@ -90,7 +90,7 @@ class _Commands(_CommandEnum):
 # Values names are really important here, as they are hashed, and need to match Nanome
 
 
-class _Messages(_CommandEnum):
+class Messages(_CommandEnum):
     # Reset enum counter for Python 2.7
     reset_auto()
 
@@ -192,7 +192,7 @@ class _Integrations(_CommandEnum):
 
 class _Hashes():
     CommandHashes = [None] * len(_Commands)
-    MessageHashes = [None] * len(_Messages)
+    MessageHashes = [None] * len(Messages)
     IntegrationHashes = [None] * len(_Integrations)
     IntegrationRequestHashes = [None] * len(Integrations)
     PermissionRequestHashes = [None] * len(Permissions)
@@ -234,7 +234,7 @@ def init_hashes():
     hashes.clear()
     i = -1
 
-    for command in _Messages:
+    for command in Messages:
         i += 1
         hash = hash_command(command.name)
         if hash in hashes:
