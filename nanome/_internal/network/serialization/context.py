@@ -127,7 +127,8 @@ class _ContextSerialization(object):
         return self.__packet_debugging
 
     def create_sub_context(self):
-        sub_context = _ContextSerialization(self._plugin_id, self.__version_table, self.__packet_debugging)
+        sub_context = _ContextSerialization(
+            self._plugin_id, self.__version_table, self.__packet_debugging)
         return sub_context
 
 

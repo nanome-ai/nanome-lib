@@ -1,3 +1,7 @@
+from nanome.util import Quaternion
+from nanome.util.enums import ShapeType
+from nanome._internal.shapes.serialization import _SphereSerializer, _ShapeSerializer, _LineSerializer, _LabelSerializer, _MeshSerializer
+from nanome._internal.util.serializers import _ArraySerializer, TypeSerializer, _UnityPositionSerializer, _ColorSerializer, _UnityRotationSerializer
 from nanome._internal.util.serializers import TypeSerializer
 from nanome.util.logs import Logs
 
@@ -27,11 +31,6 @@ class _DeleteShape(TypeSerializer):
             return [context.read_bool()]
         elif version == 1:
             return context.read_byte_array()
-from nanome.util.logs import Logs
-from nanome._internal.util.serializers import _ArraySerializer, TypeSerializer, _UnityPositionSerializer, _ColorSerializer, _UnityRotationSerializer
-from nanome._internal.shapes.serialization import _SphereSerializer, _ShapeSerializer, _LineSerializer, _LabelSerializer, _MeshSerializer
-from nanome.util.enums import ShapeType
-from nanome.util import Quaternion
 
 
 class _SetShape(TypeSerializer):

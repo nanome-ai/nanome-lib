@@ -1,3 +1,5 @@
+from nanome._internal.util.serializers import TypeSerializer, _StringSerializer
+from nanome._internal.util.serializers import TypeSerializer, _UnityPositionSerializer, _UnityRotationSerializer
 from nanome._internal.util.serializers import TypeSerializer
 
 
@@ -16,7 +18,6 @@ class _GetControllerTransforms(TypeSerializer):
 
     def deserialize(self, version, data):
         return None
-from nanome._internal.util.serializers import TypeSerializer, _UnityPositionSerializer, _UnityRotationSerializer
 
 
 class _GetControllerTransformsResponse(TypeSerializer):
@@ -41,9 +42,9 @@ class _GetControllerTransformsResponse(TypeSerializer):
         right_controller_position = context.read_using_serializer(self.pos)
         right_controller_rotation = context.read_using_serializer(self.rot)
 
-        result = (headset_position, headset_rotation, left_controller_position, left_controller_rotation, right_controller_position, right_controller_rotation)
+        result = (headset_position, headset_rotation, left_controller_position,
+                  left_controller_rotation, right_controller_position, right_controller_rotation)
         return result
-from nanome._internal.util.serializers import TypeSerializer
 
 
 class _GetPresenterInfo(TypeSerializer):
@@ -61,7 +62,6 @@ class _GetPresenterInfo(TypeSerializer):
 
     def deserialize(self, version, data):
         return None
-from nanome._internal.util.serializers import TypeSerializer, _StringSerializer
 
 
 class _GetPresenterInfoResponse(TypeSerializer):
@@ -90,7 +90,6 @@ class _GetPresenterInfoResponse(TypeSerializer):
             result.org_name = context.read_using_serializer(self.string)
 
         return result
-from nanome._internal.util.serializers import TypeSerializer
 
 
 class _PresenterChange(TypeSerializer):

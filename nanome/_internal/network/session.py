@@ -25,8 +25,9 @@ class Session(object):
         try:
             self._pm_queue_out.put(data)
         except Exception:
-            Logs.error("Cannot deliver process info to plugin", self._session_id, "Did it crash?")
-        
+            Logs.error("Cannot deliver process info to plugin",
+                       self._session_id, "Did it crash?")
+
     def signal_and_close_pipes(self):
         self._on_packet_received(stop_bytes)
         self._closed = True
@@ -43,7 +44,8 @@ class Session(object):
             has_proc_data = not self._pm_queue_in.empty()
             self._logs_manager.poll_for_logs()
         except Exception:
-            Logs.error("Plugin encountered an error, please check the logs.", traceback.format_exc())
+            Logs.error(
+                "Plugin encountered an error, please check the logs.", traceback.format_exc())
             return False
         try:
             if has_net_data:
@@ -56,7 +58,8 @@ class Session(object):
                 self._process_manager.received_request(proc_data, self)
 
         except EOFError:
-            Logs.error("Plugin encountered an error, please check the logs.", traceback.format_exc())
+            Logs.error(
+                "Plugin encountered an error, please check the logs.", traceback.format_exc())
             return False
         return True
 
@@ -64,10 +67,11 @@ class Session(object):
         try:
             self._net_queue_out.put(payload)
         except Exception:
-            Logs.error("Cannot deliver packet to plugin", self._session_id, "Did it crash?")
+            Logs.error("Cannot deliver packet to plugin",
+                       self._session_id, "Did it crash?")
 
     def _send_disconnection_message(self, plugin_id):
         packet = Packet()
-        packet.set(self._session_id, Packet.packet_type_plugin_disconnection, plugin_id)
+        packet.set(self._session_id,
+                   Packet.packet_type_plugin_disconnection, plugin_id)
         self._net_plugin.send(packet)
-

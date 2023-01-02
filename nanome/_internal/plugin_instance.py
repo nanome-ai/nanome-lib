@@ -3,7 +3,7 @@ from nanome.util import Logs
 from nanome._internal.network import Packet
 from nanome._internal.process import ProcessManagerInstance
 from nanome._internal.network.commands.callbacks import Messages
-from nanome._internal.network.commands.callbacks.commands_enums import Hashes
+from nanome._internal.network.commands.callbacks import Hashes
 
 import os
 import traceback

@@ -34,12 +34,14 @@ class Packet(object):
         self.payload.extend(data)
 
     def pack(self):
-        packed = Packet.header_pack(self.version, self.session_id, self.packet_type, self.plugin_id, self.payload_length)
+        packed = Packet.header_pack(
+            self.version, self.session_id, self.packet_type, self.plugin_id, self.payload_length)
         packed += self.payload
         return packed
 
     def compress(self):
-        self.payload = Packet.__compress_obj.compress(self.payload) + Packet.__compress_obj.flush(zlib.Z_FULL_FLUSH)
+        self.payload = Packet.__compress_obj.compress(
+            self.payload) + Packet.__compress_obj.flush(zlib.Z_FULL_FLUSH)
         self.payload_length = len(self.payload)
 
     def decompress(self):

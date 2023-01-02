@@ -1,4 +1,12 @@
 
+from nanome._internal.ui._serialization import _LayoutNodeSerializerDeep
+from nanome._internal.ui._serialization import _UIBaseSerializer
+from nanome._internal.util.serializers import TypeSerializer, _TupleSerializer, _IntSerializer, _StringSerializer
+from nanome._internal.util.serializers import _Vector3Serializer, _UnityPositionSerializer, _UnityRotationSerializer, TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer, _UnityPositionSerializer, _UnityRotationSerializer, _Vector3Serializer
+from nanome._internal.ui._serialization import _LayoutNodeSerializer, _UIBaseSerializer, _MenuSerializer
+from nanome._internal.util.serializers import _ArraySerializer
+from nanome.util import IntEnum
 from nanome._internal.util.serializers import TypeSerializer
 
 
@@ -33,9 +41,6 @@ class _ButtonCallback(TypeSerializer):
         return (content_id, state)
 
 
-from nanome._internal.util.serializers import TypeSerializer
-
-
 class _DropdownCallback(TypeSerializer):
     def __init__(self):
         pass
@@ -55,7 +60,6 @@ class _DropdownCallback(TypeSerializer):
         id = context.read_int()
         item_index = context.read_int()
         return id, item_index
-from nanome._internal.util.serializers import TypeSerializer
 
 
 class _GetMenuTransform(TypeSerializer):
@@ -73,7 +77,6 @@ class _GetMenuTransform(TypeSerializer):
 
     def deserialize(self, version, context):
         return None
-from nanome._internal.util.serializers import TypeSerializer, _UnityPositionSerializer, _UnityRotationSerializer, _Vector3Serializer
 
 
 class _GetMenuTransformResponse(TypeSerializer):
@@ -98,7 +101,6 @@ class _GetMenuTransformResponse(TypeSerializer):
 
         result = (menu_position, menu_rotation, menu_scale)
         return result
-from nanome._internal.util.serializers import TypeSerializer
 
 
 class _ImageCallback(TypeSerializer):
@@ -128,7 +130,6 @@ class _ImageCallback(TypeSerializer):
         x = context.read_float()
         y = context.read_float()
         return id, x, y
-from nanome._internal.util.serializers import TypeSerializer
 
 
 class _MenuCallback(TypeSerializer):
@@ -153,7 +154,6 @@ class _MenuCallback(TypeSerializer):
             index = 0
         value = context.read_bool()
         return (index, value)
-from nanome._internal.util.serializers import _Vector3Serializer, _UnityPositionSerializer, _UnityRotationSerializer, TypeSerializer
 
 
 class _SetMenuTransform(TypeSerializer):
@@ -176,7 +176,6 @@ class _SetMenuTransform(TypeSerializer):
 
     def deserialize(self, version, data):
         return None
-from nanome._internal.util.serializers import TypeSerializer
 
 
 class _SliderCallback(TypeSerializer):
@@ -200,7 +199,6 @@ class _SliderCallback(TypeSerializer):
             content_id &= id_mask
         result = (content_id, context.read_float())
         return result
-from nanome._internal.util.serializers import TypeSerializer, _TupleSerializer, _IntSerializer, _StringSerializer
 
 
 class _TextInputCallback(TypeSerializer):
@@ -225,8 +223,6 @@ class _TextInputCallback(TypeSerializer):
             id_mask = 0x00FFFFFF
             tup = (tup[0] & id_mask, tup[1])
         return tup
-from nanome._internal.util.serializers import TypeSerializer
-from nanome.util import IntEnum
 
 
 class _UIHook(TypeSerializer):
@@ -251,9 +247,6 @@ class _UIHook(TypeSerializer):
 
     def deserialize(self, version, context):
         raise NotImplementedError
-from nanome._internal.ui._serialization import _UIBaseSerializer
-from nanome._internal.util.serializers import _ArraySerializer
-from nanome._internal.util.serializers import TypeSerializer
 
 
 class _UpdateContent(TypeSerializer):
@@ -276,10 +269,6 @@ class _UpdateContent(TypeSerializer):
 
     def deserialize(self, version, context):
         return None
-from nanome._internal.util.serializers import _ArraySerializer
-from nanome._internal.ui._serialization import _LayoutNodeSerializer, _UIBaseSerializer, _MenuSerializer
-
-from nanome._internal.util.serializers import TypeSerializer
 
 
 class _UpdateMenu(TypeSerializer):
@@ -315,9 +304,6 @@ class _UpdateMenu(TypeSerializer):
 
     def deserialize(self, version, context):
         return None
-from nanome._internal.ui._serialization import _LayoutNodeSerializerDeep
-from nanome._internal.util.serializers import _ArraySerializer
-from nanome._internal.util.serializers import TypeSerializer
 
 
 class _UpdateNode(TypeSerializer):

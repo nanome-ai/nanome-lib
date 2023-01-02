@@ -1,3 +1,16 @@
+from nanome._internal.util.serializers import _ArraySerializer, _LongSerializer
+from nanome._internal.structure.serialization import _WorkspaceSerializer, _AtomSerializer
+from nanome._internal.structure import _Atom, _Bond, _Residue, _Chain, _Molecule, _Complex, _Base
+from nanome._internal.network.serialization import _ContextDeserialization, _ContextSerialization
+from nanome._internal.network.serialization import _ContextSerialization
+from nanome._internal.structure.serialization import _ComplexSerializer, _MoleculeSerializer, _ChainSerializer, _ResidueSerializer, _BondSerializer, _AtomSerializer, _AtomSerializerID
+from nanome._internal.util.serializers import _ArraySerializer, _DictionarySerializer, _LongSerializer, TypeSerializer
+from nanome._internal.structure.serialization import _SubstructureSerializer, _AtomSerializer, _MoleculeSerializer
+from nanome._internal.util.serializers import _DictionarySerializer, _LongSerializer
+import types
+from nanome._internal.util.serializers import _ArraySerializer, TypeSerializer, _LongSerializer
+from nanome._internal.util.serializers import TypeSerializer
+from nanome._internal.util.serializers import _ArraySerializer, _DictionarySerializer, _LongSerializer
 from nanome._internal.structure.serialization import _ComplexSerializer, _AtomSerializer
 from nanome._internal.util.serializers import TypeSerializer, _ArraySerializer, _DictionarySerializer, _LongSerializer
 
@@ -28,9 +41,6 @@ class _AddBonds(TypeSerializer):
         context.payload["Atom"] = context.read_using_serializer(self.__dict)
         complexes = context.read_using_serializer(self.__array)
         return complexes
-from nanome._internal.network.serialization import _ContextSerialization
-from nanome._internal.structure.serialization import _ComplexSerializer, _AtomSerializer
-from nanome._internal.util.serializers import TypeSerializer, _ArraySerializer, _DictionarySerializer, _LongSerializer
 
 
 class _AddDSSP(TypeSerializer):
@@ -59,10 +69,6 @@ class _AddDSSP(TypeSerializer):
         context.payload["Atom"] = context.read_using_serializer(self.__dict)
         complexes = context.read_using_serializer(self.__array)
         return complexes
-from nanome._internal.network.serialization import _ContextSerialization
-from nanome._internal.util.serializers import _ArraySerializer, _DictionarySerializer, _LongSerializer
-from nanome._internal.structure.serialization import _ComplexSerializer, _AtomSerializer
-from nanome._internal.util.serializers import TypeSerializer
 
 
 class _AddToWorkspace(TypeSerializer):
@@ -91,7 +97,6 @@ class _AddToWorkspace(TypeSerializer):
         context.payload["Atom"] = context.read_using_serializer(self.dict)
         complexes = context.read_using_serializer(self.__array)
         return complexes
-from nanome._internal.util.serializers import TypeSerializer
 
 
 class _ComplexAddedRemoved(TypeSerializer):
@@ -109,8 +114,6 @@ class _ComplexAddedRemoved(TypeSerializer):
 
     def deserialize(self, version, data):
         return None
-from nanome._internal.util.serializers import TypeSerializer, _ArraySerializer, _DictionarySerializer, _LongSerializer
-from nanome._internal.structure.serialization import _ComplexSerializer, _AtomSerializer
 
 
 class _ComplexUpdated(TypeSerializer):
@@ -140,7 +143,6 @@ class _ComplexUpdated(TypeSerializer):
         else:
             complex = None
         return (index, complex)
-from nanome._internal.util.serializers import TypeSerializer
 
 
 class _ComplexUpdatedHook(TypeSerializer):
@@ -158,8 +160,6 @@ class _ComplexUpdatedHook(TypeSerializer):
 
     def deserialize(self, version, context):
         raise NotImplementedError
-from nanome._internal.network.serialization import _ContextDeserialization, _ContextSerialization
-from nanome._internal.util.serializers import TypeSerializer
 
 
 class _ComputeHBonds(TypeSerializer):
@@ -177,11 +177,9 @@ class _ComputeHBonds(TypeSerializer):
 
     def deserialize(self, version, context):
         return None
-from nanome._internal.structure import _Atom, _Bond, _Residue, _Chain, _Molecule, _Complex, _Base
-from nanome._internal.network.serialization import _ContextDeserialization, _ContextSerialization
-from nanome._internal.util.serializers import _ArraySerializer, TypeSerializer, _LongSerializer
+
+
 # from nanome._internal.structure.serialization import _Long
-import types
 
 # deep
 
@@ -218,7 +216,6 @@ class _PositionStructures(TypeSerializer):
 
     def deserialize(self, version, context):
         return None
-from nanome._internal.util.serializers import TypeSerializer
 
 
 class _PositionStructuresDone(TypeSerializer):
@@ -236,10 +233,7 @@ class _PositionStructuresDone(TypeSerializer):
 
     def deserialize(self, version, context):
         return None
-from nanome._internal.util.serializers import _ArraySerializer, _DictionarySerializer, _LongSerializer
-from nanome._internal.structure.serialization import _ComplexSerializer, _AtomSerializer
 
-from nanome._internal.util.serializers import TypeSerializer
 
 # shallow
 
@@ -290,10 +284,6 @@ class _ReceiveComplexes(TypeSerializer):
         context.payload["Atom"] = context.read_using_serializer(self.dict)
         complexes = context.read_using_serializer(self.array_serializer)
         return complexes
-from nanome._internal.structure.serialization import _WorkspaceSerializer, _AtomSerializer
-from nanome._internal.util.serializers import _DictionarySerializer, _LongSerializer
-
-from nanome._internal.util.serializers import TypeSerializer
 
 
 class _ReceiveWorkspace(TypeSerializer):
@@ -317,9 +307,6 @@ class _ReceiveWorkspace(TypeSerializer):
         context.payload["Atom"] = context.read_using_serializer(self.dict)
         workspace = context.read_using_serializer(self.workspace)
         return workspace
-from nanome._internal.util.serializers import _ArraySerializer, _LongSerializer
-
-from nanome._internal.util.serializers import TypeSerializer
 
 
 class _RequestComplexList(TypeSerializer):
@@ -354,8 +341,6 @@ class _RequestComplexes(TypeSerializer):
 
     def deserialize(self, version, context):
         return None
-from nanome._internal.util.serializers import TypeSerializer, _ArraySerializer, _DictionarySerializer, _LongSerializer
-from nanome._internal.structure.serialization import _SubstructureSerializer, _AtomSerializer, _MoleculeSerializer
 
 
 class _RequestSubstructure(TypeSerializer):
@@ -386,9 +371,9 @@ class _RequestSubstructure(TypeSerializer):
             for residue in chain.residues:
                 residue_map[residue.index] = residue
         for substructure in substructures:
-            substructure._residues = [residue_map[index] for index in substructure._residues]
+            substructure._residues = [residue_map[index]
+                                      for index in substructure._residues]
         return substructures
-from nanome._internal.util.serializers import TypeSerializer
 
 
 class _RequestWorkspace(TypeSerializer):
@@ -406,8 +391,6 @@ class _RequestWorkspace(TypeSerializer):
 
     def deserialize(self, version, data):
         return None
-from nanome._internal.util.serializers import TypeSerializer, _ArraySerializer, _DictionarySerializer, _LongSerializer
-from nanome._internal.structure.serialization import _ComplexSerializer, _AtomSerializer
 
 
 class _SelectionChanged(TypeSerializer):
@@ -437,7 +420,6 @@ class _SelectionChanged(TypeSerializer):
         else:
             complex = None
         return (index, complex)
-from nanome._internal.util.serializers import TypeSerializer
 
 
 class _SelectionChangedHook(TypeSerializer):
@@ -456,10 +438,6 @@ class _SelectionChangedHook(TypeSerializer):
     def deserialize(self, version, context):
         raise NotImplementedError
 
-from nanome._internal.structure import _Atom, _Bond, _Residue, _Chain, _Molecule, _Complex, _Base
-from nanome._internal.network.serialization import _ContextDeserialization, _ContextSerialization
-from nanome._internal.util.serializers import _ArraySerializer, _DictionarySerializer, _LongSerializer, TypeSerializer
-from nanome._internal.structure.serialization import _ComplexSerializer, _MoleculeSerializer, _ChainSerializer, _ResidueSerializer, _BondSerializer, _AtomSerializer, _AtomSerializerID
 
 # deep
 
@@ -532,7 +510,6 @@ class _UpdateStructures(TypeSerializer):
 
     def deserialize(self, version, context):
         return None
-from nanome._internal.util.serializers import TypeSerializer
 
 
 class _UpdateStructuresDeepDone(TypeSerializer):
@@ -550,11 +527,6 @@ class _UpdateStructuresDeepDone(TypeSerializer):
 
     def deserialize(self, version, context):
         return None
-from nanome._internal.network.serialization import _ContextDeserialization, _ContextSerialization
-from nanome._internal.util.serializers import _DictionarySerializer, _LongSerializer
-from nanome._internal.structure.serialization import _WorkspaceSerializer, _AtomSerializer
-
-from nanome._internal.util.serializers import TypeSerializer
 
 
 class _UpdateWorkspace(TypeSerializer):

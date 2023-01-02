@@ -19,7 +19,8 @@ class NetInstance(object):
         self._socket.settimeout(10.0)
         self._context = ssl.SSLContext(ssl.PROTOCOL_TLS)
         self._context.verify_mode = ssl.CERT_NONE
-        self._connection = self._context.wrap_socket(self._socket, server_hostname="nanome.ai", suppress_ragged_eofs=False)
+        self._connection = self._context.wrap_socket(
+            self._socket, server_hostname="nanome.ai", suppress_ragged_eofs=False)
         self._data = Data()
         self._processing = False
         self._state = NetInstance.header_state
@@ -101,6 +102,7 @@ class NetInstance(object):
             else:
                 if self._current_packet.get_payload(self._data):
                     self._state = NetInstance.header_state
-                    self._on_received_packet(self._instance, self._current_packet)
+                    self._on_received_packet(
+                        self._instance, self._current_packet)
                 else:
                     self._processing = False

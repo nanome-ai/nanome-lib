@@ -1,4 +1,5 @@
 
+from nanome._internal.util.serializers import TypeSerializer
 from nanome._internal.volumetric.serialization import _VolumeDataSerializer, _VolumePropertiesSerializer
 from nanome._internal.util.serializers import TypeSerializer, _LongSerializer, _DictionarySerializer
 from nanome._internal.structure.serialization import _ComplexSerializer, _AtomSerializer
@@ -34,7 +35,6 @@ class _AddVolume(TypeSerializer):
 
     def deserialize(self, version, context):
         raise NotImplementedError
-from nanome._internal.util.serializers import TypeSerializer
 
 
 class _AddVolumeDone(TypeSerializer):

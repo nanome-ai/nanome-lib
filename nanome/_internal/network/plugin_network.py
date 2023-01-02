@@ -67,9 +67,11 @@ class PluginNetwork(object):
     def __send(cls, code, version_table, arg, expects_response):
         self = cls._instance
         command_id = self._command_id
-        to_send = self._serializer.serialize_message(command_id, code, arg, version_table, expects_response)
+        to_send = self._serializer.serialize_message(
+            command_id, code, arg, version_table, expects_response)
         packet = Packet()
-        packet.set(self._session_id, Packet.packet_type_message_to_client, self._plugin_id)
+        packet.set(self._session_id,
+                   Packet.packet_type_message_to_client, self._plugin_id)
         packet.write(to_send)
         # if code != 0: # Messages.connect
         #     packet.compress()
@@ -97,14 +99,16 @@ class PluginNetwork(object):
                 self._plugin._on_stop()
                 return False
 
-            received_object, command_hash, request_id = self._serializer.deserialize_command(payload, self.__version_table)
+            received_object, command_hash, request_id = self._serializer.deserialize_command(
+                payload, self.__version_table)
             if received_object == None and command_hash == None and request_id == None:
                 return True  # Happens if deserialize_command returns None, an error message is already displayed in that case
 
             try:
                 callback = self._serializer._command_callbacks[command_hash]
             except:
-                Logs.error("Received a command without callback associated:", command_hash)
+                Logs.error(
+                    "Received a command without callback associated:", command_hash)
                 return True
             callback(self, received_object, request_id)
         return True

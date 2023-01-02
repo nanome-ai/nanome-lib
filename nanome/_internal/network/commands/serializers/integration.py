@@ -1,5 +1,5 @@
 from nanome._internal.util.serializers import TypeSerializer
-from nanome._internal.network.commands.callbacks.commands_enums import Hashes, Integrations
+from nanome._internal.network.commands.callbacks import Hashes, Integrations
 from nanome._internal.integration import serialization as Serializers
 
 
@@ -16,7 +16,8 @@ class _Integration(TypeSerializer):
         Hashes.IntegrationHashes[Integrations.import_file]: Serializers._ImportFile(),
         Hashes.IntegrationHashes[Integrations.generate_molecule_image]: Serializers._GenerateMoleculeImage(),
         Hashes.IntegrationHashes[Integrations.export_smiles]: Serializers._ExportSmiles(),
-        Hashes.IntegrationHashes[Integrations.import_smiles]: Serializers._ImportSmiles()
+        Hashes.IntegrationHashes[Integrations.import_smiles]: Serializers._ImportSmiles(
+        )
     }
 
     def __init__(self):
@@ -31,7 +32,8 @@ class _Integration(TypeSerializer):
     def serialize(self, version, value, context):
         context.write_uint(value[0])
         context.write_uint(value[1])
-        context.write_using_serializer(_Integration.__integrations[value[1]], value[2])
+        context.write_using_serializer(
+            _Integration.__integrations[value[1]], value[2])
 
     def deserialize(self, version, context):
         requestID = context.read_uint()

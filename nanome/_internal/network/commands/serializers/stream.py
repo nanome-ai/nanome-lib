@@ -1,3 +1,5 @@
+from nanome._internal.util.serializers import TypeSerializer, _ArraySerializer, _StringSerializer
+from nanome.util.enums import StreamDataType, StreamDirection
 from nanome._internal.util.serializers import _ArraySerializer
 from nanome._internal.util.serializers import TypeSerializer
 from nanome.util.enums import StreamType as SType
@@ -27,8 +29,6 @@ class _CreateStream(TypeSerializer):
 
     def deserialize(self, version, context):
         raise NotImplementedError
-from nanome._internal.util.serializers import TypeSerializer
-from nanome.util.enums import StreamDataType, StreamDirection
 
 
 class _CreateStreamResult(TypeSerializer):
@@ -56,7 +56,6 @@ class _CreateStreamResult(TypeSerializer):
         else:
             direction = StreamDirection.writing
         return (err, id, data_type, direction)
-from nanome._internal.util.serializers import TypeSerializer
 
 
 class _DestroyStream(TypeSerializer):
@@ -74,7 +73,6 @@ class _DestroyStream(TypeSerializer):
 
     def deserialize(self, version, context):
         raise NotImplementedError
-from nanome._internal.util.serializers import TypeSerializer, _ArraySerializer, _StringSerializer
 
 
 class _FeedStream(TypeSerializer):
@@ -118,7 +116,6 @@ class _FeedStream(TypeSerializer):
             data = context.read_float_array()
 
         return (id, data, type)
-from nanome._internal.util.serializers import TypeSerializer
 
 
 class _FeedStreamDone(TypeSerializer):
@@ -136,7 +133,6 @@ class _FeedStreamDone(TypeSerializer):
 
     def deserialize(self, version, context):
         return None
-from nanome._internal.util.serializers import TypeSerializer
 
 
 class _InterruptStream(TypeSerializer):

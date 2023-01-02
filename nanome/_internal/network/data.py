@@ -199,7 +199,8 @@ class Data(object):
             raise BufferError(
                 'Trying to read more data than available, check API compatibility')
 
-        result = self._received_bytes[self._buffered_computed:self._buffered_computed + byte_size]
+        result = self._received_bytes[self._buffered_computed:
+                                      self._buffered_computed + byte_size]
         self.consume_data(byte_size)
         return result
 
@@ -213,7 +214,8 @@ class Data(object):
             raise BufferError(
                 'Trying to read more data than available, check API compatibility')
 
-        result = struct.unpack(str(size) + "f", self._received_bytes[self._buffered_computed:self._buffered_computed + byte_size])
+        result = struct.unpack(str(
+            size) + "f", self._received_bytes[self._buffered_computed:self._buffered_computed + byte_size])
         self.consume_data(byte_size)
         return result
 
@@ -226,7 +228,8 @@ class Data(object):
         if byte_size > self._buffered_bytes:
             raise BufferError(
                 'Trying to read more data than available, check API compatibility')
-        result = struct.unpack(str(size) + "i", self._received_bytes[self._buffered_computed:self._buffered_computed + byte_size])
+        result = struct.unpack(str(
+            size) + "i", self._received_bytes[self._buffered_computed:self._buffered_computed + byte_size])
         self.consume_data(byte_size)
         return result
 
@@ -240,7 +243,8 @@ class Data(object):
             raise BufferError(
                 'Trying to read more data than available, check API compatibility')
 
-        result = struct.unpack(str(size) + "q", self._received_bytes[self._buffered_computed:self._buffered_computed + byte_size])
+        result = struct.unpack(str(
+            size) + "q", self._received_bytes[self._buffered_computed:self._buffered_computed + byte_size])
         self.consume_data(byte_size)
         return result
 # end region
