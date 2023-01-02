@@ -5,7 +5,7 @@ import time
 from nanome.util import Color, Logs, Matrix, Quaternion, Vector3
 from nanome.api import structure as struct
 from nanome._internal.network.serialization.context import ContextDeserialization, ContextSerialization
-from nanome._internal.network.commands.serializers import _UpdateWorkspace, _ReceiveWorkspace
+from nanome._internal.network.commands.serializers import UpdateWorkspace, ReceiveWorkspace
 from testing.unit.utilities import assert_equal, assert_not_equal, TestOptions
 import unittest
 import tempfile
@@ -280,8 +280,8 @@ class AtomTestCase(unittest.TestCase):
         # create test data
         workspace1 = create_workspace()
         # create serializers
-        update_workspace = _UpdateWorkspace()
-        receive_workspace = _ReceiveWorkspace()
+        update_workspace = UpdateWorkspace()
+        receive_workspace = ReceiveWorkspace()
 
         context_s = ContextSerialization(plugin_id=random.randint(0, 0xFFFFFFFF))
         update_workspace.serialize(0, workspace1, context_s)
