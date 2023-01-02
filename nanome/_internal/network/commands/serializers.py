@@ -17,7 +17,6 @@ from nanome._internal.util.serializers import (
     _ColorSerializer, _DirectoryEntrySerializer, _FileDataSerializer, _FileSaveDataSerializer)
 
 from nanome._internal.util.serializers import TypeSerializer, _DictionarySerializer, _StringSerializer, _ByteSerializer
-from nanome._internal.volumetric.io._em_map.parse import parse_file
 from nanome._internal.volumetric.serialization import _VolumeDataSerializer, _VolumePropertiesSerializer
 from nanome.util import DirectoryRequestResult, DirectoryErrorCode, FileError, IntEnum, Quaternion, Logs
 from nanome.util.enums import LoadFileErrorCode, ShapeType,StreamDataType, StreamDirection,StreamType as SType
@@ -25,7 +24,7 @@ from nanome.util.file import FileMeta, LoadInfoDone
 import types
 
 
-class _ApplyColorScheme(TypeSerializer):
+class ApplyColorScheme(TypeSerializer):
     def __init__(self):
         pass
 
@@ -44,7 +43,7 @@ class _ApplyColorScheme(TypeSerializer):
         raise NotImplementedError
 
 
-class _AdvancedSettings(TypeSerializer):
+class AdvancedSettings(TypeSerializer):
     def __init__(self):
         pass
 
@@ -61,7 +60,7 @@ class _AdvancedSettings(TypeSerializer):
         return None
 
 
-class _Connect(TypeSerializer):
+class Connect(TypeSerializer):
     def __init__(self):
         self.__dictionary = _DictionarySerializer()
         self.__dictionary.set_types(_StringSerializer(), _ByteSerializer())
@@ -81,7 +80,7 @@ class _Connect(TypeSerializer):
         return version_table
 
 
-class _Run(TypeSerializer):
+class Run(TypeSerializer):
     def __init__(self):
         pass
 
@@ -98,7 +97,7 @@ class _Run(TypeSerializer):
         return None
 
 
-class _SetPluginListButton(TypeSerializer):
+class SetPluginListButton(TypeSerializer):
     def __init__(self):
         self.__string = _StringSerializer()
 
@@ -117,7 +116,7 @@ class _SetPluginListButton(TypeSerializer):
         return None
 
 
-class _CD(TypeSerializer):
+class CD(TypeSerializer):
     def __init__(self):
         self.__string = _StringSerializer()
 
@@ -134,7 +133,7 @@ class _CD(TypeSerializer):
         return FileError.safe_cast(context.read_int())
 
 
-class _CP(TypeSerializer):
+class CP(TypeSerializer):
     def __init__(self):
         self.__string = _StringSerializer()
 
@@ -152,7 +151,7 @@ class _CP(TypeSerializer):
         return FileError.safe_cast(context.read_int())
 
 
-class _ExportFilesItem(TypeSerializer):
+class ExportFilesItem(TypeSerializer):
     def __init__(self):
         self.__complex = _ComplexSerializer()
         self.__string = _StringSerializer()
@@ -192,10 +191,10 @@ class _ExportFilesItem(TypeSerializer):
             return res
 
 
-class _ExportFiles(TypeSerializer):
+class ExportFiles(TypeSerializer):
     def __init__(self):
         self.__array = _ArraySerializer()
-        self.__array.set_type(_ExportFilesItem())
+        self.__array.set_type(ExportFilesItem())
 
     def version(self):
         return 0
@@ -215,7 +214,7 @@ class _ExportFiles(TypeSerializer):
         return context.read_using_serializer(self.__array)
 
 
-class _FileMeta(TypeSerializer):
+class FileMeta(TypeSerializer):
     def __init__(self):
         self.__string = _StringSerializer()
 
@@ -240,7 +239,7 @@ class _FileMeta(TypeSerializer):
         return result
 
 
-class _Get(TypeSerializer):
+class Get(TypeSerializer):
     def __init__(self):
         self.__string = _StringSerializer()
 
@@ -260,11 +259,11 @@ class _Get(TypeSerializer):
         return (error_code, file)
 
 
-class _LS(TypeSerializer):
+class LS(TypeSerializer):
     def __init__(self):
         self.__string = _StringSerializer()
         self.__array = _ArraySerializer()
-        self.__array.set_type(_FileMeta())
+        self.__array.set_type(FileMeta())
 
     def version(self):
         return 0
@@ -281,7 +280,7 @@ class _LS(TypeSerializer):
         return error_code, filemetas
 
 
-class _MKDir(TypeSerializer):
+class MKDir(TypeSerializer):
     def __init__(self):
         self.__string = _StringSerializer()
 
@@ -298,7 +297,7 @@ class _MKDir(TypeSerializer):
         return FileError.safe_cast(context.read_int())
 
 
-class _MV(TypeSerializer):
+class MV(TypeSerializer):
     def __init__(self):
         self.__string = _StringSerializer()
 
@@ -316,7 +315,7 @@ class _MV(TypeSerializer):
         return FileError.safe_cast(context.read_int())
 
 
-class _Put(TypeSerializer):
+class Put(TypeSerializer):
     def __init__(self):
         self.__string = _StringSerializer()
 
@@ -335,7 +334,7 @@ class _Put(TypeSerializer):
         return FileError.safe_cast(context.read_int())
 
 
-class _PWD(TypeSerializer):
+class PWD(TypeSerializer):
     def __init__(self):
         self.__string = _StringSerializer()
 
@@ -354,7 +353,7 @@ class _PWD(TypeSerializer):
         return (error_code, path)
 
 
-class _RM(TypeSerializer):
+class RM(TypeSerializer):
     def __init__(self):
         self.__string = _StringSerializer()
 
@@ -371,7 +370,7 @@ class _RM(TypeSerializer):
         return FileError.safe_cast(context.read_int())
 
 
-class _RMDir(TypeSerializer):
+class RMDir(TypeSerializer):
     def __init__(self):
         self.__string = _StringSerializer()
 
@@ -388,7 +387,7 @@ class _RMDir(TypeSerializer):
         return FileError.safe_cast(context.read_int())
 
 
-class _DirectoryRequest(TypeSerializer):
+class DirectoryRequest(TypeSerializer):
     # Deprecated
     def __init__(self):
         self.__string = _StringSerializer()
@@ -413,7 +412,7 @@ class _DirectoryRequest(TypeSerializer):
         return result
 
 
-class _FileRequest(TypeSerializer):
+class FileRequest(TypeSerializer):
     # Deprecated
     def __init__(self):
         self.__string_array = _ArraySerializer()
@@ -434,7 +433,7 @@ class _FileRequest(TypeSerializer):
         return context.read_using_serializer(self.__file_data_array)
 
 
-class _FileSave(TypeSerializer):
+class FileSave(TypeSerializer):
     # Deprecated
     def __init__(self):
         self.__file_data_array = _ArraySerializer()
@@ -453,7 +452,7 @@ class _FileSave(TypeSerializer):
         return context.read_using_serializer(self.__file_data_array)
 
 
-class _Integration(TypeSerializer):
+class Integration(TypeSerializer):
     __integrations = {
         Hashes.IntegrationHashes[Integrations.hydrogen_add]: Serializers._AddHydrogen(),
         Hashes.IntegrationHashes[Integrations.hydrogen_remove]: Serializers._RemoveHydrogen(),
@@ -483,16 +482,16 @@ class _Integration(TypeSerializer):
         context.write_uint(value[0])
         context.write_uint(value[1])
         context.write_using_serializer(
-            _Integration.__integrations[value[1]], value[2])
+            Integration.__integrations[value[1]], value[2])
 
     def deserialize(self, version, context):
         requestID = context.read_uint()
         type = context.read_uint()
-        arg = context.read_using_serializer(_Integration.__integrations[type])
+        arg = context.read_using_serializer(Integration.__integrations[type])
         return (requestID, type, arg)
 
 
-class _LoadFileInfo(TypeSerializer):
+class LoadFileInfo(TypeSerializer):
     def __init__(self):
         self.string = _StringSerializer()
 
@@ -510,10 +509,10 @@ class _LoadFileInfo(TypeSerializer):
         raise NotImplementedError
 
 
-class _LoadFile(TypeSerializer):
+class LoadFile(TypeSerializer):
     def __init__(self):
         self.array = _ArraySerializer()
-        self.array.set_type(_LoadFileInfo())
+        self.array.set_type(LoadFileInfo())
 
     def version(self):
         return 0
@@ -530,7 +529,7 @@ class _LoadFile(TypeSerializer):
         raise NotImplementedError
 
 
-class _LoadFileDoneInfo(TypeSerializer):
+class LoadFileDoneInfo(TypeSerializer):
     def __init__(self):
         pass
 
@@ -549,10 +548,10 @@ class _LoadFileDoneInfo(TypeSerializer):
         return result
 
 
-class _LoadFileDone(TypeSerializer):
+class LoadFileDone(TypeSerializer):
     def __init__(self):
         self.array = _ArraySerializer()
-        self.array.set_type(_LoadFileDoneInfo())
+        self.array.set_type(LoadFileDoneInfo())
 
     def version(self):
         return 0
@@ -573,7 +572,7 @@ macro_serializer = _MacroSerializer()
 string_serializer = _StringSerializer()
 
 
-class _SaveMacro(TypeSerializer):
+class SaveMacro(TypeSerializer):
     _macro_serializer = macro_serializer
     _string_serializer = string_serializer
 
@@ -595,7 +594,7 @@ class _SaveMacro(TypeSerializer):
         raise NotImplementedError
 
 
-class _DeleteMacro(TypeSerializer):
+class DeleteMacro(TypeSerializer):
     _macro_serializer = macro_serializer
     _string_serializer = string_serializer
 
@@ -617,7 +616,7 @@ class _DeleteMacro(TypeSerializer):
         raise NotImplementedError
 
 
-class _RunMacro(TypeSerializer):
+class RunMacro(TypeSerializer):
     _macro_serializer = macro_serializer
     _string_serializer = string_serializer
 
@@ -639,7 +638,7 @@ class _RunMacro(TypeSerializer):
         return context.read_bool()
 
 
-class _GetMacros(TypeSerializer):
+class GetMacros(TypeSerializer):
     _macro_serializer = macro_serializer
     _string_serializer = string_serializer
 
@@ -659,7 +658,7 @@ class _GetMacros(TypeSerializer):
         raise NotImplementedError
 
 
-class _GetMacrosResponse(TypeSerializer):
+class GetMacrosResponse(TypeSerializer):
     _macro_serializer = macro_serializer
     _string_serializer = string_serializer
 
@@ -680,7 +679,7 @@ class _GetMacrosResponse(TypeSerializer):
         return context.read_using_serializer(self._array_serializer)
 
 
-class _StopMacro(TypeSerializer):
+class StopMacro(TypeSerializer):
     _macro_serializer = macro_serializer
     _string_serializer = string_serializer
 
@@ -700,7 +699,7 @@ class _StopMacro(TypeSerializer):
         raise NotImplementedError
 
 
-class _OpenURL(TypeSerializer):
+class OpenURL(TypeSerializer):
     def __init__(self):
         self.string = _StringSerializer()
 
@@ -719,7 +718,7 @@ class _OpenURL(TypeSerializer):
         raise NotImplementedError
 
 
-class _SendNotification(TypeSerializer):
+class SendNotification(TypeSerializer):
     def __init__(self):
         self.string = _StringSerializer()
 
@@ -737,7 +736,7 @@ class _SendNotification(TypeSerializer):
         raise NotImplementedError
 
 
-class _SetSkybox(TypeSerializer):
+class SetSkybox(TypeSerializer):
     def __init__(self):
         pass
 
@@ -754,7 +753,7 @@ class _SetSkybox(TypeSerializer):
         raise NotImplementedError
 
 
-class _DeleteShape(TypeSerializer):
+class DeleteShape(TypeSerializer):
     def __init__(self):
         pass
 
@@ -781,7 +780,7 @@ class _DeleteShape(TypeSerializer):
             return context.read_byte_array()
 
 
-class _SetShape(TypeSerializer):
+class SetShape(TypeSerializer):
     def __init__(self):
         self._position = _UnityPositionSerializer()
         self._rotation = _UnityRotationSerializer()
@@ -841,7 +840,7 @@ class _SetShape(TypeSerializer):
             return (indices_arr, success_arr)
 
 
-class _CreateStream(TypeSerializer):
+class CreateStream(TypeSerializer):
     def __init__(self):
         pass
 
@@ -867,7 +866,7 @@ class _CreateStream(TypeSerializer):
         raise NotImplementedError
 
 
-class _CreateStreamResult(TypeSerializer):
+class CreateStreamResult(TypeSerializer):
     def __init__(self):
         pass
 
@@ -894,7 +893,7 @@ class _CreateStreamResult(TypeSerializer):
         return (err, id, data_type, direction)
 
 
-class _DestroyStream(TypeSerializer):
+class DestroyStream(TypeSerializer):
     def __init__(self):
         pass
 
@@ -911,7 +910,7 @@ class _DestroyStream(TypeSerializer):
         raise NotImplementedError
 
 
-class _FeedStream(TypeSerializer):
+class FeedStream(TypeSerializer):
     def __init__(self):
         self.__array = _ArraySerializer()
         self.__array.set_type(_StringSerializer())
@@ -954,7 +953,7 @@ class _FeedStream(TypeSerializer):
         return (id, data, type)
 
 
-class _FeedStreamDone(TypeSerializer):
+class FeedStreamDone(TypeSerializer):
     def __init__(self):
         pass
 
@@ -971,7 +970,7 @@ class _FeedStreamDone(TypeSerializer):
         return None
 
 
-class _InterruptStream(TypeSerializer):
+class InterruptStream(TypeSerializer):
     def __init__(self):
         pass
 
@@ -990,7 +989,7 @@ class _InterruptStream(TypeSerializer):
         return (err, id)
 
 
-class _ButtonCallback(TypeSerializer):
+class ButtonCallback(TypeSerializer):
     def __init__(self):
         pass
 
@@ -1021,7 +1020,7 @@ class _ButtonCallback(TypeSerializer):
         return (content_id, state)
 
 
-class _DropdownCallback(TypeSerializer):
+class DropdownCallback(TypeSerializer):
     def __init__(self):
         pass
 
@@ -1042,7 +1041,7 @@ class _DropdownCallback(TypeSerializer):
         return id, item_index
 
 
-class _GetMenuTransform(TypeSerializer):
+class GetMenuTransform(TypeSerializer):
     def __init__(self):
         pass
 
@@ -1059,7 +1058,7 @@ class _GetMenuTransform(TypeSerializer):
         return None
 
 
-class _GetMenuTransformResponse(TypeSerializer):
+class GetMenuTransformResponse(TypeSerializer):
     def __init__(self):
         self.pos = _UnityPositionSerializer()
         self.rot = _UnityRotationSerializer()
@@ -1083,7 +1082,7 @@ class _GetMenuTransformResponse(TypeSerializer):
         return result
 
 
-class _ImageCallback(TypeSerializer):
+class ImageCallback(TypeSerializer):
     def __init__(self):
         pass
 
@@ -1112,7 +1111,7 @@ class _ImageCallback(TypeSerializer):
         return id, x, y
 
 
-class _MenuCallback(TypeSerializer):
+class MenuCallback(TypeSerializer):
     def __init__(self):
         pass
 
@@ -1136,7 +1135,7 @@ class _MenuCallback(TypeSerializer):
         return (index, value)
 
 
-class _SetMenuTransform(TypeSerializer):
+class SetMenuTransform(TypeSerializer):
     def __init__(self):
         self.pos = _UnityPositionSerializer()
         self.rot = _UnityRotationSerializer()
@@ -1158,7 +1157,7 @@ class _SetMenuTransform(TypeSerializer):
         return None
 
 
-class _SliderCallback(TypeSerializer):
+class SliderCallback(TypeSerializer):
     def version(self):
         return 1
 
@@ -1181,7 +1180,7 @@ class _SliderCallback(TypeSerializer):
         return result
 
 
-class _TextInputCallback(TypeSerializer):
+class TextInputCallback(TypeSerializer):
     def __init__(self):
         self.__tuple = _TupleSerializer(_IntSerializer(), _StringSerializer())
 
@@ -1205,7 +1204,7 @@ class _TextInputCallback(TypeSerializer):
         return tup
 
 
-class _UIHook(TypeSerializer):
+class UIHook(TypeSerializer):
     class Type(IntEnum):
         button_hover = 0
         image_pressed = 1
@@ -1229,7 +1228,7 @@ class _UIHook(TypeSerializer):
         raise NotImplementedError
 
 
-class _UpdateContent(TypeSerializer):
+class UpdateContent(TypeSerializer):
     def __init__(self):
         self._array = _ArraySerializer()
         self._content = _UIBaseSerializer()
@@ -1251,7 +1250,7 @@ class _UpdateContent(TypeSerializer):
         return None
 
 
-class _UpdateMenu(TypeSerializer):
+class UpdateMenu(TypeSerializer):
     def __init__(self):
         self.menu = _MenuSerializer()
         self.array = _ArraySerializer()
@@ -1286,7 +1285,7 @@ class _UpdateMenu(TypeSerializer):
         return None
 
 
-class _UpdateNode(TypeSerializer):
+class UpdateNode(TypeSerializer):
     def __init__(self):
         self._array = _ArraySerializer()
         self._node_serializer = _LayoutNodeSerializerDeep()
@@ -1308,7 +1307,7 @@ class _UpdateNode(TypeSerializer):
         return None
 
 
-class _GetControllerTransforms(TypeSerializer):
+class GetControllerTransforms(TypeSerializer):
     def __init__(self):
         pass
 
@@ -1325,7 +1324,7 @@ class _GetControllerTransforms(TypeSerializer):
         return None
 
 
-class _GetControllerTransformsResponse(TypeSerializer):
+class GetControllerTransformsResponse(TypeSerializer):
     def __init__(self):
         self.pos = _UnityPositionSerializer()
         self.rot = _UnityRotationSerializer()
@@ -1352,7 +1351,7 @@ class _GetControllerTransformsResponse(TypeSerializer):
         return result
 
 
-class _GetPresenterInfo(TypeSerializer):
+class GetPresenterInfo(TypeSerializer):
     def __init__(self):
         pass
 
@@ -1369,7 +1368,7 @@ class _GetPresenterInfo(TypeSerializer):
         return None
 
 
-class _GetPresenterInfoResponse(TypeSerializer):
+class GetPresenterInfoResponse(TypeSerializer):
     def __init__(self):
         self.string = _StringSerializer()
 
@@ -1397,7 +1396,7 @@ class _GetPresenterInfoResponse(TypeSerializer):
         return result
 
 
-class _PresenterChange(TypeSerializer):
+class PresenterChange(TypeSerializer):
     def __init__(self):
         pass
 
@@ -1414,7 +1413,7 @@ class _PresenterChange(TypeSerializer):
         return None
 
 
-class _AddVolume(TypeSerializer):
+class AddVolume(TypeSerializer):
     def __init__(self):
         self.__complex = _ComplexSerializer()
         atom_serializer = _AtomSerializer()
@@ -1445,7 +1444,7 @@ class _AddVolume(TypeSerializer):
         raise NotImplementedError
 
 
-class _AddVolumeDone(TypeSerializer):
+class AddVolumeDone(TypeSerializer):
     def __init__(self):
         pass
 
@@ -1462,7 +1461,7 @@ class _AddVolumeDone(TypeSerializer):
         return None
 
 
-class _AddBonds(TypeSerializer):
+class AddBonds(TypeSerializer):
     def __init__(self):
         self.__array = _ArraySerializer()
         self.__array.set_type(_ComplexSerializer())
@@ -1490,7 +1489,7 @@ class _AddBonds(TypeSerializer):
         return complexes
 
 
-class _AddDSSP(TypeSerializer):
+class AddDSSP(TypeSerializer):
     def __init__(self):
         self.__array = _ArraySerializer()
         self.__array.set_type(_ComplexSerializer())
@@ -1518,7 +1517,7 @@ class _AddDSSP(TypeSerializer):
         return complexes
 
 
-class _AddToWorkspace(TypeSerializer):
+class AddToWorkspace(TypeSerializer):
     def __init__(self):
         self.__array = _ArraySerializer()
         self.__array.set_type(_ComplexSerializer())
@@ -1546,7 +1545,7 @@ class _AddToWorkspace(TypeSerializer):
         return complexes
 
 
-class _ComplexAddedRemoved(TypeSerializer):
+class ComplexAddedRemoved(TypeSerializer):
     def __init__(self):
         pass
 
@@ -1563,7 +1562,7 @@ class _ComplexAddedRemoved(TypeSerializer):
         return None
 
 
-class _ComplexUpdated(TypeSerializer):
+class ComplexUpdated(TypeSerializer):
     def __init__(self):
         self.complex_serializer = _ComplexSerializer()
         atom_serializer = _AtomSerializer()
@@ -1592,7 +1591,7 @@ class _ComplexUpdated(TypeSerializer):
         return (index, complex)
 
 
-class _ComplexUpdatedHook(TypeSerializer):
+class ComplexUpdatedHook(TypeSerializer):
     def __init__(self):
         pass
 
@@ -1609,7 +1608,7 @@ class _ComplexUpdatedHook(TypeSerializer):
         raise NotImplementedError
 
 
-class _ComputeHBonds(TypeSerializer):
+class ComputeHBonds(TypeSerializer):
     def __init__(self):
         pass
 
@@ -1631,7 +1630,7 @@ class _ComputeHBonds(TypeSerializer):
 # deep
 
 
-class _PositionStructures(TypeSerializer):
+class PositionStructures(TypeSerializer):
     def __init__(self):
         pass
 
@@ -1665,7 +1664,7 @@ class _PositionStructures(TypeSerializer):
         return None
 
 
-class _PositionStructuresDone(TypeSerializer):
+class PositionStructuresDone(TypeSerializer):
     def __init__(self):
         pass
 
@@ -1685,7 +1684,7 @@ class _PositionStructuresDone(TypeSerializer):
 # shallow
 
 
-class _ReceiveComplexList(TypeSerializer):
+class ReceiveComplexList(TypeSerializer):
     def __init__(self):
         self.array_serializer = _ArraySerializer()
         self.array_serializer.set_type(_ComplexSerializer())
@@ -1708,7 +1707,7 @@ class _ReceiveComplexList(TypeSerializer):
 # deep
 
 
-class _ReceiveComplexes(TypeSerializer):
+class ReceiveComplexes(TypeSerializer):
     def __init__(self):
         self.array_serializer = _ArraySerializer()
         self.array_serializer.set_type(_ComplexSerializer())
@@ -1733,7 +1732,7 @@ class _ReceiveComplexes(TypeSerializer):
         return complexes
 
 
-class _ReceiveWorkspace(TypeSerializer):
+class ReceiveWorkspace(TypeSerializer):
     def __init__(self):
         self.workspace = _WorkspaceSerializer()
         atom_serializer = _AtomSerializer()
@@ -1756,7 +1755,7 @@ class _ReceiveWorkspace(TypeSerializer):
         return workspace
 
 
-class _RequestComplexList(TypeSerializer):
+class RequestComplexList(TypeSerializer):
     def __init__(self):
         pass
 
@@ -1773,7 +1772,7 @@ class _RequestComplexList(TypeSerializer):
         return None
 
 
-class _RequestComplexes(TypeSerializer):
+class RequestComplexes(TypeSerializer):
     def __init__(self):
         pass
 
@@ -1790,7 +1789,7 @@ class _RequestComplexes(TypeSerializer):
         return None
 
 
-class _RequestSubstructure(TypeSerializer):
+class RequestSubstructure(TypeSerializer):
     def __init__(self):
         self.array = _ArraySerializer()
         self.array.set_type(_SubstructureSerializer())
@@ -1823,7 +1822,7 @@ class _RequestSubstructure(TypeSerializer):
         return substructures
 
 
-class _RequestWorkspace(TypeSerializer):
+class RequestWorkspace(TypeSerializer):
     def __init__(self):
         pass
 
@@ -1840,7 +1839,7 @@ class _RequestWorkspace(TypeSerializer):
         return None
 
 
-class _SelectionChanged(TypeSerializer):
+class SelectionChanged(TypeSerializer):
     def __init__(self):
         self.complex_serializer = _ComplexSerializer()
         atom_serializer = _AtomSerializer()
@@ -1869,7 +1868,7 @@ class _SelectionChanged(TypeSerializer):
         return (index, complex)
 
 
-class _SelectionChangedHook(TypeSerializer):
+class SelectionChangedHook(TypeSerializer):
     def __init__(self):
         pass
 
@@ -1889,7 +1888,7 @@ class _SelectionChangedHook(TypeSerializer):
 # deep
 
 
-class _UpdateStructures(TypeSerializer):
+class UpdateStructures(TypeSerializer):
     def __init__(self, shallow):
         self.array_serializer = _ArraySerializer()
         # setting the shallow flag
@@ -1959,7 +1958,7 @@ class _UpdateStructures(TypeSerializer):
         return None
 
 
-class _UpdateStructuresDeepDone(TypeSerializer):
+class UpdateStructuresDeepDone(TypeSerializer):
     def __init__(self):
         pass
 
@@ -1976,7 +1975,7 @@ class _UpdateStructuresDeepDone(TypeSerializer):
         return None
 
 
-class _UpdateWorkspace(TypeSerializer):
+class UpdateWorkspace(TypeSerializer):
     def __init__(self):
         self.workspace = _WorkspaceSerializer()
         atom_serializer = _AtomSerializer()
