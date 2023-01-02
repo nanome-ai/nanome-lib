@@ -1,8 +1,8 @@
 from . import ContextSerialization, ContextDeserialization
-from ..commands import callbacks as CommandCallbacks
-from ..commands import serializers as CommandSerializers
+from ..commands import callbacks as callbacks
+from ..commands import serializers as command_serializers
 from nanome._internal.network import Data
-from nanome._internal.util import serializers as Serializers
+from nanome._internal.util.serializers import TypeSerializer
 from nanome.util import Logs
 import struct
 import traceback
@@ -17,10 +17,9 @@ class Serializer(object):
     _command_callbacks = dict()
 
     def serialize_message(self, request_id, message_type, arg, version_table, expects_response):
-        context = ContextSerialization(
-            self._plugin_id, version_table, packet_debugging)
+        context = ContextSerialization(self._plugin_id, version_table, packet_debugging)
         context.write_uint(request_id)
-        command_hash = CommandCallbacks.Hashes.MessageHashes[message_type]
+        command_hash = callbacks.Hashes.MessageHashes[message_type]
         context.write_uint(command_hash)
         if version_table is not None:
             if version_table.get(MESSAGE_VERSION_KEY, 0) >= 1:
@@ -75,7 +74,7 @@ class Serializer(object):
 
     def try_register_session(self, payload):
         command_hash = Data.uint_unpack(payload, 4)[0]
-        return command_hash == CommandCallbacks.Hashes.CommandHashes[CommandCallbacks.Commands.connect]
+        return command_hash == callbacks.Hashes.CommandHashes[commands_enum.connect]
 
     def __init__(self):
         self._plugin_id = 0
@@ -85,272 +84,271 @@ class Serializer(object):
 
 
 def add_command(command, serializer, callback):
-    Serializer._commands[CommandCallbacks.Hashes.CommandHashes[command]] = serializer
-    Serializer._command_callbacks[CommandCallbacks.Hashes.CommandHashes[command]] = callback
+    Serializer._commands[callbacks.Hashes.CommandHashes[command]] = serializer
+    Serializer._command_callbacks[callbacks.Hashes.CommandHashes[command]] = callback
 
-
+commands_enum = callbacks.Commands
+messages_enum = callbacks.Messages
 # control
-add_command(CommandCallbacks.Commands.connect,
-            CommandSerializers.Connect(), CommandCallbacks._connect)
-add_command(CommandCallbacks.Commands.run,
-            CommandSerializers.Run(), CommandCallbacks._run)
-add_command(CommandCallbacks.Commands.advanced_settings,
-            CommandSerializers.AdvancedSettings(), CommandCallbacks._advanced_settings)
+add_command(
+    commands_enum.connect,
+    command_serializers.Connect(),
+    callbacks._connect)
+add_command(commands_enum.run, command_serializers.Run(), callbacks._run)
+add_command(commands_enum.advanced_settings, command_serializers.AdvancedSettings(), callbacks._advanced_settings)
 
 # workspace
-add_command(CommandCallbacks.Commands.workspace_response,
-            CommandSerializers.ReceiveWorkspace(), CommandCallbacks._simple_callback_arg)
-add_command(CommandCallbacks.Commands.complex_add,
-            CommandSerializers.ComplexAddedRemoved(), CommandCallbacks._complex_added)
-add_command(CommandCallbacks.Commands.complex_remove,
-            CommandSerializers.ComplexAddedRemoved(), CommandCallbacks._complex_removed)
-add_command(CommandCallbacks.Commands.complex_list_response,
-            CommandSerializers.ReceiveComplexList(), CommandCallbacks._simple_callback_arg)
-add_command(CommandCallbacks.Commands.complexes_response,
-            CommandSerializers.ReceiveComplexes(), CommandCallbacks._receive_complexes)
-add_command(CommandCallbacks.Commands.structures_deep_update_done,
-            CommandSerializers.UpdateStructuresDeepDone(), CommandCallbacks._simple_callback_no_arg)
-add_command(CommandCallbacks.Commands.add_to_workspace_done,
-            CommandSerializers.AddToWorkspace(), CommandCallbacks._simple_callback_arg)
-add_command(CommandCallbacks.Commands.position_structures_done,
-            CommandSerializers.PositionStructuresDone(), CommandCallbacks._simple_callback_no_arg)
-add_command(CommandCallbacks.Commands.dssp_add_done,
-            CommandSerializers.AddDSSP(), CommandCallbacks._simple_callback_arg)
-add_command(CommandCallbacks.Commands.bonds_add_done,
-            CommandSerializers.AddBonds(), CommandCallbacks._simple_callback_arg)
-add_command(CommandCallbacks.Commands.complex_updated,
-            CommandSerializers.ComplexUpdated(), CommandCallbacks._complex_updated)
-add_command(CommandCallbacks.Commands.selection_changed,
-            CommandSerializers.SelectionChanged(), CommandCallbacks._selection_changed)
-add_command(CommandCallbacks.Commands.compute_hbonds_done,
-            CommandSerializers.ComputeHBonds(), CommandCallbacks._simple_callback_no_arg)
-add_command(CommandCallbacks.Commands.substructure_response,
-            CommandSerializers.RequestSubstructure(), CommandCallbacks._simple_callback_arg)
+add_command(commands_enum.workspace_response,
+            command_serializers.ReceiveWorkspace(), callbacks._simple_callback_arg)
+add_command(commands_enum.complex_add,
+            command_serializers.ComplexAddedRemoved(), callbacks._complex_added)
+add_command(commands_enum.complex_remove,
+            command_serializers.ComplexAddedRemoved(), callbacks._complex_removed)
+add_command(commands_enum.complex_list_response,
+            command_serializers.ReceiveComplexList(), callbacks._simple_callback_arg)
+add_command(commands_enum.complexes_response,
+            command_serializers.ReceiveComplexes(), callbacks._receive_complexes)
+add_command(commands_enum.structures_deep_update_done,
+            command_serializers.UpdateStructuresDeepDone(), callbacks._simple_callback_no_arg)
+add_command(commands_enum.add_to_workspace_done,
+            command_serializers.AddToWorkspace(), callbacks._simple_callback_arg)
+add_command(commands_enum.position_structures_done,
+            command_serializers.PositionStructuresDone(), callbacks._simple_callback_no_arg)
+add_command(commands_enum.dssp_add_done,
+            command_serializers.AddDSSP(), callbacks._simple_callback_arg)
+add_command(commands_enum.bonds_add_done,
+            command_serializers.AddBonds(), callbacks._simple_callback_arg)
+add_command(commands_enum.complex_updated,
+            command_serializers.ComplexUpdated(), callbacks._complex_updated)
+add_command(commands_enum.selection_changed,
+            command_serializers.SelectionChanged(), callbacks._selection_changed)
+add_command(commands_enum.compute_hbonds_done,
+            command_serializers.ComputeHBonds(), callbacks._simple_callback_no_arg)
+add_command(commands_enum.substructure_response,
+            command_serializers.RequestSubstructure(), callbacks._simple_callback_arg)
 
 # Volume
-add_command(CommandCallbacks.Commands.add_volume_done,
-            CommandSerializers.AddVolumeDone(), CommandCallbacks._simple_callback_no_arg)
+add_command(commands_enum.add_volume_done,
+            command_serializers.AddVolumeDone(), callbacks._simple_callback_no_arg)
 
 # ui
-add_command(CommandCallbacks.Commands.menu_toggle,
-            CommandSerializers.MenuCallback(), CommandCallbacks._menu_toggled)
-add_command(CommandCallbacks.Commands.button_press,
-            CommandSerializers.ButtonCallback(), CommandCallbacks._button_pressed)
-add_command(CommandCallbacks.Commands.button_hover,
-            CommandSerializers.ButtonCallback(), CommandCallbacks._button_hover)
-add_command(CommandCallbacks.Commands.slider_release,
-            CommandSerializers.SliderCallback(), CommandCallbacks._slider_released)
-add_command(CommandCallbacks.Commands.slider_change,
-            CommandSerializers.SliderCallback(), CommandCallbacks._slider_changed)
-add_command(CommandCallbacks.Commands.text_submit,
-            CommandSerializers.TextInputCallback(), CommandCallbacks._text_submit)
-add_command(CommandCallbacks.Commands.text_change,
-            CommandSerializers.TextInputCallback(), CommandCallbacks._text_changed)
-add_command(CommandCallbacks.Commands.image_press,
-            CommandSerializers.ImageCallback(), CommandCallbacks._image_pressed)
-add_command(CommandCallbacks.Commands.image_hold,
-            CommandSerializers.ImageCallback(), CommandCallbacks._image_held)
-add_command(CommandCallbacks.Commands.image_release,
-            CommandSerializers.ImageCallback(), CommandCallbacks._image_released)
-add_command(CommandCallbacks.Commands.dropdown_item_click,
-            CommandSerializers.DropdownCallback(), CommandCallbacks._dropdown_item_clicked)
-add_command(CommandCallbacks.Commands.menu_transform_response,
-            CommandSerializers.GetMenuTransformResponse(), CommandCallbacks._simple_callback_arg_unpack)
+add_command(commands_enum.menu_toggle,
+            command_serializers.MenuCallback(), callbacks._menu_toggled)
+add_command(commands_enum.button_press,
+            command_serializers.ButtonCallback(), callbacks._button_pressed)
+add_command(commands_enum.button_hover,
+            command_serializers.ButtonCallback(), callbacks._button_hover)
+add_command(commands_enum.slider_release,
+            command_serializers.SliderCallback(), callbacks._slider_released)
+add_command(commands_enum.slider_change,
+            command_serializers.SliderCallback(), callbacks._slider_changed)
+add_command(commands_enum.text_submit,
+            command_serializers.TextInputCallback(), callbacks._text_submit)
+add_command(commands_enum.text_change,
+            command_serializers.TextInputCallback(), callbacks._text_changed)
+add_command(commands_enum.image_press,
+            command_serializers.ImageCallback(), callbacks._image_pressed)
+add_command(commands_enum.image_hold,
+            command_serializers.ImageCallback(), callbacks._image_held)
+add_command(commands_enum.image_release,
+            command_serializers.ImageCallback(), callbacks._image_released)
+add_command(commands_enum.dropdown_item_click,
+            command_serializers.DropdownCallback(), callbacks._dropdown_item_clicked)
+add_command(commands_enum.menu_transform_response,
+            command_serializers.GetMenuTransformResponse(), callbacks._simple_callback_arg_unpack)
 
 # files
-add_command(CommandCallbacks.Commands.export_files_result,
-            CommandSerializers.ExportFiles(), CommandCallbacks._simple_callback_arg)
-add_command(CommandCallbacks.Commands.print_working_directory_response,
-            CommandSerializers.PWD(), CommandCallbacks._simple_callback_arg_unpack)
-add_command(CommandCallbacks.Commands.cd_response,
-            CommandSerializers.CD(), CommandCallbacks._simple_callback_arg)
-add_command(CommandCallbacks.Commands.ls_response, CommandSerializers.LS(
-), CommandCallbacks._simple_callback_arg_unpack)
-add_command(CommandCallbacks.Commands.mv_response,
-            CommandSerializers.MV(), CommandCallbacks._simple_callback_arg)
-add_command(CommandCallbacks.Commands.cp_response,
-            CommandSerializers.CP(), CommandCallbacks._simple_callback_arg)
-add_command(CommandCallbacks.Commands.get_response, CommandSerializers.Get(
-), CommandCallbacks._simple_callback_arg_unpack)
-add_command(CommandCallbacks.Commands.put_response,
-            CommandSerializers.Put(), CommandCallbacks._simple_callback_arg)
-add_command(CommandCallbacks.Commands.rm_response,
-            CommandSerializers.RM(), CommandCallbacks._simple_callback_arg)
-add_command(CommandCallbacks.Commands.rmdir_response,
-            CommandSerializers.RMDir(), CommandCallbacks._simple_callback_arg)
-add_command(CommandCallbacks.Commands.mkdir_response,
-            CommandSerializers.MKDir(), CommandCallbacks._simple_callback_arg)
+add_command(commands_enum.export_files_result,
+            command_serializers.ExportFiles(), callbacks._simple_callback_arg)
+add_command(commands_enum.print_working_directory_response,
+            command_serializers.PWD(), callbacks._simple_callback_arg_unpack)
+add_command(commands_enum.cd_response,
+            command_serializers.CD(), callbacks._simple_callback_arg)
+add_command(commands_enum.ls_response, command_serializers.LS(
+), callbacks._simple_callback_arg_unpack)
+add_command(commands_enum.mv_response,
+            command_serializers.MV(), callbacks._simple_callback_arg)
+add_command(commands_enum.cp_response,
+            command_serializers.CP(), callbacks._simple_callback_arg)
+add_command(commands_enum.get_response, command_serializers.Get(
+), callbacks._simple_callback_arg_unpack)
+add_command(commands_enum.put_response,
+            command_serializers.Put(), callbacks._simple_callback_arg)
+add_command(commands_enum.rm_response,
+            command_serializers.RM(), callbacks._simple_callback_arg)
+add_command(commands_enum.rmdir_response,
+            command_serializers.RMDir(), callbacks._simple_callback_arg)
+add_command(commands_enum.mkdir_response,
+            command_serializers.MKDir(), callbacks._simple_callback_arg)
 
 # streams
-add_command(CommandCallbacks.Commands.stream_create_done,
-            CommandSerializers.CreateStreamResult(), CommandCallbacks._receive_create_stream_result)
-add_command(CommandCallbacks.Commands.stream_feed,
-            CommandSerializers.FeedStream(), CommandCallbacks._feed_stream)
-add_command(CommandCallbacks.Commands.stream_interrupt,
-            CommandSerializers.InterruptStream(), CommandCallbacks._receive_interrupt_stream)
-add_command(CommandCallbacks.Commands.stream_feed_done,
-            CommandSerializers.FeedStreamDone(), CommandCallbacks._simple_callback_no_arg)
+add_command(commands_enum.stream_create_done,
+            command_serializers.CreateStreamResult(), callbacks._receive_create_stream_result)
+add_command(commands_enum.stream_feed,
+            command_serializers.FeedStream(), callbacks._feed_stream)
+add_command(commands_enum.stream_interrupt,
+            command_serializers.InterruptStream(), callbacks._receive_interrupt_stream)
+add_command(commands_enum.stream_feed_done,
+            command_serializers.FeedStreamDone(), callbacks._simple_callback_no_arg)
 
 # macros
-add_command(CommandCallbacks.Commands.get_macros_response,
-            CommandSerializers.GetMacrosResponse(), CommandCallbacks._simple_callback_arg)
-add_command(CommandCallbacks.Commands.run_macro_result,
-            CommandSerializers.RunMacro(), CommandCallbacks._simple_callback_arg)
+add_command(commands_enum.get_macros_response,
+            command_serializers.GetMacrosResponse(), callbacks._simple_callback_arg)
+add_command(commands_enum.run_macro_result,
+            command_serializers.RunMacro(), callbacks._simple_callback_arg)
 
 # Presenter
-add_command(CommandCallbacks.Commands.presenter_info_response,
-            CommandSerializers.GetPresenterInfoResponse(), CommandCallbacks._simple_callback_arg)
-add_command(CommandCallbacks.Commands.presenter_change,
-            CommandSerializers.PresenterChange(), CommandCallbacks._presenter_change)
-add_command(CommandCallbacks.Commands.controller_transforms_response,
-            CommandSerializers.GetControllerTransformsResponse(), CommandCallbacks._simple_callback_arg_unpack)
+add_command(commands_enum.presenter_info_response,
+            command_serializers.GetPresenterInfoResponse(), callbacks._simple_callback_arg)
+add_command(commands_enum.presenter_change,
+            command_serializers.PresenterChange(), callbacks._presenter_change)
+add_command(commands_enum.controller_transforms_response,
+            command_serializers.GetControllerTransformsResponse(), callbacks._simple_callback_arg_unpack)
 
 # Shape
-add_command(CommandCallbacks.Commands.set_shape_result,
-            CommandSerializers.SetShape(), CommandCallbacks._simple_callback_arg_unpack)
-add_command(CommandCallbacks.Commands.delete_shape_result,
-            CommandSerializers.DeleteShape(), CommandCallbacks._simple_callback_arg)
+add_command(commands_enum.set_shape_result,
+            command_serializers.SetShape(), callbacks._simple_callback_arg_unpack)
+add_command(commands_enum.delete_shape_result,
+            command_serializers.DeleteShape(), callbacks._simple_callback_arg)
 
 # others
-add_command(CommandCallbacks.Commands.load_file_done,
-            CommandSerializers.LoadFileDone(), CommandCallbacks._simple_callback_arg)
-add_command(CommandCallbacks.Commands.integration,
-            CommandSerializers.Integration(), CommandCallbacks._integration)
+add_command(commands_enum.load_file_done,
+            command_serializers.LoadFileDone(), callbacks._simple_callback_arg)
+add_command(commands_enum.integration,
+            command_serializers.Integration(), callbacks._integration)
 
 # -------------Messages----------- #
 # Messages are outgoing (plugin -> nanome)
 
 
 def add_message(command, serializer):
-    Serializer._messages[CommandCallbacks.Hashes.MessageHashes[command]] = serializer
+    Serializer._messages[callbacks.Hashes.MessageHashes[command]] = serializer
 
-
-Serializers.type_serializer.TypeSerializer.register_string_raw(
-    MESSAGE_VERSION_KEY, 1)
+TypeSerializer.register_string_raw(MESSAGE_VERSION_KEY, 1)
 # control
-add_message(CommandCallbacks.Messages.connect, CommandSerializers.Connect())
+add_message(callbacks.Messages.connect, command_serializers.Connect())
 
 # workspace
-add_message(CommandCallbacks.Messages.workspace_update,
-            CommandSerializers.UpdateWorkspace())
-add_message(CommandCallbacks.Messages.structures_deep_update,
-            CommandSerializers.UpdateStructures(False))
-add_message(CommandCallbacks.Messages.structures_shallow_update,
-            CommandSerializers.UpdateStructures(True))
-add_message(CommandCallbacks.Messages.workspace_request,
-            CommandSerializers.RequestWorkspace())
-add_message(CommandCallbacks.Messages.complex_list_request,
-            CommandSerializers.RequestComplexList())
-add_message(CommandCallbacks.Messages.add_to_workspace,
-            CommandSerializers.AddToWorkspace())
-add_message(CommandCallbacks.Messages.complexes_request,
-            CommandSerializers.RequestComplexes())
-add_message(CommandCallbacks.Messages.bonds_add,
-            CommandSerializers.AddBonds())
-add_message(CommandCallbacks.Messages.dssp_add, CommandSerializers.AddDSSP())
-add_message(CommandCallbacks.Messages.structures_zoom,
-            CommandSerializers.PositionStructures())
-add_message(CommandCallbacks.Messages.structures_center,
-            CommandSerializers.PositionStructures())
-add_message(CommandCallbacks.Messages.hook_complex_updated,
-            CommandSerializers.ComplexUpdatedHook())
-add_message(CommandCallbacks.Messages.hook_selection_changed,
-            CommandSerializers.SelectionChangedHook())
-add_message(CommandCallbacks.Messages.compute_hbonds,
-            CommandSerializers.ComputeHBonds())
-add_message(CommandCallbacks.Messages.substructure_request,
-            CommandSerializers.RequestSubstructure())
+add_message(callbacks.Messages.workspace_update,
+            command_serializers.UpdateWorkspace())
+add_message(callbacks.Messages.structures_deep_update,
+            command_serializers.UpdateStructures(False))
+add_message(callbacks.Messages.structures_shallow_update,
+            command_serializers.UpdateStructures(True))
+add_message(callbacks.Messages.workspace_request,
+            command_serializers.RequestWorkspace())
+add_message(callbacks.Messages.complex_list_request,
+            command_serializers.RequestComplexList())
+add_message(callbacks.Messages.add_to_workspace,
+            command_serializers.AddToWorkspace())
+add_message(callbacks.Messages.complexes_request,
+            command_serializers.RequestComplexes())
+add_message(callbacks.Messages.bonds_add,
+            command_serializers.AddBonds())
+add_message(callbacks.Messages.dssp_add, command_serializers.AddDSSP())
+add_message(callbacks.Messages.structures_zoom,
+            command_serializers.PositionStructures())
+add_message(callbacks.Messages.structures_center,
+            command_serializers.PositionStructures())
+add_message(callbacks.Messages.hook_complex_updated,
+            command_serializers.ComplexUpdatedHook())
+add_message(callbacks.Messages.hook_selection_changed,
+            command_serializers.SelectionChangedHook())
+add_message(callbacks.Messages.compute_hbonds,
+            command_serializers.ComputeHBonds())
+add_message(callbacks.Messages.substructure_request,
+            command_serializers.RequestSubstructure())
 
 # volume
-add_message(CommandCallbacks.Messages.add_volume,
-            CommandSerializers.AddVolume())
+add_message(callbacks.Messages.add_volume,
+            command_serializers.AddVolume())
 
 # ui
-add_message(CommandCallbacks.Messages.menu_update,
-            CommandSerializers.UpdateMenu())
-add_message(CommandCallbacks.Messages.content_update,
-            CommandSerializers.UpdateContent())
-add_message(CommandCallbacks.Messages.node_update,
-            CommandSerializers.UpdateNode())
-add_message(CommandCallbacks.Messages.menu_transform_set,
-            CommandSerializers.SetMenuTransform())
-add_message(CommandCallbacks.Messages.menu_transform_request,
-            CommandSerializers.GetMenuTransform())
-add_message(CommandCallbacks.Messages.notification_send,
-            CommandSerializers.SendNotification())
-add_message(CommandCallbacks.Messages.hook_ui_callback,
-            CommandSerializers.UIHook())
+add_message(callbacks.Messages.menu_update,
+            command_serializers.UpdateMenu())
+add_message(callbacks.Messages.content_update,
+            command_serializers.UpdateContent())
+add_message(callbacks.Messages.node_update,
+            command_serializers.UpdateNode())
+add_message(callbacks.Messages.menu_transform_set,
+            command_serializers.SetMenuTransform())
+add_message(callbacks.Messages.menu_transform_request,
+            command_serializers.GetMenuTransform())
+add_message(callbacks.Messages.notification_send,
+            command_serializers.SendNotification())
+add_message(callbacks.Messages.hook_ui_callback,
+            command_serializers.UIHook())
 
 # files
-add_message(CommandCallbacks.Messages.print_working_directory,
-            CommandSerializers.PWD())
-add_message(CommandCallbacks.Messages.cd, CommandSerializers.CD())
-add_message(CommandCallbacks.Messages.ls, CommandSerializers.LS())
-add_message(CommandCallbacks.Messages.mv, CommandSerializers.MV())
-add_message(CommandCallbacks.Messages.cp, CommandSerializers.CP())
-add_message(CommandCallbacks.Messages.get, CommandSerializers.Get())
-add_message(CommandCallbacks.Messages.put, CommandSerializers.Put())
-add_message(CommandCallbacks.Messages.rm, CommandSerializers.RM())
-add_message(CommandCallbacks.Messages.rmdir, CommandSerializers.RMDir())
-add_message(CommandCallbacks.Messages.mkdir, CommandSerializers.MKDir())
+add_message(callbacks.Messages.print_working_directory,
+            command_serializers.PWD())
+add_message(callbacks.Messages.cd, command_serializers.CD())
+add_message(callbacks.Messages.ls, command_serializers.LS())
+add_message(callbacks.Messages.mv, command_serializers.MV())
+add_message(callbacks.Messages.cp, command_serializers.CP())
+add_message(callbacks.Messages.get, command_serializers.Get())
+add_message(callbacks.Messages.put, command_serializers.Put())
+add_message(callbacks.Messages.rm, command_serializers.RM())
+add_message(callbacks.Messages.rmdir, command_serializers.RMDir())
+add_message(callbacks.Messages.mkdir, command_serializers.MKDir())
 
 # macros
-add_message(CommandCallbacks.Messages.run_macro,
-            CommandSerializers.RunMacro())
-add_message(CommandCallbacks.Messages.save_macro,
-            CommandSerializers.SaveMacro())
-add_message(CommandCallbacks.Messages.delete_macro,
-            CommandSerializers.DeleteMacro())
-add_message(CommandCallbacks.Messages.get_macros,
-            CommandSerializers.GetMacros())
-add_message(CommandCallbacks.Messages.stop_macro,
-            CommandSerializers.StopMacro())
+add_message(callbacks.Messages.run_macro,
+            command_serializers.RunMacro())
+add_message(callbacks.Messages.save_macro,
+            command_serializers.SaveMacro())
+add_message(callbacks.Messages.delete_macro,
+            command_serializers.DeleteMacro())
+add_message(callbacks.Messages.get_macros,
+            command_serializers.GetMacros())
+add_message(callbacks.Messages.stop_macro,
+            command_serializers.StopMacro())
 
 # streams
-add_message(CommandCallbacks.Messages.stream_create,
-            CommandSerializers.CreateStream())
-add_message(CommandCallbacks.Messages.stream_feed,
-            CommandSerializers.FeedStream())
-add_message(CommandCallbacks.Messages.stream_destroy,
-            CommandSerializers.DestroyStream())
+add_message(callbacks.Messages.stream_create,
+            command_serializers.CreateStream())
+add_message(callbacks.Messages.stream_feed,
+            command_serializers.FeedStream())
+add_message(callbacks.Messages.stream_destroy,
+            command_serializers.DestroyStream())
 
 # Presenter
-add_message(CommandCallbacks.Messages.presenter_info_request,
-            CommandSerializers.GetPresenterInfo())
-add_message(CommandCallbacks.Messages.controller_transforms_request,
-            CommandSerializers.GetControllerTransforms())
+add_message(callbacks.Messages.presenter_info_request,
+            command_serializers.GetPresenterInfo())
+add_message(callbacks.Messages.controller_transforms_request,
+            command_serializers.GetControllerTransforms())
 
 # Shape
-add_message(CommandCallbacks.Messages.set_shape,
-            CommandSerializers.SetShape())
-add_message(CommandCallbacks.Messages.delete_shape,
-            CommandSerializers.DeleteShape())
+add_message(callbacks.Messages.set_shape,
+            command_serializers.SetShape())
+add_message(callbacks.Messages.delete_shape,
+            command_serializers.DeleteShape())
 
 # others
-add_message(CommandCallbacks.Messages.open_url, CommandSerializers.OpenURL())
-add_message(CommandCallbacks.Messages.load_file,
-            CommandSerializers.LoadFile())
-add_message(CommandCallbacks.Messages.integration,
-            CommandSerializers.Integration())
-add_message(CommandCallbacks.Messages.set_skybox,
-            CommandSerializers.SetSkybox())
-add_message(CommandCallbacks.Messages.apply_color_scheme,
-            CommandSerializers.ApplyColorScheme())
+add_message(callbacks.Messages.open_url, command_serializers.OpenURL())
+add_message(callbacks.Messages.load_file,
+            command_serializers.LoadFile())
+add_message(callbacks.Messages.integration,
+            command_serializers.Integration())
+add_message(callbacks.Messages.set_skybox,
+            command_serializers.SetSkybox())
+add_message(callbacks.Messages.apply_color_scheme,
+            command_serializers.ApplyColorScheme())
 
 # files deprecated
-add_message(CommandCallbacks.Messages.directory_request,
-            CommandSerializers.DirectoryRequest())
-add_message(CommandCallbacks.Messages.file_request,
-            CommandSerializers.FileRequest())
-add_message(CommandCallbacks.Messages.file_save,
-            CommandSerializers.FileSave())
-add_message(CommandCallbacks.Messages.export_files,
-            CommandSerializers.ExportFiles())
-add_message(CommandCallbacks.Messages.plugin_list_button_set,
-            CommandSerializers.SetPluginListButton())
-add_command(CommandCallbacks.Commands.directory_response,
-            CommandSerializers.DirectoryRequest(), CommandCallbacks._simple_callback_arg)
-add_command(CommandCallbacks.Commands.file_response,
-            CommandSerializers.FileRequest(), CommandCallbacks._simple_callback_arg)
-add_command(CommandCallbacks.Commands.file_save_done,
-            CommandSerializers.FileSave(), CommandCallbacks._simple_callback_arg)
+add_message(callbacks.Messages.directory_request,
+            command_serializers.DirectoryRequest())
+add_message(callbacks.Messages.file_request,
+            command_serializers.FileRequest())
+add_message(callbacks.Messages.file_save,
+            command_serializers.FileSave())
+add_message(callbacks.Messages.export_files,
+            command_serializers.ExportFiles())
+add_message(callbacks.Messages.plugin_list_button_set,
+            command_serializers.SetPluginListButton())
+add_command(commands_enum.directory_response,
+            command_serializers.DirectoryRequest(), callbacks._simple_callback_arg)
+add_command(commands_enum.file_response,
+            command_serializers.FileRequest(), callbacks._simple_callback_arg)
+add_command(commands_enum.file_save_done,
+            command_serializers.FileSave(), callbacks._simple_callback_arg)

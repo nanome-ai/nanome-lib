@@ -6,17 +6,13 @@ from nanome._internal.macro.serialization import _MacroSerializer
 from nanome._internal.network.commands.callbacks import Hashes, Integrations
 from nanome._internal.shapes.serialization import _SphereSerializer, _ShapeSerializer, _LineSerializer, _LabelSerializer, _MeshSerializer
 from nanome._internal.structure import _Atom, _Bond, _Residue, _Chain, _Molecule, _Complex, _Base
-from nanome._internal.structure.serialization import _ComplexSerializer, _MoleculeSerializer, _ChainSerializer, _ResidueSerializer, _BondSerializer, _AtomSerializer, _AtomSerializerID
-from nanome._internal.structure.serialization import _SubstructureSerializer, _AtomSerializer, _MoleculeSerializer
-from nanome._internal.structure.serialization import _WorkspaceSerializer, _AtomSerializer
+from nanome._internal.structure.serialization import _ComplexSerializer, _MoleculeSerializer, _ChainSerializer, _ResidueSerializer, _BondSerializer, _AtomSerializer, _AtomSerializerID, _SubstructureSerializer, _AtomSerializer, _MoleculeSerializer, _WorkspaceSerializer
 from nanome._internal.ui._serialization import _LayoutNodeSerializer, _UIBaseSerializer, _MenuSerializer, _LayoutNodeSerializerDeep
 from nanome._internal.util.serializers import (
-    _ArraySerializer, _DictionarySerializer, _LongSerializer, TypeSerializer,
+    _ArraySerializer, _LongSerializer, TypeSerializer,
     _DictionarySerializer, _LongSerializer, _TupleSerializer, _IntSerializer,
-    _UnityPositionSerializer, _UnityRotationSerializer, _Vector3Serializer,
-    _ColorSerializer, _DirectoryEntrySerializer, _FileDataSerializer, _FileSaveDataSerializer)
-
-from nanome._internal.util.serializers import TypeSerializer, _DictionarySerializer, _StringSerializer, _ByteSerializer
+    _UnityPositionSerializer, _UnityRotationSerializer, _Vector3Serializer, _StringSerializer,
+    _ColorSerializer, _DirectoryEntrySerializer, _FileDataSerializer, _FileSaveDataSerializer, _ByteSerializer)
 from nanome._internal.volumetric.serialization import _VolumeDataSerializer, _VolumePropertiesSerializer
 from nanome.util import DirectoryRequestResult, DirectoryErrorCode, FileError, IntEnum, Quaternion, Logs
 from nanome.util.enums import LoadFileErrorCode, ShapeType,StreamDataType, StreamDirection,StreamType as SType
