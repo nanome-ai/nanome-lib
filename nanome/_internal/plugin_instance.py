@@ -144,6 +144,7 @@ class _PluginInstance(object):
             self._network._close()
             return
         except Exception as e:
+            from nanome.util import Logs
             text = ' '.join(map(str, e.args))
             msg = "Uncaught " + type(e).__name__ + ": " + text
             Logs.error(msg)

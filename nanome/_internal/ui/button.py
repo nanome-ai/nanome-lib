@@ -53,12 +53,14 @@ class _Button(_UIBase):
         self._pressed_callback = func
 
     def _register_hover_callback(self, func):
+        message_callbacks = nanome._internal.network.commands.callbacks.Messages
+        command_serializers = nanome._internal.network.commands.serialization
         if func == None and self._hover_callback == None:  # Low hanging filter but there may be others
             return
         try:
-            nanome._internal._network.PluginNetwork._instance._send(
-                nanome._internal._network._commands._callbacks.Messages.hook_ui_callback,
-                (nanome._internal._network._commands._serialization._UIHook.Type.button_hover, self._content_id),
+            nanome._internal.network.PluginNetwork._instance._send(
+                message_callbacks.hook_ui_callback,
+                (command_serializers._UIHook.Type.button_hover, self._content_id),
                 False)
         except:
             nanome.util.Logs.error("Could not register hook")
