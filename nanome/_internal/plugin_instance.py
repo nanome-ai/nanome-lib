@@ -12,7 +12,7 @@ from timeit import default_timer as timer
 
 try:
     import asyncio
-    from ._plugin_instance_async import async_update_loop
+    from .plugin_instance_async import async_update_loop
 except ImportError:
     asyncio = False
 
