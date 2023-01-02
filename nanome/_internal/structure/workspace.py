@@ -1,6 +1,5 @@
-from nanome.util import Vector3, Quaternion, Logs
 from . import _Base
-
+from nanome._internal.util.decorators import deprecated
 
 class _Workspace(_Base):
 
@@ -9,6 +8,7 @@ class _Workspace(_Base):
         return cls()
 
     def __init__(self):
+        from nanome.util import Vector3, Quaternion, Logs
         self._position = Vector3()
         self._rotation = Quaternion()
         self._scale = Vector3(0.02, 0.02, 0.02)
@@ -23,7 +23,7 @@ class _Workspace(_Base):
             self._complexes.remove(complex)
             complex._parent = None
 
-    @Logs.deprecated()
+    @deprecated()
     def get_atom_iterator(self):
         iterator = _Workspace.AtomIterator(self)
         return iter(iterator)

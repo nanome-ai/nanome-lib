@@ -1,8 +1,5 @@
 from .. import _Substructure
 from nanome._internal.util.type_serializers import TypeSerializer, StringSerializer, ArraySerializer, LongSerializer
-from nanome.util import Logs
-from nanome.util.enums import SubstructureType
-
 
 class _SubstructureSerializer(TypeSerializer):
     def __init__(self):
@@ -23,6 +20,7 @@ class _SubstructureSerializer(TypeSerializer):
         context.write_byte(int(value._structure_type))
 
     def deserialize(self, version, context):
+        from nanome.util.enums import SubstructureType
         result = _Substructure._create()
         result._name = context.read_using_serializer(self.string)
         result._residues = context.read_using_serializer(self.array)

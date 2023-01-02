@@ -1,14 +1,24 @@
 from . import _UIBase
-from nanome.util import Vector3, Color
 import nanome
 from copy import deepcopy
 
 
 class _Button(_UIBase):
 
-    HorizAlignOptions = nanome.util.enums.HorizAlignOptions
-    VertAlignOptions = nanome.util.enums.VertAlignOptions
-    ToolTipPositioning = nanome.util.enums.ToolTipPositioning
+    @property
+    def HorizAlignOptions(self):
+        from nanome.util import enums
+        return enums.HorizAlignOptions
+
+    @property
+    def VertAlignOptions(self):
+        from nanome.util import enums
+        return enums.VertAlignOptions
+
+    @property
+    def ToolTipPositioning(self):
+        from nanome.util import enums
+        return enums.ToolTipPositioning
 
     @classmethod
     def _create(cls):
@@ -60,6 +70,7 @@ class _Button(_UIBase):
             return cls()
 
         def __init__(self):
+            from nanome.util import Color, enums
             self._active = True
             self._value = _Button._MultiStateVariable._create("text")
             self._auto_size = True
@@ -75,8 +86,8 @@ class _Button(_UIBase):
             self._padding_left = 0.0
             self._padding_right = 0.0
             self._line_spacing = 0.0
-            self._vertical_align = _Button.VertAlignOptions.Middle
-            self._horizontal_align = _Button.HorizAlignOptions.Middle
+            self._vertical_align = enums.VertAlignOptions.Middle
+            self._horizontal_align = enums.HorizAlignOptions.Middle
 
     class _ButtonIcon(object):
         @classmethod
@@ -84,6 +95,7 @@ class _Button(_UIBase):
             return cls()
 
         def __init__(self):
+            from nanome.util import Vector3, Color
             self._active = False
             self._value = _Button._MultiStateVariable._create("")
             self._color = _Button._MultiStateVariable._create(Color.White())
@@ -99,6 +111,7 @@ class _Button(_UIBase):
             return cls()
 
         def __init__(self):
+            from nanome.util import Color
             self._active = False
             self._enabled = _Button._MultiStateVariable._create(True)
             self._color = _Button._MultiStateVariable._create(Color.Black())
@@ -109,6 +122,7 @@ class _Button(_UIBase):
             return cls()
 
         def __init__(self):
+            from nanome.util import Color
             self._active = True
             self._size = _Button._MultiStateVariable._create(.3)
             self._color = _Button._MultiStateVariable._create()
@@ -124,6 +138,7 @@ class _Button(_UIBase):
             return cls()
 
         def __init__(self):
+            from nanome.util import Color
             self._active = False
             self._on_color = Color.from_int(0x00FFD5FF)
             self._off_color = Color.from_int(0x727272FF)
@@ -134,11 +149,12 @@ class _Button(_UIBase):
             return cls()
 
         def __init__(self):
+            from nanome.util import Vector3, enums
             self._title = ""
             self._content = ""
             self._bounds = Vector3(1.73, .6, .05)
-            self._positioning_target = _Button.ToolTipPositioning.right
-            self._positioning_origin = _Button.ToolTipPositioning.top_left
+            self._positioning_target = enums.ToolTipPositioning.right
+            self._positioning_origin = enums.ToolTipPositioning.top_left
 
     def _copy_values_deep(self, other):
         super(_Button, self)._copy_values_deep(other)

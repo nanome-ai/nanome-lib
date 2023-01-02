@@ -1,9 +1,9 @@
 from . import ContextSerialization, ContextDeserialization
-from ..commands import callbacks as callbacks
+from ..commands import callbacks
 from ..commands import serializers as command_serializers
+from ..commands import enums as command_enums
 from nanome._internal.network import Data
 from nanome._internal.util.type_serializers import TypeSerializer
-from nanome.util import Logs
 import struct
 import traceback
 
@@ -14,12 +14,16 @@ packet_debugging = False
 class Serializer(object):
     _commands = dict()
     _messages = dict()
+    command_enums = dict()
     _command_callbacks = dict()
+
+    def __init__(self):
+        self._plugin_id = 0
 
     def serialize_message(self, request_id, message_type, arg, version_table, expects_response):
         context = ContextSerialization(self._plugin_id, version_table, packet_debugging)
         context.write_uint(request_id)
-        command_hash = callbacks.Hashes.MessageHashes[message_type]
+        command_hash = command_enums.Hashes.MessageHashes[message_type]
         context.write_uint(command_hash)
         if version_table is not None:
             if version_table.get(MESSAGE_VERSION_KEY, 0) >= 1:
@@ -30,6 +34,7 @@ class Serializer(object):
             try:
                 command = Serializer._messages[command_hash]
             except KeyError:
+                from nanome.util import Logs
                 Logs.warning(
                     "Trying to serialize an unregistered message type:", message_type)
             if command is not None:
@@ -38,6 +43,7 @@ class Serializer(object):
         return context.to_array()
 
     def deserialize_command(self, payload, version_table):
+        from nanome.util import Logs
         context = ContextDeserialization(
             payload, version_table, packet_debugging)
         try:
@@ -74,21 +80,18 @@ class Serializer(object):
 
     def try_register_session(self, payload):
         command_hash = Data.uint_unpack(payload, 4)[0]
-        return command_hash == callbacks.Hashes.CommandHashes[commands_enum.connect]
+        return command_hash == command_enums.Hashes.CommandHashes[commands_enum.connect]
 
-    def __init__(self):
-        self._plugin_id = 0
 
 # -------------Commands----------- #
 # Commands are incoming (nanome -> plugin)
 
-
 def add_command(command, serializer, callback):
-    Serializer._commands[callbacks.Hashes.CommandHashes[command]] = serializer
-    Serializer._command_callbacks[callbacks.Hashes.CommandHashes[command]] = callback
+    Serializer._commands[command_enums.Hashes.CommandHashes[command]] = serializer
+    Serializer._command_callbacks[command_enums.Hashes.CommandHashes[command]] = callback
 
-commands_enum = callbacks.Commands
-messages_enum = callbacks.Messages
+commands_enum = command_enums.Commands
+messages_enum = command_enums.Messages
 # control
 add_command(
     commands_enum.connect,
@@ -226,125 +229,125 @@ def add_message(command, serializer):
 
 TypeSerializer.register_string_raw(MESSAGE_VERSION_KEY, 1)
 # control
-add_message(callbacks.Messages.connect, command_serializers.Connect())
+add_message(messages_enum.connect, command_serializers.Connect())
 
 # workspace
-add_message(callbacks.Messages.workspace_update,
+add_message(messages_enum.workspace_update,
             command_serializers.UpdateWorkspace())
-add_message(callbacks.Messages.structures_deep_update,
+add_message(messages_enum.structures_deep_update,
             command_serializers.UpdateStructures(False))
-add_message(callbacks.Messages.structures_shallow_update,
+add_message(messages_enum.structures_shallow_update,
             command_serializers.UpdateStructures(True))
-add_message(callbacks.Messages.workspace_request,
+add_message(messages_enum.workspace_request,
             command_serializers.RequestWorkspace())
-add_message(callbacks.Messages.complex_list_request,
+add_message(messages_enum.complex_list_request,
             command_serializers.RequestComplexList())
-add_message(callbacks.Messages.add_to_workspace,
+add_message(messages_enum.add_to_workspace,
             command_serializers.AddToWorkspace())
-add_message(callbacks.Messages.complexes_request,
+add_message(messages_enum.complexes_request,
             command_serializers.RequestComplexes())
-add_message(callbacks.Messages.bonds_add,
+add_message(messages_enum.bonds_add,
             command_serializers.AddBonds())
-add_message(callbacks.Messages.dssp_add, command_serializers.AddDSSP())
-add_message(callbacks.Messages.structures_zoom,
+add_message(messages_enum.dssp_add, command_serializers.AddDSSP())
+add_message(messages_enum.structures_zoom,
             command_serializers.PositionStructures())
-add_message(callbacks.Messages.structures_center,
+add_message(messages_enum.structures_center,
             command_serializers.PositionStructures())
-add_message(callbacks.Messages.hook_complex_updated,
+add_message(messages_enum.hook_complex_updated,
             command_serializers.ComplexUpdatedHook())
-add_message(callbacks.Messages.hook_selection_changed,
+add_message(messages_enum.hook_selection_changed,
             command_serializers.SelectionChangedHook())
-add_message(callbacks.Messages.compute_hbonds,
+add_message(messages_enum.compute_hbonds,
             command_serializers.ComputeHBonds())
-add_message(callbacks.Messages.substructure_request,
+add_message(messages_enum.substructure_request,
             command_serializers.RequestSubstructure())
 
 # volume
-add_message(callbacks.Messages.add_volume,
+add_message(messages_enum.add_volume,
             command_serializers.AddVolume())
 
 # ui
-add_message(callbacks.Messages.menu_update,
+add_message(messages_enum.menu_update,
             command_serializers.UpdateMenu())
-add_message(callbacks.Messages.content_update,
+add_message(messages_enum.content_update,
             command_serializers.UpdateContent())
-add_message(callbacks.Messages.node_update,
+add_message(messages_enum.node_update,
             command_serializers.UpdateNode())
-add_message(callbacks.Messages.menu_transform_set,
+add_message(messages_enum.menu_transform_set,
             command_serializers.SetMenuTransform())
-add_message(callbacks.Messages.menu_transform_request,
+add_message(messages_enum.menu_transform_request,
             command_serializers.GetMenuTransform())
-add_message(callbacks.Messages.notification_send,
+add_message(messages_enum.notification_send,
             command_serializers.SendNotification())
-add_message(callbacks.Messages.hook_ui_callback,
+add_message(messages_enum.hook_ui_callback,
             command_serializers.UIHook())
 
 # files
-add_message(callbacks.Messages.print_working_directory,
+add_message(messages_enum.print_working_directory,
             command_serializers.PWD())
-add_message(callbacks.Messages.cd, command_serializers.CD())
-add_message(callbacks.Messages.ls, command_serializers.LS())
-add_message(callbacks.Messages.mv, command_serializers.MV())
-add_message(callbacks.Messages.cp, command_serializers.CP())
-add_message(callbacks.Messages.get, command_serializers.Get())
-add_message(callbacks.Messages.put, command_serializers.Put())
-add_message(callbacks.Messages.rm, command_serializers.RM())
-add_message(callbacks.Messages.rmdir, command_serializers.RMDir())
-add_message(callbacks.Messages.mkdir, command_serializers.MKDir())
+add_message(messages_enum.cd, command_serializers.CD())
+add_message(messages_enum.ls, command_serializers.LS())
+add_message(messages_enum.mv, command_serializers.MV())
+add_message(messages_enum.cp, command_serializers.CP())
+add_message(messages_enum.get, command_serializers.Get())
+add_message(messages_enum.put, command_serializers.Put())
+add_message(messages_enum.rm, command_serializers.RM())
+add_message(messages_enum.rmdir, command_serializers.RMDir())
+add_message(messages_enum.mkdir, command_serializers.MKDir())
 
 # macros
-add_message(callbacks.Messages.run_macro,
+add_message(messages_enum.run_macro,
             command_serializers.RunMacro())
-add_message(callbacks.Messages.save_macro,
+add_message(messages_enum.save_macro,
             command_serializers.SaveMacro())
-add_message(callbacks.Messages.delete_macro,
+add_message(messages_enum.delete_macro,
             command_serializers.DeleteMacro())
-add_message(callbacks.Messages.get_macros,
+add_message(messages_enum.get_macros,
             command_serializers.GetMacros())
-add_message(callbacks.Messages.stop_macro,
+add_message(messages_enum.stop_macro,
             command_serializers.StopMacro())
 
 # streams
-add_message(callbacks.Messages.stream_create,
+add_message(messages_enum.stream_create,
             command_serializers.CreateStream())
-add_message(callbacks.Messages.stream_feed,
+add_message(messages_enum.stream_feed,
             command_serializers.FeedStream())
-add_message(callbacks.Messages.stream_destroy,
+add_message(messages_enum.stream_destroy,
             command_serializers.DestroyStream())
 
 # Presenter
-add_message(callbacks.Messages.presenter_info_request,
+add_message(messages_enum.presenter_info_request,
             command_serializers.GetPresenterInfo())
-add_message(callbacks.Messages.controller_transforms_request,
+add_message(messages_enum.controller_transforms_request,
             command_serializers.GetControllerTransforms())
 
 # Shape
-add_message(callbacks.Messages.set_shape,
+add_message(messages_enum.set_shape,
             command_serializers.SetShape())
-add_message(callbacks.Messages.delete_shape,
+add_message(messages_enum.delete_shape,
             command_serializers.DeleteShape())
 
 # others
-add_message(callbacks.Messages.open_url, command_serializers.OpenURL())
-add_message(callbacks.Messages.load_file,
+add_message(messages_enum.open_url, command_serializers.OpenURL())
+add_message(messages_enum.load_file,
             command_serializers.LoadFile())
-add_message(callbacks.Messages.integration,
+add_message(messages_enum.integration,
             command_serializers.Integration())
-add_message(callbacks.Messages.set_skybox,
+add_message(messages_enum.set_skybox,
             command_serializers.SetSkybox())
-add_message(callbacks.Messages.apply_color_scheme,
+add_message(messages_enum.apply_color_scheme,
             command_serializers.ApplyColorScheme())
 
 # files deprecated
-add_message(callbacks.Messages.directory_request,
+add_message(messages_enum.directory_request,
             command_serializers.DirectoryRequest())
-add_message(callbacks.Messages.file_request,
+add_message(messages_enum.file_request,
             command_serializers.FileRequest())
-add_message(callbacks.Messages.file_save,
+add_message(messages_enum.file_save,
             command_serializers.FileSave())
-add_message(callbacks.Messages.export_files,
+add_message(messages_enum.export_files,
             command_serializers.ExportFiles())
-add_message(callbacks.Messages.plugin_list_button_set,
+add_message(messages_enum.plugin_list_button_set,
             command_serializers.SetPluginListButton())
 add_command(commands_enum.directory_response,
             command_serializers.DirectoryRequest(), callbacks._simple_callback_arg)

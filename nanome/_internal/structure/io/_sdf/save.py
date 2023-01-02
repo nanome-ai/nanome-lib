@@ -1,8 +1,3 @@
-import nanome
-from nanome._internal.structure import _Complex
-
-Options = nanome.util.complex_save_options.SDFSaveOptions
-
 
 class Results(object):
     def __init__(self):
@@ -23,6 +18,8 @@ class Results(object):
 
 
 def to_file(path, complex, options=None):
+    import nanome
+    Options = nanome.util.complex_save_options.SDFSaveOptions
     # type: (str, _Complex, Options) -> Results
     complex = complex._convert_to_frames()
     if options is None:

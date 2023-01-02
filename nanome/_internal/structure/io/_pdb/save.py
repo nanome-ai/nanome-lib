@@ -21,10 +21,9 @@ class Results(object):
             self.bond = None
 
 
-Options = nanome.util.complex_save_options.PDBSaveOptions
-
-
 def to_file(path, complex, options=None):
+    from nanome.util import complex_save_options
+    Options = complex_save_options.PDBSaveOptions
     # type: (str, _Complex, Options) -> Results
     result = Results()
     if options is None:

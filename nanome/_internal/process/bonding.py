@@ -1,4 +1,3 @@
-from nanome.util import Process, Logs
 from nanome._internal.structure import _Complex, _Bond
 from nanome._internal.structure.io import _pdb, _sdf
 
@@ -38,6 +37,7 @@ class _Bonding():
             self.__fast_mode = fast_mode
 
     def _start(self):
+        from nanome.util import Process, Logs
         if len(self.__complexes) == 0:
             self.__done()
             return self.__future
@@ -96,10 +96,12 @@ class _Bonding():
         self.__proc.start()
 
     def __on_error(self, msg):
+        from nanome.util import Logs
         if not "molecule converted" in msg:
             Logs.warning("[Bond Generation]", msg)
 
     def __bonding_done(self, result_code):
+        from nanome.util import Logs
         if result_code == -1:
             Logs.error("Couldn't execute nanobabel or openbabel to generate bonds. Is one installed?")
             self.__done()

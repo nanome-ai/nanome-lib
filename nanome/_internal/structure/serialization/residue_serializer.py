@@ -2,7 +2,6 @@ from nanome._internal.util.type_serializers import ArraySerializer, StringSerial
 from . import _AtomSerializerID
 from . import _BondSerializer
 from .. import _Residue
-from nanome.util import Logs
 
 from nanome._internal.util.type_serializers import TypeSerializer
 
@@ -56,6 +55,7 @@ class _ResidueSerializer(TypeSerializer):
             context.write_using_serializer(self.array, value._ignored_alt_locs)
 
     def deserialize(self, version, context):
+        from nanome.util import enums
         residue = _Residue._create()
         residue._index = context.read_long()
 
@@ -66,7 +66,7 @@ class _ResidueSerializer(TypeSerializer):
 
         residue._ribboned = context.read_bool()
         residue._ribbon_size = context.read_float()
-        residue._ribbon_mode = _Residue.RibbonMode.safe_cast(context.read_int())
+        residue._ribbon_mode = enums.RibbonMode.safe_cast(context.read_int())
         residue._ribbon_color = context.read_using_serializer(self.color)
         if (version > 0):
             residue._labeled = context.read_bool()
@@ -75,7 +75,7 @@ class _ResidueSerializer(TypeSerializer):
         residue._type = context.read_using_serializer(self.string)
         residue._serial = context.read_int()
         residue._name = context.read_using_serializer(self.string)
-        residue._secondary_structure = _Residue.SecondaryStructure.safe_cast(context.read_int())
+        residue._secondary_structure = enums.SecondaryStructure.safe_cast(context.read_int())
 
         if (version >= 2):
             self.array.set_type(self.char)

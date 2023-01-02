@@ -1,7 +1,6 @@
 import math
-from nanome.util import Vector3
-from nanome._internal.structure import _Complex, _Molecule, _Chain, _Residue, _Bond, _Atom
-from .content import Content
+from nanome._internal.structure import _Complex, _Molecule, _Chain, _Residue, _Atom
+
 MaxCategorySize = 40
 
 
@@ -55,6 +54,7 @@ def structure(content):
 
 
 def StructureAtom(c_atom, helper):
+    from nanome.util import Vector3
     atom = _Atom._create()
     atom._serial = c_atom.atom_serial
     atom._occupancy = c_atom.occupancy

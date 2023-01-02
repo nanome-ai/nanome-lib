@@ -12,7 +12,7 @@ except ImportError:
     from Queue import Queue, Empty  # python 2.x
 
 from nanome._internal.process import ProcessEntry
-from nanome.util import Logs, IntEnum, auto
+from nanome._internal.util import IntEnum, auto
 
 POSIX = 'posix' in sys.builtin_module_names
 
@@ -55,6 +55,7 @@ class ProcessManager():
                     entry.send(ProcessManager.DataType.position_changed, [count_before_exec])
                     count_before_exec += 1
         except:
+            from nanome.util import Logs
             Logs.error("Exception in process manager update:\n", traceback.format_exc())
 
     def __start_process(self):
@@ -75,6 +76,7 @@ class ProcessManager():
                 queue.put(data)
             pipe.close()
 
+        from nanome.util import Logs
         try:
             # Log process settings
             exec_path = request.executable_path
@@ -160,6 +162,7 @@ class ProcessManager():
                 'session_id': session_id,
                 'process_label': label
             }
+            from nanome.util import Logs
             if exit_code == 0:
                 Logs.message(message, extra=log_extra)
             else:
@@ -196,4 +199,5 @@ class ProcessManager():
         elif type == ProcessManager.CommandType.stop:
             self.__stop_process(process_request)
         else:
+            from nanome.util import Logs
             Logs.error("Received unknown process command type")

@@ -1,11 +1,10 @@
-from nanome.util import enums
 from . import _UnitCell
 
 
 class _VolumeData(object):
-    VolumeType = enums.VolumeType
 
     def __init__(self):
+        from nanome.util import enums
         self._data = []
 
         self._width = 0
@@ -14,7 +13,7 @@ class _VolumeData(object):
 
         self._mean = 0.0
         self._rmsd = 0.0
-        self._type = _VolumeData.VolumeType.default
+        self._type = enums.VolumeType.default
         self._name = ""
 
         self._cell = _UnitCell()

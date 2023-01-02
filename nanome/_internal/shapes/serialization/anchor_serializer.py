@@ -1,6 +1,5 @@
 from nanome._internal.util.type_serializers import TypeSerializer, UnityPositionSerializer
 from nanome._internal.shapes import _Anchor
-from nanome.util.enums import ShapeType
 
 
 class _AnchorSerializer(TypeSerializer):
@@ -21,6 +20,7 @@ class _AnchorSerializer(TypeSerializer):
         context.write_using_serializer(self._offset, value._viewer_offset)
 
     def deserialize(self, version, context):
+        from nanome.util.enums import ShapeType
         result = _Anchor._create()
         result._target = context.read_long()
         result._anchor_type = ShapeType.safe_cast(context.read_byte())

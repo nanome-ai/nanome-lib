@@ -1,16 +1,19 @@
-import nanome
 from . import _UIBase
-from nanome.util import Color
 
 
 class _TextInput(_UIBase):
-    HorizAlignOptions = nanome.util.enums.HorizAlignOptions
+
+    @property
+    def HorizAlignOptions(self):
+        import nanome
+        return nanome.util.enums.HorizAlignOptions
 
     @classmethod
     def _create(cls):
         return cls()
 
     def __init__(self):
+        from nanome.util import Color, enums
         # Protocol
         super(_TextInput, self).__init__()
         self._max_length = 10
@@ -20,7 +23,7 @@ class _TextInput(_UIBase):
         self._text_color = Color.Black()
         self._background_color = Color.White()
         self._text_size = 1.0
-        self._text_horizontal_align = _TextInput.HorizAlignOptions.Left
+        self._text_horizontal_align = enums.HorizAlignOptions.Left
         self._padding_left = 0.015
         self._padding_right = 0.01
         self._padding_top = 0.0

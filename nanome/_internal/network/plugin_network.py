@@ -1,4 +1,3 @@
-from nanome.util import Logs
 from nanome._internal.util.type_serializers import CachedImageSerializer
 from nanome._internal.logs import LogsManager
 
@@ -28,10 +27,12 @@ class PluginNetwork(object):
         PluginNetwork._instance = self
 
     def _on_run(self):
+        from nanome.util import Logs
         Logs.message("on_run called")
         self._plugin.on_run()
 
     def on_advanced_settings(self):
+        from nanome.util import Logs
         Logs.message("on_advanced_settings called")
         self._plugin.on_advanced_settings()
 
@@ -89,12 +90,14 @@ class PluginNetwork(object):
             if has_data:
                 payload = self._queue_in.get()
         except Exception:
+            from nanome.util import Logs
             Logs.debug("Pipe has been closed, exiting process")
             self._plugin._on_stop()
             return False
 
         if payload:
             if payload == stop_bytes:
+                from nanome.util import Logs
                 Logs.debug("Pipe has been closed, exiting process")
                 self._plugin._on_stop()
                 return False

@@ -1,4 +1,3 @@
-from nanome._internal.util.type_serializers import ArraySerializer, IntSerializer
 from .. import _LayoutNode
 
 from nanome._internal.util.type_serializers import TypeSerializer
@@ -41,15 +40,16 @@ class _LayoutNodeSerializer(TypeSerializer):
             context.write_int(content_id)
 
     def deserialize(self, version, context):
+        from nanome.util import enums
         layout_node = _LayoutNode._create()
         layout_node._id = context.read_int()
         layout_node._enabled = context.read_bool()
         layout_node._layer = context.read_int()
-        layout_node._layout_orientation = _LayoutNode.LayoutTypes(context.read_uint())
-        layout_node._sizing_type = _LayoutNode.SizingTypes(context.read_uint())
+        layout_node._layout_orientation = enums.LayoutTypes(context.read_uint())
+        layout_node._sizing_type = enums.SizingTypes(context.read_uint())
         layout_node._sizing_value = context.read_float()
         layout_node._forward_dist = context.read_float()
-        layout_node._padding_type = _LayoutNode.PaddingTypes(context.read_uint())
+        layout_node._padding_type = enums.PaddingTypes(context.read_uint())
         layout_node._padding = (context.read_float(),
                                 context.read_float(),
                                 context.read_float(),

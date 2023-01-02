@@ -1,6 +1,4 @@
-from nanome.util.enums import HorizAlignOptions, VertAlignOptions
 from nanome._internal.ui import _Label
-from nanome.util.color import Color
 
 
 def parse_json(content_json):

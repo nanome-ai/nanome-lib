@@ -1,6 +1,5 @@
 from . import Data
 from . import Packet
-from nanome.util import Logs
 
 import socket
 import ssl
@@ -27,6 +26,7 @@ class NetInstance(object):
         self._current_packet = Packet()
 
     def connect(self, host, port):
+        from nanome.util import Logs
         try:
             Logs.message("Connecting to server", host, port)
             self._connection.connect((host, port))
@@ -58,6 +58,7 @@ class NetInstance(object):
                     pass
             except Exception:
                 # Originally caught ConnectionResetError, but not Python 2 compatible
+                from nanome.util import Logs
                 Logs.error("Connection has been forcibly closed by the server")
                 raise
 
@@ -66,6 +67,7 @@ class NetInstance(object):
             self._connection.close()
 
     def receive(self):
+        from nanome.util import Logs
         try:
             data = self._connection.recv(4096)
         except ssl.SSLWantReadError:

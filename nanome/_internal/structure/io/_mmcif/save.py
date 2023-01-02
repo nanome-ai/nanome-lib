@@ -1,4 +1,3 @@
-import nanome
 from nanome._internal.structure import _Complex, _Molecule, _Chain, _Residue, _Atom, _Bond
 
 
@@ -13,9 +12,6 @@ class Results(object):
             self.atom = None
             self.position = None
             self.model_number = 0
-
-
-Options = nanome.util.complex_save_options.MMCIFSaveOptions
 
 
 class ColumnWidths(object):
@@ -53,6 +49,8 @@ class AtomText(object):
 
 
 def to_file(path, complex, options=None):
+    from nanome.util import complex_save_options
+    Options = complex_save_options.MMCIFSaveOptions
     # type: (str, _Complex, Options) -> Results
     complex = complex._convert_to_frames()
     result = Results()
@@ -169,7 +167,7 @@ def atom_to_saved_atom(atom, id, model):
 
 
 def update_column_widths(text_atom, column_widths):
-    # type: (AtomText, ColumnWidths)
+    # type: (AtomText, ColumnWidths) -> None
     column_widths.group_PDB = max(
         len(text_atom.group_PDB), column_widths.group_PDB)
     column_widths.id = max(len(text_atom.id), column_widths.id)

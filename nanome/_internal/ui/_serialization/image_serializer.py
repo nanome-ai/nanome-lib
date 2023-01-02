@@ -1,4 +1,3 @@
-from nanome.util import IntEnum
 from . import _UIBaseSerializer
 from .. import _Image
 from nanome._internal.util.type_serializers import ColorSerializer, ArraySerializer, ByteSerializer, StringSerializer, TypeSerializer, CachedImageSerializer

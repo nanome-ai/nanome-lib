@@ -1,6 +1,4 @@
-from nanome.util import Vector3
-from nanome._internal.structure import _Complex, _Molecule, _Chain, _Residue, _Bond, _Atom
-from .content import Content
+from nanome._internal.structure import _Complex, _Molecule, _Chain, _Residue, _Atom
 
 
 def structure(content):
@@ -23,6 +21,7 @@ def structure(content):
 
 def structure_molecule(atoms, compnds):
     # All structured infos
+    from nanome.util import Vector3
     all_residues = {}  # <string, Residue>
     all_chains = {}  # <string, Chain>
     all_atoms = {}  # <string, Atom>

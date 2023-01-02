@@ -1,4 +1,3 @@
-from nanome.util import Logs
 from .. import _Button, _Mesh, _Slider, _Label, _TextInput, _UIBase, _UIList, _Image, _LoadingBar, _Dropdown
 from . import button_json, mesh_json, slider_json, text_input_json, label_json, ui_list_json, image_json, loading_bar_json, dropdown_json
 # this line shouldnt't be needed ^^^
@@ -25,6 +24,7 @@ def parse_json(content_json):
     elif type_name == "Dropdown":
         return dropdown_json.parse_json(content_json)
     else:
+        from nanome.util import Logs
         Logs.error("unknown content type: " + type_name)
         return _UIBase()
 
@@ -60,6 +60,7 @@ def write_json(helper, content):
         type_name = "Dropdown"
         dropdown_json.write_json(helper, content)
     else:
+        from nanome.util import Logs
         Logs.error("unknown content type: " + str(type(content)))
         return None
     helper.write("type_name", type_name)

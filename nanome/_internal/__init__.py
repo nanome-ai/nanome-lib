@@ -7,6 +7,7 @@ from . import ui  # noqa F401
 from . import network  # noqa F401
 from . import volumetric  # noqa F401
 from . import macro  # noqa F401
+from . import logs
 # classes
 from .addon import _Addon  # noqa F401
 from .plugin_instance import _PluginInstance  # noqa F401

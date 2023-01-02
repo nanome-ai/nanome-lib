@@ -1,6 +1,4 @@
-import hashlib
-import copy
-from nanome.util import StringBuilder, Vector3, enums
+
 s_ConformersDisabled = False  # Nanome.Core.Config.getBool("mol-conformers-disabled", "false")
 s_ConformersAlways = False  # Nanome.Core.Config.getBool("mol-conformers-always", "false")
 
@@ -19,6 +17,7 @@ def convert_to_frames(complex, old_to_new_atoms=None):  # Data.Complex -> Data.C
 
 
 def convert_to_conformers(complex, force_conformer=None):  # Data.Complex -> Data.Complex
+    from nanome.util import StringBuilder, Vector3, enums
     frame_count = len(complex._molecules)
     # Maybe conformers are disabled
     if frame_count <= 1 or s_ConformersDisabled:

@@ -1,4 +1,3 @@
-from nanome.util import IntEnum
 from .. import _Slider
 from . import _UIBaseSerializer
 

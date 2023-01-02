@@ -2,8 +2,6 @@ from . import _AtomSerializerID
 from .. import _Bond
 
 from nanome._internal.util.type_serializers import TypeSerializer, ArraySerializer, BoolSerializer, ByteSerializer
-from nanome.util import Logs
-
 
 class _BondSerializer(TypeSerializer):
     def __init__(self, shallow=False):
@@ -40,6 +38,7 @@ class _BondSerializer(TypeSerializer):
 
     def deserialize(self, version, context):
         # type: (_Atom, ContextDeserialization) -> _Bond
+        from nanome.util import enums
         bond = _Bond._create()
         bond._index = context.read_long()
         if version >= 1:
@@ -50,11 +49,11 @@ class _BondSerializer(TypeSerializer):
                 self.array.set_type(self.bool)
                 bond._in_conformer = context.read_using_serializer(self.array)
                 for i in range(len(bond._kinds)):
-                    bond._kinds[i] = _Bond.Kind.safe_cast(bond._kinds[i])
+                    bond._kinds[i] = enums.Kind.safe_cast(bond._kinds[i])
             else:
-                bond._kind = _Bond.Kind.safe_cast(context.read_byte())
+                bond._kind = enums.Kind.safe_cast(context.read_byte())
         else:
-            bond._kind = _Bond.Kind.safe_cast(context.read_int())
+            bond._kind = enums.Kind.safe_cast(context.read_int())
 
         bond._atom1 = context.read_using_serializer(self.atom_serializer)
         bond._atom2 = context.read_using_serializer(self.atom_serializer)

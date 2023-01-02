@@ -1,9 +1,7 @@
 
-
-
 from nanome._internal.integration import serialization as Serializers
 from nanome._internal.macro.serialization import _MacroSerializer
-from nanome._internal.network.commands.callbacks import Hashes, Integrations
+from nanome._internal.network.commands.enums import Hashes, Integrations
 from nanome._internal.shapes.serialization import _SphereSerializer, _ShapeSerializer, _LineSerializer, _LabelSerializer, _MeshSerializer
 from nanome._internal.structure import _Atom, _Bond, _Residue, _Chain, _Molecule, _Complex, _Base
 from nanome._internal.structure.serialization import _ComplexSerializer, _MoleculeSerializer, _ChainSerializer, _ResidueSerializer, _BondSerializer, _AtomSerializer, _AtomSerializerID, _SubstructureSerializer, _AtomSerializer, _MoleculeSerializer, _WorkspaceSerializer
@@ -14,11 +12,14 @@ from nanome._internal.util.type_serializers import (
     UnityPositionSerializer, UnityRotationSerializer, Vector3Serializer, StringSerializer,
     ColorSerializer, DirectoryEntrySerializer, FileDataSerializer, FileSaveDataSerializer, ByteSerializer)
 from nanome._internal.volumetric.serialization import _VolumeDataSerializer, _VolumePropertiesSerializer
-from nanome.util import DirectoryRequestResult, DirectoryErrorCode, FileError, IntEnum, Quaternion, Logs
-from nanome.util.enums import LoadFileErrorCode, ShapeType,StreamDataType, StreamDirection,StreamType as SType
 from nanome.util.file import FileMeta, LoadInfoDone
 import types
+import sys
 
+if sys.version_info >= (3, 4):
+    from enum import Enum, IntEnum
+else:
+    from .py2_enum import Enum, IntEnum
 
 class ApplyColorScheme(TypeSerializer):
     def __init__(self):
@@ -126,6 +127,7 @@ class CD(TypeSerializer):
         context.write_using_serializer(self.__string, value)
 
     def deserialize(self, version, context):
+        from nanome.util import FileError
         return FileError.safe_cast(context.read_int())
 
 
@@ -144,6 +146,7 @@ class CP(TypeSerializer):
         context.write_using_serializer(self.__string, value[1])
 
     def deserialize(self, version, context):
+        from nanome.util import FileError
         return FileError.safe_cast(context.read_int())
 
 
@@ -249,6 +252,7 @@ class Get(TypeSerializer):
         context.write_using_serializer(self.__string, value)
 
     def deserialize(self, version, context):
+        from nanome.util import FileError
         error_code = FileError(context.read_int())
         length = context.read_uint()
         file = context.read_bytes(length)
@@ -271,6 +275,7 @@ class LS(TypeSerializer):
         context.write_using_serializer(self.__string, value)
 
     def deserialize(self, version, context):
+        from nanome.util import FileError
         error_code = FileError.safe_cast(context.read_int())
         filemetas = context.read_using_serializer(self.__array)
         return error_code, filemetas
@@ -290,6 +295,7 @@ class MKDir(TypeSerializer):
         context.write_using_serializer(self.__string, value)
 
     def deserialize(self, version, context):
+        from nanome.util import FileError
         return FileError.safe_cast(context.read_int())
 
 
@@ -308,6 +314,7 @@ class MV(TypeSerializer):
         context.write_using_serializer(self.__string, value[1])
 
     def deserialize(self, version, context):
+        from nanome.util import FileError
         return FileError.safe_cast(context.read_int())
 
 
@@ -327,6 +334,7 @@ class Put(TypeSerializer):
         context.write_bytes(value[1])
 
     def deserialize(self, version, context):
+        from nanome.util import FileError
         return FileError.safe_cast(context.read_int())
 
 
@@ -344,6 +352,7 @@ class PWD(TypeSerializer):
         pass
 
     def deserialize(self, version, context):
+        from nanome.util import FileError
         error_code = FileError.safe_cast(context.read_int())
         path = context.read_using_serializer(self.__string)
         return (error_code, path)
@@ -363,6 +372,7 @@ class RM(TypeSerializer):
         context.write_using_serializer(self.__string, value)
 
     def deserialize(self, version, context):
+        from nanome.util import FileError
         return FileError.safe_cast(context.read_int())
 
 
@@ -380,6 +390,7 @@ class RMDir(TypeSerializer):
         context.write_using_serializer(self.__string, value)
 
     def deserialize(self, version, context):
+        from nanome.util import FileError
         return FileError.safe_cast(context.read_int())
 
 
@@ -401,6 +412,7 @@ class DirectoryRequest(TypeSerializer):
         context.write_using_serializer(self.__string, value._pattern)
 
     def deserialize(self, version, context):
+        from nanome.util import DirectoryRequestResult, DirectoryErrorCode
         result = DirectoryRequestResult()
         result.entry_array = context.read_using_serializer(
             self.__directory_entry_array)
@@ -539,6 +551,7 @@ class LoadFileDoneInfo(TypeSerializer):
         raise NotImplementedError
 
     def deserialize(self, version, context):
+        from nanome.util.enums import LoadFileErrorCode
         result = LoadInfoDone()
         result.success = LoadFileErrorCode(context.read_byte())
         return result
@@ -760,6 +773,7 @@ class DeleteShape(TypeSerializer):
         return "DeleteShape"
 
     def serialize(self, version, value, context):
+        from nanome.util import Logs
         if version == 0:
             if len(value) > 1:
                 msg = "SetShape: Using a list of shapes with an old version of Nanome"
@@ -796,6 +810,8 @@ class SetShape(TypeSerializer):
         return "SetShape"
 
     def serialize(self, version, value, context):
+        from nanome.util import Quaternion, Logs
+        from nanome.util.enums import ShapeType
         if version == 0:
             if len(value) > 1:
                 msg = "SetShape: Using a list of shapes with an old version of Nanome"
@@ -847,6 +863,7 @@ class CreateStream(TypeSerializer):
         return "StreamCreation"
 
     def serialize(self, version, value, context):
+        from nanome.util.enums import StreamType as SType
         stream_type = value[0]
         if version > 0:
             context.write_byte(stream_type)
@@ -876,6 +893,7 @@ class CreateStreamResult(TypeSerializer):
         raise NotImplementedError
 
     def deserialize(self, version, context):
+        from nanome.util.enums import StreamDataType, StreamDirection
         err = context.read_byte()
         id = context.read_uint()
         if version > 0:

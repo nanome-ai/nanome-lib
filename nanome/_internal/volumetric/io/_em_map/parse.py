@@ -1,5 +1,4 @@
 from ...volume_data import _VolumeData
-from nanome.util import Logs
 import os
 import gzip
 import struct
@@ -22,6 +21,7 @@ def parse_file(path):
         result = parse_data(data)
         return result
     except:
+        from nanome.util import Logs
         Logs.error("Could not read em file: " + path)
         raise
 

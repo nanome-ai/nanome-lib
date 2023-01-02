@@ -1,5 +1,3 @@
-from nanome.util import enums
-from nanome.util import Vector3
 from nanome._internal.structure import _Complex, _Molecule, _Chain, _Residue, _Bond, _Atom
 from .content import Content
 
@@ -14,6 +12,7 @@ def structure(content):
 
 
 def structure_molecule(model):
+    from nanome.util import enums, Vector3
     # type: (Content.Model) -> Molecule
     molecule = _Molecule._create()
     molecule._name = model.name

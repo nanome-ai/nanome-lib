@@ -1,6 +1,5 @@
 from . import _UIBaseSerializer
 from .. import _Mesh
-from nanome.util import IntEnum
 from nanome._internal.util.type_serializers import ColorSerializer, TypeSerializer
 
 

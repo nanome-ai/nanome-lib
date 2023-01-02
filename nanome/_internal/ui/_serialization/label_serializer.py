@@ -1,6 +1,5 @@
 from .. import _Label
 from nanome._internal.util.type_serializers import StringSerializer, ColorSerializer
-from nanome.util.enums import VertAlignOptions, HorizAlignOptions
 from . import _UIBaseSerializer
 from nanome._internal.util.type_serializers import TypeSerializer
 
@@ -37,6 +36,7 @@ class _LabelSerializer(TypeSerializer):
         pass
 
     def deserialize(self, version, context):
+        from nanome.util.enums import VertAlignOptions, HorizAlignOptions
         value = _Label._create()
         value._content_id = context.read_int()
         if (version == 0):

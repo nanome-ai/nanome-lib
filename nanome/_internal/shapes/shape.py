@@ -1,9 +1,8 @@
 import nanome
-from nanome.util import Color, Logs
-
 
 class _Shape(object):
     def __init__(self, shape_type):
+        from nanome.util import Color
         self._index = -1
         self._shape_type = shape_type
         self._anchors = []
@@ -15,6 +14,7 @@ class _Shape(object):
 
     def _upload(self, done_callback=None):
         def set_callback(indices, results):
+            from nanome.util import Logs
             index = indices[0]
             result = results[0]
             if self._index != -1 and index != self._index:
@@ -33,6 +33,7 @@ class _Shape(object):
 
     @classmethod
     def _upload_multiple(cls, shapes, done_callback=None):
+        from nanome.util import Logs
         def set_callback(indices, results):
             error = False
             for index, shape in zip(indices, shapes):

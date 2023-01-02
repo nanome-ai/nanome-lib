@@ -1,7 +1,6 @@
 from nanome._internal.util.type_serializers import StringSerializer, CharSerializer, ColorSerializer, Vector3Serializer, ArraySerializer, BoolSerializer, DictionarySerializer
 from .. import _Atom
 from nanome._internal.util.type_serializers import TypeSerializer
-from nanome.util import Logs
 
 
 class _AtomSerializer(TypeSerializer):
@@ -97,13 +96,14 @@ class _AtomSerializer(TypeSerializer):
             context.write_using_serializer(self.char, value._alt_loc)
 
     def deserialize(self, version, context):
+        from nanome.util import enums
         # type: (_Atom, ContextDeserialization) -> _Atom
         atom = _Atom._create()
         index = context.read_long()
         if index >= 0:
             atom._index = index
         atom._selected = context.read_bool()
-        atom._atom_mode = _Atom.AtomRenderingMode.safe_cast(context.read_int())
+        atom._atom_mode = enums.AtomRenderingMode.safe_cast(context.read_int())
         atom._labeled = context.read_bool()
         if version >= 1:
             atom._label_text = context.read_using_serializer(self.string)

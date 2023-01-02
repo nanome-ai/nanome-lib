@@ -1,7 +1,5 @@
 from .. import _LayoutNode
 from . import ui_base_json
-from nanome.util import Logs
-import json
 
 
 def parse_json(node_json):

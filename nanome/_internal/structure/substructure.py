@@ -1,8 +1,5 @@
-import nanome
-
 
 class _Substructure:
-    SubstructureType = nanome.util.enums.SubstructureType
 
     @classmethod
     def _create(cls):
@@ -12,3 +9,8 @@ class _Substructure:
         self._name = ''
         self._residues = []
         self._structure_type = None
+
+    @property
+    def SubstructureType(self):
+        from nanome.util import enums
+        return enums.SubstructureType

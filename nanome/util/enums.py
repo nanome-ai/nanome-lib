@@ -1,7 +1,8 @@
-from . import IntEnum
-from .enum import auto, reset_auto
-
 import sys
+if sys.version_info >= (3, 4):
+    from enum import Enum, IntEnum
+else:
+    from .py2_enum import Enum, IntEnum
 
 
 class SubstructureType(IntEnum):
@@ -301,35 +302,3 @@ class SkyBoxes(IntEnum):
     White = 4
     Graydient = 5
 
-
-class CommandEnum(IntEnum):
-    if sys.version_info >= (3, 6):  # Tmp hack
-        # Override for auto()
-        def _generate_next_value_(name, start, count, last_values):
-            return IntEnum._generate_next_value_(name, 0, count, last_values)
-    else:
-        pass
-
-
-class Integrations(CommandEnum):
-    # Tmp hack
-    reset_auto()  # Not an enum
-
-    hydrogen = auto()
-    structure_prep = auto()
-    calculate_esp = auto()
-    minimization = auto()
-    export_file = auto()
-    export_locations = auto()
-    generate_molecule_image = auto()
-    import_file = auto()
-    analysis = auto()
-    interactions = auto()
-    smiles = auto()
-
-
-class Permissions(CommandEnum):
-    # Reset enum counter for Python 2.7
-    reset_auto()
-
-    local_files_access = auto()

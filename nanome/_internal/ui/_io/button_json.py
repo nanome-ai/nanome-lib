@@ -1,4 +1,4 @@
-from nanome.util.enums import HorizAlignOptions, VertAlignOptions
+
 from nanome._internal.ui import _Button
 
 
@@ -11,6 +11,7 @@ def read_attribute_safe(content_json, name, default):
 
 
 def parse_json(content_json):
+    from nanome.util.enums import HorizAlignOptions, VertAlignOptions
     # type: () -> Button
     # region text
     button = _Button._create()
@@ -103,7 +104,7 @@ def parse_json(content_json):
 
 
 def write_json(helper, button):
-    # type: (_Button) -> dict
+    # type: (dir(), _Button) -> dict
     helper.write("name", button._name)
     helper.write("selected", button._selected)
     helper.write("unusable", button._unusable)

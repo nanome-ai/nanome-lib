@@ -1,12 +1,10 @@
-import nanome
 from . import _PluginInstance
-from nanome._internal.network.commands.callbacks import Messages
-from nanome.util import DirectoryRequestOptions
-from nanome.util.enums import ShapeType
+from nanome._internal.util.decorators import deprecated
+from nanome._internal.network.commands.enums import Messages
 from nanome._internal import shapes as internal_shapes
 
 
-@nanome.util.Logs.deprecated("files.ls")
+@deprecated("files.ls")
 def _request_directory(self, path, callback=None, pattern="*"):
     """
     | Requests the content of a directory on the machine running Nanome
@@ -16,6 +14,7 @@ def _request_directory(self, path, callback=None, pattern="*"):
     :param pattern: Pattern to match. E.g. "*.txt" will match all .txt files. Default value is "*" (match everything)
     :type pattern: str
     """
+    from nanome.util import DirectoryRequestOptions
     options = DirectoryRequestOptions()
     options._directory_name = path
     options._pattern = pattern
@@ -26,7 +25,7 @@ def _request_directory(self, path, callback=None, pattern="*"):
 _PluginInstance.request_directory = _request_directory
 
 
-@nanome.util.Logs.deprecated("files.get")
+@deprecated("files.get")
 def _request_files(self, file_list, callback=None):
     """
     | Reads files on the machine running Nanome, and returns them
@@ -41,8 +40,9 @@ def _request_files(self, file_list, callback=None):
 _PluginInstance.request_files = _request_files
 
 
-@nanome.util.Logs.deprecated()
+@deprecated()
 def _create_shape(self, shape_type):
+    from nanome.util.enums import ShapeType
     if shape_type == ShapeType.Sphere:
         return internal_shapes._Sphere._create()
     if shape_type == ShapeType.Line:

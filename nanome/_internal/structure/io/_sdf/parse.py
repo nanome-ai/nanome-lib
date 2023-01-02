@@ -1,4 +1,3 @@
-from nanome.util import Logs
 from .content import Content
 import re
 
@@ -7,6 +6,7 @@ def parse_lines(lines):
     try:
         return _parse_lines(lines)
     except:
+        from nanome.util import Logs
         Logs.error("Could not read sdf")
         raise
 

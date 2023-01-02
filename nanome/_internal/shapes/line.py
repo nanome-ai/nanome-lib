@@ -1,10 +1,10 @@
 from .anchor import _Anchor
 from .shape import _Shape
-from nanome.util.enums import ShapeType
 
 
 class _Line(_Shape):
     def __init__(self):
+        from nanome.util.enums import ShapeType
         _Shape.__init__(self, ShapeType.Line)
         self._anchors = [_Anchor._create(), _Anchor._create()]
         self._thickness = 0.1

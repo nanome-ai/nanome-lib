@@ -1,11 +1,7 @@
-import nanome
 from nanome._internal.ui import _UIList
 
 
 class _LayoutNode(object):
-    PaddingTypes = nanome.util.enums.PaddingTypes
-    SizingTypes = nanome.util.enums.SizingTypes
-    LayoutTypes = nanome.util.enums.LayoutTypes
 
     @classmethod
     def _create(cls):
@@ -15,14 +11,15 @@ class _LayoutNode(object):
 
     def __init__(self, name="node"):
         # protocol vars
+        from nanome.util import enums
         self._id = _LayoutNode.id_gen
         self._enabled = True
         self._layer = 0
-        self._layout_orientation = _LayoutNode.LayoutTypes.vertical
-        self._sizing_type = _LayoutNode.SizingTypes.expand
+        self._layout_orientation = enums.LayoutTypes.vertical
+        self._sizing_type = enums.SizingTypes.expand
         self._sizing_value = 1.0
         self._forward_dist = 0.0
-        self._padding_type = _LayoutNode.PaddingTypes.fixed
+        self._padding_type = enums.PaddingTypes.fixed
         self._padding = (0.0, 0.0, 0.0, 0.0)
         self._children = []
         self._content = None

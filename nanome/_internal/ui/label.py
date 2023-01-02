@@ -1,11 +1,18 @@
-import nanome
 from . import _UIBase
 from nanome.util.color import Color
 
 
 class _Label(_UIBase):
-    HorizAlignOptions = nanome.util.enums.HorizAlignOptions
-    VertAlignOptions = nanome.util.enums.VertAlignOptions
+
+    @property
+    def HorizAlignOptions(self):
+        import nanome
+        return nanome.util.enums.HorizAlignOptions
+
+    @property
+    def VertAlignOptions(self):
+        import nanome
+        return nanome.util.enums.VertAlignOptions
 
     @classmethod
     def _create(cls):
@@ -13,9 +20,10 @@ class _Label(_UIBase):
 
     def __init__(self):
         super(_Label, self).__init__()
+        from nanome.util import enums
         self._text_value = ""
-        self._text_vertical_align = _Label.VertAlignOptions.Top
-        self._text_horizontal_align = _Label.HorizAlignOptions.Left
+        self._text_vertical_align = enums.VertAlignOptions.Top
+        self._text_horizontal_align = enums.HorizAlignOptions.Left
         self._text_auto_size = True
         self._text_max_size = 1.0
         self._text_min_size = 0.0

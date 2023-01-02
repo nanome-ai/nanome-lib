@@ -1,7 +1,7 @@
 from nanome._internal.structure.complex import _Complex
 from nanome._internal import _PluginInstance
 from nanome._internal.network import PluginNetwork
-from nanome._internal.network.commands.callbacks import Messages
+from nanome._internal.network.commands.enums import Messages
 from nanome.util import Matrix, Logs
 from .io import ComplexIO
 from . import Base

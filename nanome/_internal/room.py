@@ -1,11 +1,8 @@
-import nanome
 from nanome._internal.network import PluginNetwork
-from nanome._internal.network.commands.callbacks import Messages
+from nanome._internal.network.commands.enums import Messages
 
 
 class _Room():
-    SkyBoxes = nanome.util.enums.SkyBoxes
-
     def __init__(self):
         pass
 

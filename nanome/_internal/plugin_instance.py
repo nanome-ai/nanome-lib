@@ -1,9 +1,7 @@
 import nanome
-from nanome.util import Logs
 from nanome._internal.network import Packet
 from nanome._internal.process import ProcessManagerInstance
-from nanome._internal.network.commands.callbacks import Messages
-from nanome._internal.network.commands.callbacks import Hashes
+from nanome._internal.network.commands.enums import Hashes, Messages
 
 import os
 import traceback
@@ -12,7 +10,7 @@ from timeit import default_timer as timer
 
 try:
     import asyncio
-    from ._plugin_instance_async import async_update_loop
+    from .plugin_instance_async import async_update_loop
 except ImportError:
     asyncio = False
 
@@ -55,6 +53,7 @@ class _PluginInstance(object):
         self._process_manager = ProcessManagerInstance(pm_queue_in, pm_queue_out)
         self._log_pipe_conn = log_pipe_conn
         self._network._send_connect(Messages.connect, [Packet._compression_type(), original_version_table])
+        from nanome.util import Logs
         Logs.debug("Plugin constructed for session", session_id)
 
     @classmethod
@@ -80,6 +79,7 @@ class _PluginInstance(object):
             return
 
         if id not in callbacks:
+            from nanome.util import Logs
             Logs.warning('Received an unknown callback id:', id)
             return
 
@@ -100,10 +100,12 @@ class _PluginInstance(object):
         try:
             callbacks[index](new_complex)
         except KeyError:
+            from nanome.util import Logs
             Logs.warning('Received an unknown updated complex index:', index)
 
     @classmethod
     def _on_selection_changed(cls, index, new_complex):
+        from nanome.util import Logs
         callbacks = cls.__selection_changed_callbacks
         try:
             callbacks[index](new_complex)
@@ -114,6 +116,7 @@ class _PluginInstance(object):
         try:
             self.on_stop()
         except:
+            from nanome.util import Logs
             Logs.error("Error in on_stop function:", traceback.format_exc())
 
     def _update_loop(self):
@@ -134,6 +137,7 @@ class _PluginInstance(object):
             self._on_stop()
             return
         except TimeoutError:
+            from nanome.util import Logs
             Logs.warning("Session timed out")
             self._on_stop()
             self._process_manager._close()

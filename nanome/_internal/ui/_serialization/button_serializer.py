@@ -1,5 +1,4 @@
 from nanome._internal.util.type_serializers import TypeSerializer, StringSerializer, ColorSerializer, Vector3Serializer, CachedImageSerializer
-from nanome.util.enums import VertAlignOptions, HorizAlignOptions, ToolTipPositioning
 from . import _UIBaseSerializer
 from .. import _Button
 
@@ -149,6 +148,7 @@ class _ButtonSerializer(TypeSerializer):
             context.write_using_serializer(self.color, button._switch._off_color)
 
     def deserialize(self, version, context):
+        from nanome.util.enums import VertAlignOptions, HorizAlignOptions, ToolTipPositioning
         value = _Button._create()
         value._content_id = context.read_int()
         if (version == 0):

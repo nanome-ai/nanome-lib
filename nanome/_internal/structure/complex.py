@@ -1,6 +1,6 @@
-from nanome.util import Vector3, Quaternion, Logs
 from . import _Base
 from . import _helpers
+from nanome._internal.util.decorators import deprecated
 
 
 class _Complex(_Base):
@@ -10,6 +10,7 @@ class _Complex(_Base):
         return cls()
 
     def __init__(self):
+        from nanome.util import Vector3, Quaternion
         super(_Complex, self).__init__()
         # Molecular
         self._name = "complex"
@@ -46,7 +47,7 @@ class _Complex(_Base):
         for molecule in molecules:
             molecule._parent = self
 
-    @Logs.deprecated()
+    @deprecated()
     def get_atom_iterator(self):
         iterator = _Complex.AtomIterator(self)
         return iter(iterator)

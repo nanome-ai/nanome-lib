@@ -1,22 +1,23 @@
 from . import _Base
-import nanome
 
 
 class _Bond(_Base):
-    Kind = nanome.util.enums.Kind
+
 
     @classmethod
     def _create(cls):
         return cls()
 
     def __init__(self):
+        from nanome.util import enums
         super(_Bond, self).__init__()
+        self.Kind = enums.Kind
         self.__atom1 = None
         self.__atom2 = None
         self._parent = None
 
         self._in_conformer = [True]
-        self._kinds = [_Bond.Kind.CovalentSingle]
+        self._kinds = [enums.Kind.CovalentSingle]
 
     @property
     def _atom1(self):

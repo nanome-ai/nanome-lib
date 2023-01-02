@@ -1,4 +1,3 @@
-from nanome.util import Vector3
 from . import _LayoutNode
 
 

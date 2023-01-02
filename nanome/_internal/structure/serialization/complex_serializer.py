@@ -4,7 +4,6 @@ from . import _MoleculeSerializer
 from .. import _Complex
 
 from nanome._internal.util.type_serializers import TypeSerializer
-from nanome.util import Quaternion, Vector3
 
 
 class _ComplexSerializer(TypeSerializer):
@@ -29,6 +28,7 @@ class _ComplexSerializer(TypeSerializer):
         return "Complex"
 
     def serialize(self, version, value, context):
+        from nanome.util import Quaternion, Vector3
         context.write_long(value._index)
         if (self.shallow):
             context.write_using_serializer(self.array, [])

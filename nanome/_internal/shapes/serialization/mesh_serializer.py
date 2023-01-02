@@ -3,7 +3,6 @@ import tempfile
 
 from nanome._internal.shapes.mesh import _Mesh
 from nanome._internal.util.type_serializers import TypeSerializer
-from nanome.util import Logs
 
 
 class _MeshSerializer(TypeSerializer):
@@ -17,6 +16,7 @@ class _MeshSerializer(TypeSerializer):
         return "MeshShape"
 
     def read_texture(self, value):
+        from nanome.util import Logs
         if value.texture_path != "":
             filename, ext = os.path.splitext(value.texture_path)
             if ext.lower() in [".jpeg", ".jpg", ".png"]:
@@ -35,6 +35,7 @@ class _MeshSerializer(TypeSerializer):
         return []
 
     def serialize(self, version, value, context):
+        from nanome.util import Logs
         context.write_float_array(value.vertices)
         context.write_float_array(value.normals)
         context.write_float_array(value.colors)

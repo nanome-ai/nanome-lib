@@ -1,10 +1,10 @@
 from .anchor import _Anchor
 from .shape import _Shape
-from nanome.util.enums import ShapeType
 
 
 class _Sphere(_Shape):
     def __init__(self):
+        from nanome.util.enums import ShapeType
         _Shape.__init__(self, ShapeType.Sphere)
         self._anchors = [_Anchor._create()]
         self._radius = 1.0

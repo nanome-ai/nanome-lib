@@ -1,7 +1,5 @@
-from nanome.util import Logs, IntEnum
-
 from nanome._internal.util.type_serializers import TypeSerializer
-
+from nanome._internal.util import IntEnum
 
 class _UIBaseSerializer(TypeSerializer):
     class ContentType(IntEnum):
@@ -39,6 +37,7 @@ class _UIBaseSerializer(TypeSerializer):
             ui_type = _UIBaseSerializer.registered_classes[type(value).__name__]
             serializer = _UIBaseSerializer.registered_serializers[ui_type]
         except:
+            from nanome.util import Logs
             Logs.error("Trying to serialize unknown UI type:", type(value).__name__)
             return
         context.write_uint(ui_type)
@@ -49,6 +48,7 @@ class _UIBaseSerializer(TypeSerializer):
         try:
             serializer = _UIBaseSerializer.registered_serializers[ui_type]
         except:
+            from nanome.util import Logs
             Logs.error("Trying to deserialize unknown UI type:", ui_type)
             return
         return context.read_using_serializer(serializer)

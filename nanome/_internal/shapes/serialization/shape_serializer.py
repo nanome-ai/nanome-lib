@@ -1,8 +1,6 @@
 from nanome._internal.util.type_serializers import TypeSerializer, UnityPositionSerializer, ColorSerializer, ArraySerializer
 from nanome._internal.shapes.serialization import _SphereSerializer, _AnchorSerializer, _LineSerializer, _LabelSerializer, _MeshSerializer
 
-from nanome.util.enums import ShapeType
-
 
 class _ShapeSerializer(TypeSerializer):
     def __init__(self):
@@ -22,6 +20,7 @@ class _ShapeSerializer(TypeSerializer):
         return "Shape"
 
     def serialize(self, version, value, context):
+        from nanome.util.enums import ShapeType
         context.write_byte(int(value._shape_type))
         if value.shape_type == ShapeType.Sphere:
             context.write_using_serializer(self._sphere, value)
@@ -36,6 +35,7 @@ class _ShapeSerializer(TypeSerializer):
         context.write_using_serializer(self._color, value._color)
 
     def deserialize(self, version, context):
+        from nanome.util.enums import ShapeType
         shapeType = ShapeType.safe_cast(context.read_byte())
         result = None
         if shapeType == ShapeType.Sphere:

@@ -1,20 +1,17 @@
-import nanome
 from . import _UIBase
-from nanome.util import Color
-
 
 class _Image(_UIBase):
-    ScalingOptions = nanome.util.enums.ScalingOptions
 
     @classmethod
     def _create(cls):
         return cls()
 
     def __init__(self):
+        from nanome.util import Color, enums
         super(_Image, self).__init__()
         self._file_path = ""
         self._color = Color.White()
-        self._scaling_option = _Image.ScalingOptions.stretch
+        self._scaling_option = enums.ScalingOptions.stretch
         self._pressed_callback = None
         self._held_callback = None
         self._released_callback = None
@@ -32,24 +29,29 @@ class _Image(_UIBase):
             self._released_callback(self, x, y)
 
     def _register_pressed_callback(self, func):
+        import nanome
         if func == None and self._pressed_callback == None:  # Low hanging filter but there may be others
             return
+        import nanome
         self._send_hook(nanome._internal._network._commands._serialization._UIHook.Type.image_pressed)
         self._pressed_callback = func
 
     def _register_held_callback(self, func):
         if func == None and self._held_callback == None:  # Low hanging filter but there may be others
             return
+        import nanome
         self._send_hook(nanome._internal._network._commands._serialization._UIHook.Type.image_held)
         self._held_callback = func
 
     def _register_released_callback(self, func):
         if func == None and self._released_callback == None:  # Low hanging filter but there may be others
             return
+        import nanome
         self._send_hook(nanome._internal._network._commands._serialization._UIHook.Type.image_released)
         self._released_callback = func
 
     def _send_hook(self, hook_type):
+        import nanome
         try:
             nanome._internal._network.PluginNetwork._instance._send(
                 nanome._internal._network._commands._callbacks.Messages.hook_ui_callback,

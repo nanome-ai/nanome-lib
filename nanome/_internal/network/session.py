@@ -1,4 +1,3 @@
-from nanome.util import Logs
 from . import Packet
 import traceback
 
@@ -25,6 +24,7 @@ class Session(object):
         try:
             self._pm_queue_out.put(data)
         except Exception:
+            from nanome.util import Logs
             Logs.error("Cannot deliver process info to plugin",
                        self._session_id, "Did it crash?")
 
@@ -44,6 +44,7 @@ class Session(object):
             has_proc_data = not self._pm_queue_in.empty()
             self._logs_manager.poll_for_logs()
         except Exception:
+            from nanome.util import Logs
             Logs.error(
                 "Plugin encountered an error, please check the logs.", traceback.format_exc())
             return False
@@ -67,6 +68,7 @@ class Session(object):
         try:
             self._net_queue_out.put(payload)
         except Exception:
+            from nanome.util import Logs
             Logs.error("Cannot deliver packet to plugin",
                        self._session_id, "Did it crash?")
 

@@ -1,9 +1,16 @@
 import sys
-from nanome.util import Vector3, Quaternion, Color, FileErrorCode, FileSaveData, FileData, DirectoryEntry
 from abc import ABCMeta, abstractmethod
 
+if sys.version_info >= (3, 0):
+    def to_bytes(value, encoding):
+        return bytes(value, 'utf-8')
+
+else:
+    def to_bytes(value, encoding):
+        return bytearray(value, 'utf-8')
 
 class TypeSerializer(object):
+
     __metaclass__ = ABCMeta
     __version_table = dict()
 
@@ -205,6 +212,7 @@ class ColorSerializer(TypeSerializer):
         context.write_uint(value._color)
 
     def deserialize(self, version, context):
+        from nanome.util import Color
         return Color.from_int(context.read_uint())
 
 
@@ -252,6 +260,7 @@ class DirectoryEntrySerializer(TypeSerializer):
         pass
 
     def deserialize(self, version, context):
+        from nanome.util import DirectoryEntry
         result = DirectoryEntry()
         result.name = context.read_using_serializer(self.__string)
         result.is_directory = context.read_bool()
@@ -272,6 +281,7 @@ class FileDataSerializer(TypeSerializer):
         pass
 
     def deserialize(self, version, context):
+        from nanome.util import FileErrorCode, FileData
         result = FileData()
         count = context.read_int()
         result.data = context.read_bytes(count)
@@ -295,6 +305,7 @@ class FileSaveDataSerializer(TypeSerializer):
         context.write_bytes(value.data)
 
     def deserialize(self, version, context):
+        from nanome.util import FileErrorCode, FileSaveData
         result = FileSaveData()
         result.path = context.read_using_serializer(self.__string)
         result.error_code = FileErrorCode(context.read_int())
@@ -352,6 +363,7 @@ class QuaternionSerializer(TypeSerializer):
         context.write_float(value._w)
 
     def deserialize(self, version, context):
+        from nanome.util import Quaternion
         quaternion = Quaternion()
         x = context.read_float()
         y = context.read_float()
@@ -376,15 +388,6 @@ class UnityRotationSerializer(TypeSerializer):
 
     def deserialize(self, version, context):
         return context.read_using_serializer(self._Quat)
-
-
-if sys.version_info >= (3, 0):
-    def to_bytes(value, encoding):
-        return bytes(value, 'utf-8')
-
-else:
-    def to_bytes(value, encoding):
-        return bytearray(value, 'utf-8')
 
 
 class StringSerializer(TypeSerializer):
@@ -457,6 +460,7 @@ class Vector3Serializer(TypeSerializer):
         context.write_float(value.z)
 
     def deserialize(self, version, context):
+        from nanome.util import Vector3
         x = context.read_float()
         y = context.read_float()
         z = context.read_float()
@@ -465,7 +469,7 @@ class Vector3Serializer(TypeSerializer):
 
 class UnityPositionSerializer(TypeSerializer):
     def __init__(self):
-        self._Vec3 = Vector3Serializer()
+        self._vec3 = Vector3Serializer()
 
     def version(self):
         return 0
@@ -474,7 +478,7 @@ class UnityPositionSerializer(TypeSerializer):
         return "UnityPosition"
 
     def serialize(self, version, value, context):
-        context.write_using_serializer(self._Vec3, value)
+        context.write_using_serializer(self._vec3, value)
 
     def deserialize(self, version, context):
-        return context.read_using_serializer(self._Vec3)
+        return context.read_using_serializer(self._vec3)

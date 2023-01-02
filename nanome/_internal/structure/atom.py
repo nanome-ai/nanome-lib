@@ -1,22 +1,20 @@
-import nanome
-from nanome.util import Vector3, Color
-from nanome.util.logs import Logs
 from . import _Base
 
 
 class _Atom(_Base):
-    AtomRenderingMode = nanome.util.enums.AtomRenderingMode
     _vdw_radii = {}
 
     @classmethod
     def _create(cls):
-        _fill_atom_table()
+        cls._fill_atom_table()
         return cls()
 
     _atom_count = 0
 
     def __init__(self):
+        from nanome.util import Vector3, Color, enums
         super(_Atom, self).__init__()
+        self.AtomRenderingMode = enums.AtomRenderingMode
         # Molecular
         self._symbol = "C"
         self._serial = 1
@@ -34,7 +32,7 @@ class _Atom(_Base):
         # Rendering
         # API
         self._selected = False
-        self._atom_mode = _Atom.AtomRenderingMode.BallStick
+        self._atom_mode = enums.AtomRenderingMode.BallStick
         self._labeled = False
         self._label_text = ""
         self._atom_color = Color.Clear()
@@ -120,6 +118,7 @@ class _Atom(_Base):
 
     @property
     def _vdw_radius(self):
+        from nanome.util.logs import Logs
         if len(_Atom._vdw_radii) < 1:
             _Atom._fill_atom_table()
         atomSymbolLower = self._symbol.lower()

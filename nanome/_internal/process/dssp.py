@@ -1,10 +1,8 @@
-from nanome.util import Process, Logs
 from nanome._internal.structure import _Complex, _Residue
 from nanome._internal.structure.io import _pdb
 
 import tempfile
 import os
-import stat
 import sys
 import traceback
 
@@ -42,6 +40,7 @@ class _Dssp():
             self.__future = future
 
     def _start(self):
+        from nanome.util import Process, Logs
         if DSSP_PATH == None:
             Logs.error("Unsupported platform, cannot call DSSP")
             self.__done()
@@ -97,10 +96,12 @@ class _Dssp():
         self.__proc.start()
 
     def __on_error(self, msg):
+        from nanome.util import Logs
         Logs.warning("[DSSP]", msg)
 
     def __dssp_done(self, result_code):
         if result_code != 0:
+            from nanome.util import Logs
             Logs.warning("DSSP failed, code:", result_code)
             self.__done()
             return
@@ -128,6 +129,7 @@ class _Dssp():
                         chain = line[10:12].strip()
                         result.append((chain, int(serial), structure_type))
                     except:
+                        from nanome.util import Logs
                         Logs.warning("[DSSP] Parsing error on serial:", serial)
                         Logs.warning(traceback.format_exc())
                     i += 1
@@ -137,6 +139,7 @@ class _Dssp():
     def __update_secondary_structure(self, complex):
         molecules = complex._molecules
         if len(molecules) != len(self.__current_complex_result):
+            from nanome.util import Logs
             Logs.debug("[DSSP] Complex", complex._name, ": Molecule count", len(molecules), "doesn't match DSSP count", len(self.__current_complex_result))
             return
 
