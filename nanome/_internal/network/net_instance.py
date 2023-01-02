@@ -8,7 +8,7 @@ import errno
 import time
 
 
-class _NetInstance(object):
+class NetInstance(object):
     header_state = 0
     payload_state = 1
 
@@ -22,7 +22,7 @@ class _NetInstance(object):
         self._connection = self._context.wrap_socket(self._socket, server_hostname="nanome.ai", suppress_ragged_eofs=False)
         self._data = Data()
         self._processing = False
-        self._state = _NetInstance.header_state
+        self._state = NetInstance.header_state
         self._current_packet = Packet()
 
     def connect(self, host, port):
@@ -92,14 +92,14 @@ class _NetInstance(object):
         self._data.received_data(data)
         self._processing = True
         while self._processing is True:
-            if self._state == _NetInstance.header_state:
+            if self._state == NetInstance.header_state:
                 if self._current_packet.get_header(self._data):
-                    self._state = _NetInstance.payload_state
+                    self._state = NetInstance.payload_state
                 else:
                     self._processing = False
             else:
                 if self._current_packet.get_payload(self._data):
-                    self._state = _NetInstance.header_state
+                    self._state = NetInstance.header_state
                     self._on_received_packet(self._instance, self._current_packet)
                 else:
                     self._processing = False

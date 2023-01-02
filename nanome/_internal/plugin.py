@@ -251,7 +251,7 @@ class _Plugin(object):
 
     def __connect(self):
         """Create network Connection to NTS, and start listening for packets."""
-        self._network = Network._NetInstance(self, self.__class__._on_packet_received)
+        self._network = Network.NetInstance(self, self.__class__._on_packet_received)
         if self._network.connect(self._host, self._port):
             if self._plugin_id >= 0:
                 plugin_id = self._plugin_id
