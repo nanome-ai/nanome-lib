@@ -1,8 +1,8 @@
-from nanome._internal.util.serializers import _TypeSerializer, _ArraySerializer, _DictionarySerializer, _LongSerializer
+from nanome._internal.util.serializers import TypeSerializer, _ArraySerializer, _DictionarySerializer, _LongSerializer
 from nanome._internal.structure.serialization import _ComplexSerializer, _AtomSerializer
 
 
-class _SelectionChanged(_TypeSerializer):
+class _SelectionChanged(TypeSerializer):
     def __init__(self):
         self.complex_serializer = _ComplexSerializer()
         atom_serializer = _AtomSerializer()

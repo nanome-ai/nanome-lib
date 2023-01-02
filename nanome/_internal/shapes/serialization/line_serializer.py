@@ -1,8 +1,8 @@
-from nanome._internal.util.serializers import _TypeSerializer, _StringSerializer
+from nanome._internal.util.serializers import TypeSerializer, _StringSerializer
 from nanome._internal.shapes.line import _Line
 
 
-class _LineSerializer(_TypeSerializer):
+class _LineSerializer(TypeSerializer):
     def __init__(self):
         pass
 

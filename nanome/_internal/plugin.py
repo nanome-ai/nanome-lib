@@ -3,7 +3,7 @@ from nanome._internal.process import ProcessManager
 from nanome._internal.network import PluginNetwork
 from nanome._internal.network.commands.callbacks.commands_enums import _Hashes
 from nanome._internal.network.serialization.serializer import Serializer
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 from nanome._internal.logs import LogsManager
 import logging
 
@@ -152,7 +152,7 @@ class _Plugin(object):
             #   even though it was disconnected for Nanome
             if self.__serializer.try_register_session(packet.payload) is True:
                 received_version_table, _, _ = self.__serializer.deserialize_command(packet.payload, None)
-                version_table = _TypeSerializer.get_best_version_table(received_version_table)
+                version_table = TypeSerializer.get_best_version_table(received_version_table)
                 self.__on_client_connection(session_id, version_table)
                 return
 
@@ -363,7 +363,7 @@ class _Plugin(object):
             args=(
                 self._plugin_class, session_id, net_queue_in, net_queue_out,
                 pm_queue_in, pm_queue_out, log_pipe_conn, self.__serializer,
-                self._plugin_id, version_table, _TypeSerializer.get_version_table(),
+                self._plugin_id, version_table, TypeSerializer.get_version_table(),
                 self._custom_data, permissions
             )
         )

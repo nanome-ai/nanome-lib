@@ -2,11 +2,11 @@ import os
 import tempfile
 
 from nanome._internal.shapes.mesh import _Mesh
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 from nanome.util import Logs
 
 
-class _MeshSerializer(_TypeSerializer):
+class _MeshSerializer(TypeSerializer):
     def __init__(self):
         pass
 

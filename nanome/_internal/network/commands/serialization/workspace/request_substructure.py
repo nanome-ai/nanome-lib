@@ -1,8 +1,8 @@
-from nanome._internal.util.serializers import _TypeSerializer, _ArraySerializer, _DictionarySerializer, _LongSerializer
+from nanome._internal.util.serializers import TypeSerializer, _ArraySerializer, _DictionarySerializer, _LongSerializer
 from nanome._internal.structure.serialization import _SubstructureSerializer, _AtomSerializer, _MoleculeSerializer
 
 
-class _RequestSubstructure(_TypeSerializer):
+class _RequestSubstructure(TypeSerializer):
     def __init__(self):
         self.array = _ArraySerializer()
         self.array.set_type(_SubstructureSerializer())

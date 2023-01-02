@@ -3,11 +3,11 @@ from nanome._internal.util.serializers import _Vector3Serializer, _QuaternionSer
 from . import _MoleculeSerializer
 from .. import _Complex
 
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 from nanome.util import Quaternion, Vector3
 
 
-class _ComplexSerializer(_TypeSerializer):
+class _ComplexSerializer(TypeSerializer):
     def __init__(self, shallow=False):
         self.shallow = shallow
         self.array = _ArraySerializer()

@@ -1,10 +1,10 @@
 from nanome._internal.util.serializers import _ArraySerializer, _IntSerializer
 from .. import _LayoutNode
 
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _LayoutNodeSerializer(_TypeSerializer):
+class _LayoutNodeSerializer(TypeSerializer):
     def __init__(self):
         pass
 

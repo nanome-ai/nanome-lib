@@ -1,11 +1,11 @@
 from . import _AtomSerializerID
 from .. import _Bond
 
-from nanome._internal.util.serializers import _TypeSerializer, _ArraySerializer, _BoolSerializer, _ByteSerializer
+from nanome._internal.util.serializers import TypeSerializer, _ArraySerializer, _BoolSerializer, _ByteSerializer
 from nanome.util import Logs
 
 
-class _BondSerializer(_TypeSerializer):
+class _BondSerializer(TypeSerializer):
     def __init__(self, shallow=False):
         self.shallow = shallow
         self.atom_serializer = _AtomSerializerID()

@@ -1,8 +1,8 @@
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 from nanome.util import IntEnum
 
 
-class _UIHook(_TypeSerializer):
+class _UIHook(TypeSerializer):
     class Type(IntEnum):
         button_hover = 0
         image_pressed = 1

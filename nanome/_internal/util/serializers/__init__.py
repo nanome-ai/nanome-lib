@@ -1,6 +1,6 @@
 from . import *
 # classes
-from .type_serializer import _TypeSerializer
+from .type_serializer import TypeSerializer
 
 from .string_serializer import _StringSerializer
 from .char_serializer import _CharSerializer

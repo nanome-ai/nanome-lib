@@ -1,8 +1,8 @@
 from .. import _VolumeData
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _UnitCellSerializer(_TypeSerializer):
+class _UnitCellSerializer(TypeSerializer):
     def __init__(self):
         pass
 

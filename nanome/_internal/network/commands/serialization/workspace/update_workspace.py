@@ -2,10 +2,10 @@ from nanome._internal.network.serialization import _ContextDeserialization, _Con
 from nanome._internal.util.serializers import _DictionarySerializer, _LongSerializer
 from nanome._internal.structure.serialization import _WorkspaceSerializer, _AtomSerializer
 
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _UpdateWorkspace(_TypeSerializer):
+class _UpdateWorkspace(TypeSerializer):
     def __init__(self):
         self.workspace = _WorkspaceSerializer()
         atom_serializer = _AtomSerializer()

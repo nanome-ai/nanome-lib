@@ -1,7 +1,7 @@
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _ImportFile(_TypeSerializer):
+class _ImportFile(TypeSerializer):
 
     def version(self):
         return 0

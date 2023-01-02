@@ -1,7 +1,7 @@
-from nanome._internal.util.serializers import _TypeSerializer, _StringSerializer
+from nanome._internal.util.serializers import TypeSerializer, _StringSerializer
 
 
-class _GetPresenterInfoResponse(_TypeSerializer):
+class _GetPresenterInfoResponse(TypeSerializer):
     def __init__(self):
         self.string = _StringSerializer()
 

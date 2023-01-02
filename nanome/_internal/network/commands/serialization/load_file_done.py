@@ -1,10 +1,10 @@
 from nanome._internal.util.serializers import _ArraySerializer
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 from nanome.util.file import LoadInfoDone
 from nanome.util.enums import LoadFileErrorCode
 
 
-class _LoadFileDoneInfo(_TypeSerializer):
+class _LoadFileDoneInfo(TypeSerializer):
     def __init__(self):
         pass
 
@@ -23,7 +23,7 @@ class _LoadFileDoneInfo(_TypeSerializer):
         return result
 
 
-class _LoadFileDone(_TypeSerializer):
+class _LoadFileDone(TypeSerializer):
     def __init__(self):
         self.array = _ArraySerializer()
         self.array.set_type(_LoadFileDoneInfo())

@@ -1,10 +1,10 @@
 from nanome._internal.util.serializers import _ArraySerializer
 from nanome._internal.ui._serialization import _LayoutNodeSerializer, _UIBaseSerializer, _MenuSerializer
 
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _UpdateMenu(_TypeSerializer):
+class _UpdateMenu(TypeSerializer):
     def __init__(self):
         self.menu = _MenuSerializer()
         self.array = _ArraySerializer()

@@ -1,7 +1,7 @@
-from nanome._internal.util.serializers import _TypeSerializer, _TupleSerializer, _IntSerializer, _StringSerializer
+from nanome._internal.util.serializers import TypeSerializer, _TupleSerializer, _IntSerializer, _StringSerializer
 
 
-class _TextInputCallback(_TypeSerializer):
+class _TextInputCallback(TypeSerializer):
     def __init__(self):
         self.__tuple = _TupleSerializer(_IntSerializer(), _StringSerializer())
 

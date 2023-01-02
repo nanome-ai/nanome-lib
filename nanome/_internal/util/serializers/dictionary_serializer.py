@@ -1,9 +1,9 @@
 from . import _TupleSerializer, _ArraySerializer
 
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _DictionarySerializer(_TypeSerializer):
+class _DictionarySerializer(TypeSerializer):
     def __init__(self):
         self._serializer = None
 

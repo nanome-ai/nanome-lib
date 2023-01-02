@@ -167,7 +167,7 @@ def add_message(command, serializer):
     Serializer._messages[CommandCallbacks._Hashes.MessageHashes[command]] = serializer
 
 
-Serializers.type_serializer._TypeSerializer.register_string_raw(MESSAGE_VERSION_KEY, 1)
+Serializers.type_serializer.TypeSerializer.register_string_raw(MESSAGE_VERSION_KEY, 1)
 # control
 add_message(CommandCallbacks.Messages.connect, CommandSerializers._Connect())
 

@@ -1,9 +1,9 @@
 from nanome._internal.util.serializers import _ArraySerializer, _LongSerializer
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 from nanome.util.enums import StreamType as SType
 
 
-class _CreateStream(_TypeSerializer):
+class _CreateStream(TypeSerializer):
     def __init__(self):
         pass
 

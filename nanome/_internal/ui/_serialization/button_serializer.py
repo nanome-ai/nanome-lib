@@ -3,10 +3,10 @@ from nanome.util.enums import VertAlignOptions, HorizAlignOptions, ToolTipPositi
 from . import _UIBaseSerializer
 from .. import _Button
 
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _ButtonSerializer(_TypeSerializer):
+class _ButtonSerializer(TypeSerializer):
     def __init__(self):
         self.string = _StringSerializer()
         self.color = _ColorSerializer()

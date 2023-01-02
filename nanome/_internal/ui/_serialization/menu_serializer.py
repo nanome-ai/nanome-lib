@@ -2,10 +2,10 @@ from nanome._internal.util.serializers import _StringSerializer
 from .. import _Menu
 from . import _LayoutNodeSerializer
 
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _MenuSerializer(_TypeSerializer):
+class _MenuSerializer(TypeSerializer):
     def __init__(self):
         self.string = _StringSerializer()
 

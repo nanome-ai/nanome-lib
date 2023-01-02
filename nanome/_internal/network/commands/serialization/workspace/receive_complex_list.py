@@ -1,12 +1,12 @@
 from nanome._internal.util.serializers import _ArraySerializer, _DictionarySerializer, _LongSerializer
 from nanome._internal.structure.serialization import _ComplexSerializer, _AtomSerializer
 
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 # shallow
 
 
-class _ReceiveComplexList(_TypeSerializer):
+class _ReceiveComplexList(TypeSerializer):
     def __init__(self):
         self.array_serializer = _ArraySerializer()
         self.array_serializer.set_type(_ComplexSerializer())
@@ -29,7 +29,7 @@ class _ReceiveComplexList(_TypeSerializer):
 # deep
 
 
-class _ReceiveComplexes(_TypeSerializer):
+class _ReceiveComplexes(TypeSerializer):
     def __init__(self):
         self.array_serializer = _ArraySerializer()
         self.array_serializer.set_type(_ComplexSerializer())

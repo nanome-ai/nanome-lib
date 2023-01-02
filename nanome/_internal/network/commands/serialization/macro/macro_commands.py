@@ -1,11 +1,11 @@
-from nanome._internal.util.serializers import _TypeSerializer, _ArraySerializer, _StringSerializer
+from nanome._internal.util.serializers import TypeSerializer, _ArraySerializer, _StringSerializer
 from nanome._internal.macro.serialization import _MacroSerializer
 
 macro_serializer = _MacroSerializer()
 string_serializer = _StringSerializer()
 
 
-class _SaveMacro(_TypeSerializer):
+class _SaveMacro(TypeSerializer):
     _macro_serializer = macro_serializer
     _string_serializer = string_serializer
 
@@ -27,7 +27,7 @@ class _SaveMacro(_TypeSerializer):
         raise NotImplementedError
 
 
-class _DeleteMacro(_TypeSerializer):
+class _DeleteMacro(TypeSerializer):
     _macro_serializer = macro_serializer
     _string_serializer = string_serializer
 
@@ -49,7 +49,7 @@ class _DeleteMacro(_TypeSerializer):
         raise NotImplementedError
 
 
-class _RunMacro(_TypeSerializer):
+class _RunMacro(TypeSerializer):
     _macro_serializer = macro_serializer
     _string_serializer = string_serializer
 
@@ -71,7 +71,7 @@ class _RunMacro(_TypeSerializer):
         return context.read_bool()
 
 
-class _GetMacros(_TypeSerializer):
+class _GetMacros(TypeSerializer):
     _macro_serializer = macro_serializer
     _string_serializer = string_serializer
 
@@ -91,7 +91,7 @@ class _GetMacros(_TypeSerializer):
         raise NotImplementedError
 
 
-class _GetMacrosResponse(_TypeSerializer):
+class _GetMacrosResponse(TypeSerializer):
     _macro_serializer = macro_serializer
     _string_serializer = string_serializer
 
@@ -112,7 +112,7 @@ class _GetMacrosResponse(_TypeSerializer):
         return context.read_using_serializer(self._array_serializer)
 
 
-class _StopMacro(_TypeSerializer):
+class _StopMacro(TypeSerializer):
     _macro_serializer = macro_serializer
     _string_serializer = string_serializer
 

@@ -1,9 +1,9 @@
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 from nanome._internal.network.commands.callbacks.commands_enums import _Hashes, _Integrations
 from nanome._internal.integration import serialization as Serializers
 
 
-class _Integration(_TypeSerializer):
+class _Integration(TypeSerializer):
     __integrations = {
         _Hashes.IntegrationHashes[_Integrations.hydrogen_add]: Serializers._AddHydrogen(),
         _Hashes.IntegrationHashes[_Integrations.hydrogen_remove]: Serializers._RemoveHydrogen(),

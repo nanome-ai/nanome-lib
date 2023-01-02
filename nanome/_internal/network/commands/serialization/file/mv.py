@@ -1,8 +1,8 @@
-from nanome._internal.util.serializers import _StringSerializer, _TypeSerializer
+from nanome._internal.util.serializers import _StringSerializer, TypeSerializer
 from nanome.util import FileError
 
 
-class _MV(_TypeSerializer):
+class _MV(TypeSerializer):
     def __init__(self):
         self.__string = _StringSerializer()
 

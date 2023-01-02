@@ -1,9 +1,9 @@
 from nanome.util import Color
 
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _ColorSerializer(_TypeSerializer):
+class _ColorSerializer(TypeSerializer):
     def __init__(self):
         pass
 

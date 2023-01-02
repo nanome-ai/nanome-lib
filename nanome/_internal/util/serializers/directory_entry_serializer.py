@@ -1,10 +1,10 @@
 from . import _StringSerializer
 from nanome.util import Logs, DirectoryEntry
 
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _DirectoryEntrySerializer(_TypeSerializer):
+class _DirectoryEntrySerializer(TypeSerializer):
     def __init__(self):
         self.__string = _StringSerializer()
 

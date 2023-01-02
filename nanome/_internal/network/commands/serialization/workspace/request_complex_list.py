@@ -1,9 +1,9 @@
 from nanome._internal.util.serializers import _ArraySerializer, _LongSerializer
 
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _RequestComplexList(_TypeSerializer):
+class _RequestComplexList(TypeSerializer):
     def __init__(self):
         pass
 
@@ -20,7 +20,7 @@ class _RequestComplexList(_TypeSerializer):
         return None
 
 
-class _RequestComplexes(_TypeSerializer):
+class _RequestComplexes(TypeSerializer):
     def __init__(self):
         pass
 

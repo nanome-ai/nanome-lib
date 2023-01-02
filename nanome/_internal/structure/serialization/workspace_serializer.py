@@ -2,10 +2,10 @@ from nanome._internal.util.serializers import _ArraySerializer, _UnityPositionSe
 from . import _ComplexSerializer
 from .. import _Workspace
 
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _WorkspaceSerializer(_TypeSerializer):
+class _WorkspaceSerializer(TypeSerializer):
     def __init__(self):
         self.array = _ArraySerializer()
         self.array.set_type(_ComplexSerializer())

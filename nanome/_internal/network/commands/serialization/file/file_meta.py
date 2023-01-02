@@ -1,8 +1,8 @@
 from nanome.util.file import FileMeta
-from nanome._internal.util.serializers import _StringSerializer, _TypeSerializer
+from nanome._internal.util.serializers import _StringSerializer, TypeSerializer
 
 
-class _FileMeta(_TypeSerializer):
+class _FileMeta(TypeSerializer):
     def __init__(self):
         self.__string = _StringSerializer()
 

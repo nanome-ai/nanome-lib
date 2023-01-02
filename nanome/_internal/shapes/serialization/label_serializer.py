@@ -1,8 +1,8 @@
-from nanome._internal.util.serializers import _TypeSerializer, _StringSerializer
+from nanome._internal.util.serializers import TypeSerializer, _StringSerializer
 from nanome._internal.shapes.label import _Label
 
 
-class _LabelSerializer(_TypeSerializer):
+class _LabelSerializer(TypeSerializer):
     def __init__(self):
         self._string = _StringSerializer()
 

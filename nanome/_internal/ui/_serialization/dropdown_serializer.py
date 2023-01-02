@@ -1,10 +1,10 @@
 from . import _UIBaseSerializer
 from . import _DropdownItemSerializer
 from .. import _Dropdown
-from nanome._internal.util.serializers import _StringSerializer, _ArraySerializer, _TypeSerializer
+from nanome._internal.util.serializers import _StringSerializer, _ArraySerializer, TypeSerializer
 
 
-class _DropdownSerializer(_TypeSerializer):
+class _DropdownSerializer(TypeSerializer):
     def __init__(self):
         self.string = _StringSerializer()
         self.items = _ArraySerializer()

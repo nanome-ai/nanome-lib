@@ -1,10 +1,10 @@
 from nanome.util import IntEnum
 from . import _UIBaseSerializer
 from .. import _LoadingBar
-from nanome._internal.util.serializers import _StringSerializer, _TypeSerializer
+from nanome._internal.util.serializers import _StringSerializer, TypeSerializer
 
 
-class _LoadingBarSerializer(_TypeSerializer):
+class _LoadingBarSerializer(TypeSerializer):
     def __init__(self):
         self.string = _StringSerializer()
 

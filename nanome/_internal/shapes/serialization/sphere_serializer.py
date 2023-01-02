@@ -1,8 +1,8 @@
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 from nanome._internal.shapes.sphere import _Sphere
 
 
-class _SphereSerializer(_TypeSerializer):
+class _SphereSerializer(TypeSerializer):
     def __init__(self):
         pass
 

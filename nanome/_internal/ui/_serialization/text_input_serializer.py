@@ -3,10 +3,10 @@ from .. import _TextInput
 from nanome._internal.util.serializers import _StringSerializer, _ColorSerializer
 from . import _UIBaseSerializer
 
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _TextInputSerializer(_TypeSerializer):
+class _TextInputSerializer(TypeSerializer):
     def __init__(self):
         self.string = _StringSerializer()
         self.color = _ColorSerializer()

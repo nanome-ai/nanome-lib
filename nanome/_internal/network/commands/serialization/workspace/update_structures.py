@@ -1,12 +1,12 @@
 from nanome._internal.structure import _Atom, _Bond, _Residue, _Chain, _Molecule, _Complex, _Base
 from nanome._internal.network.serialization import _ContextDeserialization, _ContextSerialization
-from nanome._internal.util.serializers import _ArraySerializer, _DictionarySerializer, _LongSerializer, _TypeSerializer
+from nanome._internal.util.serializers import _ArraySerializer, _DictionarySerializer, _LongSerializer, TypeSerializer
 from nanome._internal.structure.serialization import _ComplexSerializer, _MoleculeSerializer, _ChainSerializer, _ResidueSerializer, _BondSerializer, _AtomSerializer, _AtomSerializerID
 
 # deep
 
 
-class _UpdateStructures(_TypeSerializer):
+class _UpdateStructures(TypeSerializer):
     def __init__(self, shallow):
         self.array_serializer = _ArraySerializer()
         # setting the shallow flag

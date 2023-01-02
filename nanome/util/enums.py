@@ -302,7 +302,7 @@ class SkyBoxes(IntEnum):
     Graydient = 5
 
 
-class _CommandEnum(IntEnum):
+class CommandEnum(IntEnum):
     if sys.version_info >= (3, 6):  # Tmp hack
         # Override for auto()
         def _generate_next_value_(name, start, count, last_values):
@@ -311,7 +311,7 @@ class _CommandEnum(IntEnum):
         pass
 
 
-class Integrations(_CommandEnum):
+class Integrations(CommandEnum):
     # Tmp hack
     reset_auto()  # Not an enum
 
@@ -328,7 +328,7 @@ class Integrations(_CommandEnum):
     smiles = auto()
 
 
-class Permissions(_CommandEnum):
+class Permissions(CommandEnum):
     # Reset enum counter for Python 2.7
     reset_auto()
 

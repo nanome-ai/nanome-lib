@@ -1,7 +1,7 @@
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _BoolSerializer(_TypeSerializer):
+class _BoolSerializer(TypeSerializer):
     def __init__(self):
         pass
 

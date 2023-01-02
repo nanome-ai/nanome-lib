@@ -2,10 +2,10 @@ from nanome.util import IntEnum
 from .. import _Slider
 from . import _UIBaseSerializer
 
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _SliderSerializer(_TypeSerializer):
+class _SliderSerializer(TypeSerializer):
     def __init__(self):
         pass
 

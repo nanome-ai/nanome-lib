@@ -1,10 +1,10 @@
 from . import _StringSerializer, _ArraySerializer, _ByteSerializer
 from nanome.util import FileErrorCode, FileData, IntEnum
 
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _FileDataSerializer(_TypeSerializer):
+class _FileDataSerializer(TypeSerializer):
     def __init__(self):
         pass
 

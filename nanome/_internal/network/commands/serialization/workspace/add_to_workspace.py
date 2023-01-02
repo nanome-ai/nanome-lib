@@ -1,10 +1,10 @@
 from nanome._internal.network.serialization import _ContextSerialization
 from nanome._internal.util.serializers import _ArraySerializer, _DictionarySerializer, _LongSerializer
 from nanome._internal.structure.serialization import _ComplexSerializer, _AtomSerializer
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _AddToWorkspace(_TypeSerializer):
+class _AddToWorkspace(TypeSerializer):
     def __init__(self):
         self.__array = _ArraySerializer()
         self.__array.set_type(_ComplexSerializer())

@@ -1,8 +1,8 @@
 from nanome._internal.util.serializers import _StringSerializer
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _OpenURL(_TypeSerializer):
+class _OpenURL(TypeSerializer):
     def __init__(self):
         self.string = _StringSerializer()
 

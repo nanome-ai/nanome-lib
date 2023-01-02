@@ -4,12 +4,12 @@ from abc import ABCMeta, abstractmethod
 __metaclass__ = type
 
 
-class _TypeSerializer(object):
+class TypeSerializer(object):
     __metaclass__ = ABCMeta
     __version_table = dict()
 
     def __new__(cls, *args):
-        result = super(_TypeSerializer, cls).__new__(cls)
+        result = super(TypeSerializer, cls).__new__(cls)
         cls.register_string_raw(result.name(), result.version())
         result.__init__(*args)
         return result

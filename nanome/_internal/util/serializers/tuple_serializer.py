@@ -1,7 +1,7 @@
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _TupleSerializer(_TypeSerializer):
+class _TupleSerializer(TypeSerializer):
     def __init__(self, serializer1=None, serializer2=None):
         self._serializer1 = serializer1
         self._serializer2 = serializer2

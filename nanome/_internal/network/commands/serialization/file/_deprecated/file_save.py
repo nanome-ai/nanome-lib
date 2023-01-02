@@ -1,8 +1,8 @@
 from nanome._internal.util.serializers import _StringSerializer, _ArraySerializer, _FileSaveDataSerializer
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _FileSave(_TypeSerializer):
+class _FileSave(TypeSerializer):
     def __init__(self):
         self.__file_data_array = _ArraySerializer()
         self.__file_data_array.set_type(_FileSaveDataSerializer())

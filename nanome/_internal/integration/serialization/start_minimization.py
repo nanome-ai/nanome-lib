@@ -1,7 +1,7 @@
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _StartMinimization(_TypeSerializer):
+class _StartMinimization(TypeSerializer):
     def version(self):
         return 0
 

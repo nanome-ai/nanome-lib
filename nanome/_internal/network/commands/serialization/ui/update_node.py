@@ -1,9 +1,9 @@
 from nanome._internal.ui._serialization import _LayoutNodeSerializerDeep
 from nanome._internal.util.serializers import _ArraySerializer
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _UpdateNode(_TypeSerializer):
+class _UpdateNode(TypeSerializer):
     def __init__(self):
         self._array = _ArraySerializer()
         self._node_serializer = _LayoutNodeSerializerDeep()

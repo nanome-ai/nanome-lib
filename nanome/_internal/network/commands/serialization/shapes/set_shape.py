@@ -1,11 +1,11 @@
 from nanome.util.logs import Logs
-from nanome._internal.util.serializers import _ArraySerializer, _TypeSerializer, _UnityPositionSerializer, _ColorSerializer, _UnityRotationSerializer
+from nanome._internal.util.serializers import _ArraySerializer, TypeSerializer, _UnityPositionSerializer, _ColorSerializer, _UnityRotationSerializer
 from nanome._internal.shapes.serialization import _SphereSerializer, _ShapeSerializer, _LineSerializer, _LabelSerializer, _MeshSerializer
 from nanome.util.enums import ShapeType
 from nanome.util import Quaternion
 
 
-class _SetShape(_TypeSerializer):
+class _SetShape(TypeSerializer):
     def __init__(self):
         self._position = _UnityPositionSerializer()
         self._rotation = _UnityRotationSerializer()

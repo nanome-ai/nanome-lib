@@ -1,8 +1,8 @@
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 from nanome.util.logs import Logs
 
 
-class _DeleteShape(_TypeSerializer):
+class _DeleteShape(TypeSerializer):
     def __init__(self):
         pass
 

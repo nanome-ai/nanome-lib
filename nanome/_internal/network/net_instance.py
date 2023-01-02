@@ -91,6 +91,7 @@ class NetInstance(object):
     def _received_data(self, data):
         self._data.received_data(data)
         self._processing = True
+
         while self._processing is True:
             if self._state == NetInstance.header_state:
                 if self._current_packet.get_header(self._data):

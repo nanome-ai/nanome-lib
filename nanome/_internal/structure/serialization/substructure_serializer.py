@@ -1,10 +1,10 @@
 from .. import _Substructure
-from nanome._internal.util.serializers import _TypeSerializer, _StringSerializer, _ArraySerializer, _LongSerializer
+from nanome._internal.util.serializers import TypeSerializer, _StringSerializer, _ArraySerializer, _LongSerializer
 from nanome.util import Logs
 from nanome.util.enums import SubstructureType
 
 
-class _SubstructureSerializer(_TypeSerializer):
+class _SubstructureSerializer(TypeSerializer):
     def __init__(self):
         self.string = _StringSerializer()
         self.array = _ArraySerializer()

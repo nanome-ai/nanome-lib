@@ -1,7 +1,7 @@
-from nanome._internal.util.serializers import _TypeSerializer, _ArraySerializer, _StringSerializer
+from nanome._internal.util.serializers import TypeSerializer, _ArraySerializer, _StringSerializer
 
 
-class _FeedStream(_TypeSerializer):
+class _FeedStream(TypeSerializer):
     def __init__(self):
         self.__array = _ArraySerializer()
         self.__array.set_type(_StringSerializer())

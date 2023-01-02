@@ -1,7 +1,7 @@
-from nanome._internal.util.serializers import _TypeSerializer, _StringSerializer, _ArraySerializer
+from nanome._internal.util.serializers import TypeSerializer, _StringSerializer, _ArraySerializer
 
 
-class _ExportLocations(_TypeSerializer):
+class _ExportLocations(TypeSerializer):
     def __init__(self):
         self.array = _ArraySerializer()
         self.array.set_type(_StringSerializer())

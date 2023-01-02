@@ -1,8 +1,8 @@
 from nanome._internal.network.serialization import _ContextDeserialization, _ContextSerialization
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _ComputeHBonds(_TypeSerializer):
+class _ComputeHBonds(TypeSerializer):
     def __init__(self):
         pass
 

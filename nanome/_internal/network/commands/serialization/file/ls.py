@@ -1,9 +1,9 @@
-from nanome._internal.util.serializers import _TypeSerializer, _StringSerializer, _ArraySerializer
+from nanome._internal.util.serializers import TypeSerializer, _StringSerializer, _ArraySerializer
 from nanome._internal.network.commands.serialization.file.file_meta import _FileMeta
 from nanome.util import FileError
 
 
-class _LS(_TypeSerializer):
+class _LS(TypeSerializer):
     def __init__(self):
         self.__string = _StringSerializer()
         self.__array = _ArraySerializer()

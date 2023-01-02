@@ -1,9 +1,9 @@
 from nanome.util import Vector3
 
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _Vector3Serializer(_TypeSerializer):
+class _Vector3Serializer(TypeSerializer):
     def __init__(self):
         pass
 
@@ -25,7 +25,7 @@ class _Vector3Serializer(_TypeSerializer):
         return Vector3(x, y, z)
 
 
-class _UnityPositionSerializer(_TypeSerializer):
+class _UnityPositionSerializer(TypeSerializer):
     def __init__(self):
         self._Vec3 = _Vector3Serializer()
 

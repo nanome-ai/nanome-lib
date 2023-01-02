@@ -4,10 +4,10 @@ from . import _BondSerializer
 from .. import _Residue
 from nanome.util import Logs
 
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _ResidueSerializer(_TypeSerializer):
+class _ResidueSerializer(TypeSerializer):
     def __init__(self, shallow=False):
         self.shallow = shallow
         self.array = _ArraySerializer()

@@ -1,4 +1,4 @@
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 import sys
 
@@ -11,7 +11,7 @@ else:
         return bytearray(value, 'utf-8')
 
 
-class _StringSerializer(_TypeSerializer):
+class _StringSerializer(TypeSerializer):
     def __init__(self):
         pass
 

@@ -1,9 +1,9 @@
 from nanome._internal.network.serialization import _ContextSerialization, _ContextDeserialization
 from nanome._internal.structure.serialization import _ComplexSerializer, _AtomSerializer
-from nanome._internal.util.serializers import _TypeSerializer, _ArraySerializer, _DictionarySerializer, _LongSerializer
+from nanome._internal.util.serializers import TypeSerializer, _ArraySerializer, _DictionarySerializer, _LongSerializer
 
 
-class _AddBonds(_TypeSerializer):
+class _AddBonds(TypeSerializer):
     def __init__(self):
         self.__array = _ArraySerializer()
         self.__array.set_type(_ComplexSerializer())

@@ -1,7 +1,7 @@
-from nanome._internal.util.serializers import _StringSerializer, _TypeSerializer
+from nanome._internal.util.serializers import _StringSerializer, TypeSerializer
 
 
-class _SetPluginListButton(_TypeSerializer):
+class _SetPluginListButton(TypeSerializer):
     def __init__(self):
         self.__string = _StringSerializer()
 

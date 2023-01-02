@@ -1,9 +1,9 @@
 from nanome.util import Quaternion
 
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _QuaternionSerializer(_TypeSerializer):
+class _QuaternionSerializer(TypeSerializer):
     def __init__(self):
         pass
 
@@ -29,7 +29,7 @@ class _QuaternionSerializer(_TypeSerializer):
         return quaternion
 
 
-class _UnityRotationSerializer(_TypeSerializer):
+class _UnityRotationSerializer(TypeSerializer):
     def __init__(self):
         self._Quat = _QuaternionSerializer()
 

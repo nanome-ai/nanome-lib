@@ -1,10 +1,10 @@
 from nanome._internal.util.serializers import _StringSerializer, _CharSerializer, _ColorSerializer, _Vector3Serializer, _ArraySerializer, _BoolSerializer, _DictionarySerializer
 from .. import _Atom
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 from nanome.util import Logs
 
 
-class _AtomSerializer(_TypeSerializer):
+class _AtomSerializer(TypeSerializer):
     def __init__(self):
         self.color = _ColorSerializer()
         self.string = _StringSerializer()

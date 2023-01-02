@@ -1,9 +1,9 @@
 from .. import _VolumeData
-from nanome._internal.util.serializers import _TypeSerializer, _StringSerializer
+from nanome._internal.util.serializers import TypeSerializer, _StringSerializer
 from . import _UnitCellSerializer
 
 
-class _VolumeDataSerializer(_TypeSerializer):
+class _VolumeDataSerializer(TypeSerializer):
     __string = _StringSerializer()
     __cell = _UnitCellSerializer()
 

@@ -1,8 +1,8 @@
 from . import _StringSerializer
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class CachedImageSerializer(_TypeSerializer):
+class CachedImageSerializer(TypeSerializer):
     cache = set()
     session = 0
 

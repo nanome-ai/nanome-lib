@@ -1,10 +1,10 @@
 from nanome._internal.util.serializers import _StringSerializer, _ArraySerializer, _DirectoryEntrySerializer
 from nanome.util import DirectoryRequestResult, DirectoryErrorCode
 
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _DirectoryRequest(_TypeSerializer):
+class _DirectoryRequest(TypeSerializer):
     def __init__(self):
         self.__string = _StringSerializer()
         self.__directory_entry_array = _ArraySerializer()

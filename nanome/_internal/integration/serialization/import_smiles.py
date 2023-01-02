@@ -1,9 +1,9 @@
 from nanome._internal.util.serializers import _ArraySerializer, _DictionarySerializer, _LongSerializer, _StringSerializer
 from nanome._internal.structure.serialization import _ComplexSerializer, _AtomSerializer
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _ImportSmiles(_TypeSerializer):
+class _ImportSmiles(TypeSerializer):
     def __init__(self):
         self.complex_array = _ArraySerializer()
         self.complex_array.set_type(_ComplexSerializer())

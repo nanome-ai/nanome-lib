@@ -1,10 +1,10 @@
 from nanome._internal.util.serializers import _ArraySerializer, _DictionarySerializer, _LongSerializer
 from nanome._internal.structure.serialization import _ComplexSerializer, _AtomSerializer
 
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _RemoveHydrogen(_TypeSerializer):
+class _RemoveHydrogen(TypeSerializer):
     def __init__(self):
         self.array_serializer = _ArraySerializer()
         self.array_serializer.set_type(_ComplexSerializer())

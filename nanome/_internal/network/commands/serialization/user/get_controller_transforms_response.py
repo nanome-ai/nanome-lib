@@ -1,7 +1,7 @@
-from nanome._internal.util.serializers import _TypeSerializer, _UnityPositionSerializer, _UnityRotationSerializer
+from nanome._internal.util.serializers import TypeSerializer, _UnityPositionSerializer, _UnityRotationSerializer
 
 
-class _GetControllerTransformsResponse(_TypeSerializer):
+class _GetControllerTransformsResponse(TypeSerializer):
     def __init__(self):
         self.pos = _UnityPositionSerializer()
         self.rot = _UnityRotationSerializer()

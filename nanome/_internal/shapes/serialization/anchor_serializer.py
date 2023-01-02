@@ -1,9 +1,9 @@
-from nanome._internal.util.serializers import _TypeSerializer, _UnityPositionSerializer
+from nanome._internal.util.serializers import TypeSerializer, _UnityPositionSerializer
 from nanome._internal.shapes import _Anchor
 from nanome.util.enums import ShapeType
 
 
-class _AnchorSerializer(_TypeSerializer):
+class _AnchorSerializer(TypeSerializer):
     def __init__(self):
         self._offset = _UnityPositionSerializer()
 

@@ -1,8 +1,8 @@
 from .. import _VolumeData
-from nanome._internal.util.serializers import _TypeSerializer, _ColorSerializer
+from nanome._internal.util.serializers import TypeSerializer, _ColorSerializer
 
 
-class _VolumeLayerSerializer(_TypeSerializer):
+class _VolumeLayerSerializer(TypeSerializer):
     __color = _ColorSerializer()
 
     def __init__(self):

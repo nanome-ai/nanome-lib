@@ -1,11 +1,11 @@
 from nanome._internal.network.serialization import _ContextDeserialization, _ContextSerialization
 from nanome._internal.volumetric.serialization import _VolumeDataSerializer, _VolumePropertiesSerializer
-from nanome._internal.util.serializers import _TypeSerializer, _LongSerializer, _DictionarySerializer
+from nanome._internal.util.serializers import TypeSerializer, _LongSerializer, _DictionarySerializer
 from nanome._internal.structure.serialization import _ComplexSerializer, _AtomSerializer
 from nanome._internal.volumetric.io._em_map.parse import parse_file
 
 
-class _AddVolume(_TypeSerializer):
+class _AddVolume(TypeSerializer):
     def __init__(self):
         self.__complex = _ComplexSerializer()
         atom_serializer = _AtomSerializer()

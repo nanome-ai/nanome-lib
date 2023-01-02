@@ -1,8 +1,8 @@
-from nanome._internal.util.serializers import _StringSerializer, _TypeSerializer
+from nanome._internal.util.serializers import _StringSerializer, TypeSerializer
 from nanome.util import FileError
 
 
-class _MKDir(_TypeSerializer):
+class _MKDir(TypeSerializer):
     def __init__(self):
         self.__string = _StringSerializer()
 

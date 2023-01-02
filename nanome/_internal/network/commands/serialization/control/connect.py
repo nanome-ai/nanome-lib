@@ -1,8 +1,8 @@
 from nanome._internal.util.serializers import _DictionarySerializer, _StringSerializer, _ByteSerializer
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _Connect(_TypeSerializer):
+class _Connect(TypeSerializer):
     def __init__(self):
         self.__dictionary = _DictionarySerializer()
         self.__dictionary.set_types(_StringSerializer(), _ByteSerializer())

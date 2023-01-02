@@ -2,10 +2,10 @@ from . import _ChainSerializer
 from .. import _Molecule
 
 from nanome._internal.util.serializers import _ArraySerializer, _DictionarySerializer, _StringSerializer
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _MoleculeSerializer(_TypeSerializer):
+class _MoleculeSerializer(TypeSerializer):
     def __init__(self, shallow=False):
         self.shallow = shallow
         self.array = _ArraySerializer()

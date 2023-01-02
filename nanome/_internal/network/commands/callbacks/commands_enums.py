@@ -1,11 +1,11 @@
 from nanome.util import Logs, IntEnum, auto, reset_auto
-from nanome.util.enums import _CommandEnum, Integrations, Permissions
+from nanome.util.enums import CommandEnum, Integrations, Permissions
 
 # /!\ /!\ /!\
 # Values names are really important here, as they are hashed, and need to match Nanome
 
 
-class _Commands(_CommandEnum):
+class _Commands(CommandEnum):
     # Reset enum counter for Python 2.7
     reset_auto()  # Not an enum
 
@@ -90,7 +90,7 @@ class _Commands(_CommandEnum):
 # Values names are really important here, as they are hashed, and need to match Nanome
 
 
-class Messages(_CommandEnum):
+class Messages(CommandEnum):
     # Reset enum counter for Python 2.7
     reset_auto()
 
@@ -171,7 +171,7 @@ class Messages(_CommandEnum):
     apply_color_scheme = auto()
 
 
-class _Integrations(_CommandEnum):
+class _Integrations(CommandEnum):
     # Reset enum counter for Python 2.7
     reset_auto()
 

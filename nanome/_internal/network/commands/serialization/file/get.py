@@ -1,10 +1,10 @@
 from nanome._internal.util.serializers import _StringSerializer
 from nanome.util import FileError
 
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _Get(_TypeSerializer):
+class _Get(TypeSerializer):
     def __init__(self):
         self.__string = _StringSerializer()
 

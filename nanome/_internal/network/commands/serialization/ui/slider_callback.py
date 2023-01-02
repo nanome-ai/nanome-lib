@@ -1,7 +1,7 @@
-from nanome._internal.util.serializers import _TypeSerializer
+from nanome._internal.util.serializers import TypeSerializer
 
 
-class _SliderCallback(_TypeSerializer):
+class _SliderCallback(TypeSerializer):
     def version(self):
         return 1
 
