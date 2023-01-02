@@ -1,6 +1,3 @@
-from nanome.util.logs import Logs
-from nanome._internal.ui import _Menu
-
 
 def _complex_added(network, arg, request_id):
     network.on_complex_added()

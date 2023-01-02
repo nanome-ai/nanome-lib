@@ -5,7 +5,7 @@ from nanome.util.enums import CommandEnum, Integrations, Permissions
 # Values names are really important here, as they are hashed, and need to match Nanome
 
 
-class _Commands(CommandEnum):
+class Commands(CommandEnum):
     # Reset enum counter for Python 2.7
     reset_auto()  # Not an enum
 
@@ -191,7 +191,7 @@ class _Integrations(CommandEnum):
 
 
 class _Hashes():
-    CommandHashes = [None] * len(_Commands)
+    CommandHashes = [None] * len(Commands)
     MessageHashes = [None] * len(Messages)
     IntegrationHashes = [None] * len(_Integrations)
     IntegrationRequestHashes = [None] * len(Integrations)
@@ -222,7 +222,7 @@ def hash_command(str):
 def init_hashes():
     hashes = dict()
     i = -1
-    for command in _Commands:
+    for command in Commands:
         i += 1
         hash = hash_command(command.name)
         if hash in hashes:
