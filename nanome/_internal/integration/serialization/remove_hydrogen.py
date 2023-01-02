@@ -1,7 +1,5 @@
-from nanome._internal.util.serializers import _ArraySerializer, _DictionarySerializer, _LongSerializer
+from nanome._internal.util.type_serializers import TypeSerializer, _ArraySerializer, _DictionarySerializer, _LongSerializer
 from nanome._internal.structure.serialization import _ComplexSerializer, _AtomSerializer
-
-from nanome._internal.util.serializers import TypeSerializer
 
 
 class _RemoveHydrogen(TypeSerializer):

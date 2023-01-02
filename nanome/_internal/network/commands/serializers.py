@@ -8,7 +8,7 @@ from nanome._internal.shapes.serialization import _SphereSerializer, _ShapeSeria
 from nanome._internal.structure import _Atom, _Bond, _Residue, _Chain, _Molecule, _Complex, _Base
 from nanome._internal.structure.serialization import _ComplexSerializer, _MoleculeSerializer, _ChainSerializer, _ResidueSerializer, _BondSerializer, _AtomSerializer, _AtomSerializerID, _SubstructureSerializer, _AtomSerializer, _MoleculeSerializer, _WorkspaceSerializer
 from nanome._internal.ui._serialization import _LayoutNodeSerializer, _UIBaseSerializer, _MenuSerializer, _LayoutNodeSerializerDeep
-from nanome._internal.util.serializers import (
+from nanome._internal.util.type_serializers import (
     _ArraySerializer, _LongSerializer, TypeSerializer,
     _DictionarySerializer, _LongSerializer, _TupleSerializer, _IntSerializer,
     _UnityPositionSerializer, _UnityRotationSerializer, _Vector3Serializer, _StringSerializer,

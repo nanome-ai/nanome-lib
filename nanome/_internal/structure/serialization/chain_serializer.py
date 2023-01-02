@@ -1,8 +1,8 @@
-from nanome._internal.util.serializers import _ArraySerializer, _StringSerializer
+from nanome._internal.util.type_serializers import _ArraySerializer, _StringSerializer
 from . import _ResidueSerializer
 from .. import _Chain
 
-from nanome._internal.util.serializers import TypeSerializer
+from nanome._internal.util.type_serializers import TypeSerializer
 
 
 class _ChainSerializer(TypeSerializer):

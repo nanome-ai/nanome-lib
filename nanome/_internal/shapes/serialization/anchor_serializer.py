@@ -1,4 +1,4 @@
-from nanome._internal.util.serializers import TypeSerializer, _UnityPositionSerializer
+from nanome._internal.util.type_serializers import TypeSerializer, _UnityPositionSerializer
 from nanome._internal.shapes import _Anchor
 from nanome.util.enums import ShapeType
 

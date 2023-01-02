@@ -1,6 +1,4 @@
-from nanome._internal.util.serializers import _StringSerializer
-
-from nanome._internal.util.serializers import TypeSerializer
+from nanome._internal.util.type_serializers import TypeSerializer, _StringSerializer
 
 
 class _ExportFile(TypeSerializer):

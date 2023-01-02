@@ -1,4 +1,4 @@
-from nanome._internal.util.serializers import TypeSerializer, _UnityPositionSerializer, _ColorSerializer, _ArraySerializer
+from nanome._internal.util.type_serializers import TypeSerializer, _UnityPositionSerializer, _ColorSerializer, _ArraySerializer
 from nanome._internal.shapes.serialization import _SphereSerializer, _AnchorSerializer, _LineSerializer, _LabelSerializer, _MeshSerializer
 
 from nanome.util.enums import ShapeType

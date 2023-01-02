@@ -1,7 +1,7 @@
 from . import _AtomSerializerID
 from .. import _Bond
 
-from nanome._internal.util.serializers import TypeSerializer, _ArraySerializer, _BoolSerializer, _ByteSerializer
+from nanome._internal.util.type_serializers import TypeSerializer, _ArraySerializer, _BoolSerializer, _ByteSerializer
 from nanome.util import Logs
 
 

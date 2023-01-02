@@ -1,4 +1,4 @@
-from nanome._internal.util.serializers import TypeSerializer, _StringSerializer, _ArraySerializer
+from nanome._internal.util.type_serializers import TypeSerializer, _StringSerializer, _ArraySerializer
 
 
 class _ExportLocations(TypeSerializer):

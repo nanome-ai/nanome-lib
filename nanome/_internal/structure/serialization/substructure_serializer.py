@@ -1,5 +1,5 @@
 from .. import _Substructure
-from nanome._internal.util.serializers import TypeSerializer, _StringSerializer, _ArraySerializer, _LongSerializer
+from nanome._internal.util.type_serializers import TypeSerializer, _StringSerializer, _ArraySerializer, _LongSerializer
 from nanome.util import Logs
 from nanome.util.enums import SubstructureType
 

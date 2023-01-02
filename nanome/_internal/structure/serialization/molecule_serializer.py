@@ -1,8 +1,8 @@
 from . import _ChainSerializer
 from .. import _Molecule
 
-from nanome._internal.util.serializers import _ArraySerializer, _DictionarySerializer, _StringSerializer
-from nanome._internal.util.serializers import TypeSerializer
+from nanome._internal.util.type_serializers import _ArraySerializer, _DictionarySerializer, _StringSerializer
+from nanome._internal.util.type_serializers import TypeSerializer
 
 
 class _MoleculeSerializer(TypeSerializer):

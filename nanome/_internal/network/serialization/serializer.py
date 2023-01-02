@@ -2,7 +2,7 @@ from . import ContextSerialization, ContextDeserialization
 from ..commands import callbacks as callbacks
 from ..commands import serializers as command_serializers
 from nanome._internal.network import Data
-from nanome._internal.util.serializers import TypeSerializer
+from nanome._internal.util.type_serializers import TypeSerializer
 from nanome.util import Logs
 import struct
 import traceback

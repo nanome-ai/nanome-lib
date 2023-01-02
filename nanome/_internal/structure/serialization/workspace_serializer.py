@@ -1,8 +1,8 @@
-from nanome._internal.util.serializers import _ArraySerializer, _UnityPositionSerializer, _UnityRotationSerializer, _Vector3Serializer
+from nanome._internal.util.type_serializers import _ArraySerializer, _UnityPositionSerializer, _UnityRotationSerializer, _Vector3Serializer
 from . import _ComplexSerializer
 from .. import _Workspace
 
-from nanome._internal.util.serializers import TypeSerializer
+from nanome._internal.util.type_serializers import TypeSerializer
 
 
 class _WorkspaceSerializer(TypeSerializer):

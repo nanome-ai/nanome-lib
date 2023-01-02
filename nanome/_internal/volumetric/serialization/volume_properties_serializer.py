@@ -1,5 +1,5 @@
 from .. import _VolumeData
-from nanome._internal.util.serializers import TypeSerializer, _ArraySerializer
+from nanome._internal.util.type_serializers import TypeSerializer, _ArraySerializer
 from . import _VolumeLayerSerializer
 
 

@@ -1,9 +1,9 @@
-from nanome._internal.util.serializers import _ArraySerializer, _DictionarySerializer, _StringSerializer
-from nanome._internal.util.serializers import _Vector3Serializer, _QuaternionSerializer, _UnityPositionSerializer, _UnityRotationSerializer
+from nanome._internal.util.type_serializers import _ArraySerializer, _DictionarySerializer, _StringSerializer
+from nanome._internal.util.type_serializers import _Vector3Serializer, _QuaternionSerializer, _UnityPositionSerializer, _UnityRotationSerializer
 from . import _MoleculeSerializer
 from .. import _Complex
 
-from nanome._internal.util.serializers import TypeSerializer
+from nanome._internal.util.type_serializers import TypeSerializer
 from nanome.util import Quaternion, Vector3
 
 

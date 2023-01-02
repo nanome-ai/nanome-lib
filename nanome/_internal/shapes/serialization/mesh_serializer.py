@@ -2,7 +2,7 @@ import os
 import tempfile
 
 from nanome._internal.shapes.mesh import _Mesh
-from nanome._internal.util.serializers import TypeSerializer
+from nanome._internal.util.type_serializers import TypeSerializer
 from nanome.util import Logs
 
 

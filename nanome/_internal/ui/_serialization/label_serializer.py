@@ -1,8 +1,8 @@
 from .. import _Label
-from nanome._internal.util.serializers import _StringSerializer, _ColorSerializer
+from nanome._internal.util.type_serializers import _StringSerializer, _ColorSerializer
 from nanome.util.enums import VertAlignOptions, HorizAlignOptions
 from . import _UIBaseSerializer
-from nanome._internal.util.serializers import TypeSerializer
+from nanome._internal.util.type_serializers import TypeSerializer
 
 
 class _LabelSerializer(TypeSerializer):

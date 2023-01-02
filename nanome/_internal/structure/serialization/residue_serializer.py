@@ -1,10 +1,10 @@
-from nanome._internal.util.serializers import _ArraySerializer, _StringSerializer, _ColorSerializer, _CharSerializer
+from nanome._internal.util.type_serializers import _ArraySerializer, _StringSerializer, _ColorSerializer, _CharSerializer
 from . import _AtomSerializerID
 from . import _BondSerializer
 from .. import _Residue
 from nanome.util import Logs
 
-from nanome._internal.util.serializers import TypeSerializer
+from nanome._internal.util.type_serializers import TypeSerializer
 
 
 class _ResidueSerializer(TypeSerializer):

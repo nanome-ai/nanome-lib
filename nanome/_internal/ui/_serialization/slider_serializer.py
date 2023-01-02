@@ -2,7 +2,7 @@ from nanome.util import IntEnum
 from .. import _Slider
 from . import _UIBaseSerializer
 
-from nanome._internal.util.serializers import TypeSerializer
+from nanome._internal.util.type_serializers import TypeSerializer
 
 
 class _SliderSerializer(TypeSerializer):
