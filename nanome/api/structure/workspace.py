@@ -1,4 +1,4 @@
-from nanome._internal.structure.workspace import _Workspace
+from nanome._internal.structure.models import _Workspace
 from nanome.util import Matrix, Logs
 from .client import WorkspaceClient
 

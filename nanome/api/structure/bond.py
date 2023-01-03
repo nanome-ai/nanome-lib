@@ -1,6 +1,6 @@
 import nanome
 from nanome.util import Logs
-from nanome._internal.structure.bond import _Bond
+from nanome._internal.structure.models import _Bond
 from . import Base
 
 

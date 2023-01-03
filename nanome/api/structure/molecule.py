@@ -1,5 +1,5 @@
 import nanome
-from nanome._internal.structure.molecule import _Molecule
+from nanome._internal.structure.models import _Molecule
 from nanome._internal.network import PluginNetwork
 from nanome._internal.network.commands.enums import Messages
 

@@ -1,4 +1,4 @@
-from nanome._internal.structure.chain import _Chain
+from nanome._internal.structure.models import _Chain
 from nanome.util import Logs
 from . import Base
 
