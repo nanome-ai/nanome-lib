@@ -1,4 +1,4 @@
-from nanome._internal.shapes.sphere import _Sphere
+from nanome._internal.shapes.models import _Sphere
 from nanome.util.enums import ShapeType
 from . import Shape
 

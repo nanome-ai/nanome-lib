@@ -1,12 +1,5 @@
-from nanome._internal.shapes import _Anchor
-from nanome._internal.shapes.label import _Label
-from nanome._internal.shapes.line import _Line
-from nanome._internal.shapes.mesh import _Mesh
-from nanome._internal.shapes.sphere import _Sphere
-from nanome._internal.util.type_serializers import TypeSerializer
-from nanome._internal.util.type_serializers import TypeSerializer, StringSerializer
-from nanome._internal.util.type_serializers import TypeSerializer, UnityPositionSerializer
-from nanome._internal.util.type_serializers import TypeSerializer, UnityPositionSerializer, ColorSerializer, ArraySerializer
+from .models import _Anchor, _Label, _Line, _Mesh, _Sphere 
+from nanome._internal.util.type_serializers import TypeSerializer, StringSerializer, UnityPositionSerializer, ColorSerializer, ArraySerializer
 import os
 import tempfile
 
