@@ -1,6 +1,6 @@
 import nanome
 import nanome.api.ui as UI
-from nanome._internal.ui._serialization import _LayoutNodeSerializer, _UIBaseSerializer
+from nanome._internal.ui.serializers import _LayoutNodeSerializer, _UIBaseSerializer
 from testing.unit.utilities import (
     alter_object, assert_equal, rand_string, create_test, test_serializer, TestOptions)
 import unittest

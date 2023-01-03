@@ -1,9 +1,8 @@
-from nanome._internal.files import _Files
 from nanome.util import FileErrorCode
 from nanome._internal.network.commands.enums import Permissions, Messages
 
 
-class Files(_Files):
+class Files:
     """
     | Class to navigate through files and directories on the machine running Nanome using unix-like filesystem methods.
     """
