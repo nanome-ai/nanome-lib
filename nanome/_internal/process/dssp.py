@@ -1,5 +1,5 @@
 from nanome._internal.structure import _Complex, _Residue
-from nanome._internal.structure.io import _pdb
+from nanome._internal.structure.io import pdb
 
 import tempfile
 import os
@@ -91,7 +91,7 @@ class _Dssp():
 
         single_frame = _Complex._create()
         single_frame._add_molecule(molecule)
-        _pdb.to_file(self.__input.name, single_frame)
+        pdb.to_file(self.__input.name, single_frame)
 
         self.__proc.start()
 

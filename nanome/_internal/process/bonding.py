@@ -1,5 +1,5 @@
 from nanome._internal.structure import _Complex, _Bond
-from nanome._internal.structure.io import _pdb, _sdf
+from nanome._internal.structure.io import pdb, sdf
 
 import tempfile
 import os
@@ -91,7 +91,7 @@ class _Bonding():
         molecule = framed_complex._molecules[self.__molecule_idx]
         single_frame = _Complex._create()
         single_frame._add_molecule(molecule)
-        _pdb.to_file(self.__input.name, single_frame)
+        pdb.to_file(self.__input.name, single_frame)
 
         self.__proc.start()
 
@@ -108,8 +108,8 @@ class _Bonding():
             return
         with open(self.__output.name) as f:
             lines = f.readlines()
-        content = _sdf.parse_lines(lines)
-        result = _sdf.structure(content)
+        content = sdf.parse_lines(lines)
+        result = sdf.structure(content)
         self.__match_and_bond(result)
         self.__next()
 

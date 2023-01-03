@@ -1,6 +1,6 @@
 import nanome
 from nanome._internal.addon import _Addon
-from nanome._internal.structure.io import _pdb, _sdf, _mmcif
+from nanome._internal.structure.io import pdb, sdf, mmcif
 
 
 class ComplexIO(_Addon):
@@ -21,7 +21,7 @@ class ComplexIO(_Addon):
         :type options: :class:`~nanome.util.complex_save_options.PDBSaveOptions`
         """
 
-        _pdb.to_file(path, self.base_object, options)
+        pdb.to_file(path, self.base_object, options)
 
     def from_pdb(self, **kwargs):
         """
@@ -40,7 +40,7 @@ class ComplexIO(_Addon):
             *string* (:class:`str`)
                 Contents of the file as a single string
         """
-        return self.__from_file(kwargs, _pdb)
+        return self.__from_file(kwargs, pdb)
 
     def to_sdf(self, path, options=None):
         """
@@ -52,7 +52,7 @@ class ComplexIO(_Addon):
         :type options: :class:`~nanome.util.complex_save_options.SDFSaveOptions`
         """
 
-        _sdf.to_file(path, self.base_object, options)
+        sdf.to_file(path, self.base_object, options)
 
     def from_sdf(self, **kwargs):
         """
@@ -71,7 +71,7 @@ class ComplexIO(_Addon):
             *string* (:class:`str`)
                 Contents of the file as a single string
         """
-        return self.__from_file(kwargs, _sdf)
+        return self.__from_file(kwargs, sdf)
 
     def to_mmcif(self, path, options=None):
         """
@@ -83,7 +83,7 @@ class ComplexIO(_Addon):
         :type options: :class:`~nanome.util.complex_save_options.MMCIFSaveOptions`
         """
 
-        _mmcif.to_file(path, self.base_object, options)
+        mmcif.to_file(path, self.base_object, options)
 
     def from_mmcif(self, **kwargs):
         """
@@ -102,7 +102,7 @@ class ComplexIO(_Addon):
             *string* (:class:`str`)
                 Contents of the file as a single string
         """
-        return self.__from_file(kwargs, _mmcif)
+        return self.__from_file(kwargs, mmcif)
 
     def __from_file(self, kwargs, parser):
         if (len(kwargs) != 1):
