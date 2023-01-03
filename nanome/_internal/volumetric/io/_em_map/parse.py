@@ -1,4 +1,4 @@
-from ...volume_data import _VolumeData
+from ...models import _VolumeData
 import os
 import gzip
 import struct
