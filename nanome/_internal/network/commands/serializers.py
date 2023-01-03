@@ -15,7 +15,6 @@ from nanome._internal.util.type_serializers import (
 from nanome._internal.volumetric.serialization import _VolumeDataSerializer, _VolumePropertiesSerializer
 from nanome.util.file import FileMeta, LoadInfoDone
 import types
-import sys
 
 
 class ApplyColorScheme(TypeSerializer):
