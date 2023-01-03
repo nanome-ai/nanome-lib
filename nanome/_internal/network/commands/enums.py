@@ -14,7 +14,6 @@ class CommandEnum(IntEnum):
 # /!\ /!\ /!\
 # Values names are really important here, as they are hashed, and need to match Nanome
 
-
 class Commands(CommandEnum):
     # Reset enum counter for Python 2.7
     reset_auto()  # Not an enum
@@ -214,88 +213,85 @@ class Hashes():
     PermissionRequestHashes = [None] * len(Permissions)
     HashToIntegrationName = dict()
 
+    @staticmethod
+    def hash_command(str):
+        result = 0
+        hit = 0
+        a_char_value = ord('a')
+        z_char_value = ord('z')
+        for i in range(6):
+            idx = i * 3 % len(str)
+            char_value = ord(str[idx].lower()) - a_char_value
+            result <<= 5
+            if char_value < 0 or char_value > z_char_value - a_char_value:
+                continue
+            result |= char_value + 1
+            hit += 1
+            if hit >= 6:
+                break
+        return result
 
-a_char_value = ord('a')
-z_char_value = ord('z')
+    @classmethod
+    def init_hashes(cls):
+        hashes = dict()
+        i = -1
+        for command in Commands:
+            i += 1
+            hash = cls.hash_command(command.name)
+            if hash in hashes:
+                logger.error(f"Command hash collision detected: {command.name} and {hashes[hash]}")
+                continue
+            hashes[hash] = command.name
+            Hashes.CommandHashes[i] = hash
 
+        hashes.clear()
+        i = -1
 
-def hash_command(str):
-    result = 0
-    hit = 0
-    for i in range(6):
-        idx = i * 3 % len(str)
-        char_value = ord(str[idx].lower()) - a_char_value
-        result <<= 5
-        if char_value < 0 or char_value > z_char_value - a_char_value:
-            continue
-        result |= char_value + 1
-        hit += 1
-        if hit >= 6:
-            break
-    return result
+        for command in Messages:
+            i += 1
+            hash = cls.hash_command(command.name)
+            if hash in hashes:
+                logger.error(
+                    "Message hash collision detected: " + command.name + "and" + hashes[hash])
+                continue
+            hashes[hash] = command.name
+            Hashes.MessageHashes[i] = hash
 
+        hashes.clear()
+        i = -1
 
-def init_hashes():
-    hashes = dict()
-    i = -1
-    for command in Commands:
-        i += 1
-        hash = hash_command(command.name)
-        if hash in hashes:
-            logger.error(f"Command hash collision detected: {command.name} and {hashes[hash]}")
-            continue
-        hashes[hash] = command.name
-        Hashes.CommandHashes[i] = hash
+        for command in Integrations:
+            i += 1
+            hash = cls.hash_command(command.name)
+            if hash in hashes:
+                logger.error("Integration hash collision detected:" + command.name + " and " + hashes[hash])
+                continue
+            hashes[hash] = command.name
+            Hashes.IntegrationHashes[i] = hash
+            Hashes.HashToIntegrationName[hash] = command.name
 
-    hashes.clear()
-    i = -1
+        hashes.clear()
+        i = -1
 
-    for command in Messages:
-        i += 1
-        hash = hash_command(command.name)
-        if hash in hashes:
-            logger.error(
-                "Message hash collision detected: " + command.name + "and" + hashes[hash])
-            continue
-        hashes[hash] = command.name
-        Hashes.MessageHashes[i] = hash
+        for command in Integrations:
+            i += 1
+            hash = cls.hash_command(command.name)
+            if hash in hashes:
+                logger.error("Integration request hash collision detected: " + command.name + " and " + hashes[hash])
+                continue
+            hashes[hash] = command.name
+            Hashes.IntegrationRequestHashes[i] = hash
 
-    hashes.clear()
-    i = -1
-
-    for command in Integrations:
-        i += 1
-        hash = hash_command(command.name)
-        if hash in hashes:
-            logger.error("Integration hash collision detected:" + command.name + " and " + hashes[hash])
-            continue
-        hashes[hash] = command.name
-        Hashes.IntegrationHashes[i] = hash
-        Hashes.HashToIntegrationName[hash] = command.name
-
-    hashes.clear()
-    i = -1
-
-    for command in Integrations:
-        i += 1
-        hash = hash_command(command.name)
-        if hash in hashes:
-            logger.error("Integration request hash collision detected: " + command.name + " and " + hashes[hash])
-            continue
-        hashes[hash] = command.name
-        Hashes.IntegrationRequestHashes[i] = hash
-
-    hashes.clear()
-    i = -1
-
-    for command in Permissions:
-        i += 1
-        hash = hash_command(command.name)
-        if hash in hashes:
-            logger.error(f"Permission request hash collision detected: {command.name} and {hashes[hash]}")
-            continue
-        hashes[hash] = command.name
-        Hashes.PermissionRequestHashes[i] = hash
+        hashes.clear()
+        i = -1
+        for command in Permissions:
+            i += 1
+            hash = cls.hash_command(command.name)
+            if hash in hashes:
+                logger.error(f"Permission request hash collision detected: {command.name} and {hashes[hash]}")
+                continue
+            hashes[hash] = command.name
+            Hashes.PermissionRequestHashes[i] = hash
 
 
-init_hashes()
+Hashes.init_hashes()

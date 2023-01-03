@@ -133,7 +133,6 @@ class ContextSerialization(object):
 
 
 class ContextDeserialization(object):
-    # pylint: disable=method-hidden
     def __init__(self, bytes, version_table=None, packet_debugging=False):
         self._data = Data()
         self._data.received_data(bytes)
