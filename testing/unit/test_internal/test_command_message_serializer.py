@@ -2,7 +2,7 @@ import json
 import os
 import unittest
 
-from nanome._internal.network.serialization.serializer import CommandMessageSerializer
+from nanome._internal.network.serializers import CommandMessageSerializer
 from nanome._internal.network.commands.enums import Messages
 from nanome.api.structure import Workspace
 

@@ -198,7 +198,7 @@ def previously_altered(value, seen_cache):
 
 
 def test_serializer(serializer, obj_to_test, options=None):
-    from nanome._internal.network.serialization.context import ContextDeserialization, ContextSerialization
+    from nanome._internal.network.context import ContextDeserialization, ContextSerialization
     context_s = ContextSerialization(plugin_id=random.randint(0, 0xFFFFFFFF), version_table=FakeVersionTable())
     serializer.serialize(serializer.version(), obj_to_test, context_s)
     context_d = ContextDeserialization(context_s.to_array(), FakeVersionTable())
