@@ -9,7 +9,6 @@ import traceback
 import logging
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.DEBUG)
 
 MESSAGE_VERSION_KEY = "ToClientProtocol"
 packet_debugging = False
@@ -74,11 +73,6 @@ class CommandMessageSerializer(object):
 
         try:
             logger.debug("Received command: " + command.name())
-            if command.name() == "ReceiveWorkspace":
-                import os
-                logger.debug("Received workspace")
-                with open("ReceiveWorkspaceMessage.bin", "wb") as f:
-                    f.write(context._data._received_bytes)
             received_object = context.read_using_serializer(command)
         except BufferError as err:
             logger.error(err)
