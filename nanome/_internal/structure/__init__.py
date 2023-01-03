@@ -2,15 +2,15 @@ from . import *
 
 from . import _helpers
 
-from .base import _Base
-from .atom import _Atom
-from .bond import _Bond
-from .residue import _Residue
-from .chain import _Chain
-from .molecule import _Molecule
-from .complex import _Complex
-from .workspace import _Workspace
-from .substructure import _Substructure
+from .models import _Base
+from .models import _Atom
+from .models import _Bond
+from .models import _Residue
+from .models import _Chain
+from .models import _Molecule
+from .models import _Complex
+from .models import _Workspace
+from .models import _Substructure
 
 from . import io
 from . import serializers
