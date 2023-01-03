@@ -1,5 +1,4 @@
 from . import _UIBase
-import nanome
 from copy import deepcopy
 
 
@@ -53,8 +52,9 @@ class _Button(_UIBase):
         self._pressed_callback = func
 
     def _register_hover_callback(self, func):
-        message_callbacks = nanome._internal.network.commands.callbacks.Messages
-        command_serializers = nanome._internal.network.commands.serialization
+        import nanome
+        message_callbacks = nanome._internal.network.commands.enums.Messages
+        command_serializers = nanome._internal.network.commands.serializers
         if func == None and self._hover_callback == None:  # Low hanging filter but there may be others
             return
         try:

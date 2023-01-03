@@ -1,5 +1,5 @@
 
-from nanome._internal.integration import serialization as Serializers
+from nanome._internal.integration import serializers as integration_serializers
 from nanome._internal.macro.serialization import _MacroSerializer
 from nanome._internal.network.commands.enums import Hashes, Integrations
 from nanome._internal.shapes.serialization import _SphereSerializer, _ShapeSerializer, _LineSerializer, _LabelSerializer, _MeshSerializer
@@ -462,18 +462,18 @@ class FileSave(TypeSerializer):
 
 class Integration(TypeSerializer):
     __integrations = {
-        Hashes.IntegrationHashes[Integrations.hydrogen_add]: Serializers._AddHydrogen(),
-        Hashes.IntegrationHashes[Integrations.hydrogen_remove]: Serializers._RemoveHydrogen(),
-        Hashes.IntegrationHashes[Integrations.structure_prep]: Serializers._StructurePrep(),
-        Hashes.IntegrationHashes[Integrations.calculate_esp]: Serializers._CalculateESP(),
-        Hashes.IntegrationHashes[Integrations.minimization_start]: Serializers._StartMinimization(),
-        Hashes.IntegrationHashes[Integrations.minimization_stop]: Serializers._StopMinimization(),
-        Hashes.IntegrationHashes[Integrations.export_locations]: Serializers._ExportLocations(),
-        Hashes.IntegrationHashes[Integrations.export_file]: Serializers._ExportFile(),
-        Hashes.IntegrationHashes[Integrations.import_file]: Serializers._ImportFile(),
-        Hashes.IntegrationHashes[Integrations.generate_molecule_image]: Serializers._GenerateMoleculeImage(),
-        Hashes.IntegrationHashes[Integrations.export_smiles]: Serializers._ExportSmiles(),
-        Hashes.IntegrationHashes[Integrations.import_smiles]: Serializers._ImportSmiles(
+        Hashes.IntegrationHashes[Integrations.hydrogen_add]: integration_serializers._AddHydrogen(),
+        Hashes.IntegrationHashes[Integrations.hydrogen_remove]: integration_serializers._RemoveHydrogen(),
+        Hashes.IntegrationHashes[Integrations.structure_prep]: integration_serializers._StructurePrep(),
+        Hashes.IntegrationHashes[Integrations.calculate_esp]: integration_serializers._CalculateESP(),
+        Hashes.IntegrationHashes[Integrations.minimization_start]: integration_serializers._StartMinimization(),
+        Hashes.IntegrationHashes[Integrations.minimization_stop]: integration_serializers._StopMinimization(),
+        Hashes.IntegrationHashes[Integrations.export_locations]: integration_serializers._ExportLocations(),
+        Hashes.IntegrationHashes[Integrations.export_file]: integration_serializers._ExportFile(),
+        Hashes.IntegrationHashes[Integrations.import_file]: integration_serializers._ImportFile(),
+        Hashes.IntegrationHashes[Integrations.generate_molecule_image]: integration_serializers._GenerateMoleculeImage(),
+        Hashes.IntegrationHashes[Integrations.export_smiles]: integration_serializers._ExportSmiles(),
+        Hashes.IntegrationHashes[Integrations.import_smiles]: integration_serializers._ImportSmiles(
         )
     }
 
