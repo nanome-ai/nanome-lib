@@ -6,6 +6,10 @@ from nanome._internal.network import Data
 from nanome._internal.util.type_serializers import TypeSerializer
 import struct
 import traceback
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 MESSAGE_VERSION_KEY = "ToClientProtocol"
 packet_debugging = False
@@ -34,16 +38,14 @@ class Serializer(object):
             try:
                 command = Serializer._messages[command_hash]
             except KeyError:
-                from nanome.util import Logs
-                Logs.warning(
-                    "Trying to serialize an unregistered message type:", message_type)
+                logger.warning(
+                    f"Trying to serialize an unregistered message type: {message_type}")
             if command is not None:
                 context.write_using_serializer(command, arg)
                 return context.to_array()
         return context.to_array()
 
     def deserialize_command(self, payload, version_table):
-        from nanome.util import Logs
         context = ContextDeserialization(
             payload, version_table, packet_debugging)
         try:
@@ -52,29 +54,29 @@ class Serializer(object):
             command = Serializer._commands[command_hash]
         except KeyError:
             if self.try_register_session(payload) is True:
-                Logs.error(
+                logger.error(
                     "A session is trying to connect even though it is already connected")
             else:
-                Logs.error("Received an unregistered command:", command_hash)
+                logger.error(f"Received an unregistered command: {command_hash}")
             return (None, None, None)
         except BufferError as err:
-            Logs.error(err)
-            Logs.error(traceback.format_exc())
+            logger.error(err)
+            logger.error(traceback.format_exc())
             return (None, None, None)
         except struct.error as err:
-            Logs.error(err)
-            Logs.error(traceback.format_exc())
+            logger.error(err)
+            logger.error(traceback.format_exc())
             return (None, None, None)
 
         try:
             received_object = context.read_using_serializer(command)
         except BufferError as err:
-            Logs.error(err)
-            Logs.error(traceback.format_exc())
+            logger.error(err)
+            logger.error(traceback.format_exc())
             return (None, None, None)
         except struct.error as err:
-            Logs.error(err)
-            Logs.error(traceback.format_exc())
+            logger.error(err)
+            logger.error(traceback.format_exc())
             return (None, None, None)
         return received_object, command_hash, request_id
 

@@ -1,5 +1,7 @@
 # from nanome._internal.network import nanome._internal.network.PluginNetwork
+import logging
 
+logger = logging.getLogger(__name__)
 
 class _Shape(object):
     def __init__(self, shape_type):
@@ -16,11 +18,10 @@ class _Shape(object):
     def _upload(self, done_callback=None):
         import nanome
         def set_callback(indices, results):
-            from nanome.util import Logs
             index = indices[0]
             result = results[0]
             if self._index != -1 and index != self._index:
-                Logs.error("SetShapeCallback received for the wrong shape")
+                logger.error("SetShapeCallback received for the wrong shape")
             self._index = index
             if done_callback is not None:
                 done_callback(result)
@@ -38,7 +39,6 @@ class _Shape(object):
     @classmethod
     def _upload_multiple(cls, shapes, done_callback=None):
         import nanome
-        from nanome.util import Logs
 
         def set_callback(indices, results):
             error = False
@@ -47,7 +47,7 @@ class _Shape(object):
                     error = True
                 shape._index = index
             if error:
-                Logs.error("SetShapeCallback received for the wrong shape")
+                logger.error("SetShapeCallback received for the wrong shape")
             if done_callback is not None:
                 done_callback(results)
 

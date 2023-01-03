@@ -1,6 +1,8 @@
 from . import Packet
 import traceback
+import logging
 
+logger = logging.getLogger(__name__)
 
 stop_bytes = bytearray("CLOSEPIPE", "utf-8")
 
@@ -24,9 +26,7 @@ class Session(object):
         try:
             self._pm_queue_out.put(data)
         except Exception:
-            from nanome.util import Logs
-            Logs.error("Cannot deliver process info to plugin",
-                       self._session_id, "Did it crash?")
+            logger.error(f"Cannot deliver process info to plugin {self._session_id}, Did it crash?")
 
     def signal_and_close_pipes(self):
         self._on_packet_received(stop_bytes)
@@ -44,8 +44,7 @@ class Session(object):
             has_proc_data = not self._pm_queue_in.empty()
             self._logs_manager.poll_for_logs()
         except Exception:
-            from nanome.util import Logs
-            Logs.error(
+            logger.error(
                 "Plugin encountered an error, please check the logs.", traceback.format_exc())
             return False
         try:
@@ -59,7 +58,7 @@ class Session(object):
                 self._process_manager.received_request(proc_data, self)
 
         except EOFError:
-            Logs.error(
+            logger.error(
                 "Plugin encountered an error, please check the logs.", traceback.format_exc())
             return False
         return True
@@ -68,9 +67,7 @@ class Session(object):
         try:
             self._net_queue_out.put(payload)
         except Exception:
-            from nanome.util import Logs
-            Logs.error("Cannot deliver packet to plugin",
-                       self._session_id, "Did it crash?")
+            logger.error(f"Cannot deliver packet to plugin {self._session_id}. Did it crash?")
 
     def _send_disconnection_message(self, plugin_id):
         packet = Packet()

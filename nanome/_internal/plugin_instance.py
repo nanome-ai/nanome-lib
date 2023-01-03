@@ -1,12 +1,14 @@
-import nanome
-from nanome._internal.network import Packet
-from nanome._internal.process import ProcessManagerInstance
-from nanome._internal.network.commands.enums import Hashes, Messages
-
+import logging
 import os
 import traceback
 import time
 from timeit import default_timer as timer
+
+from nanome._internal.network import Packet
+from nanome._internal.process import ProcessManagerInstance
+from nanome._internal.network.commands.enums import Hashes, Messages
+
+logger = logging.getLogger(__name__)
 
 try:
     import asyncio
@@ -53,12 +55,12 @@ class _PluginInstance(object):
         self._process_manager = ProcessManagerInstance(pm_queue_in, pm_queue_out)
         self._log_pipe_conn = log_pipe_conn
         self._network._send_connect(Messages.connect, [Packet._compression_type(), original_version_table])
-        from nanome.util import Logs
-        Logs.debug("Plugin constructed for session", session_id)
+        logger.debug(f"Plugin constructed for session {session_id}")
 
     @classmethod
     def _save_callback(cls, id, callback):
         if callback is None:
+            import nanome
             if asyncio and nanome.PluginInstance._instance.is_async:
                 loop = asyncio.get_event_loop()
                 future = loop.create_future()
@@ -79,8 +81,7 @@ class _PluginInstance(object):
             return
 
         if id not in callbacks:
-            from nanome.util import Logs
-            Logs.warning('Received an unknown callback id:', id)
+            logger.warning(f'Received an unknown callback id: {id}')
             return
 
         callbacks[id](*args)
@@ -100,24 +101,21 @@ class _PluginInstance(object):
         try:
             callbacks[index](new_complex)
         except KeyError:
-            from nanome.util import Logs
-            Logs.warning('Received an unknown updated complex index:', index)
+            logger.warning(f'Received an unknown updated complex index: {index}')
 
     @classmethod
     def _on_selection_changed(cls, index, new_complex):
-        from nanome.util import Logs
         callbacks = cls.__selection_changed_callbacks
         try:
             callbacks[index](new_complex)
         except KeyError:
-            Logs.warning('Received an unknown updated complex index:', index)
+            logger.warning('Received an unknown updated complex index: {index}')
 
     def _on_stop(self):
         try:
             self.on_stop()
         except:
-            from nanome.util import Logs
-            Logs.error("Error in on_stop function:", traceback.format_exc())
+            logger.error("Error in on_stop function:", traceback.format_exc())
 
     def _update_loop(self):
         try:
@@ -137,17 +135,15 @@ class _PluginInstance(object):
             self._on_stop()
             return
         except TimeoutError:
-            from nanome.util import Logs
-            Logs.warning("Session timed out")
+            logger.warning("Session timed out")
             self._on_stop()
             self._process_manager._close()
             self._network._close()
             return
         except Exception as e:
-            from nanome.util import Logs
             text = ' '.join(map(str, e.args))
             msg = "Uncaught " + type(e).__name__ + ": " + text
-            Logs.error(msg)
+            logger.error(msg)
             # Give log a little time to reach destination before closing pipe
             time.sleep(0.1)
             self._on_stop()

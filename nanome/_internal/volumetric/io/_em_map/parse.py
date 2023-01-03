@@ -2,6 +2,9 @@ from ...models import _VolumeData
 import os
 import gzip
 import struct
+import logging
+
+logger = logging.getLogger(__name__)
 
 float_unpack = struct.Struct('!f').unpack_from
 int_unpack = struct.Struct('!i').unpack_from
@@ -21,8 +24,7 @@ def parse_file(path):
         result = parse_data(data)
         return result
     except:
-        from nanome.util import Logs
-        Logs.error("Could not read em file: " + path)
+        logger.error("Could not read em file: " + path)
         raise
 
 

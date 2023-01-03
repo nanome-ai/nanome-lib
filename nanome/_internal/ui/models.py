@@ -1,5 +1,8 @@
 from nanome.util import Color
 from copy import deepcopy
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class _UIBase(object):
@@ -80,7 +83,7 @@ class _Button(_UIBase):
                 (command_serializers._UIHook.Type.button_hover, self._content_id),
                 False)
         except:
-            nanome.util.Logs.error("Could not register hook")
+            logger.error("Could not register hook")
         self._hover_callback = func
 
     class _ButtonText(object):
@@ -379,7 +382,7 @@ class _Image(_UIBase):
                 (hook_type, self._content_id),
                 False)
         except:
-            nanome.util.Logs.error("Could not register hook")
+            logger.error("Could not register hook")
 
     def _copy_values_deep(self, other):
         super()._copy_values_deep(other)

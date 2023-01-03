@@ -1,7 +1,9 @@
 from nanome._internal.util.type_serializers import CachedImageSerializer
 from nanome._internal.logs import LogsManager
-
 from . import Packet
+import logging
+
+logger = logging.getLogger(__name__)
 
 stop_bytes = bytearray("CLOSEPIPE", "utf-8")
 
@@ -27,13 +29,11 @@ class PluginNetwork(object):
         PluginNetwork._instance = self
 
     def _on_run(self):
-        from nanome.util import Logs
-        Logs.message("on_run called")
+        logger.info("on_run called")
         self._plugin.on_run()
 
     def on_advanced_settings(self):
-        from nanome.util import Logs
-        Logs.message("on_advanced_settings called")
+        logger.info("on_advanced_settings called")
         self._plugin.on_advanced_settings()
 
     def on_complex_added(self):
@@ -90,15 +90,13 @@ class PluginNetwork(object):
             if has_data:
                 payload = self._queue_in.get()
         except Exception:
-            from nanome.util import Logs
-            Logs.debug("Pipe has been closed, exiting process")
+            logger.debug("Pipe has been closed, exiting process")
             self._plugin._on_stop()
             return False
 
         if payload:
             if payload == stop_bytes:
-                from nanome.util import Logs
-                Logs.debug("Pipe has been closed, exiting process")
+                logger.debug("Pipe has been closed, exiting process")
                 self._plugin._on_stop()
                 return False
 
@@ -110,8 +108,8 @@ class PluginNetwork(object):
             try:
                 callback = self._serializer._command_callbacks[command_hash]
             except:
-                Logs.error(
-                    "Received a command without callback associated:", command_hash)
+                logger.error(
+                    f"Received a command without callback associated: {command_hash}")
                 return True
             callback(self, received_object, request_id)
         return True

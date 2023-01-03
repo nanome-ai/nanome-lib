@@ -6,8 +6,7 @@ def parse_lines(lines):
     try:
         return _parse_lines(lines)
     except:
-        from nanome.util import Logs
-        Logs.error("Could not read sdf")
+        logger.error("Could not read sdf")
         raise
 
 
@@ -134,7 +133,7 @@ def parse_model(lines):
         return model
     except:
         print("SDF Parsing error")
-        #           Logs.error("SDF Parsing error", e.Message + e.StackTrace)
+        # logger.error("SDF Parsing error", e.Message + e.StackTrace)
         raise
 
 

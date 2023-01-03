@@ -1,13 +1,14 @@
 from .content import Content
 import traceback
+import logging
 
+logger = logging.getLogger(__name__)
 
 def parse_lines(lines):
     try:
         return _parse_lines(lines)
     except:
-        from nanome.util import Logs
-        Logs.error("Could not read pdb")
+        logger.error("Could not read pdb")
         raise
 
 
@@ -60,8 +61,7 @@ def _parse_lines(lines):
                     content.records.append(rec)
                     content.compnds.append(rec)
                 except:
-                    from nanome.util import Logs
-                    Logs.warning("Error parsing COMPND:", traceback.format_exc())
+                    logger.warning("Error parsing COMPND:", traceback.format_exc())
             if (record_type == "REMARK"):
                 rec = record_remark(line, line_counter)
                 content.records.append(rec)

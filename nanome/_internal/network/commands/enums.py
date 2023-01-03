@@ -1,18 +1,17 @@
 import sys
 from nanome._internal.util import IntEnum, auto, reset_auto
+import logging
+
+logger = logging.getLogger(__name__)
+
 class CommandEnum(IntEnum):
     if sys.version_info >= (3, 6):  # Tmp hack
         # Override for auto()
         def _generate_next_value_(name, start, count, last_values):
             return IntEnum._generate_next_value_(name, 0, count, last_values)
-    else:
-        pass
-
 
 # /!\ /!\ /!\
 # Values names are really important here, as they are hashed, and need to match Nanome
-
-
 class Commands(CommandEnum):
     # Reset enum counter for Python 2.7
     reset_auto()  # Not an enum
@@ -96,7 +95,6 @@ class Commands(CommandEnum):
 
 # /!\ /!\ /!\
 # Values names are really important here, as they are hashed, and need to match Nanome
-
 
 class Messages(CommandEnum):
     # Reset enum counter for Python 2.7
@@ -240,8 +238,7 @@ def init_hashes():
         i += 1
         hash = hash_command(command.name)
         if hash in hashes:
-            Logs.error("Command hash collision detected:",
-                       command.name, "and", hashes[hash])
+            logger.error(f"Command hash collision detected: {command.name} and {hashes[hash]}")
             continue
         hashes[hash] = command.name
         Hashes.CommandHashes[i] = hash
@@ -253,8 +250,8 @@ def init_hashes():
         i += 1
         hash = hash_command(command.name)
         if hash in hashes:
-            Logs.error("Message hash collision detected:",
-                       command.name, "and", hashes[hash])
+            logger.error(
+                "Message hash collision detected: " + command.name + "and" + hashes[hash])
             continue
         hashes[hash] = command.name
         Hashes.MessageHashes[i] = hash
@@ -266,8 +263,7 @@ def init_hashes():
         i += 1
         hash = hash_command(command.name)
         if hash in hashes:
-            Logs.error("Integration hash collision detected:",
-                       command.name, "and", hashes[hash])
+            logger.error("Integration hash collision detected:" + command.name +  " and " + hashes[hash])
             continue
         hashes[hash] = command.name
         Hashes.IntegrationHashes[i] = hash
@@ -280,8 +276,7 @@ def init_hashes():
         i += 1
         hash = hash_command(command.name)
         if hash in hashes:
-            Logs.error("Integration request hash collision detected:",
-                       command.name, "and", hashes[hash])
+            logger.error("Integration request hash collision detected: " + command.name + " and " + hashes[hash])
             continue
         hashes[hash] = command.name
         Hashes.IntegrationRequestHashes[i] = hash
@@ -293,9 +288,7 @@ def init_hashes():
         i += 1
         hash = hash_command(command.name)
         if hash in hashes:
-            from nanome.util import Logs
-            Logs.error("Permission request hash collision detected:",
-                       command.name, "and", hashes[hash])
+            logger.error(f"Permission request hash collision detected: {command.name} and {hashes[hash]}")
             continue
         hashes[hash] = command.name
         Hashes.PermissionRequestHashes[i] = hash

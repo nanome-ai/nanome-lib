@@ -4,6 +4,10 @@ from nanome._internal.structure.io import pdb, sdf
 import tempfile
 import os
 from distutils.spawn import find_executable
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 try:
     import asyncio
@@ -37,7 +41,7 @@ class _Bonding():
             self.__fast_mode = fast_mode
 
     def _start(self):
-        from nanome.util import Process, Logs
+        from nanome.util import Process
         if len(self.__complexes) == 0:
             self.__done()
             return self.__future
@@ -61,7 +65,7 @@ class _Bonding():
             self.__proc.executable_path = OBABEL_PATH
             self.__proc.args += ['-ipdb', self.__input.name, '-osdf', '-O' + self.__output.name]
         else:
-            Logs.error("No bonding package found.")
+            logger.error("No bonding package found.")
 
         if self.__fast_mode:
             self.__proc.args.append('-f')
@@ -96,14 +100,12 @@ class _Bonding():
         self.__proc.start()
 
     def __on_error(self, msg):
-        from nanome.util import Logs
         if not "molecule converted" in msg:
-            Logs.warning("[Bond Generation]", msg)
+            logger.warning("[Bond Generation] " + msg)
 
     def __bonding_done(self, result_code):
-        from nanome.util import Logs
         if result_code == -1:
-            Logs.error("Couldn't execute nanobabel or openbabel to generate bonds. Is one installed?")
+            logger.error("Couldn't execute nanobabel or openbabel to generate bonds. Is one installed?")
             self.__done()
             return
         with open(self.__output.name) as f:

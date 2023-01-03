@@ -2,6 +2,8 @@ import traceback
 import re
 from .content import Content
 
+import logging
+logger = logging.getLogger(__name__)
 
 class _CIF_Lines(object):
     def __init__(self, lines):
@@ -39,8 +41,7 @@ def parse_lines(lines):
     try:
         return _parse_lines(lines)
     except:
-        from nanome.util import Logs
-        Logs.error("Could not read mmcif")
+        logger.error("Could not read mmcif")
         raise
 
 
@@ -51,9 +52,8 @@ def _parse_lines(lines):
     try:
         parsed_file = ParseLines(lines)
     except Exception:
-        from nanome.util import Logs
-        Logs.error("\tParse failed. Error on line:", lines.get_line_number())
-        Logs.error(traceback.format_exc())
+        logger.error("\tParse failed. Error on line:", lines.get_line_number())
+        logger.error(traceback.format_exc())
     content = raw_to_formatted(parsed_file)
     return content
 
@@ -282,8 +282,7 @@ def raw_to_atom(parsed_object):
         atom.fract = not isCart
         return atom
     except:
-        from nanome.util import Logs
-        Logs.error("Error while parsing MMCIF atom")
+        logger.error("Error while parsing MMCIF atom")
         raise
 
 # Parsing the file
@@ -304,9 +303,8 @@ def ParseLines(lines):
                 else:
                     parsed_file[category] = section_objects
         except Exception:
-            from nanome.util import Logs
-            Logs.warning("Problem during parsing, skipping line. Error on line:", lines.get_line_number())
-            Logs.warning(traceback.format_exc())
+            logger.warning("Problem during parsing, skipping line. Error on line:", lines.get_line_number())
+            logger.warning(traceback.format_exc())
             lines.move_next()
     return parsed_file
 
@@ -362,8 +360,7 @@ def parse_loop(lines):
                 parsed_object[key] = value
             parsed_objects.append(parsed_object)
         except:
-            from nanome.util import Logs
-            Logs.debug("MMCIF_Parsing")
+            logger.debug("MMCIF_Parsing")
             raise
     return parsed_objects, category
 
@@ -464,8 +461,7 @@ category_regex = re.compile(r"^(?:([^\s]+)\.)?([^\s]+)(?:\s+((?:[^\s]*)|(?:\'.*\
 def get_data_category(line):
     match = re.match(category_regex, line)
     if (match == None):
-        from nanome.util import Logs
-        Logs.error(line)
+        logger.error(line)
         return
     category = match.group(1)
     key = match.group(2)

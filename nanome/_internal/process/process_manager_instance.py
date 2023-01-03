@@ -1,7 +1,8 @@
+import logging
 from . import ProcessManager
-
 from collections import deque
 
+logger = logging.getLogger(__name__)
 
 class ProcessManagerInstance():
 
@@ -31,8 +32,7 @@ class ProcessManagerInstance():
             if has_data:
                 data = self.__queue_in.get()
         except Exception:
-            from nanome.util import Logs
-            Logs.message("Queue has been closed, exiting process")
+            logger.info("Queue has been closed, exiting process")
             return False
         if has_data:
             self.__received_data(data)
@@ -64,8 +64,7 @@ class ProcessManagerInstance():
         elif type == ProcessManager.DataType.output:
             self.__processes[process_request].on_output(output)
         else:
-            from nanome.util import Logs
-            Logs.error("Received unknown process data type")
+            logger.error("Received unknown process data type")
 
     def _close(self):
         try:

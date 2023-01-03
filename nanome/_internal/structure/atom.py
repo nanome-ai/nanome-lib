@@ -1,5 +1,7 @@
 from . import _Base
+import logging
 
+logger = logging.getLogger(__name__)
 
 class _Atom(_Base):
     _vdw_radii = {}
@@ -118,14 +120,13 @@ class _Atom(_Base):
 
     @property
     def _vdw_radius(self):
-        from nanome.util.logs import Logs
         if len(_Atom._vdw_radii) < 1:
             _Atom._fill_atom_table()
         atomSymbolLower = self._symbol.lower()
         if atomSymbolLower in _Atom._vdw_radii:
             return _Atom._vdw_radii[atomSymbolLower]
         # unknown type
-        Logs.warning("Unknown atom type '" + atomSymbolLower + "'")
+        logger.warning("Unknown atom type '" + atomSymbolLower + "'")
         return 0.0
 
     @property

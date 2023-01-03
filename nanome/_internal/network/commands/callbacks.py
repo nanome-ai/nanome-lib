@@ -3,6 +3,9 @@
 import nanome
 from nanome.util.stream import StreamCreationError
 from .enums import Hashes
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def _advanced_settings(network, args, request_id):
@@ -29,8 +32,7 @@ def _receive_create_stream_result(network, result, request_id):
         network._call(request_id, None, result[0])
 
         if result[0] == StreamCreationError.UnsupportedStream:
-            from nanome.util import Logs
-            Logs.error("Tried to create an unsupported type of stream")
+            logger.error("Tried to create an unsupported type of stream")
         return
 
     from nanome.api.streams import Stream
@@ -58,9 +60,8 @@ def _receive_interrupt_stream(network, result, request_id):
     try:
         stream = Stream._streams[result[1]]
     except:
-        from nanome.util import Logs
-        Logs.warning(
-            "Got an error for an unknown stream. Probably tried to update an unknown stream:", result[1])
+        logger.warning(
+            f"Got an error for an unknown stream. Probably tried to update an unknown stream: {result[1]}")
         return
 
     stream._interrupt(result[0])
@@ -162,8 +163,7 @@ def _menu_toggled(network, arg, request_id):
         elif enabled == False:
             active_menu._on_closed_callback()
     else:
-        from nanome.util import Logs
-        Logs.warning("Can't find Menu for callback")
+        logger.warning("Can't find Menu for callback")
 
 
 def _slider_released(network, arg, request_id):
@@ -175,8 +175,7 @@ def _slider_released(network, arg, request_id):
         active_slider.current_value = slider_value
         active_slider._on_slider_released()
     else:
-        from nanome.util import Logs
-        Logs.warning("Can't find UI content for callback")
+        logger.warning("Can't find UI content for callback")
 
 
 def _slider_changed(network, arg, request_id):
@@ -188,8 +187,7 @@ def _slider_changed(network, arg, request_id):
         active_slider.current_value = slider_value
         active_slider._on_slider_changed()
     else:
-        from nanome.util import Logs
-        Logs.warning("Can't find UI content for callback")
+        logger.warning("Can't find UI content for callback")
 
 
 def _text_submit(network, arg, request_id):
@@ -201,8 +199,7 @@ def _text_submit(network, arg, request_id):
         active_txt.input_text = text_value
         active_txt._on_text_submitted()
     else:
-        from nanome.util import Logs
-        Logs.warning("Can't find UI content for callback")
+        logger.warning("Can't find UI content for callback")
 
 
 def _text_changed(network, arg, request_id):
@@ -214,8 +211,7 @@ def _text_changed(network, arg, request_id):
         active_txt.input_text = text_value
         active_txt._on_text_changed()
     else:
-        from nanome.util import Logs
-        Logs.warning("Can't find UI content for callback")
+        logger.warning("Can't find UI content for callback")
 
 
 def _button_pressed(network, arg, request_id):
@@ -226,8 +222,7 @@ def _button_pressed(network, arg, request_id):
             btn._selected = arg[1]
         btn._on_button_pressed()
     else:
-        from nanome.util import Logs
-        Logs.warning("Can't find UI content for callback")
+        logger.warning("Can't find UI content for callback")
 
 
 def _button_hover(network, arg, request_id):
@@ -237,8 +232,7 @@ def _button_hover(network, arg, request_id):
     if btn != None:
         btn._on_button_hover(state)
     else:
-        from nanome.util import Logs
-        Logs.warning("Can't find UI content for callback")
+        logger.warning("Can't find UI content for callback")
 
 
 def _image_pressed(network, arg, request_id):
@@ -249,8 +243,7 @@ def _image_pressed(network, arg, request_id):
     if img != None:
         img._on_image_pressed(x, y)
     else:
-        from nanome.util import Logs
-        Logs.warning("Can't find UI content for callback")
+        logger.warning("Can't find UI content for callback")
 
 
 def _image_held(network, arg, request_id):
@@ -261,8 +254,7 @@ def _image_held(network, arg, request_id):
     if img != None:
         img._on_image_held(x, y)
     else:
-        from nanome.util import Logs
-        Logs.warning("Can't find UI content for callback")
+        logger.warning("Can't find UI content for callback")
 
 
 def _image_released(network, arg, request_id):
@@ -273,8 +265,7 @@ def _image_released(network, arg, request_id):
     if img != None:
         img._on_image_released(x, y)
     else:
-        from nanome.util import Logs
-        Logs.warning("Can't find UI content for callback")
+        logger.warning("Can't find UI content for callback")
 
 
 def _dropdown_item_clicked(network, arg, request_id):
@@ -289,8 +280,7 @@ def _dropdown_item_clicked(network, arg, request_id):
         clickedItem._selected = True
         dropdown._on_item_clicked(clickedItem)
     else:
-        from nanome.util import Logs
-        Logs.warning("Can't find UI content for callback")
+        logger.warning("Can't find UI content for callback")
 
 
 def _complex_added(network, arg, request_id):

@@ -5,6 +5,9 @@ import traceback
 import sys
 import time
 from threading import Thread
+import logging
+
+logger = logging.getLogger(__name__)
 
 try:
     from queue import Queue, Empty
@@ -55,8 +58,7 @@ class ProcessManager():
                     entry.send(ProcessManager.DataType.position_changed, [count_before_exec])
                     count_before_exec += 1
         except:
-            from nanome.util import Logs
-            Logs.error("Exception in process manager update:\n", traceback.format_exc())
+            logger.error("Exception in process manager update:\n", traceback.format_exc())
 
     def __start_process(self):
         entry = self.__pending.popleft()
@@ -76,7 +78,6 @@ class ProcessManager():
                 queue.put(data)
             pipe.close()
 
-        from nanome.util import Logs
         try:
             # Log process settings
             exec_path = request.executable_path
@@ -97,9 +98,9 @@ class ProcessManager():
                 'process_label': request.label
             }
             msg = "Process Started: {} for Session {}".format(id, session_id)
-            Logs.message(msg, extra=extra)
+            logger.info(msg, extra=extra)
         except:
-            Logs.error("Couldn't execute process", exec_path, "Please check if executable is present and has permissions:\n", traceback.format_exc())
+            logger.error("Couldn't execute process " + exec_path +  " Please check if executable is present and has permissions:\n", traceback.format_exc())
             entry.send(ProcessManager.DataType.done, [-1])
             return
         entry.stdout_queue = Queue()
@@ -162,11 +163,10 @@ class ProcessManager():
                 'session_id': session_id,
                 'process_label': label
             }
-            from nanome.util import Logs
             if exit_code == 0:
-                Logs.message(message, extra=log_extra)
+                logger.info(message, extra=log_extra)
             else:
-                Logs.warning(message, extra=log_extra)
+                logger.warning(message, extra=log_extra)
             entry.send(ProcessManager.DataType.done, [exit_code])
             return False
         return True
@@ -199,5 +199,4 @@ class ProcessManager():
         elif type == ProcessManager.CommandType.stop:
             self.__stop_process(process_request)
         else:
-            from nanome.util import Logs
-            Logs.error("Received unknown process command type")
+            logger.error("Received unknown process command type")

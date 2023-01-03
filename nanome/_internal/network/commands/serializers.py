@@ -15,7 +15,9 @@ from nanome._internal.util.type_serializers import (
 from nanome._internal.volumetric.serializers import _VolumeDataSerializer, _VolumePropertiesSerializer
 from nanome.util.file import FileMeta, LoadInfoDone
 import types
+import logging
 
+logger = logging.getLogger(__name__)
 
 class ApplyColorScheme(TypeSerializer):
     def __init__(self):
@@ -769,11 +771,10 @@ class DeleteShape(TypeSerializer):
         return "DeleteShape"
 
     def serialize(self, version, value, context):
-        from nanome.util import Logs
         if version == 0:
             if len(value) > 1:
                 msg = "SetShape: Using a list of shapes with an old version of Nanome"
-                Logs.warning(msg)
+                logger.warning(msg)
                 raise TypeError(msg)
             context.write_int(value[0])
         elif version == 1:
@@ -806,12 +807,12 @@ class SetShape(TypeSerializer):
         return "SetShape"
 
     def serialize(self, version, value, context):
-        from nanome.util import Quaternion, Logs
+        from nanome.util import Quaternion
         from nanome.util.enums import ShapeType
         if version == 0:
             if len(value) > 1:
                 msg = "SetShape: Using a list of shapes with an old version of Nanome"
-                Logs.warning(msg)
+                logger.warning(msg)
                 raise TypeError(msg)
             first_elem = value[0]
             context.write_byte(int(first_elem.shape_type))
@@ -832,7 +833,7 @@ class SetShape(TypeSerializer):
         elif version == 1:
             if len(value) > 1:
                 msg = "SetShape: Using a list of shapes with an old version of Nanome"
-                Logs.warning(msg)
+                logger.warning(msg)
                 raise TypeError(msg)
             first_elem = value[0]
             context.write_using_serializer(self._shape, first_elem)

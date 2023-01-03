@@ -2,6 +2,9 @@ from .models import _Anchor, _Label, _Line, _Mesh, _Sphere
 from nanome._internal.util.type_serializers import TypeSerializer, StringSerializer, UnityPositionSerializer, ColorSerializer, ArraySerializer
 import os
 import tempfile
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class _AnchorSerializer(TypeSerializer):
@@ -87,7 +90,6 @@ class _MeshSerializer(TypeSerializer):
         return "MeshShape"
 
     def read_texture(self, value):
-        from nanome.util import Logs
         if value.texture_path != "":
             filename, ext = os.path.splitext(value.texture_path)
             if ext.lower() in [".jpeg", ".jpg", ".png"]:
@@ -98,15 +100,14 @@ class _MeshSerializer(TypeSerializer):
                             texture_bytes = bytearray(f.read())
                             return texture_bytes
                     except Exception as e:
-                        Logs.error("Error reading texture file: " + e)
+                        logger.error("Error reading texture file: " + e)
                 else:
-                    Logs.error("Texture file does not exist")
+                    logger.error("Texture file does not exist")
             else:
-                Logs.error("Texture file should be a png or a jpg file")
+                logger.error("Texture file should be a png or a jpg file")
         return []
 
     def serialize(self, version, value, context):
-        from nanome.util import Logs
         context.write_float_array(value.vertices)
         context.write_float_array(value.normals)
         context.write_float_array(value.colors)
@@ -116,7 +117,7 @@ class _MeshSerializer(TypeSerializer):
         texture_bytes = self.read_texture(value)
         context.write_byte_array(texture_bytes)
         if len(texture_bytes) > 0:
-            Logs.debug("Sending texture:", value.texture_path)
+            logger.debug("Sending texture:", value.texture_path)
 
         if version >= 1:
             context.write_bool(value.unlit)

@@ -1,6 +1,7 @@
 from . import _Base
 from nanome._internal.util.decorators import deprecated
 
+
 class _Workspace(_Base):
 
     @classmethod
@@ -8,7 +9,7 @@ class _Workspace(_Base):
         return cls()
 
     def __init__(self):
-        from nanome.util import Vector3, Quaternion, Logs
+        from nanome.util import Vector3, Quaternion
         self._position = Vector3()
         self._rotation = Quaternion()
         self._scale = Vector3(0.02, 0.02, 0.02)

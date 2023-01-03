@@ -12,6 +12,8 @@ from . import _TextInput
 from . import _UIList
 from nanome._internal.util import IntEnum
 from nanome._internal.util.type_serializers import ArraySerializer, TypeSerializer, ColorSerializer, ByteSerializer, CachedImageSerializer, StringSerializer, Vector3Serializer
+import logging
+logger = logging.getLogger(__name__)
 
 
 class _UIBaseSerializer(TypeSerializer):
@@ -51,8 +53,7 @@ class _UIBaseSerializer(TypeSerializer):
                 value).__name__]
             serializer = _UIBaseSerializer.registered_serializers[ui_type]
         except:
-            from nanome.util import Logs
-            Logs.error("Trying to serialize unknown UI type:",
+            logger.error("Trying to serialize unknown UI type:",
                        type(value).__name__)
             return
         context.write_uint(ui_type)
@@ -63,8 +64,7 @@ class _UIBaseSerializer(TypeSerializer):
         try:
             serializer = _UIBaseSerializer.registered_serializers[ui_type]
         except:
-            from nanome.util import Logs
-            Logs.error("Trying to deserialize unknown UI type:", ui_type)
+            logger.error("Trying to deserialize unknown UI type:", ui_type)
             return
         return context.read_using_serializer(serializer)
 

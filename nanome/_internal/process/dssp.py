@@ -5,12 +5,14 @@ import tempfile
 import os
 import sys
 import traceback
+import logging
 
 try:
     import asyncio
 except ImportError:
     asyncio = False
 
+logger = logging.getLogger(__name__)
 
 if sys.platform.startswith("linux"):
     DSSP_PATH = os.path.join(os.path.dirname(__file__), '_external', '_dssp', 'dssp-linux')
@@ -40,9 +42,9 @@ class _Dssp():
             self.__future = future
 
     def _start(self):
-        from nanome.util import Process, Logs
+        from nanome.util import Process
         if DSSP_PATH == None:
-            Logs.error("Unsupported platform, cannot call DSSP")
+            logger.error("Unsupported platform, cannot call DSSP")
             self.__done()
             return self.__future
 
@@ -96,13 +98,11 @@ class _Dssp():
         self.__proc.start()
 
     def __on_error(self, msg):
-        from nanome.util import Logs
-        Logs.warning("[DSSP]", msg)
+        logger.warning("[DSSP]" + msg)
 
     def __dssp_done(self, result_code):
         if result_code != 0:
-            from nanome.util import Logs
-            Logs.warning("DSSP failed, code:", result_code)
+            logger.warning("DSSP failed, code: " + result_code)
             self.__done()
             return
         with open(self.__output.name) as f:
@@ -129,9 +129,8 @@ class _Dssp():
                         chain = line[10:12].strip()
                         result.append((chain, int(serial), structure_type))
                     except:
-                        from nanome.util import Logs
-                        Logs.warning("[DSSP] Parsing error on serial:", serial)
-                        Logs.warning(traceback.format_exc())
+                        logger.warning("[DSSP] Parsing error on serial: " + serial)
+                        logger.warning(traceback.format_exc())
                     i += 1
             i += 1
         return result
@@ -139,8 +138,7 @@ class _Dssp():
     def __update_secondary_structure(self, complex):
         molecules = complex._molecules
         if len(molecules) != len(self.__current_complex_result):
-            from nanome.util import Logs
-            Logs.debug("[DSSP] Complex", complex._name, ": Molecule count", len(molecules), "doesn't match DSSP count", len(self.__current_complex_result))
+            logger.debug("[DSSP] Complex" + complex._name + ": Molecule count" + len(molecules) + "doesn't match DSSP count" + len(self.__current_complex_result))
             return
 
         for i in range(len(self.__current_complex_result)):
@@ -164,7 +162,7 @@ class _Dssp():
                     elif structure_type in _Dssp._types_helix:
                         residue._secondary_structure = _Residue.SecondaryStructure.Helix
                 except:
-                    Logs.debug("[DSSP] Key not found:", dssp_info[0], dssp_info[1], traceback.format_exc())
+                    logger.debug("[DSSP] Key not found: " + dssp_info[0] + " " + dssp_info[1], traceback.format_exc())
 
     def __done(self):
         if self.__input is not None:

@@ -6,6 +6,9 @@ import ssl
 import errno
 import time
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 class NetInstance(object):
     header_state = 0
@@ -26,17 +29,16 @@ class NetInstance(object):
         self._current_packet = Packet()
 
     def connect(self, host, port):
-        from nanome.util import Logs
         try:
-            Logs.message("Connecting to server", host, port)
+            logger.info(f"Connecting to server {host} {port}")
             self._connection.connect((host, port))
             self._connection.setblocking(False)
-            Logs.message("Connected to server")
+            logger.info("Connected to server")
         except (ssl.SSLError, socket.error) as e:
             self._socket = None
             self._context = None
             self._connection = None
-            Logs.error("Cannot connect to server:", e)
+            logger.error(f"Cannot connect to server:{e}")
             return False
         return True
 
@@ -58,8 +60,7 @@ class NetInstance(object):
                     pass
             except Exception:
                 # Originally caught ConnectionResetError, but not Python 2 compatible
-                from nanome.util import Logs
-                Logs.error("Connection has been forcibly closed by the server")
+                logger.error("Connection has been forcibly closed by the server")
                 raise
 
     def disconnect(self):
@@ -67,26 +68,25 @@ class NetInstance(object):
             self._connection.close()
 
     def receive(self):
-        from nanome.util import Logs
         try:
             data = self._connection.recv(4096)
         except ssl.SSLWantReadError:
             time.sleep(0.01)
         except ssl.SSLEOFError:
-            Logs.error("Connection closed by plugin server")
+            logger.error("Connection closed by plugin server")
             self._connection = None
             return False
         except KeyboardInterrupt:
             raise
         except Exception as e:
             msg = "Uncaught {}: {}".format(type(e).__name__, e)
-            Logs.error(msg)
+            logger.error(msg)
             time.sleep(0.1)
             self._connection = None
             return False
         else:
             if len(data) == 0:
-                Logs.message("Connection shutdown requested")
+                logger.info("Connection shutdown requested")
                 return False
             self._received_data(data)
         return True
