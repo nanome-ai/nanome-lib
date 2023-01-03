@@ -9,7 +9,7 @@ import traceback
 import logging
 
 logger = logging.getLogger(__name__)
-
+logging.basicConfig(level=logging.DEBUG)
 
 MESSAGE_VERSION_KEY = "ToClientProtocol"
 packet_debugging = False
@@ -58,11 +58,9 @@ class CommandMessageSerializer(object):
             command = CommandMessageSerializer._commands[command_hash]
         except KeyError:
             if self.try_register_session(payload) is True:
-                logger.error(
-                    "A session is trying to connect even though it is already connected")
+                logger.error("A session is trying to connect even though it is already connected")
             else:
-                logger.error(
-                    f"Received an unregistered command: {command_hash}")
+                logger.error(f"Received an unregistered command: {command_hash}")
             return (None, None, None)
         except BufferError as err:
             logger.error(err)
@@ -74,6 +72,12 @@ class CommandMessageSerializer(object):
             return (None, None, None)
 
         try:
+            logger.debug("Received command: " + command.name())
+            if command.name() == "ReceiveWorkspace":
+                import os
+                logger.debug("Received workspace")
+                with open("ReceiveWorkspaceMessage.bin", "wb") as f:
+                    f.write(context._data._received_bytes)
             received_object = context.read_using_serializer(command)
         except BufferError as err:
             logger.error(err)
