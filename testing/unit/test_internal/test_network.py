@@ -108,7 +108,7 @@ class PluginNetworkTestCase(unittest.TestCase):
         arg = []
         expects_response = True
         starting_command_id = self.network._command_id
-        self.network._send(code, arg, expects_response)
+        self.network.send(code, arg, expects_response)
         self.assertEqual(self.network._command_id, starting_command_id + 1)
         self.network._queue_out.put.assert_called_once()
     

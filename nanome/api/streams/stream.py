@@ -57,7 +57,7 @@ class Stream(object):
         :param data: List of data to send. i.e, for position stream: x, y, z, x, y, z, etc. (atom 1, atom 2, etc.)
         :type data: list of :class:`float` for position and scale streams, list of :class:`byte` for color streams
         """
-        id = self.__network._send(Messages.stream_feed, (self.__id, data, self.__data_type), done_callback is not None)
+        id = self.__network.send(Messages.stream_feed, (self.__id, data, self.__data_type), done_callback is not None)
         if done_callback is None:
             def done_callback():
                 return None
@@ -80,7 +80,7 @@ class Stream(object):
         | Destroy stream once plugin doesn't need it anymore
         """
         del Stream._streams[self.__id]
-        self.__network._send(Messages.stream_destroy, self.__id, False)
+        self.__network.send(Messages.stream_destroy, self.__id, False)
 
     def _interrupt(self, reason):
         self.__interrupt_callback(reason)

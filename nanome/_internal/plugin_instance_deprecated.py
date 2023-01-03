@@ -18,7 +18,7 @@ def _request_directory(self, path, callback=None, pattern="*"):
     options = DirectoryRequestOptions()
     options._directory_name = path
     options._pattern = pattern
-    id = self._network._send(Messages.directory_request, options, callback != None)
+    id = self._network.send(Messages.directory_request, options, callback != None)
     self._save_callback(id, callback)
 
 
@@ -33,7 +33,7 @@ def _request_files(self, file_list, callback=None):
     :param file_list: List of file name (with path) to read. E.g. ["a.sdf", "../b.sdf"] will read a.sdf in running directory, b.sdf in parent directory, and return them
     :type file_list: list of :class:`str`
     """
-    id = self._network._send(Messages.file_request, file_list, callback != None)
+    id = self._network.send(Messages.file_request, file_list, callback != None)
     self._save_callback(id, callback)
 
 

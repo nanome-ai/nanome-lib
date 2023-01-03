@@ -57,11 +57,11 @@ class PluginNetwork(object):
         self._queue_out.close()
 
     @classmethod
-    def _send_connect(cls, code, arg):
+    def send_connect(cls, code, arg):
         return cls.__send(code, None, arg, False)
 
     @classmethod
-    def _send(cls, code, arg, expects_response):
+    def send(cls, code, arg, expects_response):
         return cls.__send(code, cls._instance.__version_table, arg, expects_response)
 
     @classmethod

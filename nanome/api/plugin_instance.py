@@ -95,7 +95,7 @@ class PluginInstance(_PluginInstance):
         :type callback: Callable[[Workspace], None]
         """
         expects_response = callback is not None or self.is_async
-        id = self._network._send(Messages.workspace_request, None, expects_response)
+        id = self._network.send(Messages.workspace_request, None, expects_response)
         return self._save_callback(id, callback)
 
     def request_complex_list(self, callback=None):
@@ -106,7 +106,7 @@ class PluginInstance(_PluginInstance):
         :type callback: Callable[[List[Complex]], None]
         """
         expects_response = callback is not None or self.is_async
-        id = self._network._send(Messages.complex_list_request, None, expects_response)
+        id = self._network.send(Messages.complex_list_request, None, expects_response)
         return self._save_callback(id, callback)
 
     def request_complexes(self, id_list, callback=None):
@@ -120,7 +120,7 @@ class PluginInstance(_PluginInstance):
         :type callback: Callable[[List[Complex]], None]
         """
         expects_response = callback is not None or self.is_async
-        id = self._network._send(Messages.complexes_request, id_list, expects_response)
+        id = self._network.send(Messages.complexes_request, id_list, expects_response)
         return self._save_callback(id, callback)
 
     def update_workspace(self, workspace):
@@ -130,7 +130,7 @@ class PluginInstance(_PluginInstance):
         :param workspace: New workspace
         :type workspace: :class:`~nanome.structure.Workspace`
         """
-        self._network._send(Messages.workspace_update, workspace, False)
+        self._network.send(Messages.workspace_update, workspace, False)
 
     def send_notification(self, type, message):
         """
@@ -144,7 +144,7 @@ class PluginInstance(_PluginInstance):
         # avoids unnecessary dependencies.
         # needs to match the command serializer.
         args = (type, message)
-        self._network._send(Messages.notification_send, args, False)
+        self._network.send(Messages.notification_send, args, False)
 
     def update_structures_deep(self, structures, callback=None):
         """
@@ -157,7 +157,7 @@ class PluginInstance(_PluginInstance):
         :type callback: Callable[[], None]
         """
         expects_response = callback is not None or self.is_async
-        id = self._network._send(Messages.structures_deep_update, structures, expects_response)
+        id = self._network.send(Messages.structures_deep_update, structures, expects_response)
         return self._save_callback(id, callback)
 
     def update_structures_shallow(self, structures):
@@ -168,7 +168,7 @@ class PluginInstance(_PluginInstance):
         :param structures: List of molecular structures to update.
         :type structures: list of :class:`~nanome.structure.Base`
         """
-        self._network._send(Messages.structures_shallow_update, structures, False)
+        self._network.send(Messages.structures_shallow_update, structures, False)
 
     def zoom_on_structures(self, structures, callback=None):
         """
@@ -181,7 +181,7 @@ class PluginInstance(_PluginInstance):
         :type callback: Callable[[], None]
         """
         expects_response = callback is not None or self.is_async
-        id = self._network._send(Messages.structures_zoom, structures, expects_response)
+        id = self._network.send(Messages.structures_zoom, structures, expects_response)
         return self._save_callback(id, callback)
 
     def center_on_structures(self, structures, callback=None):
@@ -195,7 +195,7 @@ class PluginInstance(_PluginInstance):
         :type callback: Callable[[], None]
         """
         expects_response = callback is not None or self.is_async
-        id = self._network._send(Messages.structures_center, structures, expects_response)
+        id = self._network.send(Messages.structures_center, structures, expects_response)
         return self._save_callback(id, callback)
 
     def add_to_workspace(self, complex_list, callback=None):
@@ -208,7 +208,7 @@ class PluginInstance(_PluginInstance):
         :type callback: Callable[[], None]
         """
         expects_response = callback is not None or self.is_async
-        id = self._network._send(Messages.add_to_workspace, complex_list, expects_response)
+        id = self._network.send(Messages.add_to_workspace, complex_list, expects_response)
         return self._save_callback(id, callback)
 
     def remove_from_workspace(self, complex_list, callback=None):
@@ -227,7 +227,7 @@ class PluginInstance(_PluginInstance):
             empty_complexes.append(empty)
 
         expects_response = callback is not None or self.is_async
-        id = self._network._send(Messages.structures_deep_update, empty_complexes, expects_response)
+        id = self._network.send(Messages.structures_deep_update, empty_complexes, expects_response)
         return self._save_callback(id, callback)
 
     def update_menu(self, menu, shallow=False):
@@ -240,7 +240,7 @@ class PluginInstance(_PluginInstance):
         :type shallow: bool
         """
         self._menus[menu.index] = menu
-        self._network._send(Messages.menu_update, (menu, shallow), False)
+        self._network.send(Messages.menu_update, (menu, shallow), False)
 
     def update_content(self, *content):
         """
@@ -253,7 +253,7 @@ class PluginInstance(_PluginInstance):
         """
         if len(content) == 1 and isinstance(content[0], list):
             content = content[0]
-        self._network._send(Messages.content_update, content, False)
+        self._network.send(Messages.content_update, content, False)
 
     def update_node(self, *nodes):
         """
@@ -266,7 +266,7 @@ class PluginInstance(_PluginInstance):
         """
         if len(nodes) == 1 and isinstance(nodes[0], list):
             nodes = nodes[0]
-        self._network._send(Messages.node_update, nodes, False)
+        self._network.send(Messages.node_update, nodes, False)
 
     def set_menu_transform(self, index, position, rotation, scale):
         """
@@ -281,7 +281,7 @@ class PluginInstance(_PluginInstance):
         :param scale: New scale of the menu
         :type scale: :class:`~nanome.util.vector3`
         """
-        self._network._send(Messages.menu_transform_set,
+        self._network.send(Messages.menu_transform_set,
                             (index, position, rotation, scale), False)
 
     def request_menu_transform(self, index, callback=None):
@@ -294,7 +294,7 @@ class PluginInstance(_PluginInstance):
         :type callback: Callable[[Vector3, Quaternion, Vector3], None]
         """
         expects_response = callback is not None or self.is_async
-        id = self._network._send(Messages.menu_transform_request, index, expects_response)
+        id = self._network.send(Messages.menu_transform_request, index, expects_response)
         return self._save_callback(id, callback)
 
     def save_files(self, file_list, callback=None):
@@ -307,7 +307,7 @@ class PluginInstance(_PluginInstance):
         :type callable: Callable[[List[FileSaveData]], None]
         """
         expects_response = callback is not None or self.is_async
-        id = self._network._send(Messages.file_save, file_list, expects_response)
+        id = self._network.send(Messages.file_save, file_list, expects_response)
         return self._save_callback(id, callback)
 
     def create_writing_stream(self, indices_list, stream_type, callback=None):
@@ -322,7 +322,7 @@ class PluginInstance(_PluginInstance):
         :type callback: Callable[[Stream, StreamCreationError], None]
         """
         expects_response = callback is not None or self.is_async
-        id = self._network._send(Messages.stream_create, (stream_type, indices_list, StreamDirection.writing), expects_response)
+        id = self._network.send(Messages.stream_create, (stream_type, indices_list, StreamDirection.writing), expects_response)
         return self._save_callback(id, callback)
 
     def create_reading_stream(self, indices_list, stream_type, callback=None):
@@ -337,7 +337,7 @@ class PluginInstance(_PluginInstance):
         :type callback: Callable[[Stream, StreamCreationError], None]
         """
         expects_response = callback is not None or self.is_async
-        id = self._network._send(Messages.stream_create, (stream_type, indices_list, StreamDirection.reading), expects_response)
+        id = self._network.send(Messages.stream_create, (stream_type, indices_list, StreamDirection.reading), expects_response)
         return self._save_callback(id, callback)
 
     def add_bonds(self, complex_list, callback=None, fast_mode=None):
@@ -367,7 +367,7 @@ class PluginInstance(_PluginInstance):
 
     def add_volume(self, complex, volume, properties, complex_to_align_index=-1, callback=None):
         expects_response = callback is not None or self.is_async
-        id = self._network._send(Messages.add_volume, (complex, complex_to_align_index, volume, properties), expects_response)
+        id = self._network.send(Messages.add_volume, (complex, complex_to_align_index, volume, properties), expects_response)
         return self._save_callback(id, callback)
 
     def open_url(self, url, desktop_browser=False):
@@ -382,7 +382,7 @@ class PluginInstance(_PluginInstance):
         url = url.strip()
         if '://' not in url:
             url = 'http://' + url
-        self._network._send(Messages.open_url, (url, desktop_browser), False)
+        self._network.send(Messages.open_url, (url, desktop_browser), False)
 
     def request_presenter_info(self, callback=None):
         """
@@ -392,7 +392,7 @@ class PluginInstance(_PluginInstance):
         :type callback: Callable[[PresenterInfo], None]
         """
         expects_response = callback is not None or self.is_async
-        id = self._network._send(Messages.presenter_info_request, None, expects_response)
+        id = self._network.send(Messages.presenter_info_request, None, expects_response)
         return self._save_callback(id, callback)
 
     def request_controller_transforms(self, callback=None):
@@ -403,7 +403,7 @@ class PluginInstance(_PluginInstance):
         :type callback: Callable[[Vector3, Quaternion, Vector3, Quaternion, Vector3, Quaternion], None]
         """
         expects_response = callback is not None or self.is_async
-        id = self._network._send(Messages.controller_transforms_request, None, expects_response)
+        id = self._network.send(Messages.controller_transforms_request, None, expects_response)
         return self._save_callback(id, callback)
 
     def set_plugin_list_button(self, button, text=None, usable=None):
@@ -433,7 +433,7 @@ class PluginInstance(_PluginInstance):
         else:
             current_usable[0] = usable
 
-        self._network._send(Messages.plugin_list_button_set, (button, text, usable), False)
+        self._network.send(Messages.plugin_list_button_set, (button, text, usable), False)
 
     def send_files_to_load(self, files_list, callback=None):
         """
@@ -460,7 +460,7 @@ class PluginInstance(_PluginInstance):
             files.append((file_name, data))
 
         expects_response = callback is not None or self.is_async
-        id = self._network._send(Messages.load_file, (files, True, True), expects_response)
+        id = self._network.send(Messages.load_file, (files, True, True), expects_response)
         return self._save_callback(id, callback)
 
     def request_export(self, format, callback=None, entities=None):
@@ -479,7 +479,7 @@ class PluginInstance(_PluginInstance):
         if entities is not None and not isinstance(entities, list):
             entities = [entities]
 
-        id = self._network._send(Messages.export_files, (format, entities), True)
+        id = self._network.send(Messages.export_files, (format, entities), True)
         return self._save_callback(id, callback)
 
     def apply_color_scheme(self, color_scheme, target, only_carbons):
@@ -493,7 +493,7 @@ class PluginInstance(_PluginInstance):
         :param only_carbons: whether you want to only color carbons, or all atoms.
         :type only_carbons: bool
         """
-        self._network._send(Messages.apply_color_scheme, (color_scheme, target, only_carbons), False)
+        self._network.send(Messages.apply_color_scheme, (color_scheme, target, only_carbons), False)
 
     @property
     def plugin_files_path(self):
@@ -525,7 +525,7 @@ class PluginInstance(_PluginInstance):
 
     @Logs.deprecated("create_writing_stream")
     def create_stream(self, atom_indices_list, callback):
-        id = self._network._send(Messages.stream_create, (Stream.Type.position, atom_indices_list, StreamDirection.writing), callback is not None)
+        id = self._network.send(Messages.stream_create, (Stream.Type.position, atom_indices_list, StreamDirection.writing), callback is not None)
         self._save_callback(id, callback)
 
     @Logs.deprecated("create_writing_stream")

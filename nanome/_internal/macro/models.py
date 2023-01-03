@@ -18,22 +18,22 @@ class _Macro(object):
         return cls()
 
     def _save(self, all_users=False):
-        PluginNetwork._send(Messages.save_macro, (self, all_users, _Macro._plugin_identifier), False)
+        PluginNetwork.send(Messages.save_macro, (self, all_users, _Macro._plugin_identifier), False)
 
     def _run(self, callback=None):
         expects_response = callback is not None or nanome.PluginInstance._instance.is_async
-        id = PluginNetwork._send(Messages.run_macro, self, expects_response)
+        id = PluginNetwork.send(Messages.run_macro, self, expects_response)
         return nanome.PluginInstance._save_callback(id, callback)
 
     def _delete(self, all_users=False):
-        PluginNetwork._send(Messages.delete_macro, (self, all_users, _Macro._plugin_identifier), False)
+        PluginNetwork.send(Messages.delete_macro, (self, all_users, _Macro._plugin_identifier), False)
 
     @classmethod
     def _stop(cls):
-        PluginNetwork._send(Messages.stop_macro, None, False)
+        PluginNetwork.send(Messages.stop_macro, None, False)
 
     @classmethod
     def _get_live(cls, callback=None):
         expects_response = callback is not None or nanome.PluginInstance._instance.is_async
-        id = PluginNetwork._send(Messages.get_macros, _Macro._plugin_identifier, expects_response)
+        id = PluginNetwork.send(Messages.get_macros, _Macro._plugin_identifier, expects_response)
         return nanome.PluginInstance._save_callback(id, callback)

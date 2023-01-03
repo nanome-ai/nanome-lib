@@ -54,7 +54,7 @@ class _PluginInstance(object):
         self._network = plugin_network
         self._process_manager = ProcessManagerInstance(pm_queue_in, pm_queue_out)
         self._log_pipe_conn = log_pipe_conn
-        self._network._send_connect(Messages.connect, [Packet._compression_type(), original_version_table])
+        self._network.send_connect(Messages.connect, [Packet._compression_type(), original_version_table])
         logger.debug(f"Plugin constructed for session {session_id}")
 
     @classmethod

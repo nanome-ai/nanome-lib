@@ -20,7 +20,7 @@ class Files:
         if not self.plugin._has_permission(Permissions.local_files_access):
             raise Exception("Plugin requires files permission to use this method.")
         expects_response = callback is not None or self.plugin.is_async
-        id = self.plugin._network._send(Messages.print_working_directory, None, expects_response)
+        id = self.plugin._network.send(Messages.print_working_directory, None, expects_response)
         return self.plugin._save_callback(id, callback)
 
     def cd(self, directory, callback=None):
@@ -35,7 +35,7 @@ class Files:
         if not self.plugin._has_permission(Permissions.local_files_access):
             raise Exception("Plugin requires files permission to use this method.")
         expects_response = callback is not None or self.plugin.is_async
-        id = self.plugin._network._send(Messages.cd, directory, expects_response)
+        id = self.plugin._network.send(Messages.cd, directory, expects_response)
         return self.plugin._save_callback(id, callback)
 
     def ls(self, directory, callback=None):
@@ -50,7 +50,7 @@ class Files:
         if not self.plugin._has_permission(Permissions.local_files_access):
             raise Exception("Plugin requires files permission to use this method.")
         expects_response = callback is not None or self.plugin.is_async
-        id = self.plugin._network._send(Messages.ls, directory, expects_response)
+        id = self.plugin._network.send(Messages.ls, directory, expects_response)
         return self.plugin._save_callback(id, callback)
 
     def mv(self, source, dest, callback=None):
@@ -67,7 +67,7 @@ class Files:
         if not self.plugin._has_permission(Permissions.local_files_access):
             raise Exception("Plugin requires files permission to use this method.")
         expects_response = callback is not None or self.plugin.is_async
-        id = self.plugin._network._send(Messages.mv, (source, dest), expects_response)
+        id = self.plugin._network.send(Messages.mv, (source, dest), expects_response)
         return self.plugin._save_callback(id, callback)
 
     def get(self, source, dest, callback=None):
@@ -90,7 +90,7 @@ class Files:
                     ofile.write(file)
                     ofile.close()
             callback(error, dest)
-        id = self.plugin._network._send(Messages.get, source, True)
+        id = self.plugin._network.send(Messages.get, source, True)
         result = self.plugin._save_callback(id, cb if callback else None)
         if callback is None and self.plugin.is_async:
             result.real_set_result = result.set_result
@@ -115,7 +115,7 @@ class Files:
             file = f.read()
             f.close()
         expects_response = callback is not None or self.plugin.is_async
-        id = self.plugin._network._send(Messages.put, (dest, file), expects_response)
+        id = self.plugin._network.send(Messages.put, (dest, file), expects_response)
         return self.plugin._save_callback(id, callback)
 
     def rm(self, target, callback=None):
@@ -130,7 +130,7 @@ class Files:
         if not self.plugin._has_permission(Permissions.local_files_access):
             raise Exception("Plugin requires files permission to use this method.")
         expects_response = callback is not None or self.plugin.is_async
-        id = self.plugin._network._send(Messages.rm, target, expects_response)
+        id = self.plugin._network.send(Messages.rm, target, expects_response)
         return self.plugin._save_callback(id, callback)
 
     def rmdir(self, target, callback=None):
@@ -145,7 +145,7 @@ class Files:
         if not self.plugin._has_permission(Permissions.local_files_access):
             raise Exception("Plugin requires files permission to use this method.")
         expects_response = callback is not None or self.plugin.is_async
-        id = self.plugin._network._send(Messages.rmdir, target, expects_response)
+        id = self.plugin._network.send(Messages.rmdir, target, expects_response)
         return self.plugin._save_callback(id, callback)
 
     def cp(self, source, dest, callback=None):
@@ -162,7 +162,7 @@ class Files:
         if not self.plugin._has_permission(Permissions.local_files_access):
             raise Exception("Plugin requires files permission to use this method.")
         expects_response = callback is not None or self.plugin.is_async
-        id = self.plugin._network._send(Messages.cp, (source, dest), expects_response)
+        id = self.plugin._network.send(Messages.cp, (source, dest), expects_response)
         return self.plugin._save_callback(id, callback)
 
     def mkdir(self, target, callback=None):
@@ -177,5 +177,5 @@ class Files:
         if not self.plugin._has_permission(Permissions.local_files_access):
             raise Exception("Plugin requires files permission to use this method.")
         expects_response = callback is not None or self.plugin.is_async
-        id = self.plugin._network._send(Messages.mkdir, target, expects_response)
+        id = self.plugin._network.send(Messages.mkdir, target, expects_response)
         return self.plugin._save_callback(id, callback)
