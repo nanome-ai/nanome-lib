@@ -14,6 +14,7 @@ class CommandEnum(IntEnum):
 # /!\ /!\ /!\
 # Values names are really important here, as they are hashed, and need to match Nanome
 
+
 class Commands(CommandEnum):
     # Reset enum counter for Python 2.7
     reset_auto()  # Not an enum
