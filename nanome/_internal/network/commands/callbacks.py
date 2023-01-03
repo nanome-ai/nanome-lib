@@ -144,7 +144,7 @@ def simple_callback_no_arg(network, arg, request_id):
     network._call(request_id)
 
 
-def _find_content(network, content_id):
+def __find_content(network, content_id):
     for menu in network._plugin._menus.values():
         content = menu._find_content(content_id)
         if content is not None:
