@@ -1,19 +1,18 @@
 
-from nanome._internal.integration import serializers as integration_serializers
-from nanome._internal.macro.serializers import _MacroSerializer
-from nanome._internal.network.commands.enums import Hashes, Integrations
-from nanome._internal.shapes.serializers import _SphereSerializer, _ShapeSerializer, _LineSerializer, _LabelSerializer, _MeshSerializer
-from nanome._internal.structure import _Atom, _Bond, _Residue, _Chain, _Molecule, _Complex, _Base
-from nanome._internal.structure.serializers import _ComplexSerializer, _MoleculeSerializer, _ChainSerializer, _ResidueSerializer, _BondSerializer, _AtomSerializer, _AtomSerializerID, _SubstructureSerializer, _AtomSerializer, _MoleculeSerializer, _WorkspaceSerializer
-from nanome._internal.ui.serializers import _LayoutNodeSerializer, _UIBaseSerializer, _MenuSerializer, _LayoutNodeSerializerDeep
-from nanome._internal.util import IntEnum
-from nanome._internal.util.type_serializers import (
+from .integration import serializers as integration_serializers
+from .macro.serializers import _MacroSerializer
+from .network.enums import Hashes, Integrations
+from .shapes.serializers import _SphereSerializer, _ShapeSerializer, _LineSerializer, _LabelSerializer, _MeshSerializer
+from .structure import _Atom, _Bond, _Residue, _Chain, _Molecule, _Complex, _Base
+from .structure.serializers import _ComplexSerializer, _MoleculeSerializer, _ChainSerializer, _ResidueSerializer, _BondSerializer, _AtomSerializer, _AtomSerializerID, _SubstructureSerializer, _AtomSerializer, _MoleculeSerializer, _WorkspaceSerializer
+from .ui.serializers import _LayoutNodeSerializer, _UIBaseSerializer, _MenuSerializer, _LayoutNodeSerializerDeep
+from .util import IntEnum
+from .util.type_serializers import (
     ArraySerializer, LongSerializer, TypeSerializer,
     DictionarySerializer, LongSerializer, TupleSerializer, IntSerializer,
     UnityPositionSerializer, UnityRotationSerializer, Vector3Serializer, StringSerializer,
     ColorSerializer, DirectoryEntrySerializer, FileDataSerializer, FileSaveDataSerializer, ByteSerializer)
-from nanome._internal.volumetric.serializers import _VolumeDataSerializer, _VolumePropertiesSerializer
-from nanome.util.file import FileMeta, LoadInfoDone
+from .volumetric.serializers import _VolumeDataSerializer, _VolumePropertiesSerializer
 import types
 import logging
 
@@ -550,6 +549,7 @@ class LoadFileDoneInfo(TypeSerializer):
         raise NotImplementedError
 
     def deserialize(self, version, context):
+        from nanome.util.file import LoadInfoDone
         from nanome.util.enums import LoadFileErrorCode
         result = LoadInfoDone()
         result.success = LoadFileErrorCode(context.read_byte())

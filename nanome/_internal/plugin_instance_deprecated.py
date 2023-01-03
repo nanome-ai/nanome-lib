@@ -1,6 +1,6 @@
 from . import _PluginInstance
 from nanome._internal.util.decorators import deprecated
-from nanome._internal.network.commands.enums import Messages
+from nanome._internal.network.enums import Messages
 from nanome._internal import shapes as internal_shapes
 
 

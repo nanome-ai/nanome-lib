@@ -6,7 +6,7 @@ from timeit import default_timer as timer
 
 from nanome._internal.network import Packet
 from nanome._internal.process import ProcessManagerInstance
-from nanome._internal.network.commands.enums import Hashes, Messages
+from nanome._internal.network.enums import Hashes, Messages
 
 logger = logging.getLogger(__name__)
 

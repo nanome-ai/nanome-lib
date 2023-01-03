@@ -1,8 +1,8 @@
 from nanome._internal import network as Network
 from nanome._internal.process import ProcessManager
 from nanome._internal.network import PluginNetwork
-from nanome._internal.network.commands.enums import Hashes
-from nanome._internal.network.serializers import CommandMessageSerializer
+from nanome._internal.network.enums import Hashes
+from nanome._internal.serializers import CommandMessageSerializer
 from nanome._internal.util.type_serializers import TypeSerializer
 from nanome._internal.logs import LogsManager
 import logging

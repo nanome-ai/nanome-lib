@@ -1,6 +1,6 @@
 from nanome.util import enums
 from nanome._internal.network import PluginNetwork
-from nanome._internal.network.commands.enums import Messages
+from nanome._internal.network.enums import Messages
 
 class Room:
     """

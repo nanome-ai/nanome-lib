@@ -1,5 +1,5 @@
 from nanome.util import FileErrorCode
-from nanome._internal.network.commands.enums import Permissions, Messages
+from nanome._internal.network.enums import Permissions, Messages
 
 
 class Files:
