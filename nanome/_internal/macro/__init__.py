@@ -1,3 +1,3 @@
-from .macro import _Macro
+from .models import _Macro
 
 from . import serializers
