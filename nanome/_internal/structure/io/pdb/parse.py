@@ -4,6 +4,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 def parse_lines(lines):
     try:
         return _parse_lines(lines)

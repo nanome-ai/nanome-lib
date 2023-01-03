@@ -5,6 +5,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 def parse_json(content_json):
     type_name = content_json.read("type_name", "Unknown")
     if type_name == "Button":

@@ -5,6 +5,7 @@ from .content import Content
 import logging
 logger = logging.getLogger(__name__)
 
+
 class _CIF_Lines(object):
     def __init__(self, lines):
         self.lines = lines

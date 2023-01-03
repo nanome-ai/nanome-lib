@@ -92,6 +92,7 @@ def add_command(command, serializer, callback):
     Serializer._commands[command_enums.Hashes.CommandHashes[command]] = serializer
     Serializer._command_callbacks[command_enums.Hashes.CommandHashes[command]] = callback
 
+
 commands_enum = command_enums.Commands
 messages_enum = command_enums.Messages
 # control
@@ -228,6 +229,7 @@ add_command(commands_enum.integration,
 
 def add_message(command, serializer):
     Serializer._messages[callbacks.Hashes.MessageHashes[command]] = serializer
+
 
 TypeSerializer.register_string_raw(MESSAGE_VERSION_KEY, 1)
 # control

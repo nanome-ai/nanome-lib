@@ -3,6 +3,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 class _Shape(object):
     def __init__(self, shape_type):
         from nanome.util import Color
@@ -17,6 +18,7 @@ class _Shape(object):
 
     def _upload(self, done_callback=None):
         import nanome
+
         def set_callback(indices, results):
             index = indices[0]
             result = results[0]
@@ -63,6 +65,7 @@ class _Shape(object):
 
     def _destroy(self, done_callback=None):
         import nanome
+
         def set_callback(indices):
             if done_callback is not None:
                 done_callback(indices)
@@ -80,6 +83,7 @@ class _Shape(object):
     @classmethod
     def _destroy_multiple(cls, shapes, done_callback=None):
         import nanome
+
         def set_callback(indices):
             if done_callback is not None:
                 done_callback(indices)
@@ -94,6 +98,7 @@ class _Shape(object):
             result.set_result = lambda args: set_callback(args)
             def done_callback(args): return result.real_set_result(args)
         return result
+
 
 class _Anchor(object):
     def __init__(self):

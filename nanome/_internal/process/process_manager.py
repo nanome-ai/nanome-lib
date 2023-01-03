@@ -1,3 +1,5 @@
+from nanome._internal.util import IntEnum, auto
+from nanome._internal.process import ProcessEntry
 from collections import deque
 from functools import partial
 import subprocess
@@ -14,8 +16,6 @@ try:
 except ImportError:
     from Queue import Queue, Empty  # python 2.x
 
-from nanome._internal.process import ProcessEntry
-from nanome._internal.util import IntEnum, auto
 
 POSIX = 'posix' in sys.builtin_module_names
 
@@ -100,7 +100,7 @@ class ProcessManager():
             msg = "Process Started: {} for Session {}".format(id, session_id)
             logger.info(msg, extra=extra)
         except:
-            logger.error("Couldn't execute process " + exec_path +  " Please check if executable is present and has permissions:\n", traceback.format_exc())
+            logger.error("Couldn't execute process " + exec_path + " Please check if executable is present and has permissions:\n", traceback.format_exc())
             entry.send(ProcessManager.DataType.done, [-1])
             return
         entry.stdout_queue = Queue()

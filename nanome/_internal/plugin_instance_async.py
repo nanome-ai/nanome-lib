@@ -6,6 +6,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 async def async_update_loop(plugin_instance, UPDATE_RATE, MINIMUM_SLEEP):
     try:
         plugin_instance.start()

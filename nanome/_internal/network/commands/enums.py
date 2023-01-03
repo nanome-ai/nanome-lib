@@ -4,6 +4,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 class CommandEnum(IntEnum):
     if sys.version_info >= (3, 6):  # Tmp hack
         # Override for auto()
@@ -12,6 +13,8 @@ class CommandEnum(IntEnum):
 
 # /!\ /!\ /!\
 # Values names are really important here, as they are hashed, and need to match Nanome
+
+
 class Commands(CommandEnum):
     # Reset enum counter for Python 2.7
     reset_auto()  # Not an enum
@@ -95,6 +98,7 @@ class Commands(CommandEnum):
 
 # /!\ /!\ /!\
 # Values names are really important here, as they are hashed, and need to match Nanome
+
 
 class Messages(CommandEnum):
     # Reset enum counter for Python 2.7
@@ -263,7 +267,7 @@ def init_hashes():
         i += 1
         hash = hash_command(command.name)
         if hash in hashes:
-            logger.error("Integration hash collision detected:" + command.name +  " and " + hashes[hash])
+            logger.error("Integration hash collision detected:" + command.name + " and " + hashes[hash])
             continue
         hashes[hash] = command.name
         Hashes.IntegrationHashes[i] = hash

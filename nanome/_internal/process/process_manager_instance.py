@@ -4,6 +4,7 @@ from collections import deque
 
 logger = logging.getLogger(__name__)
 
+
 class ProcessManagerInstance():
 
     def __init__(self, queue_in, queue_out):

@@ -153,7 +153,7 @@ class _Atom(_Base):
             self._in_conformer.extend([self._in_conformer[-1]] * (extension))
             copy_val = self._positions[-1]
             self._positions.extend([copy_val.get_copy()
-                                   for i in range(extension)])
+                                    for i in range(extension)])
         else:
             self._in_conformer = self._in_conformer[:new_size]
             self._positions = self._positions[:new_size]
@@ -744,7 +744,7 @@ class _Molecule(_Base):
             self._names.extend([self._names[-1]] * (extension))
             copy_val = self._associateds[-1]
             self._associateds.extend([copy_val.copy()
-                                     for i in range(extension)])
+                                      for i in range(extension)])
         else:
             self._names = self._names[:value]
             self._associateds = self._associateds[:value]
