@@ -2,14 +2,13 @@ import logging
 import types
 
 from .network.enums import Hashes, Integrations
-from . import macro
 from . import integration
+from . import macro
 from . import shapes
 from . import structure
 from . import ui
-from .util import IntEnum
-from .util import type_serializers as fields
 from . import volumetric
+from .util import IntEnum, type_serializers as fields
 
 logger = logging.getLogger(__name__)
 
