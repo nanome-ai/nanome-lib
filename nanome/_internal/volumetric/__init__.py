@@ -5,4 +5,4 @@ from .volume_properties import _VolumeProperties
 
 # folders
 from . import io
-from . import serialization
+from . import serializers

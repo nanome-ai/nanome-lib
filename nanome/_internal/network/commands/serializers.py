@@ -12,7 +12,7 @@ from nanome._internal.util.type_serializers import (
     DictionarySerializer, LongSerializer, TupleSerializer, IntSerializer,
     UnityPositionSerializer, UnityRotationSerializer, Vector3Serializer, StringSerializer,
     ColorSerializer, DirectoryEntrySerializer, FileDataSerializer, FileSaveDataSerializer, ByteSerializer)
-from nanome._internal.volumetric.serialization import _VolumeDataSerializer, _VolumePropertiesSerializer
+from nanome._internal.volumetric.serializers import _VolumeDataSerializer, _VolumePropertiesSerializer
 from nanome.util.file import FileMeta, LoadInfoDone
 import types
 
