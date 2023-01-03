@@ -1,10 +1,10 @@
 
 from nanome._internal.integration import serializers as integration_serializers
-from nanome._internal.macro.serialization import _MacroSerializer
+from nanome._internal.macro.serializers import _MacroSerializer
 from nanome._internal.network.commands.enums import Hashes, Integrations
 from nanome._internal.shapes.serializers import _SphereSerializer, _ShapeSerializer, _LineSerializer, _LabelSerializer, _MeshSerializer
 from nanome._internal.structure import _Atom, _Bond, _Residue, _Chain, _Molecule, _Complex, _Base
-from nanome._internal.structure.serialization import _ComplexSerializer, _MoleculeSerializer, _ChainSerializer, _ResidueSerializer, _BondSerializer, _AtomSerializer, _AtomSerializerID, _SubstructureSerializer, _AtomSerializer, _MoleculeSerializer, _WorkspaceSerializer
+from nanome._internal.structure.serializers import _ComplexSerializer, _MoleculeSerializer, _ChainSerializer, _ResidueSerializer, _BondSerializer, _AtomSerializer, _AtomSerializerID, _SubstructureSerializer, _AtomSerializer, _MoleculeSerializer, _WorkspaceSerializer
 from nanome._internal.ui.serializers import _LayoutNodeSerializer, _UIBaseSerializer, _MenuSerializer, _LayoutNodeSerializerDeep
 from nanome._internal.util import IntEnum
 from nanome._internal.util.type_serializers import (

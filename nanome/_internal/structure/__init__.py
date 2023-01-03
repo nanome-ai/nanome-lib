@@ -13,4 +13,4 @@ from .workspace import _Workspace
 from .substructure import _Substructure
 
 from . import io
-from . import serialization
+from . import serializers
