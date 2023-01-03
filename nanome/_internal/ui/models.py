@@ -80,7 +80,7 @@ class _Button(_UIBase):
         try:
             nanome._internal.network.PluginNetwork._instance._send(
                 message_callbacks.hook_ui_callback,
-                (command_serializers._UIHook.Type.button_hover, self._content_id),
+                (command_serializers.UIHook.Type.button_hover, self._content_id),
                 False)
         except:
             logger.error("Could not register hook")
@@ -355,7 +355,7 @@ class _Image(_UIBase):
             return
         import nanome
         self._send_hook(
-            nanome._internal._network._commands._serialization._UIHook.Type.image_pressed)
+            nanome._internal._network._commands._serialization.UIHook.Type.image_pressed)
         self._pressed_callback = func
 
     def _register_held_callback(self, func):
@@ -363,7 +363,7 @@ class _Image(_UIBase):
             return
         import nanome
         self._send_hook(
-            nanome._internal._network._commands._serialization._UIHook.Type.image_held)
+            nanome._internal._network._commands._serialization.UIHook.Type.image_held)
         self._held_callback = func
 
     def _register_released_callback(self, func):
@@ -371,7 +371,7 @@ class _Image(_UIBase):
             return
         import nanome
         self._send_hook(
-            nanome._internal._network._commands._serialization._UIHook.Type.image_released)
+            nanome._internal._network._commands._serialization.UIHook.Type.image_released)
         self._released_callback = func
 
     def _send_hook(self, hook_type):
