@@ -1,7 +1,7 @@
-from nanome._internal.macro.models import _Macro
+from nanome._internal import macro
 
 
-class Macro(_Macro):
+class Macro(macro.models._Macro):
     def __init__(self, title="", logic=""):
         self.title = title
         self.logic = logic
@@ -9,11 +9,11 @@ class Macro(_Macro):
 
     @classmethod
     def get_plugin_identifier(cls):
-        return _Macro._plugin_identifier
+        return macro.models._Macro_Macro._plugin_identifier
 
     @classmethod
     def set_plugin_identifier(cls, value):
-        _Macro._plugin_identifier = value
+        macro.models._Macro._plugin_identifier = value
 
     @property
     def title(self):
@@ -49,4 +49,4 @@ class Macro(_Macro):
         return cls._get_live(callback)
 
 
-_Macro._create = Macro
+macro.models._Macro._create = Macro
