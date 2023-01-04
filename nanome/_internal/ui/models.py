@@ -721,8 +721,6 @@ __metaclass__ = type
 # classes inherting from _UIBase are expected to also inherit UIBase separately.
 
 
-
-
 class _UIList(_UIBase):
 
     @classmethod
