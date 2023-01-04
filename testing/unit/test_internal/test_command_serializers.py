@@ -5,7 +5,9 @@ import unittest
 from nanome._internal import network
 from nanome._internal.serializers import CommandMessageSerializer
 from nanome._internal.enums import Messages
-from nanome.api import structure
+from nanome._internal._volumetric._volume_layer import _VolumeLayer
+from nanome._internal._volumetric._volume_properties import _VolumeProperties
+from nanome.api import structure, shapes
 from nanome.api import ui
 from nanome import util
 from nanome.util import enums
@@ -238,6 +240,60 @@ class MessageSerializeTestCase(unittest.TestCase):
         message_type = Messages.stream_destroy
         stream_id = 1
         args = stream_id
+        expects_response = True
+        payload = self.serializer.serialize_message(self.request_id, message_type, args, self.version_table, expects_response)
+        self.assertTrue(isinstance(payload, memoryview))
+
+    def test_presenter_info_request(self):
+        message_type = Messages.presenter_info_request
+        args = []
+        expects_response = True
+        payload = self.serializer.serialize_message(self.request_id, message_type, args, self.version_table, expects_response)
+        self.assertTrue(isinstance(payload, memoryview))
+    
+    def test_controller_transforms_request(self):
+        message_type = Messages.controller_transforms_request
+        args = []
+        expects_response = True
+        payload = self.serializer.serialize_message(self.request_id, message_type, args, self.version_table, expects_response)
+        self.assertTrue(isinstance(payload, memoryview))
+    
+    def test_set_shape(self):
+        message_type = Messages.set_shape
+        args = [shapes.Sphere()]
+        expects_response = True
+        payload = self.serializer.serialize_message(self.request_id, message_type, args, self.version_table, expects_response)
+        self.assertTrue(isinstance(payload, memoryview))
+    
+    def test_delete_shape(self):
+        message_type = Messages.delete_shape
+        shape_index = 2
+        args = [shape_index]
+        expects_response = True
+        payload = self.serializer.serialize_message(self.request_id, message_type, args, self.version_table, expects_response)
+        self.assertTrue(isinstance(payload, memoryview))
+
+    def test_open_url(self):
+        message_type = Messages.open_url
+        use_desktop_browser = False
+        args = ["nanome.ai", use_desktop_browser]
+        expects_response = True
+        payload = self.serializer.serialize_message(self.request_id, message_type, args, self.version_table, expects_response)
+        self.assertTrue(isinstance(payload, memoryview))
+
+    def test_set_skybox(self):
+        message_type = Messages.set_skybox
+        args = enums.SkyBoxes.Sunset
+        expects_response = True
+        payload = self.serializer.serialize_message(self.request_id, message_type, args, self.version_table, expects_response)
+        self.assertTrue(isinstance(payload, memoryview))
+
+    def test_apply_color_scheme(self):
+        message_type = Messages.apply_color_scheme
+        color_scheme = enums.ColorScheme.Rainbow
+        color_scheme_target = enums.ColorSchemeTarget.All
+        only_carbons = True
+        args = [color_scheme, color_scheme_target, only_carbons]
         expects_response = True
         payload = self.serializer.serialize_message(self.request_id, message_type, args, self.version_table, expects_response)
         self.assertTrue(isinstance(payload, memoryview))
