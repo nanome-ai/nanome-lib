@@ -46,7 +46,7 @@ setup(
     ]},
     package_data={
         "nanome": [
-            "_internal/_process/_external/_dssp/*",
+            "_internal/process/external/dssp/*",
             "plugin-template.zip"
         ]
     },
