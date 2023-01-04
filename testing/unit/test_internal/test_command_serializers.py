@@ -213,4 +213,31 @@ class MessageSerializeTestCase(unittest.TestCase):
         expects_response = True
         payload = self.serializer.serialize_message(self.request_id, message_type, args, self.version_table, expects_response)
         self.assertTrue(isinstance(payload, memoryview))
+    
+    def test_stream_create(self):
+        message_type = Messages.stream_create
+        atom_indices = [1, 2, 3]
+        stream_type = enums.StreamType.color
+        stream_direction = enums.StreamDirection.writing
+        args = [stream_type, atom_indices, stream_direction]
+        expects_response = True
+        payload = self.serializer.serialize_message(self.request_id, message_type, args, self.version_table, expects_response)
+        self.assertTrue(isinstance(payload, memoryview))
 
+    def test_stream_feed(self):
+        message_type = Messages.stream_feed
+        stream_id = 1
+        data = [1, 2, 3]
+        data_type = enums.StreamDataType.float
+        args = [stream_id, data, data_type]
+        expects_response = True
+        payload = self.serializer.serialize_message(self.request_id, message_type, args, self.version_table, expects_response)
+        self.assertTrue(isinstance(payload, memoryview))
+
+    def test_stream_destroy(self):
+        message_type = Messages.stream_destroy
+        stream_id = 1
+        args = stream_id
+        expects_response = True
+        payload = self.serializer.serialize_message(self.request_id, message_type, args, self.version_table, expects_response)
+        self.assertTrue(isinstance(payload, memoryview))
