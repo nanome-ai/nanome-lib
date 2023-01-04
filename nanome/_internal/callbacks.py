@@ -1,5 +1,6 @@
 from .enums import Hashes
 import logging
+from . import _PluginInstance
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +17,6 @@ def receive_complexes(network, arg, request_id):
 
 
 def complex_updated(network, arg, request_id):
-    from nanome._internal import _PluginInstance
     _PluginInstance._on_complex_updated(arg[0], arg[1])
 
 
@@ -127,7 +127,7 @@ def run(network, args, request_id):
 
 
 def selection_changed(network, arg, request_id):
-    nanome._internal._PluginInstance._on_selection_changed(arg[0], arg[1])
+    _PluginInstance._on_selection_changed(arg[0], arg[1])
 
 
 def simple_callback_arg_unpack(network, arg, request_id):

@@ -1,12 +1,13 @@
-from .network.context import ContextSerialization, ContextDeserialization
+import logging
+import struct
+import traceback
+
 from . import callbacks
 from . import message_serializers
 from . import enums as command_enums
-from nanome._internal.network import Data
-from nanome._internal.util.type_serializers import TypeSerializer
-import struct
-import traceback
-import logging
+from .network import Data
+from .network.context import ContextSerialization, ContextDeserialization
+from .util.type_serializers import TypeSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -165,7 +166,6 @@ command_serializer_callback_list = (
     # Shape
     (commands_enum.set_shape_result, message_serializers.SetShape(), callbacks.simple_callback_arg_unpack),
     (commands_enum.delete_shape_result, message_serializers.DeleteShape(), callbacks.simple_callback_arg),
-
     # others
     (commands_enum.load_file_done, message_serializers.LoadFileDone(), callbacks.simple_callback_arg),
     (commands_enum.integration, message_serializers.Integration(), callbacks.integration),
