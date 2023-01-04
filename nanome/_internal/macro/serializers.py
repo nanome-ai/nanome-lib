@@ -1,7 +1,5 @@
-from nanome._internal.util.type_serializers import StringSerializer
+from nanome._internal.util.type_serializers import StringSerializer, TypeSerializer
 from . import _Macro
-
-from nanome._internal.util.type_serializers import TypeSerializer
 
 
 class _MacroSerializer(TypeSerializer):
