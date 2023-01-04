@@ -1,4 +1,4 @@
-from nanome._internal.network.enums import Messages
+from nanome._internal.enums import Messages
 
 
 class IntegrationRequest():

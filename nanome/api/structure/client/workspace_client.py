@@ -1,7 +1,7 @@
 import nanome
 from nanome._internal.addon import _Addon
 from nanome._internal.network import PluginNetwork
-from nanome._internal.network.enums import Messages
+from nanome._internal.enums import Messages
 
 
 class WorkspaceClient(_Addon):

@@ -1,7 +1,7 @@
 import logging
 import types
 
-from .network.enums import Hashes, Integrations
+from .enums import Hashes, Integrations
 from . import integration
 from . import macro
 from . import shapes

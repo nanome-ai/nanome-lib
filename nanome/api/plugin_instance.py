@@ -5,7 +5,7 @@ from nanome.util import Logs, config
 from nanome.util.enums import StreamDirection, PluginListButtonType
 from nanome._internal import _PluginInstance
 from nanome._internal.process import _Bonding, _Dssp
-from nanome._internal.network.enums import Messages
+from nanome._internal.enums import Messages
 from nanome.api.structure import Complex
 from nanome.api.integration import Integration
 from nanome.api.ui import Menu

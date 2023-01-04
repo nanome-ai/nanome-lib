@@ -28,7 +28,7 @@ class _Shape(object):
             if done_callback is not None:
                 done_callback(result)
 
-        from nanome._internal.network.callbacks import Messages
+        from nanome._internal.callbacks import Messages
         id = nanome._internal.network.PluginNetwork._instance._send(Messages.set_shape, [self], True)
         result = nanome.PluginInstance._save_callback(
             id, set_callback if done_callback else None)

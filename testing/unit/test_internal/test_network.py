@@ -5,7 +5,7 @@ from unittest.mock import MagicMock
 
 from nanome._internal.logs import LogsManager
 from nanome._internal.serializers import CommandMessageSerializer
-from nanome._internal.network.enums import Messages
+from nanome._internal.enums import Messages
 from nanome._internal.network import PluginNetwork
 
 test_assets = os.getcwd() + ("/testing/test_assets")

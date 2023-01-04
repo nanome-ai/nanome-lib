@@ -4,7 +4,7 @@ import unittest
 
 from nanome._internal import network
 from nanome._internal.serializers import CommandMessageSerializer
-from nanome._internal.network.enums import Messages
+from nanome._internal.enums import Messages
 from nanome.api.structure import Workspace
 from nanome.api import ui
 from nanome.util import enums

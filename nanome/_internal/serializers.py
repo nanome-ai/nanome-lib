@@ -1,7 +1,7 @@
 from .network.context import ContextSerialization, ContextDeserialization
-from .network import callbacks
+from . import callbacks
 from . import message_serializers
-from .network import enums as command_enums
+from . import enums as command_enums
 from nanome._internal.network import Data
 from nanome._internal.util.type_serializers import TypeSerializer
 import struct

@@ -6,7 +6,7 @@ from timeit import default_timer as timer
 
 from nanome._internal.network import Packet
 from nanome._internal.process import ProcessManagerInstance
-from nanome._internal.network.enums import Hashes, Messages
+from nanome._internal.enums import Hashes, Messages
 from nanome._internal.util.decorators import deprecated
 from nanome._internal import shapes as internal_shapes
 
