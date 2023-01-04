@@ -1,5 +1,3 @@
-import nanome
-from nanome.util.stream import StreamCreationError
 from .enums import Hashes
 import logging
 
@@ -18,7 +16,8 @@ def receive_complexes(network, arg, request_id):
 
 
 def complex_updated(network, arg, request_id):
-    nanome._internal._PluginInstance._on_complex_updated(arg[0], arg[1])
+    from nanome._internal import _PluginInstance
+    _PluginInstance._on_complex_updated(arg[0], arg[1])
 
 
 def connect(network, arg, request_id):
@@ -26,6 +25,8 @@ def connect(network, arg, request_id):
 
 
 def receive_create_stream_result(network, result, request_id):
+    from nanome.util.stream import StreamCreationError
+    from nanome.api.streams import Stream
     if result[0] != StreamCreationError.NoError:
         network._call(request_id, None, result[0])
 
@@ -33,7 +34,6 @@ def receive_create_stream_result(network, result, request_id):
             logger.error("Tried to create an unsupported type of stream")
         return
 
-    from nanome.api.streams import Stream
     stream = Stream(network, result[1], result[2], result[3])
     network._call(request_id, stream, StreamCreationError.NoError)
 
