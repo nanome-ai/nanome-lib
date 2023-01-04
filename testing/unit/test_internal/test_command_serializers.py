@@ -5,8 +5,6 @@ import unittest
 from nanome._internal import network
 from nanome._internal.serializers import CommandMessageSerializer
 from nanome._internal.enums import Messages
-from nanome._internal._volumetric._volume_layer import _VolumeLayer
-from nanome._internal._volumetric._volume_properties import _VolumeProperties
 from nanome.api import structure, shapes
 from nanome.api import ui
 from nanome import util
