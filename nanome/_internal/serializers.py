@@ -102,7 +102,7 @@ class CommandMessageSerializer(object):
 
 
 # -------------Commands----------- #
-# Commands are incoming (nanome -> plugin)commands_enum = command_enums.Commands
+# Commands are incoming (nanome -> plugin)
 commands_enum = command_enums.Commands
 command_serializer_callback_list = (
     # control
