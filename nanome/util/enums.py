@@ -1,4 +1,7 @@
 import sys
+from nanome._internal.enums import Integrations, Messages, Commands, Permissions  # noqa F401
+
+
 if sys.version_info >= (3, 4):
     from enum import Enum, IntEnum
 else:
