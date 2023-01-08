@@ -1,6 +1,6 @@
 import copy
 from nanome._internal.util.decorators import deprecated
-from . import _helpers
+from . import helpers
 import logging
 
 logger = logging.getLogger(__name__)
@@ -546,7 +546,7 @@ class _Chain(_Base):
         return chain
 
     def _deep_copy(self, conformer_number=None):
-        return _helpers.copy._deep_copy_chain(self, conformer_number)
+        return helpers.copy._deep_copy_chain(self, conformer_number)
 
 
 class _Complex(_Base):
@@ -649,14 +649,14 @@ class _Complex(_Base):
         return complex
 
     def _deep_copy(self):
-        return _helpers.copy._deep_copy_complex(self)
+        return helpers.copy._deep_copy_complex(self)
 
     def _convert_to_conformers(self, force_conformers=None):
-        result = _helpers.conformer_helper.convert_to_conformers(self, None)
+        result = helpers.conformer_helper.convert_to_conformers(self, None)
         return result
 
     def _convert_to_frames(self, old_to_new_atoms=None):
-        result = _helpers.conformer_helper.convert_to_frames(
+        result = helpers.conformer_helper.convert_to_frames(
             self, old_to_new_atoms)
         return result
 
@@ -817,7 +817,7 @@ class _Molecule(_Base):
         return molecule
 
     def _deep_copy(self, conformer_number=None, old_to_new_atoms=None):
-        return _helpers.copy._deep_copy_molecule(self, conformer_number, old_to_new_atoms)
+        return helpers.copy._deep_copy_molecule(self, conformer_number, old_to_new_atoms)
 
 
 class _Residue(_Base):
@@ -919,7 +919,7 @@ class _Residue(_Base):
         return residue
 
     def _deep_copy(self, conformer_number=None):
-        return _helpers.copy._deep_copy_residue(self, conformer_number)
+        return helpers.copy._deep_copy_residue(self, conformer_number)
 
 
 class _Substructure:
