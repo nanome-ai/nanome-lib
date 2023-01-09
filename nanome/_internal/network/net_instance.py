@@ -104,7 +104,6 @@ class NetInstance(object):
             else:
                 if self._current_packet.get_payload(self._data):
                     self._state = NetInstance.header_state
-                    self._on_received_packet(
-                        self._instance, self._current_packet)
+                    self._on_received_packet(self._instance, self._current_packet)
                 else:
                     self._processing = False
