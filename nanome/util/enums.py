@@ -1,6 +1,8 @@
 import sys
-from nanome._internal.enums import Integrations, Messages, Commands, Permissions  # noqa F401
+from nanome._internal.util import auto, reset_auto
 
+# We want to expose unused imports from _internal.enums to the user.
+from nanome._internal.enums import CommandEnum, Commands, Messages # noqa: F401
 
 if sys.version_info >= (3, 4):
     from enum import Enum, IntEnum
@@ -305,3 +307,30 @@ class SkyBoxes(IntEnum):
     White = 4
     Graydient = 5
 
+
+class Integrations(CommandEnum):
+    """Integrations available to connect to your plugin.
+    
+    Some integrations have multiple hooks to connect to.
+    See `nanome._internal.enums.Integrations` for more details
+    """
+    # Reset enum counter for Python 2.7
+    reset_auto()
+
+    hydrogen = auto()
+    structure_prep = auto()
+    calculate_esp = auto()
+    minimization = auto()
+    export_file = auto()
+    export_locations = auto()
+    generate_molecule_image = auto()
+    import_file = auto()
+    analysis = auto()
+    interactions = auto()
+    smiles = auto()
+
+
+class Permissions(CommandEnum):
+    # Reset enum counter for Python 2.7
+    reset_auto()
+    local_files_access = auto()

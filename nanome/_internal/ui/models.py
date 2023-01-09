@@ -1,6 +1,7 @@
-from nanome.util import Color
 from copy import deepcopy
 import logging
+
+from nanome._internal import enums, message_serializers, network
 
 logger = logging.getLogger(__name__)
 
@@ -72,7 +73,6 @@ class _Button(_UIBase):
         self._pressed_callback = func
 
     def _register_hover_callback(self, func):
-        from nanome._internal import enums, message_serializers, network
         message_callbacks = enums.Messages
         if func == None and self._hover_callback == None:  # Low hanging filter but there may be others
             return
@@ -411,7 +411,7 @@ class _Label(_UIBase):
 
     def __init__(self):
         super(_Label, self).__init__()
-        from nanome.util import enums
+        from nanome.util import enums, Color
         self._text_value = ""
         self._text_vertical_align = enums.VertAlignOptions.Top
         self._text_horizontal_align = enums.HorizAlignOptions.Left
@@ -634,6 +634,7 @@ class _Mesh(_UIBase):
 
     def __init__(self):
         super(_Mesh, self).__init__()
+        from nanome.util import Color
         self._mesh_color = Color.Gray()
 
     def _copy_values_deep(self, other):

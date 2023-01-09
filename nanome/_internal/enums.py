@@ -182,6 +182,7 @@ class Messages(CommandEnum):
 
 
 class Integrations(CommandEnum):
+    """Command names for Integration calls that can be received from NTS."""
     # Reset enum counter for Python 2.7
     reset_auto()
 
