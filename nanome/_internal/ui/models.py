@@ -77,7 +77,7 @@ class _Button(_UIBase):
         if func == None and self._hover_callback == None:  # Low hanging filter but there may be others
             return
         try:
-            network.PluginNetwork._instance._send(
+            network.PluginNetwork._instance.send(
                 message_callbacks.hook_ui_callback,
                 (message_serializers.UIHook.Type.button_hover, self._content_id),
                 False)
@@ -349,12 +349,11 @@ class _Image(_UIBase):
             self._released_callback(self, x, y)
 
     def _register_pressed_callback(self, func):
-        import nanome
         if func == None and self._pressed_callback == None:  # Low hanging filter but there may be others
             return
         import nanome
         self._send_hook(
-            nanome._internal._network._commands._serialization.UIHook.Type.image_pressed)
+            message_serializers.UIHook.Type.image_pressed)
         self._pressed_callback = func
 
     def _register_held_callback(self, func):
@@ -362,22 +361,22 @@ class _Image(_UIBase):
             return
         import nanome
         self._send_hook(
-            nanome._internal._network._commands._serialization.UIHook.Type.image_held)
+            message_serializers.UIHook.Type.image_held)
         self._held_callback = func
 
     def _register_released_callback(self, func):
         if func == None and self._released_callback == None:  # Low hanging filter but there may be others
             return
-        import nanome
         self._send_hook(
-            nanome._internal._network._commands._serialization.UIHook.Type.image_released)
+            message_serializers.UIHook.Type.image_released)
         self._released_callback = func
 
     def _send_hook(self, hook_type):
-        import nanome
         try:
-            nanome._internal._network.PluginNetwork._instance._send(
-                nanome._internal._network._commands._callbacks.Messages.hook_ui_callback,
+            plugin_network = network.PluginNetwork._instance
+            hook_ui_callback = enums.Messages.hook_ui_callback
+            plugin_network.send(
+                hook_ui_callback,
                 (hook_type, self._content_id),
                 False)
         except:

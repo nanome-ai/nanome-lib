@@ -15,4 +15,4 @@ class Room:
         self._set_skybox(skybox)
 
     def _set_skybox(self, skybox):
-        PluginNetwork._send(Messages.set_skybox, skybox, False)
+        PluginNetwork._instance.send(Messages.set_skybox, skybox, False)

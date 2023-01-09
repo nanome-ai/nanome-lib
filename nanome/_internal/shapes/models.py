@@ -1,8 +1,11 @@
 # from nanome._internal.network import nanome._internal.network.PluginNetwork
 import logging
+from nanome._internal import network, enums
+from nanome._internal.enums import Messages
 
 logger = logging.getLogger(__name__)
 
+plugin_network = network.PluginNetwork._instance
 
 class _Shape(object):
     def __init__(self, shape_type):
@@ -28,8 +31,7 @@ class _Shape(object):
             if done_callback is not None:
                 done_callback(result)
 
-        from nanome._internal.callbacks import Messages
-        id = nanome._internal.network.PluginNetwork._instance._send(Messages.set_shape, [self], True)
+        id = plugin_network.send(Messages.set_shape, [self], True)
         result = nanome.PluginInstance._save_callback(
             id, set_callback if done_callback else None)
         if done_callback is None and nanome.PluginInstance._instance.is_async:
@@ -53,8 +55,7 @@ class _Shape(object):
             if done_callback is not None:
                 done_callback(results)
 
-        id = nanome._internal.network.PluginNetwork._instance._send(
-            nanome._internal._network._commands._callbacks.Messages.set_shape, shapes, True)
+        id = plugin_network.send(Messages.set_shape, shapes, True)
         result = nanome.PluginInstance._save_callback(
             id, set_callback if done_callback else None)
         if done_callback is None and nanome.PluginInstance._instance.is_async:
@@ -69,9 +70,8 @@ class _Shape(object):
         def set_callback(indices):
             if done_callback is not None:
                 done_callback(indices)
-
-        id = nanome._internal.network.PluginNetwork._instance._send(
-            nanome._internal._network._commands._callbacks.Messages.delete_shape, [self._index], True)
+        id = plugin_network.send(
+            Messages.delete_shape, [self._index], True)
         result = nanome.PluginInstance._save_callback(
             id, set_callback if done_callback else None)
         if done_callback is None and nanome.PluginInstance._instance.is_async:
@@ -89,8 +89,7 @@ class _Shape(object):
                 done_callback(indices)
 
         indices = [x._index for x in shapes]
-        id = nanome._internal.network.PluginNetwork._instance._send(
-            nanome._internal._network._commands._callbacks.Messages.delete_shape, indices, True)
+        id = plugin_network.send(Messages.delete_shape, indices, True)
         result = nanome.PluginInstance._save_callback(
             id, set_callback if done_callback else None)
         if done_callback is None and nanome.PluginInstance._instance.is_async:
