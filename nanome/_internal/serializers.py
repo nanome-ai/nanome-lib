@@ -2,9 +2,7 @@ import logging
 import struct
 import traceback
 
-from . import callbacks
-from . import message_serializers
-from . import enums as command_enums
+from . import callbacks, message_serializers, enums as command_enums
 from .network import Data
 from .network.context import ContextSerialization, ContextDeserialization
 from .util.type_serializers import TypeSerializer

@@ -1,13 +1,8 @@
 import logging
 import types
 
+from . import integration, macro, shapes, structure, ui, volumetric
 from .enums import Hashes, Integrations
-from . import integration
-from . import macro
-from . import shapes
-from . import structure
-from . import ui
-from . import volumetric
 from .util import IntEnum, type_serializers as fields
 
 logger = logging.getLogger(__name__)

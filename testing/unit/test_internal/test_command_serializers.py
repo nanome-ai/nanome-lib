@@ -5,8 +5,7 @@ import unittest
 from nanome._internal import network
 from nanome._internal.serializers import CommandMessageSerializer
 from nanome._internal.enums import Messages
-from nanome.api import structure, shapes
-from nanome.api import ui
+from nanome.api import structure, shapes, ui
 from nanome import util
 from nanome.util import enums
 
@@ -54,7 +53,7 @@ class MessageSerializeTestCase(unittest.TestCase):
         args = [network.Packet.packet_type_plugin_connection, self.version_table]
         payload = self.serializer.serialize_message(self.request_id, message_type, arg, self.version_table, expects_response)
         self.assertTrue(isinstance(payload, memoryview))
-    
+
     def test_plugin_list_button_set(self):
         message_type = Messages.plugin_list_button_set
         arg = [enums.PluginListButtonType.run, "Button Text!", True]
@@ -90,7 +89,7 @@ class MessageSerializeTestCase(unittest.TestCase):
         expects_response = False
         payload = self.serializer.serialize_message(self.request_id, message_type, args, version_table, expects_response)
         self.assertTrue(isinstance(payload, memoryview))
-    
+
     def test_node_update(self):
         message_type = Messages.node_update
         args = [ui.LayoutNode()]
@@ -98,7 +97,7 @@ class MessageSerializeTestCase(unittest.TestCase):
         expects_response = False
         payload = self.serializer.serialize_message(self.request_id, message_type, args, version_table, expects_response)
         self.assertTrue(isinstance(payload, memoryview))
-    
+
     def test_menu_transform_set(self):
         message_type = Messages.menu_transform_set
         menu_index = 1
@@ -110,7 +109,7 @@ class MessageSerializeTestCase(unittest.TestCase):
         expects_response = False
         payload = self.serializer.serialize_message(self.request_id, message_type, args, version_table, expects_response)
         self.assertTrue(isinstance(payload, memoryview))
-    
+
     def test_menu_transform_request(self):
         message_type = Messages.menu_transform_request
         menu_index = 1
@@ -213,7 +212,7 @@ class MessageSerializeTestCase(unittest.TestCase):
         expects_response = True
         payload = self.serializer.serialize_message(self.request_id, message_type, args, self.version_table, expects_response)
         self.assertTrue(isinstance(payload, memoryview))
-    
+
     def test_stream_create(self):
         message_type = Messages.stream_create
         atom_indices = [1, 2, 3]
@@ -248,21 +247,21 @@ class MessageSerializeTestCase(unittest.TestCase):
         expects_response = True
         payload = self.serializer.serialize_message(self.request_id, message_type, args, self.version_table, expects_response)
         self.assertTrue(isinstance(payload, memoryview))
-    
+
     def test_controller_transforms_request(self):
         message_type = Messages.controller_transforms_request
         args = []
         expects_response = True
         payload = self.serializer.serialize_message(self.request_id, message_type, args, self.version_table, expects_response)
         self.assertTrue(isinstance(payload, memoryview))
-    
+
     def test_set_shape(self):
         message_type = Messages.set_shape
         args = [shapes.Sphere()]
         expects_response = True
         payload = self.serializer.serialize_message(self.request_id, message_type, args, self.version_table, expects_response)
         self.assertTrue(isinstance(payload, memoryview))
-    
+
     def test_delete_shape(self):
         message_type = Messages.delete_shape
         shape_index = 2

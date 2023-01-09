@@ -1,5 +1,4 @@
-from . import Data
-from . import Packet
+from . import Data, Packet
 
 import socket
 import ssl
