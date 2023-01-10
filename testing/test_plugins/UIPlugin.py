@@ -395,8 +395,8 @@ class UIPlugin(nanome.PluginInstance):
         self.tab_button2.register_pressed_callback(tab2_callback)
         return ln
 
-
-permissions = [nanome.util.enums.Permissions.local_files_access]
-integrations = [nanome.util.enums.Integrations.minimization, nanome.util.enums.Integrations.structure_prep]
+enums = nanome.util.enums
+permissions = [enums.Permissions.local_files_access]
+integrations = [enums.Integrations.minimization, enums.Integrations.structure_prep]
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, UIPlugin, permissions=permissions, integrations=integrations)

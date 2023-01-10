@@ -1,4 +1,4 @@
-from nanome._internal._shapes._anchor import _Anchor
+from nanome._internal.shapes.models import _Anchor
 
 
 class Anchor(_Anchor):

@@ -1,4 +1,4 @@
-from nanome._internal._ui import _DropdownItem
+from nanome._internal.ui import _DropdownItem
 
 
 class DropdownItem(_DropdownItem):

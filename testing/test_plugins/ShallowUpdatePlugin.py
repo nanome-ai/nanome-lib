@@ -1,7 +1,7 @@
 import nanome
 import sys
 import time
-from nanome._internal._structure import _Bond
+from nanome._internal.structure import _Bond
 
 # Config
 

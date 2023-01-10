@@ -1,4 +1,4 @@
-from nanome._internal._shapes import _Line
+from nanome._internal.shapes import _Line
 from nanome.util.enums import ShapeType
 from . import Shape
 

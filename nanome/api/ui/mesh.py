@@ -1,5 +1,5 @@
 from . import UIBase
-from nanome._internal._ui import _Mesh
+from nanome._internal.ui import _Mesh
 
 
 class Mesh(_Mesh, UIBase):

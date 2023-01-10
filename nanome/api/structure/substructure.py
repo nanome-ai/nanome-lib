@@ -1,5 +1,5 @@
 import nanome
-from nanome._internal._structure._substructure import _Substructure
+from nanome._internal.structure.models import _Substructure
 
 
 class Substructure(_Substructure):

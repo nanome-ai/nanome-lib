@@ -1,4 +1,4 @@
-from nanome._internal._shapes import _Label
+from nanome._internal.shapes import _Label
 from nanome.util.enums import ShapeType
 from . import Shape
 

@@ -1,4 +1,4 @@
-from nanome._internal._macro._macro import _Macro
+from nanome._internal.macro.models import _Macro
 
 
 class Macro(_Macro):

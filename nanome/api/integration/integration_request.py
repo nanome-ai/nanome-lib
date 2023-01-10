@@ -1,4 +1,4 @@
-from nanome._internal._network._commands._callbacks._commands_enums import _Messages
+from nanome._internal.enums import Messages
 
 
 class IntegrationRequest():
@@ -13,4 +13,4 @@ class IntegrationRequest():
 
     def send_response(self, args):
         response = (self.__request_id, self.__type, args)
-        self.__network._send(_Messages.integration, response, False)
+        self.__network.send(Messages.integration, response, False)

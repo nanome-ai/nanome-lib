@@ -1,4 +1,4 @@
-from nanome._internal._ui import _Menu
+from nanome._internal.ui import _Menu
 from .io import MenuIO
 
 

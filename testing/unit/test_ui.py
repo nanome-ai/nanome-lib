@@ -1,12 +1,12 @@
+import logging
 import nanome
-# from nanome import UI
 import nanome.api.ui as UI
-# from nanome.serialization.commands import ReceiveMenu, UpdateMenu
-from nanome._internal._ui._serialization import _LayoutNodeSerializer, _UIBaseSerializer
+from nanome._internal.ui.serializers import _LayoutNodeSerializer, _UIBaseSerializer
 from testing.unit.utilities import (
     alter_object, assert_equal, rand_string, create_test, test_serializer, TestOptions)
 import unittest
 
+deprecation_logger = logging.getLogger('nanome._internal.util.decorators')
 
 def prefab_button_pressed_callback(btn):
     pass
@@ -160,8 +160,9 @@ def suspend_warning():
     from functools import partial
 
     if suspensions < 1:
-        nanome.util.Logs.s_warning = nanome.util.Logs.warning
-        nanome.util.Logs.warning = partial(confirm_warning, nanome.util.Logs)
+        global deprecation_logger
+        deprecation_logger.s_warning = deprecation_logger.warning
+        deprecation_logger.warning = partial(confirm_warning, deprecation_logger)
         suspensions = 0
     warned = False
     suspensions += 1
@@ -170,9 +171,10 @@ def suspend_warning():
 def restore_warning():
     global suspensions
     global warned
+    global deprecation_logger
     suspensions -= 1
     if suspensions == 0:
-        nanome.util.Logs.warning = nanome.util.Logs.s_warning
+        deprecation_logger.warning = deprecation_logger.s_warning
 
 
 def confirm_warning(*args):

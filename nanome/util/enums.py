@@ -1,7 +1,11 @@
-from . import IntEnum
-from .enum import auto, reset_auto
-
 import sys
+from nanome._internal.util import auto, reset_auto
+from nanome._internal.enums import CommandEnum
+
+if sys.version_info >= (3, 4):
+    from enum import Enum, IntEnum
+else:
+    from .py2_enum import Enum, IntEnum
 
 
 class SubstructureType(IntEnum):
@@ -302,18 +306,14 @@ class SkyBoxes(IntEnum):
     Graydient = 5
 
 
-class _CommandEnum(IntEnum):
-    if sys.version_info >= (3, 6):  # Tmp hack
-        # Override for auto()
-        def _generate_next_value_(name, start, count, last_values):
-            return IntEnum._generate_next_value_(name, 0, count, last_values)
-    else:
-        pass
-
-
-class Integrations(_CommandEnum):
-    # Tmp hack
-    reset_auto()  # Not an enum
+class Integrations(CommandEnum):
+    """Integrations available to connect to your plugin.
+    
+    Some integrations have multiple hooks to connect to.
+    See `nanome._internal.enums.Integrations` for more details
+    """
+    # Reset enum counter for Python 2.7
+    reset_auto()
 
     hydrogen = auto()
     structure_prep = auto()
@@ -328,8 +328,7 @@ class Integrations(_CommandEnum):
     smiles = auto()
 
 
-class Permissions(_CommandEnum):
+class Permissions(CommandEnum):
     # Reset enum counter for Python 2.7
     reset_auto()
-
     local_files_access = auto()

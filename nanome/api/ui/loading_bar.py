@@ -1,5 +1,5 @@
 from . import UIBase
-from nanome._internal._ui import _LoadingBar
+from nanome._internal.ui import _LoadingBar
 
 
 class LoadingBar(_LoadingBar, UIBase):

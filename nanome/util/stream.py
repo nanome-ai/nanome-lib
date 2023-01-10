@@ -1,4 +1,4 @@
-from .enum import IntEnum
+from nanome._internal.util import IntEnum
 
 
 class StreamCreationError(IntEnum):

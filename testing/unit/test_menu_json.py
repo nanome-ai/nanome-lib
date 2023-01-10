@@ -28,7 +28,7 @@ class JsonTestCase(unittest.TestCase):
             content._content_id = 0
         assert_equal(menu, menu2)
 
-    def test_text_layout_node_json(self):
+    def test_textlayout_node_json(self):
         test_path = test_assets + "/test_menu.json"
         output_path = tempfile.NamedTemporaryFile(suffix='.json').name
         menu = Menu.io.from_json(test_path)

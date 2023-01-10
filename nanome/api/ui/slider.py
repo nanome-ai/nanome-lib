@@ -1,5 +1,5 @@
 from . import UIBase
-from nanome._internal._ui import _Slider
+from nanome._internal.ui import _Slider
 
 
 class Slider(_Slider, UIBase):

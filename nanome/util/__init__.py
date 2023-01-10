@@ -6,7 +6,6 @@ from . import *
 from .string_builder import StringBuilder
 from .color import Color
 from .logs import Logs
-from .enum import Enum, IntEnum, auto, reset_auto
 
 try:
     from .asyncio import async_callback

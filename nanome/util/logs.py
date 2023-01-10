@@ -1,9 +1,8 @@
-import functools
 import inspect
 import logging
 import sys
-
-from .enum import IntEnum, auto
+from nanome._internal.util.decorators import deprecated as _internal_deprecated
+from nanome._internal.util import auto, IntEnum
 
 
 class Logs(object):
@@ -85,20 +84,7 @@ class Logs(object):
 
     @staticmethod
     def deprecated(new_func=None, msg=""):
-        def deprecated_decorator(func):
-            @functools.wraps(func)
-            def wrapper(*args, **kwargs):
-                if not wrapper.used:
-                    warning = "Function " + func.__name__ + " is deprecated. "
-                    if new_func is not None:
-                        warning += "Try using " + new_func + " instead. "
-                    warning += msg
-                    Logs.warning(warning)
-                    wrapper.used = True
-                return func(*args, **kwargs)
-            wrapper.used = False
-            return wrapper
-        return deprecated_decorator
+        return _internal_deprecated(new_func, msg)
 
     @staticmethod
     def caller_name(skip=2):

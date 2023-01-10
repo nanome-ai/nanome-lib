@@ -8,10 +8,10 @@ from nanome.api import structure, ui, shapes, streams
 from nanome.util import Vector3, enums, Color
 
 if sys.version_info.major >= 3:
-    from unittest.mock import MagicMock, patch
+    from unittest.mock import MagicMock
 else:
     # Python 2.7 way of getting magicmock. Requires pip install mock
-    from mock import MagicMock, patch
+    from mock import MagicMock
 
 # Schemas requirements are optional, so don't run tests if they are not installed.
 reqs_installed = True

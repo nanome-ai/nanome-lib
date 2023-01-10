@@ -1,6 +1,6 @@
 import nanome
 from nanome.util import Logs
-from nanome._internal._structure._residue import _Residue
+from nanome._internal.structure.models import _Residue
 from . import Base
 
 
