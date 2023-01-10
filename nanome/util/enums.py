@@ -1,9 +1,6 @@
 import sys
 from nanome._internal.util import auto, reset_auto
 
-# We want to expose unused imports from _internal.enums to the user.
-from nanome._internal.enums import CommandEnum, Commands, Messages # noqa: F401
-
 if sys.version_info >= (3, 4):
     from enum import Enum, IntEnum
 else:
@@ -307,6 +304,11 @@ class SkyBoxes(IntEnum):
     White = 4
     Graydient = 5
 
+class CommandEnum(IntEnum):
+    if sys.version_info >= (3, 6):  # Tmp hack
+        # Override for auto()
+        def _generate_next_value_(name, start, count, last_values):
+            return IntEnum._generate_next_value_(name, 0, count, last_values)
 
 class Integrations(CommandEnum):
     """Integrations available to connect to your plugin.

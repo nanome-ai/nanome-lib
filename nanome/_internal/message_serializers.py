@@ -2,7 +2,7 @@ import logging
 import types
 
 from . import integration, macro, shapes, structure, ui, volumetric
-from .enums import Hashes, Integrations
+from .enums import Hashes, IntegrationCommands
 from .util import IntEnum, type_serializers as fields
 
 logger = logging.getLogger(__name__)
@@ -449,18 +449,18 @@ class FileSave(fields.TypeSerializer):
 
 class Integration(fields.TypeSerializer):
     __integrations = {
-        Hashes.IntegrationHashes[Integrations.hydrogen_add]: integration.serializers._AddHydrogen(),
-        Hashes.IntegrationHashes[Integrations.hydrogen_remove]: integration.serializers._RemoveHydrogen(),
-        Hashes.IntegrationHashes[Integrations.structure_prep]: integration.serializers._StructurePrep(),
-        Hashes.IntegrationHashes[Integrations.calculate_esp]: integration.serializers._CalculateESP(),
-        Hashes.IntegrationHashes[Integrations.minimization_start]: integration.serializers._StartMinimization(),
-        Hashes.IntegrationHashes[Integrations.minimization_stop]: integration.serializers._StopMinimization(),
-        Hashes.IntegrationHashes[Integrations.export_locations]: integration.serializers._ExportLocations(),
-        Hashes.IntegrationHashes[Integrations.export_file]: integration.serializers._ExportFile(),
-        Hashes.IntegrationHashes[Integrations.import_file]: integration.serializers._ImportFile(),
-        Hashes.IntegrationHashes[Integrations.generate_molecule_image]: integration.serializers._GenerateMoleculeImage(),
-        Hashes.IntegrationHashes[Integrations.export_smiles]: integration.serializers._ExportSmiles(),
-        Hashes.IntegrationHashes[Integrations.import_smiles]: integration.serializers._ImportSmiles(
+        Hashes.IntegrationHashes[IntegrationCommands.hydrogen_add]: integration.serializers._AddHydrogen(),
+        Hashes.IntegrationHashes[IntegrationCommands.hydrogen_remove]: integration.serializers._RemoveHydrogen(),
+        Hashes.IntegrationHashes[IntegrationCommands.structure_prep]: integration.serializers._StructurePrep(),
+        Hashes.IntegrationHashes[IntegrationCommands.calculate_esp]: integration.serializers._CalculateESP(),
+        Hashes.IntegrationHashes[IntegrationCommands.minimization_start]: integration.serializers._StartMinimization(),
+        Hashes.IntegrationHashes[IntegrationCommands.minimization_stop]: integration.serializers._StopMinimization(),
+        Hashes.IntegrationHashes[IntegrationCommands.export_locations]: integration.serializers._ExportLocations(),
+        Hashes.IntegrationHashes[IntegrationCommands.export_file]: integration.serializers._ExportFile(),
+        Hashes.IntegrationHashes[IntegrationCommands.import_file]: integration.serializers._ImportFile(),
+        Hashes.IntegrationHashes[IntegrationCommands.generate_molecule_image]: integration.serializers._GenerateMoleculeImage(),
+        Hashes.IntegrationHashes[IntegrationCommands.export_smiles]: integration.serializers._ExportSmiles(),
+        Hashes.IntegrationHashes[IntegrationCommands.import_smiles]: integration.serializers._ImportSmiles(
         )
     }
 
