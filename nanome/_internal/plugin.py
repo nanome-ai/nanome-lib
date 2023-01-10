@@ -1,25 +1,24 @@
-from nanome._internal import network as Network
+import json
+import fnmatch
+import logging
+import multiprocessing
+import os
+import random
+import re
+import subprocess
+import signal
+import string
+import sys
+import time
+from multiprocessing import Process, Queue, current_process
+from timeit import default_timer as timer
+
+from nanome._internal import network
 from nanome._internal.process import ProcessManager
-from nanome._internal.network import PluginNetwork
 from nanome._internal.enums import Hashes
 from nanome._internal.serializers import CommandMessageSerializer
 from nanome._internal.util.type_serializers import TypeSerializer
 from nanome._internal.logs import LogsManager
-import logging
-
-import multiprocessing
-import random
-import string
-from multiprocessing import Process, Queue, current_process
-from timeit import default_timer as timer
-import sys
-import json
-import time
-import os
-import fnmatch
-import re
-import subprocess
-import signal
 
 logger = logging.getLogger(__name__)
 
@@ -119,7 +118,7 @@ class _Plugin(object):
         :arg permissions: The permissions of the plugin.
         """
         plugin_instance = plugin_instance_class()
-        plugin_network = PluginNetwork(
+        plugin_network = network.PluginNetwork(
             plugin_instance, session_id, net_queue_in, net_queue_out,
             serializer, plugin_id, version_table)
         plugin_instance._setup(
@@ -144,7 +143,7 @@ class _Plugin(object):
 
     def _on_packet_received(self, packet):
         """When packet received, identify Packet type, and call appropriate function."""
-        if packet.packet_type == Network.Packet.packet_type_message_to_plugin:
+        if packet.packet_type == network.Packet.packet_type_message_to_plugin:
             session_id = packet.session_id
             # Always look if we're trying to register a session
             #   Fix 5/27/2021 - Jeremie: We need to always check for session registration in order to fix timeout issues
@@ -164,11 +163,11 @@ class _Plugin(object):
             # Doesn't register? It's an error
             logger.warning("Received a command from an unregistered session {}".format(session_id))
 
-        elif packet.packet_type == Network.Packet.packet_type_plugin_connection:
+        elif packet.packet_type == network.Packet.packet_type_plugin_connection:
             self._plugin_id = packet.plugin_id
             logger.info("Registered with plugin ID {}\n=======================================\n".format(str(self._plugin_id)))
 
-        elif packet.packet_type == Network.Packet.packet_type_plugin_disconnection:
+        elif packet.packet_type == network.Packet.packet_type_plugin_disconnection:
             if self._plugin_id == -1:
                 if self._description['auth'] is None:
                     logger.error("Connection refused by NTS. Are you missing a security key file?")
@@ -179,7 +178,7 @@ class _Plugin(object):
                 logger.info("Connection ended by NTS")
                 sys.exit(0)
 
-        elif packet.packet_type == Network.Packet.packet_type_client_disconnection:
+        elif packet.packet_type == network.Packet.packet_type_client_disconnection:
             try:
                 id = packet.session_id
                 self._sessions[id].signal_and_close_pipes()
@@ -188,9 +187,9 @@ class _Plugin(object):
                 logger.info("Session {} disconnected".format(id), extra=extra)
             except Exception:
                 pass
-        elif packet.packet_type == Network.Packet.packet_type_keep_alive:
+        elif packet.packet_type == network.Packet.packet_type_keep_alive:
             self.__waiting_keep_alive = False
-        elif packet.packet_type == Network.Packet.packet_type_logs_request:
+        elif packet.packet_type == network.Packet.packet_type_logs_request:
             self.__logs_request(packet)
         else:
             logger.warning("Received a packet of unknown type {}. Ignoring".format(packet.packet_type))
@@ -251,14 +250,14 @@ class _Plugin(object):
 
     def __connect(self):
         """Create network Connection to NTS, and start listening for packets."""
-        self._network = Network.NetInstance(self, self.__class__._on_packet_received)
+        self._network = network.NetInstance(self, self.__class__._on_packet_received)
         if self._network.connect(self._host, self._port):
             if self._plugin_id >= 0:
                 plugin_id = self._plugin_id
             else:
                 plugin_id = 0
-            packet = Network.Packet()
-            packet.set(0, Network.Packet.packet_type_plugin_connection, plugin_id)
+            packet = network.Packet()
+            packet.set(0, network.Packet.packet_type_plugin_connection, plugin_id)
             packet.write_string(json.dumps(self._description))
             self._network.send(packet)
             self.connected = True
@@ -305,8 +304,8 @@ class _Plugin(object):
                 elif now - self.__last_keep_alive >= KEEP_ALIVE_TIME_INTERVAL and self._plugin_id >= 0:
                     self.__last_keep_alive = now
                     self.__waiting_keep_alive = True
-                    packet = Network.Packet()
-                    packet.set(self._plugin_id, Network.Packet.packet_type_keep_alive, 0)
+                    packet = network.Packet()
+                    packet.set(self._plugin_id, network.Packet.packet_type_keep_alive, 0)
                     self._network.send(packet)
 
                 del to_remove[:]
@@ -353,7 +352,7 @@ class _Plugin(object):
         net_queue_out = Queue()
         pm_queue_in = Queue()
         pm_queue_out = Queue()
-        session = Network.Session(
+        session = network.Session(
             session_id, self._network, self._process_manager, self._logs_manager,
             net_queue_in, net_queue_out, pm_queue_in, pm_queue_out)
         permissions = self._description["permissions"]
@@ -395,8 +394,8 @@ class _Plugin(object):
             'logs': content
         }
 
-        packet = Network.Packet()
-        packet.set(0, Network.Packet.packet_type_logs_request, 0)
+        packet = network.Packet()
+        packet.set(0, network.Packet.packet_type_logs_request, 0)
         packet.write_string(json.dumps(response))
 
     @staticmethod

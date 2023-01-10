@@ -38,8 +38,8 @@ class PluginTestCase(unittest.TestCase):
 
     @patch('nanome._internal.plugin._Plugin._autoreload')
     @patch('nanome._internal.plugin._Plugin._loop')
-    @patch('nanome._internal.plugin.Network.NetInstance.connect')
-    @patch('nanome._internal.plugin.Network.NetInstance.send')
+    @patch('nanome._internal.network.NetInstance.connect')
+    @patch('nanome._internal.network.NetInstance.send')
     def test_run(self, send_mock, connect_mock, loop_mock, autoreload_mock):
         host = 'anyhost'
         port = 8000
@@ -78,7 +78,7 @@ class PluginTestCase(unittest.TestCase):
         autoreload_mock.assert_called_once()
 
     @patch('nanome._internal.plugin._Plugin._loop')
-    @patch('nanome._internal.plugin.Network.NetInstance')
+    @patch('nanome._internal.network.NetInstance')
     def test_setup(self, netinstance_mock, loop_mock):
         name = 'Test Plugin'
         description = 'Test Plugin'
@@ -114,7 +114,7 @@ class PluginTestCase(unittest.TestCase):
         self.plugin.post_run()
 
     @patch('nanome._internal.plugin._Plugin._loop')
-    @patch('nanome._internal.plugin.Network.NetInstance')
+    @patch('nanome._internal.network.NetInstance')
     @patch('nanome._internal.plugin._Plugin._autoreload')
     def test_config_priority(self, *args):
         """Validate order of priority for plugin settings.
