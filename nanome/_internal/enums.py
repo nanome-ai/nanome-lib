@@ -1,9 +1,15 @@
 import sys
 from nanome._internal.util import IntEnum, auto, reset_auto
-from nanome.util.enums import Integrations, CommandEnum
 import logging
 
 logger = logging.getLogger(__name__)
+
+
+class CommandEnum(IntEnum):
+    if sys.version_info >= (3, 6):  # Tmp hack
+        # Override for auto()
+        def _generate_next_value_(name, start, count, last_values):
+            return IntEnum._generate_next_value_(name, 0, count, last_values)
 
 
 # /!\ /!\ /!\
@@ -206,7 +212,7 @@ class Hashes():
     CommandHashes = [None] * len(Commands)
     MessageHashes = [None] * len(Messages)
     IntegrationHashes = [None] * len(IntegrationCommands)
-    IntegrationRequestHashes = [None] * len(Integrations)
+    IntegrationRequestHashes = None  # initialized in init_hashes
     PermissionRequestHashes = [None] * len(Permissions)
     HashToIntegrationName = dict()
 
@@ -230,6 +236,10 @@ class Hashes():
 
     @classmethod
     def init_hashes(cls):
+        # TODO: Avoid importing this from nanome.util
+        from nanome.util.enums import Integrations
+        cls.IntegrationRequestHashes = [None] * len(Integrations)
+
         hashes = dict()
         i = -1
         for command in Commands:
@@ -239,7 +249,7 @@ class Hashes():
                 logger.error(f"Command hash collision detected: {command.name} and {hashes[hash]}")
                 continue
             hashes[hash] = command.name
-            Hashes.CommandHashes[i] = hash
+            cls.CommandHashes[i] = hash
 
         hashes.clear()
         i = -1
@@ -252,7 +262,7 @@ class Hashes():
                     "Message hash collision detected: " + command.name + "and" + hashes[hash])
                 continue
             hashes[hash] = command.name
-            Hashes.MessageHashes[i] = hash
+            cls.MessageHashes[i] = hash
 
         hashes.clear()
         i = -1
@@ -264,8 +274,8 @@ class Hashes():
                 logger.error("Integration hash collision detected:" + command.name + " and " + hashes[hash])
                 continue
             hashes[hash] = command.name
-            Hashes.IntegrationHashes[i] = hash
-            Hashes.HashToIntegrationName[hash] = command.name
+            cls.IntegrationHashes[i] = hash
+            cls.HashToIntegrationName[hash] = command.name
 
         hashes.clear()
         i = -1
@@ -277,7 +287,7 @@ class Hashes():
                 logger.error("Integration request hash collision detected: " + command.name + " and " + hashes[hash])
                 continue
             hashes[hash] = command.name
-            Hashes.IntegrationRequestHashes[i] = hash
+            cls.IntegrationRequestHashes[i] = hash
 
         hashes.clear()
         i = -1
@@ -288,7 +298,7 @@ class Hashes():
                 logger.error(f"Permission request hash collision detected: {command.name} and {hashes[hash]}")
                 continue
             hashes[hash] = command.name
-            Hashes.PermissionRequestHashes[i] = hash
+            cls.PermissionRequestHashes[i] = hash
 
 
 Hashes.init_hashes()
