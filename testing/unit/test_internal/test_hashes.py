@@ -2,7 +2,7 @@ import unittest
 from nanome._internal.enums import Hashes
 
 class HashesTestCase(unittest.TestCase):
-    """Ensure that Hash values don't change."""
+    """Ensure that Hash values remain constant."""
 
     def setUp(self):
         Hashes.init_hashes()
