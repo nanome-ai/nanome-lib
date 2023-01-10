@@ -1,15 +1,10 @@
 import sys
 from nanome._internal.util import IntEnum, auto, reset_auto
+from nanome.util.enums import Integrations, CommandEnum
 import logging
 
 logger = logging.getLogger(__name__)
 
-
-class CommandEnum(IntEnum):
-    if sys.version_info >= (3, 6):  # Tmp hack
-        # Override for auto()
-        def _generate_next_value_(name, start, count, last_values):
-            return IntEnum._generate_next_value_(name, 0, count, last_values)
 
 # /!\ /!\ /!\
 # Values names are really important here, as they are hashed, and need to match Nanome
@@ -181,7 +176,7 @@ class Messages(CommandEnum):
     apply_color_scheme = auto()
 
 
-class Integrations(CommandEnum):
+class IntegrationCommands(CommandEnum):
     """Command names for Integration calls that can be received from NTS."""
     # Reset enum counter for Python 2.7
     reset_auto()
@@ -210,7 +205,7 @@ class Permissions(CommandEnum):
 class Hashes():
     CommandHashes = [None] * len(Commands)
     MessageHashes = [None] * len(Messages)
-    IntegrationHashes = [None] * len(Integrations)
+    IntegrationHashes = [None] * len(IntegrationCommands)
     IntegrationRequestHashes = [None] * len(Integrations)
     PermissionRequestHashes = [None] * len(Permissions)
     HashToIntegrationName = dict()
@@ -262,7 +257,7 @@ class Hashes():
         hashes.clear()
         i = -1
 
-        for command in Integrations:
+        for command in IntegrationCommands:
             i += 1
             hash = cls.hash_command(command.name)
             if hash in hashes:
