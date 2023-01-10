@@ -7,6 +7,7 @@ if sys.version_info >= (3, 4):
 else:
     from .py2_enum import Enum, IntEnum
 
+
 @classmethod
 def safe_cast(cls, value):
     try:
@@ -18,17 +19,12 @@ def safe_cast(cls, value):
         return list(cls)[0]
 
 
-if sys.version_info >= (3, 4):
-    from enum import Enum, IntEnum
-else:
-    from .py2_enum import Enum, IntEnum
 
 if sys.version_info >= (3, 6):
     from enum import auto
 
     def reset_auto():
         pass
-
 else:
     from .py2_enum import auto, reset_auto
 
