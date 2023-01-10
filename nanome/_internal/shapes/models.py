@@ -7,6 +7,7 @@ logger = logging.getLogger(__name__)
 
 plugin_network = network.PluginNetwork._instance
 
+
 class _Shape(object):
     def __init__(self, shape_type):
         from nanome.util import Color
