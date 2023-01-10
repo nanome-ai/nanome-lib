@@ -29,7 +29,7 @@ class NetInstance(object):
 
     def connect(self, host, port):
         try:
-            logger.info(f"Connecting to server {host} {port}")
+            logger.info("Connecting to server {} {}".format(host, port))
             self._connection.connect((host, port))
             self._connection.setblocking(False)
             logger.info("Connected to server")
@@ -37,7 +37,7 @@ class NetInstance(object):
             self._socket = None
             self._context = None
             self._connection = None
-            logger.error(f"Cannot connect to server:{e}")
+            logger.error("Cannot connect to server: {}".format(e))
             return False
         return True
 

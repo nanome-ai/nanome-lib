@@ -246,7 +246,7 @@ class Hashes():
             i += 1
             hash = cls.hash_command(command.name)
             if hash in hashes:
-                logger.error(f"Command hash collision detected: {command.name} and {hashes[hash]}")
+                logger.error("Command hash collision detected: {} and {}".format(command.name, hashes[hash]))
                 continue
             hashes[hash] = command.name
             cls.CommandHashes[i] = hash
@@ -295,7 +295,8 @@ class Hashes():
             i += 1
             hash = cls.hash_command(command.name)
             if hash in hashes:
-                logger.error(f"Permission request hash collision detected: {command.name} and {hashes[hash]}")
+                logger.error(
+                    "Permission request hash collision detected: {} and {}".format(command.name, hashes[hash]))
                 continue
             hashes[hash] = command.name
             cls.PermissionRequestHashes[i] = hash

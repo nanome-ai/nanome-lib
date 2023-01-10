@@ -26,7 +26,7 @@ class Session(object):
         try:
             self._pm_queue_out.put(data)
         except Exception:
-            logger.error(f"Cannot deliver process info to plugin {self._session_id}, Did it crash?")
+            logger.error("Cannot deliver process info to plugin {}, Did it crash?".format(self._session_id))
 
     def signal_and_close_pipes(self):
         self._on_packet_received(stop_bytes)
@@ -67,7 +67,7 @@ class Session(object):
         try:
             self._net_queue_out.put(payload)
         except Exception:
-            logger.error(f"Cannot deliver packet to plugin {self._session_id}. Did it crash?")
+            logger.error("Cannot deliver packet to plugin {}. Did it crash?".format(self._session_id))
 
     def _send_disconnection_message(self, plugin_id):
         packet = Packet()

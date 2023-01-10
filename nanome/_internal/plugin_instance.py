@@ -57,7 +57,7 @@ class _PluginInstance(object):
         self._process_manager = ProcessManagerInstance(pm_queue_in, pm_queue_out)
         self._log_pipe_conn = log_pipe_conn
         self._network.send_connect(Messages.connect, [Packet._compression_type(), original_version_table])
-        logger.debug(f"Plugin constructed for session {session_id}")
+        logger.debug("Plugin constructed for session {}".format(session_id))
 
     @classmethod
     def _save_callback(cls, id, callback):
@@ -83,7 +83,7 @@ class _PluginInstance(object):
             return
 
         if id not in callbacks:
-            logger.warning(f'Received an unknown callback id: {id}')
+            logger.warning('Received an unknown callback id: {}'.format(id))
             return
 
         callbacks[id](*args)
@@ -103,7 +103,7 @@ class _PluginInstance(object):
         try:
             callbacks[index](new_complex)
         except KeyError:
-            logger.warning(f'Received an unknown updated complex index: {index}')
+            logger.warning('Received an unknown updated complex index: {}'.format(index))
 
     @classmethod
     def _on_selection_changed(cls, index, new_complex):

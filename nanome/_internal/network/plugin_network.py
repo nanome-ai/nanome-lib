@@ -109,7 +109,7 @@ class PluginNetwork(object):
                 callback = self._serializer._command_callbacks[command_hash]
             except:
                 logger.error(
-                    f"Received a command without callback associated: {command_hash}")
+                    "Received a command without callback associated: {}".format(command_hash))
                 return True
             callback(self, received_object, request_id)
         return True
