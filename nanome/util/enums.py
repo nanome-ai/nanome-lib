@@ -205,7 +205,7 @@ class LoadFileErrorCode(IntEnum):
 class VolumeType(IntEnum):
     """
     | Volume types visible within a complex.
-    | To be used with _internal._volumetric._VolumeData()._type
+    | To be used with _internal._volumetric.VolumeData()._type
     """
     default = 0
     density = 1
@@ -217,7 +217,7 @@ class VolumeType(IntEnum):
 class VolumeVisualStyle(IntEnum):
     """
     | Ways that a complex's volume can be displayed.
-    | To be used with _internal._volumetric._VolumeProperties()._style
+    | To be used with nanome.api.volumetric.VolumeProperties()._style
     """
     Mesh = 0
     FlatSurface = 1
