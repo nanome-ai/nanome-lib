@@ -1,16 +1,17 @@
-from nanome._internal.shapes.models import _Sphere
 from nanome.util.enums import ShapeType
 from . import Shape
+from .anchor import Anchor
 
 
-class Sphere(_Sphere, Shape):
+class Sphere(Shape):
     """
     | Represents a sphere. Can display a sphere in Nanome App.
     """
 
     def __init__(self):
-        Shape.__init__(self, ShapeType.Sphere)
-        _Sphere.__init__(self)
+        super().__init__(ShapeType.Sphere)
+        self._anchors = [Anchor()]
+        self._radius = 1.0
 
     @property
     def radius(self):
@@ -25,6 +26,3 @@ class Sphere(_Sphere, Shape):
     @radius.setter
     def radius(self, value):
         self._radius = value
-
-
-_Sphere._create = Sphere

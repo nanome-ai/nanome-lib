@@ -1,17 +1,23 @@
-from nanome._internal.shapes.models import _Mesh
 from nanome.util.enums import ShapeType
 
 from . import Shape
+from .anchor import Anchor
 
-
-class Mesh(_Mesh, Shape):
+class Mesh(Shape):
     """
     | Represents a mesh. Can display a mesh in Nanome App.
     """
 
     def __init__(self):
-        Shape.__init__(self, ShapeType.Mesh)
-        _Mesh.__init__(self)
+        super().__init__(ShapeType.Mesh)
+        self._anchors = [Anchor()]
+        self._vertices = []
+        self._normals = []
+        self._colors = []
+        self._triangles = []
+        self._uv = []
+        self._texture_path = ""
+        self._unlit = False
 
     @property
     def vertices(self):
@@ -110,6 +116,3 @@ class Mesh(_Mesh, Shape):
     @unlit.setter
     def unlit(self, value):
         self._unlit = value
-
-
-_Mesh._create = Mesh

@@ -1,8 +1,10 @@
-from ..._internal.shapes.models import _Anchor, _Label, _Line, _Mesh, _Sphere
 from nanome._internal.serializer_fields import TypeSerializer, StringSerializer, UnityPositionSerializer, ColorSerializer, ArraySerializer
 import os
 import tempfile
 import logging
+from nanome.util.enums import ShapeType
+from .anchor import Anchor
+from . import Label, Line, Mesh, Sphere
 
 logger = logging.getLogger(__name__)
 
@@ -25,8 +27,7 @@ class AnchorSerializer(TypeSerializer):
         context.write_using_serializer(self._offset, value._viewer_offset)
 
     def deserialize(self, version, context):
-        from nanome.util.enums import ShapeType
-        result = _Anchor._create()
+        result = Anchor()
         result._target = context.read_long()
         result._anchor_type = ShapeType.safe_cast(context.read_byte())
         result._local_offset = context.read_using_serializer(self._offset)
@@ -50,7 +51,7 @@ class LabelSerializer(TypeSerializer):
         context.write_float(value._font_size)
 
     def deserialize(self, version, context):
-        result = _Label._create()
+        result = Label()
         result._text = context.read_using_serializer(self._string)
         result._font_size = context.read_float()
         return result
@@ -72,7 +73,7 @@ class LineSerializer(TypeSerializer):
         context.write_float(value._dash_distance)
 
     def deserialize(self, version, context):
-        result = _Line._create()
+        result = Line._create()
         result._thickness = context.read_float()
         result._dash_length = context.read_float()
         result._dash_distance = context.read_float()
@@ -127,7 +128,7 @@ class MeshSerializer(TypeSerializer):
             f.write(texture_bytes)
 
     def deserialize(self, version, context):
-        result = _Mesh._create()
+        result = Mesh._create()
         result.vertices = context.read_float_array()
         result.normals = context.read_float_array()
         result.colors = context.read_float_array()
@@ -164,7 +165,6 @@ class ShapeSerializer(TypeSerializer):
         return "Shape"
 
     def serialize(self, version, value, context):
-        from nanome.util.enums import ShapeType
         context.write_byte(int(value._shape_type))
         if value.shape_type == ShapeType.Sphere:
             context.write_using_serializer(self._sphere, value)
@@ -211,6 +211,6 @@ class SphereSerializer(TypeSerializer):
         context.write_float(value.radius)
 
     def deserialize(self, version, context):
-        result = _Sphere._create()
+        result = Sphere._create()
         result.radius = context.read_float()
         return result

@@ -9,8 +9,8 @@ from nanome._internal.process import ProcessManagerInstance
 from nanome._internal.process import _Bonding, _Dssp
 from nanome._internal.enums import Messages
 from nanome._internal.util.decorators import deprecated
-from nanome._internal import shapes as internal_shapes
 
+from nanome.api import shapes
 from nanome.api.integration import Integration
 from nanome.api.ui import Menu
 from nanome.api.streams import Stream
@@ -730,9 +730,9 @@ class PluginInstance:
     def create_shape(self, shape_type):
         from nanome.util.enums import ShapeType
         if shape_type == ShapeType.Sphere:
-            return internal_shapes._Sphere._create()
+            return shapes.Sphere()
         if shape_type == ShapeType.Line:
-            return internal_shapes._Line._create()
+            return shapes.Line()
         raise ValueError('Parameter shape_type must be a value of nanome.util.enums.ShapeType')
 
 

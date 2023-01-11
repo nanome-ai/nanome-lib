@@ -1,13 +1,15 @@
-from nanome._internal.shapes import _Label
 from nanome.util.enums import ShapeType
 from . import Shape
+from .anchor import Anchor
 
 
-class Label(_Label, Shape):
+class Label(Shape):
 
     def __init__(self):
-        Shape.__init__(self, ShapeType.Label)
-        _Label.__init__(self)
+        super().__init__(ShapeType.Label)
+        self._anchors = [Anchor()]
+        self._text = ""
+        self._font_size = .5
 
     @property
     def anchors(self):
@@ -32,6 +34,3 @@ class Label(_Label, Shape):
     @font_size.setter
     def font_size(self, value):
         self._font_size = value
-
-
-_Label._create = Label

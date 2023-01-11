@@ -1,9 +1,14 @@
-from nanome._internal.shapes.models import _Anchor
+from nanome.util import Vector3
+from nanome.util.enums import ShapeAnchorType
 
+class Anchor:
 
-class Anchor(_Anchor):
     def __init__(self):
-        _Anchor.__init__(self)
+        self._target = 0
+        self._local_offset = Vector3()
+        self._global_offset = Vector3()
+        self._viewer_offset = Vector3()
+        self._anchor_type = ShapeAnchorType.Workspace
 
     @property
     def target(self):
@@ -44,6 +49,3 @@ class Anchor(_Anchor):
     @anchor_type.setter
     def anchor_type(self, value):
         self._anchor_type = value
-
-
-_Anchor._create = Anchor
