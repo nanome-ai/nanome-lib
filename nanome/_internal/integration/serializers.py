@@ -2,7 +2,7 @@ from nanome._internal.serializer_fields import TypeSerializer, ArraySerializer, 
 from nanome._internal.structure.serializers import _ComplexSerializer, _AtomSerializer
 
 
-class _AddHydrogen(TypeSerializer):
+class AddHydrogen(TypeSerializer):
     def __init__(self):
         self.array_serializer = ArraySerializer()
         self.array_serializer.set_type(_ComplexSerializer())
@@ -30,7 +30,7 @@ class _AddHydrogen(TypeSerializer):
         return complexes
 
 
-class _CalculateESP(TypeSerializer):
+class CalculateESP(TypeSerializer):
     def __init__(self):
         self.array_serializer = ArraySerializer()
         self.array_serializer.set_type(_ComplexSerializer())
@@ -58,7 +58,7 @@ class _CalculateESP(TypeSerializer):
         return complexes
 
 
-class _ExportFile(TypeSerializer):
+class ExportFile(TypeSerializer):
     _String = StringSerializer()
 
     def version(self):
@@ -71,13 +71,13 @@ class _ExportFile(TypeSerializer):
         context.write_bool(value)
 
     def deserialize(self, version, context):
-        location = context.read_using_serializer(_ExportFile._String)
-        filename = context.read_using_serializer(_ExportFile._String)
+        location = context.read_using_serializer(ExportFile._String)
+        filename = context.read_using_serializer(ExportFile._String)
         data = context.read_byte_array()
         return (location, filename, data)
 
 
-class _ExportLocations(TypeSerializer):
+class ExportLocations(TypeSerializer):
     def __init__(self):
         self.array = ArraySerializer()
         self.array.set_type(StringSerializer())
@@ -95,7 +95,7 @@ class _ExportLocations(TypeSerializer):
         return None
 
 
-class _ExportSmiles(TypeSerializer):
+class ExportSmiles(TypeSerializer):
     def __init__(self):
         self.complex_array = ArraySerializer()
         self.complex_array.set_type(_ComplexSerializer())
@@ -120,7 +120,7 @@ class _ExportSmiles(TypeSerializer):
         return complexes
 
 
-class _GenerateMoleculeImage(TypeSerializer):
+class GenerateMoleculeImage(TypeSerializer):
     def __init__(self):
         self.complex_array = ArraySerializer()
         self.complex_array.set_type(_ComplexSerializer())
@@ -148,7 +148,7 @@ class _GenerateMoleculeImage(TypeSerializer):
         return ligands, (x, y)
 
 
-class _ImportFile(TypeSerializer):
+class ImportFile(TypeSerializer):
 
     def version(self):
         return 0
@@ -163,7 +163,7 @@ class _ImportFile(TypeSerializer):
         return
 
 
-class _ImportSmiles(TypeSerializer):
+class ImportSmiles(TypeSerializer):
     def __init__(self):
         self.complex_array = ArraySerializer()
         self.complex_array.set_type(_ComplexSerializer())
@@ -191,7 +191,7 @@ class _ImportSmiles(TypeSerializer):
         return strings
 
 
-class _RemoveHydrogen(TypeSerializer):
+class RemoveHydrogen(TypeSerializer):
     def __init__(self):
         self.array_serializer = ArraySerializer()
         self.array_serializer.set_type(_ComplexSerializer())
@@ -219,7 +219,7 @@ class _RemoveHydrogen(TypeSerializer):
         return complexes
 
 
-class _StartMinimization(TypeSerializer):
+class StartMinimization(TypeSerializer):
     def version(self):
         return 0
 
@@ -237,7 +237,7 @@ class _StartMinimization(TypeSerializer):
         return (forcefield, steps, steepest, cutoff)
 
 
-class _StopMinimization(TypeSerializer):
+class StopMinimization(TypeSerializer):
     def version(self):
         return 0
 
@@ -251,7 +251,7 @@ class _StopMinimization(TypeSerializer):
         return None
 
 
-class _StructurePrep(TypeSerializer):
+class StructurePrep(TypeSerializer):
     def __init__(self):
         self.array_serializer = ArraySerializer()
         self.array_serializer.set_type(_ComplexSerializer())
