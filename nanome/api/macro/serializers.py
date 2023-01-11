@@ -1,5 +1,5 @@
 from nanome._internal.serializer_fields import StringSerializer, TypeSerializer
-from ..._internal.macro import _Macro
+from .macro import Macro
 
 
 class MacroSerializer(TypeSerializer):
@@ -17,7 +17,7 @@ class MacroSerializer(TypeSerializer):
         context.write_using_serializer(self.string, value.logic)
 
     def deserialize(self, version, context):
-        result = _Macro._create()
+        result = Macro._create()
         result._title = context.read_using_serializer(self.string)
         result._logic = context.read_using_serializer(self.string)
         return result
