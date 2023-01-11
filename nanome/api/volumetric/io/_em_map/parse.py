@@ -1,4 +1,4 @@
-from ...models import _VolumeData
+from ...models import VolumeData
 import os
 import gzip
 import struct
@@ -66,7 +66,7 @@ def parse_data(bytes):
     delta_x = unit_cell[0] / header[7]
     delta_y = unit_cell[1] / header[8]
     delta_z = unit_cell[2] / header[9]
-    map = _VolumeData(n_columns, n_rows, n_section, delta_x, delta_y, delta_z)
+    map = VolumeData(n_columns, n_rows, n_section, delta_x, delta_y, delta_z)
     if (header[16] != 1 or header[17] != 2 or header[18] != 3):
         raise Exception("CryoEM> data layout doesn't meet Cryo-EM standard. Is this an Electron Density Map?")
     symmetrySizeByte = header[23]

@@ -1,9 +1,9 @@
-from nanome.util import Color
+from nanome.util import enums, Color, Vector3
 
 
-class _UnitCell(object):
+class UnitCell(object):
+
     def __init__(self):
-        from nanome.util import Vector3
         self._A = 0.0
         self._B = 0.0
         self._C = 0.0
@@ -15,12 +15,10 @@ class _UnitCell(object):
         self._Origin = Vector3()
 
 
-class _VolumeData(object):
+class VolumeData(object):
 
     def __init__(self):
-        from nanome.util import enums
         self._data = []
-
         self._width = 0
         self._height = 0
         self._depth = 0
@@ -29,20 +27,19 @@ class _VolumeData(object):
         self._rmsd = 0.0
         self._type = enums.VolumeType.default
         self._name = ""
+        self._cell = UnitCell()
 
-        self._cell = _UnitCell()
 
+class VolumeLayer():
 
-class _VolumeLayer():
     def __init__(self):
         self._color = Color()
         self._rmsd = 0.0
 
 
-class _VolumeProperties():
+class VolumeProperties():
 
     def __init__(self):
-        from nanome.util import enums
         self._visible = True
         self._boxed = True
         self._use_map_mover = True

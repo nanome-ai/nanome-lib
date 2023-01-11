@@ -26,7 +26,7 @@ class UnitCellSerializer(TypeSerializer):
         raise NotImplementedError
 
 
-class _VolumeDataSerializer(TypeSerializer):
+class VolumeDataSerializer(TypeSerializer):
     __string = StringSerializer()
     __cell = UnitCellSerializer()
 
@@ -48,9 +48,9 @@ class _VolumeDataSerializer(TypeSerializer):
         context.write_float(value._rmsd)
         context.write_int(value._type)
         context.write_using_serializer(
-            _VolumeDataSerializer.__string, value._name)
+            VolumeDataSerializer.__string, value._name)
         context.write_using_serializer(
-            _VolumeDataSerializer.__cell, value._cell)
+            VolumeDataSerializer.__cell, value._cell)
 
         context.write_float_array(value._data)
 
@@ -58,7 +58,7 @@ class _VolumeDataSerializer(TypeSerializer):
         raise NotImplementedError
 
 
-class _VolumeLayerSerializer(TypeSerializer):
+class VolumeLayerSerializer(TypeSerializer):
     __color = ColorSerializer()
 
     def __init__(self):
@@ -72,17 +72,17 @@ class _VolumeLayerSerializer(TypeSerializer):
 
     def serialize(self, version, value, context):
         context.write_using_serializer(
-            _VolumeLayerSerializer.__color, value._color)
+            VolumeLayerSerializer.__color, value._color)
         context.write_float(value._rmsd)
 
     def deserialize(self, version, context):
         raise NotImplementedError
 
 
-class _VolumePropertiesSerializer(TypeSerializer):
+class VolumePropertiesSerializer(TypeSerializer):
     def __init__(self):
         self.__array = ArraySerializer()
-        self.__array.set_type(_VolumeLayerSerializer())
+        self.__array.set_type(VolumeLayerSerializer())
 
     def version(self):
         return 0

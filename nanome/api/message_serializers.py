@@ -5,8 +5,7 @@ from .._internal import serializer_fields as serializer_fields
 
 from .._internal.enums import IntegrationCommands
 from .._internal.util import IntEnum
-from .._internal import volumetric
-from nanome.api import integration, structure, macro, shapes, ui
+from nanome.api import integration, structure, macro, shapes, ui, volumetric
 from nanome.api._hashes import Hashes
 from nanome.api.streams import Stream
 from nanome.api.user import PresenterInfo
@@ -1475,8 +1474,8 @@ class AddVolume(serializer_fields.TypeSerializer):
         long_serializer = serializer_fields.LongSerializer()
         self.__dict = serializer_fields.DictionarySerializer()
         self.__dict.set_types(long_serializer, atom_serializer)
-        self.__data = volumetric.serializers._VolumeDataSerializer()
-        self.__properties = volumetric.serializers._VolumePropertiesSerializer()
+        self.__data = volumetric.serializers.VolumeDataSerializer()
+        self.__properties = volumetric.serializers.VolumePropertiesSerializer()
 
     def version(self):
         return 0
