@@ -3,7 +3,7 @@ import os
 import unittest
 
 from nanome._internal import network
-from nanome._internal.serializers import CommandMessageSerializer
+from nanome.api.serializers import CommandMessageSerializer
 from nanome._internal.enums import Messages
 from nanome.api import structure, shapes, ui
 from nanome import util

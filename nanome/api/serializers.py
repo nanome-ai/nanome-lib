@@ -2,10 +2,12 @@ import logging
 import struct
 import traceback
 
-from . import callbacks, message_serializers, enums as command_enums
-from .network import Data
-from .network.context import ContextSerialization, ContextDeserialization
-from .util.type_serializers import TypeSerializer
+from . import callbacks, message_serializers
+
+from .._internal import enums as command_enums
+from .._internal.network import Data
+from .._internal.network.context import ContextSerialization, ContextDeserialization
+from .._internal.util.type_serializers import TypeSerializer
 
 logger = logging.getLogger(__name__)
 

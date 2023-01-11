@@ -1,6 +1,10 @@
-from .enums import Hashes
 import logging
-from . import _PluginInstance
+from .._internal.enums import Hashes
+from .._internal import _PluginInstance
+
+from nanome.api.streams import Stream
+from nanome.api.integration import Integration, IntegrationRequest
+from nanome.util.stream import StreamCreationError
 
 logger = logging.getLogger(__name__)
 
@@ -25,8 +29,6 @@ def connect(network, arg, request_id):
 
 
 def receive_create_stream_result(network, result, request_id):
-    from nanome.util.stream import StreamCreationError
-    from nanome.api.streams import Stream
     if result[0] != StreamCreationError.NoError:
         network._call(request_id, None, result[0])
 
@@ -39,12 +41,10 @@ def receive_create_stream_result(network, result, request_id):
 
 
 def feed_stream(network, result, request_id):
-    from nanome.api.streams import Stream
     Stream._streams[result[0]]._update_received(result[1])
 
 
 def integration(network, args, request_id):
-    from nanome.api.integration import Integration, IntegrationRequest
 
     integration = network._plugin.integration
     request = IntegrationRequest(args[0], args[1], args[2], network)
@@ -53,7 +53,6 @@ def integration(network, args, request_id):
 
 
 def receive_interrupt_stream(network, result, request_id):
-    from nanome.api.streams import Stream
 
     try:
         stream = Stream._streams[result[1]]

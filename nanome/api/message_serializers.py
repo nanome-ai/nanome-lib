@@ -1,9 +1,13 @@
 import logging
 import types
 
-from . import integration, macro, shapes, structure, ui, volumetric
-from .enums import Hashes, IntegrationCommands
-from .util import IntEnum, type_serializers as fields
+from .._internal import integration, macro, shapes, structure, ui, volumetric
+from .._internal.enums import Hashes, IntegrationCommands
+from .._internal.util import IntEnum, type_serializers as fields
+
+from nanome.api.streams import Stream
+from nanome.api.user import PresenterInfo
+
 
 logger = logging.getLogger(__name__)
 
@@ -923,7 +927,6 @@ class FeedStream(fields.TypeSerializer):
         return "StreamFeed"
 
     def serialize(self, version, value, context):
-        from nanome.api.streams import Stream
 
         context.write_uint(value[0])
         data_type = value[2]
@@ -937,7 +940,6 @@ class FeedStream(fields.TypeSerializer):
             context.write_float_array(value[1])
 
     def deserialize(self, version, context):
-        from nanome.api.streams import Stream
 
         id = context.read_uint()
         type = Stream.DataType.float
@@ -1383,7 +1385,6 @@ class GetPresenterInfoResponse(fields.TypeSerializer):
         pass
 
     def deserialize(self, version, context):
-        from nanome.api.user import PresenterInfo
 
         result = PresenterInfo()
         result.account_id = context.read_using_serializer(self.string)

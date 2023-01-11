@@ -16,7 +16,6 @@ from timeit import default_timer as timer
 from nanome._internal import network
 from nanome._internal.process import ProcessManager
 from nanome._internal.enums import Hashes
-from nanome._internal.serializers import CommandMessageSerializer
 from nanome._internal.util.type_serializers import TypeSerializer
 from nanome._internal.logs import LogsManager
 
@@ -30,11 +29,13 @@ __metaclass__ = type
 
 
 class _Plugin(object):
-    __serializer = CommandMessageSerializer()
+    __serializer = None
     _plugin_id = -1
     _custom_data = None
 
     def __init__(self, name, description, tags=None, has_advanced=False, permissions=None, integrations=None):
+        from nanome.api.serializers import CommandMessageSerializer
+        self.__serializer = CommandMessageSerializer()
         tags = tags or []
         permissions = permissions or []
         integrations = integrations or []

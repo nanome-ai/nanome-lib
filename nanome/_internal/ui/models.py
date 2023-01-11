@@ -1,7 +1,8 @@
 from copy import deepcopy
 import logging
 
-from nanome._internal import enums, message_serializers, network
+from nanome._internal import enums, network
+from nanome.api import message_serializers
 
 logger = logging.getLogger(__name__)
 
