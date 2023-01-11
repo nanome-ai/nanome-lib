@@ -6,7 +6,7 @@ from testing.unit.utilities import (
     alter_object, assert_equal, rand_string, create_test, test_serializer, TestOptions)
 import unittest
 
-deprecation_logger = logging.getLogger('nanome._internal.util.decorators')
+deprecation_logger = logging.getLogger('nanome._internal.decorators')
 
 def prefab_button_pressed_callback(btn):
     pass

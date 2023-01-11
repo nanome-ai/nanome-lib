@@ -8,7 +8,7 @@ from nanome._internal.network import Packet
 from nanome._internal.process import ProcessManagerInstance
 from nanome._internal.process import _Bonding, _Dssp
 from nanome._internal.enums import Messages
-from nanome._internal.util.decorators import deprecated
+from nanome._internal.decorators import deprecated
 
 from nanome.api import shapes
 from nanome.api.integration import Integration

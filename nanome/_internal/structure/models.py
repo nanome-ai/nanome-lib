@@ -1,5 +1,5 @@
 import copy
-from nanome._internal.util.decorators import deprecated
+from nanome._internal.decorators import deprecated
 from . import helpers
 import logging
 

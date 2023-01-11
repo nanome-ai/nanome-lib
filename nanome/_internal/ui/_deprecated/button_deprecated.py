@@ -1,5 +1,5 @@
 from .. import _Button
-from nanome._internal.util.decorators import deprecated
+from nanome._internal.decorators import deprecated
 
 # region Text Deprecated Properties
 

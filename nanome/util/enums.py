@@ -1,5 +1,5 @@
 import sys
-from nanome._internal.util import auto, reset_auto
+from nanome._internal.enum_utils import auto, reset_auto
 from nanome._internal.enums import CommandEnum
 
 if sys.version_info >= (3, 4):

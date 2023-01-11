@@ -4,7 +4,7 @@ import types
 from .._internal import serializer_fields as serializer_fields
 
 from .._internal.enums import IntegrationCommands
-from .._internal.util import IntEnum
+from .._internal.enum_utils import IntEnum
 from nanome.api import integration, structure, macro, shapes, ui, volumetric
 from nanome.api._hashes import Hashes
 from nanome.api.streams import Stream

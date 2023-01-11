@@ -1,5 +1,5 @@
 import sys
-from nanome._internal.util import IntEnum, auto, reset_auto
+from nanome._internal.enum_utils import IntEnum, auto, reset_auto
 import logging
 
 logger = logging.getLogger(__name__)
