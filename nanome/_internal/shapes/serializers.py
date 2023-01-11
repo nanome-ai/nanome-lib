@@ -7,7 +7,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class _AnchorSerializer(TypeSerializer):
+class AnchorSerializer(TypeSerializer):
     def __init__(self):
         self._offset = UnityPositionSerializer()
 
@@ -35,7 +35,7 @@ class _AnchorSerializer(TypeSerializer):
         return result
 
 
-class _LabelSerializer(TypeSerializer):
+class LabelSerializer(TypeSerializer):
     def __init__(self):
         self._string = StringSerializer()
 
@@ -56,7 +56,7 @@ class _LabelSerializer(TypeSerializer):
         return result
 
 
-class _LineSerializer(TypeSerializer):
+class LineSerializer(TypeSerializer):
     def __init__(self):
         pass
 
@@ -79,7 +79,7 @@ class _LineSerializer(TypeSerializer):
         return result
 
 
-class _MeshSerializer(TypeSerializer):
+class MeshSerializer(TypeSerializer):
     def __init__(self):
         pass
 
@@ -146,16 +146,16 @@ class _MeshSerializer(TypeSerializer):
         return result
 
 
-class _ShapeSerializer(TypeSerializer):
+class ShapeSerializer(TypeSerializer):
     def __init__(self):
         self._position = UnityPositionSerializer()
         self._color = ColorSerializer()
-        self._sphere = _SphereSerializer()
-        self._line = _LineSerializer()
-        self._label = _LabelSerializer()
-        self._mesh = _MeshSerializer()
+        self._sphere = SphereSerializer()
+        self._line = LineSerializer()
+        self._label = LabelSerializer()
+        self._mesh = MeshSerializer()
         self._anchor_array = ArraySerializer()
-        self._anchor_array.set_type(_AnchorSerializer())
+        self._anchor_array.set_type(AnchorSerializer())
 
     def version(self):
         return 1
@@ -197,7 +197,7 @@ class _ShapeSerializer(TypeSerializer):
         return (context.read_int(), context.read_bool())
 
 
-class _SphereSerializer(TypeSerializer):
+class SphereSerializer(TypeSerializer):
     def __init__(self):
         pass
 
