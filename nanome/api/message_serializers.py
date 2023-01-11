@@ -3,11 +3,10 @@ import types
 
 from .._internal import serializer_fields as serializer_fields
 
-from .._internal import macro, shapes, ui, volumetric
 from .._internal.enums import IntegrationCommands
 from .._internal.util import IntEnum
-
-from nanome.api import integration, structure
+from .._internal import volumetric
+from nanome.api import integration, structure, macro, shapes, ui
 from nanome.api._hashes import Hashes
 from nanome.api.streams import Stream
 from nanome.api.user import PresenterInfo

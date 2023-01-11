@@ -17,5 +17,4 @@ from .models import _Menu
 # folders
 from . import *
 from . import _io
-from . import serializers
 from . import _deprecated

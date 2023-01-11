@@ -1,4 +1,4 @@
-from . import Anchor, Label, Line, Mesh, Sphere
+from ..._internal.shapes.models import _Anchor, _Label, _Line, _Mesh, _Sphere
 from nanome._internal.serializer_fields import TypeSerializer, StringSerializer, UnityPositionSerializer, ColorSerializer, ArraySerializer
 import os
 import tempfile
@@ -26,7 +26,7 @@ class AnchorSerializer(TypeSerializer):
 
     def deserialize(self, version, context):
         from nanome.util.enums import ShapeType
-        result = Anchor()
+        result = _Anchor._create()
         result._target = context.read_long()
         result._anchor_type = ShapeType.safe_cast(context.read_byte())
         result._local_offset = context.read_using_serializer(self._offset)
@@ -50,7 +50,7 @@ class LabelSerializer(TypeSerializer):
         context.write_float(value._font_size)
 
     def deserialize(self, version, context):
-        result = Label()
+        result = _Label._create()
         result._text = context.read_using_serializer(self._string)
         result._font_size = context.read_float()
         return result
@@ -72,7 +72,7 @@ class LineSerializer(TypeSerializer):
         context.write_float(value._dash_distance)
 
     def deserialize(self, version, context):
-        result = Line()
+        result = _Line._create()
         result._thickness = context.read_float()
         result._dash_length = context.read_float()
         result._dash_distance = context.read_float()
@@ -127,7 +127,7 @@ class MeshSerializer(TypeSerializer):
             f.write(texture_bytes)
 
     def deserialize(self, version, context):
-        result = Mesh()
+        result = _Mesh._create()
         result.vertices = context.read_float_array()
         result.normals = context.read_float_array()
         result.colors = context.read_float_array()
@@ -211,6 +211,6 @@ class SphereSerializer(TypeSerializer):
         context.write_float(value.radius)
 
     def deserialize(self, version, context):
-        result = Sphere()
+        result = _Sphere._create()
         result.radius = context.read_float()
         return result

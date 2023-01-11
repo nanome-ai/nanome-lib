@@ -1,4 +1,4 @@
-from . import _Button, _Dropdown, _DropdownItem, _Image, _Label, _LayoutNode, _LoadingBar, _Menu, _Mesh, _Slider, _TextInput, _UIList
+from ..._internal.ui import _Button, _Dropdown, _DropdownItem, _Image, _Label, _LayoutNode, _LoadingBar, _Menu, _Mesh, _Slider, _TextInput, _UIList
 from nanome._internal.util import IntEnum
 from nanome._internal.serializer_fields import ArraySerializer, TypeSerializer, ColorSerializer, ByteSerializer, CachedImageSerializer, StringSerializer, Vector3Serializer
 import logging

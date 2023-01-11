@@ -1,7 +1,7 @@
 import logging
 import nanome
 import nanome.api.ui as UI
-from nanome._internal.ui.serializers import LayoutNodeSerializer, UIBaseSerializer
+from nanome.api.ui.serializers import LayoutNodeSerializer, UIBaseSerializer
 from testing.unit.utilities import (
     alter_object, assert_equal, rand_string, create_test, test_serializer, TestOptions)
 import unittest
