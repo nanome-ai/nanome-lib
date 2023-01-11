@@ -1,5 +1,5 @@
 import unittest
-from nanome._internal.enums import Hashes
+from nanome.api._hashes import Hashes
 
 class HashesTestCase(unittest.TestCase):
     """Ensure that Hash values remain constant."""

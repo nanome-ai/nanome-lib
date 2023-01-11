@@ -6,7 +6,7 @@ from timeit import default_timer as timer
 
 from nanome._internal.network import Packet
 from nanome._internal.process import ProcessManagerInstance
-from nanome._internal.enums import Hashes, Messages
+from nanome._internal.enums import Messages
 from nanome._internal.util.decorators import deprecated
 from nanome._internal import shapes as internal_shapes
 
@@ -161,6 +161,7 @@ class _PluginInstance(object):
             self._update_loop()
 
     def _has_permission(self, permission):
+        from nanome.api._hashes import Hashes
         return Hashes.PermissionRequestHashes[permission] in self._permissions
 
     @deprecated("files.ls")

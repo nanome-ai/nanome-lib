@@ -2,9 +2,10 @@ import logging
 import types
 
 from .._internal import integration, macro, shapes, structure, ui, volumetric
-from .._internal.enums import Hashes, IntegrationCommands
+from .._internal.enums import IntegrationCommands
 from .._internal.util import IntEnum, type_serializers as fields
 
+from nanome.api._hashes import Hashes
 from nanome.api.streams import Stream
 from nanome.api.user import PresenterInfo
 

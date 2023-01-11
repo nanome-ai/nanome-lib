@@ -1,5 +1,5 @@
 import logging
-from .._internal.enums import Hashes
+from ._hashes import Hashes
 from .._internal import _PluginInstance
 
 from nanome.api.streams import Stream

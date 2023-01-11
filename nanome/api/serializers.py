@@ -8,6 +8,7 @@ from .._internal import enums as command_enums
 from .._internal.network import Data
 from .._internal.network.context import ContextSerialization, ContextDeserialization
 from .._internal.util.type_serializers import TypeSerializer
+from ._hashes import Hashes
 
 logger = logging.getLogger(__name__)
 
@@ -25,13 +26,14 @@ class CommandMessageSerializer(object):
 
     def __init__(self):
         self._plugin_id = 0
+        Hashes.init_hashes()
         self._register_commands(command_serializer_callback_list)
         self._register_messages(message_serializers_list)
 
     def serialize_message(self, request_id, message_type, arg, version_table, expects_response):
         context = ContextSerialization(self._plugin_id, version_table, packet_debugging)
         context.write_uint(request_id)
-        command_hash = command_enums.Hashes.MessageHashes[message_type]
+        command_hash = Hashes.MessageHashes[message_type]
         context.write_uint(command_hash)
         if version_table is not None:
             if version_table.get(MESSAGE_VERSION_KEY, 0) >= 1:
@@ -86,13 +88,13 @@ class CommandMessageSerializer(object):
 
     def try_register_session(self, payload):
         command_hash = Data.uint_unpack(payload, 4)[0]
-        return command_hash == command_enums.Hashes.CommandHashes[commands_enum.connect]
+        return command_hash == Hashes.CommandHashes[commands_enum.connect]
 
     @classmethod
     def _register_commands(cls, command_serializer_callback_list):
         for command, serializer, callback in command_serializer_callback_list:
-            cls._commands[command_enums.Hashes.CommandHashes[command]] = serializer
-            cls._command_callbacks[command_enums.Hashes.CommandHashes[command]] = callback
+            cls._commands[Hashes.CommandHashes[command]] = serializer
+            cls._command_callbacks[Hashes.CommandHashes[command]] = callback
 
     @classmethod
     def _register_messages(cls, command_serializer_list):
