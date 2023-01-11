@@ -1,5 +1,5 @@
 from nanome._internal.serializer_fields import TypeSerializer, ArraySerializer, DictionarySerializer, LongSerializer, ByteArraySerializer, LongSerializer, StringSerializer
-from nanome._internal.structure.serializers import ComplexSerializer, AtomSerializer
+from nanome.api.structure.serializers import ComplexSerializer, AtomSerializer
 
 
 class AddHydrogen(TypeSerializer):

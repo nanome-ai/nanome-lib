@@ -1,5 +1,4 @@
 from nanome._internal.structure.models import _Complex
-from nanome.api import PluginInstance
 from nanome._internal.network import PluginNetwork
 from nanome._internal.enums import Messages
 from nanome.util import Matrix, Logs
@@ -301,11 +300,13 @@ class Complex(_Complex, Base):
         return self._convert_to_frames()
 
     def register_complex_updated_callback(self, callback):
+        from nanome.api import PluginInstance
         self._complex_updated_callback = callback
         PluginInstance._hook_complex_updated(self.index, callback)
         PluginNetwork.send(Messages.hook_complex_updated, self.index, False)
 
     def register_selection_changed_callback(self, callback):
+        from nanome.api import PluginInstance
         self._selection_changed_callback = callback
         PluginInstance._hook_selection_changed(self.index, callback)
         PluginNetwork.send(Messages.hook_selection_changed, self.index, False)

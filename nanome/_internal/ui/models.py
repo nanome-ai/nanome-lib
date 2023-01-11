@@ -2,7 +2,6 @@ from copy import deepcopy
 import logging
 
 from nanome._internal import enums, network
-from nanome.api import message_serializers
 
 logger = logging.getLogger(__name__)
 
@@ -74,6 +73,7 @@ class _Button(_UIBase):
         self._pressed_callback = func
 
     def _register_hover_callback(self, func):
+        from nanome.api import message_serializers
         message_callbacks = enums.Messages
         if func == None and self._hover_callback == None:  # Low hanging filter but there may be others
             return
@@ -350,14 +350,15 @@ class _Image(_UIBase):
             self._released_callback(self, x, y)
 
     def _register_pressed_callback(self, func):
+        from nanome.api import message_serializers
         if func == None and self._pressed_callback == None:  # Low hanging filter but there may be others
             return
-        import nanome
         self._send_hook(
             message_serializers.UIHook.Type.image_pressed)
         self._pressed_callback = func
 
     def _register_held_callback(self, func):
+        from nanome.api import message_serializers
         if func == None and self._held_callback == None:  # Low hanging filter but there may be others
             return
         import nanome
@@ -366,6 +367,7 @@ class _Image(_UIBase):
         self._held_callback = func
 
     def _register_released_callback(self, func):
+        from nanome.api import message_serializers
         if func == None and self._released_callback == None:  # Low hanging filter but there may be others
             return
         self._send_hook(

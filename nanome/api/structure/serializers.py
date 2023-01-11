@@ -4,7 +4,7 @@ from nanome._internal.serializer_fields import (
     BoolSerializer, DictionarySerializer, ByteSerializer, TypeSerializer,
     LongSerializer, QuaternionSerializer
 )
-from . import _Atom, _Bond, _Chain, _Complex, _Molecule, _Residue, _Substructure, _Workspace
+from ..._internal.structure import _Atom, _Bond, _Chain, _Complex, _Molecule, _Residue, _Substructure, _Workspace
 
 
 class AtomSerializer(TypeSerializer):
