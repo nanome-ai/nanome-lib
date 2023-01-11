@@ -14,6 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 class ApplyColorScheme(fields.TypeSerializer):
+
     def __init__(self):
         pass
 
@@ -33,6 +34,7 @@ class ApplyColorScheme(fields.TypeSerializer):
 
 
 class AdvancedSettings(fields.TypeSerializer):
+
     def __init__(self):
         pass
 
@@ -50,6 +52,7 @@ class AdvancedSettings(fields.TypeSerializer):
 
 
 class Connect(fields.TypeSerializer):
+
     def __init__(self):
         self.__dictionary = fields.DictionarySerializer()
         self.__dictionary.set_types(fields.StringSerializer(), fields.ByteSerializer())
@@ -70,6 +73,7 @@ class Connect(fields.TypeSerializer):
 
 
 class Run(fields.TypeSerializer):
+
     def __init__(self):
         pass
 
@@ -87,6 +91,7 @@ class Run(fields.TypeSerializer):
 
 
 class SetPluginListButton(fields.TypeSerializer):
+
     def __init__(self):
         self.__string = fields.StringSerializer()
 
@@ -106,6 +111,7 @@ class SetPluginListButton(fields.TypeSerializer):
 
 
 class CD(fields.TypeSerializer):
+
     def __init__(self):
         self.__string = fields.StringSerializer()
 
@@ -124,6 +130,7 @@ class CD(fields.TypeSerializer):
 
 
 class CP(fields.TypeSerializer):
+
     def __init__(self):
         self.__string = fields.StringSerializer()
 
@@ -143,6 +150,7 @@ class CP(fields.TypeSerializer):
 
 
 class ExportFilesItem(fields.TypeSerializer):
+
     def __init__(self):
         self.__complex = structure.serializers._ComplexSerializer()
         self.__string = fields.StringSerializer()
@@ -183,6 +191,7 @@ class ExportFilesItem(fields.TypeSerializer):
 
 
 class ExportFiles(fields.TypeSerializer):
+
     def __init__(self):
         self.__array = fields.ArraySerializer()
         self.__array.set_type(ExportFilesItem())
@@ -206,6 +215,7 @@ class ExportFiles(fields.TypeSerializer):
 
 
 class FileMeta(fields.TypeSerializer):
+
     def __init__(self):
         self.__string = fields.StringSerializer()
 
@@ -231,6 +241,7 @@ class FileMeta(fields.TypeSerializer):
 
 
 class Get(fields.TypeSerializer):
+
     def __init__(self):
         self.__string = fields.StringSerializer()
 
@@ -252,6 +263,7 @@ class Get(fields.TypeSerializer):
 
 
 class LS(fields.TypeSerializer):
+
     def __init__(self):
         self.__string = fields.StringSerializer()
         self.__array = fields.ArraySerializer()
@@ -274,6 +286,7 @@ class LS(fields.TypeSerializer):
 
 
 class MKDir(fields.TypeSerializer):
+
     def __init__(self):
         self.__string = fields.StringSerializer()
 
@@ -292,6 +305,7 @@ class MKDir(fields.TypeSerializer):
 
 
 class MV(fields.TypeSerializer):
+
     def __init__(self):
         self.__string = fields.StringSerializer()
 
@@ -311,6 +325,7 @@ class MV(fields.TypeSerializer):
 
 
 class Put(fields.TypeSerializer):
+
     def __init__(self):
         self.__string = fields.StringSerializer()
 
@@ -331,6 +346,7 @@ class Put(fields.TypeSerializer):
 
 
 class PWD(fields.TypeSerializer):
+
     def __init__(self):
         self.__string = fields.StringSerializer()
 
@@ -351,6 +367,7 @@ class PWD(fields.TypeSerializer):
 
 
 class RM(fields.TypeSerializer):
+
     def __init__(self):
         self.__string = fields.StringSerializer()
 
@@ -369,6 +386,7 @@ class RM(fields.TypeSerializer):
 
 
 class RMDir(fields.TypeSerializer):
+
     def __init__(self):
         self.__string = fields.StringSerializer()
 
@@ -492,6 +510,7 @@ class Integration(fields.TypeSerializer):
 
 
 class LoadFileInfo(fields.TypeSerializer):
+
     def __init__(self):
         self.string = fields.StringSerializer()
 
@@ -510,6 +529,7 @@ class LoadFileInfo(fields.TypeSerializer):
 
 
 class LoadFile(fields.TypeSerializer):
+
     def __init__(self):
         self.array = fields.ArraySerializer()
         self.array.set_type(LoadFileInfo())
@@ -530,6 +550,7 @@ class LoadFile(fields.TypeSerializer):
 
 
 class LoadFileDoneInfo(fields.TypeSerializer):
+
     def __init__(self):
         pass
 
@@ -551,6 +572,7 @@ class LoadFileDoneInfo(fields.TypeSerializer):
 
 
 class LoadFileDone(fields.TypeSerializer):
+
     def __init__(self):
         self.array = fields.ArraySerializer()
         self.array.set_type(LoadFileDoneInfo())
@@ -702,6 +724,7 @@ class StopMacro(fields.TypeSerializer):
 
 
 class OpenURL(fields.TypeSerializer):
+
     def __init__(self):
         self.string = fields.StringSerializer()
 
@@ -721,6 +744,7 @@ class OpenURL(fields.TypeSerializer):
 
 
 class SendNotification(fields.TypeSerializer):
+
     def __init__(self):
         self.string = fields.StringSerializer()
 
@@ -739,6 +763,7 @@ class SendNotification(fields.TypeSerializer):
 
 
 class SetSkybox(fields.TypeSerializer):
+
     def __init__(self):
         pass
 
@@ -756,6 +781,7 @@ class SetSkybox(fields.TypeSerializer):
 
 
 class DeleteShape(fields.TypeSerializer):
+
     def __init__(self):
         pass
 
@@ -783,6 +809,7 @@ class DeleteShape(fields.TypeSerializer):
 
 
 class SetShape(fields.TypeSerializer):
+
     def __init__(self):
         self._position = fields.UnityPositionSerializer()
         self._rotation = fields.UnityRotationSerializer()
@@ -845,6 +872,7 @@ class SetShape(fields.TypeSerializer):
 
 
 class CreateStream(fields.TypeSerializer):
+
     def __init__(self):
         pass
 
@@ -872,6 +900,7 @@ class CreateStream(fields.TypeSerializer):
 
 
 class CreateStreamResult(fields.TypeSerializer):
+
     def __init__(self):
         pass
 
@@ -900,6 +929,7 @@ class CreateStreamResult(fields.TypeSerializer):
 
 
 class DestroyStream(fields.TypeSerializer):
+
     def __init__(self):
         pass
 
@@ -917,6 +947,7 @@ class DestroyStream(fields.TypeSerializer):
 
 
 class FeedStream(fields.TypeSerializer):
+
     def __init__(self):
         self.__array = fields.ArraySerializer()
         self.__array.set_type(fields.StringSerializer())
@@ -958,6 +989,7 @@ class FeedStream(fields.TypeSerializer):
 
 
 class FeedStreamDone(fields.TypeSerializer):
+
     def __init__(self):
         pass
 
@@ -975,6 +1007,7 @@ class FeedStreamDone(fields.TypeSerializer):
 
 
 class InterruptStream(fields.TypeSerializer):
+
     def __init__(self):
         pass
 
@@ -994,6 +1027,7 @@ class InterruptStream(fields.TypeSerializer):
 
 
 class ButtonCallback(fields.TypeSerializer):
+
     def __init__(self):
         pass
 
@@ -1025,6 +1059,7 @@ class ButtonCallback(fields.TypeSerializer):
 
 
 class DropdownCallback(fields.TypeSerializer):
+
     def __init__(self):
         pass
 
@@ -1046,6 +1081,7 @@ class DropdownCallback(fields.TypeSerializer):
 
 
 class GetMenuTransform(fields.TypeSerializer):
+
     def __init__(self):
         pass
 
@@ -1063,6 +1099,7 @@ class GetMenuTransform(fields.TypeSerializer):
 
 
 class GetMenuTransformResponse(fields.TypeSerializer):
+
     def __init__(self):
         self.pos = fields.UnityPositionSerializer()
         self.rot = fields.UnityRotationSerializer()
@@ -1087,6 +1124,7 @@ class GetMenuTransformResponse(fields.TypeSerializer):
 
 
 class ImageCallback(fields.TypeSerializer):
+
     def __init__(self):
         pass
 
@@ -1116,6 +1154,7 @@ class ImageCallback(fields.TypeSerializer):
 
 
 class MenuCallback(fields.TypeSerializer):
+
     def __init__(self):
         pass
 
@@ -1140,6 +1179,7 @@ class MenuCallback(fields.TypeSerializer):
 
 
 class SetMenuTransform(fields.TypeSerializer):
+
     def __init__(self):
         self.pos = fields.UnityPositionSerializer()
         self.rot = fields.UnityRotationSerializer()
@@ -1185,6 +1225,7 @@ class SliderCallback(fields.TypeSerializer):
 
 
 class TextInputCallback(fields.TypeSerializer):
+
     def __init__(self):
         self.__tuple = fields.TupleSerializer(fields.IntSerializer(), fields.StringSerializer())
 
@@ -1233,6 +1274,7 @@ class UIHook(fields.TypeSerializer):
 
 
 class UpdateContent(fields.TypeSerializer):
+
     def __init__(self):
         self._array = fields.ArraySerializer()
         self._content = ui.serializers._UIBaseSerializer()
@@ -1255,6 +1297,7 @@ class UpdateContent(fields.TypeSerializer):
 
 
 class UpdateMenu(fields.TypeSerializer):
+
     def __init__(self):
         self.menu = ui.serializers._MenuSerializer()
         self.array = fields.ArraySerializer()
@@ -1290,6 +1333,7 @@ class UpdateMenu(fields.TypeSerializer):
 
 
 class UpdateNode(fields.TypeSerializer):
+
     def __init__(self):
         self._array = fields.ArraySerializer()
         self._node_serializer = ui.serializers._LayoutNodeSerializerDeep()
@@ -1312,6 +1356,7 @@ class UpdateNode(fields.TypeSerializer):
 
 
 class GetControllerTransforms(fields.TypeSerializer):
+
     def __init__(self):
         pass
 
@@ -1329,6 +1374,7 @@ class GetControllerTransforms(fields.TypeSerializer):
 
 
 class GetControllerTransformsResponse(fields.TypeSerializer):
+
     def __init__(self):
         self.pos = fields.UnityPositionSerializer()
         self.rot = fields.UnityRotationSerializer()
@@ -1356,6 +1402,7 @@ class GetControllerTransformsResponse(fields.TypeSerializer):
 
 
 class GetPresenterInfo(fields.TypeSerializer):
+
     def __init__(self):
         pass
 
@@ -1373,6 +1420,7 @@ class GetPresenterInfo(fields.TypeSerializer):
 
 
 class GetPresenterInfoResponse(fields.TypeSerializer):
+
     def __init__(self):
         self.string = fields.StringSerializer()
 
@@ -1400,6 +1448,7 @@ class GetPresenterInfoResponse(fields.TypeSerializer):
 
 
 class PresenterChange(fields.TypeSerializer):
+
     def __init__(self):
         pass
 
@@ -1417,6 +1466,7 @@ class PresenterChange(fields.TypeSerializer):
 
 
 class AddVolume(fields.TypeSerializer):
+
     def __init__(self):
         self.__complex = structure.serializers._ComplexSerializer()
         atom_serializer = structure.serializers._AtomSerializer()
@@ -1448,6 +1498,7 @@ class AddVolume(fields.TypeSerializer):
 
 
 class AddVolumeDone(fields.TypeSerializer):
+
     def __init__(self):
         pass
 
@@ -1465,6 +1516,7 @@ class AddVolumeDone(fields.TypeSerializer):
 
 
 class AddBonds(fields.TypeSerializer):
+
     def __init__(self):
         self.__array = fields.ArraySerializer()
         self.__array.set_type(structure.serializers._ComplexSerializer())
@@ -1493,6 +1545,7 @@ class AddBonds(fields.TypeSerializer):
 
 
 class AddDSSP(fields.TypeSerializer):
+
     def __init__(self):
         self.__array = fields.ArraySerializer()
         self.__array.set_type(structure.serializers._ComplexSerializer())
@@ -1521,6 +1574,7 @@ class AddDSSP(fields.TypeSerializer):
 
 
 class AddToWorkspace(fields.TypeSerializer):
+
     def __init__(self):
         self.__array = fields.ArraySerializer()
         self.__array.set_type(structure.serializers._ComplexSerializer())
@@ -1549,6 +1603,7 @@ class AddToWorkspace(fields.TypeSerializer):
 
 
 class ComplexAddedRemoved(fields.TypeSerializer):
+
     def __init__(self):
         pass
 
@@ -1566,6 +1621,7 @@ class ComplexAddedRemoved(fields.TypeSerializer):
 
 
 class ComplexUpdated(fields.TypeSerializer):
+
     def __init__(self):
         self.complex_serializer = structure.serializers._ComplexSerializer()
         atom_serializer = structure.serializers._AtomSerializer()
@@ -1595,6 +1651,7 @@ class ComplexUpdated(fields.TypeSerializer):
 
 
 class ComplexUpdatedHook(fields.TypeSerializer):
+
     def __init__(self):
         pass
 
@@ -1612,6 +1669,7 @@ class ComplexUpdatedHook(fields.TypeSerializer):
 
 
 class ComputeHBonds(fields.TypeSerializer):
+
     def __init__(self):
         pass
 
@@ -1634,6 +1692,7 @@ class ComputeHBonds(fields.TypeSerializer):
 
 
 class PositionStructures(fields.TypeSerializer):
+
     def __init__(self):
         pass
 
@@ -1668,6 +1727,7 @@ class PositionStructures(fields.TypeSerializer):
 
 
 class PositionStructuresDone(fields.TypeSerializer):
+
     def __init__(self):
         pass
 
@@ -1688,6 +1748,7 @@ class PositionStructuresDone(fields.TypeSerializer):
 
 
 class ReceiveComplexList(fields.TypeSerializer):
+
     def __init__(self):
         self.array_serializer = fields.ArraySerializer()
         self.array_serializer.set_type(structure.serializers._ComplexSerializer())
@@ -1711,6 +1772,7 @@ class ReceiveComplexList(fields.TypeSerializer):
 
 
 class ReceiveComplexes(fields.TypeSerializer):
+
     def __init__(self):
         self.array_serializer = fields.ArraySerializer()
         self.array_serializer.set_type(structure.serializers._ComplexSerializer())
@@ -1736,6 +1798,7 @@ class ReceiveComplexes(fields.TypeSerializer):
 
 
 class ReceiveWorkspace(fields.TypeSerializer):
+
     def __init__(self):
         self.workspace = structure.serializers._WorkspaceSerializer()
         atom_serializer = structure.serializers._AtomSerializer()
@@ -1759,6 +1822,7 @@ class ReceiveWorkspace(fields.TypeSerializer):
 
 
 class RequestComplexList(fields.TypeSerializer):
+
     def __init__(self):
         pass
 
@@ -1776,6 +1840,7 @@ class RequestComplexList(fields.TypeSerializer):
 
 
 class RequestComplexes(fields.TypeSerializer):
+
     def __init__(self):
         pass
 
@@ -1793,6 +1858,7 @@ class RequestComplexes(fields.TypeSerializer):
 
 
 class RequestSubstructure(fields.TypeSerializer):
+
     def __init__(self):
         self.array = fields.ArraySerializer()
         self.array.set_type(structure.serializers._SubstructureSerializer())
@@ -1826,6 +1892,7 @@ class RequestSubstructure(fields.TypeSerializer):
 
 
 class RequestWorkspace(fields.TypeSerializer):
+
     def __init__(self):
         pass
 
@@ -1843,6 +1910,7 @@ class RequestWorkspace(fields.TypeSerializer):
 
 
 class SelectionChanged(fields.TypeSerializer):
+
     def __init__(self):
         self.complex_serializer = structure.serializers._ComplexSerializer()
         atom_serializer = structure.serializers._AtomSerializer()
@@ -1872,6 +1940,7 @@ class SelectionChanged(fields.TypeSerializer):
 
 
 class SelectionChangedHook(fields.TypeSerializer):
+
     def __init__(self):
         pass
 
@@ -1962,6 +2031,7 @@ class UpdateStructures(fields.TypeSerializer):
 
 
 class UpdateStructuresDeepDone(fields.TypeSerializer):
+
     def __init__(self):
         pass
 
@@ -1979,6 +2049,7 @@ class UpdateStructuresDeepDone(fields.TypeSerializer):
 
 
 class UpdateWorkspace(fields.TypeSerializer):
+
     def __init__(self):
         self.workspace = structure.serializers._WorkspaceSerializer()
         atom_serializer = structure.serializers._AtomSerializer()
