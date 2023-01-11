@@ -5,7 +5,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class _UIBaseSerializer(TypeSerializer):
+class UIBaseSerializer(TypeSerializer):
     class ContentType(IntEnum):
         ebutton = 0
         emesh = 1
@@ -38,9 +38,9 @@ class _UIBaseSerializer(TypeSerializer):
         if value == None:
             return
         try:
-            ui_type = _UIBaseSerializer.registered_classes[type(
+            ui_type = UIBaseSerializer.registered_classes[type(
                 value).__name__]
-            serializer = _UIBaseSerializer.registered_serializers[ui_type]
+            serializer = UIBaseSerializer.registered_serializers[ui_type]
         except:
             logger.error("Trying to serialize unknown UI type:",
                        type(value).__name__)
@@ -49,15 +49,15 @@ class _UIBaseSerializer(TypeSerializer):
         context.write_using_serializer(serializer, value)
 
     def deserialize(self, version, context):
-        ui_type = _UIBaseSerializer.ContentType(context.read_uint())
+        ui_type = UIBaseSerializer.ContentType(context.read_uint())
         try:
-            serializer = _UIBaseSerializer.registered_serializers[ui_type]
+            serializer = UIBaseSerializer.registered_serializers[ui_type]
         except:
             logger.error("Trying to deserialize unknown UI type:", ui_type)
             return
         return context.read_using_serializer(serializer)
 
-class _ButtonSerializer(TypeSerializer):
+class ButtonSerializer(TypeSerializer):
     def __init__(self):
         self.string = StringSerializer()
         self.color = ColorSerializer()
@@ -388,11 +388,11 @@ class _ButtonSerializer(TypeSerializer):
         return value
 
 
-_UIBaseSerializer.register_type(
-    "Button", _UIBaseSerializer.ContentType.ebutton, _ButtonSerializer())
+UIBaseSerializer.register_type(
+    "Button", UIBaseSerializer.ContentType.ebutton, ButtonSerializer())
 
 
-class _DropdownItemSerializer(TypeSerializer):
+class DropdownItemSerializer(TypeSerializer):
     def __init__(self):
         self.string = StringSerializer()
 
@@ -417,11 +417,11 @@ class _DropdownItemSerializer(TypeSerializer):
         return value
 
 
-class _DropdownSerializer(TypeSerializer):
+class DropdownSerializer(TypeSerializer):
     def __init__(self):
         self.string = StringSerializer()
         self.items = ArraySerializer()
-        self.items.set_type(_DropdownItemSerializer())
+        self.items.set_type(DropdownItemSerializer())
 
     def version(self):
         return 0
@@ -446,11 +446,11 @@ class _DropdownSerializer(TypeSerializer):
         return value
 
 
-_UIBaseSerializer.register_type(
-    "Dropdown", _UIBaseSerializer.ContentType.edropdown, _DropdownSerializer())
+UIBaseSerializer.register_type(
+    "Dropdown", UIBaseSerializer.ContentType.edropdown, DropdownSerializer())
 
 
-class _ImageSerializer(TypeSerializer):
+class ImageSerializer(TypeSerializer):
     def __init__(self):
         self.data = ArraySerializer()
         self.data.set_type(ByteSerializer())
@@ -502,11 +502,11 @@ class _ImageSerializer(TypeSerializer):
         return value
 
 
-_UIBaseSerializer.register_type(
-    "Image", _UIBaseSerializer.ContentType.eimage, _ImageSerializer())
+UIBaseSerializer.register_type(
+    "Image", UIBaseSerializer.ContentType.eimage, ImageSerializer())
 
 
-class _LabelSerializer(TypeSerializer):
+class LabelSerializer(TypeSerializer):
     def __init__(self):
         self.string = StringSerializer()
         self.color = ColorSerializer()
@@ -558,11 +558,11 @@ class _LabelSerializer(TypeSerializer):
         return value
 
 
-_UIBaseSerializer.register_type(
-    "Label", _UIBaseSerializer.ContentType.elabel, _LabelSerializer())
+UIBaseSerializer.register_type(
+    "Label", UIBaseSerializer.ContentType.elabel, LabelSerializer())
 
 
-class _LayoutNodeSerializer(TypeSerializer):
+class LayoutNodeSerializer(TypeSerializer):
     def __init__(self):
         pass
 
@@ -626,11 +626,11 @@ class _LayoutNodeSerializer(TypeSerializer):
         return layout_node
 
 
-class _LayoutNodeSerializerDeep(TypeSerializer):
+class LayoutNodeSerializerDeep(TypeSerializer):
     def __init__(self):
         self._layout_array = ArraySerializer()
         self._layout_array.set_type(self)
-        self._content_serializer = _UIBaseSerializer()
+        self._content_serializer = UIBaseSerializer()
         self._inited = False
 
     def version(self):
@@ -682,7 +682,7 @@ class _LayoutNodeSerializerDeep(TypeSerializer):
         return result
 
 
-class _LoadingBarSerializer(TypeSerializer):
+class LoadingBarSerializer(TypeSerializer):
     def __init__(self):
         self.string = StringSerializer()
 
@@ -717,11 +717,11 @@ class _LoadingBarSerializer(TypeSerializer):
         return value
 
 
-_UIBaseSerializer.register_type(
-    "LoadingBar", _UIBaseSerializer.ContentType.eloadingBar, _LoadingBarSerializer())
+UIBaseSerializer.register_type(
+    "LoadingBar", UIBaseSerializer.ContentType.eloadingBar, LoadingBarSerializer())
 
 
-class _MenuSerializer(TypeSerializer):
+class MenuSerializer(TypeSerializer):
     def __init__(self):
         self.string = StringSerializer()
 
@@ -752,7 +752,7 @@ class _MenuSerializer(TypeSerializer):
         return menu
 
 
-class _MeshSerializer(TypeSerializer):
+class MeshSerializer(TypeSerializer):
     def __init__(self):
         self.color = ColorSerializer()
 
@@ -781,11 +781,11 @@ class _MeshSerializer(TypeSerializer):
         return value
 
 
-_UIBaseSerializer.register_type(
-    "Mesh", _UIBaseSerializer.ContentType.emesh, _MeshSerializer())
+UIBaseSerializer.register_type(
+    "Mesh", UIBaseSerializer.ContentType.emesh, MeshSerializer())
 
 
-class _SliderSerializer(TypeSerializer):
+class SliderSerializer(TypeSerializer):
     def __init__(self):
         pass
 
@@ -819,11 +819,11 @@ class _SliderSerializer(TypeSerializer):
         return value
 
 
-_UIBaseSerializer.register_type(
-    "Slider", _UIBaseSerializer.ContentType.eslider, _SliderSerializer())
+UIBaseSerializer.register_type(
+    "Slider", UIBaseSerializer.ContentType.eslider, SliderSerializer())
 
 
-class _TextInputSerializer(TypeSerializer):
+class TextInputSerializer(TypeSerializer):
     def __init__(self):
         self.string = StringSerializer()
         self.color = ColorSerializer()
@@ -886,13 +886,13 @@ class _TextInputSerializer(TypeSerializer):
             value._padding_bottom = context.read_float()
         return value
 
-_UIBaseSerializer.register_type(
-    "TextInput", _UIBaseSerializer.ContentType.etextInput, _TextInputSerializer())
+UIBaseSerializer.register_type(
+    "TextInput", UIBaseSerializer.ContentType.etextInput, TextInputSerializer())
 
-class _UIListSerializer(TypeSerializer):
+class UIListSerializer(TypeSerializer):
     def __init__(self):
         self._array = ArraySerializer()
-        self._array.set_type(_LayoutNodeSerializerDeep())
+        self._array.set_type(LayoutNodeSerializerDeep())
 
     def version(self):
         return 1
@@ -927,5 +927,5 @@ class _UIListSerializer(TypeSerializer):
         return value
 
 
-_UIBaseSerializer.register_type(
-    "UIList", _UIBaseSerializer.ContentType.elist, _UIListSerializer())
+UIBaseSerializer.register_type(
+    "UIList", UIBaseSerializer.ContentType.elist, UIListSerializer())

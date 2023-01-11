@@ -1279,7 +1279,7 @@ class UpdateContent(serializer_fields.TypeSerializer):
 
     def __init__(self):
         self._array = serializer_fields.ArraySerializer()
-        self._content = ui.serializers._UIBaseSerializer()
+        self._content = ui.serializers.UIBaseSerializer()
         self._array.set_type(self._content)
 
     def version(self):
@@ -1301,10 +1301,10 @@ class UpdateContent(serializer_fields.TypeSerializer):
 class UpdateMenu(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self.menu = ui.serializers._MenuSerializer()
+        self.menu = ui.serializers.MenuSerializer()
         self.array = serializer_fields.ArraySerializer()
-        self.layout = ui.serializers._LayoutNodeSerializer()
-        self.content = ui.serializers._UIBaseSerializer()
+        self.layout = ui.serializers.LayoutNodeSerializer()
+        self.content = ui.serializers.UIBaseSerializer()
 
     def version(self):
         return 2
@@ -1338,7 +1338,7 @@ class UpdateNode(serializer_fields.TypeSerializer):
 
     def __init__(self):
         self._array = serializer_fields.ArraySerializer()
-        self._node_serializer = ui.serializers._LayoutNodeSerializerDeep()
+        self._node_serializer = ui.serializers.LayoutNodeSerializerDeep()
         self._array.set_type(self._node_serializer)
 
     def version(self):
