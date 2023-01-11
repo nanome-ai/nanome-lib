@@ -1,6 +1,6 @@
 import logging
 from ._hashes import Hashes
-from .._internal import _PluginInstance
+from nanome.api import PluginInstance
 
 from nanome.api.streams import Stream
 from nanome.api.integration import Integration, IntegrationRequest
@@ -21,7 +21,7 @@ def receive_complexes(network, arg, request_id):
 
 
 def complex_updated(network, arg, request_id):
-    _PluginInstance._on_complex_updated(arg[0], arg[1])
+    PluginInstance._on_complex_updated(arg[0], arg[1])
 
 
 def connect(network, arg, request_id):
@@ -126,7 +126,7 @@ def run(network, args, request_id):
 
 
 def selection_changed(network, arg, request_id):
-    _PluginInstance._on_selection_changed(arg[0], arg[1])
+    PluginInstance._on_selection_changed(arg[0], arg[1])
 
 
 def simple_callback_arg_unpack(network, arg, request_id):
