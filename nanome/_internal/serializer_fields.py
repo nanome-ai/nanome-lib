@@ -53,20 +53,13 @@ class TypeSerializer(object):
         pass
 
 
-class ArraySerializer(TypeSerializer):
+class ArraySerializer:
     def __init__(self):
         self._serializer = None
 
-    def version(self):
-        return 0
-
-    def name(self):
-        return "Array"
-
     def serialize(self, version, value, context):
         if self._serializer == None:
-            raise TypeError(
-                'Trying to serialize array without setting content type first')
+            raise TypeError('Trying to serialize array without setting content type first')
 
         context.write_uint(len(value))
         for cur in value:
@@ -74,8 +67,7 @@ class ArraySerializer(TypeSerializer):
 
     def deserialize(self, version, context):
         if self._serializer == None:
-            raise TypeError(
-                'Trying to deserialize array without setting content type first')
+            raise TypeError('Trying to deserialize array without setting content type first')
 
         length = context.read_uint()
         result = []
@@ -88,15 +80,7 @@ class ArraySerializer(TypeSerializer):
         self._serializer = serializer
 
 
-class BoolSerializer(TypeSerializer):
-    def __init__(self):
-        pass
-
-    def version(self):
-        return 0
-
-    def name(self):
-        return "bool"
+class BoolSerializer:
 
     def serialize(self, version, value, context):
         context.write_bool(value)
@@ -105,12 +89,7 @@ class BoolSerializer(TypeSerializer):
         return context.read_bool()
 
 
-class ByteArraySerializer(TypeSerializer):
-    def version(self):
-        return 0
-
-    def name(self):
-        return "ByteArray"
+class ByteArraySerializer:
 
     def serialize(self, version, value, context):
         context.write_byte_array(value)
@@ -119,15 +98,7 @@ class ByteArraySerializer(TypeSerializer):
         return context.read_byte_Array()
 
 
-class ByteSerializer(TypeSerializer):
-    def __init__(self):
-        pass
-
-    def version(self):
-        return 0
-
-    def name(self):
-        return "byte"
+class ByteSerializer:
 
     def serialize(self, version, value, context):
         context.write_byte(value)
@@ -137,18 +108,13 @@ class ByteSerializer(TypeSerializer):
         return byte
 
 
-class CachedImageSerializer(TypeSerializer):
+class CachedImageSerializer:
     cache = set()
     session = 0
 
     def __init__(self):
         self._string = StringSerializer()
 
-    def version(self):
-        return 0
-
-    def name(self):
-        return "CachedImage"
 
     def serialize(self, version, value, context):
         session = CachedImageSerializer.session
@@ -181,15 +147,7 @@ class CachedImageSerializer(TypeSerializer):
             context.read_byte_array()
 
 
-class CharSerializer(TypeSerializer):
-    def __init__(self):
-        pass
-
-    def version(self):
-        return 0
-
-    def name(self):
-        return "char"
+class CharSerializer:
 
     def serialize(self, version, value, context):
         context.write_byte(ord(value[0]))
@@ -198,15 +156,7 @@ class CharSerializer(TypeSerializer):
         return chr(context.read_byte())
 
 
-class ColorSerializer(TypeSerializer):
-    def __init__(self):
-        pass
-
-    def version(self):
-        return 0
-
-    def name(self):
-        return "Color"
+class ColorSerializer:
 
     def serialize(self, version, value, context):
         context.write_uint(value._color)
@@ -216,15 +166,10 @@ class ColorSerializer(TypeSerializer):
         return Color.from_int(context.read_uint())
 
 
-class DictionarySerializer(TypeSerializer):
+class DictionarySerializer:
     def __init__(self):
         self._serializer = None
 
-    def version(self):
-        return 0
-
-    def name(self):
-        return "Dictionary"
 
     def serialize(self, version, value, context):
         if self._serializer == None:
@@ -246,15 +191,10 @@ class DictionarySerializer(TypeSerializer):
         self._serializer.set_type(tuple_serializer)
 
 
-class DirectoryEntrySerializer(TypeSerializer):
+class DirectoryEntrySerializer:
     def __init__(self):
         self.__string = StringSerializer()
 
-    def version(self):
-        return 0
-
-    def name(self):
-        return "DirectoryEntry"
 
     def serialize(self, version, value, context):
         pass
@@ -267,15 +207,7 @@ class DirectoryEntrySerializer(TypeSerializer):
         return result
 
 
-class FileDataSerializer(TypeSerializer):
-    def __init__(self):
-        pass
-
-    def version(self):
-        return 0
-
-    def name(self):
-        return "FileData"
+class FileDataSerializer:
 
     def serialize(self, version, value, context):
         pass
@@ -289,15 +221,10 @@ class FileDataSerializer(TypeSerializer):
         return result
 
 
-class FileSaveDataSerializer(TypeSerializer):
+class FileSaveDataSerializer:
     def __init__(self):
         self.__string = StringSerializer()
 
-    def version(self):
-        return 0
-
-    def name(self):
-        return "FileSaveData"
 
     def serialize(self, version, value, context):
         context.write_using_serializer(self.__string, value.path)
@@ -312,15 +239,7 @@ class FileSaveDataSerializer(TypeSerializer):
         return result
 
 
-class IntSerializer(TypeSerializer):
-    def __init__(self):
-        pass
-
-    def version(self):
-        return 0
-
-    def name(self):
-        return "int"
+class IntSerializer:
 
     def serialize(self, version, value, context):
         context.write_int(value)
@@ -329,15 +248,7 @@ class IntSerializer(TypeSerializer):
         return context.read_int()
 
 
-class LongSerializer(TypeSerializer):
-    def __init__(self):
-        pass
-
-    def version(self):
-        return 0
-
-    def name(self):
-        return "long"
+class LongSerializer:
 
     def serialize(self, version, value, context):
         context.write_long(value)
@@ -346,15 +257,7 @@ class LongSerializer(TypeSerializer):
         return context.read_long()
 
 
-class QuaternionSerializer(TypeSerializer):
-    def __init__(self):
-        pass
-
-    def version(self):
-        return 0
-
-    def name(self):
-        return "Quaternion"
+class QuaternionSerializer:
 
     def serialize(self, version, value, context):
         context.write_float(value._x)
@@ -373,15 +276,10 @@ class QuaternionSerializer(TypeSerializer):
         return quaternion
 
 
-class UnityRotationSerializer(TypeSerializer):
+class UnityRotationSerializer:
     def __init__(self):
         self._Quat = QuaternionSerializer()
 
-    def version(self):
-        return 0
-
-    def name(self):
-        return "UnityRotation"
 
     def serialize(self, version, value, context):
         context.write_using_serializer(self._Quat, value)
@@ -390,15 +288,7 @@ class UnityRotationSerializer(TypeSerializer):
         return context.read_using_serializer(self._Quat)
 
 
-class StringSerializer(TypeSerializer):
-    def __init__(self):
-        pass
-
-    def version(self):
-        return 0
-
-    def name(self):
-        return "string"
+class StringSerializer:
 
     def serialize(self, version, value, context):
         to_write = to_bytes(value, 'utf-8')
@@ -412,16 +302,11 @@ class StringSerializer(TypeSerializer):
         return str
 
 
-class TupleSerializer(TypeSerializer):
+class TupleSerializer:
     def __init__(self, serializer1=None, serializer2=None):
         self._serializer1 = serializer1
         self._serializer2 = serializer2
 
-    def version(self):
-        return 0
-
-    def name(self):
-        return "Tuple"
 
     def serialize(self, version, value, context):
         if self._serializer1 == None or self._serializer2 == None:
@@ -444,15 +329,7 @@ class TupleSerializer(TypeSerializer):
         self._serializer2 = serializer2
 
 
-class Vector3Serializer(TypeSerializer):
-    def __init__(self):
-        pass
-
-    def version(self):
-        return 0
-
-    def name(self):
-        return "Vector3"
+class Vector3Serializer:
 
     def serialize(self, version, value, context):
         context.write_float(value.x)
@@ -467,15 +344,10 @@ class Vector3Serializer(TypeSerializer):
         return Vector3(x, y, z)
 
 
-class UnityPositionSerializer(TypeSerializer):
+class UnityPositionSerializer:
     def __init__(self):
         self._vec3 = Vector3Serializer()
 
-    def version(self):
-        return 0
-
-    def name(self):
-        return "UnityPosition"
 
     def serialize(self, version, value, context):
         context.write_using_serializer(self._vec3, value)

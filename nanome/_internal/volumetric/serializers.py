@@ -1,4 +1,4 @@
-from nanome._internal.util.type_serializers import TypeSerializer, ArraySerializer, ColorSerializer, StringSerializer
+from nanome._internal.serializer_fields import TypeSerializer, ArraySerializer, ColorSerializer, StringSerializer
 
 
 class _UnitCellSerializer(TypeSerializer):

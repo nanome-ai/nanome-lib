@@ -1,8 +1,8 @@
-from nanome._internal.util.type_serializers import StringSerializer, TypeSerializer
+from nanome._internal.serializer_fields import StringSerializer, TypeSerializer
 from . import _Macro
 
 
-class _MacroSerializer(TypeSerializer):
+class MacroSerializer(TypeSerializer):
     def __init__(self):
         self.string = StringSerializer()
 

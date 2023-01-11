@@ -1,4 +1,4 @@
-from nanome._internal.util.type_serializers import (
+from nanome._internal.serializer_fields import (
     ArraySerializer, StringSerializer, ColorSerializer, CharSerializer,
     UnityPositionSerializer, Vector3Serializer, UnityRotationSerializer,
     BoolSerializer, DictionarySerializer, ByteSerializer, TypeSerializer,

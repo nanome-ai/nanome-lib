@@ -7,7 +7,7 @@ from . import callbacks, message_serializers
 from .._internal import enums as command_enums
 from .._internal.network import Data
 from .._internal.network.context import ContextSerialization, ContextDeserialization
-from .._internal.util.type_serializers import TypeSerializer
+from .._internal.serializer_fields import TypeSerializer
 from ._hashes import Hashes
 
 logger = logging.getLogger(__name__)

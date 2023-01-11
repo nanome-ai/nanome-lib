@@ -1,4 +1,4 @@
-from nanome._internal.util.type_serializers import TypeSerializer, ArraySerializer, DictionarySerializer, LongSerializer, ByteArraySerializer, LongSerializer, StringSerializer
+from nanome._internal.serializer_fields import TypeSerializer, ArraySerializer, DictionarySerializer, LongSerializer, ByteArraySerializer, LongSerializer, StringSerializer
 from nanome._internal.structure.serializers import _ComplexSerializer, _AtomSerializer
 
 

@@ -1,4 +1,4 @@
-from nanome._internal.util.type_serializers import CachedImageSerializer
+from nanome._internal.serializer_fields import CachedImageSerializer
 from nanome._internal.logs import LogsManager
 from . import Packet
 import logging

@@ -15,7 +15,7 @@ from timeit import default_timer as timer
 
 from nanome._internal import network
 from nanome._internal.process import ProcessManager
-from nanome._internal.util.type_serializers import TypeSerializer
+from nanome._internal.serializer_fields import TypeSerializer
 from nanome._internal.logs import LogsManager
 
 logger = logging.getLogger(__name__)

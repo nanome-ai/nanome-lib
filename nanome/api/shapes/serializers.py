@@ -1,5 +1,5 @@
 from . import Anchor, Label, Line, Mesh, Sphere
-from nanome._internal.util.type_serializers import TypeSerializer, StringSerializer, UnityPositionSerializer, ColorSerializer, ArraySerializer
+from nanome._internal.serializer_fields import TypeSerializer, StringSerializer, UnityPositionSerializer, ColorSerializer, ArraySerializer
 import os
 import tempfile
 import logging
