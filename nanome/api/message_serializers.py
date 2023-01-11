@@ -154,10 +154,10 @@ class CP(serializer_fields.TypeSerializer):
 class ExportFilesItem(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self.__complex = structure.serializers._ComplexSerializer()
+        self.__complex = structure.serializers.ComplexSerializer()
         self.__string = serializer_fields.StringSerializer()
         self.__dict = serializer_fields.DictionarySerializer()
-        self.__dict.set_types(serializer_fields.LongSerializer(), structure.serializers._AtomSerializer())
+        self.__dict.set_types(serializer_fields.LongSerializer(), structure.serializers.AtomSerializer())
 
     def version(self):
         return 0
@@ -1470,8 +1470,8 @@ class PresenterChange(serializer_fields.TypeSerializer):
 class AddVolume(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self.__complex = structure.serializers._ComplexSerializer()
-        atom_serializer = structure.serializers._AtomSerializer()
+        self.__complex = structure.serializers.ComplexSerializer()
+        atom_serializer = structure.serializers.AtomSerializer()
         long_serializer = serializer_fields.LongSerializer()
         self.__dict = serializer_fields.DictionarySerializer()
         self.__dict.set_types(long_serializer, atom_serializer)
@@ -1521,9 +1521,9 @@ class AddBonds(serializer_fields.TypeSerializer):
 
     def __init__(self):
         self.__array = serializer_fields.ArraySerializer()
-        self.__array.set_type(structure.serializers._ComplexSerializer())
+        self.__array.set_type(structure.serializers.ComplexSerializer())
         self.__dict = serializer_fields.DictionarySerializer()
-        self.__dict.set_types(serializer_fields.LongSerializer(), structure.serializers._AtomSerializer())
+        self.__dict.set_types(serializer_fields.LongSerializer(), structure.serializers.AtomSerializer())
 
     def version(self):
         return 0
@@ -1550,9 +1550,9 @@ class AddDSSP(serializer_fields.TypeSerializer):
 
     def __init__(self):
         self.__array = serializer_fields.ArraySerializer()
-        self.__array.set_type(structure.serializers._ComplexSerializer())
+        self.__array.set_type(structure.serializers.ComplexSerializer())
         self.__dict = serializer_fields.DictionarySerializer()
-        self.__dict.set_types(serializer_fields.LongSerializer(), structure.serializers._AtomSerializer())
+        self.__dict.set_types(serializer_fields.LongSerializer(), structure.serializers.AtomSerializer())
 
     def version(self):
         return 0
@@ -1579,8 +1579,8 @@ class AddToWorkspace(serializer_fields.TypeSerializer):
 
     def __init__(self):
         self.__array = serializer_fields.ArraySerializer()
-        self.__array.set_type(structure.serializers._ComplexSerializer())
-        atom_serializer = structure.serializers._AtomSerializer()
+        self.__array.set_type(structure.serializers.ComplexSerializer())
+        atom_serializer = structure.serializers.AtomSerializer()
         long_serializer = serializer_fields.LongSerializer()
         self.dict = serializer_fields.DictionarySerializer()
         self.dict.set_types(long_serializer, atom_serializer)
@@ -1625,8 +1625,8 @@ class ComplexAddedRemoved(serializer_fields.TypeSerializer):
 class ComplexUpdated(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self.complex_serializer = structure.serializers._ComplexSerializer()
-        atom_serializer = structure.serializers._AtomSerializer()
+        self.complex_serializer = structure.serializers.ComplexSerializer()
+        atom_serializer = structure.serializers.AtomSerializer()
         long_serializer = serializer_fields.LongSerializer()
         self.dict = serializer_fields.DictionarySerializer()
         self.dict.set_types(long_serializer, atom_serializer)
@@ -1753,7 +1753,7 @@ class ReceiveComplexList(serializer_fields.TypeSerializer):
 
     def __init__(self):
         self.array_serializer = serializer_fields.ArraySerializer()
-        self.array_serializer.set_type(structure.serializers._ComplexSerializer())
+        self.array_serializer.set_type(structure.serializers.ComplexSerializer())
 
     def version(self):
         return 0
@@ -1777,8 +1777,8 @@ class ReceiveComplexes(serializer_fields.TypeSerializer):
 
     def __init__(self):
         self.array_serializer = serializer_fields.ArraySerializer()
-        self.array_serializer.set_type(structure.serializers._ComplexSerializer())
-        atom_serializer = structure.serializers._AtomSerializer()
+        self.array_serializer.set_type(structure.serializers.ComplexSerializer())
+        atom_serializer = structure.serializers.AtomSerializer()
         long_serializer = serializer_fields.LongSerializer()
         self.dict = serializer_fields.DictionarySerializer()
         self.dict.set_types(long_serializer, atom_serializer)
@@ -1802,8 +1802,8 @@ class ReceiveComplexes(serializer_fields.TypeSerializer):
 class ReceiveWorkspace(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self.workspace = structure.serializers._WorkspaceSerializer()
-        atom_serializer = structure.serializers._AtomSerializer()
+        self.workspace = structure.serializers.WorkspaceSerializer()
+        atom_serializer = structure.serializers.AtomSerializer()
         long_serializer = serializer_fields.LongSerializer()
         self.dict = serializer_fields.DictionarySerializer()
         self.dict.set_types(long_serializer, atom_serializer)
@@ -1863,10 +1863,10 @@ class RequestSubstructure(serializer_fields.TypeSerializer):
 
     def __init__(self):
         self.array = serializer_fields.ArraySerializer()
-        self.array.set_type(structure.serializers._SubstructureSerializer())
+        self.array.set_type(structure.serializers.SubstructureSerializer())
         self.dict = serializer_fields.DictionarySerializer()
-        self.dict.set_types(serializer_fields.LongSerializer(), structure.serializers._AtomSerializer())
-        self.molecule = structure.serializers._MoleculeSerializer()
+        self.dict.set_types(serializer_fields.LongSerializer(), structure.serializers.AtomSerializer())
+        self.molecule = structure.serializers.MoleculeSerializer()
 
     def version(self):
         return 0
@@ -1914,8 +1914,8 @@ class RequestWorkspace(serializer_fields.TypeSerializer):
 class SelectionChanged(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self.complex_serializer = structure.serializers._ComplexSerializer()
-        atom_serializer = structure.serializers._AtomSerializer()
+        self.complex_serializer = structure.serializers.ComplexSerializer()
+        atom_serializer = structure.serializers.AtomSerializer()
         long_serializer = serializer_fields.LongSerializer()
         self.dict = serializer_fields.DictionarySerializer()
         self.dict.set_types(long_serializer, atom_serializer)
@@ -1966,15 +1966,15 @@ class UpdateStructures(serializer_fields.TypeSerializer):
     def __init__(self, shallow):
         self.array_serializer = serializer_fields.ArraySerializer()
         # setting the shallow flag
-        self.complex_serializer = structure.serializers._ComplexSerializer(shallow)
-        self.molecule_serializer = structure.serializers._MoleculeSerializer(shallow)
-        self.chain_serializer = structure.serializers._ChainSerializer(shallow)
-        self.residue_serializer = structure.serializers._ResidueSerializer(shallow)
-        self.bond_serializer = structure.serializers._BondSerializer(shallow)
-        self.atom_serializer = structure.serializers._AtomSerializerID(shallow)
+        self.complex_serializer = structure.serializers.ComplexSerializer(shallow)
+        self.molecule_serializer = structure.serializers.MoleculeSerializer(shallow)
+        self.chain_serializer = structure.serializers.ChainSerializer(shallow)
+        self.residue_serializer = structure.serializers.ResidueSerializer(shallow)
+        self.bond_serializer = structure.serializers.BondSerializer(shallow)
+        self.atom_serializer = structure.serializers.AtomSerializerID(shallow)
         # atom dict only used by deep
         self.dict = serializer_fields.DictionarySerializer()
-        self.dict.set_types(serializer_fields.LongSerializer(), structure.serializers._AtomSerializer())
+        self.dict.set_types(serializer_fields.LongSerializer(), structure.serializers.AtomSerializer())
 
     def name(self):
         return "UpdateStructures"
@@ -2053,8 +2053,8 @@ class UpdateStructuresDeepDone(serializer_fields.TypeSerializer):
 class UpdateWorkspace(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self.workspace = structure.serializers._WorkspaceSerializer()
-        atom_serializer = structure.serializers._AtomSerializer()
+        self.workspace = structure.serializers.WorkspaceSerializer()
+        atom_serializer = structure.serializers.AtomSerializer()
         long_serializer = serializer_fields.LongSerializer()
         self.dict = serializer_fields.DictionarySerializer()
         self.dict.set_types(long_serializer, atom_serializer)

@@ -1,12 +1,12 @@
 from nanome._internal.serializer_fields import TypeSerializer, ArraySerializer, DictionarySerializer, LongSerializer, ByteArraySerializer, LongSerializer, StringSerializer
-from nanome._internal.structure.serializers import _ComplexSerializer, _AtomSerializer
+from nanome._internal.structure.serializers import ComplexSerializer, AtomSerializer
 
 
 class AddHydrogen(TypeSerializer):
     def __init__(self):
         self.array_serializer = ArraySerializer()
-        self.array_serializer.set_type(_ComplexSerializer())
-        atom_serializer = _AtomSerializer()
+        self.array_serializer.set_type(ComplexSerializer())
+        atom_serializer = AtomSerializer()
         long_serializer = LongSerializer()
         self.dict = DictionarySerializer()
         self.dict.set_types(long_serializer, atom_serializer)
@@ -33,8 +33,8 @@ class AddHydrogen(TypeSerializer):
 class CalculateESP(TypeSerializer):
     def __init__(self):
         self.array_serializer = ArraySerializer()
-        self.array_serializer.set_type(_ComplexSerializer())
-        atom_serializer = _AtomSerializer()
+        self.array_serializer.set_type(ComplexSerializer())
+        atom_serializer = AtomSerializer()
         long_serializer = LongSerializer()
         self.dict = DictionarySerializer()
         self.dict.set_types(long_serializer, atom_serializer)
@@ -98,12 +98,12 @@ class ExportLocations(TypeSerializer):
 class ExportSmiles(TypeSerializer):
     def __init__(self):
         self.complex_array = ArraySerializer()
-        self.complex_array.set_type(_ComplexSerializer())
+        self.complex_array.set_type(ComplexSerializer())
         self.string_array = ArraySerializer()
         self.string_array.set_type(StringSerializer())
 
         self.dict = DictionarySerializer()
-        self.dict.set_types(LongSerializer(), _AtomSerializer())
+        self.dict.set_types(LongSerializer(), AtomSerializer())
 
     def version(self):
         return 0
@@ -123,13 +123,13 @@ class ExportSmiles(TypeSerializer):
 class GenerateMoleculeImage(TypeSerializer):
     def __init__(self):
         self.complex_array = ArraySerializer()
-        self.complex_array.set_type(_ComplexSerializer())
+        self.complex_array.set_type(ComplexSerializer())
 
         self.image_array = ArraySerializer()
         self.image_array.set_type(ByteArraySerializer())
 
         self.dict = DictionarySerializer()
-        self.dict.set_types(LongSerializer(), _AtomSerializer())
+        self.dict.set_types(LongSerializer(), AtomSerializer())
 
     def version(self):
         return 0
@@ -166,12 +166,12 @@ class ImportFile(TypeSerializer):
 class ImportSmiles(TypeSerializer):
     def __init__(self):
         self.complex_array = ArraySerializer()
-        self.complex_array.set_type(_ComplexSerializer())
+        self.complex_array.set_type(ComplexSerializer())
         self.string_array = ArraySerializer()
         self.string_array.set_type(StringSerializer())
 
         self.dict = DictionarySerializer()
-        self.dict.set_types(LongSerializer(), _AtomSerializer())
+        self.dict.set_types(LongSerializer(), AtomSerializer())
 
     def version(self):
         return 0
@@ -194,8 +194,8 @@ class ImportSmiles(TypeSerializer):
 class RemoveHydrogen(TypeSerializer):
     def __init__(self):
         self.array_serializer = ArraySerializer()
-        self.array_serializer.set_type(_ComplexSerializer())
-        atom_serializer = _AtomSerializer()
+        self.array_serializer.set_type(ComplexSerializer())
+        atom_serializer = AtomSerializer()
         long_serializer = LongSerializer()
         self.dict = DictionarySerializer()
         self.dict.set_types(long_serializer, atom_serializer)
@@ -254,8 +254,8 @@ class StopMinimization(TypeSerializer):
 class StructurePrep(TypeSerializer):
     def __init__(self):
         self.array_serializer = ArraySerializer()
-        self.array_serializer.set_type(_ComplexSerializer())
-        atom_serializer = _AtomSerializer()
+        self.array_serializer.set_type(ComplexSerializer())
+        atom_serializer = AtomSerializer()
         long_serializer = LongSerializer()
         self.dict = DictionarySerializer()
         self.dict.set_types(long_serializer, atom_serializer)

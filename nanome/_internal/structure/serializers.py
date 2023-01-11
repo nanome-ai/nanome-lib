@@ -7,7 +7,7 @@ from nanome._internal.serializer_fields import (
 from . import _Atom, _Bond, _Chain, _Complex, _Molecule, _Residue, _Substructure, _Workspace
 
 
-class _AtomSerializer(TypeSerializer):
+class AtomSerializer(TypeSerializer):
     def __init__(self):
         self.color = ColorSerializer()
         self.string = StringSerializer()
@@ -175,7 +175,7 @@ class _AtomSerializer(TypeSerializer):
 # Deserializes the ID and returns the atom from the dict with that ID.
 
 
-class _AtomSerializerID(TypeSerializer):
+class AtomSerializerID(TypeSerializer):
     def version(self):
         return 0
 
@@ -194,10 +194,10 @@ class _AtomSerializerID(TypeSerializer):
         return atom
 
 
-class _BondSerializer(TypeSerializer):
+class BondSerializer(TypeSerializer):
     def __init__(self, shallow=False):
         self.shallow = shallow
-        self.atom_serializer = _AtomSerializerID()
+        self.atom_serializer = AtomSerializerID()
         self.array = ArraySerializer()
         self.bool = BoolSerializer()
         self.byte = ByteSerializer()
@@ -252,11 +252,11 @@ class _BondSerializer(TypeSerializer):
         return bond
 
 
-class _ChainSerializer(TypeSerializer):
+class ChainSerializer(TypeSerializer):
     def __init__(self, shallow=False):
         self.shallow = shallow
         self.array_serializer = ArraySerializer()
-        self.array_serializer.set_type(_ResidueSerializer())
+        self.array_serializer.set_type(ResidueSerializer())
         self.string = StringSerializer()
 
     def version(self):
@@ -284,11 +284,11 @@ class _ChainSerializer(TypeSerializer):
         return chain
 
 
-class _ComplexSerializer(TypeSerializer):
+class ComplexSerializer(TypeSerializer):
     def __init__(self, shallow=False):
         self.shallow = shallow
         self.array = ArraySerializer()
-        self.array.set_type(_MoleculeSerializer())
+        self.array.set_type(MoleculeSerializer())
         self.string = StringSerializer()
 
         self.dictionary = DictionarySerializer()
@@ -378,7 +378,7 @@ class _ComplexSerializer(TypeSerializer):
         return complex
 
 
-class _MoleculeSerializer(TypeSerializer):
+class MoleculeSerializer(TypeSerializer):
     def __init__(self, shallow=False):
         self.shallow = shallow
         self.array = ArraySerializer()
@@ -395,7 +395,7 @@ class _MoleculeSerializer(TypeSerializer):
 
     def serialize(self, version, value, context):
         context.write_long(value._index)
-        self.array.set_type(_ChainSerializer())
+        self.array.set_type(ChainSerializer())
         if (self.shallow):
             context.write_using_serializer(self.array, [])
         else:
@@ -422,7 +422,7 @@ class _MoleculeSerializer(TypeSerializer):
     def deserialize(self, version, context):
         molecule = _Molecule._create()
         molecule._index = context.read_long()
-        self.array.set_type(_ChainSerializer())
+        self.array.set_type(ChainSerializer())
         molecule._set_chains(context.read_using_serializer(self.array))
 
         if version >= 1:
@@ -447,12 +447,12 @@ class _MoleculeSerializer(TypeSerializer):
         return molecule
 
 
-class _ResidueSerializer(TypeSerializer):
+class ResidueSerializer(TypeSerializer):
     def __init__(self, shallow=False):
         self.shallow = shallow
         self.array = ArraySerializer()
-        self.atom = _AtomSerializerID()
-        self.bond = _BondSerializer()
+        self.atom = AtomSerializerID()
+        self.bond = BondSerializer()
         self.color = ColorSerializer()
         self.string = StringSerializer()
         self.char = CharSerializer()
@@ -527,7 +527,7 @@ class _ResidueSerializer(TypeSerializer):
         return residue
 
 
-class _SubstructureSerializer(TypeSerializer):
+class SubstructureSerializer(TypeSerializer):
     def __init__(self):
         self.string = StringSerializer()
         self.array = ArraySerializer()
@@ -555,10 +555,10 @@ class _SubstructureSerializer(TypeSerializer):
         return result
 
 
-class _WorkspaceSerializer(TypeSerializer):
+class WorkspaceSerializer(TypeSerializer):
     def __init__(self):
         self.array = ArraySerializer()
-        self.array.set_type(_ComplexSerializer())
+        self.array.set_type(ComplexSerializer())
         self.vec = Vector3Serializer()
         self.pos = UnityPositionSerializer()
         self.rot = UnityRotationSerializer()
