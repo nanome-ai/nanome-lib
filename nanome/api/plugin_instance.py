@@ -567,25 +567,8 @@ class PluginInstance:
         self.create_writing_stream(atom_indices_list, stream_type, callback)
 
     def _setup(
-            self, session_id, plugin_network, pm_queue_in, pm_queue_out,
-            log_pipe_conn, original_version_table, custom_data, permissions):
-        self.__setup(
-            session_id, plugin_network, pm_queue_in, pm_queue_out,
-            log_pipe_conn, original_version_table, custom_data, permissions)
-        # We assume that a scientist creating their own plugin should not have to remember
-        # to call super()
-        # _setup is called by the Plugin during the process launch. If init hasn't been properly run,
-        # call it here.
-        if not hasattr(self, 'integration'):
-            # Call base class init first.
-            PluginInstance.__init__(self)
-            # re-init child classes, so that their overrides take priority
-            self.__init__()
-    
-    def __setup(
-        self, session_id, plugin_network, pm_queue_in, pm_queue_out, log_pipe_conn,
+        self, session_id, plugin_network, pm_queue_in, pm_queue_out,log_pipe_conn,
             original_version_table, custom_data, permissions):
-        # TODO: Merge with _setup
         self._menus = {}
         self._run_text = "Run"
         self._run_usable = True
@@ -600,6 +583,15 @@ class PluginInstance:
         self._log_pipe_conn = log_pipe_conn
         self._network.send_connect(Messages.connect, [Packet._compression_type(), original_version_table])
         logger.debug("Plugin constructed for session {}".format(session_id))
+        # We assume that a scientist creating their own plugin should not have to remember
+        # to call super()
+        # _setup is called by the Plugin during the process launch. If init hasn't been properly run,
+        # call it here.
+        if not hasattr(self, 'integration'):
+            # Call base class init first.
+            PluginInstance.__init__(self)
+            # re-init child classes, so that their overrides take priority
+            self.__init__()
 
     @classmethod
     def _save_callback(cls, id, callback):
