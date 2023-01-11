@@ -42,7 +42,7 @@ class PluginLoggingTestCase(unittest.TestCase):
         nanome_logger.handlers = []
         testing_logger.handlers = []
 
-    @patch('nanome._internal.plugin._Plugin._run')
+    @patch('nanome.api.Plugin._run')
     @patch('nanome._internal.network.NetInstance')
     @patch('nanome._internal.logs.NTSLoggingHandler.handle')
     def test_nts_handler_called(self, handle_mock, *args):
@@ -60,7 +60,7 @@ class PluginLoggingTestCase(unittest.TestCase):
         Logs.message('This should be forwarded to NTS.')
         handle_mock.assert_called()
 
-    @patch('nanome._internal.plugin._Plugin._run')
+    @patch('nanome.api.Plugin._run')
     @patch('nanome._internal.network.NetInstance')
     @patch('nanome._internal.logs.NTSLoggingHandler.handle')
     def test_nts_handler_not_called(self, *args):
@@ -81,7 +81,7 @@ class PluginLoggingTestCase(unittest.TestCase):
         nts_handler = self.plugin._logs_manager.nts_handler
         self.assertTrue(isinstance(nts_handler, logging.NullHandler))
 
-    @patch('nanome._internal.plugin._Plugin._run')
+    @patch('nanome.api.Plugin._run')
     @patch('nanome._internal.network.NetInstance')
     def test_file_handler_called(self, *args):
         """Assert if write_log_file is True, the log_file_handler is utilized."""
@@ -98,7 +98,7 @@ class PluginLoggingTestCase(unittest.TestCase):
         Logs.message('Log file handler should be called.')
         self.plugin._logs_manager.log_file_handler.handle.assert_called()
 
-    @patch('nanome._internal.plugin._Plugin._run')
+    @patch('nanome.api.Plugin._run')
     @patch('nanome._internal.network.NetInstance')
     def test_file_handler_not_called(self, *args):
         """Assert if write_log_file is False, the log_file_handler is not utilized."""
@@ -113,7 +113,7 @@ class PluginLoggingTestCase(unittest.TestCase):
         self.plugin._logs_manager.log_file_handler.handle = MagicMock()
         Logs.message('Log file should not be called')
 
-    @patch('nanome._internal.plugin._Plugin._loop')
+    @patch('nanome.api.Plugin._loop')
     @patch('nanome._internal.network.NetInstance.connect')
     @patch('nanome._internal.network.NetInstance.send')
     def test_nts_logger_handler(self, send_mock, *args):
@@ -122,7 +122,7 @@ class PluginLoggingTestCase(unittest.TestCase):
             self.plugin.run(self.host, self.port, self.key)
         send_mock.assert_called()
 
-    @patch('nanome._internal.plugin._Plugin._run')
+    @patch('nanome.api.Plugin._run')
     @patch('nanome._internal.network.NetInstance')
     def test_console_handler_called(self, *args):
         """Assert logs are always logged to the console."""
