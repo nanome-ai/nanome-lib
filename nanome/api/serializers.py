@@ -29,8 +29,7 @@ class CommandMessageSerializer(object):
         self._register_messages(message_serializers_list)
 
     def serialize_message(self, request_id, message_type, arg, version_table, expects_response):
-        context = ContextSerialization(
-            self._plugin_id, version_table, packet_debugging)
+        context = ContextSerialization(self._plugin_id, version_table, packet_debugging)
         context.write_uint(request_id)
         command_hash = command_enums.Hashes.MessageHashes[message_type]
         context.write_uint(command_hash)

@@ -34,8 +34,6 @@ class _Plugin(object):
     _custom_data = None
 
     def __init__(self, name, description, tags=None, has_advanced=False, permissions=None, integrations=None):
-        from nanome.api.serializers import CommandMessageSerializer
-        self.__serializer = CommandMessageSerializer()
         tags = tags or []
         permissions = permissions or []
         integrations = integrations or []

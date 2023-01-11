@@ -4,6 +4,7 @@ from . import _DefaultPlugin
 from nanome._internal import _Plugin
 from nanome._internal.logs import LogsManager
 from nanome._internal.process import ProcessManager
+from nanome.api.serializers import CommandMessageSerializer
 from nanome.util.logs import Logs
 from nanome.util import config
 
@@ -16,6 +17,8 @@ class Plugin(_Plugin):
     When a user activates a Plugin, this class creates a PluginInstance object
     connected to the user's Nanome session.
     """
+
+    __serializer = CommandMessageSerializer()
 
     def __init__(self, name, description, tags=None, has_advanced=False, permissions=None, integrations=None, version=None):
         """
