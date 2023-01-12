@@ -39,7 +39,7 @@ class Plugin:
     connected to the user's Nanome session.
     """
 
-    __serializer = CommandMessageSerializer()
+    _serializer = CommandMessageSerializer()
     _plugin_id = -1
     _custom_data = None
 
@@ -301,26 +301,6 @@ class Plugin:
     def post_run(self, value):
         self._post_run = value
 
-    def _run(self):
-        # set_start_method ensures consistent process behavior between Windows and Linux
-        if sys.version_info.major >= 3 and sys.version_info.minor >= 4:
-            multiprocessing.set_start_method('spawn', force=True)
-
-        if os.name == "nt":
-            signal.signal(signal.SIGBREAK, self.__on_termination_signal)
-        else:
-            signal.signal(signal.SIGTERM, self.__on_termination_signal)
-
-        if self._pre_run is not None:
-            self._pre_run()
-
-        self._description['auth'] = self.__read_key()
-        self._process_manager = ProcessManager()
-
-        self.__reconnect_attempt = 0
-        self.__connect()
-        self._loop()
-
     @classmethod
     def _run_plugin_instance(
         cls, plugin_instance_class, session_id, net_queue_in, net_queue_out,
@@ -352,6 +332,132 @@ class Plugin:
         LogsManager.configure_child_process(plugin_instance)
         logger.debug("Starting plugin")
         plugin_instance._run()
+    
+    def _run(self):
+        # set_start_method ensures consistent process behavior between Windows and Linux
+        if sys.version_info.major >= 3 and sys.version_info.minor >= 4:
+            multiprocessing.set_start_method('spawn', force=True)
+
+        if os.name == "nt":
+            signal.signal(signal.SIGBREAK, self.__on_termination_signal)
+        else:
+            signal.signal(signal.SIGTERM, self.__on_termination_signal)
+
+        if self._pre_run is not None:
+            self._pre_run()
+
+        self._description['auth'] = self.__read_key()
+        self._process_manager = ProcessManager()
+
+        self.__reconnect_attempt = 0
+        self._connect()
+        self._loop()
+
+    def _connect(self):
+        """Create network Connection to NTS, and start listening for packets."""
+        self._network = network.NetInstance(self, self.__class__._on_packet_received)
+        if self._network.connect(self._host, self._port):
+            if self._plugin_id >= 0:
+                plugin_id = self._plugin_id
+            else:
+                plugin_id = 0
+            packet = network.Packet()
+            packet.set(0, network.Packet.packet_type_plugin_connection, plugin_id)
+            packet.write_string(json.dumps(self._description))
+            self._network.send(packet)
+            self.connected = True
+            self.__reconnect_attempt = 0
+            self.__waiting_keep_alive = False
+            self.__last_keep_alive = timer()
+            for session in self._sessions.values():
+                session._net_plugin = self._network
+            return True
+        else:
+            self.__disconnection_time = timer()
+            self.__reconnect_attempt += 1
+            return False
+
+    def _loop(self):
+        to_remove = []
+        try:
+            while True:
+                now = timer()
+
+                if self.connected is False:
+                    reconnect_wait = min(2 ** self.__reconnect_attempt, MAX_RECONNECT_WAIT)
+                    elapsed = now - self.__disconnection_time
+                    if elapsed >= reconnect_wait:
+                        logger.info("Trying to reconnect...")
+                        if self._connect() is False:
+                            if self.__reconnect_attempt == 3:
+                                self.__disconnect()
+                            continue
+                    else:
+                        time.sleep(reconnect_wait - elapsed)
+                        continue
+                if self._network.receive() is False:
+                    self.connected = False
+                    self.__disconnection_time = timer()
+                    self._network.disconnect()
+                    continue
+
+                if self.__waiting_keep_alive:
+                    if now - self.__last_keep_alive >= KEEP_ALIVE_TIMEOUT:
+                        self.connected = False
+                        self.__disconnection_time = timer()
+                        continue
+                elif now - self.__last_keep_alive >= KEEP_ALIVE_TIME_INTERVAL and self._plugin_id >= 0:
+                    self.__last_keep_alive = now
+                    self.__waiting_keep_alive = True
+                    packet = network.Packet()
+                    packet.set(self._plugin_id, network.Packet.packet_type_keep_alive, 0)
+                    self._network.send(packet)
+
+                del to_remove[:]
+                for id, session in self._sessions.items():
+                    if session._read_from_plugin() is False:
+                        session.close_pipes()
+                        to_remove.append(id)
+                for id in to_remove:
+                    self._sessions[id]._send_disconnection_message(self._plugin_id)
+                    del self._sessions[id]
+                self._process_manager.update()
+        except KeyboardInterrupt:
+            self.__exit()
+
+    def _start_session_process(self, session_id, version_table):
+        """Setup Queues and networking for PluginInstance, run session process."""
+        if session_id in self._sessions:  # If session_id already exists, close it first ()
+            logger.info("Closing session ID {} because a new session connected with the same ID".format(session_id))
+            self._sessions[session_id].signal_and_close_pipes()
+
+        net_queue_in = multiprocessing.Queue()
+        net_queue_out = multiprocessing.Queue()
+        pm_queue_in = multiprocessing.Queue()
+        pm_queue_out = multiprocessing.Queue()
+        session = network.Session(
+            session_id, self._network, self._process_manager, self._logs_manager,
+            net_queue_in, net_queue_out, pm_queue_in, pm_queue_out)
+        permissions = self._description["permissions"]
+        log_pipe_conn = self._logs_manager.child_pipe_conn
+        process = multiprocessing.Process(
+            target=self._run_plugin_instance,
+            args=(
+                self._plugin_class, session_id, net_queue_in, net_queue_out,
+                pm_queue_in, pm_queue_out, log_pipe_conn, self._serializer,
+                self._plugin_id, version_table, TypeSerializer.get_version_table(),
+                self._custom_data, permissions
+            )
+        )
+
+        # Appending random string to process name makes tracking unique sessions easier
+        random_str = ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))
+        process.name = "Session-{}-{}".format(session_id, random_str)
+        process.start()
+        session.plugin_process = process
+        self._sessions[session_id] = session
+        extra = {'session_id': session_id}
+        logger.info("Registered new session: {}".format(session_id), extra=extra)
 
     def __read_key(self):
         if not self._key:
@@ -374,8 +480,8 @@ class Plugin:
             #   Fix 5/27/2021 - Jeremie: We need to always check for session registration in order to fix timeout issues
             #   When NTS forces disconnection because of plugin list change, session_id still exists in self._sessions,
             #   even though it was disconnected for Nanome
-            if self.__serializer.try_register_session(packet.payload) is True:
-                received_version_table, _, _ = self.__serializer.deserialize_command(packet.payload, None)
+            if self._serializer.try_register_session(packet.payload) is True:
+                received_version_table, _, _ = self._serializer.deserialize_command(packet.payload, None)
                 version_table = TypeSerializer.get_best_version_table(received_version_table)
                 self.__on_client_connection(session_id, version_table)
                 return
@@ -473,78 +579,6 @@ class Plugin:
                 process.send_signal(break_signal)
                 break
 
-    def __connect(self):
-        """Create network Connection to NTS, and start listening for packets."""
-        self._network = network.NetInstance(self, self.__class__._on_packet_received)
-        if self._network.connect(self._host, self._port):
-            if self._plugin_id >= 0:
-                plugin_id = self._plugin_id
-            else:
-                plugin_id = 0
-            packet = network.Packet()
-            packet.set(0, network.Packet.packet_type_plugin_connection, plugin_id)
-            packet.write_string(json.dumps(self._description))
-            self._network.send(packet)
-            self.connected = True
-            self.__reconnect_attempt = 0
-            self.__waiting_keep_alive = False
-            self.__last_keep_alive = timer()
-            for session in self._sessions.values():
-                session._net_plugin = self._network
-            return True
-        else:
-            self.__disconnection_time = timer()
-            self.__reconnect_attempt += 1
-            return False
-
-    def _loop(self):
-        to_remove = []
-        try:
-            while True:
-                now = timer()
-
-                if self.connected is False:
-                    reconnect_wait = min(2 ** self.__reconnect_attempt, MAX_RECONNECT_WAIT)
-                    elapsed = now - self.__disconnection_time
-                    if elapsed >= reconnect_wait:
-                        logger.info("Trying to reconnect...")
-                        if self.__connect() is False:
-                            if self.__reconnect_attempt == 3:
-                                self.__disconnect()
-                            continue
-                    else:
-                        time.sleep(reconnect_wait - elapsed)
-                        continue
-                if self._network.receive() is False:
-                    self.connected = False
-                    self.__disconnection_time = timer()
-                    self._network.disconnect()
-                    continue
-
-                if self.__waiting_keep_alive:
-                    if now - self.__last_keep_alive >= KEEP_ALIVE_TIMEOUT:
-                        self.connected = False
-                        self.__disconnection_time = timer()
-                        continue
-                elif now - self.__last_keep_alive >= KEEP_ALIVE_TIME_INTERVAL and self._plugin_id >= 0:
-                    self.__last_keep_alive = now
-                    self.__waiting_keep_alive = True
-                    packet = network.Packet()
-                    packet.set(self._plugin_id, network.Packet.packet_type_keep_alive, 0)
-                    self._network.send(packet)
-
-                del to_remove[:]
-                for id, session in self._sessions.items():
-                    if session._read_from_plugin() is False:
-                        session.close_pipes()
-                        to_remove.append(id)
-                for id in to_remove:
-                    self._sessions[id]._send_disconnection_message(self._plugin_id)
-                    del self._sessions[id]
-                self._process_manager.update()
-        except KeyboardInterrupt:
-            self.__exit()
-
     def __disconnect(self):
         to_remove = []
         for id in self._sessions.keys():
@@ -566,40 +600,6 @@ class Plugin:
 
     def __on_client_connection(self, session_id, version_table):
         self._start_session_process(session_id, version_table)
-
-    def _start_session_process(self, session_id, version_table):
-        """Setup Queues and networking for PluginInstance, run session process."""
-        if session_id in self._sessions:  # If session_id already exists, close it first ()
-            logger.info("Closing session ID {} because a new session connected with the same ID".format(session_id))
-            self._sessions[session_id].signal_and_close_pipes()
-
-        net_queue_in = multiprocessing.Queue()
-        net_queue_out = multiprocessing.Queue()
-        pm_queue_in = multiprocessing.Queue()
-        pm_queue_out = multiprocessing.Queue()
-        session = network.Session(
-            session_id, self._network, self._process_manager, self._logs_manager,
-            net_queue_in, net_queue_out, pm_queue_in, pm_queue_out)
-        permissions = self._description["permissions"]
-        log_pipe_conn = self._logs_manager.child_pipe_conn
-        process = multiprocessing.Process(
-            target=self._run_plugin_instance,
-            args=(
-                self._plugin_class, session_id, net_queue_in, net_queue_out,
-                pm_queue_in, pm_queue_out, log_pipe_conn, self.__serializer,
-                self._plugin_id, version_table, TypeSerializer.get_version_table(),
-                self._custom_data, permissions
-            )
-        )
-
-        # Appending random string to process name makes tracking unique sessions easier
-        random_str = ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))
-        process.name = "Session-{}-{}".format(session_id, random_str)
-        process.start()
-        session.plugin_process = process
-        self._sessions[session_id] = session
-        extra = {'session_id': session_id}
-        logger.info("Registered new session: {}".format(session_id), extra=extra)
 
     def __logs_request(self, packet):
         try:
