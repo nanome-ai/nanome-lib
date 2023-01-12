@@ -2,7 +2,7 @@ import importlib
 import logging
 import struct
 import traceback
-from . import callbacks
+from ..util import simple_callbacks
 from ._hashes import Hashes
 from nanome._internal import enums as command_enums
 from nanome._internal.network import Data
@@ -127,7 +127,7 @@ for module_str in registered_modules:
     # Get registered commands from each module
     module = importlib.import_module(module_str)
     module_commands = getattr(module, 'registered_commands', False)
-    if not module_commands:
+    if module_commands is False:
         logger.warning('No registerd commands found in {}, Skipping'.format(module_str))
         continue
     registered_commands += module_commands

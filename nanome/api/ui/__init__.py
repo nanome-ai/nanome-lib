@@ -20,7 +20,7 @@ from . import serializers
 from . import io, messages, callbacks
 
 from nanome._internal.enums import Commands
-from nanome.api import callbacks as base_callbacks
+from nanome.util import simple_callbacks 
 
 registered_commands = [
     (Commands.menu_toggle, messages.MenuCallback(), callbacks.menu_toggled),
@@ -34,5 +34,5 @@ registered_commands = [
     (Commands.image_hold, messages.ImageCallback(), callbacks.image_held),
     (Commands.image_release, messages.ImageCallback(), callbacks.image_released),
     (Commands.dropdown_item_click, messages.DropdownCallback(), callbacks.dropdown_item_clicked),
-    (Commands.menu_transform_response, messages.GetMenuTransformResponse(), base_callbacks.simple_callback_arg_unpack),
+    (Commands.menu_transform_response, messages.GetMenuTransformResponse(), simple_callbacks.simple_callback_arg_unpack),
 ]
