@@ -8,7 +8,7 @@ from nanome._internal import enums as command_enums
 from nanome._internal.network import Data
 from nanome._internal.network.context import ContextSerialization, ContextDeserialization
 from nanome._internal.serializer_fields import TypeSerializer
-from nanome.api import structure
+from nanome.api import structure, ui
 from ._hashes import Hashes
 
 
@@ -130,18 +130,18 @@ command_serializer_callback_list = (
     # Volume
     (commands_enum.add_volume_done, message_serializers.AddVolumeDone(), callbacks.simple_callback_no_arg),
     # ui
-    (commands_enum.menu_toggle, message_serializers.MenuCallback(), callbacks.menu_toggled),
-    (commands_enum.button_press, message_serializers.ButtonCallback(), callbacks.button_pressed),
-    (commands_enum.button_hover, message_serializers.ButtonCallback(), callbacks.button_hover),
-    (commands_enum.slider_release, message_serializers.SliderCallback(), callbacks.slider_released),
-    (commands_enum.slider_change, message_serializers.SliderCallback(), callbacks.slider_changed),
-    (commands_enum.text_submit, message_serializers.TextInputCallback(), callbacks.text_submit),
-    (commands_enum.text_change, message_serializers.TextInputCallback(), callbacks.text_changed),
-    (commands_enum.image_press, message_serializers.ImageCallback(), callbacks.image_pressed),
-    (commands_enum.image_hold, message_serializers.ImageCallback(), callbacks.image_held),
-    (commands_enum.image_release, message_serializers.ImageCallback(), callbacks.image_released),
-    (commands_enum.dropdown_item_click, message_serializers.DropdownCallback(), callbacks.dropdown_item_clicked),
-    (commands_enum.menu_transform_response, message_serializers.GetMenuTransformResponse(), callbacks.simple_callback_arg_unpack),
+    (commands_enum.menu_toggle, ui.messages.MenuCallback(), ui.callbacks.menu_toggled),
+    (commands_enum.button_press, ui.messages.ButtonCallback(), ui.callbacks.button_pressed),
+    (commands_enum.button_hover, ui.messages.ButtonCallback(), ui.callbacks.button_hover),
+    (commands_enum.slider_release, ui.messages.SliderCallback(), ui.callbacks.slider_released),
+    (commands_enum.slider_change, ui.messages.SliderCallback(), ui.callbacks.slider_changed),
+    (commands_enum.text_submit, ui.messages.TextInputCallback(), ui.callbacks.text_submit),
+    (commands_enum.text_change, ui.messages.TextInputCallback(), ui.callbacks.text_changed),
+    (commands_enum.image_press, ui.messages.ImageCallback(), ui.callbacks.image_pressed),
+    (commands_enum.image_hold, ui.messages.ImageCallback(), ui.callbacks.image_held),
+    (commands_enum.image_release, ui.messages.ImageCallback(), ui.callbacks.image_released),
+    (commands_enum.dropdown_item_click, ui.messages.DropdownCallback(), ui.callbacks.dropdown_item_clicked),
+    (commands_enum.menu_transform_response, ui.messages.GetMenuTransformResponse(), callbacks.simple_callback_arg_unpack),
     # files
     (commands_enum.export_files_result, message_serializers.ExportFiles(), callbacks.simple_callback_arg),
     (commands_enum.print_working_directory_response, message_serializers.PWD(), callbacks.simple_callback_arg_unpack),
@@ -204,13 +204,13 @@ message_serializers_list = (
     # volume
     (messages_enum.add_volume, message_serializers.AddVolume()),
     # ui
-    (messages_enum.menu_update, message_serializers.UpdateMenu()),
-    (messages_enum.content_update, message_serializers.UpdateContent()),
-    (messages_enum.node_update, message_serializers.UpdateNode()),
-    (messages_enum.menu_transform_set, message_serializers.SetMenuTransform()),
-    (messages_enum.menu_transform_request, message_serializers.GetMenuTransform()),
-    (messages_enum.notification_send, message_serializers.SendNotification()),
-    (messages_enum.hook_ui_callback, message_serializers.UIHook()),
+    (messages_enum.menu_update, ui.messages.UpdateMenu()),
+    (messages_enum.content_update, ui.messages.UpdateContent()),
+    (messages_enum.node_update, ui.messages.UpdateNode()),
+    (messages_enum.menu_transform_set, ui.messages.SetMenuTransform()),
+    (messages_enum.menu_transform_request, ui.messages.GetMenuTransform()),
+    (messages_enum.notification_send, ui.messages.SendNotification()),
+    (messages_enum.hook_ui_callback, ui.messages.UIHook()),
     # files
     (messages_enum.print_working_directory, message_serializers.PWD()),
     (messages_enum.cd, message_serializers.CD()),
