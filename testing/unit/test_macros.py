@@ -3,7 +3,7 @@ import os
 import unittest
 
 from nanome.api import macro
-from nanome._internal.enums import Messages
+from nanome.api.serializers import CommandMessageSerializer
 from nanome._internal.network import PluginNetwork
 from nanome.api import PluginInstance
 from unittest.mock import MagicMock
@@ -94,8 +94,9 @@ class MacroTestCase(unittest.TestCase):
         with open(version_table_file, 'r') as f:
             version_table = json.load(f)
         
+        serializer = CommandMessageSerializer()
         # Mock args that are passed to setup plugin instance networking
-        plugin = session_id = queue_in = queue_out = serializer = plugin_id = MagicMock()
+        plugin = session_id = queue_in = queue_out = plugin_id = MagicMock()
         self.network = PluginNetwork(plugin, session_id, queue_in, queue_out, serializer, plugin_id, version_table)
         self.macro = macro.Macro(title="test Macro", logic=self.test_macro)
 
