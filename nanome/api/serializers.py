@@ -8,7 +8,7 @@ from nanome._internal import enums as command_enums
 from nanome._internal.network import Data
 from nanome._internal.network.context import ContextSerialization, ContextDeserialization
 from nanome._internal.serializer_fields import TypeSerializer
-from nanome.api import structure, ui
+from nanome.api import files, structure, ui
 from ._hashes import Hashes
 
 
@@ -143,17 +143,17 @@ command_serializer_callback_list = (
     (commands_enum.dropdown_item_click, ui.messages.DropdownCallback(), ui.callbacks.dropdown_item_clicked),
     (commands_enum.menu_transform_response, ui.messages.GetMenuTransformResponse(), callbacks.simple_callback_arg_unpack),
     # files
-    (commands_enum.export_files_result, message_serializers.ExportFiles(), callbacks.simple_callback_arg),
-    (commands_enum.print_working_directory_response, message_serializers.PWD(), callbacks.simple_callback_arg_unpack),
-    (commands_enum.cd_response, message_serializers.CD(), callbacks.simple_callback_arg),
-    (commands_enum.ls_response, message_serializers.LS(), callbacks.simple_callback_arg_unpack),
-    (commands_enum.mv_response, message_serializers.MV(), callbacks.simple_callback_arg),
-    (commands_enum.cp_response, message_serializers.CP(), callbacks.simple_callback_arg),
-    (commands_enum.get_response, message_serializers.Get(), callbacks.simple_callback_arg_unpack),
-    (commands_enum.put_response, message_serializers.Put(), callbacks.simple_callback_arg),
-    (commands_enum.rm_response, message_serializers.RM(), callbacks.simple_callback_arg),
-    (commands_enum.rmdir_response, message_serializers.RMDir(), callbacks.simple_callback_arg),
-    (commands_enum.mkdir_response, message_serializers.MKDir(), callbacks.simple_callback_arg),
+    (commands_enum.export_files_result, files.messages.ExportFiles(), callbacks.simple_callback_arg),
+    (commands_enum.print_working_directory_response, files.messages.PWD(), callbacks.simple_callback_arg_unpack),
+    (commands_enum.cd_response, files.messages.CD(), callbacks.simple_callback_arg),
+    (commands_enum.ls_response, files.messages.LS(), callbacks.simple_callback_arg_unpack),
+    (commands_enum.mv_response, files.messages.MV(), callbacks.simple_callback_arg),
+    (commands_enum.cp_response, files.messages.CP(), callbacks.simple_callback_arg),
+    (commands_enum.get_response, files.messages.Get(), callbacks.simple_callback_arg_unpack),
+    (commands_enum.put_response, files.messages.Put(), callbacks.simple_callback_arg),
+    (commands_enum.rm_response, files.messages.RM(), callbacks.simple_callback_arg),
+    (commands_enum.rmdir_response, files.messages.RMDir(), callbacks.simple_callback_arg),
+    (commands_enum.mkdir_response, files.messages.MKDir(), callbacks.simple_callback_arg),
     # streams
     (commands_enum.stream_create_done, message_serializers.CreateStreamResult(), callbacks.receive_create_stream_result),
     (commands_enum.stream_feed, message_serializers.FeedStream(), callbacks.feed_stream),
@@ -170,11 +170,11 @@ command_serializer_callback_list = (
     (commands_enum.set_shape_result, message_serializers.SetShape(), callbacks.simple_callback_arg_unpack),
     (commands_enum.delete_shape_result, message_serializers.DeleteShape(), callbacks.simple_callback_arg),
     # others
-    (commands_enum.load_file_done, message_serializers.LoadFileDone(), callbacks.simple_callback_arg),
+    (commands_enum.load_file_done, files.messages.LoadFileDone(), callbacks.simple_callback_arg),
+    (commands_enum.directory_response, files.messages.DirectoryRequest(), callbacks.simple_callback_arg),
+    (commands_enum.file_response, files.messages.FileRequest(), callbacks.simple_callback_arg),
+    (commands_enum.file_save_done, files.messages.FileSave(), callbacks.simple_callback_arg),
     (commands_enum.integration, message_serializers.Integration(), callbacks.integration),
-    (commands_enum.directory_response, message_serializers.DirectoryRequest(), callbacks.simple_callback_arg),
-    (commands_enum.file_response, message_serializers.FileRequest(), callbacks.simple_callback_arg),
-    (commands_enum.file_save_done, message_serializers.FileSave(), callbacks.simple_callback_arg),
 )
 
 
@@ -212,16 +212,16 @@ message_serializers_list = (
     (messages_enum.notification_send, ui.messages.SendNotification()),
     (messages_enum.hook_ui_callback, ui.messages.UIHook()),
     # files
-    (messages_enum.print_working_directory, message_serializers.PWD()),
-    (messages_enum.cd, message_serializers.CD()),
-    (messages_enum.ls, message_serializers.LS()),
-    (messages_enum.mv, message_serializers.MV()),
-    (messages_enum.cp, message_serializers.CP()),
-    (messages_enum.get, message_serializers.Get()),
-    (messages_enum.put, message_serializers.Put()),
-    (messages_enum.rm, message_serializers.RM()),
-    (messages_enum.rmdir, message_serializers.RMDir()),
-    (messages_enum.mkdir, message_serializers.MKDir()),
+    (messages_enum.print_working_directory, files.messages.PWD()),
+    (messages_enum.cd, files.messages.CD()),
+    (messages_enum.ls, files.messages.LS()),
+    (messages_enum.mv, files.messages.MV()),
+    (messages_enum.cp, files.messages.CP()),
+    (messages_enum.get, files.messages.Get()),
+    (messages_enum.put, files.messages.Put()),
+    (messages_enum.rm, files.messages.RM()),
+    (messages_enum.rmdir, files.messages.RMDir()),
+    (messages_enum.mkdir, files.messages.MKDir()),
     # macros
     (messages_enum.run_macro, message_serializers.RunMacro()),
     (messages_enum.save_macro, message_serializers.SaveMacro()),
@@ -240,14 +240,14 @@ message_serializers_list = (
     (messages_enum.delete_shape, message_serializers.DeleteShape()),
     # others
     (messages_enum.open_url, message_serializers.OpenURL()),
-    (messages_enum.load_file, message_serializers.LoadFile()),
+    (messages_enum.load_file, files.messages.LoadFile()),
     (messages_enum.integration, message_serializers.Integration()),
     (messages_enum.set_skybox, message_serializers.SetSkybox()),
     (messages_enum.apply_color_scheme, message_serializers.ApplyColorScheme()),
     # files deprecated
-    (messages_enum.directory_request, message_serializers.DirectoryRequest()),
-    (messages_enum.file_request, message_serializers.FileRequest()),
-    (messages_enum.file_save, message_serializers.FileSave()),
-    (messages_enum.export_files, message_serializers.ExportFiles()),
+    (messages_enum.directory_request, files.messages.DirectoryRequest()),
+    (messages_enum.file_request, files.messages.FileRequest()),
+    (messages_enum.file_save, files.messages.FileSave()),
+    (messages_enum.export_files, files.messages.ExportFiles()),
     (messages_enum.plugin_list_button_set, message_serializers.SetPluginListButton()),
 )
