@@ -1,3 +1,11 @@
+import logging
+
+from nanome.api.integration import Integration, IntegrationRequest
+
+
+logger = logging.getLogger(__name__)
+
+
 def simple_callback_arg_unpack(network, arg, request_id):
     network._call(request_id, *arg)
 
