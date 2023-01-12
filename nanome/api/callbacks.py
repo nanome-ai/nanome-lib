@@ -1,7 +1,6 @@
 import logging
 from ._hashes import Hashes
 
-from nanome.api.streams import Stream
 from nanome.api.integration import Integration, IntegrationRequest
 
 
@@ -21,10 +20,6 @@ def integration(network, args, request_id):
     request = IntegrationRequest(args[0], args[1], args[2], network)
     name = Hashes.HashToIntegrationName[args[1]]
     Integration._call(integration, name, request)
-
-
-def presenter_change(network, arg, request_id):
-    network._on_presenter_change()
 
 
 def run(network, args, request_id):

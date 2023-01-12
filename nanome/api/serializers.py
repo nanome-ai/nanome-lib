@@ -8,7 +8,7 @@ from nanome._internal import enums as command_enums
 from nanome._internal.network import Data
 from nanome._internal.network.context import ContextSerialization, ContextDeserialization
 from nanome._internal.serializer_fields import TypeSerializer
-from nanome.api import files, macro, shapes, streams, structure, ui
+from nanome.api import files, macro, shapes, streams, structure, ui, user
 from ._hashes import Hashes
 
 
@@ -163,8 +163,8 @@ command_serializer_callback_list = (
     (commands_enum.get_macros_response, macro.messages.GetMacrosResponse(), callbacks.simple_callback_arg),
     (commands_enum.run_macro_result, macro.messages.RunMacro(), callbacks.simple_callback_arg),
     # Presenter
-    (commands_enum.presenter_info_response, message_serializers.GetPresenterInfoResponse(), callbacks.simple_callback_arg),
-    (commands_enum.presenter_change, message_serializers.PresenterChange(), callbacks.presenter_change),
+    (commands_enum.presenter_info_response, user.messages.GetPresenterInfoResponse(), callbacks.simple_callback_arg),
+    (commands_enum.presenter_change, user.messages.PresenterChange(), user.callbacks.presenter_change),
     (commands_enum.controller_transforms_response, message_serializers.GetControllerTransformsResponse(), callbacks.simple_callback_arg_unpack),
     # Shape
     (commands_enum.set_shape_result, shapes.messages.SetShape(), callbacks.simple_callback_arg_unpack),
@@ -185,6 +185,9 @@ messages_enum = command_enums.Messages
 message_serializers_list = (
     # control
     (messages_enum.connect, message_serializers.Connect()),
+    (messages_enum.controller_transforms_request, message_serializers.GetControllerTransforms()),
+    (messages_enum.open_url, message_serializers.OpenURL()),
+    (messages_enum.set_skybox, message_serializers.SetSkybox()),
     # workspace
     (messages_enum.workspace_update, structure.messages.UpdateWorkspace()),
     (messages_enum.structures_deep_update, structure.messages.UpdateStructures(False)),
@@ -201,6 +204,7 @@ message_serializers_list = (
     (messages_enum.hook_selection_changed, structure.messages.SelectionChangedHook()),
     (messages_enum.compute_hbonds, structure.messages.ComputeHBonds()),
     (messages_enum.substructure_request, structure.messages.RequestSubstructure()),
+    (messages_enum.apply_color_scheme, message_serializers.ApplyColorScheme()),
     # volume
     (messages_enum.add_volume, message_serializers.AddVolume()),
     # ui
@@ -233,17 +237,14 @@ message_serializers_list = (
     (messages_enum.stream_feed, streams.messages.FeedStream()),
     (messages_enum.stream_destroy, streams.messages.DestroyStream()),
     # Presenter
-    (messages_enum.presenter_info_request, message_serializers.GetPresenterInfo()),
-    (messages_enum.controller_transforms_request, message_serializers.GetControllerTransforms()),
+    (messages_enum.presenter_info_request, user.messages.GetPresenterInfo()),
     # Shape
     (messages_enum.set_shape, shapes.messages.SetShape()),
     (messages_enum.delete_shape, shapes.messages.DeleteShape()),
     # others
-    (messages_enum.open_url, message_serializers.OpenURL()),
     (messages_enum.load_file, files.messages.LoadFile()),
+    # Integration
     (messages_enum.integration, message_serializers.Integration()),
-    (messages_enum.set_skybox, message_serializers.SetSkybox()),
-    (messages_enum.apply_color_scheme, message_serializers.ApplyColorScheme()),
     # files deprecated
     (messages_enum.directory_request, files.messages.DirectoryRequest()),
     (messages_enum.file_request, files.messages.FileRequest()),
