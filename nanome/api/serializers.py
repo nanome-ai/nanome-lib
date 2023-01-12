@@ -8,7 +8,7 @@ from nanome._internal import enums as command_enums
 from nanome._internal.network import Data
 from nanome._internal.network.context import ContextSerialization, ContextDeserialization
 from nanome._internal.serializer_fields import TypeSerializer
-from nanome.api import files, macro, structure, ui
+from nanome.api import files, macro, streams, structure, ui
 from ._hashes import Hashes
 
 
@@ -155,10 +155,10 @@ command_serializer_callback_list = (
     (commands_enum.rmdir_response, files.messages.RMDir(), callbacks.simple_callback_arg),
     (commands_enum.mkdir_response, files.messages.MKDir(), callbacks.simple_callback_arg),
     # streams
-    (commands_enum.stream_create_done, message_serializers.CreateStreamResult(), callbacks.receive_create_stream_result),
-    (commands_enum.stream_feed, message_serializers.FeedStream(), callbacks.feed_stream),
-    (commands_enum.stream_interrupt, message_serializers.InterruptStream(), callbacks.receive_interrupt_stream),
-    (commands_enum.stream_feed_done, message_serializers.FeedStreamDone(), callbacks.simple_callback_no_arg),
+    (commands_enum.stream_create_done, streams.messages.CreateStreamResult(), callbacks.receive_create_stream_result),
+    (commands_enum.stream_feed, streams.messages.FeedStream(), callbacks.feed_stream),
+    (commands_enum.stream_interrupt, streams.messages.InterruptStream(), callbacks.receive_interrupt_stream),
+    (commands_enum.stream_feed_done, streams.messages.FeedStreamDone(), callbacks.simple_callback_no_arg),
     # macros
     (commands_enum.get_macros_response, macro.messages.GetMacrosResponse(), callbacks.simple_callback_arg),
     (commands_enum.run_macro_result, macro.messages.RunMacro(), callbacks.simple_callback_arg),
@@ -229,9 +229,9 @@ message_serializers_list = (
     (messages_enum.get_macros, macro.messages.GetMacros()),
     (messages_enum.stop_macro, macro.messages.StopMacro()),
     # streams
-    (messages_enum.stream_create, message_serializers.CreateStream()),
-    (messages_enum.stream_feed, message_serializers.FeedStream()),
-    (messages_enum.stream_destroy, message_serializers.DestroyStream()),
+    (messages_enum.stream_create, streams.messages.CreateStream()),
+    (messages_enum.stream_feed, streams.messages.FeedStream()),
+    (messages_enum.stream_destroy, streams.messages.DestroyStream()),
     # Presenter
     (messages_enum.presenter_info_request, message_serializers.GetPresenterInfo()),
     (messages_enum.controller_transforms_request, message_serializers.GetControllerTransforms()),
