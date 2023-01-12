@@ -11,6 +11,7 @@ from unittest.mock import MagicMock
 
 test_assets = os.getcwd() + ("/testing/test_assets")
 
+
 class MacroTestCase(unittest.TestCase):
 
     def setUp(self):
@@ -109,7 +110,7 @@ class MacroTestCase(unittest.TestCase):
     def test_get_plugin_identifier(self):
         # identifier should be 12 random characters
         self.assertEqual(len(self.macro.get_plugin_identifier()), 12)
-    
+
     def test_run(self):
         PluginNetwork.queue_out = MagicMock()
         PluginInstance._instance = MagicMock()
@@ -127,7 +128,7 @@ class MacroTestCase(unittest.TestCase):
         self.macro.save()
         new_command_id = PluginNetwork._instance._command_id
         self.assertEqual(starting_command_id + 1, new_command_id)
-    
+
     def test_delete(self):
         PluginNetwork.queue_out = MagicMock()
         all_users = True
@@ -135,14 +136,14 @@ class MacroTestCase(unittest.TestCase):
         self.macro.delete(all_users)
         new_command_id = PluginNetwork._instance._command_id
         self.assertEqual(starting_command_id + 1, new_command_id)
-    
+
     def test_stop(self):
         PluginNetwork.queue_out = MagicMock()
         starting_command_id = PluginNetwork._instance._command_id
         self.macro.stop()
         new_command_id = PluginNetwork._instance._command_id
         self.assertEqual(starting_command_id + 1, new_command_id)
-    
+
     def test_get_live(self):
         PluginNetwork.queue_out = MagicMock()
         PluginInstance._instance = MagicMock()
