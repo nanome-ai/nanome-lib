@@ -3,11 +3,9 @@ import logging
 import struct
 import traceback
 from ._hashes import Hashes
-from nanome._internal import enums as command_enums
+from nanome._internal.enums import Commands
 from nanome._internal.network import Data
 from nanome._internal.network.context import ContextSerialization, ContextDeserialization
-from nanome._internal.serializer_fields import TypeSerializer
-from nanome.api import control, files, integration, macro, room, shapes, streams, structure, ui, user, volumetric
 
 
 logger = logging.getLogger(__name__)
@@ -17,7 +15,7 @@ packet_debugging = False
 
 __all__ = ["CommandMessageSerializer", 'registered_commands', 'registered_messages']
 
-# Modules which contain messages to register with the serializer
+# Modules which contain commands and messages to register with the serializer
 registered_modules = [
     'nanome.api.control',
     'nanome.api.files',
@@ -36,7 +34,6 @@ registered_modules = [
 class CommandMessageSerializer(object):
     _commands = dict()
     _messages = dict()
-    command_enums = dict()
     _command_callbacks = dict()
 
     def __init__(self):
@@ -117,9 +114,12 @@ class CommandMessageSerializer(object):
             cls._messages[Hashes.MessageHashes[command]] = serializer
 
 
-# -------------Commands----------- #
-# Commands are incoming (nanome -> plugin)
-Commands = command_enums.Commands
+"""
+Register commands and messages with the serializer
+
+Messages are outgoing (plugin -> nanome)
+Commands are incoming (nanome -> plugin)
+"""
 
 registered_commands = []
 registered_messages = []
@@ -135,8 +135,3 @@ for module_str in registered_modules:
         registered_commands += module_commands
     if module_messages:
         registered_messages += module_messages
-
-# -------------Messages----------- #
-# Messages are outgoing (plugin -> nanome)
-TypeSerializer.register_string_raw(MESSAGE_VERSION_KEY, 1)
-Messages = command_enums.Messages
