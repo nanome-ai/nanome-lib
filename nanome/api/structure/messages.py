@@ -1,8 +1,6 @@
 import types
 from nanome._internal import serializer_fields
-from nanome._internal.enums import Commands
-from . import serializers, callbacks
-from nanome.api import callbacks as base_callbacks
+from . import serializers, models
 
 
 class AddToWorkspace(serializer_fields.TypeSerializer):
@@ -142,13 +140,13 @@ class PositionStructures(serializer_fields.TypeSerializer):
         atom_ids = []
 
         for val in value:
-            if isinstance(val, structure.models._Atom):
+            if isinstance(val, models.Atom):
                 atom_ids.append(val._index)
-            elif isinstance(val, structure.models._Bond):
+            elif isinstance(val, models.Bond):
                 atom_ids.append(val._atom1._index)
                 atom_ids.append(val._atom2._index)
             # all other base objects implement the atoms generator
-            elif isinstance(val, structure.models._Base):
+            elif isinstance(val, models.Base):
                 for atom in val.atoms:
                     atom_ids.append(atom._index)
 
@@ -423,17 +421,17 @@ class UpdateStructures(serializer_fields.TypeSerializer):
         complexes = []
 
         for val in value:
-            if isinstance(val, structure.models._Atom):
+            if isinstance(val, models.Atom):
                 atoms.append(val)
-            if isinstance(val, structure.models._Bond):
+            if isinstance(val, models.Bond):
                 bonds.append(val)
-            if isinstance(val, structure.models._Residue):
+            if isinstance(val, models.Residue):
                 residues.append(val)
-            if isinstance(val, structure.models._Chain):
+            if isinstance(val, models.Chain):
                 chains.append(val)
-            if isinstance(val, structure.models._Molecule):
+            if isinstance(val, models.Molecule):
                 molecules.append(val)
-            if isinstance(val, structure.models._Complex):
+            if isinstance(val, models.Complex):
                 complexes.append(val)
 
         subcontext = context.create_sub_context()
@@ -581,20 +579,3 @@ class ApplyColorScheme(serializer_fields.TypeSerializer):
 
     def deserialize(self, version, context):
         raise NotImplementedError
-    
-registered_commands = [
-    (Commands.workspace_response, ReceiveWorkspace(), base_callbacks.simple_callback_arg),
-    (Commands.complex_add, ComplexAddedRemoved(), callbacks.complex_added),
-    (Commands.complex_remove, ComplexAddedRemoved(), callbacks.complex_removed),
-    (Commands.complex_list_response, ReceiveComplexList(), base_callbacks.simple_callback_arg),
-    (Commands.complexes_response, ReceiveComplexes(), callbacks.receive_complexes),
-    (Commands.structures_deep_update_done, UpdateStructuresDeepDone(), base_callbacks.simple_callback_no_arg),
-    (Commands.add_to_workspace_done, AddToWorkspace(), base_callbacks.simple_callback_arg),
-    (Commands.position_structures_done, PositionStructuresDone(), base_callbacks.simple_callback_no_arg),
-    (Commands.dssp_add_done, AddDSSP(), base_callbacks.simple_callback_arg),
-    (Commands.bonds_add_done, AddBonds(), base_callbacks.simple_callback_arg),
-    (Commands.complex_updated, ComplexUpdated(), callbacks.complex_updated),
-    (Commands.selection_changed, SelectionChanged(), callbacks.selection_changed),
-    (Commands.compute_hbonds_done, ComputeHBonds(), base_callbacks.simple_callback_no_arg),
-    (Commands.substructure_response, RequestSubstructure(), base_callbacks.simple_callback_arg),
-]

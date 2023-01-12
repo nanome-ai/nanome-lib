@@ -2,7 +2,6 @@ from nanome._internal import serializer_fields as serializer_fields
 from nanome._internal.enum_utils import IntEnum
 from . import serializers
 
-
 class ButtonCallback(serializer_fields.TypeSerializer):
 
     def __init__(self):
@@ -349,4 +348,3 @@ class SendNotification(serializer_fields.TypeSerializer):
 
     def deserialize(self, version, context):
         raise NotImplementedError
-

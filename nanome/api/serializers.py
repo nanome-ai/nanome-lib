@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 MESSAGE_VERSION_KEY = "ToClientProtocol"
 packet_debugging = False
 
-__all__ = ["CommandMessageSerializer", 'command_serializer_callback_list', 'message_serializers_list']
+__all__ = ["CommandMessageSerializer", 'registered_commands', 'message_serializers_list']
 
 # Modules which contain messages to register with the serializer
 registered_modules = [
@@ -43,7 +43,7 @@ class CommandMessageSerializer(object):
     def __init__(self):
         self._plugin_id = 0
         Hashes.init_hashes()
-        self._register_commands(command_serializer_callback_list)
+        self._register_commands(registered_commands)
         self._register_messages(message_serializers_list)
 
     def serialize_message(self, request_id, message_type, arg, version_table, expects_response):
@@ -104,11 +104,11 @@ class CommandMessageSerializer(object):
 
     def try_register_session(self, payload):
         command_hash = Data.uint_unpack(payload, 4)[0]
-        return command_hash == Hashes.CommandHashes[commands_enum.connect]
+        return command_hash == Hashes.CommandHashes[Commands.connect]
 
     @classmethod
-    def _register_commands(cls, command_serializer_callback_list):
-        for command, serializer, callback in command_serializer_callback_list:
+    def _register_commands(cls, registered_commands):
+        for command, serializer, callback in registered_commands:
             cls._commands[Hashes.CommandHashes[command]] = serializer
             cls._command_callbacks[Hashes.CommandHashes[command]] = callback
 
@@ -120,7 +120,7 @@ class CommandMessageSerializer(object):
 
 # -------------Commands----------- #
 # Commands are incoming (nanome -> plugin)
-commands_enum = command_enums.Commands
+Commands = command_enums.Commands
 
 registered_commands = []
 for module_str in registered_modules:
@@ -131,57 +131,6 @@ for module_str in registered_modules:
         logger.warning('No registerd commands found in {}, Skipping'.format(module_str))
         continue
     registered_commands += module_commands
-
-command_serializer_callback_list = [
-    *registered_commands,
-    # Volume
-    (commands_enum.add_volume_done, volumetric.messages.AddVolumeDone(), callbacks.simple_callback_no_arg),
-    # ui
-    (commands_enum.menu_toggle, ui.messages.MenuCallback(), ui.callbacks.menu_toggled),
-    (commands_enum.button_press, ui.messages.ButtonCallback(), ui.callbacks.button_pressed),
-    (commands_enum.button_hover, ui.messages.ButtonCallback(), ui.callbacks.button_hover),
-    (commands_enum.slider_release, ui.messages.SliderCallback(), ui.callbacks.slider_released),
-    (commands_enum.slider_change, ui.messages.SliderCallback(), ui.callbacks.slider_changed),
-    (commands_enum.text_submit, ui.messages.TextInputCallback(), ui.callbacks.text_submit),
-    (commands_enum.text_change, ui.messages.TextInputCallback(), ui.callbacks.text_changed),
-    (commands_enum.image_press, ui.messages.ImageCallback(), ui.callbacks.image_pressed),
-    (commands_enum.image_hold, ui.messages.ImageCallback(), ui.callbacks.image_held),
-    (commands_enum.image_release, ui.messages.ImageCallback(), ui.callbacks.image_released),
-    (commands_enum.dropdown_item_click, ui.messages.DropdownCallback(), ui.callbacks.dropdown_item_clicked),
-    (commands_enum.menu_transform_response, ui.messages.GetMenuTransformResponse(), callbacks.simple_callback_arg_unpack),
-    # files
-    (commands_enum.export_files_result, files.messages.ExportFiles(), callbacks.simple_callback_arg),
-    (commands_enum.print_working_directory_response, files.messages.PWD(), callbacks.simple_callback_arg_unpack),
-    (commands_enum.cd_response, files.messages.CD(), callbacks.simple_callback_arg),
-    (commands_enum.ls_response, files.messages.LS(), callbacks.simple_callback_arg_unpack),
-    (commands_enum.mv_response, files.messages.MV(), callbacks.simple_callback_arg),
-    (commands_enum.cp_response, files.messages.CP(), callbacks.simple_callback_arg),
-    (commands_enum.get_response, files.messages.Get(), callbacks.simple_callback_arg_unpack),
-    (commands_enum.put_response, files.messages.Put(), callbacks.simple_callback_arg),
-    (commands_enum.rm_response, files.messages.RM(), callbacks.simple_callback_arg),
-    (commands_enum.rmdir_response, files.messages.RMDir(), callbacks.simple_callback_arg),
-    (commands_enum.mkdir_response, files.messages.MKDir(), callbacks.simple_callback_arg),
-    # streams
-    (commands_enum.stream_create_done, streams.messages.CreateStreamResult(), streams.callbacks.receive_create_stream_result),
-    (commands_enum.stream_feed, streams.messages.FeedStream(), streams.callbacks.feed_stream),
-    (commands_enum.stream_interrupt, streams.messages.InterruptStream(), streams.callbacks.receive_interrupt_stream),
-    (commands_enum.stream_feed_done, streams.messages.FeedStreamDone(), callbacks.simple_callback_no_arg),
-    # macros
-    (commands_enum.get_macros_response, macro.messages.GetMacrosResponse(), callbacks.simple_callback_arg),
-    (commands_enum.run_macro_result, macro.messages.RunMacro(), callbacks.simple_callback_arg),
-    # Presenter
-    (commands_enum.presenter_info_response, user.messages.GetPresenterInfoResponse(), callbacks.simple_callback_arg),
-    (commands_enum.presenter_change, user.messages.PresenterChange(), user.callbacks.presenter_change),
-    # Shape
-    (commands_enum.set_shape_result, shapes.messages.SetShape(), callbacks.simple_callback_arg_unpack),
-    (commands_enum.delete_shape_result, shapes.messages.DeleteShape(), callbacks.simple_callback_arg),
-    # others
-    (commands_enum.load_file_done, files.messages.LoadFileDone(), callbacks.simple_callback_arg),
-    (commands_enum.directory_response, files.messages.DirectoryRequest(), callbacks.simple_callback_arg),
-    (commands_enum.file_response, files.messages.FileRequest(), callbacks.simple_callback_arg),
-    (commands_enum.file_save_done, files.messages.FileSave(), callbacks.simple_callback_arg),
-    (commands_enum.integration, integration.messages.Integration(), integration.callbacks.integration),
-]
 
 
 # -------------Messages----------- #

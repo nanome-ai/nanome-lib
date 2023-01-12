@@ -1,8 +1,16 @@
-from . import *
-from .shape import Shape
-from .sphere import Sphere
-from .line import Line
-from .label import Label
-from .anchor import Anchor
-from .mesh import Mesh
-from . import serializers, messages
+from . import *  # noqa: F401
+from .shape import Shape  # noqa: F401
+from .sphere import Sphere  # noqa: F401
+from .line import Line  # noqa: F401
+from .label import Label  # noqa: F401
+from .anchor import Anchor  # noqa: F401
+from .mesh import Mesh  # noqa: F401
+from . import serializers, messages  # noqa: F401
+
+from nanome._internal.enums import Commands
+from nanome.api import callbacks as base_callbacks
+
+registered_commands = [
+    (Commands.set_shape_result, messages.SetShape(),  base_callbacks.simple_callback_arg_unpack),
+    (Commands.delete_shape_result, messages.DeleteShape(),  base_callbacks.simple_callback_arg),
+]
