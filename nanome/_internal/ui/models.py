@@ -73,14 +73,14 @@ class _Button(_UIBase):
         self._pressed_callback = func
 
     def _register_hover_callback(self, func):
-        from nanome.api import message_serializers
+        from . import messages
         message_callbacks = enums.Messages
         if func == None and self._hover_callback == None:  # Low hanging filter but there may be others
             return
         try:
             network.PluginNetwork._instance.send(
                 message_callbacks.hook_ui_callback,
-                (message_serializers.UIHook.Type.button_hover, self._content_id),
+                (messages.UIHook.Type.button_hover, self._content_id),
                 False)
         except:
             logger.error("Could not register hook")

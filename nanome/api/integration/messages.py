@@ -1,4 +1,6 @@
 from nanome._internal.serializer_fields import TypeSerializer, ArraySerializer, DictionarySerializer, LongSerializer, ByteArraySerializer, LongSerializer, StringSerializer
+from nanome._internal.enums import IntegrationCommands
+from nanome.api._hashes import Hashes
 from nanome.api.structure.serializers import ComplexSerializer, AtomSerializer
 
 
@@ -277,3 +279,41 @@ class StructurePrep(TypeSerializer):
         context.payload["Atom"] = context.read_using_serializer(self.dict)
         complexes = context.read_using_serializer(self.array_serializer)
         return complexes
+
+class Integration(TypeSerializer):
+    __integrations = {
+        Hashes.IntegrationHashes[IntegrationCommands.hydrogen_add]: AddHydrogen(),
+        Hashes.IntegrationHashes[IntegrationCommands.hydrogen_remove]: RemoveHydrogen(),
+        Hashes.IntegrationHashes[IntegrationCommands.structure_prep]: StructurePrep(),
+        Hashes.IntegrationHashes[IntegrationCommands.calculate_esp]: CalculateESP(),
+        Hashes.IntegrationHashes[IntegrationCommands.minimization_start]: StartMinimization(),
+        Hashes.IntegrationHashes[IntegrationCommands.minimization_stop]: StopMinimization(),
+        Hashes.IntegrationHashes[IntegrationCommands.export_locations]: ExportLocations(),
+        Hashes.IntegrationHashes[IntegrationCommands.export_file]: ExportFile(),
+        Hashes.IntegrationHashes[IntegrationCommands.import_file]: ImportFile(),
+        Hashes.IntegrationHashes[IntegrationCommands.generate_molecule_image]: GenerateMoleculeImage(),
+        Hashes.IntegrationHashes[IntegrationCommands.export_smiles]: ExportSmiles(),
+        Hashes.IntegrationHashes[IntegrationCommands.import_smiles]: ImportSmiles(
+        )
+    }
+
+    def __init__(self):
+        pass
+
+    def version(self):
+        return 0
+
+    def name(self):
+        return "Integration"
+
+    def serialize(self, version, value, context):
+        context.write_uint(value[0])
+        context.write_uint(value[1])
+        context.write_using_serializer(
+            Integration.__integrations[value[1]], value[2])
+
+    def deserialize(self, version, context):
+        requestID = context.read_uint()
+        type = context.read_uint()
+        arg = context.read_using_serializer(Integration.__integrations[type])
+        return (requestID, type, arg)

@@ -2,14 +2,13 @@ import logging
 import struct
 import traceback
 
-from . import callbacks, message_serializers
-
+from . import callbacks
+from ._hashes import Hashes
 from nanome._internal import enums as command_enums
 from nanome._internal.network import Data
 from nanome._internal.network.context import ContextSerialization, ContextDeserialization
 from nanome._internal.serializer_fields import TypeSerializer
-from nanome.api import control, files, macro, room, shapes, streams, structure, ui, user, volumetric
-from ._hashes import Hashes
+from nanome.api import control, files, integration, macro, room, shapes, streams, structure, ui, user, volumetric
 
 
 logger = logging.getLogger(__name__)
@@ -101,7 +100,7 @@ class CommandMessageSerializer(object):
     @classmethod
     def _register_messages(cls, command_serializer_list):
         for command, serializer in command_serializer_list:
-            cls._messages[callbacks.Hashes.MessageHashes[command]] = serializer
+            cls._messages[Hashes.MessageHashes[command]] = serializer
 
 
 # -------------Commands----------- #
@@ -110,7 +109,7 @@ commands_enum = command_enums.Commands
 command_serializer_callback_list = (
     # control
     (commands_enum.connect, control.messages.Connect(), control.callbacks.connect),
-    (commands_enum.run, control.messages.Run(), callbacks.run),
+    (commands_enum.run, control.messages.Run(), control.callbacks.run),
     (commands_enum.advanced_settings, control.messages.AdvancedSettings(), control.callbacks.advanced_settings),
     (commands_enum.controller_transforms_response, control.messages.GetControllerTransformsResponse(), callbacks.simple_callback_arg_unpack),
     # workspace
@@ -174,7 +173,7 @@ command_serializer_callback_list = (
     (commands_enum.directory_response, files.messages.DirectoryRequest(), callbacks.simple_callback_arg),
     (commands_enum.file_response, files.messages.FileRequest(), callbacks.simple_callback_arg),
     (commands_enum.file_save_done, files.messages.FileSave(), callbacks.simple_callback_arg),
-    (commands_enum.integration, message_serializers.Integration(), callbacks.integration),
+    (commands_enum.integration, integration.messages.Integration(), integration.callbacks.integration),
 )
 
 
@@ -245,7 +244,7 @@ message_serializers_list = (
     # others
     (messages_enum.load_file, files.messages.LoadFile()),
     # Integration
-    (messages_enum.integration, message_serializers.Integration()),
+    (messages_enum.integration, integration.messages.Integration()),
     # files deprecated
     (messages_enum.directory_request, files.messages.DirectoryRequest()),
     (messages_enum.file_request, files.messages.FileRequest()),
