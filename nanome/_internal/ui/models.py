@@ -73,7 +73,7 @@ class _Button(_UIBase):
         self._pressed_callback = func
 
     def _register_hover_callback(self, func):
-        from . import messages
+        from nanome.api.ui import messages
         message_callbacks = enums.Messages
         if func == None and self._hover_callback == None:  # Low hanging filter but there may be others
             return
