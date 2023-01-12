@@ -19,7 +19,7 @@ from . import serializers
 # folders
 from . import io, messages, callbacks
 
-from nanome._internal.enums import Commands
+from nanome._internal.enums import Commands, Messages
 from nanome.util import simple_callbacks 
 
 registered_commands = [
@@ -35,4 +35,14 @@ registered_commands = [
     (Commands.image_release, messages.ImageCallback(), callbacks.image_released),
     (Commands.dropdown_item_click, messages.DropdownCallback(), callbacks.dropdown_item_clicked),
     (Commands.menu_transform_response, messages.GetMenuTransformResponse(), simple_callbacks.simple_callback_arg_unpack),
+]
+
+registered_messages = [
+    (Messages.menu_update, messages.UpdateMenu()),
+    (Messages.content_update, messages.UpdateContent()),
+    (Messages.node_update, messages.UpdateNode()),
+    (Messages.menu_transform_set, messages.SetMenuTransform()),
+    (Messages.menu_transform_request, messages.GetMenuTransform()),
+    (Messages.notification_send, messages.SendNotification()),
+    (Messages.hook_ui_callback, messages.UIHook()),
 ]

@@ -1,7 +1,7 @@
-from . import messages, models
+from . import messages, models  # noqa: F401
 
 from nanome.util import simple_callbacks 
-from nanome._internal.enums import Commands
+from nanome._internal.enums import Commands, Messages
 
 
 registered_commands = [
@@ -20,4 +20,23 @@ registered_commands = [
     (Commands.directory_response, messages.DirectoryRequest(), simple_callbacks.simple_callback_arg),
     (Commands.file_response, messages.FileRequest(), simple_callbacks.simple_callback_arg),
     (Commands.file_save_done, messages.FileSave(), simple_callbacks.simple_callback_arg),
+]
+
+registered_messages = [
+    (Messages.print_working_directory, messages.PWD()),
+    (Messages.cd, messages.CD()),
+    (Messages.ls, messages.LS()),
+    (Messages.mv, messages.MV()),
+    (Messages.cp, messages.CP()),
+    (Messages.get, messages.Get()),
+    (Messages.put, messages.Put()),
+    (Messages.rm, messages.RM()),
+    (Messages.rmdir, messages.RMDir()),
+    (Messages.mkdir, messages.MKDir()),
+    (Messages.load_file, messages.LoadFile()),
+    # Deprecated list
+    (Messages.directory_request, messages.DirectoryRequest()),
+    (Messages.file_request, messages.FileRequest()),
+    (Messages.file_save, messages.FileSave()),
+    (Messages.export_files, messages.ExportFiles()),
 ]
