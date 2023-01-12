@@ -8,7 +8,7 @@ from nanome._internal import enums as command_enums
 from nanome._internal.network import Data
 from nanome._internal.network.context import ContextSerialization, ContextDeserialization
 from nanome._internal.serializer_fields import TypeSerializer
-from nanome.api import files, macro, shapes, streams, structure, ui, user
+from nanome.api import files, macro, shapes, streams, structure, ui, user, volumetric
 from ._hashes import Hashes
 
 
@@ -128,7 +128,7 @@ command_serializer_callback_list = (
     (commands_enum.compute_hbonds_done, structure.messages.ComputeHBonds(), callbacks.simple_callback_no_arg),
     (commands_enum.substructure_response, structure.messages.RequestSubstructure(), callbacks.simple_callback_arg),
     # Volume
-    (commands_enum.add_volume_done, message_serializers.AddVolumeDone(), callbacks.simple_callback_no_arg),
+    (commands_enum.add_volume_done, volumetric.messages.AddVolumeDone(), callbacks.simple_callback_no_arg),
     # ui
     (commands_enum.menu_toggle, ui.messages.MenuCallback(), ui.callbacks.menu_toggled),
     (commands_enum.button_press, ui.messages.ButtonCallback(), ui.callbacks.button_pressed),
@@ -206,7 +206,7 @@ message_serializers_list = (
     (messages_enum.substructure_request, structure.messages.RequestSubstructure()),
     (messages_enum.apply_color_scheme, message_serializers.ApplyColorScheme()),
     # volume
-    (messages_enum.add_volume, message_serializers.AddVolume()),
+    (messages_enum.add_volume, volumetric.messages.AddVolume()),
     # ui
     (messages_enum.menu_update, ui.messages.UpdateMenu()),
     (messages_enum.content_update, ui.messages.UpdateContent()),
