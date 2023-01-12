@@ -1,3 +1,4 @@
+import types
 from nanome._internal import serializer_fields as fields
 from . import serializers
 

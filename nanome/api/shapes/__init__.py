@@ -5,4 +5,4 @@ from .line import Line
 from .label import Label
 from .anchor import Anchor
 from .mesh import Mesh
-from . import serializers
+from . import serializers, messages

@@ -8,7 +8,7 @@ from nanome._internal import enums as command_enums
 from nanome._internal.network import Data
 from nanome._internal.network.context import ContextSerialization, ContextDeserialization
 from nanome._internal.serializer_fields import TypeSerializer
-from nanome.api import files, macro, streams, structure, ui
+from nanome.api import files, macro, shapes, streams, structure, ui
 from ._hashes import Hashes
 
 
@@ -167,8 +167,8 @@ command_serializer_callback_list = (
     (commands_enum.presenter_change, message_serializers.PresenterChange(), callbacks.presenter_change),
     (commands_enum.controller_transforms_response, message_serializers.GetControllerTransformsResponse(), callbacks.simple_callback_arg_unpack),
     # Shape
-    (commands_enum.set_shape_result, message_serializers.SetShape(), callbacks.simple_callback_arg_unpack),
-    (commands_enum.delete_shape_result, message_serializers.DeleteShape(), callbacks.simple_callback_arg),
+    (commands_enum.set_shape_result, shapes.messages.SetShape(), callbacks.simple_callback_arg_unpack),
+    (commands_enum.delete_shape_result, shapes.messages.DeleteShape(), callbacks.simple_callback_arg),
     # others
     (commands_enum.load_file_done, files.messages.LoadFileDone(), callbacks.simple_callback_arg),
     (commands_enum.directory_response, files.messages.DirectoryRequest(), callbacks.simple_callback_arg),
@@ -236,8 +236,8 @@ message_serializers_list = (
     (messages_enum.presenter_info_request, message_serializers.GetPresenterInfo()),
     (messages_enum.controller_transforms_request, message_serializers.GetControllerTransforms()),
     # Shape
-    (messages_enum.set_shape, message_serializers.SetShape()),
-    (messages_enum.delete_shape, message_serializers.DeleteShape()),
+    (messages_enum.set_shape, shapes.messages.SetShape()),
+    (messages_enum.delete_shape, shapes.messages.DeleteShape()),
     # others
     (messages_enum.open_url, message_serializers.OpenURL()),
     (messages_enum.load_file, files.messages.LoadFile()),
