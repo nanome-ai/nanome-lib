@@ -8,7 +8,7 @@ from nanome._internal import enums as command_enums
 from nanome._internal.network import Data
 from nanome._internal.network.context import ContextSerialization, ContextDeserialization
 from nanome._internal.serializer_fields import TypeSerializer
-from nanome.api import files, structure, ui
+from nanome.api import files, macro, structure, ui
 from ._hashes import Hashes
 
 
@@ -160,8 +160,8 @@ command_serializer_callback_list = (
     (commands_enum.stream_interrupt, message_serializers.InterruptStream(), callbacks.receive_interrupt_stream),
     (commands_enum.stream_feed_done, message_serializers.FeedStreamDone(), callbacks.simple_callback_no_arg),
     # macros
-    (commands_enum.get_macros_response, message_serializers.GetMacrosResponse(), callbacks.simple_callback_arg),
-    (commands_enum.run_macro_result, message_serializers.RunMacro(), callbacks.simple_callback_arg),
+    (commands_enum.get_macros_response, macro.messages.GetMacrosResponse(), callbacks.simple_callback_arg),
+    (commands_enum.run_macro_result, macro.messages.RunMacro(), callbacks.simple_callback_arg),
     # Presenter
     (commands_enum.presenter_info_response, message_serializers.GetPresenterInfoResponse(), callbacks.simple_callback_arg),
     (commands_enum.presenter_change, message_serializers.PresenterChange(), callbacks.presenter_change),
@@ -223,11 +223,11 @@ message_serializers_list = (
     (messages_enum.rmdir, files.messages.RMDir()),
     (messages_enum.mkdir, files.messages.MKDir()),
     # macros
-    (messages_enum.run_macro, message_serializers.RunMacro()),
-    (messages_enum.save_macro, message_serializers.SaveMacro()),
-    (messages_enum.delete_macro, message_serializers.DeleteMacro()),
-    (messages_enum.get_macros, message_serializers.GetMacros()),
-    (messages_enum.stop_macro, message_serializers.StopMacro()),
+    (messages_enum.run_macro, macro.messages.RunMacro()),
+    (messages_enum.save_macro, macro.messages.SaveMacro()),
+    (messages_enum.delete_macro, macro.messages.DeleteMacro()),
+    (messages_enum.get_macros, macro.messages.GetMacros()),
+    (messages_enum.stop_macro, macro.messages.StopMacro()),
     # streams
     (messages_enum.stream_create, message_serializers.CreateStream()),
     (messages_enum.stream_feed, message_serializers.FeedStream()),
