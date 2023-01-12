@@ -2,7 +2,7 @@ from .macro import Macro  # noqa: F401
 from . import serializers, messages  # noqa: F401
 
 from nanome._internal.enums import Commands, Messages
-from nanome.util import simple_callbacks 
+from nanome.util import simple_callbacks
 
 
 registered_commands = [

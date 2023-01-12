@@ -11,7 +11,7 @@ from .workspace import Workspace  # noqa: F401
 from .substructure import Substructure  # noqa: F401
 
 from . import client, io, messages, callbacks
-from nanome.util import simple_callbacks 
+from nanome.util import simple_callbacks
 from nanome._internal.enums import Commands, Messages
 
 registered_commands = [

@@ -64,4 +64,3 @@ class PresenterChange(serializer_fields.TypeSerializer):
 
     def deserialize(self, version, data):
         return None
-

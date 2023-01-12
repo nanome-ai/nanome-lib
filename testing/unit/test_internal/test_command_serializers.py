@@ -33,6 +33,7 @@ class CommandDeserializerTestCase(unittest.TestCase):
         self.assertEqual(command_hash, 783319662)
         self.assertEqual(request_id, 2)
 
+
 class MessageSerializeTestCase(unittest.TestCase):
 
     def setUp(self):

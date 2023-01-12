@@ -3,6 +3,7 @@ from nanome.util.enums import ShapeType
 from . import Shape
 from .anchor import Anchor
 
+
 class Mesh(Shape):
     """
     | Represents a mesh. Can display a mesh in Nanome App.

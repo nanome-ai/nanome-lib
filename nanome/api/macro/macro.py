@@ -4,6 +4,7 @@ import random
 from nanome._internal.network import PluginNetwork
 from nanome._internal.enums import Messages
 
+
 class Macro:
 
     # generates a different random identifier for each instance of the plugin lib.

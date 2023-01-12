@@ -9,6 +9,7 @@ else:
     def to_bytes(value, encoding):
         return bytearray(value, 'utf-8')
 
+
 class TypeSerializer(object):
 
     __metaclass__ = ABCMeta
@@ -115,7 +116,6 @@ class CachedImageSerializer:
     def __init__(self):
         self._string = StringSerializer()
 
-
     def serialize(self, version, value, context):
         session = CachedImageSerializer.session
         if value == None or value == "":
@@ -170,7 +170,6 @@ class DictionarySerializer:
     def __init__(self):
         self._serializer = None
 
-
     def serialize(self, version, value, context):
         if self._serializer == None:
             raise TypeError(
@@ -194,7 +193,6 @@ class DictionarySerializer:
 class DirectoryEntrySerializer:
     def __init__(self):
         self.__string = StringSerializer()
-
 
     def serialize(self, version, value, context):
         pass
@@ -224,7 +222,6 @@ class FileDataSerializer:
 class FileSaveDataSerializer:
     def __init__(self):
         self.__string = StringSerializer()
-
 
     def serialize(self, version, value, context):
         context.write_using_serializer(self.__string, value.path)
@@ -280,7 +277,6 @@ class UnityRotationSerializer:
     def __init__(self):
         self._Quat = QuaternionSerializer()
 
-
     def serialize(self, version, value, context):
         context.write_using_serializer(self._Quat, value)
 
@@ -306,7 +302,6 @@ class TupleSerializer:
     def __init__(self, serializer1=None, serializer2=None):
         self._serializer1 = serializer1
         self._serializer2 = serializer2
-
 
     def serialize(self, version, value, context):
         if self._serializer1 == None or self._serializer2 == None:
@@ -347,7 +342,6 @@ class Vector3Serializer:
 class UnityPositionSerializer:
     def __init__(self):
         self._vec3 = Vector3Serializer()
-
 
     def serialize(self, version, value, context):
         context.write_using_serializer(self._vec3, value)

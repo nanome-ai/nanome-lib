@@ -1,6 +1,7 @@
 from nanome._internal.decorators import deprecated
 from . import Shape
 
+
 @property
 @deprecated()
 def target(self):

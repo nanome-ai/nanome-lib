@@ -561,6 +561,7 @@ class AddDSSP(serializer_fields.TypeSerializer):
         complexes = context.read_using_serializer(self.__array)
         return complexes
 
+
 class ApplyColorScheme(serializer_fields.TypeSerializer):
 
     def __init__(self):

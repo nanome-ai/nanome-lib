@@ -2,6 +2,7 @@ from nanome._internal import serializer_fields
 from nanome.util import FileError
 from nanome.api import structure
 
+
 class CD(serializer_fields.TypeSerializer):
 
     def __init__(self):

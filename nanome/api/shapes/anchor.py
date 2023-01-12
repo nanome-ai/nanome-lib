@@ -1,6 +1,7 @@
 from nanome.util import Vector3
 from nanome.util.enums import ShapeAnchorType
 
+
 class Anchor:
 
     def __init__(self):

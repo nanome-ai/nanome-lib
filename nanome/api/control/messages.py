@@ -1,5 +1,6 @@
 from nanome._internal import serializer_fields
 
+
 class AdvancedSettings(serializer_fields.TypeSerializer):
 
     def __init__(self):

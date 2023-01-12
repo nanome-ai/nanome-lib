@@ -2,6 +2,7 @@ from nanome.util import enums
 from nanome._internal.network import PluginNetwork
 from nanome._internal.enums import Messages
 
+
 class Room:
     """
     | Represents a room in Nanome

@@ -19,14 +19,13 @@ def receive_create_stream_result(network, result, request_id):
     network._call(request_id, stream, StreamCreationError.NoError)
 
 
-
 def receive_interrupt_stream(network, result, request_id):
     try:
         stream = Stream._streams[result[1]]
     except:
         Logs.warning(
             ("Got an error for an unknown stream."
-            "Probably tried to update an unknown stream: {}".format(result[1]))
+             "Probably tried to update an unknown stream: {}".format(result[1]))
         )
         return
     stream._interrupt(result[0])

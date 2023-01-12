@@ -155,4 +155,3 @@ class InterruptStream(serializer_fields.TypeSerializer):
         err = context.read_byte()
         id = context.read_uint()
         return (err, id)
-

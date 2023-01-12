@@ -1,6 +1,6 @@
 from . import messages, models  # noqa: F401
 
-from nanome.util import simple_callbacks 
+from nanome.util import simple_callbacks
 from nanome._internal.enums import Commands, Messages
 
 

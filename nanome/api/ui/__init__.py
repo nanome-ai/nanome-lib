@@ -20,7 +20,7 @@ from . import serializers
 from . import io, messages, callbacks
 
 from nanome._internal.enums import Commands, Messages
-from nanome.util import simple_callbacks 
+from nanome.util import simple_callbacks
 
 registered_commands = [
     (Commands.menu_toggle, messages.MenuCallback(), callbacks.menu_toggled),

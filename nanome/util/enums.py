@@ -308,7 +308,7 @@ class SkyBoxes(IntEnum):
 
 class Integrations(CommandEnum):
     """Integrations available to connect to your plugin.
-    
+
     Some integrations have multiple hooks to connect to.
     See `nanome._internal.enums.Integrations` for more details
     """

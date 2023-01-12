@@ -43,7 +43,7 @@ class UIBaseSerializer(TypeSerializer):
             serializer = UIBaseSerializer.registered_serializers[ui_type]
         except:
             logger.error("Trying to serialize unknown UI type:",
-                       type(value).__name__)
+                         type(value).__name__)
             return
         context.write_uint(ui_type)
         context.write_using_serializer(serializer, value)
@@ -56,6 +56,7 @@ class UIBaseSerializer(TypeSerializer):
             logger.error("Trying to deserialize unknown UI type:", ui_type)
             return
         return context.read_using_serializer(serializer)
+
 
 class ButtonSerializer(TypeSerializer):
     def __init__(self):
@@ -886,8 +887,10 @@ class TextInputSerializer(TypeSerializer):
             value._padding_bottom = context.read_float()
         return value
 
+
 UIBaseSerializer.register_type(
     "TextInput", UIBaseSerializer.ContentType.etextInput, TextInputSerializer())
+
 
 class UIListSerializer(TypeSerializer):
     def __init__(self):

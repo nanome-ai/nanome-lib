@@ -94,4 +94,3 @@ class SetShape(serializer_fields.TypeSerializer):
             indices_arr = context.read_int_array()
             success_arr = context.read_byte_array()
             return (indices_arr, success_arr)
-

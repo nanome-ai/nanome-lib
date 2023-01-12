@@ -2,7 +2,7 @@ from .presenter_info import PresenterInfo  # noqa: F401
 from . import messages, callbacks
 
 from nanome._internal.enums import Commands, Messages
-from nanome.util import simple_callbacks 
+from nanome.util import simple_callbacks
 
 
 registered_commands = [

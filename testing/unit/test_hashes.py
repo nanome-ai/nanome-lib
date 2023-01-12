@@ -1,12 +1,13 @@
 import unittest
 from nanome.api._hashes import Hashes
 
+
 class HashesTestCase(unittest.TestCase):
     """Ensure that Hash values remain constant."""
 
     def setUp(self):
         Hashes.init_hashes()
-        
+
     def test_integration_hashes(self):
         expected_hashes = [
             287474962, 287492584, 660242612, 103842316,
@@ -14,7 +15,7 @@ class HashesTestCase(unittest.TestCase):
             183513874, 317731250, 183510640, 317728368
         ]
         self.assertEqual(Hashes.IntegrationHashes, expected_hashes)
-    
+
     def test_command_hashes(self):
         expected_hashes = [
             116013167, 623462994, 34786951, 458731680, 88085588, 88102996, 641741420, 692757664,
@@ -25,7 +26,7 @@ class HashesTestCase(unittest.TestCase):
             455626437, 120081925, 235518176, 537508352, 623398309, 614023789, 446251627, 234998959,
             604078708, 557449426, 557449253, 122047059, 637567604, 139461651, 33953249, 407142863, 307281351]
         self.assertEqual(Hashes.CommandHashes, expected_hashes)
-    
+
     def test_message_hashes(self):
         expected_hashes = [
             116013167, 544230484, 458772640, 122307215, 475550176, 458837587, 458837586,
@@ -36,14 +37,14 @@ class HashesTestCase(unittest.TestCase):
             604096515, 654360045, 234999425, 557449426, 122047059, 637586433, 139461765, 33952911, 518602764,
             407154825, 307281351, 638378635, 46251621]
         self.assertEqual(Hashes.MessageHashes, expected_hashes)
-    
+
     def test_integration_request_hashes(self):
         expected_hashes = [
             287499758, 660242612, 103842316, 446506409, 183513874, 183504179, 240792748, 317731250,
             46447411, 307346725, 650752620
         ]
         self.assertEqual(Hashes.IntegrationRequestHashes, expected_hashes)
-    
+
     def test_permission_request_hashes(self):
         expected_hashes = [403903525]
         self.assertEqual(Hashes.PermissionRequestHashes, expected_hashes)

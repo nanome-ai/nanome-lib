@@ -280,6 +280,7 @@ class StructurePrep(TypeSerializer):
         complexes = context.read_using_serializer(self.array_serializer)
         return complexes
 
+
 class Integration(TypeSerializer):
     __integrations = {
         Hashes.IntegrationHashes[IntegrationCommands.hydrogen_add]: AddHydrogen(),

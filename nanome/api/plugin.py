@@ -332,7 +332,7 @@ class Plugin:
         LogsManager.configure_child_process(plugin_instance)
         logger.debug("Starting plugin")
         plugin_instance._run()
-    
+
     def _run(self):
         # set_start_method ensures consistent process behavior between Windows and Linux
         if sys.version_info.major >= 3 and sys.version_info.minor >= 4:

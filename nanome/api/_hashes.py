@@ -11,7 +11,7 @@ class Hashes():
     CommandHashes = [None] * len(Commands)
     MessageHashes = [None] * len(Messages)
     IntegrationHashes = [None] * len(IntegrationCommands)
-    IntegrationRequestHashes = [None]  * len(Integrations)
+    IntegrationRequestHashes = [None] * len(Integrations)
     PermissionRequestHashes = [None] * len(Permissions)
     HashToIntegrationName = dict()
 

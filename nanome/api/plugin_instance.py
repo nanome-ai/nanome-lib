@@ -316,7 +316,7 @@ class PluginInstance:
         :type scale: :class:`~nanome.util.vector3`
         """
         self._network.send(Messages.menu_transform_set,
-                            (index, position, rotation, scale), False)
+                           (index, position, rotation, scale), False)
 
     def request_menu_transform(self, index, callback=None):
         """
@@ -567,7 +567,7 @@ class PluginInstance:
         self.create_writing_stream(atom_indices_list, stream_type, callback)
 
     def _setup(
-        self, session_id, plugin_network, pm_queue_in, pm_queue_out,log_pipe_conn,
+        self, session_id, plugin_network, pm_queue_in, pm_queue_out, log_pipe_conn,
             original_version_table, custom_data, permissions):
         self._menus = {}
         self._run_text = "Run"

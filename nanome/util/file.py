@@ -38,6 +38,7 @@ class DirectoryErrorCode(IntEnum):
 
 # deprecated: This is part of the deprecated file API
 
+
 class FileErrorCode(IntEnum):
     """
     | Deprecated.

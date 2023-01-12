@@ -19,7 +19,6 @@ def safe_cast(cls, value):
         return list(cls)[0]
 
 
-
 if sys.version_info >= (3, 6):
     from enum import auto
 
