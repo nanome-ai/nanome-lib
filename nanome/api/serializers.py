@@ -204,7 +204,7 @@ message_serializers_list = (
     (messages_enum.hook_selection_changed, structure.messages.SelectionChangedHook()),
     (messages_enum.compute_hbonds, structure.messages.ComputeHBonds()),
     (messages_enum.substructure_request, structure.messages.RequestSubstructure()),
-    (messages_enum.apply_color_scheme, message_serializers.ApplyColorScheme()),
+    (messages_enum.apply_color_scheme, structure.messages.ApplyColorScheme()),
     # volume
     (messages_enum.add_volume, volumetric.messages.AddVolume()),
     # ui
