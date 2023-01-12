@@ -24,6 +24,7 @@ class UIBaseSerializer(TypeSerializer):
     def register_type(cls, classname, enum_value, serializer):
         cls.registered_classes[classname] = enum_value
         cls.registered_serializers[enum_value] = serializer
+
     def version(self):
         return 0
 

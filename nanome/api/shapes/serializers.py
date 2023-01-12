@@ -58,7 +58,7 @@ class LabelSerializer(TypeSerializer):
 
 
 class LineSerializer(TypeSerializer):
-    
+
     def version(self):
         return 0
 

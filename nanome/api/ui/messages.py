@@ -212,6 +212,7 @@ class UIHook(serializer_fields.TypeSerializer):
         image_pressed = 1
         image_held = 2
         image_released = 3
+
     def version(self):
         return 0
 

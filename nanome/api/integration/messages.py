@@ -297,6 +297,7 @@ class Integration(TypeSerializer):
         Hashes.IntegrationHashes[IntegrationCommands.import_smiles]: ImportSmiles(
         )
     }
+
     def version(self):
         return 0
 
