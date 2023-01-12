@@ -8,7 +8,7 @@ from nanome._internal import enums as command_enums
 from nanome._internal.network import Data
 from nanome._internal.network.context import ContextSerialization, ContextDeserialization
 from nanome._internal.serializer_fields import TypeSerializer
-from nanome.api import files, macro, room, shapes, streams, structure, ui, user, volumetric
+from nanome.api import control, files, macro, room, shapes, streams, structure, ui, user, volumetric
 from ._hashes import Hashes
 
 
@@ -109,9 +109,10 @@ class CommandMessageSerializer(object):
 commands_enum = command_enums.Commands
 command_serializer_callback_list = (
     # control
-    (commands_enum.connect, message_serializers.Connect(), callbacks.connect),
-    (commands_enum.run, message_serializers.Run(), callbacks.run),
-    (commands_enum.advanced_settings, message_serializers.AdvancedSettings(), callbacks.advanced_settings),
+    (commands_enum.connect, control.messages.Connect(), control.callbacks.connect),
+    (commands_enum.run, control.messages.Run(), callbacks.run),
+    (commands_enum.advanced_settings, control.messages.AdvancedSettings(), control.callbacks.advanced_settings),
+    (commands_enum.controller_transforms_response, control.messages.GetControllerTransformsResponse(), callbacks.simple_callback_arg_unpack),
     # workspace
     (commands_enum.workspace_response, structure.messages.ReceiveWorkspace(), callbacks.simple_callback_arg),
     (commands_enum.complex_add, structure.messages.ComplexAddedRemoved(), structure.callbacks.complex_added),
@@ -165,7 +166,6 @@ command_serializer_callback_list = (
     # Presenter
     (commands_enum.presenter_info_response, user.messages.GetPresenterInfoResponse(), callbacks.simple_callback_arg),
     (commands_enum.presenter_change, user.messages.PresenterChange(), user.callbacks.presenter_change),
-    (commands_enum.controller_transforms_response, message_serializers.GetControllerTransformsResponse(), callbacks.simple_callback_arg_unpack),
     # Shape
     (commands_enum.set_shape_result, shapes.messages.SetShape(), callbacks.simple_callback_arg_unpack),
     (commands_enum.delete_shape_result, shapes.messages.DeleteShape(), callbacks.simple_callback_arg),
@@ -184,10 +184,11 @@ TypeSerializer.register_string_raw(MESSAGE_VERSION_KEY, 1)
 messages_enum = command_enums.Messages
 message_serializers_list = (
     # control
-    (messages_enum.connect, message_serializers.Connect()),
-    (messages_enum.controller_transforms_request, message_serializers.GetControllerTransforms()),
-    (messages_enum.open_url, message_serializers.OpenURL()),
+    (messages_enum.connect, control.messages.Connect()),
+    (messages_enum.controller_transforms_request, control.messages.GetControllerTransforms()),
+    (messages_enum.open_url, control.messages.OpenURL()),
     (messages_enum.set_skybox, room.messages.SetSkybox()),
+    (messages_enum.plugin_list_button_set, control.messages.SetPluginListButton()),
     # workspace
     (messages_enum.workspace_update, structure.messages.UpdateWorkspace()),
     (messages_enum.structures_deep_update, structure.messages.UpdateStructures(False)),
@@ -250,5 +251,4 @@ message_serializers_list = (
     (messages_enum.file_request, files.messages.FileRequest()),
     (messages_enum.file_save, files.messages.FileSave()),
     (messages_enum.export_files, files.messages.ExportFiles()),
-    (messages_enum.plugin_list_button_set, message_serializers.SetPluginListButton()),
 )
