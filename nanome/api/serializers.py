@@ -1,7 +1,7 @@
+import importlib
 import logging
 import struct
 import traceback
-
 from . import callbacks
 from ._hashes import Hashes
 from nanome._internal import enums as command_enums
@@ -17,6 +17,21 @@ MESSAGE_VERSION_KEY = "ToClientProtocol"
 packet_debugging = False
 
 __all__ = ["CommandMessageSerializer", 'command_serializer_callback_list', 'message_serializers_list']
+
+# Modules which contain messages to register with the serializer
+registered_modules = [
+    'nanome.api.control',
+    'nanome.api.files',
+    'nanome.api.integration',
+    'nanome.api.macro',
+    'nanome.api.room',
+    'nanome.api.shapes',
+    'nanome.api.streams',
+    'nanome.api.structure',
+    'nanome.api.ui',
+    'nanome.api.user',
+    'nanome.api.volumetric',
+]
 
 
 class CommandMessageSerializer(object):
@@ -106,27 +121,19 @@ class CommandMessageSerializer(object):
 # -------------Commands----------- #
 # Commands are incoming (nanome -> plugin)
 commands_enum = command_enums.Commands
-command_serializer_callback_list = (
-    # control
-    (commands_enum.connect, control.messages.Connect(), control.callbacks.connect),
-    (commands_enum.run, control.messages.Run(), control.callbacks.run),
-    (commands_enum.advanced_settings, control.messages.AdvancedSettings(), control.callbacks.advanced_settings),
-    (commands_enum.controller_transforms_response, control.messages.GetControllerTransformsResponse(), callbacks.simple_callback_arg_unpack),
-    # workspace
-    (commands_enum.workspace_response, structure.messages.ReceiveWorkspace(), callbacks.simple_callback_arg),
-    (commands_enum.complex_add, structure.messages.ComplexAddedRemoved(), structure.callbacks.complex_added),
-    (commands_enum.complex_remove, structure.messages.ComplexAddedRemoved(), structure.callbacks.complex_removed),
-    (commands_enum.complex_list_response, structure.messages.ReceiveComplexList(), callbacks.simple_callback_arg),
-    (commands_enum.complexes_response, structure.messages.ReceiveComplexes(), structure.callbacks.receive_complexes),
-    (commands_enum.structures_deep_update_done, structure.messages.UpdateStructuresDeepDone(), callbacks.simple_callback_no_arg),
-    (commands_enum.add_to_workspace_done, structure.messages.AddToWorkspace(), callbacks.simple_callback_arg),
-    (commands_enum.position_structures_done, structure.messages.PositionStructuresDone(), callbacks.simple_callback_no_arg),
-    (commands_enum.dssp_add_done, structure.messages.AddDSSP(), callbacks.simple_callback_arg),
-    (commands_enum.bonds_add_done, structure.messages.AddBonds(), callbacks.simple_callback_arg),
-    (commands_enum.complex_updated, structure.messages.ComplexUpdated(), structure.callbacks.complex_updated),
-    (commands_enum.selection_changed, structure.messages.SelectionChanged(), structure.callbacks.selection_changed),
-    (commands_enum.compute_hbonds_done, structure.messages.ComputeHBonds(), callbacks.simple_callback_no_arg),
-    (commands_enum.substructure_response, structure.messages.RequestSubstructure(), callbacks.simple_callback_arg),
+
+registered_commands = []
+for module_str in registered_modules:
+    # Get registered commands from each module
+    module = importlib.import_module(module_str)
+    module_commands = getattr(module, 'registered_commands', False)
+    if not module_commands:
+        logger.warning('No registerd commands found in {}, Skipping'.format(module_str))
+        continue
+    registered_commands += module_commands
+
+command_serializer_callback_list = [
+    *registered_commands,
     # Volume
     (commands_enum.add_volume_done, volumetric.messages.AddVolumeDone(), callbacks.simple_callback_no_arg),
     # ui
@@ -174,7 +181,7 @@ command_serializer_callback_list = (
     (commands_enum.file_response, files.messages.FileRequest(), callbacks.simple_callback_arg),
     (commands_enum.file_save_done, files.messages.FileSave(), callbacks.simple_callback_arg),
     (commands_enum.integration, integration.messages.Integration(), integration.callbacks.integration),
-)
+]
 
 
 # -------------Messages----------- #

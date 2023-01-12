@@ -1,5 +1,7 @@
 from nanome._internal import serializer_fields
-
+from nanome.api import callbacks as base_callbacks
+from nanome._internal.enums import Commands
+from . import callbacks
 
 class AdvancedSettings(serializer_fields.TypeSerializer):
 
@@ -143,3 +145,10 @@ class GetControllerTransformsResponse(serializer_fields.TypeSerializer):
                   left_controller_rotation, right_controller_position, right_controller_rotation)
         return result
 
+
+registered_commands = [
+    (Commands.connect, Connect(), callbacks.connect),
+    (Commands.run, Run(), callbacks.run),
+    (Commands.advanced_settings, AdvancedSettings(), callbacks.advanced_settings),
+    (Commands.controller_transforms_response, GetControllerTransformsResponse(), base_callbacks.simple_callback_arg_unpack),
+]

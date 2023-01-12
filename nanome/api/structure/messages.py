@@ -1,6 +1,8 @@
 import types
 from nanome._internal import serializer_fields
-from . import serializers
+from nanome._internal.enums import Commands
+from . import serializers, callbacks
+from nanome.api import callbacks as base_callbacks
 
 
 class AddToWorkspace(serializer_fields.TypeSerializer):
@@ -579,3 +581,20 @@ class ApplyColorScheme(serializer_fields.TypeSerializer):
 
     def deserialize(self, version, context):
         raise NotImplementedError
+    
+registered_commands = [
+    (Commands.workspace_response, ReceiveWorkspace(), base_callbacks.simple_callback_arg),
+    (Commands.complex_add, ComplexAddedRemoved(), callbacks.complex_added),
+    (Commands.complex_remove, ComplexAddedRemoved(), callbacks.complex_removed),
+    (Commands.complex_list_response, ReceiveComplexList(), base_callbacks.simple_callback_arg),
+    (Commands.complexes_response, ReceiveComplexes(), callbacks.receive_complexes),
+    (Commands.structures_deep_update_done, UpdateStructuresDeepDone(), base_callbacks.simple_callback_no_arg),
+    (Commands.add_to_workspace_done, AddToWorkspace(), base_callbacks.simple_callback_arg),
+    (Commands.position_structures_done, PositionStructuresDone(), base_callbacks.simple_callback_no_arg),
+    (Commands.dssp_add_done, AddDSSP(), base_callbacks.simple_callback_arg),
+    (Commands.bonds_add_done, AddBonds(), base_callbacks.simple_callback_arg),
+    (Commands.complex_updated, ComplexUpdated(), callbacks.complex_updated),
+    (Commands.selection_changed, SelectionChanged(), callbacks.selection_changed),
+    (Commands.compute_hbonds_done, ComputeHBonds(), base_callbacks.simple_callback_no_arg),
+    (Commands.substructure_response, RequestSubstructure(), base_callbacks.simple_callback_arg),
+]

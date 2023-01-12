@@ -10,7 +10,5 @@ from .complex import Complex
 from .workspace import Workspace
 from .substructure import Substructure
 
-from . import client
-from . import io
-from . import messages
-from . import callbacks
+from . import client, io, messages, callbacks
+from .messages import registered_commands
