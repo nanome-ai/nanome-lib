@@ -113,18 +113,18 @@ class SetPluginListButton(serializer_fields.TypeSerializer):
 
 class Integration(serializer_fields.TypeSerializer):
     __integrations = {
-        Hashes.IntegrationHashes[IntegrationCommands.hydrogen_add]: integration.serializers.AddHydrogen(),
-        Hashes.IntegrationHashes[IntegrationCommands.hydrogen_remove]: integration.serializers.RemoveHydrogen(),
-        Hashes.IntegrationHashes[IntegrationCommands.structure_prep]: integration.serializers.StructurePrep(),
-        Hashes.IntegrationHashes[IntegrationCommands.calculate_esp]: integration.serializers.CalculateESP(),
-        Hashes.IntegrationHashes[IntegrationCommands.minimization_start]: integration.serializers.StartMinimization(),
-        Hashes.IntegrationHashes[IntegrationCommands.minimization_stop]: integration.serializers.StopMinimization(),
-        Hashes.IntegrationHashes[IntegrationCommands.export_locations]: integration.serializers.ExportLocations(),
-        Hashes.IntegrationHashes[IntegrationCommands.export_file]: integration.serializers.ExportFile(),
-        Hashes.IntegrationHashes[IntegrationCommands.import_file]: integration.serializers.ImportFile(),
-        Hashes.IntegrationHashes[IntegrationCommands.generate_molecule_image]: integration.serializers.GenerateMoleculeImage(),
-        Hashes.IntegrationHashes[IntegrationCommands.export_smiles]: integration.serializers.ExportSmiles(),
-        Hashes.IntegrationHashes[IntegrationCommands.import_smiles]: integration.serializers.ImportSmiles(
+        Hashes.IntegrationHashes[IntegrationCommands.hydrogen_add]: integration.messages.AddHydrogen(),
+        Hashes.IntegrationHashes[IntegrationCommands.hydrogen_remove]: integration.messages.RemoveHydrogen(),
+        Hashes.IntegrationHashes[IntegrationCommands.structure_prep]: integration.messages.StructurePrep(),
+        Hashes.IntegrationHashes[IntegrationCommands.calculate_esp]: integration.messages.CalculateESP(),
+        Hashes.IntegrationHashes[IntegrationCommands.minimization_start]: integration.messages.StartMinimization(),
+        Hashes.IntegrationHashes[IntegrationCommands.minimization_stop]: integration.messages.StopMinimization(),
+        Hashes.IntegrationHashes[IntegrationCommands.export_locations]: integration.messages.ExportLocations(),
+        Hashes.IntegrationHashes[IntegrationCommands.export_file]: integration.messages.ExportFile(),
+        Hashes.IntegrationHashes[IntegrationCommands.import_file]: integration.messages.ImportFile(),
+        Hashes.IntegrationHashes[IntegrationCommands.generate_molecule_image]: integration.messages.GenerateMoleculeImage(),
+        Hashes.IntegrationHashes[IntegrationCommands.export_smiles]: integration.messages.ExportSmiles(),
+        Hashes.IntegrationHashes[IntegrationCommands.import_smiles]: integration.messages.ImportSmiles(
         )
     }
 
