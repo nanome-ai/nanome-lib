@@ -184,7 +184,6 @@ class SetSkybox(serializer_fields.TypeSerializer):
         raise NotImplementedError
 
 
-
 class GetControllerTransforms(serializer_fields.TypeSerializer):
 
     def __init__(self):
@@ -343,4 +342,3 @@ class AddVolumeDone(serializer_fields.TypeSerializer):
 
     def deserialize(self, version, context):
         return None
-

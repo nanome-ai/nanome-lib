@@ -155,9 +155,9 @@ command_serializer_callback_list = (
     (commands_enum.rmdir_response, files.messages.RMDir(), callbacks.simple_callback_arg),
     (commands_enum.mkdir_response, files.messages.MKDir(), callbacks.simple_callback_arg),
     # streams
-    (commands_enum.stream_create_done, streams.messages.CreateStreamResult(), callbacks.receive_create_stream_result),
-    (commands_enum.stream_feed, streams.messages.FeedStream(), callbacks.feed_stream),
-    (commands_enum.stream_interrupt, streams.messages.InterruptStream(), callbacks.receive_interrupt_stream),
+    (commands_enum.stream_create_done, streams.messages.CreateStreamResult(), streams.callbacks.receive_create_stream_result),
+    (commands_enum.stream_feed, streams.messages.FeedStream(), streams.callbacks.feed_stream),
+    (commands_enum.stream_interrupt, streams.messages.InterruptStream(), streams.callbacks.receive_interrupt_stream),
     (commands_enum.stream_feed_done, streams.messages.FeedStreamDone(), callbacks.simple_callback_no_arg),
     # macros
     (commands_enum.get_macros_response, macro.messages.GetMacrosResponse(), callbacks.simple_callback_arg),
