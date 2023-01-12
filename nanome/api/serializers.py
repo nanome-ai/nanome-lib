@@ -8,7 +8,7 @@ from nanome._internal import enums as command_enums
 from nanome._internal.network import Data
 from nanome._internal.network.context import ContextSerialization, ContextDeserialization
 from nanome._internal.serializer_fields import TypeSerializer
-from nanome.api import files, macro, shapes, streams, structure, ui, user, volumetric
+from nanome.api import files, macro, room, shapes, streams, structure, ui, user, volumetric
 from ._hashes import Hashes
 
 
@@ -187,7 +187,7 @@ message_serializers_list = (
     (messages_enum.connect, message_serializers.Connect()),
     (messages_enum.controller_transforms_request, message_serializers.GetControllerTransforms()),
     (messages_enum.open_url, message_serializers.OpenURL()),
-    (messages_enum.set_skybox, message_serializers.SetSkybox()),
+    (messages_enum.set_skybox, room.messages.SetSkybox()),
     # workspace
     (messages_enum.workspace_update, structure.messages.UpdateWorkspace()),
     (messages_enum.structures_deep_update, structure.messages.UpdateStructures(False)),

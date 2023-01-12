@@ -9,26 +9,6 @@ from nanome.api._hashes import Hashes
 logger = logging.getLogger(__name__)
 
 
-class ApplyColorScheme(serializer_fields.TypeSerializer):
-
-    def __init__(self):
-        pass
-
-    def version(self):
-        return 0
-
-    def name(self):
-        return "ApplyColorScheme"
-
-    def serialize(self, version, value, context):
-        context.write_int(value[0])
-        context.write_int(value[1])
-        context.write_bool(value[2])
-
-    def deserialize(self, version, context):
-        raise NotImplementedError
-
-
 class AdvancedSettings(serializer_fields.TypeSerializer):
 
     def __init__(self):
@@ -160,24 +140,6 @@ class OpenURL(serializer_fields.TypeSerializer):
         context.write_using_serializer(self.string, value[0])  # URL
         if version >= 1:
             context.write_bool(value[1])  # Desktop Browser
-
-    def deserialize(self, version, context):
-        raise NotImplementedError
-
-
-class SetSkybox(serializer_fields.TypeSerializer):
-
-    def __init__(self):
-        pass
-
-    def version(self):
-        return 0
-
-    def name(self):
-        return "SetSkybox"
-
-    def serialize(self, version, value, context):
-        context.write_int(value)
 
     def deserialize(self, version, context):
         raise NotImplementedError
