@@ -4,10 +4,6 @@ from . import serializers
 
 
 class ButtonCallback(serializer_fields.TypeSerializer):
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 2
 
@@ -36,10 +32,6 @@ class ButtonCallback(serializer_fields.TypeSerializer):
 
 
 class DropdownCallback(serializer_fields.TypeSerializer):
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 0
 
@@ -58,10 +50,6 @@ class DropdownCallback(serializer_fields.TypeSerializer):
 
 
 class GetMenuTransform(serializer_fields.TypeSerializer):
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 0
 
@@ -101,10 +89,6 @@ class GetMenuTransformResponse(serializer_fields.TypeSerializer):
 
 
 class ImageCallback(serializer_fields.TypeSerializer):
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 1
 
@@ -131,10 +115,6 @@ class ImageCallback(serializer_fields.TypeSerializer):
 
 
 class MenuCallback(serializer_fields.TypeSerializer):
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 1
 
@@ -232,10 +212,6 @@ class UIHook(serializer_fields.TypeSerializer):
         image_pressed = 1
         image_held = 2
         image_released = 3
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 0
 

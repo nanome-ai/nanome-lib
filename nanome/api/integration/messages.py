@@ -297,10 +297,6 @@ class Integration(TypeSerializer):
         Hashes.IntegrationHashes[IntegrationCommands.import_smiles]: ImportSmiles(
         )
     }
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 0
 

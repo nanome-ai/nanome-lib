@@ -58,9 +58,7 @@ class LabelSerializer(TypeSerializer):
 
 
 class LineSerializer(TypeSerializer):
-    def __init__(self):
-        pass
-
+    
     def version(self):
         return 0
 
@@ -81,8 +79,6 @@ class LineSerializer(TypeSerializer):
 
 
 class MeshSerializer(TypeSerializer):
-    def __init__(self):
-        pass
 
     def version(self):
         return 1
@@ -198,8 +194,6 @@ class ShapeSerializer(TypeSerializer):
 
 
 class SphereSerializer(TypeSerializer):
-    def __init__(self):
-        pass
 
     def version(self):
         return 0

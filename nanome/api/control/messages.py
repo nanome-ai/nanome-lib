@@ -2,10 +2,6 @@ from nanome._internal import serializer_fields
 
 
 class AdvancedSettings(serializer_fields.TypeSerializer):
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 0
 
@@ -41,10 +37,6 @@ class Connect(serializer_fields.TypeSerializer):
 
 
 class Run(serializer_fields.TypeSerializer):
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 0
 
@@ -99,10 +91,6 @@ class OpenURL(serializer_fields.TypeSerializer):
 
 
 class GetControllerTransforms(serializer_fields.TypeSerializer):
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 0
 

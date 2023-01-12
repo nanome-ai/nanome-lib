@@ -37,10 +37,6 @@ class AddVolume(serializer_fields.TypeSerializer):
 
 
 class AddVolumeDone(serializer_fields.TypeSerializer):
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 0
 

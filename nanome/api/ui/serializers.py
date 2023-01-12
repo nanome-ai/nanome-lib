@@ -24,10 +24,6 @@ class UIBaseSerializer(TypeSerializer):
     def register_type(cls, classname, enum_value, serializer):
         cls.registered_classes[classname] = enum_value
         cls.registered_serializers[enum_value] = serializer
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 0
 
@@ -564,8 +560,6 @@ UIBaseSerializer.register_type(
 
 
 class LayoutNodeSerializer(TypeSerializer):
-    def __init__(self):
-        pass
 
     def version(self):
         return 1
@@ -787,8 +781,6 @@ UIBaseSerializer.register_type(
 
 
 class SliderSerializer(TypeSerializer):
-    def __init__(self):
-        pass
 
     def version(self):
         return 1

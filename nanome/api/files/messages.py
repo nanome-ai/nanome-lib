@@ -403,10 +403,6 @@ class LoadFile(serializer_fields.TypeSerializer):
 
 
 class LoadFileDoneInfo(serializer_fields.TypeSerializer):
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 0
 

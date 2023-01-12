@@ -4,10 +4,6 @@ from nanome.util.enums import StreamType
 
 
 class CreateStream(serializer_fields.TypeSerializer):
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 2
 
@@ -31,10 +27,6 @@ class CreateStream(serializer_fields.TypeSerializer):
 
 
 class CreateStreamResult(serializer_fields.TypeSerializer):
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 2
 
@@ -60,10 +52,6 @@ class CreateStreamResult(serializer_fields.TypeSerializer):
 
 
 class DestroyStream(serializer_fields.TypeSerializer):
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 0
 
@@ -120,10 +108,6 @@ class FeedStream(serializer_fields.TypeSerializer):
 
 
 class FeedStreamDone(serializer_fields.TypeSerializer):
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 0
 
@@ -138,10 +122,6 @@ class FeedStreamDone(serializer_fields.TypeSerializer):
 
 
 class InterruptStream(serializer_fields.TypeSerializer):
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 0
 

@@ -33,10 +33,6 @@ class AddToWorkspace(serializer_fields.TypeSerializer):
 
 
 class ComplexAddedRemoved(serializer_fields.TypeSerializer):
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 0
 
@@ -81,10 +77,6 @@ class ComplexUpdated(serializer_fields.TypeSerializer):
 
 
 class ComplexUpdatedHook(serializer_fields.TypeSerializer):
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 0
 
@@ -99,10 +91,6 @@ class ComplexUpdatedHook(serializer_fields.TypeSerializer):
 
 
 class ComputeHBonds(serializer_fields.TypeSerializer):
-
-    def __init__(self):
-        pass
-
     def name(self):
         return "ComputeHBonds"
 
@@ -122,10 +110,6 @@ class ComputeHBonds(serializer_fields.TypeSerializer):
 
 
 class PositionStructures(serializer_fields.TypeSerializer):
-
-    def __init__(self):
-        pass
-
     def name(self):
         return "PositionStructures"
 
@@ -157,10 +141,6 @@ class PositionStructures(serializer_fields.TypeSerializer):
 
 
 class PositionStructuresDone(serializer_fields.TypeSerializer):
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 0
 
@@ -252,10 +232,6 @@ class ReceiveWorkspace(serializer_fields.TypeSerializer):
 
 
 class RequestComplexList(serializer_fields.TypeSerializer):
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 0
 
@@ -270,10 +246,6 @@ class RequestComplexList(serializer_fields.TypeSerializer):
 
 
 class RequestComplexes(serializer_fields.TypeSerializer):
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 0
 
@@ -322,10 +294,6 @@ class RequestSubstructure(serializer_fields.TypeSerializer):
 
 
 class RequestWorkspace(serializer_fields.TypeSerializer):
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 0
 
@@ -370,10 +338,6 @@ class SelectionChanged(serializer_fields.TypeSerializer):
 
 
 class SelectionChangedHook(serializer_fields.TypeSerializer):
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 0
 
@@ -461,10 +425,6 @@ class UpdateStructures(serializer_fields.TypeSerializer):
 
 
 class UpdateStructuresDeepDone(serializer_fields.TypeSerializer):
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 0
 
@@ -563,10 +523,6 @@ class AddDSSP(serializer_fields.TypeSerializer):
 
 
 class ApplyColorScheme(serializer_fields.TypeSerializer):
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 0
 

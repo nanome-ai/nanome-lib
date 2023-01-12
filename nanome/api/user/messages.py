@@ -3,10 +3,6 @@ from . import PresenterInfo
 
 
 class GetPresenterInfo(serializer_fields.TypeSerializer):
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 0
 
@@ -49,10 +45,6 @@ class GetPresenterInfoResponse(serializer_fields.TypeSerializer):
 
 
 class PresenterChange(serializer_fields.TypeSerializer):
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 0
 

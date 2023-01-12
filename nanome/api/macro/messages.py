@@ -8,10 +8,6 @@ string_serializer = serializer_fields.StringSerializer()
 class SaveMacro(serializer_fields.TypeSerializer):
     _macro_serializer = macro_serializer
     _string_serializer = string_serializer
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 0
 
@@ -30,10 +26,6 @@ class SaveMacro(serializer_fields.TypeSerializer):
 class DeleteMacro(serializer_fields.TypeSerializer):
     _macro_serializer = macro_serializer
     _string_serializer = string_serializer
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 0
 
@@ -52,10 +44,6 @@ class DeleteMacro(serializer_fields.TypeSerializer):
 class RunMacro(serializer_fields.TypeSerializer):
     _macro_serializer = macro_serializer
     _string_serializer = string_serializer
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 1
 
@@ -74,10 +62,6 @@ class RunMacro(serializer_fields.TypeSerializer):
 class GetMacros(serializer_fields.TypeSerializer):
     _macro_serializer = macro_serializer
     _string_serializer = string_serializer
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 0
 
@@ -115,10 +99,6 @@ class GetMacrosResponse(serializer_fields.TypeSerializer):
 class StopMacro(serializer_fields.TypeSerializer):
     _macro_serializer = macro_serializer
     _string_serializer = string_serializer
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 0
 

@@ -6,10 +6,6 @@ logger = logging.getLogger(__name__)
 
 
 class DeleteShape(serializer_fields.TypeSerializer):
-
-    def __init__(self):
-        pass
-
     def version(self):
         return 1
 
