@@ -4,11 +4,13 @@ import traceback
 
 from . import callbacks, message_serializers
 
-from .._internal import enums as command_enums
-from .._internal.network import Data
-from .._internal.network.context import ContextSerialization, ContextDeserialization
-from .._internal.serializer_fields import TypeSerializer
+from nanome._internal import enums as command_enums
+from nanome._internal.network import Data
+from nanome._internal.network.context import ContextSerialization, ContextDeserialization
+from nanome._internal.serializer_fields import TypeSerializer
+from nanome.api import structure
 from ._hashes import Hashes
+
 
 logger = logging.getLogger(__name__)
 
@@ -111,20 +113,20 @@ command_serializer_callback_list = (
     (commands_enum.run, message_serializers.Run(), callbacks.run),
     (commands_enum.advanced_settings, message_serializers.AdvancedSettings(), callbacks.advanced_settings),
     # workspace
-    (commands_enum.workspace_response, message_serializers.ReceiveWorkspace(), callbacks.simple_callback_arg),
-    (commands_enum.complex_add, message_serializers.ComplexAddedRemoved(), callbacks.complex_added),
-    (commands_enum.complex_remove, message_serializers.ComplexAddedRemoved(), callbacks.complex_removed),
-    (commands_enum.complex_list_response, message_serializers.ReceiveComplexList(), callbacks.simple_callback_arg),
-    (commands_enum.complexes_response, message_serializers.ReceiveComplexes(), callbacks.receive_complexes),
-    (commands_enum.structures_deep_update_done, message_serializers.UpdateStructuresDeepDone(), callbacks.simple_callback_no_arg),
-    (commands_enum.add_to_workspace_done, message_serializers.AddToWorkspace(), callbacks.simple_callback_arg),
-    (commands_enum.position_structures_done, message_serializers.PositionStructuresDone(), callbacks.simple_callback_no_arg),
-    (commands_enum.dssp_add_done, message_serializers.AddDSSP(), callbacks.simple_callback_arg),
-    (commands_enum.bonds_add_done, message_serializers.AddBonds(), callbacks.simple_callback_arg),
-    (commands_enum.complex_updated, message_serializers.ComplexUpdated(), callbacks.complex_updated),
-    (commands_enum.selection_changed, message_serializers.SelectionChanged(), callbacks.selection_changed),
-    (commands_enum.compute_hbonds_done, message_serializers.ComputeHBonds(), callbacks.simple_callback_no_arg),
-    (commands_enum.substructure_response, message_serializers.RequestSubstructure(), callbacks.simple_callback_arg),
+    (commands_enum.workspace_response, structure.messages.ReceiveWorkspace(), callbacks.simple_callback_arg),
+    (commands_enum.complex_add, structure.messages.ComplexAddedRemoved(), structure.callbacks.complex_added),
+    (commands_enum.complex_remove, structure.messages.ComplexAddedRemoved(), structure.callbacks.complex_removed),
+    (commands_enum.complex_list_response, structure.messages.ReceiveComplexList(), callbacks.simple_callback_arg),
+    (commands_enum.complexes_response, structure.messages.ReceiveComplexes(), structure.callbacks.receive_complexes),
+    (commands_enum.structures_deep_update_done, structure.messages.UpdateStructuresDeepDone(), callbacks.simple_callback_no_arg),
+    (commands_enum.add_to_workspace_done, structure.messages.AddToWorkspace(), callbacks.simple_callback_arg),
+    (commands_enum.position_structures_done, structure.messages.PositionStructuresDone(), callbacks.simple_callback_no_arg),
+    (commands_enum.dssp_add_done, structure.messages.AddDSSP(), callbacks.simple_callback_arg),
+    (commands_enum.bonds_add_done, structure.messages.AddBonds(), callbacks.simple_callback_arg),
+    (commands_enum.complex_updated, structure.messages.ComplexUpdated(), structure.callbacks.complex_updated),
+    (commands_enum.selection_changed, structure.messages.SelectionChanged(), structure.callbacks.selection_changed),
+    (commands_enum.compute_hbonds_done, structure.messages.ComputeHBonds(), callbacks.simple_callback_no_arg),
+    (commands_enum.substructure_response, structure.messages.RequestSubstructure(), callbacks.simple_callback_arg),
     # Volume
     (commands_enum.add_volume_done, message_serializers.AddVolumeDone(), callbacks.simple_callback_no_arg),
     # ui
@@ -184,21 +186,21 @@ message_serializers_list = (
     # control
     (messages_enum.connect, message_serializers.Connect()),
     # workspace
-    (messages_enum.workspace_update, message_serializers.UpdateWorkspace()),
-    (messages_enum.structures_deep_update, message_serializers.UpdateStructures(False)),
-    (messages_enum.structures_shallow_update, message_serializers.UpdateStructures(True)),
-    (messages_enum.workspace_request, message_serializers.RequestWorkspace()),
-    (messages_enum.complex_list_request, message_serializers.RequestComplexList()),
-    (messages_enum.add_to_workspace, message_serializers.AddToWorkspace()),
-    (messages_enum.complexes_request, message_serializers.RequestComplexes()),
-    (messages_enum.bonds_add, message_serializers.AddBonds()),
-    (messages_enum.dssp_add, message_serializers.AddDSSP()),
-    (messages_enum.structures_zoom, message_serializers.PositionStructures()),
-    (messages_enum.structures_center, message_serializers.PositionStructures()),
-    (messages_enum.hook_complex_updated, message_serializers.ComplexUpdatedHook()),
-    (messages_enum.hook_selection_changed, message_serializers.SelectionChangedHook()),
-    (messages_enum.compute_hbonds, message_serializers.ComputeHBonds()),
-    (messages_enum.substructure_request, message_serializers.RequestSubstructure()),
+    (messages_enum.workspace_update, structure.messages.UpdateWorkspace()),
+    (messages_enum.structures_deep_update, structure.messages.UpdateStructures(False)),
+    (messages_enum.structures_shallow_update, structure.messages.UpdateStructures(True)),
+    (messages_enum.workspace_request, structure.messages.RequestWorkspace()),
+    (messages_enum.complex_list_request, structure.messages.RequestComplexList()),
+    (messages_enum.add_to_workspace, structure.messages.AddToWorkspace()),
+    (messages_enum.complexes_request, structure.messages.RequestComplexes()),
+    (messages_enum.bonds_add, structure.messages.AddBonds()),
+    (messages_enum.dssp_add, structure.messages.AddDSSP()),
+    (messages_enum.structures_zoom, structure.messages.PositionStructures()),
+    (messages_enum.structures_center, structure.messages.PositionStructures()),
+    (messages_enum.hook_complex_updated, structure.messages.ComplexUpdatedHook()),
+    (messages_enum.hook_selection_changed, structure.messages.SelectionChangedHook()),
+    (messages_enum.compute_hbonds, structure.messages.ComputeHBonds()),
+    (messages_enum.substructure_request, structure.messages.RequestSubstructure()),
     # volume
     (messages_enum.add_volume, message_serializers.AddVolume()),
     # ui

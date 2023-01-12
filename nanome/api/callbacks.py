@@ -13,17 +13,6 @@ def advanced_settings(network, args, request_id):
     network.on_advanced_settings()
 
 
-def receive_complexes(network, arg, request_id):
-    for i in range(len(arg)):
-        if arg[i]._index == -1:
-            arg[i] = None
-    network._call(request_id, arg)
-
-
-def complex_updated(network, arg, request_id):
-    PluginInstance._on_complex_updated(arg[0], arg[1])
-
-
 def connect(network, arg, request_id):
     pass
 
@@ -45,7 +34,6 @@ def feed_stream(network, result, request_id):
 
 
 def integration(network, args, request_id):
-
     integration = network._plugin.integration
     request = IntegrationRequest(args[0], args[1], args[2], network)
     name = Hashes.HashToIntegrationName[args[1]]
@@ -53,7 +41,6 @@ def integration(network, args, request_id):
 
 
 def receive_interrupt_stream(network, result, request_id):
-
     try:
         stream = Stream._streams[result[1]]
     except:
@@ -278,11 +265,3 @@ def dropdown_item_clicked(network, arg, request_id):
         dropdown._on_item_clicked(clickedItem)
     else:
         logger.warning("Can't find UI content for callback")
-
-
-def complex_added(network, arg, request_id):
-    network.on_complex_added()
-
-
-def complex_removed(network, arg, request_id):
-    network.on_complex_removed()
