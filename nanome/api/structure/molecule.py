@@ -5,16 +5,13 @@ from nanome._internal.enums import Messages
 
 from nanome.util import Logs
 from . import Base
+from ._deprecated import MoleculeDeprecated
 
 
-class Molecule(_Molecule, Base):
+class Molecule(_Molecule, MoleculeDeprecated, Base):
     """
     | Represents a molecule. Contains chains.
     """
-
-    def __init__(self):
-        super(Molecule, self).__init__()
-        self._molecular = Molecule.Molecular(self)
 
     def add_chain(self, chain):
         """
@@ -196,25 +193,6 @@ class Molecule(_Molecule, Base):
         expects_response = callback is not None or nanome.PluginInstance._instance.is_async
         id = PluginNetwork.send(Messages.substructure_request, (self.index, nanome.util.enums.SubstructureType.Solvent), expects_response)
         return nanome.PluginInstance._save_callback(id, callback)
-
-    # region deprecated
-    @property
-    @Logs.deprecated()
-    def molecular(self):
-        return self._molecular
-
-    class Molecular(object):
-        def __init__(self, parent):
-            self.parent = parent
-
-        @property
-        def name(self):
-            return self.parent.name
-
-        @name.setter
-        def name(self, value):
-            self.parent.name = value
-    # endregion
 
 
 _Molecule._create = Molecule

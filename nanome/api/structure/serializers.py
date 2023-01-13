@@ -8,6 +8,7 @@ from ..._internal.structure import _Atom, _Bond, _Chain, _Complex, _Molecule, _R
 
 
 class AtomSerializer(TypeSerializer):
+
     def __init__(self):
         self.color = ColorSerializer()
         self.string = StringSerializer()

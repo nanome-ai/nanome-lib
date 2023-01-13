@@ -4,9 +4,10 @@ from nanome._internal.enums import Messages
 from nanome.util import Matrix, Logs
 from .io import ComplexIO
 from . import Base
+from ._deprecated import ComplexDeprecated
 
 
-class Complex(_Complex, Base):
+class Complex(_Complex, ComplexDeprecated, Base):
     """
     | Represents a Complex that contains molecules.
     """
@@ -14,9 +15,6 @@ class Complex(_Complex, Base):
 
     def __init__(self):
         super(Complex, self).__init__()
-        self._rendering = Complex.Rendering(self)
-        self._molecular = Complex.Molecular(self)
-        self._transform = Complex.Transform(self)
         self.io = ComplexIO(self)
 
     def add_molecule(self, molecule):
@@ -317,147 +315,5 @@ class Complex(_Complex, Base):
             complex.position = target_complex.position.get_copy()
             complex.rotation = target_complex.rotation.get_copy()
 
-    # region deprecated
-
-    @property
-    @Logs.deprecated()
-    def rendering(self):
-        return self._rendering
-
-    @property
-    @Logs.deprecated()
-    def molecular(self):
-        return self._molecular
-
-    @property
-    @Logs.deprecated()
-    def transform(self):
-        return self._transform
-
-    class Rendering(object):
-        def __init__(self, parent):
-            self.parent = parent
-
-        @property
-        def boxed(self):
-            return self.parent._boxed
-
-        @boxed.setter
-        def boxed(self, value):
-            self.parent.boxed = value
-
-        @property
-        def locked(self):
-            return self.parent.locked
-
-        @locked.setter
-        def locked(self, value):
-            self.parent.locked = value
-
-        @property
-        def visible(self):
-            return self.parent.visible
-
-        @visible.setter
-        def visible(self, value):
-            self.parent.visible = value
-
-        @property
-        def computing(self):
-            return self.parent.computing
-
-        @computing.setter
-        def computing(self, value):
-            self.parent.computing = value
-
-        @property
-        def current_frame(self):
-            return self.parent.current_frame
-
-        @current_frame.setter
-        def current_frame(self, value):
-            self.parent.current_frame = value
-
-        # returns true if the complex is selected on nanome.
-        def get_selected(self):
-            return self.parent.selected
-
-        def set_surface_needs_redraw(self):
-            self.parent.surface_dirty = True
-
-        @property
-        def box_label(self):
-            return self._box_label
-
-        @box_label.setter
-        def box_label(self, value):
-            self._box_label = value
-
-    class Molecular(object):
-        def __init__(self, parent):
-            self.parent = parent
-
-        @property
-        def name(self):
-            return self.parent.name
-
-        @name.setter
-        def name(self, value):
-            self.parent.name = value
-
-        @property
-        def index_tag(self):
-            return self.parent.index_tag
-
-        @index_tag.setter
-        def index_tag(self, value):
-            self.parent.index_tag = value
-
-        @property
-        def split_tag(self):
-            return self.parent.split_tag
-
-        @split_tag.setter
-        def split_tag(self, value):
-            self.parent.split_tag = value
-
-    class Transform(object):
-        def __init__(self, parent):
-            self.parent = parent
-
-        @property
-        def position(self):
-            return self.parent.position
-
-        @position.setter
-        def position(self, value):
-            self.parent.position = value
-
-        @property
-        def rotation(self):
-            return self.parent.rotation
-
-        @rotation.setter
-        def rotation(self, value):
-            self.parent.rotation = value
-
-        def get_workspace_to_complex_matrix(self):
-            rotation = Matrix.from_quaternion(self.parent.rotation)
-            rotation.transpose()
-
-            translation = Matrix.identity(4)
-            translation[0][3] = -self.parent.position.x
-            translation[1][3] = -self.parent.position.y
-            translation[2][3] = -self.parent.position.z
-
-            transformation = rotation * translation
-            return transformation
-
-        def get_complex_to_workspace_matrix(self):
-            result = self.parent.get_workspace_to_complex_matrix()
-            result = result.get_inverse()
-            return result
-
-    # endregion
 Complex.io._setup_addon(Complex)
 _Complex._create = Complex
