@@ -1,6 +1,6 @@
 from nanome._internal import serializer_fields
 from nanome.api.streams import Stream
-from nanome.util.enums import StreamType
+from nanome.util.enums import StreamDataType, StreamDirection, StreamType
 
 
 class CreateStream(serializer_fields.TypeSerializer):
@@ -37,7 +37,6 @@ class CreateStreamResult(serializer_fields.TypeSerializer):
         raise NotImplementedError
 
     def deserialize(self, version, context):
-        from nanome.util.enums import StreamDataType, StreamDirection
         err = context.read_byte()
         id = context.read_uint()
         if version > 0:
@@ -78,7 +77,6 @@ class FeedStream(serializer_fields.TypeSerializer):
         return "StreamFeed"
 
     def serialize(self, version, value, context):
-
         context.write_uint(value[0])
         data_type = value[2]
         if version > 0:
@@ -91,7 +89,6 @@ class FeedStream(serializer_fields.TypeSerializer):
             context.write_float_array(value[1])
 
     def deserialize(self, version, context):
-
         id = context.read_uint()
         type = Stream.DataType.float
         if version > 0:
