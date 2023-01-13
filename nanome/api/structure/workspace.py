@@ -1,9 +1,10 @@
 from nanome._internal.structure.models import _Workspace
-from nanome.util import Matrix, Logs
+from nanome.util import Matrix
 from .client import WorkspaceClient
+from ._deprecated import WorkspaceDeprecated
 
 
-class Workspace(_Workspace):
+class Workspace(_Workspace, WorkspaceDeprecated):
     """
     | Workspace that contains all the complexes shown in Nanome.
     """
