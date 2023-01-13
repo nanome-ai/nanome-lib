@@ -1,8 +1,8 @@
 from nanome._internal.serializer_fields import (
-    ArraySerializer, StringSerializer, ColorSerializer, CharSerializer,
-    UnityPositionSerializer, Vector3Serializer, UnityRotationSerializer,
-    BoolSerializer, DictionarySerializer, ByteSerializer, TypeSerializer,
-    LongSerializer, QuaternionSerializer
+    ArrayField, StringField, ColorField, CharField,
+    UnityPositionField, Vector3Field, UnityRotationField,
+    BoolField, DictionaryField, ByteField, TypeSerializer,
+    LongField, QuaternionField
 )
 from ..._internal.structure import _Atom, _Bond, _Chain, _Complex, _Molecule, _Residue, _Substructure, _Workspace
 
@@ -10,13 +10,13 @@ from ..._internal.structure import _Atom, _Bond, _Chain, _Complex, _Molecule, _R
 class AtomSerializer(TypeSerializer):
 
     def __init__(self):
-        self.color = ColorSerializer()
-        self.string = StringSerializer()
-        self.char = CharSerializer()
-        self.vector = Vector3Serializer()
-        self.array = ArraySerializer()
-        self.bool = BoolSerializer()
-        self.dict = DictionarySerializer()
+        self.color = ColorField()
+        self.string = StringField()
+        self.char = CharField()
+        self.vector = Vector3Field()
+        self.array = ArrayField()
+        self.bool = BoolField()
+        self.dict = DictionaryField()
         self.dict.set_types(self.string, self.string)
 
     def version(self):
@@ -199,9 +199,9 @@ class BondSerializer(TypeSerializer):
     def __init__(self, shallow=False):
         self.shallow = shallow
         self.atom_serializer = AtomSerializerID()
-        self.array = ArraySerializer()
-        self.bool = BoolSerializer()
-        self.byte = ByteSerializer()
+        self.array = ArrayField()
+        self.bool = BoolField()
+        self.byte = ByteField()
 
     def version(self):
         # Version 0 corresponds to Nanome release 1.12
@@ -256,9 +256,9 @@ class BondSerializer(TypeSerializer):
 class ChainSerializer(TypeSerializer):
     def __init__(self, shallow=False):
         self.shallow = shallow
-        self.array_serializer = ArraySerializer()
+        self.array_serializer = ArrayField()
         self.array_serializer.set_type(ResidueSerializer())
-        self.string = StringSerializer()
+        self.string = StringField()
 
     def version(self):
         return 0
@@ -288,17 +288,17 @@ class ChainSerializer(TypeSerializer):
 class ComplexSerializer(TypeSerializer):
     def __init__(self, shallow=False):
         self.shallow = shallow
-        self.array = ArraySerializer()
+        self.array = ArrayField()
         self.array.set_type(MoleculeSerializer())
-        self.string = StringSerializer()
+        self.string = StringField()
 
-        self.dictionary = DictionarySerializer()
+        self.dictionary = DictionaryField()
         self.dictionary.set_types(self.string, self.string)
 
-        self.vector = Vector3Serializer()
-        self.quaternion = QuaternionSerializer()
-        self.pos = UnityPositionSerializer()
-        self.rot = UnityRotationSerializer()
+        self.vector = Vector3Field()
+        self.quaternion = QuaternionField()
+        self.pos = UnityPositionField()
+        self.rot = UnityRotationField()
 
     def version(self):
         return 3
@@ -382,9 +382,9 @@ class ComplexSerializer(TypeSerializer):
 class MoleculeSerializer(TypeSerializer):
     def __init__(self, shallow=False):
         self.shallow = shallow
-        self.array = ArraySerializer()
-        self.string = StringSerializer()
-        self.dictionary = DictionarySerializer()
+        self.array = ArrayField()
+        self.string = StringField()
+        self.dictionary = DictionaryField()
         self.dictionary.set_types(self.string, self.string)
 
     def version(self):
@@ -451,12 +451,12 @@ class MoleculeSerializer(TypeSerializer):
 class ResidueSerializer(TypeSerializer):
     def __init__(self, shallow=False):
         self.shallow = shallow
-        self.array = ArraySerializer()
+        self.array = ArrayField()
         self.atom = AtomSerializerID()
         self.bond = BondSerializer()
-        self.color = ColorSerializer()
-        self.string = StringSerializer()
-        self.char = CharSerializer()
+        self.color = ColorField()
+        self.string = StringField()
+        self.char = CharField()
 
     def version(self):
         # Version 0 corresponds to Nanome release 1.10
@@ -530,9 +530,9 @@ class ResidueSerializer(TypeSerializer):
 
 class SubstructureSerializer(TypeSerializer):
     def __init__(self):
-        self.string = StringSerializer()
-        self.array = ArraySerializer()
-        self.array.set_type(LongSerializer())
+        self.string = StringField()
+        self.array = ArrayField()
+        self.array.set_type(LongField())
 
     def version(self):
         return 0
@@ -558,11 +558,11 @@ class SubstructureSerializer(TypeSerializer):
 
 class WorkspaceSerializer(TypeSerializer):
     def __init__(self):
-        self.array = ArraySerializer()
+        self.array = ArrayField()
         self.array.set_type(ComplexSerializer())
-        self.vec = Vector3Serializer()
-        self.pos = UnityPositionSerializer()
-        self.rot = UnityRotationSerializer()
+        self.vec = Vector3Field()
+        self.pos = UnityPositionField()
+        self.rot = UnityRotationField()
 
     def version(self):
         return 0

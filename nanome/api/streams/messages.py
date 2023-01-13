@@ -68,8 +68,8 @@ class DestroyStream(serializer_fields.TypeSerializer):
 class FeedStream(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self.__array = serializer_fields.ArraySerializer()
-        self.__array.set_type(serializer_fields.StringSerializer())
+        self.__array = serializer_fields.ArrayField()
+        self.__array.set_type(serializer_fields.StringField())
 
     def version(self):
         return 2

@@ -6,7 +6,7 @@ from nanome.api import structure
 class CD(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self.__string = serializer_fields.StringSerializer()
+        self.__string = serializer_fields.StringField()
 
     def version(self):
         return 0
@@ -24,7 +24,7 @@ class CD(serializer_fields.TypeSerializer):
 class CP(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self.__string = serializer_fields.StringSerializer()
+        self.__string = serializer_fields.StringField()
 
     def version(self):
         return 0
@@ -45,9 +45,9 @@ class ExportFilesItem(serializer_fields.TypeSerializer):
 
     def __init__(self):
         self.__complex = structure.serializers.ComplexSerializer()
-        self.__string = serializer_fields.StringSerializer()
-        self.__dict = serializer_fields.DictionarySerializer()
-        self.__dict.set_types(serializer_fields.LongSerializer(), structure.serializers.AtomSerializer())
+        self.__string = serializer_fields.StringField()
+        self.__dict = serializer_fields.DictionaryField()
+        self.__dict.set_types(serializer_fields.LongField(), structure.serializers.AtomSerializer())
 
     def version(self):
         return 0
@@ -85,7 +85,7 @@ class ExportFilesItem(serializer_fields.TypeSerializer):
 class ExportFiles(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self.__array = serializer_fields.ArraySerializer()
+        self.__array = serializer_fields.ArrayField()
         self.__array.set_type(ExportFilesItem())
 
     def version(self):
@@ -109,7 +109,7 @@ class ExportFiles(serializer_fields.TypeSerializer):
 class FileMeta(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self.__string = serializer_fields.StringSerializer()
+        self.__string = serializer_fields.StringField()
 
     def version(self):
         return 0
@@ -135,7 +135,7 @@ class FileMeta(serializer_fields.TypeSerializer):
 class Get(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self.__string = serializer_fields.StringSerializer()
+        self.__string = serializer_fields.StringField()
 
     def version(self):
         return 0
@@ -157,8 +157,8 @@ class Get(serializer_fields.TypeSerializer):
 class LS(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self.__string = serializer_fields.StringSerializer()
-        self.__array = serializer_fields.ArraySerializer()
+        self.__string = serializer_fields.StringField()
+        self.__array = serializer_fields.ArrayField()
         self.__array.set_type(FileMeta())
 
     def version(self):
@@ -180,7 +180,7 @@ class LS(serializer_fields.TypeSerializer):
 class MKDir(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self.__string = serializer_fields.StringSerializer()
+        self.__string = serializer_fields.StringField()
 
     def version(self):
         return 0
@@ -199,7 +199,7 @@ class MKDir(serializer_fields.TypeSerializer):
 class MV(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self.__string = serializer_fields.StringSerializer()
+        self.__string = serializer_fields.StringField()
 
     def version(self):
         return 0
@@ -219,7 +219,7 @@ class MV(serializer_fields.TypeSerializer):
 class Put(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self.__string = serializer_fields.StringSerializer()
+        self.__string = serializer_fields.StringField()
 
     def version(self):
         return 0
@@ -240,7 +240,7 @@ class Put(serializer_fields.TypeSerializer):
 class PWD(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self.__string = serializer_fields.StringSerializer()
+        self.__string = serializer_fields.StringField()
 
     def version(self):
         return 0
@@ -261,7 +261,7 @@ class PWD(serializer_fields.TypeSerializer):
 class RM(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self.__string = serializer_fields.StringSerializer()
+        self.__string = serializer_fields.StringField()
 
     def version(self):
         return 0
@@ -280,7 +280,7 @@ class RM(serializer_fields.TypeSerializer):
 class RMDir(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self.__string = serializer_fields.StringSerializer()
+        self.__string = serializer_fields.StringField()
 
     def version(self):
         return 0
@@ -299,9 +299,9 @@ class RMDir(serializer_fields.TypeSerializer):
 class DirectoryRequest(serializer_fields.TypeSerializer):
     # Deprecated
     def __init__(self):
-        self.__string = serializer_fields.StringSerializer()
-        self.__directory_entry_array = serializer_fields.ArraySerializer()
-        self.__directory_entry_array.set_type(serializer_fields.DirectoryEntrySerializer())
+        self.__string = serializer_fields.StringField()
+        self.__directory_entry_array = serializer_fields.ArrayField()
+        self.__directory_entry_array.set_type(serializer_fields.DirectoryEntryField())
 
     def version(self):
         return 0
@@ -325,10 +325,10 @@ class DirectoryRequest(serializer_fields.TypeSerializer):
 class FileRequest(serializer_fields.TypeSerializer):
     # Deprecated
     def __init__(self):
-        self.__string_array = serializer_fields.ArraySerializer()
-        self.__string_array.set_type(serializer_fields.StringSerializer())
-        self.__file_data_array = serializer_fields.ArraySerializer()
-        self.__file_data_array.set_type(serializer_fields.FileDataSerializer())
+        self.__string_array = serializer_fields.ArrayField()
+        self.__string_array.set_type(serializer_fields.StringField())
+        self.__file_data_array = serializer_fields.ArrayField()
+        self.__file_data_array.set_type(serializer_fields.FileDataField())
 
     def version(self):
         return 0
@@ -346,8 +346,8 @@ class FileRequest(serializer_fields.TypeSerializer):
 class FileSave(serializer_fields.TypeSerializer):
     # Deprecated
     def __init__(self):
-        self.__file_data_array = serializer_fields.ArraySerializer()
-        self.__file_data_array.set_type(serializer_fields.FileSaveDataSerializer())
+        self.__file_data_array = serializer_fields.ArrayField()
+        self.__file_data_array.set_type(serializer_fields.FileSaveDataField())
 
     def version(self):
         return 0
@@ -365,7 +365,7 @@ class FileSave(serializer_fields.TypeSerializer):
 class LoadFileInfo(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self.string = serializer_fields.StringSerializer()
+        self.string = serializer_fields.StringField()
 
     def version(self):
         return 0
@@ -384,7 +384,7 @@ class LoadFileInfo(serializer_fields.TypeSerializer):
 class LoadFile(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self.array = serializer_fields.ArraySerializer()
+        self.array = serializer_fields.ArrayField()
         self.array.set_type(LoadFileInfo())
 
     def version(self):
@@ -424,7 +424,7 @@ class LoadFileDoneInfo(serializer_fields.TypeSerializer):
 class LoadFileDone(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self.array = serializer_fields.ArraySerializer()
+        self.array = serializer_fields.ArrayField()
         self.array.set_type(LoadFileDoneInfo())
 
     def version(self):

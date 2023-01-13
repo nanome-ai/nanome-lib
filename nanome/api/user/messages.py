@@ -19,7 +19,7 @@ class GetPresenterInfo(serializer_fields.TypeSerializer):
 class GetPresenterInfoResponse(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self.string = serializer_fields.StringSerializer()
+        self.string = serializer_fields.StringField()
 
     def version(self):
         return 1

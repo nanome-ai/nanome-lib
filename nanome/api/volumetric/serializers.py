@@ -1,4 +1,4 @@
-from nanome._internal.serializer_fields import TypeSerializer, ArraySerializer, ColorSerializer, StringSerializer
+from nanome._internal.serializer_fields import TypeSerializer, ArrayField, ColorField, StringField
 
 
 class UnitCellSerializer(TypeSerializer):
@@ -25,7 +25,7 @@ class UnitCellSerializer(TypeSerializer):
 
 
 class VolumeDataSerializer(TypeSerializer):
-    __string = StringSerializer()
+    __string = StringField()
     __cell = UnitCellSerializer()
 
     def version(self):
@@ -54,7 +54,7 @@ class VolumeDataSerializer(TypeSerializer):
 
 
 class VolumeLayerSerializer(TypeSerializer):
-    __color = ColorSerializer()
+    __color = ColorField()
 
     def version(self):
         return 0
@@ -73,7 +73,7 @@ class VolumeLayerSerializer(TypeSerializer):
 
 class VolumePropertiesSerializer(TypeSerializer):
     def __init__(self):
-        self.__array = ArraySerializer()
+        self.__array = ArrayField()
         self.__array.set_type(VolumeLayerSerializer())
 
     def version(self):

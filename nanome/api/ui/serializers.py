@@ -1,6 +1,6 @@
 from ..._internal.ui import _Button, _Dropdown, _DropdownItem, _Image, _Label, _LayoutNode, _LoadingBar, _Menu, _Mesh, _Slider, _TextInput, _UIList
 from nanome._internal.enum_utils import IntEnum
-from nanome._internal.serializer_fields import ArraySerializer, TypeSerializer, ColorSerializer, ByteSerializer, CachedImageSerializer, StringSerializer, Vector3Serializer
+from nanome._internal.serializer_fields import ArrayField, TypeSerializer, ColorField, ByteField, CachedImageField, StringField, Vector3Field
 import logging
 logger = logging.getLogger(__name__)
 
@@ -57,10 +57,10 @@ class UIBaseSerializer(TypeSerializer):
 
 class ButtonSerializer(TypeSerializer):
     def __init__(self):
-        self.string = StringSerializer()
-        self.color = ColorSerializer()
-        self.vector = Vector3Serializer()
-        self.cached_image = CachedImageSerializer()
+        self.string = StringField()
+        self.color = ColorField()
+        self.vector = Vector3Field()
+        self.cached_image = CachedImageField()
 
     def version(self):
         return 6
@@ -392,7 +392,7 @@ UIBaseSerializer.register_type(
 
 class DropdownItemSerializer(TypeSerializer):
     def __init__(self):
-        self.string = StringSerializer()
+        self.string = StringField()
 
     def version(self):
         return 0
@@ -417,8 +417,8 @@ class DropdownItemSerializer(TypeSerializer):
 
 class DropdownSerializer(TypeSerializer):
     def __init__(self):
-        self.string = StringSerializer()
-        self.items = ArraySerializer()
+        self.string = StringField()
+        self.items = ArrayField()
         self.items.set_type(DropdownItemSerializer())
 
     def version(self):
@@ -450,11 +450,11 @@ UIBaseSerializer.register_type(
 
 class ImageSerializer(TypeSerializer):
     def __init__(self):
-        self.data = ArraySerializer()
-        self.data.set_type(ByteSerializer())
-        self.color = ColorSerializer()
-        self.string = StringSerializer()
-        self.cached_image = CachedImageSerializer()
+        self.data = ArrayField()
+        self.data.set_type(ByteField())
+        self.color = ColorField()
+        self.string = StringField()
+        self.cached_image = CachedImageField()
 
     def version(self):
         return 2
@@ -506,8 +506,8 @@ UIBaseSerializer.register_type(
 
 class LabelSerializer(TypeSerializer):
     def __init__(self):
-        self.string = StringSerializer()
-        self.color = ColorSerializer()
+        self.string = StringField()
+        self.color = ColorField()
 
     def version(self):
         return 1
@@ -624,7 +624,7 @@ class LayoutNodeSerializer(TypeSerializer):
 
 class LayoutNodeSerializerDeep(TypeSerializer):
     def __init__(self):
-        self._layout_array = ArraySerializer()
+        self._layout_array = ArrayField()
         self._layout_array.set_type(self)
         self._content_serializer = UIBaseSerializer()
         self._inited = False
@@ -680,7 +680,7 @@ class LayoutNodeSerializerDeep(TypeSerializer):
 
 class LoadingBarSerializer(TypeSerializer):
     def __init__(self):
-        self.string = StringSerializer()
+        self.string = StringField()
 
     def version(self):
         return 1
@@ -719,7 +719,7 @@ UIBaseSerializer.register_type(
 
 class MenuSerializer(TypeSerializer):
     def __init__(self):
-        self.string = StringSerializer()
+        self.string = StringField()
 
     def version(self):
         return 0
@@ -750,7 +750,7 @@ class MenuSerializer(TypeSerializer):
 
 class MeshSerializer(TypeSerializer):
     def __init__(self):
-        self.color = ColorSerializer()
+        self.color = ColorField()
 
     def version(self):
         return 1
@@ -819,8 +819,8 @@ UIBaseSerializer.register_type(
 
 class TextInputSerializer(TypeSerializer):
     def __init__(self):
-        self.string = StringSerializer()
-        self.color = ColorSerializer()
+        self.string = StringField()
+        self.color = ColorField()
 
     def version(self):
         return 3
@@ -887,7 +887,7 @@ UIBaseSerializer.register_type(
 
 class UIListSerializer(TypeSerializer):
     def __init__(self):
-        self._array = ArraySerializer()
+        self._array = ArrayField()
         self._array.set_type(LayoutNodeSerializerDeep())
 
     def version(self):

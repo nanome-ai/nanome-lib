@@ -1,4 +1,4 @@
-from nanome._internal.serializer_fields import TypeSerializer, StringSerializer, UnityPositionSerializer, ColorSerializer, ArraySerializer
+from nanome._internal.serializer_fields import TypeSerializer, StringField, UnityPositionField, ColorField, ArrayField
 import os
 import tempfile
 import logging
@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 class AnchorSerializer(TypeSerializer):
     def __init__(self):
-        self._offset = UnityPositionSerializer()
+        self._offset = UnityPositionField()
 
     def version(self):
         return 0
@@ -38,7 +38,7 @@ class AnchorSerializer(TypeSerializer):
 
 class LabelSerializer(TypeSerializer):
     def __init__(self):
-        self._string = StringSerializer()
+        self._string = StringField()
 
     def version(self):
         return 0
@@ -145,13 +145,13 @@ class MeshSerializer(TypeSerializer):
 
 class ShapeSerializer(TypeSerializer):
     def __init__(self):
-        self._position = UnityPositionSerializer()
-        self._color = ColorSerializer()
+        self._position = UnityPositionField()
+        self._color = ColorField()
         self._sphere = SphereSerializer()
         self._line = LineSerializer()
         self._label = LabelSerializer()
         self._mesh = MeshSerializer()
-        self._anchor_array = ArraySerializer()
+        self._anchor_array = ArrayField()
         self._anchor_array.set_type(AnchorSerializer())
 
     def version(self):

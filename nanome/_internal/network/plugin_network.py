@@ -1,4 +1,4 @@
-from nanome._internal.serializer_fields import CachedImageSerializer
+from nanome._internal.serializer_fields import CachedImageField
 from nanome._internal.logs import LogsManager
 from . import Packet
 import logging
@@ -25,7 +25,7 @@ class PluginNetwork(object):
         self._command_id = 0
         self.__version_table = version_table
 
-        CachedImageSerializer.session = session_id
+        CachedImageField.session = session_id
         PluginNetwork._instance = self
 
     def _on_run(self):

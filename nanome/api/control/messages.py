@@ -18,8 +18,8 @@ class AdvancedSettings(serializer_fields.TypeSerializer):
 class Connect(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self.__dictionary = serializer_fields.DictionarySerializer()
-        self.__dictionary.set_types(serializer_fields.StringSerializer(), serializer_fields.ByteSerializer())
+        self.__dictionary = serializer_fields.DictionaryField()
+        self.__dictionary.set_types(serializer_fields.StringField(), serializer_fields.ByteField())
 
     def version(self):
         return 0
@@ -53,7 +53,7 @@ class Run(serializer_fields.TypeSerializer):
 class SetPluginListButton(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self.__string = serializer_fields.StringSerializer()
+        self.__string = serializer_fields.StringField()
 
     def version(self):
         return 0
@@ -73,7 +73,7 @@ class SetPluginListButton(serializer_fields.TypeSerializer):
 class OpenURL(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self.string = serializer_fields.StringSerializer()
+        self.string = serializer_fields.StringField()
 
     def version(self):
         return 1
@@ -107,8 +107,8 @@ class GetControllerTransforms(serializer_fields.TypeSerializer):
 class GetControllerTransformsResponse(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self.pos = serializer_fields.UnityPositionSerializer()
-        self.rot = serializer_fields.UnityRotationSerializer()
+        self.pos = serializer_fields.UnityPositionField()
+        self.rot = serializer_fields.UnityRotationField()
 
     def version(self):
         return 0

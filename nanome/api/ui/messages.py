@@ -66,9 +66,9 @@ class GetMenuTransform(serializer_fields.TypeSerializer):
 class GetMenuTransformResponse(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self.pos = serializer_fields.UnityPositionSerializer()
-        self.rot = serializer_fields.UnityRotationSerializer()
-        self.vec3 = serializer_fields.Vector3Serializer()
+        self.pos = serializer_fields.UnityPositionField()
+        self.rot = serializer_fields.UnityRotationField()
+        self.vec3 = serializer_fields.Vector3Field()
 
     def version(self):
         return 0
@@ -138,9 +138,9 @@ class MenuCallback(serializer_fields.TypeSerializer):
 class SetMenuTransform(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self.pos = serializer_fields.UnityPositionSerializer()
-        self.rot = serializer_fields.UnityRotationSerializer()
-        self.vec3 = serializer_fields.Vector3Serializer()
+        self.pos = serializer_fields.UnityPositionField()
+        self.rot = serializer_fields.UnityRotationField()
+        self.vec3 = serializer_fields.Vector3Field()
 
     def version(self):
         return 0
@@ -184,7 +184,7 @@ class SliderCallback(serializer_fields.TypeSerializer):
 class TextInputCallback(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self.__tuple = serializer_fields.TupleSerializer(serializer_fields.IntSerializer(), serializer_fields.StringSerializer())
+        self.__tuple = serializer_fields.TupleField(serializer_fields.IntField(), serializer_fields.StringField())
 
     def version(self):
         return 1
@@ -230,7 +230,7 @@ class UIHook(serializer_fields.TypeSerializer):
 class UpdateContent(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self._array = serializer_fields.ArraySerializer()
+        self._array = serializer_fields.ArrayField()
         self._content = serializers.UIBaseSerializer()
         self._array.set_type(self._content)
 
@@ -254,7 +254,7 @@ class UpdateMenu(serializer_fields.TypeSerializer):
 
     def __init__(self):
         self.menu = serializers.MenuSerializer()
-        self.array = serializer_fields.ArraySerializer()
+        self.array = serializer_fields.ArrayField()
         self.layout = serializers.LayoutNodeSerializer()
         self.content = serializers.UIBaseSerializer()
 
@@ -289,7 +289,7 @@ class UpdateMenu(serializer_fields.TypeSerializer):
 class UpdateNode(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self._array = serializer_fields.ArraySerializer()
+        self._array = serializer_fields.ArrayField()
         self._node_serializer = serializers.LayoutNodeSerializerDeep()
         self._array.set_type(self._node_serializer)
 
@@ -312,7 +312,7 @@ class UpdateNode(serializer_fields.TypeSerializer):
 class SendNotification(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self.string = serializer_fields.StringSerializer()
+        self.string = serializer_fields.StringField()
 
     def version(self):
         return 0

@@ -54,7 +54,7 @@ class TypeSerializer(object):
         pass
 
 
-class ArraySerializer:
+class ArrayField:
     def __init__(self):
         self._serializer = None
 
@@ -81,7 +81,7 @@ class ArraySerializer:
         self._serializer = serializer
 
 
-class BoolSerializer:
+class BoolField:
 
     def serialize(self, version, value, context):
         context.write_bool(value)
@@ -90,7 +90,7 @@ class BoolSerializer:
         return context.read_bool()
 
 
-class ByteArraySerializer:
+class ByteArrayField:
 
     def serialize(self, version, value, context):
         context.write_byte_array(value)
@@ -99,7 +99,7 @@ class ByteArraySerializer:
         return context.read_byte_Array()
 
 
-class ByteSerializer:
+class ByteField:
 
     def serialize(self, version, value, context):
         context.write_byte(value)
@@ -109,22 +109,22 @@ class ByteSerializer:
         return byte
 
 
-class CachedImageSerializer:
+class CachedImageField:
     cache = set()
     session = 0
 
     def __init__(self):
-        self._string = StringSerializer()
+        self._string = StringField()
 
     def serialize(self, version, value, context):
-        session = CachedImageSerializer.session
+        session = CachedImageField.session
         if value == None or value == "":
             context.write_bool(False)
             context.write_using_serializer(self._string, str(session) + "-")
             context.write_byte_array([])
             return
 
-        if value in CachedImageSerializer.cache:
+        if value in CachedImageField.cache:
             context.write_bool(True)
             context.write_using_serializer(
                 self._string, str(session) + "-" + value)
@@ -135,7 +135,7 @@ class CachedImageSerializer:
             context.write_using_serializer(
                 self._string, str(session) + "-" + value)
             context.write_byte_array(data)
-            CachedImageSerializer.cache.add(value)
+            CachedImageField.cache.add(value)
 
     def deserialize(self, version, context):
         # This function is only used by unit tests
@@ -147,7 +147,7 @@ class CachedImageSerializer:
             context.read_byte_array()
 
 
-class CharSerializer:
+class CharField:
 
     def serialize(self, version, value, context):
         context.write_byte(ord(value[0]))
@@ -156,7 +156,7 @@ class CharSerializer:
         return chr(context.read_byte())
 
 
-class ColorSerializer:
+class ColorField:
 
     def serialize(self, version, value, context):
         context.write_uint(value._color)
@@ -166,7 +166,7 @@ class ColorSerializer:
         return Color.from_int(context.read_uint())
 
 
-class DictionarySerializer:
+class DictionaryField:
     def __init__(self):
         self._serializer = None
 
@@ -184,15 +184,15 @@ class DictionarySerializer:
         return result
 
     def set_types(self, serializer1, serializer2):
-        tuple_serializer = TupleSerializer()
+        tuple_serializer = TupleField()
         tuple_serializer.set_types(serializer1, serializer2)
-        self._serializer = ArraySerializer()
+        self._serializer = ArrayField()
         self._serializer.set_type(tuple_serializer)
 
 
-class DirectoryEntrySerializer:
+class DirectoryEntryField:
     def __init__(self):
-        self.__string = StringSerializer()
+        self.__string = StringField()
 
     def serialize(self, version, value, context):
         pass
@@ -205,7 +205,7 @@ class DirectoryEntrySerializer:
         return result
 
 
-class FileDataSerializer:
+class FileDataField:
 
     def serialize(self, version, value, context):
         pass
@@ -219,9 +219,9 @@ class FileDataSerializer:
         return result
 
 
-class FileSaveDataSerializer:
+class FileSaveDataField:
     def __init__(self):
-        self.__string = StringSerializer()
+        self.__string = StringField()
 
     def serialize(self, version, value, context):
         context.write_using_serializer(self.__string, value.path)
@@ -236,7 +236,7 @@ class FileSaveDataSerializer:
         return result
 
 
-class IntSerializer:
+class IntField:
 
     def serialize(self, version, value, context):
         context.write_int(value)
@@ -245,7 +245,7 @@ class IntSerializer:
         return context.read_int()
 
 
-class LongSerializer:
+class LongField:
 
     def serialize(self, version, value, context):
         context.write_long(value)
@@ -254,7 +254,7 @@ class LongSerializer:
         return context.read_long()
 
 
-class QuaternionSerializer:
+class QuaternionField:
 
     def serialize(self, version, value, context):
         context.write_float(value._x)
@@ -273,9 +273,9 @@ class QuaternionSerializer:
         return quaternion
 
 
-class UnityRotationSerializer:
+class UnityRotationField:
     def __init__(self):
-        self._Quat = QuaternionSerializer()
+        self._Quat = QuaternionField()
 
     def serialize(self, version, value, context):
         context.write_using_serializer(self._Quat, value)
@@ -284,7 +284,7 @@ class UnityRotationSerializer:
         return context.read_using_serializer(self._Quat)
 
 
-class StringSerializer:
+class StringField:
 
     def serialize(self, version, value, context):
         to_write = to_bytes(value, 'utf-8')
@@ -298,7 +298,7 @@ class StringSerializer:
         return str
 
 
-class TupleSerializer:
+class TupleField:
     def __init__(self, serializer1=None, serializer2=None):
         self._serializer1 = serializer1
         self._serializer2 = serializer2
@@ -324,7 +324,7 @@ class TupleSerializer:
         self._serializer2 = serializer2
 
 
-class Vector3Serializer:
+class Vector3Field:
 
     def serialize(self, version, value, context):
         context.write_float(value.x)
@@ -339,9 +339,9 @@ class Vector3Serializer:
         return Vector3(x, y, z)
 
 
-class UnityPositionSerializer:
+class UnityPositionField:
     def __init__(self):
-        self._vec3 = Vector3Serializer()
+        self._vec3 = Vector3Field()
 
     def serialize(self, version, value, context):
         context.write_using_serializer(self._vec3, value)

@@ -32,15 +32,15 @@ class DeleteShape(serializer_fields.TypeSerializer):
 class SetShape(serializer_fields.TypeSerializer):
 
     def __init__(self):
-        self._position = serializer_fields.UnityPositionSerializer()
-        self._rotation = serializer_fields.UnityRotationSerializer()
-        self._color = serializer_fields.ColorSerializer()
+        self._position = serializer_fields.UnityPositionField()
+        self._rotation = serializer_fields.UnityRotationField()
+        self._color = serializer_fields.ColorField()
         self._sphere = serializers.SphereSerializer()
         self._line = serializers.LineSerializer()
         self._label = serializers.LabelSerializer()
         self._mesh = serializers.MeshSerializer()
         self._shape = serializers.ShapeSerializer()
-        self._shape_array = serializer_fields.ArraySerializer()
+        self._shape_array = serializer_fields.ArrayField()
         self._shape_array.set_type(self._shape)
 
     def version(self):

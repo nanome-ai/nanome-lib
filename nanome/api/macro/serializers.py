@@ -1,10 +1,10 @@
-from nanome._internal.serializer_fields import StringSerializer, TypeSerializer
+from nanome._internal.serializer_fields import StringField, TypeSerializer
 from .macro import Macro
 
 
 class MacroSerializer(TypeSerializer):
     def __init__(self):
-        self.string = StringSerializer()
+        self.string = StringField()
 
     def version(self):
         return 0

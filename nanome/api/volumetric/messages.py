@@ -9,8 +9,8 @@ class AddVolume(serializer_fields.TypeSerializer):
     def __init__(self):
         self.__complex = structure.serializers.ComplexSerializer()
         atom_serializer = structure.serializers.AtomSerializer()
-        long_serializer = serializer_fields.LongSerializer()
-        self.__dict = serializer_fields.DictionarySerializer()
+        long_serializer = serializer_fields.LongField()
+        self.__dict = serializer_fields.DictionaryField()
         self.__dict.set_types(long_serializer, atom_serializer)
         self.__data = serializers.VolumeDataSerializer()
         self.__properties = serializers.VolumePropertiesSerializer()
