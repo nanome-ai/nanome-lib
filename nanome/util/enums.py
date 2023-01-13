@@ -1,6 +1,4 @@
 import sys
-from nanome._internal.enum_utils import auto, reset_auto
-from nanome._internal.enums import CommandEnum
 
 if sys.version_info >= (3, 4):
     from enum import Enum, IntEnum
@@ -306,29 +304,24 @@ class SkyBoxes(IntEnum):
     Graydient = 5
 
 
-class Integrations(CommandEnum):
+class Integrations(IntEnum):
     """Integrations available to connect to your plugin.
 
     Some integrations have multiple hooks to connect to.
     See `nanome._internal.enums.Integrations` for more details
     """
-    # Reset enum counter for Python 2.7
-    reset_auto()
-
-    hydrogen = auto()
-    structure_prep = auto()
-    calculate_esp = auto()
-    minimization = auto()
-    export_file = auto()
-    export_locations = auto()
-    generate_molecule_image = auto()
-    import_file = auto()
-    analysis = auto()
-    interactions = auto()
-    smiles = auto()
+    hydrogen = 0
+    structure_prep = 1
+    calculate_esp = 2
+    minimization = 3
+    export_file = 4
+    export_locations = 5
+    generate_molecule_image = 6
+    import_file = 7
+    analysis = 8
+    interactions = 9
+    smiles = 10
 
 
-class Permissions(CommandEnum):
-    # Reset enum counter for Python 2.7
-    reset_auto()
-    local_files_access = auto()
+class Permissions(IntEnum):
+    local_files_access = 0

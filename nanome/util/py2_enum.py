@@ -37,7 +37,7 @@ import sys
 
 """Python Enumerations"""
 
-__all__ = ['Enum', 'IntEnum', 'unique', 'auto', 'reset_auto']
+__all__ = ['Enum', 'IntEnum', 'unique']
 
 pyver = float('%s.%s' % sys.version_info[:2])
 
@@ -910,18 +910,3 @@ def unique(enumeration):
                          (enumeration, duplicate_names)
                          )
     return enumeration
-
-
-__enum_auto_value = 0
-
-
-def auto():
-    global __enum_auto_value
-    result = __enum_auto_value
-    __enum_auto_value += 1
-    return result
-
-
-def reset_auto():
-    global __enum_auto_value
-    __enum_auto_value = 0
