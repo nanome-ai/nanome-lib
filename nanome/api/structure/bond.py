@@ -127,4 +127,5 @@ class Bond(_Bond, BondDeprecated, Base):
         self._in_conformer = value
     # endregion
 
+
 _Bond._create = Bond

@@ -1,11 +1,12 @@
 from nanome.util import Logs
 
+
 class AtomDeprecated:
     def __init__(self):
         super(AtomDeprecated, self).__init__()
         self._rendering = AtomDeprecated.Rendering(self)
         self._molecular = AtomDeprecated.Molecular(self)
-    
+
     # region deprecated
     @property
     @Logs.deprecated()
@@ -284,7 +285,7 @@ class ResidueDeprecated:
 
 
 class ChainDeprecated:
-    
+
     # region deprecated
     def __init__(self):
         super(ChainDeprecated, self).__init__()

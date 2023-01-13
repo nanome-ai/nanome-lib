@@ -240,4 +240,5 @@ class Residue(_Residue, ResidueDeprecated, Base):
         self._ignored_alt_locs = value
     # endregion
 
+
 _Residue._create = Residue

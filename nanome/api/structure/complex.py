@@ -315,5 +315,6 @@ class Complex(_Complex, ComplexDeprecated, Base):
             complex.position = target_complex.position.get_copy()
             complex.rotation = target_complex.rotation.get_copy()
 
+
 Complex.io._setup_addon(Complex)
 _Complex._create = Complex

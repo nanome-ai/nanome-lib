@@ -95,5 +95,6 @@ class Workspace(_Workspace, WorkspaceDeprecated):
     def get_world_to_workspace_matrix(self):
         return self.get_workspace_to_world_matrix().get_inverse()
 
+
 Workspace.client._setup_addon(Workspace)
 _Workspace._create = Workspace

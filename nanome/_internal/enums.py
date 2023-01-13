@@ -20,24 +20,24 @@ class Commands(int, Enum):
 
     # UI
     menu_toggle = 3
-    button_press =4
-    button_hover =5 
-    slider_release =6 
-    text_submit =7 
-    text_change =8
-    slider_change =9
-    image_press =10 
-    image_hold =11
-    image_release =12
-    dropdown_item_click =13 
-    menu_transform_response =14 
- 
+    button_press = 4
+    button_hover = 5
+    slider_release = 6
+    text_submit = 7
+    text_change = 8
+    slider_change = 9
+    image_press = 10
+    image_hold = 11
+    image_release = 12
+    dropdown_item_click = 13
+    menu_transform_response = 14
+
     # Structure
     workspace_response = 15
     complex_list_response = 16
-    complexes_response = 17 
+    complexes_response = 17
     substructure_response = 18
-    structures_deep_update_done = 19 
+    structures_deep_update_done = 19
     add_to_workspace_done = 20
     position_structures_done = 21
     complex_add = 22
@@ -47,7 +47,7 @@ class Commands(int, Enum):
     complex_updated = 26
     selection_changed = 27
     compute_hbonds_done = 28
- 
+
     # Stream
     stream_create_done = 29
     stream_feed = 30
@@ -71,7 +71,7 @@ class Commands(int, Enum):
     rm_response = 44
     rmdir_response = 45
     mkdir_response = 46
- 
+
     # Macro
     get_macros_response = 47
     run_macro_result = 48

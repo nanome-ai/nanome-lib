@@ -92,5 +92,6 @@ class Chain(_Chain, ChainDeprecated, Base):
         if type(value) is not str:
             value = str(value)
         self._name = value
+
     # endregion
 _Chain._create = Chain
