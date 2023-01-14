@@ -5,9 +5,10 @@ import socket
 import ssl
 import time
 
-from nanome._internal.network import Packet, Data
-from nanome.api.serializers import CommandMessageSerializer
+from nanome._internal.network import Packet, Data, PacketTypes
+
 from nanome._internal.serializer_fields import TypeSerializer
+from nanome.api.serializers import CommandMessageSerializer
 
 
 KEEP_ALIVE_TIME_INTERVAL = 60.0
@@ -16,7 +17,6 @@ PACKET_SIZE = 4096
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
-
 
 
 def send_packet(connection, packet: Packet):
@@ -59,7 +59,6 @@ def connect_to_nts(host, port):
 
 def receive(received_bytes):
     # Parse received bytes into Packet instance
-    breakpoint()
     data = Data()
     data.received_data(received_bytes)
     packet = Packet()
@@ -86,16 +85,31 @@ def connect_plugin(connection, description):
             # time.sleep(0.01)
             continue
     current_packet = receive(connect_data)
-    breakpoint()
     assert current_packet.packet_type == Packet.packet_type_plugin_connection
     return packet.plugin_id
 
 def on_client_connection(session_id, version_table):
     logger.info(f"Session {session_id} connected!")
 
+def route_packet(packet, connection, plugin_id, serializer):
+    if packet.packet_type == Packet.packet_type_message_to_plugin:
+        logger.info("Received message to plugin")
+        session_id = packet.session_id
+        if packet.payload:
+            received_version_table, _, _ = serializer.deserialize_command(packet.payload, None)
+            version_table = TypeSerializer.get_best_version_table(received_version_table)
+            on_client_connection(session_id, version_table)
+    elif packet.packet_type == Packet.packet_type_keep_alive:
+        logger.info("Received keep alive packet")
+        last_keep_alive = keep_alive(connection, last_keep_alive, plugin_id)
+    elif packet.packet_type == Packet.packet_type_plugin_list:
+        logger.info("Plugin list happening?")
+    elif packet.packet_type == 97:
+        logger.info("What does packet_type 97 mean?")
+
+
 def loop_forever(connection, plugin_id):
     serializer = CommandMessageSerializer()
-    last_keep_alive = time.time()
     while True:
         try:
             received_data = connection.recv(PACKET_SIZE)
@@ -105,25 +119,18 @@ def loop_forever(connection, plugin_id):
         except ssl.SSLEOFError:
             logger.error("Connection has been forcibly closed by the server")
             break
+        except KeyboardInterrupt:
+            logger.warning("Server stopped by user")
+            break
         else:
             packet = receive(received_data)
-            logger.debug(packet.packet_type)
-            if packet.packet_type == Packet.packet_type_message_to_plugin:
-                print("Plugin connection happening")
-                session_id = packet.session_id
-                if packet.payload:
-                    received_version_table, _, _ = serializer.deserialize_command(packet.payload, None)
-                    version_table = TypeSerializer.get_best_version_table(received_version_table)
-                    on_client_connection(session_id, version_table)
+            try:
+                packet_type = PacketTypes(packet.packet_type).name
+            except ValueError:
+                packet_type = packet.packet_type
 
-            elif packet.packet_type == Packet.packet_type_keep_alive:
-                logger.info("Received keep alive packet")
-                last_keep_alive = keep_alive(connection, last_keep_alive, plugin_id)
-
-            elif packet.packet_type == Packet.packet_type_plugin_list:
-                logger.info("Plugin list happening?")
-            elif packet.packet_type == 97:
-                logger.info("What does packet_type 97 mean?")
+            logger.debug(f"Packet received {packet_type}")
+            route_packet(packet, connection, plugin_id, serializer)
 
 def keep_alive(connection, last_keep_alive, plugin_id):
     now = time.time()
