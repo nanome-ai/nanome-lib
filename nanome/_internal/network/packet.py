@@ -2,6 +2,7 @@ import struct
 import zlib
 import enum
 
+
 class PacketTypes(enum.IntEnum):
     plugin_list = 0
     plugin_connection = 1

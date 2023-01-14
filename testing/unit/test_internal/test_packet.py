@@ -18,7 +18,7 @@ class PacketTestCase(unittest.TestCase):
         payload = self.packet.payload
         expected_value = test_payload.encode('utf-8')
         self.assertEqual(payload, expected_value)
-    
+
     def test_write(self):
         test_payload_1 = 'test1'.encode('utf-8')
         self.packet.write(test_payload_1)
@@ -30,7 +30,7 @@ class PacketTestCase(unittest.TestCase):
         self.packet.write(test_payload_2)
         expected_value = test_payload_1 + test_payload_2  # test1test2
         self.assertEqual(self.packet.payload, expected_value)
-    
+
     def test_compress(self):
         self.assertEqual(self.packet.payload_length, 0)
         test_payload = 'test1test2test3'
