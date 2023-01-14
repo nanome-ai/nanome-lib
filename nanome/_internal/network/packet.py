@@ -20,6 +20,9 @@ class Packet(object):
     header_unpack = struct.Struct('<HIBIi').unpack
     __compress_obj = zlib.compressobj(4, zlib.DEFLATED, -zlib.MAX_WBITS)
 
+    def __repr__(self):
+        return f"Packet(version={self.version}, session_id={self.session_id}, packet_type={self.packet_type}, plugin_id={self.plugin_id}, payload_length={self.payload_length})"
+
     def __init__(self):
         self.version = Packet.protocol_version
         self.session_id = 0
@@ -27,10 +30,6 @@ class Packet(object):
         self.plugin_id = 0
         self.payload_length = 0
         self.payload = bytearray()
-
-    @staticmethod
-    def _compression_type():
-        return 0
 
     def write_string(self, str):
         encoded = str.encode('utf-8')
@@ -79,6 +78,10 @@ class Packet(object):
         self.session_id = session_id
         self.packet_type = type
         self.plugin_id = plugin_id
+
+    @staticmethod
+    def _compression_type():
+        return 0
 
     def __len__(self):
         return self.payload_length + Packet.packet_header_length

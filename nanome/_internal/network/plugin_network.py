@@ -71,8 +71,7 @@ class PluginNetwork(object):
         to_send = self._serializer.serialize_message(
             command_id, code, arg, version_table, expects_response)
         packet = Packet()
-        packet.set(self._session_id,
-                   Packet.packet_type_message_to_client, self._plugin_id)
+        packet.set(self._session_id, Packet.packet_type_message_to_client, self._plugin_id)
         packet.write(to_send)
         # if code != 0: # Messages.connect
         #     packet.compress()
