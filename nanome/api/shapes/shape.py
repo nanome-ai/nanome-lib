@@ -1,9 +1,8 @@
 import nanome
 from nanome.util import Logs, Color
-from nanome._internal import network
+from nanome._internal.network import PluginNetwork
 from nanome._internal.enums import Messages
 
-plugin_network = network.PluginNetwork._instance
 
 try:
     import asyncio
@@ -156,7 +155,7 @@ class Shape:
             if done_callback is not None:
                 done_callback(result)
 
-        id = plugin_network.send(Messages.set_shape, [self], True)
+        id = PluginNetwork._instance.send(Messages.set_shape, [self], True)
         result = nanome.PluginInstance._save_callback(
             id, set_callback if done_callback else None)
         if done_callback is None and nanome.PluginInstance._instance.is_async:
@@ -179,7 +178,7 @@ class Shape:
             if done_callback is not None:
                 done_callback(results)
 
-        id = plugin_network.send(Messages.set_shape, shapes, True)
+        id = PluginNetwork._instance.send(Messages.set_shape, shapes, True)
         result = nanome.PluginInstance._save_callback(
             id, set_callback if done_callback else None)
         if done_callback is None and nanome.PluginInstance._instance.is_async:
@@ -194,7 +193,7 @@ class Shape:
             if done_callback is not None:
                 done_callback(indices)
 
-        id = plugin_network.send(
+        id = PluginNetwork._instance.send(
             Messages.delete_shape, [self._index], True)
         result = nanome.PluginInstance._save_callback(
             id, set_callback if done_callback else None)
@@ -212,7 +211,7 @@ class Shape:
                 done_callback(indices)
 
         indices = [x._index for x in shapes]
-        id = plugin_network.send(Messages.delete_shape, indices, True)
+        id = PluginNetwork._instance.send(Messages.delete_shape, indices, True)
         result = nanome.PluginInstance._save_callback(
             id, set_callback if done_callback else None)
         if done_callback is None and nanome.PluginInstance._instance.is_async:
