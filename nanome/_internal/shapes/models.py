@@ -1,11 +1,9 @@
 # from nanome._internal.network import nanome._internal.network.PluginNetwork
 import logging
-from nanome._internal import network, enums
 from nanome._internal.enums import Messages
+from nanome._internal.network import PluginNetwork
 
 logger = logging.getLogger(__name__)
-
-plugin_network = network.PluginNetwork._instance
 
 
 class _Shape(object):
@@ -32,7 +30,7 @@ class _Shape(object):
             if done_callback is not None:
                 done_callback(result)
 
-        id = plugin_network.send(Messages.set_shape, [self], True)
+        id = PluginNetwork._instance.send(Messages.set_shape, [self], True)
         result = nanome.PluginInstance._save_callback(
             id, set_callback if done_callback else None)
         if done_callback is None and nanome.PluginInstance._instance.is_async:
@@ -56,7 +54,7 @@ class _Shape(object):
             if done_callback is not None:
                 done_callback(results)
 
-        id = plugin_network.send(Messages.set_shape, shapes, True)
+        id = PluginNetwork._instance.send(Messages.set_shape, shapes, True)
         result = nanome.PluginInstance._save_callback(
             id, set_callback if done_callback else None)
         if done_callback is None and nanome.PluginInstance._instance.is_async:
@@ -71,7 +69,7 @@ class _Shape(object):
         def set_callback(indices):
             if done_callback is not None:
                 done_callback(indices)
-        id = plugin_network.send(
+        id = PluginNetwork._instance.send(
             Messages.delete_shape, [self._index], True)
         result = nanome.PluginInstance._save_callback(
             id, set_callback if done_callback else None)
@@ -90,7 +88,7 @@ class _Shape(object):
                 done_callback(indices)
 
         indices = [x._index for x in shapes]
-        id = plugin_network.send(Messages.delete_shape, indices, True)
+        id = PluginNetwork._instance.send(Messages.delete_shape, indices, True)
         result = nanome.PluginInstance._save_callback(
             id, set_callback if done_callback else None)
         if done_callback is None and nanome.PluginInstance._instance.is_async:
