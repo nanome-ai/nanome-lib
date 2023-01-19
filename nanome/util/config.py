@@ -40,6 +40,9 @@ PLUGIN_IGNORE
 __all__ = ['load_settings', 'fetch', 'set', 'create_parser']
 
 
+logger = logging.getLogger(__name__)
+
+
 def str2bool(v):
     """Accept various truthy/falsey values as boolean arguments."""
     if isinstance(v, bool):
@@ -127,7 +130,11 @@ def set(key, value):
 def _get_config_dict():
     config_path = _setup_file()
     with open(config_path, "r") as f:
-        config_dict = json.load(f)
+        try:
+            config_dict = json.load(f)
+        except json.decoder.JSONDecodeError:
+            logger.warning("{} setup failed".format(config_path))
+            config_dict = {}
     serialized_dict = _serialize_dict_with_parser(config_dict)
     return serialized_dict
 
@@ -164,7 +171,6 @@ def _get_cli_args():
 def _setup_file():
     config_path = _get_config_path()
     directory = os.path.dirname(config_path)
-    logger = logging.getLogger(__name__)
 
     if not os.path.isdir(directory):
         try:
