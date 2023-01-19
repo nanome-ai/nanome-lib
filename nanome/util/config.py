@@ -133,7 +133,7 @@ def _get_config_dict():
         try:
             config_dict = json.load(f)
         except json.decoder.JSONDecodeError:
-            logger.warning(".config file setup failed")
+            logger.warning("{} setup failed".format(config_path))
             config_dict = {}
     serialized_dict = _serialize_dict_with_parser(config_dict)
     return serialized_dict
