@@ -158,7 +158,8 @@ class Molecule(_Molecule, MoleculeDeprecated, Base):
         return self._current_conformer
 
     @current_conformer.setter
-    def current_conformer(self, value: int):
+    def current_conformer(self, value):
+        """"value: int"""
         self._current_conformer = value
 
     def create_conformer(self, index):

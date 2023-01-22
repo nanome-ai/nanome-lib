@@ -3,7 +3,7 @@ import sys
 if sys.version_info >= (3, 4):
     from enum import Enum, IntEnum
 else:
-    from .py2_enum import Enum, IntEnum
+    from nanome._internal.py2_enum import Enum, IntEnum
 
 
 class SubstructureType(IntEnum):

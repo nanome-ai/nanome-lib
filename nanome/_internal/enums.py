@@ -1,7 +1,7 @@
 import sys
 from nanome._internal.enum_utils import IntEnum
 import logging
-from enum import Enum
+from nanome._internal.enum_utils import Enum
 
 
 logger = logging.getLogger(__name__)

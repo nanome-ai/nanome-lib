@@ -1,9 +1,8 @@
 import struct
 import zlib
-import enum
+from nanome._internal.enum_utils import IntEnum
 
-
-class PacketTypes(enum.IntEnum):
+class PacketTypes(IntEnum):
     plugin_list = 0
     plugin_connection = 1
     client_connection = 2
@@ -37,7 +36,9 @@ class Packet(object):
 
     def __repr__(self):
         packet_type = PacketTypes(self.packet_type).name
-        return f"Packet(version={self.version}, session_id={self.session_id}, packet_type={packet_type}, plugin_id={self.plugin_id}, payload_length={self.payload_length})"
+        return (
+            "Packet(version={}, session_id={}, packet_type={}, plugin_id={}, payload_length={})"
+        ).format(self.version, self.session_id, packet_type, self.plugin_id, self.payload_length)
 
     def __init__(self):
         self.version = Packet.protocol_version

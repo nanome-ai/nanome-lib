@@ -1,11 +1,9 @@
 import json
-import fnmatch
 import logging
 import multiprocessing
 import os
 import random
 import re
-import subprocess
 import signal
 import string
 import sys
@@ -13,14 +11,15 @@ import time
 from timeit import default_timer as timer
 
 from nanome._internal.serializer_fields import TypeSerializer
-from . import _DefaultPlugin
 from nanome._internal.logs import LogsManager
 from nanome._internal.process import ProcessManager
 from nanome._internal import network
 from nanome.api._hashes import Hashes
 from nanome.api.serializers import CommandMessageSerializer
+from nanome.api.mixins import AutoReloadMixin
 from nanome.util.logs import Logs
 from nanome.util import config
+from . import _DefaultPlugin
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +29,7 @@ KEEP_ALIVE_TIME_INTERVAL = 60.0
 KEEP_ALIVE_TIMEOUT = 15.0
 
 
-class Plugin:
+class Plugin(AutoReloadMixin):
     """Process that connects to NTS, and allows a user to access a PluginInstance.
 
     When plugin process is running, an entry is added to the Nanome Stacks Menu.
@@ -40,8 +39,8 @@ class Plugin:
     """
 
     _serializer = CommandMessageSerializer()
-    _plugin_id = -1
-    _custom_data = None
+    plugin_id = -1
+    custom_data = None
 
     def __init__(self, name, description, tags=None, has_advanced=False, permissions=None, integrations=None, version=None):
         """
@@ -56,6 +55,15 @@ class Plugin:
         :param version: Semantic version number of plugin. Used for logging.
         :type version: :class:`str`
         """
+        super(Plugin, self).__init__()
+        self.host = ''
+        self.port = None
+        self.key = ''
+        self.remote_logging = False
+        self.write_log_file = True
+        self.verbose = False
+        self.has_autoreload = False
+
         tags = tags or []
         permissions = permissions or []
         integrations = integrations or []
@@ -87,15 +95,7 @@ class Plugin:
             'permissions': permissions,
             'integrations': integrations
         }
-        self._plugin_class = None
         self.connected = False
-        self._host = ''
-        self._key = ''
-        self._port = None
-        self._pre_run = None
-        self._post_run = None
-        self._write_log_file = True
-        self._remote_logging = False
         self._to_ignore = []
         self.__waiting_keep_alive = False
 
@@ -147,7 +147,7 @@ class Plugin:
             self.name = settings.get('name')
 
         # Configure Logging
-        self.__log_filename = self._plugin_class.__name__ + ".log"
+        self.__log_filename = self.plugin_class.__name__ + ".log"
         self._logs_manager = LogsManager(
             self.__log_filename,
             plugin=self,
@@ -156,9 +156,8 @@ class Plugin:
         self._logs_manager.configure_main_process(self.plugin_class)
 
         Logs.message("Starting Plugin")
-
         if self.has_autoreload:
-            self._autoreload()
+            self.autoreload()
         else:
             self._run()
 
@@ -179,67 +178,11 @@ class Plugin:
         :param args: Variable length argument list
         :type args: Anything serializable
         """
-        self._custom_data = args
+        self.custom_data = args
 
     @staticmethod
     def set_maximum_processes_count(max_process_nb):
         ProcessManager._max_process_count = max_process_nb
-
-    @property
-    def host(self):
-        return getattr(self, '_host', None)
-
-    @host.setter
-    def host(self, value):
-        setattr(self, '_host', value)
-
-    @property
-    def port(self):
-        return getattr(self, '_port', None)
-
-    @port.setter
-    def port(self, value):
-        setattr(self, '_port', value)
-
-    @property
-    def key(self):
-        return getattr(self, '_key', None)
-
-    @key.setter
-    def key(self, value):
-        setattr(self, '_key', value)
-
-    @property
-    def write_log_file(self):
-        return getattr(self, '_write_log_file', None)
-
-    @write_log_file.setter
-    def write_log_file(self, value):
-        setattr(self, '_write_log_file', value)
-
-    @property
-    def remote_logging(self):
-        return getattr(self, '_remote_logging', None)
-
-    @remote_logging.setter
-    def remote_logging(self, value):
-        setattr(self, '_remote_logging', value)
-
-    @property
-    def verbose(self):
-        return getattr(self, '_verbose', None)
-
-    @verbose.setter
-    def verbose(self, value):
-        setattr(self, '_verbose', value)
-
-    @property
-    def has_autoreload(self):
-        return getattr(self, '_has_autoreload', None)
-
-    @has_autoreload.setter
-    def has_autoreload(self, value):
-        setattr(self, '_has_autoreload', value)
 
     @property
     def to_ignore(self):
@@ -248,15 +191,6 @@ class Plugin:
     @to_ignore.setter
     def to_ignore(self, value):
         setattr(self, '_to_ignore', value)
-
-    @property
-    def plugin_class(self):
-        """Child class of PluginInstance class that will be instantiated when Session activated."""
-        return getattr(self, '_plugin_class', None)
-
-    @plugin_class.setter
-    def plugin_class(self, value):
-        setattr(self, '_plugin_class', value)
 
     @property
     def name(self):
@@ -276,30 +210,6 @@ class Plugin:
         :type plugin_class: :class:`~nanome.PluginInstance`
         """
         self.plugin_class = plugin_class
-
-    @property
-    def pre_run(self):
-        """
-        | Function to call before the plugin runs and tries to connect to NTS
-        | Useful when using autoreload
-        """
-        return self._pre_run
-
-    @pre_run.setter
-    def pre_run(self, value):
-        self._pre_run = value
-
-    @property
-    def post_run(self):
-        """
-        | Function to call when the plugin is about to exit
-        | Useful when using autoreload
-        """
-        return self._post_run
-
-    @post_run.setter
-    def post_run(self, value):
-        self._post_run = value
 
     @classmethod
     def _run_plugin_instance(
@@ -356,9 +266,9 @@ class Plugin:
     def _connect(self):
         """Create network Connection to NTS, and start listening for packets."""
         self._network = network.NetInstance(self, self.__class__._on_packet_received)
-        if self._network.connect(self._host, self._port):
-            if self._plugin_id >= 0:
-                plugin_id = self._plugin_id
+        if self._network.connect(self.host, self.port):
+            if self.plugin_id >= 0:
+                plugin_id = self.plugin_id
             else:
                 plugin_id = 0
             packet = network.Packet()
@@ -406,20 +316,20 @@ class Plugin:
                         self.connected = False
                         self.__disconnection_time = timer()
                         continue
-                elif now - self.__last_keep_alive >= KEEP_ALIVE_TIME_INTERVAL and self._plugin_id >= 0:
+                elif now - self.__last_keep_alive >= KEEP_ALIVE_TIME_INTERVAL and self.plugin_id >= 0:
                     self.__last_keep_alive = now
                     self.__waiting_keep_alive = True
                     packet = network.Packet()
-                    packet.set(self._plugin_id, network.Packet.packet_type_keep_alive, 0)
+                    packet.set(self.plugin_id, network.Packet.packet_type_keep_alive, 0)
                     self._network.send(packet)
 
                 del to_remove[:]
                 for id, session in self._sessions.items():
-                    if session._read_from_plugin() is False:
+                    if session.read_from_plugin() is False:
                         session.close_pipes()
                         to_remove.append(id)
                 for id in to_remove:
-                    self._sessions[id]._send_disconnection_message(self._plugin_id)
+                    self._sessions[id]._send_disconnection_message(self.plugin_id)
                     del self._sessions[id]
                 self._process_manager.update()
         except KeyboardInterrupt:
@@ -443,10 +353,10 @@ class Plugin:
         process = multiprocessing.Process(
             target=self._run_plugin_instance,
             args=(
-                self._plugin_class, session_id, net_queue_in, net_queue_out,
+                self.plugin_class, session_id, net_queue_in, net_queue_out,
                 pm_queue_in, pm_queue_out, log_pipe_conn, self._serializer,
-                self._plugin_id, version_table, TypeSerializer.get_version_table(),
-                self._custom_data, permissions
+                self.plugin_id, version_table, TypeSerializer.get_version_table(),
+                self.custom_data, permissions
             )
         )
 
@@ -458,19 +368,6 @@ class Plugin:
         self._sessions[session_id] = session
         extra = {'session_id': session_id}
         logger.info("Registered new session: {}".format(session_id), extra=extra)
-
-    def __read_key(self):
-        if not self._key:
-            return
-        # check if arg is key data
-        elif re.match(r'^[0-9A-F]+$', self._key):
-            return self._key
-        try:
-            f = open(self._key, "r")
-            key = f.read().strip()
-            return key
-        except Exception:
-            return None
 
     def _on_packet_received(self, packet):
         """When packet received, identify Packet type, and call appropriate function."""
@@ -495,11 +392,11 @@ class Plugin:
             logger.warning("Received a command from an unregistered session {}".format(session_id))
 
         elif packet.packet_type == network.Packet.packet_type_plugin_connection:
-            self._plugin_id = packet.plugin_id
-            logger.info("Registered with plugin ID {}\n=======================================\n".format(str(self._plugin_id)))
+            self.plugin_id = packet.plugin_id
+            logger.info("Registered with plugin ID {}\n=======================================\n".format(str(self.plugin_id)))
 
         elif packet.packet_type == network.Packet.packet_type_plugin_disconnection:
-            if self._plugin_id == -1:
+            if self.plugin_id == -1:
                 if self._description['auth'] is None:
                     logger.error("Connection refused by NTS. Are you missing a security key file?")
                 else:
@@ -525,59 +422,22 @@ class Plugin:
         else:
             logger.warning("Received a packet of unknown type {}. Ignoring".format(packet.packet_type))
 
-    def __file_filter(self, name):
-        return name.endswith(".py") or name.endswith(".json")
+    @staticmethod
+    def _is_process():
+        return multiprocessing.current_process().name != 'MainProcess'
 
-    def __file_times(self, path):
-        found_file = False
-        for root, dirs, files in os.walk(path):
-            for file in filter(self.__file_filter, files):
-                file_path = os.path.join(root, file)
-                matched = False
-                for pattern in self._to_ignore:
-                    if fnmatch.fnmatch(file_path, pattern):
-                        matched = True
-                if matched is False:
-                    found_file = True
-                    yield os.stat(file_path).st_mtime
-        if found_file is False:
-            yield 0.0
-
-    def _autoreload(self):
-        wait = 3
-
-        if os.name == "nt":
-            sub_kwargs = {'creationflags': subprocess.CREATE_NEW_PROCESS_GROUP}
-            break_signal = signal.CTRL_BREAK_EVENT
-        else:
-            sub_kwargs = {}
-            break_signal = signal.SIGTERM
-
-        # Make sure autoreload is turned off for child processes.
-        sub_args = [x for x in sys.argv if x != '-r' and x != "--auto-reload"]
-        popen_environ = dict(os.environ)
-        popen_environ.pop('PLUGIN_AUTO_RELOAD', None)
-
+    def __read_key(self):
+        if not self.key:
+            return
+        # check if arg is key data
+        elif re.match(r'^[0-9A-F]+$', self.key):
+            return self.key
         try:
-            sub_args = [sys.executable] + sub_args
-            process = subprocess.Popen(sub_args, env=popen_environ, **sub_kwargs)
+            f = open(self.key, "r")
+            key = f.read().strip()
+            return key
         except Exception:
-            logger.error("Couldn't find a suitable python executable")
-            sys.exit(1)
-
-        last_mtime = max(self.__file_times("."))
-        while True:
-            try:
-                max_mtime = max(self.__file_times("."))
-                if max_mtime > last_mtime:
-                    last_mtime = max_mtime
-                    logger.info("Restarting plugin")
-                    process.send_signal(break_signal)
-                    process = subprocess.Popen(sub_args, **sub_kwargs)
-                time.sleep(wait)
-            except KeyboardInterrupt:
-                process.send_signal(break_signal)
-                break
+            return None
 
     def __disconnect(self):
         to_remove = []
@@ -622,7 +482,4 @@ class Plugin:
         packet = network.Packet()
         packet.set(0, network.Packet.packet_type_logs_request, 0)
         packet.write_string(json.dumps(response))
-
-    @staticmethod
-    def _is_process():
-        return multiprocessing.current_process().name != 'MainProcess'
+    

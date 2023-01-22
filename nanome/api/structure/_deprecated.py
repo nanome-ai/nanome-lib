@@ -1,7 +1,7 @@
 from nanome.util import Logs
+from nanome.util import Matrix
 
-
-class AtomDeprecated:
+class AtomDeprecated(object):
     def __init__(self):
         super(AtomDeprecated, self).__init__()
         self._rendering = AtomDeprecated.Rendering(self)
@@ -149,7 +149,7 @@ class AtomDeprecated:
     # endregion
 
 
-class BondDeprecated:
+class BondDeprecated(object):
 
     def __init__(self):
         super(BondDeprecated, self).__init__()
@@ -175,7 +175,7 @@ class BondDeprecated:
     # endregion
 
 
-class ResidueDeprecated:
+class ResidueDeprecated(object):
 
     def __init__(self):
         super(ResidueDeprecated, self).__init__()
@@ -284,7 +284,7 @@ class ResidueDeprecated:
     # endregion
 
 
-class ChainDeprecated:
+class ChainDeprecated(object):
 
     # region deprecated
     def __init__(self):
@@ -311,7 +311,7 @@ class ChainDeprecated:
     # endregion
 
 
-class MoleculeDeprecated:
+class MoleculeDeprecated(object):
 
     def __init__(self):
         super(MoleculeDeprecated, self).__init__()
@@ -337,7 +337,7 @@ class MoleculeDeprecated:
     # endregion
 
 
-class ComplexDeprecated:
+class ComplexDeprecated(object):
 
     def __init__(self):
         super(ComplexDeprecated, self).__init__()

@@ -9,7 +9,7 @@ class Sphere(Shape):
     """
 
     def __init__(self):
-        super().__init__(ShapeType.Sphere)
+        super(Sphere, self).__init__(ShapeType.Sphere)
         self._anchors = [Anchor()]
         self._radius = 1.0
 

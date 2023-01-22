@@ -1,7 +1,13 @@
 import json
 import os
+import sys
 import unittest
-from unittest.mock import MagicMock
+
+if sys.version_info.major >= 3:
+    from unittest.mock import MagicMock
+else:
+    # Python 2.7 way of getting magicmock. Requires pip install mock
+    from mock import MagicMock
 
 from nanome._internal.logs import LogsManager
 from nanome.api.serializers import CommandMessageSerializer
@@ -12,6 +18,7 @@ test_assets = os.getcwd() + ("/testing/test_assets")
 
 
 class PluginNetworkTestCase(unittest.TestCase):
+
     def setUp(self):
         version_table_file = os.path.join(test_assets, "version_table_1_24_2.json")
         with open(version_table_file, 'r') as f:

@@ -10,7 +10,7 @@ except ImportError:
     asyncio = False
 
 
-class Shape:
+class Shape(object):
     """
     | Base class of a shape. Used in self.create_shape(shape_type) in plugins.
 

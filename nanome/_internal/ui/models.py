@@ -299,7 +299,7 @@ class _Dropdown(_UIBase):
         self._item_clicked_callback = other._item_clicked_callback
 
 
-class _DropdownItem():
+class _DropdownItem(object):
     @classmethod
     def _create(cls):
         return cls()
@@ -556,6 +556,7 @@ class _LayoutNode(object):
 
 
 class _LoadingBar(_UIBase):
+
     @classmethod
     def _create(cls):
         return cls()
@@ -568,7 +569,7 @@ class _LoadingBar(_UIBase):
         self._failure = False
 
     def _copy_values_deep(self, other):
-        super()._copy_values_deep(other)
+        super(_LoadingBar, self)._copy_values_deep(other)
         self._percentage = other._percentage
         self._title = other._title
         self._description = other._description

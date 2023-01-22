@@ -1,12 +1,19 @@
 import json
 import os
+import sys
 import unittest
 
 from nanome.api import macro
 from nanome.api.serializers import CommandMessageSerializer
 from nanome._internal.network import PluginNetwork
 from nanome.api import PluginInstance
-from unittest.mock import MagicMock
+
+
+if sys.version_info.major >= 3:
+    from unittest.mock import MagicMock
+else:
+    # Python 2.7 way of getting magicmock. Requires pip install mock
+    from mock import MagicMock
 
 
 test_assets = os.getcwd() + ("/testing/test_assets")

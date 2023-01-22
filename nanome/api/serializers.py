@@ -57,7 +57,8 @@ class CommandMessageSerializer(object):
                 command = CommandMessageSerializer._messages[command_hash]
             except KeyError:
                 logger.warning(
-                    f"Trying to serialize an unregistered message type: {message_type}")
+                    "Trying to serialize an unregistered message type: {}".format(message_type)
+                )
             if command is not None:
                 context.write_using_serializer(command, arg)
                 return context.to_array()
@@ -74,7 +75,7 @@ class CommandMessageSerializer(object):
             if self.try_register_session(payload) is True:
                 logger.error("A session is trying to connect even though it is already connected")
             else:
-                logger.error(f"Received an unregistered command: {command_hash}")
+                logger.error("Received an unregistered command: {}".format(command_hash))
             return (None, None, None)
         except BufferError as err:
             logger.error(err)
