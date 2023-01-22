@@ -24,7 +24,12 @@ __all__ = ['_LoggingWatcher', '_BaseTestCaseContext', '_CapturingHandler', '_Ass
 
 
 class Py2AssertLogs(object):
+<<<<<<< HEAD
     """Py2 compatible version of unittest.Testcase.assertLogs."""
+=======
+    """Py2 compatible version of unittest.Testcase.assertLogs"""
+
+>>>>>>> Automated autopep8 fixes
     def __init__(self, *args, **kwargs):
         super(Py2AssertLogs, self).__init__(*args, **kwargs)
         if sys.version_info.major < 3:
@@ -35,7 +40,11 @@ class Py2AssertLogs(object):
         return _AssertLogsContext(self, logger, level)
 
 
+<<<<<<< HEAD
 class PluginLoggingTestCase(unittest.TestCase):
+=======
+class PluginLoggingTestCase(Py2AssertLogs, unittest.TestCase):
+>>>>>>> Automated autopep8 fixes
 
     def setUp(self):
         self.plugin = Plugin('Test Plugin', 'Unit Test Plugin')
