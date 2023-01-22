@@ -39,7 +39,7 @@ jobs:
       - name: Install dependencies
         run: |
           python2 -m pip install --upgrade pip
-          pip install -e .
-          pip install mock
+          python2 -m pip install -e .
+          python2 -m pip install mock
       - name: Run tests.py
         run: python tests.py
