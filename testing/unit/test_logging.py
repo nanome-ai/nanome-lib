@@ -118,9 +118,14 @@ class PluginLoggingTestCase(unittest.TestCase):
             self.plugin.run(self.host, self.port, self.key)
 
         # Write log, and make sure log_file_handler is called.
-        self.plugin._logs_manager.log_file_handler.handle = MagicMock()
+        logger = logging.getLogger(__name__)
+        active_rfh = [
+            h for h in logger.handlers
+            if isinstance(h, logging.handlers.RotatingFileHandler)
+        ][0]
+        active_rfh.handle = MagicMock()
         Logs.message('Log file handler should be called.')
-        self.plugin._logs_manager.log_file_handler.handle.assert_called()
+        active_rfh.handle.assert_called()
 
     @patch('nanome.api.Plugin._run')
     @patch('nanome._internal.network.NetInstance')
@@ -158,10 +163,14 @@ class PluginLoggingTestCase(unittest.TestCase):
 
         with patch.object(sys, 'argv', testargs):
             self.plugin.run(self.host, self.port, self.key)
-            console_handler = self.plugin._logs_manager.console_handler
-            with patch.object(console_handler, 'handle') as handle_mock:
-                Logs.message("Should be printed to console")
-                handle_mock.assert_called()
+            logger = logging.getLogger(__name__)
+            console_handler = [
+                h for h in logger.handlers
+                if isinstance(h, logging.StreamHandler)
+            ][0]
+            console_handler.handle = MagicMock()
+            Logs.message("Should be printed to console")
+            console_handler.handle.assert_called()
 
 
 class LogUtilTestCase(Py2AssertLogs, unittest.TestCase):
