@@ -1,6 +1,7 @@
 from nanome.util import Logs
 from nanome.util import Matrix
 
+
 class AtomDeprecated(object):
     def __init__(self):
         super(AtomDeprecated, self).__init__()

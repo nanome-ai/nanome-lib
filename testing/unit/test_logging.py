@@ -15,12 +15,19 @@ import collections
 import logging
 
 
+class _BaseTestCaseContext(object):
+
+    def __init__(self, test_case):
+        self.test_case = test_case
+
 __all__ = ['_LoggingWatcher', '_BaseTestCaseContext', '_CapturingHandler', '_AssertLogsContext']
 
+
 class Py2AssertLogs(object):
-    """Py2 compatible version of unittest.Testcase.assertLogs"""
-    def __init__(self, *args, **kwargs):
-        super(Py2AssertLogs, self).__init__(*args, **kwargs)
+
+    def __init__(self):
+        import pdb
+        pdb.set_trace()
         if sys.version_info.major <= 3:
             self.assertLogs = self._assertLogs
 
@@ -28,7 +35,8 @@ class Py2AssertLogs(object):
         "Py2 compatible version of self.assertLogs"
         return _AssertLogsContext(self, logger, level)
 
-class PluginLoggingTestCase(Py2AssertLogs, unittest.TestCase):
+
+class PluginLoggingTestCase(unittest.TestCase):
 
     def setUp(self):
         self.plugin = Plugin('Test Plugin', 'Unit Test Plugin')
@@ -163,6 +171,8 @@ class LogUtilTestCase(Py2AssertLogs, unittest.TestCase):
         self.logger.setLevel(logging.INFO)
 
     def test_log_warning(self):
+        import pdb
+        pdb.set_trace()
         with self.assertLogs(self.logger, logging.WARNING) as captured:
             message = "This is a warning"
             Logs.warning(message)

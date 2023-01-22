@@ -51,7 +51,7 @@ class AutoReloadMixin(object):
             except KeyboardInterrupt:
                 process.send_signal(break_signal)
                 break
-    
+
     def __file_times(self, path):
         found_file = False
         for root, dirs, files in os.walk(path):
@@ -66,7 +66,7 @@ class AutoReloadMixin(object):
                     yield os.stat(file_path).st_mtime
         if found_file is False:
             yield 0.0
-    
+
     def __file_filter(self, name):
         return name.endswith(".py") or name.endswith(".json")
 

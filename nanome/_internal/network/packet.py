@@ -2,6 +2,7 @@ import struct
 import zlib
 from nanome._internal.enum_utils import IntEnum
 
+
 class PacketTypes(IntEnum):
     plugin_list = 0
     plugin_connection = 1

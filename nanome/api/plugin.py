@@ -482,4 +482,3 @@ class Plugin(AutoReloadMixin):
         packet = network.Packet()
         packet.set(0, network.Packet.packet_type_logs_request, 0)
         packet.write_string(json.dumps(response))
-    
