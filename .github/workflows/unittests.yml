@@ -34,6 +34,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install python2
+          curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
+          python2 get-pip.py
       - name: Install dependencies
         run: |
           python2 -m pip install --upgrade pip
