@@ -1,3 +1,4 @@
+import sys
 import struct
 import zlib
 from nanome._internal.enum_utils import IntEnum
@@ -65,8 +66,10 @@ class Packet(object):
         return packed
 
     def compress(self):
-        self.payload = Packet.__compress_obj.compress(
-            self.payload) + Packet.__compress_obj.flush(zlib.Z_FULL_FLUSH)
+        if sys.version_info.major == 2:
+            # TODO: Figure out why/if this is needed.
+            self.payload = str(self.payload)
+        self.payload = Packet.__compress_obj.compress(self.payload) + Packet.__compress_obj.flush(zlib.Z_FULL_FLUSH)
         self.payload_length = len(self.payload)
 
     def decompress(self):

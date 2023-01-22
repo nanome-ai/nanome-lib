@@ -39,6 +39,7 @@ class PacketTestCase(unittest.TestCase):
         self.assertEqual(self.packet.payload_length, len(test_payload))
         self.packet.compress()
         self.assertEqual(self.packet.payload_length, len(test_payload_compressed))
+        self.assertEqual(self.packet.payload, test_payload_compressed)
 
     def test_pack_unpack(self):
         # Generate a packet with a payload.
