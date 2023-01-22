@@ -24,11 +24,10 @@ __all__ = ['_LoggingWatcher', '_BaseTestCaseContext', '_CapturingHandler', '_Ass
 
 
 class Py2AssertLogs(object):
-
-    def __init__(self):
-        import pdb
-        pdb.set_trace()
-        if sys.version_info.major <= 3:
+    """Py2 compatible version of unittest.Testcase.assertLogs."""
+    def __init__(self, *args, **kwargs):
+        super(Py2AssertLogs, self).__init__(*args, **kwargs)
+        if sys.version_info.major < 3:
             self.assertLogs = self._assertLogs
 
     def _assertLogs(self, logger=None, level=None):
@@ -209,7 +208,9 @@ class LogUtilTestCase(Py2AssertLogs, unittest.TestCase):
             self.assertEqual(len(captured.records), 1)
             self.assertEqual(captured.records[0].getMessage(), message)
 
+
 _LoggingWatcher = collections.namedtuple("_LoggingWatcher", ["records", "output"])
+
 
 class _BaseTestCaseContext(object):
 
