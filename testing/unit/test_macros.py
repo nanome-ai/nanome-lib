@@ -101,7 +101,7 @@ class MacroTestCase(unittest.TestCase):
         version_table_file = os.path.join(test_assets, "version_table_1_24_2.json")
         with open(version_table_file, 'r') as f:
             version_table = json.load(f)
-        
+
         serializer = CommandMessageSerializer()
         # Mock args that are passed to setup plugin instance networking
         plugin = session_id = queue_in = queue_out = plugin_id = MagicMock()
