@@ -18,6 +18,7 @@ def safe_cast(cls, value):
             logger.warning("Invalid value", value, "for enum", cls.__name__, ". Library might outdated.")
         return list(cls)[0]
 
+
 if sys.version_info >= (3, 6):
     from enum import auto
 
