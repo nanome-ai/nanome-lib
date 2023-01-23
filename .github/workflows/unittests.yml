@@ -42,4 +42,4 @@ jobs:
           python2 -m pip install -e .
           python2 -m pip install mock
       - name: Run tests.py
-        run: python tests.py
+        run: python2 tests.py
