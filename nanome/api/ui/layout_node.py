@@ -233,15 +233,15 @@ class LayoutNode(_LayoutNode):
         )
 
     def set_size_ratio(self, size):
-        self.sizing_type = _LayoutNode.SizingTypes.ratio
+        self.sizing_type = self.SizingTypes.ratio
         self.sizing_value = size
 
     def set_size_fixed(self, size):
-        self.sizing_type = _LayoutNode.SizingTypes.fixed
+        self.sizing_type = self.SizingTypes.fixed
         self.sizing_value = size
 
     def set_size_expand(self):
-        self.sizing_type = _LayoutNode.SizingTypes.expand
+        self.sizing_type = self.SizingTypes.expand
     # endregion
     # region Content adders
 
