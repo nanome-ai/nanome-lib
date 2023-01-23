@@ -20,11 +20,13 @@ class _BaseTestCaseContext(object):
     def __init__(self, test_case):
         self.test_case = test_case
 
+
 __all__ = ['_LoggingWatcher', '_BaseTestCaseContext', '_CapturingHandler', '_AssertLogsContext']
 
 
 class Py2AssertLogs(object):
     """Py2 compatible version of unittest.Testcase.assertLogs"""
+
     def __init__(self, *args, **kwargs):
         super(Py2AssertLogs, self).__init__(*args, **kwargs)
         if sys.version_info.major < 3:
