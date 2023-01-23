@@ -1,6 +1,7 @@
 import nanome
 from nanome._internal.ui import _LayoutNode
 from nanome.api.ui import Button, Slider, UIList, Mesh, Label, TextInput, Image, LoadingBar, Dropdown
+from nanome.util import enums
 from .io import LayoutNodeIO
 
 
