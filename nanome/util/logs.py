@@ -2,7 +2,7 @@ import inspect
 import logging
 import sys
 from nanome._internal.decorators import deprecated as _internal_deprecated
-from nanome._internal.enum_utils import IntEnum
+from nanome._internal.enum_utils import auto, IntEnum
 
 
 class Logs(object):
@@ -11,10 +11,10 @@ class Logs(object):
     | Possible log types are Debug, Warning, and Error.
     """
     class LogType(IntEnum):
-        debug = 0
-        warning = 1
-        error = 2
-        info = 3
+        debug = auto()
+        warning = auto()
+        error = auto()
+        info = auto()
 
     @classmethod
     def error(cls, *args, **kwargs):

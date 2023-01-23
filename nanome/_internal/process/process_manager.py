@@ -1,4 +1,4 @@
-from nanome._internal.enum_utils import IntEnum
+from nanome._internal.enum_utils import IntEnum, auto
 from nanome._internal.process import ProcessEntry
 from collections import deque
 from functools import partial
@@ -23,16 +23,16 @@ POSIX = 'posix' in sys.builtin_module_names
 class ProcessManager():
 
     class DataType(IntEnum):
-        queued = 0
-        position_changed = 1
-        starting = 2
-        error = 3
-        output = 4
-        done = 5
+        queued = auto()
+        position_changed = auto()
+        starting = auto()
+        error = auto()
+        output = auto()
+        done = auto()
 
     class CommandType(IntEnum):
-        start = 0
-        stop = 1
+        start = auto()
+        stop = auto()
 
     _max_process_count = 10
 
