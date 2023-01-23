@@ -36,7 +36,7 @@ class PluginTestCase(unittest.TestCase):
         parser = Plugin.create_parser()
         self.assertTrue(isinstance(parser, argparse.ArgumentParser))
 
-    @patch('nanome.api.Plugin.autoreload')
+    @patch('nanome.api.Plugin._autoreload')
     @patch('nanome.api.Plugin._loop')
     @patch('nanome._internal.network.NetInstance.connect')
     @patch('nanome._internal.network.NetInstance.send')
@@ -115,7 +115,7 @@ class PluginTestCase(unittest.TestCase):
 
     @patch('nanome.api.Plugin._loop')
     @patch('nanome._internal.network.NetInstance')
-    @patch('nanome.api.Plugin.autoreload')
+    @patch('nanome.api.Plugin._autoreload')
     def test_config_priority(self, *args):
         """Validate order of priority for plugin settings.
 

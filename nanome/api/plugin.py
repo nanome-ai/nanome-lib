@@ -1,3 +1,4 @@
+import fnmatch
 import json
 import logging
 import multiprocessing
@@ -5,6 +6,7 @@ import os
 import random
 import re
 import signal
+import subprocess
 import string
 import sys
 import time
@@ -16,7 +18,6 @@ from nanome._internal.process import ProcessManager
 from nanome._internal import network
 from nanome.api._hashes import Hashes
 from nanome.api.serializers import CommandMessageSerializer
-from nanome.api.mixins import AutoReloadMixin
 from nanome.util.logs import Logs
 from nanome.util import config
 from . import _DefaultPlugin
@@ -29,7 +30,7 @@ KEEP_ALIVE_TIME_INTERVAL = 60.0
 KEEP_ALIVE_TIMEOUT = 15.0
 
 
-class Plugin(AutoReloadMixin):
+class Plugin(object):
     """Process that connects to NTS, and allows a user to access a PluginInstance.
 
     When plugin process is running, an entry is added to the Nanome Stacks Menu.
@@ -98,6 +99,8 @@ class Plugin(AutoReloadMixin):
         self.connected = False
         self._to_ignore = []
         self.__waiting_keep_alive = False
+        self._pre_run = None
+        self._post_run = None
 
     @staticmethod
     def create_parser():
@@ -157,7 +160,7 @@ class Plugin(AutoReloadMixin):
 
         Logs.message("Starting Plugin")
         if self.has_autoreload:
-            self.autoreload()
+            self._autoreload()
         else:
             self._run()
 
@@ -482,3 +485,81 @@ class Plugin(AutoReloadMixin):
         packet = network.Packet()
         packet.set(0, network.Packet.packet_type_logs_request, 0)
         packet.write_string(json.dumps(response))
+
+    def _autoreload(self):
+        wait = 3
+
+        if os.name == "nt":
+            sub_kwargs = {'creationflags': subprocess.CREATE_NEW_PROCESS_GROUP}
+            break_signal = signal.CTRL_BREAK_EVENT
+        else:
+            sub_kwargs = {}
+            break_signal = signal.SIGTERM
+
+        # Make sure autoreload is turned off for child processes.
+        sub_args = [x for x in sys.argv if x != '-r' and x != "--auto-reload"]
+        popen_environ = dict(os.environ)
+        popen_environ.pop('PLUGIN_AUTO_RELOAD', None)
+
+        try:
+            sub_args = [sys.executable] + sub_args
+            process = subprocess.Popen(sub_args, env=popen_environ, **sub_kwargs)
+        except Exception:
+            logger.error("Couldn't find a suitable python executable")
+            sys.exit(1)
+
+        last_mtime = max(self.__file_times("."))
+        while True:
+            try:
+                max_mtime = max(self.__file_times("."))
+                if max_mtime > last_mtime:
+                    last_mtime = max_mtime
+                    logger.info("Restarting plugin")
+                    process.send_signal(break_signal)
+                    process = subprocess.Popen(sub_args, **sub_kwargs)
+                time.sleep(wait)
+            except KeyboardInterrupt:
+                process.send_signal(break_signal)
+                break
+
+    def __file_times(self, path):
+        found_file = False
+        for root, dirs, files in os.walk(path):
+            for file in filter(self.__file_filter, files):
+                file_path = os.path.join(root, file)
+                matched = False
+                for pattern in self._to_ignore:
+                    if fnmatch.fnmatch(file_path, pattern):
+                        matched = True
+                if matched is False:
+                    found_file = True
+                    yield os.stat(file_path).st_mtime
+        if found_file is False:
+            yield 0.0
+
+    def __file_filter(self, name):
+        return name.endswith(".py") or name.endswith(".json")
+
+    @property
+    def pre_run(self):
+        """
+        | Function to call before the plugin runs and tries to connect to NTS
+        | Useful when using autoreload
+        """
+        return self._pre_run
+
+    @pre_run.setter
+    def pre_run(self, value):
+        self._pre_run = value
+
+    @property
+    def post_run(self):
+        """
+        | Function to call when the plugin is about to exit
+        | Useful when using autoreload
+        """
+        return self._post_run
+
+    @post_run.setter
+    def post_run(self, value):
+        self._post_run = value
