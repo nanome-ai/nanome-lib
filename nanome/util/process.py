@@ -154,8 +154,11 @@ class Process():
             nanome.util.Logs.warning("Running process outside of ProcessManager. This should only happen during unittests.")
             cmd = [self.executable_path] + self.args
             result = subprocess.run(cmd, capture_output=True, text=self.output_text)
-            self.on_output(result.stdout)
-            self.on_error(result.stderr)
+            if result.stdout:
+                self.on_output(result.stdout)
+            if result.stderr:
+                self.on_error(result.stderr)
+            self.on_done(result.returncode)
             self._future.set_result(result.returncode)
         else:
             Process._manager.start_process(self, self.__request)
