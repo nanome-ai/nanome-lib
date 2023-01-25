@@ -16,6 +16,10 @@ logger = logging.getLogger(__name__)
 
 if sys.platform.startswith("linux"):
     DSSP_PATH = os.path.join(os.path.dirname(__file__), 'external', 'dssp', 'dssp-linux')
+    try:
+        os.chmod(DSSP_PATH, 0o777)
+    except PermissionError:
+        logger.warning("Could not set DSSP as executable")
 elif sys.platform.startswith("win"):
     DSSP_PATH = os.path.join(os.path.dirname(__file__), 'external', 'dssp', 'dssp-3.0.0-win32.exe')
 else:
