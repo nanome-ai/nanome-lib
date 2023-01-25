@@ -158,8 +158,8 @@ class Process():
                 self.on_output(result.stdout)
             if result.stderr:
                 self.on_error(result.stderr)
-            self.on_done(result.returncode)
             self._future.set_result(result.returncode)
+            self.on_done(result.returncode)
         else:
             Process._manager.start_process(self, self.__request)
         return self._future
