@@ -1,4 +1,4 @@
-from nanome._internal.structure import _Complex, _Residue
+from nanome._internal.structure import _Complex
 from nanome._internal.structure.io import pdb
 
 import tempfile
@@ -139,6 +139,7 @@ class _Dssp():
         return result
 
     def __update_secondary_structure(self, complex):
+        from nanome.util.enums import SecondaryStructure
         molecules = complex._molecules
         if len(molecules) != len(self.__current_complex_result):
             logger.debug("[DSSP] Complex" + complex._name + ": Molecule count" + len(molecules) + "doesn't match DSSP count" + len(self.__current_complex_result))
@@ -159,11 +160,11 @@ class _Dssp():
                     residue = chain[dssp_info[1]]
                     structure_type = dssp_info[2]
                     if structure_type in _Dssp._types_coil:
-                        residue._secondary_structure = _Residue.SecondaryStructure.Coil
+                        residue._secondary_structure = SecondaryStructure.Coil
                     elif structure_type in _Dssp._types_sheet:
-                        residue._secondary_structure = _Residue.SecondaryStructure.Sheet
+                        residue._secondary_structure = SecondaryStructure.Sheet
                     elif structure_type in _Dssp._types_helix:
-                        residue._secondary_structure = _Residue.SecondaryStructure.Helix
+                        residue._secondary_structure = SecondaryStructure.Helix
                 except:
                     logger.debug("[DSSP] Key not found: " + dssp_info[0] + " " + dssp_info[1], traceback.format_exc())
 
