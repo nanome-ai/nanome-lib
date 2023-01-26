@@ -13,23 +13,25 @@ jobs:
     env:
       IMAGE_URI: public.ecr.aws/h7r1e4h2/chemical-interactions:latest
     steps:
+      - uses: actions/checkout@v3
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1-node16
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-      - name: Login to Amazon ECR
-        id: login-ecr
+      - name: Login to Amazon ECR Public
+        id: login-ecr-public
         uses: aws-actions/amazon-ecr-login@v1
-      - uses: actions/checkout@v3
+        with:
+          registry-type: public
       - name: Pull Latest chemical-interactions image
         run: |
           docker pull ${{ env.IMAGE_URI }}
       - name: Run chemical-interactions tests with newest lib
         run: |
           docker run --rm \
-          -v $(pwd)/nanome:/opt/conda/lib/python3.7/site-packages/nanome \
+          -v $(pwd)/nanome:/opt/conda/lib/python3.9/site-packages/nanome \
           ${{ env.IMAGE_URI }} \
           python run_tests.py
 
@@ -38,23 +40,25 @@ jobs:
     env:
       IMAGE_URI: public.ecr.aws/h7r1e4h2/docking-smina:latest
     steps:
+      - uses: actions/checkout@v3
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1-node16
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-      - name: Login to Amazon ECR
-        id: login-ecr
+      - name: Login to Amazon ECR Public
+        id: login-ecr-public
         uses: aws-actions/amazon-ecr-login@v1
-      - uses: actions/checkout@v3
+        with:
+          registry-type: public
       - name: Pull Latest docking-smina image
         run: |
           docker pull ${{ env.IMAGE_URI }}
       - name: Run docking-smina tests with newest lib
         run: |
           docker run --rm \
-          -v $(pwd)/nanome:/opt/conda/lib/python3.7/site-packages/nanome \
+          -v $(pwd)/nanome:/opt/conda/lib/python3.9/site-packages/nanome \
           ${{ env.IMAGE_URI }} \
           python -m unittest discover tests.smina
 
@@ -63,23 +67,25 @@ jobs:
     env:
       IMAGE_URI: public.ecr.aws/h7r1e4h2/antibodies:latest
     steps:
+      - uses: actions/checkout@v3
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1-node16
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-      - name: Login to Amazon ECR
-        id: login-ecr
+      - name: Login to Amazon ECR Public
+        id: login-ecr-public
         uses: aws-actions/amazon-ecr-login@v1
-      - uses: actions/checkout@v3
+        with:
+          registry-type: public
       - name: Pull Latest image
         run: |
           docker pull ${{ env.IMAGE_URI }}
       - name: Run antibodies tests with newest lib
         run: |
           docker run --rm \
-          -v $(pwd)/nanome:/opt/conda/lib/python3.7/site-packages/nanome \
+          -v $(pwd)/nanome:/opt/conda/lib/python3.10/site-packages/nanome \
           ${{ env.IMAGE_URI }} \
           python -m unittest discover tests
   
@@ -88,22 +94,51 @@ jobs:
     env:
       IMAGE_URI: public.ecr.aws/h7r1e4h2/esp:latest
     steps:
+      - uses: actions/checkout@v3
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1-node16
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-      - name: Login to Amazon ECR
-        id: login-ecr
+      - name: Login to Amazon ECR Public
+        id: login-ecr-public
         uses: aws-actions/amazon-ecr-login@v1
-      - uses: actions/checkout@v3
+        with:
+          registry-type: public
       - name: Pull Latest image
         run: |
           docker pull ${{ env.IMAGE_URI }}
       - name: Run tests with newest lib
         run: |
           docker run --rm \
-          -v $(pwd)/nanome:/opt/conda/lib/python3.7/site-packages/nanome \
+          -v $(pwd)/nanome:/opt/conda/lib/python3.9/site-packages/nanome \
+          ${{ env.IMAGE_URI }} \
+          python -m unittest discover tests
+  
+  structure-prep-unittests:
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_URI: public.ecr.aws/h7r1e4h2/structure-prep:latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - name: Login to Amazon ECR Public
+        id: login-ecr-public
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          registry-type: public
+      - name: Pull Latest image
+        run: |
+          docker pull ${{ env.IMAGE_URI }}
+      - name: Run tests with newest lib
+        run: |
+          docker run --rm \
+          -v $(pwd)/nanome:/opt/conda/lib/python3.9/site-packages/nanome \
           ${{ env.IMAGE_URI }} \
           python -m unittest discover tests
