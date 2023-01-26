@@ -38,7 +38,6 @@ class CommandDeserializerTestCase(unittest.TestCase):
         bytes_file = os.path.join(test_assets, "structureprep.bin")
         with open(bytes_file, 'rb') as f:
             payload = f.read()
-        breakpoint()
         request_id, command_hash, received_obj_list = self.serializer.deserialize_command(payload, self.version_table)[0]
         self.assertTrue(isinstance(received_obj_list[0], structure.Complex))
         self.assertEqual(command_hash, 660242612)

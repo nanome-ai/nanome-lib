@@ -3,6 +3,10 @@ from nanome._internal.enums import IntegrationCommands
 from nanome.api._hashes import Hashes
 from nanome.api.structure.serializers import ComplexSerializer, AtomSerializer
 
+# In cases wher Hashes haven't been calculated yet, do so.
+if all([hash == None for hash in Hashes.IntegrationHashes]):
+    Hashes.init_hashes()
+
 
 class AddHydrogenSerializer(TypeSerializer):
     def __init__(self):
@@ -282,7 +286,7 @@ class StructurePrepSerializer(TypeSerializer):
 
 
 class IntegrationSerializer(TypeSerializer):
-    _integrations = {
+    __hash_serializer_map = {
         Hashes.IntegrationHashes[IntegrationCommands.hydrogen_add]: AddHydrogenSerializer(),
         Hashes.IntegrationHashes[IntegrationCommands.hydrogen_remove]: RemoveHydrogenSerializer(),
         Hashes.IntegrationHashes[IntegrationCommands.structure_prep]: StructurePrepSerializer(),
@@ -306,12 +310,13 @@ class IntegrationSerializer(TypeSerializer):
     def serialize(self, version, value, context):
         context.write_uint(value[0])
         context.write_uint(value[1])
+        val_to_write = value[2]
+        serializer = self.__hash_serializer_map[value[1]]
         context.write_using_serializer(
-            Integration._integrations[value[1]], value[2])
+            serializer, val_to_write)
 
     def deserialize(self, version, context):
-        breakpoint()
-        requestID = context.read_uint()
-        type = context.read_uint()
-        arg = context.read_using_serializer(self._integrations[type])
-        return (requestID, type, arg)
+        request_id = context.read_uint()
+        hash = context.read_uint()
+        arg = context.read_using_serializer(self.__hash_serializer_map[hash])
+        return (request_id, hash, arg)
