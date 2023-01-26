@@ -31,7 +31,7 @@ jobs:
       - name: Run chemical-interactions tests with newest lib
         run: |
           docker run --rm \
-          -v $(pwd)/nanome:/opt/conda/lib/python3.7/site-packages/nanome \
+          -v $(pwd)/nanome:/opt/conda/lib/python3.9/site-packages/nanome \
           ${{ env.IMAGE_URI }} \
           python run_tests.py
 
@@ -58,7 +58,7 @@ jobs:
       - name: Run docking-smina tests with newest lib
         run: |
           docker run --rm \
-          -v $(pwd)/nanome:/opt/conda/lib/python3.7/site-packages/nanome \
+          -v $(pwd)/nanome:/opt/conda/lib/python3.9/site-packages/nanome \
           ${{ env.IMAGE_URI }} \
           python -m unittest discover tests.smina
 
@@ -85,7 +85,7 @@ jobs:
       - name: Run antibodies tests with newest lib
         run: |
           docker run --rm \
-          -v $(pwd)/nanome:/opt/conda/lib/python3.7/site-packages/nanome \
+          -v $(pwd)/nanome:/opt/conda/lib/python3.10/site-packages/nanome \
           ${{ env.IMAGE_URI }} \
           python -m unittest discover tests
   
@@ -112,7 +112,7 @@ jobs:
       - name: Run tests with newest lib
         run: |
           docker run --rm \
-          -v $(pwd)/nanome:/opt/conda/lib/python3.7/site-packages/nanome \
+          -v $(pwd)/nanome:/opt/conda/lib/python3.9/site-packages/nanome \
           ${{ env.IMAGE_URI }} \
           python -m unittest discover tests
   
@@ -139,6 +139,6 @@ jobs:
       - name: Run tests with newest lib
         run: |
           docker run --rm \
-          -v $(pwd)/nanome:/opt/conda/lib/python3.7/site-packages/nanome \
+          -v $(pwd)/nanome:/opt/conda/lib/python3.9/site-packages/nanome \
           ${{ env.IMAGE_URI }} \
           python -m unittest discover tests
