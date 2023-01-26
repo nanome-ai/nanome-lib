@@ -129,12 +129,12 @@ def set(key, value):
 
 def _get_config_dict():
     config_path = _setup_file()
-    with open(config_path, "r") as f:
-        try:
+    if config_path:
+        with open(config_path, "r") as f:
             config_dict = json.load(f)
-        except json.decoder.JSONDecodeError:
-            logger.warning("{} setup failed".format(config_path))
-            config_dict = {}
+    else:
+        logger.warning("Could not write config file, please check permissions.")
+        config_dict = {}
     serialized_dict = _serialize_dict_with_parser(config_dict)
     return serialized_dict
 
