@@ -32,7 +32,7 @@ class CommandDeserializerTestCase(unittest.TestCase):
         self.assertTrue(isinstance(received_object, structure.Workspace))
         self.assertEqual(command_hash, 783319662)
         self.assertEqual(request_id, 2)
-    
+
     def test_deserialize_integration_command(self):
         """Test that we can deserialze bytes from test StructurePrep Integeration."""
         bytes_file = os.path.join(test_assets, "structureprep.bin")
