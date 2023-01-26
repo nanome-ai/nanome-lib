@@ -4,7 +4,7 @@ from nanome.api._hashes import Hashes
 from nanome.api.structure.serializers import ComplexSerializer, AtomSerializer
 
 
-class AddHydrogen(TypeSerializer):
+class AddHydrogenSerializer(TypeSerializer):
     def __init__(self):
         self.array_serializer = ArrayField()
         self.array_serializer.set_type(ComplexSerializer())
@@ -32,7 +32,7 @@ class AddHydrogen(TypeSerializer):
         return complexes
 
 
-class CalculateESP(TypeSerializer):
+class CalculateESPSerializer(TypeSerializer):
     def __init__(self):
         self.array_serializer = ArrayField()
         self.array_serializer.set_type(ComplexSerializer())
@@ -60,7 +60,7 @@ class CalculateESP(TypeSerializer):
         return complexes
 
 
-class ExportFile(TypeSerializer):
+class ExportFileSerializer(TypeSerializer):
     _String = StringField()
 
     def version(self):
@@ -79,7 +79,7 @@ class ExportFile(TypeSerializer):
         return (location, filename, data)
 
 
-class ExportLocations(TypeSerializer):
+class ExportLocationsSerializer(TypeSerializer):
     def __init__(self):
         self.array = ArrayField()
         self.array.set_type(StringField())
@@ -97,7 +97,7 @@ class ExportLocations(TypeSerializer):
         return None
 
 
-class ExportSmiles(TypeSerializer):
+class ExportSmilesSerializer(TypeSerializer):
     def __init__(self):
         self.complex_array = ArrayField()
         self.complex_array.set_type(ComplexSerializer())
@@ -122,7 +122,7 @@ class ExportSmiles(TypeSerializer):
         return complexes
 
 
-class GenerateMoleculeImage(TypeSerializer):
+class GenerateMoleculeImageSerializer(TypeSerializer):
     def __init__(self):
         self.complex_array = ArrayField()
         self.complex_array.set_type(ComplexSerializer())
@@ -150,7 +150,7 @@ class GenerateMoleculeImage(TypeSerializer):
         return ligands, (x, y)
 
 
-class ImportFile(TypeSerializer):
+class ImportFileSerializer(TypeSerializer):
 
     def version(self):
         return 0
@@ -165,7 +165,7 @@ class ImportFile(TypeSerializer):
         return
 
 
-class ImportSmiles(TypeSerializer):
+class ImportSmilesSerializer(TypeSerializer):
     def __init__(self):
         self.complex_array = ArrayField()
         self.complex_array.set_type(ComplexSerializer())
@@ -193,7 +193,7 @@ class ImportSmiles(TypeSerializer):
         return strings
 
 
-class RemoveHydrogen(TypeSerializer):
+class RemoveHydrogenSerializer(TypeSerializer):
     def __init__(self):
         self.array_serializer = ArrayField()
         self.array_serializer.set_type(ComplexSerializer())
@@ -221,7 +221,7 @@ class RemoveHydrogen(TypeSerializer):
         return complexes
 
 
-class StartMinimization(TypeSerializer):
+class StartMinimizationSerializer(TypeSerializer):
     def version(self):
         return 0
 
@@ -239,7 +239,7 @@ class StartMinimization(TypeSerializer):
         return (forcefield, steps, steepest, cutoff)
 
 
-class StopMinimization(TypeSerializer):
+class StopMinimizationSerializer(TypeSerializer):
     def version(self):
         return 0
 
@@ -253,7 +253,7 @@ class StopMinimization(TypeSerializer):
         return None
 
 
-class StructurePrep(TypeSerializer):
+class StructurePrepSerializer(TypeSerializer):
     def __init__(self):
         self.array_serializer = ArrayField()
         self.array_serializer.set_type(ComplexSerializer())
@@ -281,21 +281,20 @@ class StructurePrep(TypeSerializer):
         return complexes
 
 
-class Integration(TypeSerializer):
-    __integrations = {
-        Hashes.IntegrationHashes[IntegrationCommands.hydrogen_add]: AddHydrogen(),
-        Hashes.IntegrationHashes[IntegrationCommands.hydrogen_remove]: RemoveHydrogen(),
-        Hashes.IntegrationHashes[IntegrationCommands.structure_prep]: StructurePrep(),
-        Hashes.IntegrationHashes[IntegrationCommands.calculate_esp]: CalculateESP(),
-        Hashes.IntegrationHashes[IntegrationCommands.minimization_start]: StartMinimization(),
-        Hashes.IntegrationHashes[IntegrationCommands.minimization_stop]: StopMinimization(),
-        Hashes.IntegrationHashes[IntegrationCommands.export_locations]: ExportLocations(),
-        Hashes.IntegrationHashes[IntegrationCommands.export_file]: ExportFile(),
-        Hashes.IntegrationHashes[IntegrationCommands.import_file]: ImportFile(),
-        Hashes.IntegrationHashes[IntegrationCommands.generate_molecule_image]: GenerateMoleculeImage(),
-        Hashes.IntegrationHashes[IntegrationCommands.export_smiles]: ExportSmiles(),
-        Hashes.IntegrationHashes[IntegrationCommands.import_smiles]: ImportSmiles(
-        )
+class IntegrationSerializer(TypeSerializer):
+    _integrations = {
+        Hashes.IntegrationHashes[IntegrationCommands.hydrogen_add]: AddHydrogenSerializer(),
+        Hashes.IntegrationHashes[IntegrationCommands.hydrogen_remove]: RemoveHydrogenSerializer(),
+        Hashes.IntegrationHashes[IntegrationCommands.structure_prep]: StructurePrepSerializer(),
+        Hashes.IntegrationHashes[IntegrationCommands.calculate_esp]: CalculateESPSerializer(),
+        Hashes.IntegrationHashes[IntegrationCommands.minimization_start]: StartMinimizationSerializer(),
+        Hashes.IntegrationHashes[IntegrationCommands.minimization_stop]: StopMinimizationSerializer(),
+        Hashes.IntegrationHashes[IntegrationCommands.export_locations]: ExportLocationsSerializer(),
+        Hashes.IntegrationHashes[IntegrationCommands.export_file]: ExportFileSerializer(),
+        Hashes.IntegrationHashes[IntegrationCommands.import_file]: ImportFileSerializer(),
+        Hashes.IntegrationHashes[IntegrationCommands.generate_molecule_image]: GenerateMoleculeImageSerializer(),
+        Hashes.IntegrationHashes[IntegrationCommands.export_smiles]: ExportSmilesSerializer(),
+        Hashes.IntegrationHashes[IntegrationCommands.import_smiles]: ImportSmilesSerializer()
     }
 
     def version(self):
@@ -308,10 +307,11 @@ class Integration(TypeSerializer):
         context.write_uint(value[0])
         context.write_uint(value[1])
         context.write_using_serializer(
-            Integration.__integrations[value[1]], value[2])
+            Integration._integrations[value[1]], value[2])
 
     def deserialize(self, version, context):
+        breakpoint()
         requestID = context.read_uint()
         type = context.read_uint()
-        arg = context.read_using_serializer(Integration.__integrations[type])
+        arg = context.read_using_serializer(self._integrations[type])
         return (requestID, type, arg)

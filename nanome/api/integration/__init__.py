@@ -7,10 +7,10 @@ from nanome._internal.enums import Commands, Messages
 
 
 registered_commands = [
-    (Commands.integration, messages.Integration(), callbacks.integration),
+    (Commands.integration, messages.IntegrationSerializer(), callbacks.integration),
 ]
 
 
 registered_messages = [
-    (Messages.integration, messages.Integration()),
+    (Messages.integration, messages.IntegrationSerializer()),
 ]
