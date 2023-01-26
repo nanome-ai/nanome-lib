@@ -32,6 +32,17 @@ class CommandDeserializerTestCase(unittest.TestCase):
         self.assertTrue(isinstance(received_object, structure.Workspace))
         self.assertEqual(command_hash, 783319662)
         self.assertEqual(request_id, 2)
+    
+    def test_deserialize_integration_command(self):
+        """Test that we can deserialze bytes from test StructurePrep Integeration."""
+        bytes_file = os.path.join(test_assets, "structureprep.bin")
+        with open(bytes_file, 'rb') as f:
+            payload = f.read()
+        breakpoint()
+        request_id, command_hash, received_obj_list = self.serializer.deserialize_command(payload, self.version_table)[0]
+        self.assertTrue(isinstance(received_obj_list[0], structure.Complex))
+        self.assertEqual(command_hash, 660242612)
+        self.assertEqual(request_id, 7)
 
 
 class MessageSerializeTestCase(unittest.TestCase):
