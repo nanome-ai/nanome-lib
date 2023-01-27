@@ -2,11 +2,11 @@ import json
 import os
 import unittest
 
-from nanome._internal import network
-from nanome.api.serializers import CommandMessageSerializer
-from nanome._internal.enums import Messages
-from nanome.api import structure, shapes, ui
 from nanome import util
+from nanome._internal import network
+from nanome._internal.enums import Messages
+from nanome.api.serializers import CommandMessageSerializer
+from nanome.api import structure, shapes, ui
 from nanome.util import enums
 
 test_assets = os.getcwd() + ("/testing/test_assets")
