@@ -16,8 +16,12 @@ else:
 # Schemas requirements are optional, so don't run tests if they are not installed.
 reqs_installed = True
 try:
-    from nanome.api import schemas
-except ModuleNotFoundError:
+    try:
+        from nanome.api import schemas
+    except ModuleNotFoundError:
+        reqs_installed = False
+except NameError:
+    # Py2 does not support ModuleNotFoundError
     reqs_installed = False
 
 test_assets = os.path.join(os.getcwd(), "testing/test_assets")

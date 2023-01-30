@@ -1,9 +1,10 @@
 from nanome._internal.structure.models import _Workspace
-from nanome.util import Matrix, Logs
+from nanome.util import Matrix
 from .client import WorkspaceClient
+from ._deprecated import WorkspaceDeprecated
 
 
-class Workspace(_Workspace):
+class Workspace(_Workspace, WorkspaceDeprecated):
     """
     | Workspace that contains all the complexes shown in Nanome.
     """
@@ -94,40 +95,6 @@ class Workspace(_Workspace):
     def get_world_to_workspace_matrix(self):
         return self.get_workspace_to_world_matrix().get_inverse()
 
-    # region deprecated
-    @property
-    @Logs.deprecated()
-    def transform(self):
-        return self._transform
 
-    class Transform(object):
-        def __init__(self, parent):
-            self.parent = parent
-
-        @property
-        def position(self):
-            return self.parent.position
-
-        @position.setter
-        def position(self, value):
-            self.parent.position = value
-
-        @property
-        def rotation(self):
-            return self.parent.rotation
-
-        @rotation.setter
-        def rotation(self, value):
-            self.parent.rotation = value
-
-        @property
-        def scale(self):
-            return self.parent.scale
-
-        @scale.setter
-        def scale(self, value):
-            self.parent.scale = value
-
-    # endregion
 Workspace.client._setup_addon(Workspace)
 _Workspace._create = Workspace

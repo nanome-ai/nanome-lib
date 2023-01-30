@@ -1,4 +1,4 @@
-from nanome._internal.util.type_serializers import CachedImageSerializer
+from nanome._internal.serializer_fields import CachedImageField
 from nanome._internal.logs import LogsManager
 from . import Packet
 import logging
@@ -25,7 +25,7 @@ class PluginNetwork(object):
         self._command_id = 0
         self.__version_table = version_table
 
-        CachedImageSerializer.session = session_id
+        CachedImageField.session = session_id
         PluginNetwork._instance = self
 
     def _on_run(self):
@@ -71,8 +71,7 @@ class PluginNetwork(object):
         to_send = self._serializer.serialize_message(
             command_id, code, arg, version_table, expects_response)
         packet = Packet()
-        packet.set(self._session_id,
-                   Packet.packet_type_message_to_client, self._plugin_id)
+        packet.set(self._session_id, Packet.packet_type_message_to_client, self._plugin_id)
         packet.write(to_send)
         # if code != 0: # Messages.connect
         #     packet.compress()

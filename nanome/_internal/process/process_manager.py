@@ -1,4 +1,4 @@
-from nanome._internal.util import IntEnum, auto
+from nanome._internal.enum_utils import IntEnum, auto
 from nanome._internal.process import ProcessEntry
 from collections import deque
 from functools import partial

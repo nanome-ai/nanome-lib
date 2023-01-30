@@ -13,4 +13,3 @@ from .models import _Workspace
 from .models import _Substructure
 
 from . import io
-from . import serializers

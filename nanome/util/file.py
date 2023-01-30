@@ -1,4 +1,4 @@
-from nanome._internal.util import IntEnum
+from nanome._internal.enum_utils import IntEnum
 from .enums import LoadFileErrorCode
 
 
@@ -37,6 +37,7 @@ class DirectoryErrorCode(IntEnum):
     folder_unreachable = 1
 
 # deprecated: This is part of the deprecated file API
+
 
 class FileErrorCode(IntEnum):
     """

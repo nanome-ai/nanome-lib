@@ -1,11 +1,11 @@
 import sys
-from nanome._internal.util import auto, reset_auto
+from nanome._internal.enum_utils import auto, reset_auto
 from nanome._internal.enums import CommandEnum
 
 if sys.version_info >= (3, 4):
     from enum import Enum, IntEnum
 else:
-    from .py2_enum import Enum, IntEnum
+    from nanome._internal.py2_enum import Enum, IntEnum
 
 
 class SubstructureType(IntEnum):
@@ -205,7 +205,7 @@ class LoadFileErrorCode(IntEnum):
 class VolumeType(IntEnum):
     """
     | Volume types visible within a complex.
-    | To be used with _internal._volumetric._VolumeData()._type
+    | To be used with _internal._volumetric.VolumeData()._type
     """
     default = 0
     density = 1
@@ -217,7 +217,7 @@ class VolumeType(IntEnum):
 class VolumeVisualStyle(IntEnum):
     """
     | Ways that a complex's volume can be displayed.
-    | To be used with _internal._volumetric._VolumeProperties()._style
+    | To be used with nanome.api.volumetric.VolumeProperties()._style
     """
     Mesh = 0
     FlatSurface = 1
@@ -308,7 +308,7 @@ class SkyBoxes(IntEnum):
 
 class Integrations(CommandEnum):
     """Integrations available to connect to your plugin.
-    
+
     Some integrations have multiple hooks to connect to.
     See `nanome._internal.enums.Integrations` for more details
     """

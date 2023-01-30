@@ -38,7 +38,7 @@ class Session(object):
         self._pm_queue_out.close()
         self._process_manager._remove_session_processes(self._session_id)
 
-    def _read_from_plugin(self):
+    def read_from_plugin(self):
         try:
             has_net_data = not self._net_queue_in.empty()
             has_proc_data = not self._pm_queue_in.empty()

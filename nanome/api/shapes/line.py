@@ -1,13 +1,16 @@
-from nanome._internal.shapes import _Line
 from nanome.util.enums import ShapeType
 from . import Shape
+from .anchor import Anchor
 
 
-class Line(_Line, Shape):
+class Line(Shape):
 
     def __init__(self):
-        Shape.__init__(self, ShapeType.Line)
-        _Line.__init__(self)
+        super().__init__(ShapeType.Line)
+        self._anchors = [Anchor(), Anchor()]
+        self._thickness = 0.1
+        self._dash_length = 0.4
+        self._dash_distance = 0.1
 
     @property
     def anchors(self):
@@ -40,6 +43,3 @@ class Line(_Line, Shape):
     @dash_distance.setter
     def dash_distance(self, value):
         self._dash_distance = value
-
-
-_Line._create = Line

@@ -36,8 +36,8 @@ class PluginTestCase(unittest.TestCase):
         parser = Plugin.create_parser()
         self.assertTrue(isinstance(parser, argparse.ArgumentParser))
 
-    @patch('nanome._internal.plugin._Plugin._autoreload')
-    @patch('nanome._internal.plugin._Plugin._loop')
+    @patch('nanome.api.Plugin._autoreload')
+    @patch('nanome.api.Plugin._loop')
     @patch('nanome._internal.network.NetInstance.connect')
     @patch('nanome._internal.network.NetInstance.send')
     def test_run(self, send_mock, connect_mock, loop_mock, autoreload_mock):
@@ -77,7 +77,7 @@ class PluginTestCase(unittest.TestCase):
         self.assertEqual(self.plugin.verbose, True)
         autoreload_mock.assert_called_once()
 
-    @patch('nanome._internal.plugin._Plugin._loop')
+    @patch('nanome.api.Plugin._loop')
     @patch('nanome._internal.network.NetInstance')
     def test_setup(self, netinstance_mock, loop_mock):
         name = 'Test Plugin'
@@ -96,7 +96,7 @@ class PluginTestCase(unittest.TestCase):
         # Test set_custom_data()
         custom_data = "Data that may be needed inside PluginInstance"
         self.plugin.set_custom_data(custom_data)
-        self.assertEqual(self.plugin._custom_data[0], custom_data)
+        self.assertEqual(self.plugin.custom_data[0], custom_data)
 
     def test_set_maximum_processes_count(self):
         new_value = 5
@@ -113,9 +113,9 @@ class PluginTestCase(unittest.TestCase):
         self.plugin.post_run = test_callback_fn
         self.plugin.post_run()
 
-    @patch('nanome._internal.plugin._Plugin._loop')
+    @patch('nanome.api.Plugin._loop')
     @patch('nanome._internal.network.NetInstance')
-    @patch('nanome._internal.plugin._Plugin._autoreload')
+    @patch('nanome.api.Plugin._autoreload')
     def test_config_priority(self, *args):
         """Validate order of priority for plugin settings.
 

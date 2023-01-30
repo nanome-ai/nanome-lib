@@ -1,4 +1,4 @@
-from nanome._internal.util import IntEnum
+from nanome._internal.enum_utils import IntEnum
 from nanome.util.color import Color
 from nanome.util.vector3 import Vector3
 

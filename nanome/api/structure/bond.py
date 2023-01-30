@@ -1,18 +1,15 @@
 import nanome
 from nanome.util import Logs
 from nanome._internal.structure.models import _Bond
+from ._deprecated import BondDeprecated
 from . import Base
 
 
-class Bond(_Bond, Base):
+class Bond(_Bond, BondDeprecated, Base):
     """
     | Represents a Bond between two atoms
     """
     Kind = nanome.util.enums.Kind
-
-    def __init__(self):
-        super(Bond, self).__init__()
-        self._molecular = Bond.Molecular(self)
 
     # region connections
     @property
@@ -130,23 +127,5 @@ class Bond(_Bond, Base):
         self._in_conformer = value
     # endregion
 
-    # region deprecated
-    @property
-    @Logs.deprecated()
-    def molecular(self):
-        return self._molecular
 
-    class Molecular(object):
-        def __init__(self, parent):
-            self.parent = parent
-
-        @property
-        def kind(self):
-            return self.parent.kind
-
-        @kind.setter
-        def kind(self, value):
-            self.parent.kind = value
-
-    # endregion
 _Bond._create = Bond

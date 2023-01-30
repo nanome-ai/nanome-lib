@@ -27,17 +27,18 @@ jobs:
 
   python2:
     runs-on: ubuntu-latest
-    if: ${{ false }} # disable for now
     steps:
       - uses: actions/checkout@v3
       - name: Install Python 2
-        uses: actions/setup-python@v1
-        with:
-          python-version: 2.7.18
+        run: |
+          sudo apt-get update
+          sudo apt-get install python2
+          curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
+          python2 get-pip.py
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -e .
-          pip install mock
+          python2 -m pip install --upgrade pip
+          python2 -m pip install -e .
+          python2 -m pip install mock
       - name: Run tests.py
-        run: python tests.py
+        run: python2 tests.py

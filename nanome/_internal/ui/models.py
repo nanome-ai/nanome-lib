@@ -1,7 +1,7 @@
 from copy import deepcopy
 import logging
 
-from nanome._internal import enums, message_serializers, network
+from nanome._internal import enums, network
 
 logger = logging.getLogger(__name__)
 
@@ -73,13 +73,14 @@ class _Button(_UIBase):
         self._pressed_callback = func
 
     def _register_hover_callback(self, func):
+        from nanome.api.ui import messages
         message_callbacks = enums.Messages
         if func == None and self._hover_callback == None:  # Low hanging filter but there may be others
             return
         try:
             network.PluginNetwork._instance.send(
                 message_callbacks.hook_ui_callback,
-                (message_serializers.UIHook.Type.button_hover, self._content_id),
+                (messages.UIHook.Type.button_hover, self._content_id),
                 False)
         except:
             logger.error("Could not register hook")
@@ -298,7 +299,7 @@ class _Dropdown(_UIBase):
         self._item_clicked_callback = other._item_clicked_callback
 
 
-class _DropdownItem():
+class _DropdownItem(object):
     @classmethod
     def _create(cls):
         return cls()
@@ -349,14 +350,15 @@ class _Image(_UIBase):
             self._released_callback(self, x, y)
 
     def _register_pressed_callback(self, func):
+        from nanome.api import message_serializers
         if func == None and self._pressed_callback == None:  # Low hanging filter but there may be others
             return
-        import nanome
         self._send_hook(
             message_serializers.UIHook.Type.image_pressed)
         self._pressed_callback = func
 
     def _register_held_callback(self, func):
+        from nanome.api import message_serializers
         if func == None and self._held_callback == None:  # Low hanging filter but there may be others
             return
         import nanome
@@ -365,6 +367,7 @@ class _Image(_UIBase):
         self._held_callback = func
 
     def _register_released_callback(self, func):
+        from nanome.api import message_serializers
         if func == None and self._released_callback == None:  # Low hanging filter but there may be others
             return
         self._send_hook(
@@ -553,6 +556,7 @@ class _LayoutNode(object):
 
 
 class _LoadingBar(_UIBase):
+
     @classmethod
     def _create(cls):
         return cls()
@@ -565,7 +569,7 @@ class _LoadingBar(_UIBase):
         self._failure = False
 
     def _copy_values_deep(self, other):
-        super()._copy_values_deep(other)
+        super(_LoadingBar, self)._copy_values_deep(other)
         self._percentage = other._percentage
         self._title = other._title
         self._description = other._description

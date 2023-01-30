@@ -70,7 +70,7 @@ class NTSLoggingHandler(graypy.handler.BaseGELFHandler):
         record.__dict__.update({
             'plugin_name': self._plugin.name,
             'plugin_class': self._plugin.plugin_class.__name__,
-            'plugin_id': self._plugin._plugin_id,
+            'plugin_id': self._plugin.plugin_id,
             'nts_host': self._plugin.host,
             'source_type': 'Plugin',
             'version': self._plugin.version

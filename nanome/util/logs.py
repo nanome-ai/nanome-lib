@@ -1,8 +1,8 @@
 import inspect
 import logging
 import sys
-from nanome._internal.util.decorators import deprecated as _internal_deprecated
-from nanome._internal.util import auto, IntEnum
+from nanome._internal.decorators import deprecated as _internal_deprecated
+from nanome._internal.enum_utils import auto, IntEnum
 
 
 class Logs(object):

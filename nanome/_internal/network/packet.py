@@ -1,24 +1,46 @@
+import sys
 import struct
 import zlib
+from nanome._internal.enum_utils import IntEnum
+
+
+class PacketTypes(IntEnum):
+    plugin_list = 0
+    plugin_connection = 1
+    client_connection = 2
+    message_to_plugin = 3
+    message_to_client = 4
+    plugin_disconnection = 5
+    client_disconnection = 6
+    master_change = 7
+    keep_alive = 8
+    logs_request = 9
+    live_logs = 10
 
 
 class Packet(object):
     packet_header_length = 15
     protocol_version = 0
-    packet_type_plugin_list = 0
-    packet_type_plugin_connection = 1
-    packet_type_client_connection = 2
-    packet_type_message_to_plugin = 3
-    packet_type_message_to_client = 4
-    packet_type_plugin_disconnection = 5
-    packet_type_client_disconnection = 6
-    packet_type_master_change = 7
-    packet_type_keep_alive = 8
-    packet_type_logs_request = 9
-    packet_type_live_logs = 10
+    packet_type_plugin_list = PacketTypes.plugin_list
+    packet_type_plugin_connection = PacketTypes.plugin_connection
+    packet_type_client_connection = PacketTypes.client_connection
+    packet_type_message_to_plugin = PacketTypes.message_to_plugin
+    packet_type_message_to_client = PacketTypes.message_to_client
+    packet_type_plugin_disconnection = PacketTypes.plugin_disconnection
+    packet_type_client_disconnection = PacketTypes.client_disconnection
+    packet_type_master_change = PacketTypes.master_change
+    packet_type_keep_alive = PacketTypes.keep_alive
+    packet_type_logs_request = PacketTypes.logs_request
+    packet_type_live_logs = PacketTypes.live_logs
     header_pack = struct.Struct('<HIBIi').pack
     header_unpack = struct.Struct('<HIBIi').unpack
     __compress_obj = zlib.compressobj(4, zlib.DEFLATED, -zlib.MAX_WBITS)
+
+    def __repr__(self):
+        packet_type = PacketTypes(self.packet_type).name
+        return (
+            "Packet(version={}, session_id={}, packet_type={}, plugin_id={}, payload_length={})"
+        ).format(self.version, self.session_id, packet_type, self.plugin_id, self.payload_length)
 
     def __init__(self):
         self.version = Packet.protocol_version
@@ -27,10 +49,6 @@ class Packet(object):
         self.plugin_id = 0
         self.payload_length = 0
         self.payload = bytearray()
-
-    @staticmethod
-    def _compression_type():
-        return 0
 
     def write_string(self, str):
         encoded = str.encode('utf-8')
@@ -48,8 +66,10 @@ class Packet(object):
         return packed
 
     def compress(self):
-        self.payload = Packet.__compress_obj.compress(
-            self.payload) + Packet.__compress_obj.flush(zlib.Z_FULL_FLUSH)
+        if sys.version_info.major == 2:
+            # TODO: Figure out why/if this is needed.
+            self.payload = str(self.payload)
+        self.payload = Packet.__compress_obj.compress(self.payload) + Packet.__compress_obj.flush(zlib.Z_FULL_FLUSH)
         self.payload_length = len(self.payload)
 
     def decompress(self):
@@ -79,6 +99,10 @@ class Packet(object):
         self.session_id = session_id
         self.packet_type = type
         self.plugin_id = plugin_id
+
+    @staticmethod
+    def _compression_type():
+        return 0
 
     def __len__(self):
         return self.payload_length + Packet.packet_header_length

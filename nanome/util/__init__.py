@@ -15,7 +15,6 @@ except SyntaxError:
 from . import enums
 from . import complex_save_options
 
-from .import_utils import ImportUtils
 from .octree import Octree
 from .quaternion import Quaternion
 from .vector3 import Vector3
