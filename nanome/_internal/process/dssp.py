@@ -166,7 +166,7 @@ class _Dssp():
                     elif structure_type in _Dssp._types_helix:
                         residue._secondary_structure = SecondaryStructure.Helix
                 except:
-                    logger.debug("[DSSP] Key not found: " + dssp_info[0] + " " + dssp_info[1], traceback.format_exc())
+                    logger.debug("[DSSP] Key not found: " + str(dssp_info[0]) + " " + str(dssp_info[1]), traceback.format_exc())
 
     def __done(self):
         if self.__input is not None:
