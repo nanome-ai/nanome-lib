@@ -53,8 +53,7 @@ class Hashes():
             i += 1
             hash = cls.hash_command(command.name)
             if hash in hashes:
-                logger.error(
-                    "Message hash collision detected: " + command.name + "and" + hashes[hash])
+                logger.error("Message hash collision detected: {} and {}".format(command.name, hashes[hash]))
                 continue
             hashes[hash] = command.name
             cls.MessageHashes[i] = hash
@@ -66,7 +65,7 @@ class Hashes():
             i += 1
             hash = cls.hash_command(command.name)
             if hash in hashes:
-                logger.error("Integration hash collision detected:" + command.name + " and " + hashes[hash])
+                logger.error("Integration hash collision detected: {} and {}".format(command.name, hashes[hash]))
                 continue
             hashes[hash] = command.name
             cls.IntegrationHashes[i] = hash
@@ -79,7 +78,7 @@ class Hashes():
             i += 1
             hash = cls.hash_command(command.name)
             if hash in hashes:
-                logger.error("Integration request hash collision detected: " + command.name + " and " + hashes[hash])
+                logger.error("Integration request hash collision detected: {} and {}".format(command.name, hashes[hash]))
                 continue
             hashes[hash] = command.name
             cls.IntegrationRequestHashes[i] = hash
@@ -90,8 +89,7 @@ class Hashes():
             i += 1
             hash = cls.hash_command(command.name)
             if hash in hashes:
-                logger.error(
-                    "Permission request hash collision detected: {} and {}".format(command.name, hashes[hash]))
+                logger.error("Permission request hash collision detected: {} and {}".format(command.name, hashes[hash]))
                 continue
             hashes[hash] = command.name
             cls.PermissionRequestHashes[i] = hash
