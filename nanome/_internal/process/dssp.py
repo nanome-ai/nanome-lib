@@ -101,11 +101,11 @@ class _Dssp():
         self.__proc.start()
 
     def __on_error(self, msg):
-        logger.warning("[DSSP]" + msg)
+        logger.warning("[DSSP] " + msg)
 
     def __dssp_done(self, result_code):
         if result_code != 0:
-            logger.warning("DSSP failed, code: " + result_code)
+            logger.warning("DSSP failed, code: {}".format(result_code))
             self.__done()
             return
         with open(self.__output.name) as f:
@@ -142,7 +142,7 @@ class _Dssp():
         from nanome.util.enums import SecondaryStructure
         molecules = complex._molecules
         if len(molecules) != len(self.__current_complex_result):
-            logger.debug("[DSSP] Complex" + complex._name + ": Molecule count" + len(molecules) + "doesn't match DSSP count" + len(self.__current_complex_result))
+            logger.debug("[DSSP] Complex {}: Molecule count {} doesn't match DSSP count {}".format(complex._name, len(molecules), len(self.__current_complex_result)))
             return
 
         for i in range(len(self.__current_complex_result)):
@@ -166,7 +166,7 @@ class _Dssp():
                     elif structure_type in _Dssp._types_helix:
                         residue._secondary_structure = SecondaryStructure.Helix
                 except:
-                    logger.debug("[DSSP] Key not found: " + str(dssp_info[0]) + " " + str(dssp_info[1]), traceback.format_exc())
+                    logger.debug("[DSSP] Key not found: {} {}".format(dssp_info[0], dssp_info[1]), traceback.format_exc())
 
     def __done(self):
         if self.__input is not None:
