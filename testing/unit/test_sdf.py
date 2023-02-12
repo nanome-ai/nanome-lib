@@ -25,6 +25,7 @@ def read_write_read(filename):
     complex2 = struct.Complex.io.from_sdf(path=output_file)
 
     compare_atom_positions(complex1, complex2)
+    compare_atom_charges(complex1, complex2)
     assert_equal(complex1, complex2, options)
     assert_not_equal(complex2, struct.Complex(), options)
 
@@ -43,6 +44,7 @@ def read_write_read_frames(filename):
     complex2 = complex2.convert_to_frames()
 
     compare_atom_positions(complex1, complex2)
+    compare_atom_charges(complex1, complex2)
     assert_equal(complex1, complex2, options)
     assert_not_equal(complex2, struct.Complex(), options)
 
@@ -84,6 +86,11 @@ def compare_atom_positions(complex1, complex2):
         assert(difference > -.001)
 
 
+def compare_atom_charges(complex1, complex2):
+    for atom1, atom2 in zip(complex1.atoms, complex2.atoms):
+        assert(atom1.formal_charge == atom2.formal_charge)
+
+
 class SDFTestCase(unittest.TestCase):
 
     def test_aromatic(self):
@@ -98,6 +105,19 @@ class SDFTestCase(unittest.TestCase):
             if bond.kind == nanome.util.enums.Kind.Aromatic:
                 aromatic_bond = True
         assert(aromatic_bond)
+
+    def test_charges(self):
+        """
+        Test that charges are read and written correctly,
+        and match the expected charges for the test file.
+        """
+        input_dir = test_assets + ("/sdf/charges.sdf")
+
+        complex1, _ = read_write_read(input_dir)
+        expected_charges = [(0, 1), (12, -1), (19, 1), (28, -1), (35, 1), (44, -1)]
+        atoms = list(complex1.atoms)
+        for index, charge in expected_charges:
+            assert(atoms[index].formal_charge == charge)
 
     def test_thrombin(self):
         input_dir = test_assets + ("/sdf/small_thrombin.sdf")

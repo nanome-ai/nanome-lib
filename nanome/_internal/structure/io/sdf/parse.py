@@ -1,5 +1,8 @@
 from .content import Content
 import re
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def parse_lines(lines):
@@ -80,8 +83,14 @@ def parse_model(lines):
                         bond.bond_order = record_chunk_int(line, 7, 9)
                         model.bonds.append(bond)
                         bond_counter = bond_counter - 1
-                    elif line[0] == 'm':
+                    elif line[0] == 'M':
                         model.properties.append(line)
+                        parts = line.split()
+                        if parts[1] == "CHG":
+                            for i in range(3, len(parts), 2):
+                                atom_index = int(parts[i]) - 1
+                                atom = model.atoms[atom_index]
+                                atom.charge = int(parts[i + 1])
                 elif version == "V3000":
                     parts = line.split()
                     if len(parts) >= 4:
