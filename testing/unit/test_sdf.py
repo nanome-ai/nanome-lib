@@ -87,11 +87,7 @@ def compare_atom_positions(complex1, complex2):
 
 
 def compare_atom_charges(complex1, complex2):
-    a1 = complex1.atoms
-    a2 = complex2.atoms
-    for a, _ in enumerate(complex1.atoms):
-        atom1 = next(a1)
-        atom2 = next(a2)
+    for atom1, atom2 in zip(complex1.atoms, complex2.atoms):
         assert(atom1.formal_charge == atom2.formal_charge)
 
 
