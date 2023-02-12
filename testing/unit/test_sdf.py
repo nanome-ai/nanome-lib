@@ -107,6 +107,10 @@ class SDFTestCase(unittest.TestCase):
         assert(aromatic_bond)
 
     def test_charges(self):
+        """
+        Test that charges are read and written correctly,
+        and match the expected charges for the test file.
+        """
         input_dir = test_assets + ("/sdf/charges.sdf")
 
         complex1, _ = read_write_read(input_dir)
