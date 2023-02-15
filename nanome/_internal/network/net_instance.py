@@ -4,6 +4,7 @@ import socket
 import ssl
 import errno
 import time
+import traceback
 
 import logging
 logger = logging.getLogger(__name__)
@@ -79,7 +80,7 @@ class NetInstance(object):
             raise
         except Exception as e:
             msg = "Uncaught {}: {}".format(type(e).__name__, e)
-            logger.error(msg)
+            logger.error(msg, traceback.format_exc())
             time.sleep(0.1)
             self._connection = None
             return False

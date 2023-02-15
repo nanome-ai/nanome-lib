@@ -2,6 +2,7 @@ import asyncio
 import inspect
 import logging
 import sys
+import traceback
 from concurrent.futures._base import CancelledError
 from . import Logs
 
@@ -22,7 +23,7 @@ async def handle_exception(exc_type, exc_value, exc_traceback):
         logger = logging.getLogger()
 
     msg = "Uncaught " + exc_type.__name__ + ": " + str(exc_value)
-    logger.error(msg, exc_info=1)
+    logger.error(msg, traceback.format_exc(), exc_info=1)
     await asyncio.sleep(0.1)  # Give log a split second to process
 
 
