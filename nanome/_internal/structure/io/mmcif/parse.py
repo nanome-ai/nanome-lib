@@ -1,4 +1,3 @@
-import traceback
 import re
 from .content import Content
 
@@ -53,8 +52,7 @@ def _parse_lines(lines):
     try:
         parsed_file = ParseLines(lines)
     except Exception:
-        logger.error("\tParse failed. Error on line:", lines.get_line_number())
-        logger.error(traceback.format_exc())
+        logger.error("Parse failed. Error on line: {}".format(lines.get_line_number()), exc_info=1)
     content = raw_to_formatted(parsed_file)
     return content
 
@@ -304,8 +302,7 @@ def ParseLines(lines):
                 else:
                     parsed_file[category] = section_objects
         except Exception:
-            logger.warning("Problem during parsing, skipping line. Error on line:", lines.get_line_number())
-            logger.warning(traceback.format_exc())
+            logger.warning("Problem during parsing, skipping line. Error on line: {}".format(lines.get_line_number()), exc_info=1)
             lines.move_next()
     return parsed_file
 

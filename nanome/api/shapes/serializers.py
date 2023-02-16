@@ -114,7 +114,7 @@ class MeshSerializer(TypeSerializer):
         texture_bytes = self.read_texture(value)
         context.write_byte_array(texture_bytes)
         if len(texture_bytes) > 0:
-            logger.debug("Sending texture:", value.texture_path)
+            logger.debug("Sending texture: {}".format(value.texture_path))
 
         if version >= 1:
             context.write_bool(value.unlit)

@@ -3,7 +3,6 @@ from nanome._internal.process import ProcessEntry
 from collections import deque
 from functools import partial
 import subprocess
-import traceback
 import sys
 import time
 from threading import Thread
@@ -58,7 +57,7 @@ class ProcessManager():
                     entry.send(ProcessManager.DataType.position_changed, [count_before_exec])
                     count_before_exec += 1
         except:
-            logger.error("Exception in process manager update:\n", traceback.format_exc())
+            logger.error("Exception in process manager update:", exc_info=1)
 
     def __start_process(self):
         entry = self.__pending.popleft()
@@ -100,7 +99,7 @@ class ProcessManager():
             msg = "Process Started: {} for Session {}".format(id, session_id)
             logger.info(msg, extra=extra)
         except:
-            logger.error("Couldn't execute process " + exec_path + " Please check if executable is present and has permissions:\n", traceback.format_exc())
+            logger.error("Couldn't execute process " + exec_path + " Please check if executable is present and has permissions:\n", exc_info=1)
             entry.send(ProcessManager.DataType.done, [-1])
             return
         entry.stdout_queue = Queue()

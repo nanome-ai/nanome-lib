@@ -1,7 +1,6 @@
 import logging
 import os
 import time
-import traceback
 from timeit import default_timer as timer
 
 from nanome._internal.network import Packet
@@ -645,13 +644,13 @@ class PluginInstance:
         try:
             callbacks[index](new_complex)
         except KeyError:
-            logger.warning('Received an unknown updated complex index: {index}')
+            logger.warning('Received an unknown updated complex index: {}'.format(index))
 
     def _on_stop(self):
         try:
             self.on_stop()
         except:
-            logger.error("Error in on_stop function:", traceback.format_exc())
+            logger.error("Error in on_stop function:", exc_info=1)
 
     def _update_loop(self):
         try:
@@ -677,9 +676,7 @@ class PluginInstance:
             self._network._close()
             return
         except Exception as e:
-            text = ' '.join(map(str, e.args))
-            msg = "Uncaught " + type(e).__name__ + ": " + text
-            logger.error(msg)
+            logger.error("Uncaught {}: {}".format(type(e).__name__, e), exc_info=1)
             # Give log a little time to reach destination before closing pipe
             time.sleep(0.1)
             self._on_stop()

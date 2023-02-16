@@ -1,5 +1,4 @@
 from . import Packet
-import traceback
 import logging
 
 logger = logging.getLogger(__name__)
@@ -44,8 +43,7 @@ class Session(object):
             has_proc_data = not self._pm_queue_in.empty()
             self._logs_manager.poll_for_logs()
         except Exception:
-            logger.error(
-                "Plugin encountered an error, please check the logs.", traceback.format_exc())
+            logger.error("Plugin encountered an error, please check the logs.", exc_info=1)
             return False
         try:
             if has_net_data:
@@ -56,10 +54,8 @@ class Session(object):
             if has_proc_data:
                 proc_data = self._pm_queue_in.get()
                 self._process_manager.received_request(proc_data, self)
-
         except EOFError:
-            logger.error(
-                "Plugin encountered an error, please check the logs.", traceback.format_exc())
+            logger.error("Plugin encountered an error, please check the logs.", exc_info=1)
             return False
         return True
 

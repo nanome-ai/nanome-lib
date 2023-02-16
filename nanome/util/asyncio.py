@@ -21,8 +21,7 @@ async def handle_exception(exc_type, exc_value, exc_traceback):
     else:
         logger = logging.getLogger()
 
-    msg = "Uncaught " + exc_type.__name__ + ": " + str(exc_value)
-    logger.error(msg, exc_info=1)
+    logger.error("Uncaught {}: {}".format(exc_type.__name__, exc_value), exc_info=1)
     await asyncio.sleep(0.1)  # Give log a split second to process
 
 

@@ -1,5 +1,4 @@
 from .content import Content
-import traceback
 import logging
 
 logger = logging.getLogger(__name__)
@@ -62,7 +61,7 @@ def _parse_lines(lines):
                     content.records.append(rec)
                     content.compnds.append(rec)
                 except:
-                    logger.warning("Error parsing COMPND:", traceback.format_exc())
+                    logger.warning("Error parsing COMPND:", exc_info=1)
             if (record_type == "REMARK"):
                 rec = record_remark(line, line_counter)
                 content.records.append(rec)
