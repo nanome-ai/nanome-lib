@@ -1,6 +1,5 @@
 import asyncio
 import sys
-import traceback
 from timeit import default_timer as timer
 import logging
 
@@ -32,8 +31,6 @@ async def async_update_loop(plugin_instance, UPDATE_RATE, MINIMUM_SLEEP):
         return
     except Exception:
         from nanome.util.asyncio import handle_exception
-        msg = traceback.format_exc()
-        logger.error(msg)
         await handle_exception(*sys.exc_info())
         plugin_instance._on_stop()
         plugin_instance._process_manager._close()

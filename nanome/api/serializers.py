@@ -1,7 +1,6 @@
 import importlib
 import logging
 import struct
-import traceback
 from ._hashes import Hashes
 from nanome._internal.enums import Commands
 from nanome._internal.network import Data
@@ -77,26 +76,17 @@ class CommandMessageSerializer(object):
             else:
                 logger.error("Received an unregistered command: {}".format(command_hash))
             return (None, None, None)
-        except BufferError as err:
-            logger.error(err)
-            logger.error(traceback.format_exc())
-            return (None, None, None)
-        except struct.error as err:
-            logger.error(err)
-            logger.error(traceback.format_exc())
+        except (BufferError, struct.error) as err:
+            logger.error(err, exc_info=1)
             return (None, None, None)
 
         try:
             logger.debug("Received command: " + command.name())
             received_object = context.read_using_serializer(command)
-        except BufferError as err:
-            logger.error(err)
-            logger.error(traceback.format_exc())
+        except (BufferError, struct.error) as err:
+            logger.error(err, exc_info=1)
             return (None, None, None)
-        except struct.error as err:
-            logger.error(err)
-            logger.error(traceback.format_exc())
-            return (None, None, None)
+
         return received_object, command_hash, request_id
 
     def try_register_session(self, payload):
@@ -130,7 +120,7 @@ for module_str in registered_modules:
     module_commands = getattr(module, 'registered_commands', False)
     module_messages = getattr(module, 'registered_messages', False)
     if module_commands is False and module_messages is False:
-        logger.warning('No registerd commands or messages found in {}, Skipping'.format(module_str))
+        logger.warning('No registered commands or messages found in {}, Skipping'.format(module_str))
         continue
     if module_commands:
         registered_commands += module_commands

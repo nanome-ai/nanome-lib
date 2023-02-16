@@ -15,7 +15,7 @@ def safe_cast(cls, value):
     except ValueError:
         if cls.cast_failed_warning is False:
             cls.cast_failed_warning = True
-            logger.warning("Invalid value", value, "for enum", cls.__name__, ". Library might outdated.")
+            logger.warning("Invalid value {} for enum {}. Library might outdated.".format(value, cls.__name__))
         return list(cls)[0]
 
 

@@ -39,8 +39,7 @@ class UIBaseSerializer(TypeSerializer):
                 value).__name__]
             serializer = UIBaseSerializer.registered_serializers[ui_type]
         except:
-            logger.error("Trying to serialize unknown UI type:",
-                         type(value).__name__)
+            logger.error("Trying to serialize unknown UI type: {}".format(type(value).__name__))
             return
         context.write_uint(ui_type)
         context.write_using_serializer(serializer, value)
@@ -50,7 +49,7 @@ class UIBaseSerializer(TypeSerializer):
         try:
             serializer = UIBaseSerializer.registered_serializers[ui_type]
         except:
-            logger.error("Trying to deserialize unknown UI type:", ui_type)
+            logger.error("Trying to deserialize unknown UI type: {}".format(ui_type))
             return
         return context.read_using_serializer(serializer)
 

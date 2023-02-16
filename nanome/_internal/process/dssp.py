@@ -4,7 +4,6 @@ from nanome._internal.structure.io import pdb
 import tempfile
 import os
 import sys
-import traceback
 import logging
 
 try:
@@ -132,8 +131,7 @@ class _Dssp():
                         chain = line[10:12].strip()
                         result.append((chain, int(serial), structure_type))
                     except:
-                        logger.warning("[DSSP] Parsing error on serial: " + serial)
-                        logger.warning(traceback.format_exc())
+                        logger.warning("[DSSP] Parsing error on serial: " + serial, exc_info=1)
                     i += 1
             i += 1
         return result
@@ -166,7 +164,7 @@ class _Dssp():
                     elif structure_type in _Dssp._types_helix:
                         residue._secondary_structure = SecondaryStructure.Helix
                 except:
-                    logger.debug("[DSSP] Key not found: {} {}".format(dssp_info[0], dssp_info[1]), traceback.format_exc())
+                    logger.debug("[DSSP] Key not found: {} {}".format(dssp_info[0], dssp_info[1]), exc_info=1)
 
     def __done(self):
         if self.__input is not None:
