@@ -350,28 +350,24 @@ class _Image(_UIBase):
             self._released_callback(self, x, y)
 
     def _register_pressed_callback(self, func):
-        from nanome.api import message_serializers
+        from nanome.api.ui import messages
         if func == None and self._pressed_callback == None:  # Low hanging filter but there may be others
             return
-        self._send_hook(
-            message_serializers.UIHook.Type.image_pressed)
+        self._send_hook(messages.UIHook.Type.image_pressed)
         self._pressed_callback = func
 
     def _register_held_callback(self, func):
-        from nanome.api import message_serializers
+        from nanome.api.ui import messages
         if func == None and self._held_callback == None:  # Low hanging filter but there may be others
             return
-        import nanome
-        self._send_hook(
-            message_serializers.UIHook.Type.image_held)
+        self._send_hook(messages.UIHook.Type.image_held)
         self._held_callback = func
 
     def _register_released_callback(self, func):
-        from nanome.api import message_serializers
+        from nanome.api.ui import messages
         if func == None and self._released_callback == None:  # Low hanging filter but there may be others
             return
-        self._send_hook(
-            message_serializers.UIHook.Type.image_released)
+        self._send_hook(messages.UIHook.Type.image_released)
         self._released_callback = func
 
     def _send_hook(self, hook_type):
