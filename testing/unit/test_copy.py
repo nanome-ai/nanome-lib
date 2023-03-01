@@ -56,25 +56,6 @@ class CopyTestCase(unittest.TestCase):
             'current_frame', 'remarks',
         ]
 
-    def validate_fields(self, struct_orig, struct_copy, field_list):
-        for field in field_list:
-            orig_val = getattr(struct_orig, field)
-            copy_val = getattr(struct_copy, field)
-            # Skip struct classes, because they will not be equal (different memory)
-            if isinstance(orig_val, struct.Base) or isinstance(orig_val, types.GeneratorType):
-                continue
-            elif isinstance(orig_val, util.Color):
-                self.assertEqual(orig_val.rgba, copy_val.rgba)
-            elif isinstance(orig_val, util.Vector3):
-                self.assertEqual(orig_val.unpack(), copy_val.unpack())
-            elif isinstance(orig_val, util.Quaternion):
-                self.assertEqual(str(orig_val), str(copy_val))
-            else:
-                # Assert copy has the same values as the original
-                err_msg = "{field}: {orig_val} != {copy_val}".format(
-                    field=field, orig_val=orig_val, copy_val=copy_val)
-                self.assertTrue(orig_val == copy_val, err_msg)
-
     def test_shallow_copy_atom(self):
         atom = next(self.complex.atoms)
         atom_copy = atom._shallow_copy()
@@ -136,18 +117,58 @@ class CopyTestCase(unittest.TestCase):
 
     def test_deep_copy_complex(self):
         comp = self.complex
-        field_list = self.complex_fields
         comp_copy = comp._deep_copy()
-        # Traverse data structure and make sure all data was copied.
-        self.assertTrue(comp_copy is not comp)
-        self.validate_fields(comp, comp_copy, field_list)
-        for mol, mol_copy in zip(comp.molecules, comp_copy.molecules):
+        self.validate_deep_copy(comp, comp_copy)
+    
+    def test_deep_copy_conformer_complex(self):
+        """Validate deep copy of complex that has multiple conformations."""
+        pdb_path = os.path.join(test_assets, 'pdb', 'thrombine_conformer.pdb')
+        comp = struct.Complex.io.from_pdb(path=pdb_path)
+        # Add a random bond to test with.
+        atom1 = next(comp.atoms)
+        atom2 = next(comp.atoms)
+        residue = next(comp.residues)
+        bond = struct.Bond()
+        bond.atom1 = atom1
+        bond.atom2 = atom2
+        bond.kind = util.enums.Kind.CovalentSingle
+        residue.add_bond(bond)
+        comp_copy = comp._deep_copy()
+        self.validate_deep_copy(comp, comp_copy)
+
+    def validate_fields(self, struct_orig, struct_copy, field_list):
+        for field in field_list:
+            orig_val = getattr(struct_orig, field)
+            copy_val = getattr(struct_copy, field)
+            # Skip struct classes, because they will not be equal (different memory)
+            if isinstance(orig_val, struct.Base) or isinstance(orig_val, types.GeneratorType):
+                continue
+            elif isinstance(orig_val, util.Color):
+                self.assertEqual(orig_val.rgba, copy_val.rgba)
+            elif isinstance(orig_val, util.Vector3):
+                self.assertEqual(orig_val.unpack(), copy_val.unpack())
+            elif isinstance(orig_val, util.Quaternion):
+                self.assertEqual(str(orig_val), str(copy_val))
+            else:
+                # Assert copy has the same values as the original
+                err_msg = "{field}: {orig_val} != {copy_val}".format(
+                    field=field, orig_val=orig_val, copy_val=copy_val)
+                self.assertTrue(orig_val == copy_val, err_msg)
+
+    def validate_deep_copy(self, comp_original, comp_copy):
+        """Traverse Complex data and make sure all fields were copied."""
+        # Validate Complex fields
+        self.assertTrue(comp_copy is not comp_original)
+        self.validate_fields(comp_original, comp_copy, self.complex_fields)
+        for mol, mol_copy in zip(comp_original.molecules, comp_copy.molecules):
             self.assertTrue(mol is not mol_copy)
             self.validate_fields(mol, mol_copy, self.molecule_fields)
+            # Validate chains copied
             self.assertTrue(sum(1 for _ in mol.chains) == sum(1 for _ in mol_copy.chains))
             for chain, chain_copy in zip(mol.chains, mol_copy.chains):
                 self.assertTrue(chain is not chain_copy)
                 self.validate_fields(chain, chain_copy, self.chain_fields)
+                # Validate residues copied
                 self.assertEqual(sum(1 for _ in chain.residues), sum(1 for _ in chain_copy.residues))
                 for residue, residue_copy in zip(chain.residues, chain_copy.residues):
                     self.assertTrue(residue is not residue_copy)
@@ -163,4 +184,3 @@ class CopyTestCase(unittest.TestCase):
                     for bond, bond_copy in zip(residue.bonds, residue_copy.bonds):
                         self.assertTrue(bond is not bond_copy)
                         self.validate_fields(bond, bond_copy, self.bond_fields)
-
