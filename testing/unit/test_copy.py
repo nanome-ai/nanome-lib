@@ -132,13 +132,13 @@ class CopyTestCase(unittest.TestCase):
         self.assertTrue(len(list(struc_copy.molecules)) == 0)
 
     def test_deep_copy_complex(self):
-        struc = self.complex
+        comp = self.complex
         field_list = self.complex_fields
-        struc_copy = struc._deep_copy()
+        comp_copy = comp._deep_copy()
         # Traverse data structure and make sure all data was copied.
-        self.assertTrue(struc_copy is not struc)
-        self.validate_fields(struc, struc_copy, field_list)
-        for mol, mol_copy in zip(struc.molecules, struc_copy.molecules):
+        self.assertTrue(comp_copy is not comp)
+        self.validate_fields(comp, comp_copy, field_list)
+        for mol, mol_copy in zip(comp.molecules, comp_copy.molecules):
             self.assertTrue(mol is not mol_copy)
             self.validate_fields(mol, mol_copy, self.molecule_fields)
             self.assertTrue(len(list(mol.chains)) > 0)
