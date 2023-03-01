@@ -4,6 +4,7 @@ import time
 
 from nanome.util import Color, Logs, Matrix, Quaternion, Vector3
 from nanome.api import structure as struct
+from nanome.api.structure import Atom
 from nanome._internal.network.context import ContextDeserialization, ContextSerialization
 from nanome.api.structure.messages import UpdateWorkspace, ReceiveWorkspace
 from testing.unit.utilities import assert_equal, assert_not_equal, TestOptions
@@ -61,7 +62,7 @@ def count_structures(complex):
 
 
 def create_atom():
-    val = struct.Atom()
+    val = Atom()
     val.index = 1000
     val.selected = True
     val.atom_mode = 1  # BALLSTICK
@@ -90,7 +91,7 @@ def create_bond():
 def create_residue():
     val = struct.Residue()
     val.index = 1000
-    val._atoms = [struct.Atom(), create_atom(), struct.Atom(), create_atom()]
+    val._atoms = [Atom(), create_atom(), Atom(), create_atom()]
     val._bonds = [create_bond(), create_bond(), create_bond(), create_bond()]
     val.ribboned = True
     val.ribbon_size = 1
@@ -188,7 +189,7 @@ def assert_no_parents(atom, bond, residue, chain, molecule, complex):
 class AtomTestCase(unittest.TestCase):
 
     def test_parent_pointers(self):
-        atom = struct.Atom()
+        atom = Atom()
         bond = struct.Bond()
         residue = struct.Residue()
         chain = struct.Chain()
@@ -238,7 +239,7 @@ class AtomTestCase(unittest.TestCase):
 
         res_atom_global_pos = Vector3(-20.33947, 0.1491127, -9.878754)
         complex = struct.Complex()
-        atom = struct.Atom()
+        atom = Atom()
         atom.position.set(7.2, 2.6, -21.56)
         complex.position.set(-3.197371, -2.314157, 5.071643)
         complex.rotation.set(0.09196287, 0.4834483, 0.3486853, 0.797646)
@@ -354,7 +355,7 @@ class AtomTestCase(unittest.TestCase):
         assert_equal(create_complex(), create_complex(), options)
         assert_equal(create_workspace(), create_workspace(), options)
 
-        assert_not_equal(create_atom(), struct.Atom(), options)
+        assert_not_equal(create_atom(), Atom(), options)
         assert_not_equal(create_bond(), struct.Bond(), options)
         assert_not_equal(create_residue(), struct.Residue(), options)
         assert_not_equal(create_chain(), struct.Chain(), options)
@@ -384,6 +385,6 @@ class AtomTestCase(unittest.TestCase):
         assert_not_equal(complex2, struct.Complex(), options)
 
     def test_fill_atom_table(self):
-        self.assertEqual(len(struct.Atom._vdw_radii), 0)
-        struct.Atom._fill_atom_table()
-        self.assertEqual(len(struct.Atom._vdw_radii), 118)
+        self.assertEqual(len(Atom._vdw_radii), 0)
+        Atom._fill_atom_table()
+        self.assertEqual(len(Atom._vdw_radii), 118)
