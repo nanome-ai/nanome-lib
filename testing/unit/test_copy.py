@@ -71,7 +71,9 @@ class CopyTestCase(unittest.TestCase):
                 self.assertEqual(str(orig_val), str(copy_val))
             else:
                 # Assert copy has the same values as the original
-                self.assertTrue(orig_val == copy_val, f"{field}: {orig_val} != {copy_val}")
+                err_msg = "{field}: {orig_val} != {copy_val}".format(
+                    field=field, orig_val=orig_val, copy_val=copy_val)
+                self.assertTrue(orig_val == copy_val, err_msg)
 
     def test_shallow_copy_atom(self):
         atom = next(self.complex.atoms)
