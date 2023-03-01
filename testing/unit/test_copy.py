@@ -10,6 +10,7 @@ test_assets = os.path.join(os.getcwd(), 'testing', 'test_assets')
 
 
 class CopyTestCase(unittest.TestCase):
+    """Validate Structure shallow and deep copy functions."""
 
     @classmethod
     def setUpClass(cls):
