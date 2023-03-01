@@ -14,7 +14,7 @@ class CopyTestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        pdb_path = os.path.join(test_assets, 'pdb', '3mcf.pdb')
+        pdb_path = os.path.join(test_assets, 'pdb', 'thrombine_conformer.pdb')
         cls.complex = struct.Complex.io.from_pdb(path=pdb_path)
         # Add a random bond to test with.
         atom1 = next(cls.complex.atoms)
@@ -144,15 +144,23 @@ class CopyTestCase(unittest.TestCase):
         for mol, mol_copy in zip(comp.molecules, comp_copy.molecules):
             self.assertTrue(mol is not mol_copy)
             self.validate_fields(mol, mol_copy, self.molecule_fields)
-            self.assertTrue(len(list(mol.chains)) > 0)
+            self.assertTrue(sum(1 for _ in mol.chains) == sum(1 for _ in mol_copy.chains))
             for chain, chain_copy in zip(mol.chains, mol_copy.chains):
                 self.assertTrue(chain is not chain_copy)
                 self.validate_fields(chain, chain_copy, self.chain_fields)
-                self.assertTrue(sum(1 for _ in chain.residues) > 0)
+                self.assertEqual(sum(1 for _ in chain.residues), sum(1 for _ in chain_copy.residues))
                 for residue, residue_copy in zip(chain.residues, chain_copy.residues):
                     self.assertTrue(residue is not residue_copy)
                     self.validate_fields(residue, residue_copy, self.residue_fields)
                     self.assertTrue(sum(1 for _ in residue.atoms) > 0)
+                    # Validate atoms copied
+                    self.assertEqual(sum(1 for _ in residue.atoms), sum(1 for _ in residue_copy.atoms))
                     for atom, atom_copy in zip(residue.atoms, residue_copy.atoms):
                         self.assertTrue(atom is not atom_copy)
                         self.validate_fields(atom, atom_copy, self.atom_fields)
+                    # Validate bonds copied
+                    self.assertEqual(sum(1 for _ in residue.bonds), sum(1 for _ in residue_copy.bonds))
+                    for bond, bond_copy in zip(residue.bonds, residue_copy.bonds):
+                        self.assertTrue(bond is not bond_copy)
+                        self.validate_fields(bond, bond_copy, self.bond_fields)
+
