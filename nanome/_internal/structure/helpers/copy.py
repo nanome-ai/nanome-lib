@@ -61,14 +61,17 @@ def __deep_copy_residue(residue, bond_set, conformer_number, old_to_new_atoms=No
             new_bond = __no_dup_copy_bond(bond, bond_set, conformer_number)
             new_bonds = __list_with(new_bonds, new_bond)
     for atom in residue._atoms:
+        new_atom = None
         if conformer_number is None or atom._in_conformer[conformer_number]:
             new_atom = atom._shallow_copy(conformer_number)
             new_atoms = __list_with(new_atoms, new_atom)
             if old_to_new_atoms is not None:
                 old_to_new_atoms[atom] = new_atom
         for bond in atom._bonds:
+            new_bond = __no_dup_copy_bond(bond, bond_set, conformer_number)
             if conformer_number is None or bond._in_conformer[conformer_number]:
-                new_bond = __no_dup_copy_bond(bond, bond_set, conformer_number)
+                if not new_atom:
+                    new_atom = atom._shallow_copy(conformer_number)
                 if bond._atom1 == atom:
                     new_bond._atom1 = new_atom
                 else:
