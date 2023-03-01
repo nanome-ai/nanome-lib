@@ -119,7 +119,7 @@ class CopyTestCase(unittest.TestCase):
         comp = self.complex
         comp_copy = comp._deep_copy()
         self.validate_deep_copy(comp, comp_copy)
-    
+
     def test_deep_copy_conformer_complex(self):
         """Validate deep copy of complex that has multiple conformations."""
         pdb_path = os.path.join(test_assets, 'pdb', 'thrombine_conformer.pdb')
