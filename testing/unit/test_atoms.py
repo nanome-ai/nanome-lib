@@ -384,6 +384,7 @@ class AtomTestCase(unittest.TestCase):
         assert_not_equal(complex2, struct.Complex(), options)
 
     def test_fill_atom_table(self):
+        struct.Atom._vdw_radii = {}
         self.assertEqual(len(struct.Atom._vdw_radii), 0)
         struct.Atom._fill_atom_table()
         self.assertEqual(len(struct.Atom._vdw_radii), 118)
