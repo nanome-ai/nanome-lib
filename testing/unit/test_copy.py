@@ -122,8 +122,8 @@ class CopyTestCase(unittest.TestCase):
 
     def test_deep_copy_conformer_complex(self):
         """Validate deep copy of complex that has multiple conformations."""
-        pdb_path = os.path.join(test_assets, 'pdb', 'thrombine_conformer.pdb')
-        comp = struct.Complex.io.from_pdb(path=pdb_path)
+        pdb_path = os.path.join(test_assets, 'sdf', 'Thrombin_100cmpds (1).sdf')
+        comp = struct.Complex.io.from_sdf(path=pdb_path)
         # Add a random bond to test with.
         atom1 = next(comp.atoms)
         atom2 = next(comp.atoms)
