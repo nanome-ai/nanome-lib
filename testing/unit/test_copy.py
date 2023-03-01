@@ -135,6 +135,7 @@ class CopyTestCase(unittest.TestCase):
         struc = self.complex
         field_list = self.complex_fields
         struc_copy = struc._deep_copy()
+        # Traverse data structure and make sure all data was copied.
         self.assertTrue(struc_copy is not struc)
         self.validate_fields(struc, struc_copy, field_list)
         for mol, mol_copy in zip(struc.molecules, struc_copy.molecules):
