@@ -27,9 +27,9 @@ class CopyTestCase(unittest.TestCase):
         # These are the fields we want to validate are copied between structs.
         cls.atom_fields = [
             'index', 'selected', 'labeled', 'atom_rendering', 'surface_rendering',
-            'exists', 'is_het', 'occupancy','bfactor','acceptor','donor','polar_hydrogen',
-            'atom_mode','serial', 'current_conformer', 'positions', 'label_text', 'atom_color',
-            'atom_scale','surface_color','surface_opacity','symbol','name','position',
+            'exists', 'is_het', 'occupancy', 'bfactor', 'acceptor', 'donor', 'polar_hydrogen',
+            'atom_mode', 'serial', 'current_conformer', 'positions', 'label_text', 'atom_color',
+            'atom_scale', 'surface_color', 'surface_opacity', 'symbol', 'name', 'position',
             'formal_charge', 'partial_charge', 'vdw_radius', 'alt_loc', 'is_het',
             'in_conformer', 'het_surfaced', '_display_mode',
         ]
@@ -81,7 +81,7 @@ class CopyTestCase(unittest.TestCase):
         # Assert no residue copied
         self.assertTrue(atom.residue is not None)
         self.assertTrue(atom_copy.residue is None)
-    
+
     def test_shallow_copy_residue(self):
         struc = next(self.complex.residues)
         field_list = self.residue_fields
@@ -94,7 +94,7 @@ class CopyTestCase(unittest.TestCase):
         self.assertTrue(len(list(struc_copy.atoms)) == 0)
         self.assertTrue(len(list(struc.bonds)) > 0)
         self.assertTrue(len(list(struc_copy.bonds)) == 0)
-    
+
     def test_shallow_copy_bonds(self):
         struc = next(self.complex.bonds)
         field_list = self.bond_fields
@@ -121,7 +121,7 @@ class CopyTestCase(unittest.TestCase):
         # Validate no chains copied
         self.assertTrue(len(list(struc.chains)) > 0)
         self.assertTrue(len(list(struc_copy.chains)) == 0)
-    
+
     def test_shallow_copy_complex(self):
         struc = self.complex
         field_list = self.complex_fields
