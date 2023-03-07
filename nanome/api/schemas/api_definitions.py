@@ -118,6 +118,7 @@ class ApplyColorScheme:
     ]
     output = None
 
+
 api_function_definitions = {
     'request_workspace': RequestWorkspace(),
     'request_complexes': RequestComplexes(),
