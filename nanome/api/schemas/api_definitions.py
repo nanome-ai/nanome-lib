@@ -97,15 +97,6 @@ class RequestControllerTransforms:
     ]
 
 
-class RequestControllerTransforms:
-    params = []
-    output = [
-        schemas.Vector3Field(), schemas.QuaternionField(),
-        schemas.Vector3Field(), schemas.QuaternionField(),
-        schemas.Vector3Field(), schemas.QuaternionField()
-    ]
-
-
 class ApplyColorScheme:
     params = [
         schemas.EnumField(enum=enums.ColorScheme),
