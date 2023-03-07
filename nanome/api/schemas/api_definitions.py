@@ -1,10 +1,6 @@
-import logging
 from nanome.api import structure, schemas
 from nanome.util import enums
 from marshmallow import fields
-
-
-logging = logging.getLogger(__name__)
 
 
 structure_schema_map = {
