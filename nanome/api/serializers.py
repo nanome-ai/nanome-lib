@@ -19,6 +19,7 @@ registered_modules = [
     'nanome.api.control',
     'nanome.api.files',
     'nanome.api.integration',
+    'nanome.api.interactions',
     'nanome.api.macro',
     'nanome.api.room',
     'nanome.api.shapes',

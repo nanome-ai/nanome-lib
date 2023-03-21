@@ -9,3 +9,4 @@ from . import structure
 from . import shapes
 from . import macro
 from . import user
+from . import interactions

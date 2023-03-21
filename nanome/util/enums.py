@@ -257,6 +257,14 @@ class ShapeAnchorType(IntEnum):
     Atom = 2
 
 
+class InteractionKind(IntEnum):
+    """
+    | Types of interactions that can be created within Nanome.
+    | Used internally
+    """
+    All = 0 # Used to return any interaction kind when getting interactions
+    HydrogenBond = 1
+
 class ColorScheme(IntEnum):
     """
     | Color schemes for all structure representations.

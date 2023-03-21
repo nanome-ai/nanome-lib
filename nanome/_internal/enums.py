@@ -93,6 +93,10 @@ class Commands(CommandEnum):
     set_shape_result = auto()
     delete_shape_result = auto()
 
+    # Interactions
+    create_interactions_result = auto()
+    get_interactions_response = auto()
+
     # Other
     add_volume_done = auto()
     load_file_done = auto()
@@ -173,6 +177,11 @@ class Messages(CommandEnum):
     # Shapes
     set_shape = auto()
     delete_shape = auto()
+    
+    # Interactions
+    create_interactions = auto()
+    get_interactions = auto()
+    delete_interactions = auto()
 
     # Other
     add_volume = auto()

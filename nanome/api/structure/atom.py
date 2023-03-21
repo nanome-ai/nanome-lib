@@ -65,6 +65,15 @@ class Atom(_Atom, AtomDeprecated, Base):
         self._hetatomed = value
 
     @property
+    def index(self):
+        """
+        | Represents the index of the atom in the Nanome workspace.
+
+        :type: :class:`int`
+        """
+        return self._index
+
+    @property
     def selected(self):
         """
         | Represents if the atom is currently selected in the Nanome workspace.

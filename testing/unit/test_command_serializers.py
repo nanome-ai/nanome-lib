@@ -6,8 +6,8 @@ from nanome import util
 from nanome._internal import network
 from nanome._internal.enums import Messages
 from nanome.api.serializers import CommandMessageSerializer
-from nanome.api import structure, shapes, ui
-from nanome.util import enums
+from nanome.api import structure, shapes, interactions, ui
+from nanome.util import enums, color
 
 test_assets = os.getcwd() + ("/testing/test_assets")
 
@@ -277,6 +277,28 @@ class MessageSerializeTestCase(unittest.TestCase):
         message_type = Messages.delete_shape
         shape_index = 2
         args = [shape_index]
+        expects_response = True
+        payload = self.serializer.serialize_message(self.request_id, message_type, args, self.version_table, expects_response)
+        self.assertTrue(isinstance(payload, memoryview))
+
+    def test_create_interactions(self):
+        message_type = Messages.create_interactions
+        args = [interactions.Interaction(enums.InteractionKind.HydrogenBond, color.Color.Blue, 0, 0)]
+        expects_response = True
+        payload = self.serializer.serialize_message(self.request_id, message_type, args, self.version_table, expects_response)
+        self.assertTrue(isinstance(payload, memoryview))
+
+    def test_delete_interactions(self):
+        message_type = Messages.delete_interactions
+        interaction_index = 2
+        args = [interaction_index]
+        expects_response = False
+        payload = self.serializer.serialize_message(self.request_id, message_type, args, self.version_table, expects_response)
+        self.assertTrue(isinstance(payload, memoryview))
+
+    def test_get_interactions(self):
+        message_type = Messages.get_interactions
+        args = ([], [], [], [], [], enums.InteractionKind.All)
         expects_response = True
         payload = self.serializer.serialize_message(self.request_id, message_type, args, self.version_table, expects_response)
         self.assertTrue(isinstance(payload, memoryview))
