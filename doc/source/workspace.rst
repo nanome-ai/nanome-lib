@@ -88,6 +88,35 @@ to each other as they were positioned inside Nanome.
 Common Operations
 *****************
 
+Load PDB/SDF/MMCIF as a Nanome Complex
+================================
+.. code-block:: python
+
+    from nanome.api.structure import Complex
+
+    pdb_path = '/path/to/file.pdb'
+    sdf_path = '/path/to/file.sdf'
+    mmcif_path = '/path/to/file.mmcif'
+    comp = Complex.io.from_pdb(path=pdb_file)
+    comp = Complex.io.from_sdf(path=sdf_file)
+    comp = Complex.io.from_mmcif(path=mmcif_file)
+
+
+Export Nanome Complex as PDB/SDF/MMCIF
+================================
+.. code-block:: python
+
+    from nanome.api.structure import Complex
+
+    pdb_path = '/path/to/file.pdb'
+    sdf_path = '/path/to/file.sdf'
+    mmcif_path = '/path/to/file.mmcif'
+    comp = Complex()
+    comp.io.to_pdb(path=pdb_path)
+    comp.io.to_sdf(path=sdf_path)
+    comp.io.to_mmcif(path=mmcif_path)
+
+
 Request entire workspace in deep mode
 =====================================
 
