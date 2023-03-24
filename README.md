@@ -32,7 +32,11 @@ All documentation needed to use this package is available at [Read The Docs](htt
 pip install sphinx sphinx_rtd_theme
 cd doc
 make html
-```
+# start server to serve html docs
+cd build/html
+python -m http.server 8000
+``` 
+
 
 ### License
 
