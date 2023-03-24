@@ -65,7 +65,8 @@ class CalculateESPSerializer(TypeSerializer):
 
 
 class ExportFileSerializer(TypeSerializer):
-    _String = StringField()
+    def __init__(self):
+        self.string = StringField()
 
     def version(self):
         return 0
@@ -77,8 +78,8 @@ class ExportFileSerializer(TypeSerializer):
         context.write_bool(value)
 
     def deserialize(self, version, context):
-        location = context.read_using_serializer(ExportFile._String)
-        filename = context.read_using_serializer(ExportFile._String)
+        location = context.read_using_serializer(self.string)
+        filename = context.read_using_serializer(self.string)
         data = context.read_byte_array()
         return (location, filename, data)
 
