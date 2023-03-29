@@ -146,21 +146,15 @@ class LogsManager():
         self.main_pipe_conn = None
         self.child_pipe_conn = None
 
-    def configure_main_process(self, plugin_class):
+    def configure_main_process(self):
         self.main_pipe_conn, self.child_pipe_conn = Pipe()
         logging_level = logging.INFO
         if self.plugin and self.plugin.verbose:
             logging_level = logging.DEBUG
 
-        lib_logger = logging.getLogger("nanome")
-        lib_logger.setLevel(logging_level)
-
-        # Set up logger for plugin modules
-        plugin_module = plugin_class.__module__.split('.')[0]
-        plugin_logger = logging.getLogger(plugin_module)
-        plugin_logger.setLevel(logging_level)
-
-        existing_handler_types = set([type(hdlr) for hdlr in lib_logger.handlers])
+        root_logger = logging.getLogger()
+        root_logger.setLevel(logging_level)
+        existing_handler_types = set([type(hdlr) for hdlr in root_logger.handlers])
 
         self.console_handler = self.create_console_handler()
         self.console_handler.setLevel(logging_level)
@@ -168,22 +162,19 @@ class LogsManager():
         self.nts_handler = logging.NullHandler()
 
         if type(self.console_handler) not in existing_handler_types:
-            lib_logger.addHandler(self.console_handler)
-            plugin_logger.addHandler(self.console_handler)
+            root_logger.addHandler(self.console_handler)
 
         if self.write_log_file and self.filename:
             self.log_file_handler = self.create_log_file_handler(self.filename)
             self.log_file_handler.setLevel(logging_level)
             if type(self.log_file_handler) not in existing_handler_types:
-                lib_logger.addHandler(self.log_file_handler)
-                plugin_logger.addHandler(self.log_file_handler)
+                root_logger.addHandler(self.log_file_handler)
 
         if self.remote_logging:
             self.nts_handler = self.create_nts_handler(self.plugin)
             self.nts_handler.setLevel(logging_level)
             if type(self.nts_handler) not in existing_handler_types:
-                lib_logger.addHandler(self.nts_handler)
-                plugin_logger.addHandler(self.nts_handler)
+                root_logger.addHandler(self.nts_handler)
 
         # If timezone not specified, set to UTC
         if not os.environ.get('TZ'):
@@ -192,24 +183,16 @@ class LogsManager():
     @staticmethod
     def configure_child_process(plugin_instance):
         """Set up a PipeHandler that forwards all Logs to the main Process."""
-        # reset loggers on nanome-lib.
-        nanome_logger = logging.getLogger("nanome")
-        nanome_logger.handlers = []
-        nanome_logger.setLevel(logging.DEBUG)
-
-        # make sure plugin module is logged
-        plugin_module = plugin_instance.__class__.__module__.split('.')[0]
-        plugin_logger = logging.getLogger(plugin_module)
-        plugin_logger.handlers = []
-        plugin_logger.setLevel(logging.DEBUG)
+        # reset loggers.
+        root_logger = logging.getLogger()
+        root_logger.handlers = []
+        root_logger.setLevel(logging.DEBUG)
 
         # Pipe should send all logs to main process
         # If debug logs are disabled, they will be filtered in main process.
         pipe_handler = PipeHandler(plugin_instance)
         pipe_handler.level = logging.DEBUG
-
-        nanome_logger.addHandler(pipe_handler)
-        plugin_logger.addHandler(pipe_handler)
+        root_logger.addHandler(pipe_handler)
 
     @staticmethod
     def create_log_file_handler(filename):

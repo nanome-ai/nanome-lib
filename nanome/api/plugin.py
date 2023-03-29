@@ -156,7 +156,7 @@ class Plugin(object):
             plugin=self,
             write_log_file=self.write_log_file,
             remote_logging=self.remote_logging)
-        self._logs_manager.configure_main_process(self.plugin_class)
+        self._logs_manager.configure_main_process()
 
         Logs.message("Starting Plugin")
         if self.has_autoreload:
