@@ -119,7 +119,7 @@ class PluginLoggingTestCase(Py2AssertLogs, unittest.TestCase):
             self.plugin.run(self.host, self.port, self.key)
 
         # Write log, and make sure log_file_handler is called.
-        logger = logging.getLogger(__name__)
+        logger = logging.getLogger()
         active_rfh = [
             h for h in logger.handlers
             if isinstance(h, logging.handlers.RotatingFileHandler)
@@ -164,7 +164,7 @@ class PluginLoggingTestCase(Py2AssertLogs, unittest.TestCase):
 
         with patch.object(sys, 'argv', testargs):
             self.plugin.run(self.host, self.port, self.key)
-            logger = logging.getLogger(__name__)
+            logger = logging.getLogger()
             console_handler = [
                 h for h in logger.handlers
                 if isinstance(h, logging.StreamHandler)
