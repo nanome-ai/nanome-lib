@@ -183,7 +183,7 @@ class LogsManager():
     @staticmethod
     def configure_child_process(plugin_instance):
         """Set up a PipeHandler that forwards all Logs to the main Process."""
-        # reset loggers on nanome-lib.
+        # reset loggers.
         root_logger = logging.getLogger()
         root_logger.handlers = []
         root_logger.setLevel(logging.DEBUG)
