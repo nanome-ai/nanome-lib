@@ -384,12 +384,12 @@ class Plugin(object):
                 received_version_table, _, _ = self._serializer.deserialize_command(packet.payload, None)
                 version_table = TypeSerializer.get_best_version_table(received_version_table)
                 self.__on_client_connection(session_id, version_table)
-                return
+                return True
 
             if session_id in self._sessions:
                 # packet.decompress()
                 self._sessions[session_id]._on_packet_received(packet.payload)
-                return
+                return True
 
             # Doesn't register? It's an error
             logger.warning("Received a command from an unregistered session {}".format(session_id))
@@ -407,7 +407,8 @@ class Plugin(object):
                 sys.exit(1)
             else:
                 logger.info("Connection ended by NTS")
-                sys.exit(0)
+                self.plugin_id = -1
+                return False
 
         elif packet.packet_type == network.Packet.packet_type_client_disconnection:
             try:
@@ -424,6 +425,7 @@ class Plugin(object):
             self.__logs_request(packet)
         else:
             logger.warning("Received a packet of unknown type {}. Ignoring".format(packet.packet_type))
+        return True
 
     @staticmethod
     def _is_process():
