@@ -86,7 +86,8 @@ class NetInstance(object):
             if len(data) == 0:
                 logger.info("Connection shutdown requested")
                 return False
-            self._received_data(data)
+            if self._received_data(data) == False:
+                return False
         return True
 
     def _received_data(self, data):
@@ -102,6 +103,8 @@ class NetInstance(object):
             else:
                 if self._current_packet.get_payload(self._data):
                     self._state = NetInstance.header_state
-                    self._on_received_packet(self._instance, self._current_packet)
+                    if self._on_received_packet(self._instance, self._current_packet) == False:
+                        return False
                 else:
                     self._processing = False
+        return True
