@@ -17,7 +17,7 @@ class MacroSerializer(TypeSerializer):
         context.write_using_serializer(self.string, value.logic)
 
     def deserialize(self, version, context):
-        result = Macro._create()
-        result._title = context.read_using_serializer(self.string)
-        result._logic = context.read_using_serializer(self.string)
+        result = Macro()
+        result.title = context.read_using_serializer(self.string)
+        result.logic = context.read_using_serializer(self.string)
         return result
