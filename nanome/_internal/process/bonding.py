@@ -33,7 +33,7 @@ class _Bonding():
             self.__future = future
 
         atom_count = 0
-        if fast_mode == None:
+        if fast_mode is None:
             for complex in complex_list:
                 atom_count += sum(atom._conformer_count for atom in complex.atoms)
             self.__fast_mode = atom_count > 20000
