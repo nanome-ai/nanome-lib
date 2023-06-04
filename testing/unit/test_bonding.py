@@ -27,7 +27,8 @@ class BondingTestCase(unittest.TestCase):
         async def validate_bonding():
             pdb_file = os.path.join(test_assets, 'pdb', '3mcf.pdb')
             comp = structure.Complex.io.from_pdb(path=pdb_file)
-            self.assertEqual(len(list(comp.bonds)), 0)
+            bond_count = sum(1 for _ in comp.bonds)
+            self.assertEqual(bond_count, 0)
             complex_list = [comp]
             callback = None
             fast_mode = False
@@ -35,7 +36,7 @@ class BondingTestCase(unittest.TestCase):
             plugin = MagicMock()
             bonding = _Bonding(plugin, complex_list, callback, fast_mode)
             await bonding._start()
-            for cmp in complex_list:
-                self.assertTrue(len(list(comp.bonds)) > 0)
+            bond_count = sum(1 for _ in comp.bonds)
+            self.assertGreater(bond_count, 0)
 
         run_awaitable(validate_bonding)
