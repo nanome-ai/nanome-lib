@@ -1,7 +1,7 @@
 import asyncio
 import nanome
 import unittest
-from nanome._internal.process import _Bonding
+from nanome._internal.process import Bonding
 from nanome.api import structure
 import os
 from unittest.mock import MagicMock
@@ -22,7 +22,7 @@ class BondingTestCase(unittest.TestCase):
     def setUp(self):
         nanome.PluginInstance._instance = MagicMock()
 
-    def test_bonding(self):
+    def test(self):
 
         async def validate_bonding():
             pdb_file = os.path.join(test_assets, 'pdb', '3mcf.pdb')
@@ -34,7 +34,7 @@ class BondingTestCase(unittest.TestCase):
             fast_mode = False
 
             plugin = MagicMock()
-            bonding = _Bonding(plugin, complex_list, callback, fast_mode)
+            bonding = Bonding(plugin, complex_list, callback, fast_mode)
             await bonding._start()
             bond_count = sum(1 for _ in comp.bonds)
             self.assertGreater(bond_count, 0)

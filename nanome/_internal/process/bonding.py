@@ -18,7 +18,7 @@ NANOBABEL_PATH = find_executable('nanobabel')
 OBABEL_PATH = find_executable('obabel')
 
 
-class _Bonding():
+class Bonding():
     def __init__(self, plugin, complex_list, callback=None, fast_mode=None):
         self.__complexes = complex_list
         self.__framed_complexes = [complex.convert_to_frames() for complex in complex_list]
@@ -100,7 +100,7 @@ class _Bonding():
         self.__proc.start()
 
     def __on_error(self, msg):
-        if not "molecule converted" in msg:
+        if "molecule converted" not in msg:
             logger.warning("[Bond Generation] " + msg)
 
     def __bonding_done(self, result_code):

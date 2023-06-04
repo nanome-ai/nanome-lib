@@ -5,7 +5,7 @@ from timeit import default_timer as timer
 
 from nanome._internal.network import Packet
 from nanome._internal.process import ProcessManagerInstance
-from nanome._internal.process import _Bonding, _Dssp
+from nanome._internal.process import Bonding, _Dssp
 from nanome._internal.enums import Messages
 from nanome._internal.decorators import deprecated
 
