@@ -40,7 +40,7 @@ class Bonding():
         else:
             self.__fast_mode = fast_mode
 
-    def _start(self):
+    def start(self):
         from nanome.util import Process
         if len(self.__complexes) == 0:
             self.__done()
