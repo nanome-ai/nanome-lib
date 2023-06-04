@@ -22,7 +22,7 @@ class BondingTestCase(unittest.TestCase):
     def setUp(self):
         nanome.PluginInstance._instance = MagicMock()
 
-    def test(self):
+    def test_bonding(self):
 
         async def validate_bonding():
             pdb_file = os.path.join(test_assets, 'pdb', '3mcf.pdb')
