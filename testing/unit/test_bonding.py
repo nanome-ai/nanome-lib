@@ -23,20 +23,17 @@ class BondingTestCase(unittest.TestCase):
         nanome.PluginInstance._instance = MagicMock()
 
     def test_bonding(self):
+        pdb_file = os.path.join(test_assets, 'pdb', '3mcf.pdb')
+        comp = structure.Complex.io.from_pdb(path=pdb_file)
+        bond_count = sum(1 for _ in comp.bonds)
+        self.assertEqual(bond_count, 0)
 
-        async def validate_bonding():
-            pdb_file = os.path.join(test_assets, 'pdb', '3mcf.pdb')
-            comp = structure.Complex.io.from_pdb(path=pdb_file)
-            bond_count = sum(1 for _ in comp.bonds)
-            self.assertEqual(bond_count, 0)
-            complex_list = [comp]
-            callback = None
-            fast_mode = False
+        complex_list = [comp]
+        callback = None
+        fast_mode = False
+        plugin = MagicMock()
+        bonding = Bonding(plugin, complex_list, callback, fast_mode)
+        bonding.start()
 
-            plugin = MagicMock()
-            bonding = Bonding(plugin, complex_list, callback, fast_mode)
-            await bonding.start()
-            bond_count = sum(1 for _ in comp.bonds)
-            self.assertGreater(bond_count, 0)
-
-        run_awaitable(validate_bonding)
+        bond_count = sum(1 for _ in comp.bonds)
+        self.assertGreater(bond_count, 0)

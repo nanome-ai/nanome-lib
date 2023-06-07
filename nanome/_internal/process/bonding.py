@@ -1,6 +1,7 @@
 from nanome._internal.structure import _Complex, _Bond
 from nanome._internal.structure.io import pdb, sdf
 
+import functools
 import tempfile
 import os
 from distutils.spawn import find_executable
@@ -19,13 +20,14 @@ OBABEL_PATH = find_executable('obabel')
 
 
 class Bonding():
+
     def __init__(self, plugin, complex_list, callback=None, fast_mode=None):
         self.__complexes = complex_list
-        self.__framed_complexes = [complex.convert_to_frames() for complex in complex_list]
         self.__callback = callback
         self.__future = None
         self.__input = None
         self.__output = None
+        self.dir = tempfile.TemporaryDirectory()
 
         if asyncio and plugin.is_async:
             loop = asyncio.get_event_loop()
@@ -41,6 +43,42 @@ class Bonding():
             self.__fast_mode = fast_mode
 
     def start(self):
+        self.processes = []
+        for comp in self.__complexes:
+            comp.convert_to_frames()
+            input_file = tempfile.NamedTemporaryFile(delete=False, dir=self.dir.name, suffix='.pdb')
+            input_filename = input_file.name
+            output_file = tempfile.NamedTemporaryFile(delete=False, dir=self.dir.name, suffix='.mol')
+            output_filename = output_file.name
+            comp.io.to_pdb(input_file.name)
+            callback = functools.partial(self._handle_results_and_run_next_process, output_filename, comp)
+            proc = self.setup_process(input_filename, output_filename, callback)
+            self.processes.append(proc)
+        current_proc = self.processes.pop(-1)
+        current_proc.start()
+
+    def setup_process(self, input_file, output_file, callback_fn):
+        from nanome.util import Process
+        proc = Process()
+        proc.output_text = True
+        proc.on_error = self.__on_error
+        proc.on_done = callback_fn
+        if NANOBABEL_PATH:
+            proc.label = 'nanobabel'
+            proc.executable_path = NANOBABEL_PATH
+            proc.args += ['bonding', '-i', input_file, '-o', output_file]
+        elif OBABEL_PATH:
+            proc.label = 'obabel'
+            proc.executable_path = OBABEL_PATH
+            proc.args += ['-ipdb', input_file, '-osdf', '-O' + output_file]
+        else:
+            logger.error("No bonding package found.")
+
+        if self.__fast_mode:
+            proc.args.append('-f')
+        return proc
+
+    def old_start(self):
         from nanome.util import Process
         if len(self.__complexes) == 0:
             self.__done()
@@ -48,13 +86,13 @@ class Bonding():
 
         self.__complex_idx = 0
         self.__molecule_idx = -1
-        self.__input = tempfile.NamedTemporaryFile(delete=False, suffix='.pdb')
-        self.__output = tempfile.NamedTemporaryFile(delete=False, suffix='.mol')
+        self.__input = tempfile.NamedTemporaryFile(delete=False, dir=self.dir, suffix='.pdb')
+        self.__output = tempfile.NamedTemporaryFile(delete=False, dir=self.dir, suffix='.mol')
 
         self.__proc = Process()
         self.__proc.output_text = True
         self.__proc.on_error = self.__on_error
-        self.__proc.on_done = self.__bonding_done
+        self.__proc.on_done = self._handle_results_and_run_next_process
 
         if NANOBABEL_PATH:
             self.__proc.label = 'nanobabel'
@@ -103,17 +141,53 @@ class Bonding():
         if "molecule converted" not in msg:
             logger.warning("[Bond Generation] " + msg)
 
-    def __bonding_done(self, result_code):
+    def _handle_results_and_run_next_process(self, output_file, initial_comp, result_code):
         if result_code == -1:
             logger.error("Couldn't execute nanobabel or openbabel to generate bonds. Is one installed?")
             self.__done()
             return
-        with open(self.__output.name) as f:
+        with open(output_file) as f:
             lines = f.readlines()
         content = sdf.parse_lines(lines)
-        result = sdf.structure(content)
-        self.__match_and_bond(result)
-        self.__next()
+        result_comp = sdf.structure(content)
+        self._match_and_bond(initial_comp, result_comp)
+        # self.__next()
+
+    @classmethod
+    def _match_and_bond(cls, unbonded_comp, bonded_comp):
+        assert len(list(unbonded_comp.atoms)) == len(list(bonded_comp.atoms))
+        # make one to one mapping of atoms based on position
+        bonded_serial_to_unbonded_atom = dict()
+        for initial_atom in unbonded_comp.atoms:
+            bonded_atom = next(
+                atm for atm in bonded_comp.atoms
+                if atm.position == initial_atom.position)
+            bonded_serial_to_unbonded_atom[bonded_atom.serial] = initial_atom
+        # make bonds for each atom in unbonded_comp
+        for bond in bonded_comp.bonds:
+            serial1 = bond._atom1._serial
+            serial2 = bond._atom2._serial
+
+            if serial1 > serial2:
+                serial1, serial2 = serial2, serial1
+
+            if serial1 in bonded_serial_to_unbonded_atom and serial2 in bonded_serial_to_unbonded_atom:
+                atom1 = bonded_serial_to_unbonded_atom[serial1]
+                atom2 = bonded_serial_to_unbonded_atom[serial2]
+                residue = atom1._residue
+
+                new_bond = None
+                for old_bond in atom1.bonds:
+                    if old_bond._atom2 == atom2:
+                        new_bond = old_bond
+                        break
+
+                if new_bond is None:
+                    new_bond = _Bond._create()
+                    new_bond._kind = bond._kind
+                    new_bond._atom1 = atom1
+                    new_bond._atom2 = atom2
+                    residue._add_bond(new_bond)
 
     def __match_and_bond(self, bonding_result):
         if self.__molecule_idx == 0:
