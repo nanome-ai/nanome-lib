@@ -34,6 +34,6 @@ class BondingTestCase(unittest.TestCase):
         plugin = MagicMock()
         bonding = Bonding(plugin, complex_list, callback, fast_mode)
         bonding.start()
-
+        expected_bond_count = 2134
         bond_count = sum(1 for _ in comp.bonds)
-        self.assertGreater(bond_count, 0)
+        self.assertEqual(bond_count, expected_bond_count)
