@@ -158,11 +158,16 @@ class Bonding():
         assert len(list(unbonded_comp.atoms)) == len(list(bonded_comp.atoms))
         # make one to one mapping of atoms based on position
         bonded_serial_to_unbonded_atom = dict()
-        for initial_atom in unbonded_comp.atoms:
-            bonded_atom = next(
-                atm for atm in bonded_comp.atoms
-                if atm.position == initial_atom.position)
+
+        def sort_lambda(atm):
+            return atm.position.unpack()
+        sorted_unbonded_atoms = sorted(list(unbonded_comp.atoms), key=sort_lambda)
+        sorted_bonded_atoms = sorted(list(bonded_comp.atoms), key=sort_lambda)
+
+        for initial_atom, bonded_atom in zip(sorted_unbonded_atoms, sorted_bonded_atoms):
+            assert initial_atom.position == bonded_atom.position
             bonded_serial_to_unbonded_atom[bonded_atom.serial] = initial_atom
+
         # make bonds for each atom in unbonded_comp
         for bond in bonded_comp.bonds:
             serial1 = bond._atom1._serial

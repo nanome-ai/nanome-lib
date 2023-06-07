@@ -37,3 +37,19 @@ class BondingTestCase(unittest.TestCase):
         expected_bond_count = 2134
         bond_count = sum(1 for _ in comp.bonds)
         self.assertEqual(bond_count, expected_bond_count)
+
+    def test_bonding_conformer(self):
+        pdb_file = os.path.join(test_assets, 'pdb', 'thrombine_conformer.pdb')
+        comp = structure.Complex.io.from_pdb(path=pdb_file)
+        bond_count = sum(1 for _ in comp.bonds)
+        self.assertEqual(bond_count, 0)
+
+        complex_list = [comp]
+        callback = None
+        fast_mode = False
+        plugin = MagicMock()
+        bonding = Bonding(plugin, complex_list, callback, fast_mode)
+        bonding.start()
+        expected_bond_count = 114
+        bond_count = sum(1 for _ in comp.bonds)
+        self.assertEqual(bond_count, expected_bond_count)
