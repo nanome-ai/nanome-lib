@@ -23,7 +23,7 @@ jobs:
           # Install openbabel
           wget -q https://github.com/openbabel/openbabel/archive/refs/tags/openbabel-3-1-1.tar.gz
           tar -xzvf openbabel-3-1-1.tar.gz
-          cd openbabel-3-1-1
+          cd openbabel-openbabel-3-1-1
           python setup.py install
       - name: Run tests.py
         run: coverage run --source=nanome --omit=nanome/util/py2_enum.py -m unittest discover -s testing
