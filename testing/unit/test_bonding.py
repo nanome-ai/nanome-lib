@@ -1,4 +1,3 @@
-import asyncio
 import nanome
 import unittest
 from nanome._internal.process import _Bonding
@@ -8,14 +7,6 @@ from unittest.mock import MagicMock
 
 
 test_assets = os.getcwd() + ("/testing/test_assets")
-
-
-def run_awaitable(awaitable, *args, **kwargs):
-    loop = asyncio.get_event_loop()
-    if loop.is_running:
-        loop = asyncio.new_event_loop()
-    loop.run_until_complete(awaitable(*args, **kwargs))
-    loop.close()
 
 
 class BondingTestCase(unittest.TestCase):
