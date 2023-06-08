@@ -187,6 +187,6 @@ class _Bonding():
     def has_executable():
         """Ensure that nanobabel or openbabel is installed."""
         if not NANOBABEL_PATH and not OBABEL_PATH:
-            logger.error("No bonding package found.")
+            logger.error("No bonding executable found. Please install openbabel or nanobabel to use Bonding feature.")
             return False
         return True
