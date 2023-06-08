@@ -9,7 +9,7 @@ on:
 
 jobs:
   python3:
-    runs-on: nanome/plugin-env
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Install Python 3
@@ -20,6 +20,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip coverage
           pip install -e .['schemas']
+          # Install openbabel
+          curl https://github.com/openbabel/openbabel/archive/refs/tags/openbabel-3-1-1.tar.gz -o openbabel-3-1-1.tar.gz
+          tar -xzvf openbabel-3-1-1.tar.gz
+          cd openbabel-openbabel-3-1-1
+          python setup.py install
       - name: Run tests.py
         run: coverage run --source=nanome --omit=nanome/util/py2_enum.py -m unittest discover -s testing
       - name: print coverage percentage
