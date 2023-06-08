@@ -21,7 +21,7 @@ jobs:
           python -m pip install --upgrade pip coverage
           pip install -e .['schemas']
           # Install openbabel
-          wget https://github.com/openbabel/openbabel/archive/refs/tags/openbabel-3-1-1.tar.gz
+          wget -q https://github.com/openbabel/openbabel/archive/refs/tags/openbabel-3-1-1.tar.gz
           tar -xzvf openbabel-3-1-1.tar.gz
           cd openbabel-3-1-1
           python setup.py install
