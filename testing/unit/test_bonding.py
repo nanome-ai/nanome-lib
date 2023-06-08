@@ -1,14 +1,24 @@
 import nanome
+import sys
 import unittest
 from nanome._internal.process import _Bonding
 from nanome.api import structure
 import os
-from unittest.mock import MagicMock
+
+if sys.version_info.major >= 3:
+    from unittest.mock import MagicMock
+else:
+    # Python 2.7 way of getting magicmock. Requires pip install mock
+    from mock import MagicMock
 
 
 test_assets = os.getcwd() + ("/testing/test_assets")
 
+# Don't run tests if environment doesn't have Bonding executables
+reqs_installed = _Bonding.has_executable()
 
+
+@unittest.skipIf(not reqs_installed, "Bonding executable not found. Install openbabel or nanobabel to run tests.")
 class BondingTestCase(unittest.TestCase):
 
     def setUp(self):
