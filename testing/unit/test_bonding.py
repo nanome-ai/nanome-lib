@@ -109,24 +109,22 @@ class BondingTestCase(unittest.TestCase):
         self.assertEqual(pdb2_mol._conformer_count, pdb2_expected_conformer_count)
 
         # PDB1 Assert Bond count on all conformers
-        mol = next(pdb1_comp.molecules)
-        for i in range(0, mol._conformer_count):
-            mol.set_current_conformer(i)
-            self.assertEqual(mol.current_conformer, i)
-            conformer_atom_count = sum(1 for atm in mol.atoms if atm.in_conformer[i])
-            conformer_bond_count = sum(1 for bnd in mol.bonds if bnd.in_conformer[i])
+        for i in range(0, pdb1_mol._conformer_count):
+            pdb1_mol.set_current_conformer(i)
+            self.assertEqual(pdb1_mol.current_conformer, i)
+            conformer_atom_count = sum(1 for atm in pdb1_mol.atoms if atm.in_conformer[i])
+            conformer_bond_count = sum(1 for bnd in pdb1_mol.bonds if bnd.in_conformer[i])
             expected_conf_atom_count = pdb1_expected_atom_counts[i]
             expected_conf_bond_count = pdb1_expected_bond_counts[i]
             self.assertEqual(conformer_atom_count, expected_conf_atom_count)
             self.assertEqual(conformer_bond_count, expected_conf_bond_count)
 
         # PDB2 Assert Bond count on all conformers
-        mol = next(pdb2_comp.molecules)
-        for i in range(0, mol._conformer_count):
-            mol.set_current_conformer(i)
-            self.assertEqual(mol.current_conformer, i)
-            conformer_atom_count = sum(1 for atm in mol.atoms if atm.in_conformer[i])
-            conformer_bond_count = sum(1 for bnd in mol.bonds if bnd.in_conformer[i])
+        for i in range(0, pdb2_mol._conformer_count):
+            pdb2_mol.set_current_conformer(i)
+            self.assertEqual(pdb2_mol.current_conformer, i)
+            conformer_atom_count = sum(1 for atm in pdb2_mol.atoms if atm.in_conformer[i])
+            conformer_bond_count = sum(1 for bnd in pdb2_mol.bonds if bnd.in_conformer[i])
             expected_conf_atom_count = pdb2_expected_atom_counts[i]
             expected_conf_bond_count = pdb2_expected_bond_counts[i]
             self.assertEqual(conformer_atom_count, expected_conf_atom_count)
