@@ -50,6 +50,7 @@ class AtomSchema(Schema):
     in_conformer = fields.List(fields.Boolean())
     het_surfaced = fields.Boolean()
     display_mode = fields.Integer()
+    unique_identifier = fields.Integer(attribute='_unique_identifier')
 
     @post_load
     def make_atom(self, data, **kwargs):
@@ -60,8 +61,8 @@ class AtomSchema(Schema):
 
 class BondSchema(Schema):
     index = fields.Integer(default=-1)
-    atom1 = fields.Nested(AtomSchema(only=('index',)))
-    atom2 = fields.Nested(AtomSchema(only=('index',)))
+    atom1 = fields.Nested(AtomSchema())
+    atom2 = fields.Nested(AtomSchema())
     kind = EnumField(enum=enums.Kind)
     in_conformer = fields.List(fields.Boolean())
     kinds = fields.List(EnumField(enum=enums.Kind))
