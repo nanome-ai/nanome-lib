@@ -9,7 +9,8 @@ CATEGORY = "testing"
 HAS_ADVANCED_OPTIONS = False
 
 
-class SchemaTest(nanome.AsyncPluginInstance):
+class SchemaBondTest(nanome.AsyncPluginInstance):
+    """Validate that bonds aren't lost during schema serialization/deserialization."""
 
     @async_callback
     async def start(self):
