@@ -1,0 +1,40 @@
+import json
+import nanome
+from nanome.util import async_callback, Logs, Color
+from nanome.api import schemas, structure
+
+NAME = "Schema Test"
+DESCRIPTION = "Tests async/await in plugins."
+CATEGORY = "testing"
+HAS_ADVANCED_OPTIONS = False
+
+
+class SchemaTest(nanome.AsyncPluginInstance):
+
+    def start(self):
+        self.on_run()
+
+    @async_callback
+    async def on_run(self):
+        shallow = await self.request_complex_list()
+        index = shallow[0].index
+
+        [comp] = await self.request_complexes([index])
+        bond_count = len(list(comp.bonds))
+        comp_data = json.dumps(schemas.ComplexSchema().dump(comp))
+        new_comp = schemas.ComplexSchema().loads(comp_data)
+        new_comp_bond_count = len(list(new_comp.bonds))
+        assert bond_count == new_comp_bond_count
+
+        for res in new_comp.residues:
+            res.ribbon_color = Color.Blue()
+        await self.update_structures_deep([new_comp])
+
+        [updated_comp] = await self.request_complexes([index])
+        updated_bond_count = len(list(updated_comp.bonds))
+        # this assertion fails
+        assert bond_count == updated_bond_count
+        Logs.message('done')
+
+
+nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, False, SchemaTest)
