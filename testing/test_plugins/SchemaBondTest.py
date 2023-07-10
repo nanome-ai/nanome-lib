@@ -38,4 +38,4 @@ class SchemaBondTest(nanome.AsyncPluginInstance):
         Logs.message('done')
 
 
-nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, False, SchemaTest)
+nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, False, SchemaBondTest)
