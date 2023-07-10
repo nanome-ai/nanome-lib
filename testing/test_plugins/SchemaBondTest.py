@@ -11,11 +11,11 @@ HAS_ADVANCED_OPTIONS = False
 
 class SchemaTest(nanome.AsyncPluginInstance):
 
-    def start(self):
-        self.on_run()
-
     @async_callback
-    async def on_run(self):
+    async def start(self):
+        await self.run_test()
+
+    async def run_test(self):
         shallow = await self.request_complex_list()
         index = shallow[0].index
 
