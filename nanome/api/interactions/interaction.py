@@ -23,7 +23,7 @@ class Interaction(object):
     """
 
     def __init__(self, kind=None, color=None, atom1_idx=None, atom2_idx=None, atom1_conf=None, atom2_conf=None):
-        self.index = None
+        self.index = -1
         self.kind = kind
         self.color: Color = color
         self.atom1_idx = atom1_idx
