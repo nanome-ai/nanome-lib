@@ -4,12 +4,6 @@ from nanome._internal.network import PluginNetwork
 from nanome._internal.enums import Messages
 
 
-try:
-    import asyncio
-except ImportError:
-    asyncio = False
-
-
 class Interaction(object):
     """
     | Class representing a chemical interaction.
@@ -29,20 +23,13 @@ class Interaction(object):
     """
 
     def __init__(self, kind=None, color=None, atom1_idx=None, atom2_idx=None, atom1_conf=None, atom2_conf=None):
-        self._index = None
-        self._kind = kind
-        self._atom1_idx = atom1_idx
-        self._atom2_idx = atom2_idx
+        self.index = None
+        self.kind = kind
+        self.color: Color = color
+        self.atom1_idx = atom1_idx
+        self.atom2_idx = atom2_idx
         self._atom1_conformation = atom1_conf
         self._atom2_conformation = atom2_conf
-        self._color = color
-
-    @property
-    def index(self):
-        """
-        | Index of the interaction
-        """
-        return self._index
 
     @property
     def interaction_type(self):
@@ -52,15 +39,6 @@ class Interaction(object):
         :rtype: :class:`~nanome.util.enums.InteractionType`
         """
         return self._interaction_type
-
-    @property
-    def color(self):
-        """
-        | Color of the interaction
-
-        :rtype: :class:`~nanome.util.Color`
-        """
-        return self._color
 
     def upload(self, done_callback=None):
         """

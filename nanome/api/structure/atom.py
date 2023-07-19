@@ -73,6 +73,15 @@ class Atom(_Atom, AtomDeprecated, Base):
         """
         return self._index
 
+    @index.setter
+    def index(self, value):
+        """
+        | Represents the index of the atom in the Nanome workspace.
+
+        :type: :class:`int`
+        """
+        self._index = value
+
     @property
     def selected(self):
         """
