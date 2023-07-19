@@ -28,6 +28,8 @@ class InteractionTest(nanome.PluginInstance):
         interaction = Interaction(InteractionKind.HydrogenBond, Color.Blue(), atoms[0].index, atoms[1].index)
         nanome.util.Logs.debug("Upload interaction")
         interaction.upload()
+        nanome.util.Logs.debug("Done")
+
 
     def on_interactions_received(self, interactions):
         if len(interactions) > 0:
