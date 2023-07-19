@@ -55,7 +55,7 @@ class Interaction(object):
         return cls._destroy_multiple(interactions)
     
     @classmethod
-    def get(cls, done_callback=None, complexes_idx=None, molecules_idx=None, chains_idx=None,
+    def get(cls, done_callback, complexes_idx=None, molecules_idx=None, chains_idx=None,
             residues_idx=None, atom_idx=None, type_filter=None):
         """
         | Get interactions from Nanome App
@@ -86,8 +86,6 @@ class Interaction(object):
             return
 
         def set_callback(indices):
-            if type(indices) is int:
-                indices = [indices]
             index = indices[0]
             self.index = index
             if done_callback is not None:
@@ -97,7 +95,7 @@ class Interaction(object):
         result = nanome.PluginInstance._save_callback(id, set_callback if done_callback else None)
         if done_callback is None and nanome.PluginInstance._instance.is_async:
             result.real_set_result = result.set_result
-            result.set_result = lambda args: set_callback(args)
+            result.set_result = lambda args: set_callback(*args)
             done_callback = lambda *args: result.real_set_result(args)
         return result
 
