@@ -263,7 +263,26 @@ class InteractionKind(IntEnum):
     | Used internally
     """
     All = 0 # Used to return any interaction kind when getting interactions
-    HydrogenBond = 1
+    Covalent = 1
+    HydrogenBond = 2
+    Ionic = 3
+    XBond = 4
+    MetalComplex = 5
+    Aromatic = 6
+    Hydrophobic = 7
+    VanDerWall = 8
+    VanDerWallClash = 9
+    WeakHBond = 10
+    Polar = 11
+    WeakPolar = 12
+    Clash = 13
+    Carbonyl = 14
+    CarbonPi = 15
+    CationPi = 16
+    DonorPi = 17
+    HalogenPi = 18
+    MetsulphurPi = 19
+    Proximal = 20
 
 class ColorScheme(IntEnum):
     """
