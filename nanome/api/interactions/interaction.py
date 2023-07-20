@@ -1,5 +1,5 @@
 import nanome
-from nanome.util import Logs, Color, enums
+from nanome.util import Logs, enums
 from nanome._internal.network import PluginNetwork
 from nanome._internal.enums import Messages
 
@@ -10,35 +10,23 @@ class Interaction(object):
 
     :param kind: Enumerator representing the kind of interaction to create
     :type kind: :class:`~nanome.util.enums.InteractionType`
-    :param color: Color of the interaction
-    :type color: :class:`~nanome.util.Color`
-    :param atom1_idx: Integer representing the atom1 index
-    :type atom1_idx: int
-    :param atom2_idx: Integer representing the atom2 index
-    :type atom2_idx: int
-    :param atom1_conf: Optional conformation for atom1
+    :param atom1_idx: Array of integers representing the indices of atoms in group 1
+    :type atom1_idx: List[int]
+    :param atom2_idx: Array of integers representing the indices of atoms in group 2
+    :type atom2_idx: List[int]
+    :param atom1_conf: Optional conformation for all atoms in group 1
     :type atom1_conf: int
-    :param atom2_conf: Optional conformation for atom2
+    :param atom2_conf: Optional conformation for all atoms in group 2
     :type atom2_conf: int
     """
 
-    def __init__(self, kind=None, color=None, atom1_idx=None, atom2_idx=None, atom1_conf=None, atom2_conf=None):
+    def __init__(self, kind=None, atom1_idx_arr=None, atom2_idx_arr=None, atom1_conf=None, atom2_conf=None):
         self.index = -1
         self.kind = kind
-        self.color: Color = color
-        self.atom1_idx = atom1_idx
-        self.atom2_idx = atom2_idx
-        self._atom1_conformation = atom1_conf
-        self._atom2_conformation = atom2_conf
-
-    @property
-    def interaction_type(self):
-        """
-        | Type of chemical interaction.
-
-        :rtype: :class:`~nanome.util.enums.InteractionType`
-        """
-        return self._interaction_type
+        self.atom1_idx_arr = atom1_idx_arr
+        self.atom2_idx_arr = atom2_idx_arr
+        self.atom1_conformation = atom1_conf
+        self.atom2_conformation = atom2_conf
 
     def upload(self, done_callback=None):
         """
@@ -93,13 +81,13 @@ class Interaction(object):
         return cls._get_interactions(args, done_callback)
 
     def _upload(self, done_callback=None):
-        if self._index != None:
+        if self.index != -1:
             Logs.error("An interaction can only be uploaded once")
             return
 
         def set_callback(indices):
             index = indices[0]
-            self._index = index
+            self.index = index
             if done_callback is not None:
                 done_callback()
 
@@ -114,13 +102,13 @@ class Interaction(object):
     @classmethod
     def _upload_multiple(cls, interactions, done_callback=None):
         for interaction in interactions:
-            if interaction._index != None:
+            if interaction.index != -1:
                 Logs.error("An interaction can only be uploaded once")
                 return
 
         def set_callback(indices):
             for index, interaction in zip(indices, interactions):
-                interaction._index = index
+                interaction.index = index
             if done_callback is not None:
                 done_callback()
 
@@ -133,11 +121,11 @@ class Interaction(object):
         return result
 
     def _destroy(self):
-        PluginNetwork._instance.send(Messages.delete_interactions, [self._index], False)
+        PluginNetwork._instance.send(Messages.delete_interactions, [self.index], False)
 
     @classmethod
     def _destroy_multiple(cls, interactions):
-        indices = [x._index for x in interactions]
+        indices = [x.index for x in interactions]
         Logs.debug("Destroying interactions", indices)
         PluginNetwork._instance.send(Messages.delete_interactions, indices, False)
 
