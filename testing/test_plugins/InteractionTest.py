@@ -25,7 +25,7 @@ class InteractionTest(nanome.PluginInstance):
 
     def on_workspace_received(self, workspace):
         atoms = random.sample(list(self.iter(workspace)), 2)
-        interaction = Interaction(InteractionKind.HydrogenBond, Color.Blue(), atoms[0].index, atoms[1].index)
+        interaction = Interaction(InteractionKind.HydrogenBond, [atoms[0].index], [atoms[1].index])
         nanome.util.Logs.debug("Upload interaction")
         interaction.upload()
         nanome.util.Logs.debug("Done")
