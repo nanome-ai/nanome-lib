@@ -5,8 +5,8 @@ from nanome.api.serializers import CommandMessageSerializer
 from nanome.util import enums
 from nanome._internal.network.packet import Packet
 from nanome._internal.enums import Messages
-from nanome_sdk import utils
-from nanome_sdk.session.bonding import Bonding
+from nanome.beta.nanome_sdk import utils
+from nanome.beta.nanome_sdk.session.bonding import Bonding
 
 
 __all__ = ["SessionClient"]

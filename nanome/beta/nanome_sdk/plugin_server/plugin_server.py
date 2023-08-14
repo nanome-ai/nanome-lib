@@ -9,9 +9,9 @@ import sys
 from nanome._internal.network.packet import Packet, PacketTypes
 from nanome._internal.serializer_fields import TypeSerializer
 from nanome.api.serializers import CommandMessageSerializer
-from nanome_sdk.logs import configure_main_process_logging
-from nanome_sdk.utils import convert_bytes_to_packet
-from nanome_sdk.session import run_session_loop_py
+from nanome.beta.nanome_sdk.logs import configure_main_process_logging
+from nanome.beta.nanome_sdk.utils import convert_bytes_to_packet
+from nanome.beta.nanome_sdk.session import run_session_loop_py
 from nanome.util.config import str2bool
 
 __all__ = ["PluginServer"]
@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 KEEP_ALIVE_TIME_INTERVAL = 60.0
-PLUGIN_REMOTE_LOGGING = str2bool(os.environ.get('PLUGIN_REMOTE_LOGGING'))
+PLUGIN_REMOTE_LOGGING = str2bool(os.environ.get('PLUGIN_REMOTE_LOGGING', False))
 
 
 class PluginServer:
@@ -33,6 +33,7 @@ class PluginServer:
         self.polling_tasks = {}
 
     async def run(self, nts_host, nts_port, plugin_name, description, plugin_class):
+        self.keep_alive_task = asyncio.create_task(self.keep_alive(self.plugin_id))
         self.plugin_class = plugin_class
         self.plugin_name = os.environ.get("PLUGIN_NAME") or plugin_name
         try:
@@ -41,7 +42,6 @@ class PluginServer:
             self.plugin_id = await self.connect_plugin(self.plugin_name, description)
             configure_main_process_logging(self.nts_writer, self.plugin_id, self.plugin_name)
             logger.info(f"Plugin Connected. ID: {self.plugin_id}")
-            self.keep_alive_task = asyncio.create_task(self.keep_alive(self.plugin_id))
             self.poll_nts_task = asyncio.create_task(self.poll_nts())
             await self.poll_nts_task
         except Exception as e:
@@ -64,7 +64,7 @@ class PluginServer:
     async def connect_plugin(self, name, description):
         """Send a packet to NTS to register plugin."""
         environ = os.environ
-        key = environ["NTS_KEY"]
+        key = environ.get("NTS_KEY", None)
         category = ""
         tags = []
         has_advanced = False

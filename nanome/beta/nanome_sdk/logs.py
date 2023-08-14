@@ -19,7 +19,7 @@ class RemoteLoggingFilter(logging.Filter):
 
     def filter(self, record):
         """Filter out log messages when remote logging is set to False."""
-        return str2bool(os.environ.get('PLUGIN_REMOTE_LOGGING'))
+        return str2bool(os.environ.get('PLUGIN_REMOTE_LOGGING', 'False'))
 
 
 class SessionLoggingHandler(graypy.handler.BaseGELFHandler):
@@ -92,7 +92,7 @@ def configure_main_process_logging(nts_writer, plugin_id, plugin_name):
     session_handler = SessionLoggingHandler(nts_writer, plugin_id, plugin_name)
     session_handler.addFilter(RemoteLoggingFilter())
 
-    verbose = str2bool(os.environ.get("PLUGIN_VERBOSE"))
+    verbose = str2bool(os.environ.get("PLUGIN_VERBOSE", False))
     level = logging.DEBUG if verbose else logging.INFO
     logger.setLevel(level)
     logger.addHandler(session_handler)
