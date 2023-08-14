@@ -97,13 +97,13 @@ class PluginServer:
         """Long running task to send keep alive packets to NTS."""
         sleep_time = KEEP_ALIVE_TIME_INTERVAL
         while True:
-            await asyncio.sleep(sleep_time)
             logger.debug("Sending keep alive packet.")
             packet = Packet()
             packet.set(plugin_id, PacketTypes.keep_alive, 0)
             pack = packet.pack()
             self.nts_writer.write(pack)
             await self.nts_writer.drain()
+            await asyncio.sleep(sleep_time)
 
     async def route_bytes(self, received_bytes):
         """Route bytes from NTS to the appropriate session."""
