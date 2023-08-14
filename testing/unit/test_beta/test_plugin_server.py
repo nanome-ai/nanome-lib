@@ -26,6 +26,10 @@ class TestPluginServer(unittest.TestCase):
         self.loop = asyncio.new_event_loop()
         asyncio.set_event_loop(self.loop)
 
+    def tearDown(self) -> None:
+        super().tearDown()
+        self.loop.close()
+
     @patch("asyncio.open_connection", new_callable=AsyncMock)
     @patch.object(PluginServer, "connect_plugin", new_callable=AsyncMock)
     @patch.object(PluginServer, "keep_alive", new_callable=AsyncMock)
@@ -78,7 +82,7 @@ class TestPluginServer(unittest.TestCase):
     @patch.object(Packet, "header_unpack")
     def test_connect_plugin(self, mock_header_unpack):
         self.server.nts_writer = MagicMock()
-        self.server.nts_writer.write = AsyncMock()
+        self.server.nts_writer.write = MagicMock()
         self.server.nts_writer.drain = AsyncMock()
         self.server.nts_reader = MagicMock()
         self.server.nts_reader.readexactly = AsyncMock()
