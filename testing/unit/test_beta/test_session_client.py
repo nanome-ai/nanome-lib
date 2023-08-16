@@ -6,7 +6,7 @@ from nanome.util import enums
 from nanome.api import ui, structure
 from nanome.beta.nanome_sdk.session import SessionClient
 from nanome._internal.enums import Messages
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock, patch, ANY
 
 
 test_assets = os.getcwd() + ("/testing/test_assets")
@@ -124,3 +124,37 @@ class TestSessionClient(unittest.IsolatedAsyncioTestCase):
             expects_response = False
             self.client.center_on_structures([atom])
             mock_send_message.assert_called_once_with(Messages.structures_center, [atom], expects_response)
+
+    async def test_add_to_workspace(self):
+        with patch.object(self.client, '_send_message') as mock_send_message:
+            mock_send_message.return_value = self.request_id
+            comp = structure.Complex()
+            expects_response = True
+            await self.client.add_to_workspace([comp])
+            mock_send_message.assert_called_once_with(Messages.add_to_workspace, [comp], expects_response)
+
+    async def test_remove_from_workspace(self):
+        with patch.object(self.client, '_send_message') as mock_send_message:
+            mock_send_message.return_value = self.request_id
+            comp = structure.Complex()
+            expects_response = True
+            await self.client.remove_from_workspace([comp])
+            mock_send_message.assert_called_once_with(Messages.structures_deep_update, [ANY], expects_response)
+
+    def test_update_content(self):
+        with patch.object(self.client, '_send_message') as mock_send_message:
+            mock_send_message.return_value = self.request_id
+            btn = ui.Button()
+            expects_response = False
+            self.client.update_content(btn)
+            mock_send_message.assert_called_once_with(Messages.content_update, [btn], expects_response)
+
+    def test_update_node(self):
+        with patch.object(self.client, '_send_message') as mock_send_message:
+            mock_send_message.return_value = self.request_id
+            ln = ui.LayoutNode()
+            expects_response = False
+            self.client.update_node(ln)
+            mock_send_message.assert_called_once_with(Messages.node_update, (ln,), expects_response)
+
+    
