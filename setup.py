@@ -25,6 +25,9 @@ setup(
     extras_require={
         'schemas': [
             'marshmallow==3.18.0'
+        ],
+        'beta': [
+            'redis==4.1.3',
         ]
     },
     classifiers=[
