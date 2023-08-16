@@ -103,7 +103,7 @@ class SessionClient:
 
     def update_structures_shallow(self, structures):
         message_type = Messages.structures_shallow_update
-        expects_response = False
+        expects_response = True
         args = structures
         self._send_message(message_type, args, expects_response)
 
