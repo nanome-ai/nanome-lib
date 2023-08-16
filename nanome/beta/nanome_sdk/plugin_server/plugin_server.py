@@ -96,7 +96,6 @@ class PluginServer:
     async def keep_alive(self, plugin_id):
         """Long running task to send keep alive packets to NTS."""
         sleep_time = KEEP_ALIVE_TIME_INTERVAL
-        breakpoint()
         while True:
             logger.debug("Sending keep alive packet.")
             packet = Packet()
@@ -136,8 +135,7 @@ class PluginServer:
             del self._sessions[session_id]
 
         elif packet_type == PacketTypes.keep_alive:
-            # Why is the plugin id returned as the session id?
-            plugin_id = packet.session_id
+            plugin_id = packet.plugin_id
             logger.debug(f"Keep Alive Packet received. Plugin id: {plugin_id}")
         elif packet_type == PacketTypes.plugin_list:
             logger.info("Plugin list happening?")
