@@ -33,7 +33,6 @@ class PluginServer:
         self.polling_tasks = {}
 
     async def run(self, nts_host, nts_port, plugin_name, description, plugin_class):
-        self.keep_alive_task = asyncio.create_task(self.keep_alive(self.plugin_id))
         self.plugin_class = plugin_class
         self.plugin_name = os.environ.get("PLUGIN_NAME") or plugin_name
         try:
@@ -42,6 +41,7 @@ class PluginServer:
             self.plugin_id = await self.connect_plugin(self.plugin_name, description)
             configure_main_process_logging(self.nts_writer, self.plugin_id, self.plugin_name)
             logger.info(f"Plugin Connected. ID: {self.plugin_id}")
+            self.keep_alive_task = asyncio.create_task(self.keep_alive(self.plugin_id))
             self.poll_nts_task = asyncio.create_task(self.poll_nts())
             await self.poll_nts_task
         except Exception as e:
@@ -96,10 +96,16 @@ class PluginServer:
     async def keep_alive(self, plugin_id):
         """Long running task to send keep alive packets to NTS."""
         sleep_time = KEEP_ALIVE_TIME_INTERVAL
+        breakpoint()
         while True:
             logger.debug("Sending keep alive packet.")
             packet = Packet()
-            packet.set(plugin_id, PacketTypes.keep_alive, 0)
+            session_id = 0
+            packet.payload_length = 0
+            packet.session_id = session_id
+            packet.plugin_id = plugin_id
+            packet.packet_type = PacketTypes.keep_alive
+            # packet.set(session_id, packet_type, plugin_id)
             pack = packet.pack()
             self.nts_writer.write(pack)
             await self.nts_writer.drain()
