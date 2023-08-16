@@ -8,9 +8,9 @@ import sys
 from nanome._internal.network import Packet
 from nanome.api.serializers import CommandMessageSerializer
 from nanome.api import control, ui, structure
-from nanome_sdk.session import NanomePlugin
-from nanome_sdk import utils
-from nanome_sdk.logs import configure_session_logging
+from nanome.beta.nanome_sdk.session import NanomePlugin
+from nanome.beta.nanome_sdk import utils
+from nanome.beta.nanome_sdk.logs import configure_session_logging
 
 # Make sure plugin folder is in path
 # Bold assumption that plugin is always in `plugin` folder
