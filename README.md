@@ -23,6 +23,11 @@ As of version 0.38.0, we provide schemas for serializing nanome API objects in J
 $ pip install nanome[schemas]
 ```
 
+Some modules in the `beta` folder require extra dependencies. To install these, run:
+```sh
+$ pip install nanome[beta]
+```
+
 ### Documentation
 
 All documentation needed to use this package is available at [Read The Docs](https://nanome.readthedocs.io/en/latest/)

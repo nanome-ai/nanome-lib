@@ -25,6 +25,10 @@ setup(
     extras_require={
         'schemas': [
             'marshmallow==3.18.0'
+        ],
+        'beta': [
+            'redis==4.1.3',
+            'marshmallow==3.18.0'
         ]
     },
     classifiers=[
@@ -47,7 +51,8 @@ setup(
     package_data={
         "nanome": [
             "_internal/process/external/dssp/*",
-            "plugin-template.zip"
+            "plugin-template.zip",
+            "beta/nanome_sdk/logging_config.ini"
         ]
     },
 )
