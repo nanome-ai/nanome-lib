@@ -28,6 +28,7 @@ setup(
         ],
         'beta': [
             'redis==4.1.3',
+            'marshmallow==3.18.0'
         ]
     },
     classifiers=[

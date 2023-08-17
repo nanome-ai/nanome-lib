@@ -23,7 +23,7 @@ class StreamRedisInterface:
     """
 
     def __init__(self, stream_data, plugin_interface):
-        self.id = stream_data['id']
+        self.stream_id = stream_data['id']
         # self.error = stream_data['error']
         self._plugin_interface = plugin_interface
 
@@ -54,23 +54,6 @@ class PluginInstanceRedisInterface:
     def set_channel(self, value):
         self.channel = value
 
-    def __getattr__(self, name):
-        """Override superclass getattr to provide a proxy for the PluginInstance class.
-
-        If a user calls an attribute on the Interface that exists on the PluginInstance,
-        return a proxy call to Redis.
-        """
-        plugin_instance_api = iter(attr for attr in dir(self.plugin_class) if not attr.startswith('_'))
-        interface_override = iter(attr for attr in dir(self) if not attr.startswith('_'))
-        # Only intercept if the property is a public property of a PluginInstance,
-        # and theres no override on this class.
-        if name in plugin_instance_api and name not in interface_override:
-            def proxy_redis_message(*args, **kwargs):
-                response = self._rpc_request(name, args, kwargs)
-                return response
-            return proxy_redis_message
-        return getattr(self, name)
-
     def ping(self):
         self.redis.ping()
 
@@ -83,6 +66,60 @@ class PluginInstanceRedisInterface:
             stream_interface = StreamRedisInterface(stream, self)
             response = stream_interface
         return response
+
+    def request_workspace(self):
+        function_name = 'request_workspace'
+        args = []
+        response = self._rpc_request(function_name, args=args)
+        return response
+
+    def request_complexes(self):
+        pass
+
+    def update_structures_shallow(self):
+        pass
+
+    def update_structures_deep(self):
+        pass
+
+    def request_complex_list(self):
+        function_name = 'request_complex_list'
+        args = []
+        response = self._rpc_request(function_name, args=args)
+        return response
+
+    def stream_update(self):
+        pass
+
+    def update_workspace(self):
+        pass
+
+    def zoom_on_structures(self):
+        pass
+
+    def send_notification(self):
+        pass
+
+    def center_on_structures(self):
+        pass
+
+    def add_to_workspace(self):
+        pass
+
+    def add_bonds(self):
+        pass
+
+    def open_url(self):
+        pass
+
+    def request_presenter_info(self):
+        pass
+
+    def request_controller_transforms(self):
+        pass
+
+    def apply_color_scheme(self):
+        pass
 
     def _rpc_request(self, function_name, args=None, kwargs=None):
         """Publish an RPC request to redis, and await response.
@@ -136,6 +173,7 @@ class PluginInstanceRedisInterface:
                 pubsub.unsubscribe()
                 output_schema = fn_definition.output
                 if output_schema:
+                    breakpoint()
                     deserialized_response = output_schema.load(response_data)
                 else:
                     deserialized_response = None
