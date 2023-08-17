@@ -58,7 +58,7 @@ class TestPluginServer(unittest.TestCase):
     @patch.object(PluginServer, "route_bytes", new_callable=AsyncMock)
     def test_poll_nts(self, route_bytes_mock):
         self.server.nts_reader = MagicMock()
-        
+
         packed_packet = self.packet.pack()
         header_fut = asyncio.Future()
         header_fut.set_result(packed_packet[:Packet.packet_header_length])
@@ -86,14 +86,15 @@ class TestPluginServer(unittest.TestCase):
         self.server.nts_writer.drain = AsyncMock()
         self.server.nts_reader = MagicMock()
         self.server.nts_reader.readexactly = AsyncMock()
-        
+
         mock_header_unpack.return_value = [0, 0, 0, "test_plugin_id", 0]
 
         plugin_id = asyncio.run(self.server.connect_plugin("name", "description"))
-        
+
         self.assertEqual(plugin_id, "test_plugin_id")
 
     # Add more test methods as necessary
+
 
 if __name__ == "__main__":
     unittest.main()

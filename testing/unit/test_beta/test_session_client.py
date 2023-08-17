@@ -21,12 +21,11 @@ class TestSessionClient(unittest.IsolatedAsyncioTestCase):
             cls.version_table = json.load(f)
         cls.plugin_id = 21
         cls.session_id = 42
-        
 
     def setUp(self):
         self.client = SessionClient(self.plugin_id, self.session_id, self.version_table)
         self.client.writer = MagicMock()
-        
+
         # Mock request futs
         self.request_id = 1
         response_fut = asyncio.Future()
@@ -51,14 +50,14 @@ class TestSessionClient(unittest.IsolatedAsyncioTestCase):
             expects_response = False
             self.client.update_menu(menu, shallow=shallow)
             mock_send_message.assert_called_once_with(Messages.menu_update, [menu, True], expects_response)
-    
+
     async def test_request_complex_list(self):
         with patch.object(self.client, '_send_message') as mock_send_message:
             mock_send_message.return_value = self.request_id
             expects_response = True
             await self.client.request_complex_list()
             mock_send_message.assert_called_once_with(Messages.complex_list_request, None, expects_response)
-    
+
     async def test_request_workspace(self):
         with patch.object(self.client, '_send_message') as mock_send_message:
             mock_send_message.return_value = self.request_id
@@ -73,7 +72,7 @@ class TestSessionClient(unittest.IsolatedAsyncioTestCase):
             expects_response = True
             await self.client.request_complexes(comp_indices)
             mock_send_message.assert_called_once_with(Messages.complexes_request, comp_indices, expects_response)
-    
+
     def test_update_workspace(self):
         with patch.object(self.client, '_send_message') as mock_send_message:
             mock_send_message.return_value = self.request_id
@@ -81,7 +80,7 @@ class TestSessionClient(unittest.IsolatedAsyncioTestCase):
             expects_response = False
             self.client.update_workspace(workspace)
             mock_send_message.assert_called_once_with(Messages.workspace_update, [workspace], expects_response)
-    
+
     async def test_send_notification(self):
         with patch.object(self.client, '_send_message') as mock_send_message:
             mock_send_message.return_value = self.request_id
@@ -90,7 +89,7 @@ class TestSessionClient(unittest.IsolatedAsyncioTestCase):
             expects_response = False
             await self.client.send_notification(notification_type, message)
             mock_send_message.assert_called_once_with(Messages.notification_send, [notification_type, message], expects_response)
-    
+
     async def test_update_structures_deep(self):
         with patch.object(self.client, '_send_message') as mock_send_message:
             mock_send_message.return_value = self.request_id
@@ -108,7 +107,7 @@ class TestSessionClient(unittest.IsolatedAsyncioTestCase):
             expects_response = True
             self.client.update_structures_shallow([atom, comp])
             mock_send_message.assert_called_once_with(Messages.structures_shallow_update, [atom, comp], expects_response)
-    
+
     def test_zoom_on_structures(self):
         with patch.object(self.client, '_send_message') as mock_send_message:
             mock_send_message.return_value = self.request_id
@@ -156,5 +155,3 @@ class TestSessionClient(unittest.IsolatedAsyncioTestCase):
             expects_response = False
             self.client.update_node(ln)
             mock_send_message.assert_called_once_with(Messages.node_update, (ln,), expects_response)
-
-    

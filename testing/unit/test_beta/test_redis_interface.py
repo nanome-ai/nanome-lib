@@ -4,6 +4,7 @@ from nanome.api import shapes, structure
 from nanome.beta.redis_interface import StreamRedisInterface, PluginInstanceRedisInterface
 from nanome.util import enums, Color
 
+
 class TestStreamRedisInterface(unittest.TestCase):
     def setUp(self):
         self.mock_plugin_interface = Mock()
@@ -50,8 +51,8 @@ class TestPluginInstanceRedisInterface(unittest.TestCase):
         # You might need to expand on it depending on the specifics of your application.
         function_name = 'request_complex_list'
         with patch('json.dumps', return_value='json_string'), \
-             patch('time.time', side_effect=[0, 1, 2, 31]), \
-             patch.object(self.redis_interface, 'redis'):
+                patch('time.time', side_effect=[0, 1, 2, 31]), \
+                patch.object(self.redis_interface, 'redis'):
             mock_pubsub = Mock()
             mock_pubsub.get_message.return_value = {'type': 'message', 'data': b'[]'}
             mock_pubsub.channels.keys.return_value = [b'channel']
@@ -61,7 +62,7 @@ class TestPluginInstanceRedisInterface(unittest.TestCase):
 
             # Verify interaction with Redis, etc.
             self.redis_interface.redis.publish.assert_called_once_with('channel', 'json_string')
-        
+
     def test_request_complex_list(self):
         fn_name = 'request_complex_list'
         with patch.object(self.redis_interface, '_rpc_request') as mock_rpc_request:
@@ -70,7 +71,7 @@ class TestPluginInstanceRedisInterface(unittest.TestCase):
             response = self.redis_interface.request_complex_list()
             self.assertIsNotNone(response)
             mock_rpc_request.assert_called_once_with(fn_name, args=args)
-    
+
     def test_upload_shapes(self):
         fn_name = 'upload_shapes'
         with patch.object(self.redis_interface, '_rpc_request') as mock_rpc_request:
@@ -91,7 +92,7 @@ class TestPluginInstanceRedisInterface(unittest.TestCase):
             response = self.redis_interface.stream_update(*args)
             self.assertIsNotNone(response)
             mock_rpc_request.assert_called_once_with(fn_name, args=args)
-    
+
     def test_get_plugin_data(self):
         fn_name = 'get_plugin_data'
         with patch.object(self.redis_interface, '_rpc_request') as mock_rpc_request:
@@ -99,7 +100,7 @@ class TestPluginInstanceRedisInterface(unittest.TestCase):
             response = self.redis_interface.get_plugin_data()
             self.assertIsNotNone(response)
             mock_rpc_request.assert_called_once_with(fn_name)
-    
+
     def test_request_workspace(self):
         fn_name = 'request_workspace'
         with patch.object(self.redis_interface, '_rpc_request') as mock_rpc_request:
@@ -107,7 +108,7 @@ class TestPluginInstanceRedisInterface(unittest.TestCase):
             response = self.redis_interface.request_workspace()
             self.assertIsNotNone(response)
             mock_rpc_request.assert_called_once_with(fn_name, args=[])
-    
+
     def test_request_complexes(self):
         fn_name = 'request_complexes'
         with patch.object(self.redis_interface, '_rpc_request') as mock_rpc_request:
@@ -117,7 +118,7 @@ class TestPluginInstanceRedisInterface(unittest.TestCase):
             response = self.redis_interface.request_complexes(*args)
             self.assertIsNotNone(response)
             mock_rpc_request.assert_called_once_with(fn_name, args=args)
-    
+
     def test_update_structures_shallow(self):
         fn_name = 'update_structures_shallow'
         with patch.object(self.redis_interface, '_rpc_request') as mock_rpc_request:
@@ -127,7 +128,7 @@ class TestPluginInstanceRedisInterface(unittest.TestCase):
             response = self.redis_interface.update_structures_shallow(*args)
             self.assertIsNotNone(response)
             mock_rpc_request.assert_called_once_with(fn_name, args=args)
-    
+
     def test_update_structures_deep(self):
         fn_name = 'update_structures_deep'
         with patch.object(self.redis_interface, '_rpc_request') as mock_rpc_request:
@@ -137,7 +138,7 @@ class TestPluginInstanceRedisInterface(unittest.TestCase):
             response = self.redis_interface.update_structures_deep(*args)
             self.assertIsNotNone(response)
             mock_rpc_request.assert_called_once_with(fn_name, args=args)
-    
+
     def test_update_workspace(self):
         fn_name = 'update_workspace'
         with patch.object(self.redis_interface, '_rpc_request') as mock_rpc_request:
@@ -157,7 +158,7 @@ class TestPluginInstanceRedisInterface(unittest.TestCase):
             response = self.redis_interface.zoom_on_structures(*args)
             self.assertIsNotNone(response)
             mock_rpc_request.assert_called_once_with(fn_name, args=args)
-    
+
     def test_center_on_structures(self):
         fn_name = 'center_on_structures'
         with patch.object(self.redis_interface, '_rpc_request') as mock_rpc_request:
@@ -167,7 +168,7 @@ class TestPluginInstanceRedisInterface(unittest.TestCase):
             response = self.redis_interface.center_on_structures(*args)
             self.assertIsNotNone(response)
             mock_rpc_request.assert_called_once_with(fn_name, args=args)
-    
+
     def test_add_to_workspace(self):
         fn_name = 'add_to_workspace'
         with patch.object(self.redis_interface, '_rpc_request') as mock_rpc_request:
@@ -177,7 +178,7 @@ class TestPluginInstanceRedisInterface(unittest.TestCase):
             response = self.redis_interface.add_to_workspace(*args)
             self.assertIsNotNone(response)
             mock_rpc_request.assert_called_once_with(fn_name, args=args)
-    
+
     def test_add_bonds(self):
         fn_name = 'add_bonds'
         with patch.object(self.redis_interface, '_rpc_request') as mock_rpc_request:
@@ -187,7 +188,7 @@ class TestPluginInstanceRedisInterface(unittest.TestCase):
             response = self.redis_interface.add_bonds(*args)
             self.assertIsNotNone(response)
             mock_rpc_request.assert_called_once_with(fn_name, args=args)
-    
+
     def test_open_url(self):
         fn_name = 'open_url'
         with patch.object(self.redis_interface, '_rpc_request') as mock_rpc_request:
@@ -197,7 +198,7 @@ class TestPluginInstanceRedisInterface(unittest.TestCase):
             response = self.redis_interface.open_url(*args)
             self.assertIsNotNone(response)
             mock_rpc_request.assert_called_once_with(fn_name, args=args)
-    
+
     def test_request_presenter_info(self):
         fn_name = 'request_presenter_info'
         with patch.object(self.redis_interface, '_rpc_request') as mock_rpc_request:
@@ -206,7 +207,7 @@ class TestPluginInstanceRedisInterface(unittest.TestCase):
             response = self.redis_interface.request_presenter_info(*args)
             self.assertIsNotNone(response)
             mock_rpc_request.assert_called_once_with(fn_name, args=args)
-    
+
     def test_request_controller_transforms(self):
         fn_name = 'request_controller_transforms'
         with patch.object(self.redis_interface, '_rpc_request') as mock_rpc_request:
@@ -215,7 +216,7 @@ class TestPluginInstanceRedisInterface(unittest.TestCase):
             response = self.redis_interface.request_controller_transforms(*args)
             self.assertIsNotNone(response)
             mock_rpc_request.assert_called_once_with(fn_name, args=args)
-    
+
     def test_apply_color_scheme(self):
         fn_name = 'apply_color_scheme'
         with patch.object(self.redis_interface, '_rpc_request') as mock_rpc_request:
