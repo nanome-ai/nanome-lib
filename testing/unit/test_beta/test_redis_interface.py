@@ -1,7 +1,8 @@
 import unittest
 from unittest.mock import patch, Mock, MagicMock
+from nanome.api import shapes, structure
 from nanome.beta.redis_interface import StreamRedisInterface, PluginInstanceRedisInterface
-from nanome.util import enums
+from nanome.util import enums, Color
 
 class TestStreamRedisInterface(unittest.TestCase):
     def setUp(self):
@@ -65,7 +66,164 @@ class TestPluginInstanceRedisInterface(unittest.TestCase):
         fn_name = 'request_complex_list'
         with patch.object(self.redis_interface, '_rpc_request') as mock_rpc_request:
             mock_rpc_request.return_value = []
-            atom_indices = [1, 2, 3]
-            stream_type = enums.StreamType.color
+            args = []
             response = self.redis_interface.request_complex_list()
+            self.assertIsNotNone(response)
+            mock_rpc_request.assert_called_once_with(fn_name, args=args)
+    
+    def test_upload_shapes(self):
+        fn_name = 'upload_shapes'
+        with patch.object(self.redis_interface, '_rpc_request') as mock_rpc_request:
+            mock_rpc_request.return_value = [MagicMock()]
+            shape_list = [shapes.Sphere()]  # Represents Shapes
+            args = [shape_list]
+            response = self.redis_interface.upload_shapes(shape_list)
+            self.assertIsNotNone(response)
+            mock_rpc_request.assert_called_once_with(fn_name, args=args)
+
+    def test_stream_update(self):
+        fn_name = 'stream_update'
+        with patch.object(self.redis_interface, '_rpc_request') as mock_rpc_request:
+            mock_rpc_request.return_value = [MagicMock()]
+            stream_id = 1
+            stream_data = [Color.Blue()]  # Represents Shapes
+            args = [stream_id, stream_data]
+            response = self.redis_interface.stream_update(*args)
+            self.assertIsNotNone(response)
+            mock_rpc_request.assert_called_once_with(fn_name, args=args)
+    
+    def test_get_plugin_data(self):
+        fn_name = 'get_plugin_data'
+        with patch.object(self.redis_interface, '_rpc_request') as mock_rpc_request:
+            mock_rpc_request.return_value = {}
+            response = self.redis_interface.get_plugin_data()
+            self.assertIsNotNone(response)
+            mock_rpc_request.assert_called_once_with(fn_name)
+    
+    def test_request_workspace(self):
+        fn_name = 'request_workspace'
+        with patch.object(self.redis_interface, '_rpc_request') as mock_rpc_request:
+            mock_rpc_request.return_value = [structure.Workspace()]
+            response = self.redis_interface.request_workspace()
+            self.assertIsNotNone(response)
             mock_rpc_request.assert_called_once_with(fn_name, args=[])
+    
+    def test_request_complexes(self):
+        fn_name = 'request_complexes'
+        with patch.object(self.redis_interface, '_rpc_request') as mock_rpc_request:
+            comp_ids = [1, 2, 3]
+            args = [comp_ids]
+            mock_rpc_request.return_value = [structure.Complex()]
+            response = self.redis_interface.request_complexes(*args)
+            self.assertIsNotNone(response)
+            mock_rpc_request.assert_called_once_with(fn_name, args=args)
+    
+    def test_update_structures_shallow(self):
+        fn_name = 'update_structures_shallow'
+        with patch.object(self.redis_interface, '_rpc_request') as mock_rpc_request:
+            struct_list = [structure.Complex(), structure.Complex()]
+            args = [struct_list]
+            mock_rpc_request.return_value = [structure.Complex()]
+            response = self.redis_interface.update_structures_shallow(*args)
+            self.assertIsNotNone(response)
+            mock_rpc_request.assert_called_once_with(fn_name, args=args)
+    
+    def test_update_structures_deep(self):
+        fn_name = 'update_structures_deep'
+        with patch.object(self.redis_interface, '_rpc_request') as mock_rpc_request:
+            struct_list = [structure.Complex(), structure.Complex()]
+            args = [struct_list]
+            mock_rpc_request.return_value = [structure.Complex()]
+            response = self.redis_interface.update_structures_deep(*args)
+            self.assertIsNotNone(response)
+            mock_rpc_request.assert_called_once_with(fn_name, args=args)
+    
+    def test_update_workspace(self):
+        fn_name = 'update_workspace'
+        with patch.object(self.redis_interface, '_rpc_request') as mock_rpc_request:
+            ws = structure.Workspace()
+            args = [ws]
+            mock_rpc_request.return_value = []
+            response = self.redis_interface.update_workspace(*args)
+            self.assertIsNotNone(response)
+            mock_rpc_request.assert_called_once_with(fn_name, args=args)
+
+    def test_zoom_on_structures(self):
+        fn_name = 'zoom_on_structures'
+        with patch.object(self.redis_interface, '_rpc_request') as mock_rpc_request:
+            struct_to_zoom_on = structure.Complex()
+            args = [struct_to_zoom_on]
+            mock_rpc_request.return_value = []
+            response = self.redis_interface.zoom_on_structures(*args)
+            self.assertIsNotNone(response)
+            mock_rpc_request.assert_called_once_with(fn_name, args=args)
+    
+    def test_center_on_structures(self):
+        fn_name = 'center_on_structures'
+        with patch.object(self.redis_interface, '_rpc_request') as mock_rpc_request:
+            struct_to_center_on = structure.Complex()
+            args = [struct_to_center_on]
+            mock_rpc_request.return_value = []
+            response = self.redis_interface.center_on_structures(*args)
+            self.assertIsNotNone(response)
+            mock_rpc_request.assert_called_once_with(fn_name, args=args)
+    
+    def test_add_to_workspace(self):
+        fn_name = 'add_to_workspace'
+        with patch.object(self.redis_interface, '_rpc_request') as mock_rpc_request:
+            comp = structure.Complex()
+            args = [comp]
+            mock_rpc_request.return_value = []
+            response = self.redis_interface.add_to_workspace(*args)
+            self.assertIsNotNone(response)
+            mock_rpc_request.assert_called_once_with(fn_name, args=args)
+    
+    def test_add_bonds(self):
+        fn_name = 'add_bonds'
+        with patch.object(self.redis_interface, '_rpc_request') as mock_rpc_request:
+            comp = structure.Complex()
+            args = [comp]
+            mock_rpc_request.return_value = []
+            response = self.redis_interface.add_bonds(*args)
+            self.assertIsNotNone(response)
+            mock_rpc_request.assert_called_once_with(fn_name, args=args)
+    
+    def test_open_url(self):
+        fn_name = 'open_url'
+        with patch.object(self.redis_interface, '_rpc_request') as mock_rpc_request:
+            url = 'https://nanome.ai'
+            args = [url]
+            mock_rpc_request.return_value = []
+            response = self.redis_interface.open_url(*args)
+            self.assertIsNotNone(response)
+            mock_rpc_request.assert_called_once_with(fn_name, args=args)
+    
+    def test_request_presenter_info(self):
+        fn_name = 'request_presenter_info'
+        with patch.object(self.redis_interface, '_rpc_request') as mock_rpc_request:
+            args = []
+            mock_rpc_request.return_value = []
+            response = self.redis_interface.request_presenter_info(*args)
+            self.assertIsNotNone(response)
+            mock_rpc_request.assert_called_once_with(fn_name, args=args)
+    
+    def test_request_controller_transforms(self):
+        fn_name = 'request_controller_transforms'
+        with patch.object(self.redis_interface, '_rpc_request') as mock_rpc_request:
+            args = []
+            mock_rpc_request.return_value = []
+            response = self.redis_interface.request_controller_transforms(*args)
+            self.assertIsNotNone(response)
+            mock_rpc_request.assert_called_once_with(fn_name, args=args)
+    
+    def test_apply_color_scheme(self):
+        fn_name = 'apply_color_scheme'
+        with patch.object(self.redis_interface, '_rpc_request') as mock_rpc_request:
+            color_scheme = enums.ColorScheme.BFactor
+            color_scheme_target = enums.ColorSchemeTarget.Ribbon
+            apply_to_all = True
+            args = [color_scheme, color_scheme_target, apply_to_all]
+            mock_rpc_request.return_value = []
+            response = self.redis_interface.apply_color_scheme(*args)
+            self.assertIsNotNone(response)
+            mock_rpc_request.assert_called_once_with(fn_name, args=args)

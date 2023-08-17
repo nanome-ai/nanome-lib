@@ -57,10 +57,10 @@ class PluginInstanceRedisInterface:
     def ping(self):
         self.redis.ping()
 
-    def create_writing_stream(self, atom_indices, stream_type):
+    def create_writing_stream(self, indices_list, stream_type):
         """Return a stream wrapped in the RedisStreamInterface"""
         function_name = 'create_writing_stream'
-        args = [atom_indices, stream_type]
+        args = [indices_list, stream_type]
         stream = self._rpc_request(function_name, args=args)
         if stream:
             stream_interface = StreamRedisInterface(stream, self)
@@ -73,14 +73,23 @@ class PluginInstanceRedisInterface:
         response = self._rpc_request(function_name, args=args)
         return response
 
-    def request_complexes(self):
-        pass
+    def request_complexes(self, comp_id_list):
+        function_name = 'request_complexes'
+        args = [comp_id_list]
+        response = self._rpc_request(function_name, args=args)
+        return response
 
-    def update_structures_shallow(self):
-        pass
+    def update_structures_shallow(self, struct_list):
+        function_name = 'update_structures_shallow'
+        args = [struct_list]
+        response = self._rpc_request(function_name, args=args)
+        return response
 
-    def update_structures_deep(self):
-        pass
+    def update_structures_deep(self, struct_list):
+        function_name = 'update_structures_deep'
+        args = [struct_list]
+        response = self._rpc_request(function_name, args=args)
+        return response
 
     def request_complex_list(self):
         function_name = 'request_complex_list'
@@ -88,38 +97,71 @@ class PluginInstanceRedisInterface:
         response = self._rpc_request(function_name, args=args)
         return response
 
-    def stream_update(self):
-        pass
+    def stream_update(self, stream_id, stream_data):
+        function_name = 'stream_update'
+        args = [stream_id, stream_data]
+        response = self._rpc_request(function_name, args=args)
+        return response
 
-    def update_workspace(self):
-        pass
+    def update_workspace(self, workspace):
+        function_name = 'update_workspace'
+        args = [workspace]
+        response = self._rpc_request(function_name, args=args)
+        return response
 
-    def zoom_on_structures(self):
-        pass
+    def zoom_on_structures(self, struct_list):
+        function_name = 'zoom_on_structures'
+        args = [struct_list]
+        response = self._rpc_request(function_name, args=args)
+        return response
 
     def send_notification(self):
-        pass
+        function_name = 'send_notification'
+        args = []
+        response = self._rpc_request(function_name, args=args)
+        return response
 
-    def center_on_structures(self):
-        pass
+    def center_on_structures(self, struct_list):
+        function_name = 'center_on_structures'
+        args = [struct_list]
+        response = self._rpc_request(function_name, args=args)
+        return response
 
-    def add_to_workspace(self):
-        pass
+    def add_to_workspace(self, comp_list):
+        function_name = 'add_to_workspace'
+        args = [comp_list]
+        response = self._rpc_request(function_name, args=args)
+        return response
 
-    def add_bonds(self):
-        pass
+    def add_bonds(self, comp_list):
+        function_name = 'add_bonds'
+        args = [comp_list]
+        response = self._rpc_request(function_name, args=args)
+        return response
 
-    def open_url(self):
-        pass
+    def open_url(self, url):
+        function_name = 'open_url'
+        args = [url]
+        response = self._rpc_request(function_name, args=args)
+        return response
 
     def request_presenter_info(self):
-        pass
+        function_name = 'request_presenter_info'
+        args = []
+        response = self._rpc_request(function_name, args=args)
+        return response
 
     def request_controller_transforms(self):
-        pass
+        function_name = 'request_controller_transforms'
+        args = []
+        response = self._rpc_request(function_name, args=args)
+        return response
 
-    def apply_color_scheme(self):
-        pass
+    def apply_color_scheme(self, color_scheme, color_scheme_target, apply_to_all):
+        function_name = 'apply_color_scheme'
+        args = [color_scheme, color_scheme_target, apply_to_all]
+        response = self._rpc_request(function_name, args=args)
+        return response
 
     def _rpc_request(self, function_name, args=None, kwargs=None):
         """Publish an RPC request to redis, and await response.
@@ -173,7 +215,6 @@ class PluginInstanceRedisInterface:
                 pubsub.unsubscribe()
                 output_schema = fn_definition.output
                 if output_schema:
-                    breakpoint()
                     deserialized_response = output_schema.load(response_data)
                 else:
                     deserialized_response = None
