@@ -55,7 +55,7 @@ class Interaction(object):
         return cls._destroy_multiple(interactions)
     
     @classmethod
-    def get(cls, done_callback, complexes_idx=None, molecules_idx=None, chains_idx=None,
+    def get(cls, done_callback=None, complexes_idx=None, molecules_idx=None, chains_idx=None,
             residues_idx=None, atom_idx=None, type_filter=None):
         """
         | Get interactions from Nanome App
