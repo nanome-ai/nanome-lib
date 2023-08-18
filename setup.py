@@ -8,7 +8,7 @@ with open(README_PATH, 'r') as f:
 setup(
     name='nanome',
     packages=find_packages(exclude=["testing", "doc", "test_plugins"]),
-    version='0.40.5',
+    version='0.41.0',
     license='MIT',
     description='Python API for Nanome Plugins',
     long_description=README,
@@ -24,6 +24,10 @@ setup(
     ],
     extras_require={
         'schemas': [
+            'marshmallow==3.18.0'
+        ],
+        'beta': [
+            'redis==4.1.3',
             'marshmallow==3.18.0'
         ]
     },
@@ -47,7 +51,8 @@ setup(
     package_data={
         "nanome": [
             "_internal/process/external/dssp/*",
-            "plugin-template.zip"
+            "plugin-template.zip",
+            "beta/nanome_sdk/logging_config.ini"
         ]
     },
 )
