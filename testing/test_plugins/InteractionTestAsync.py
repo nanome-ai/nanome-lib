@@ -32,7 +32,7 @@ class InteractionTest(nanome.AsyncPluginInstance):
         interaction = Interaction(enums.InteractionKind.HydrogenBond, [atom1.index], [atom2.index])
         assert interaction.index == -1
         Logs.debug("Upload interaction")
-        await interaction.upload()
+        await Interaction.upload_multiple([interaction])
         assert interaction.index != -1
         Logs.debug("Done")
 
