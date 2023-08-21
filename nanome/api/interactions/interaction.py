@@ -106,17 +106,19 @@ class Interaction(object):
                 return
 
         def set_callback(indices):
+            if type(indices) is int:
+                indices = [indices]
             for index, interaction in zip(indices, interactions):
                 interaction.index = index
             if done_callback is not None:
-                done_callback()
+                done_callback(indices)
 
         id = PluginNetwork._instance.send(Messages.create_interactions, interactions, True)
         result = nanome.PluginInstance._save_callback(id, set_callback if done_callback else None)
         if done_callback is None and nanome.PluginInstance._instance.is_async:
             result.real_set_result = result.set_result
-            result.set_result = lambda args: set_callback(*args)
-            done_callback = lambda *args: result.real_set_result(args)
+            result.set_result = lambda indices: set_callback(indices)
+            done_callback = lambda indices: result.real_set_result(indices)
         return result
 
     def _destroy(self):
