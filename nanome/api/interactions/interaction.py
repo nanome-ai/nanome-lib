@@ -77,7 +77,6 @@ class Interaction(object):
             atom_idx if isinstance(atom_idx, list) else [atom_idx] if isinstance(atom_idx, int) else [],
             type_filter if type_filter is not None else enums.InteractionKind.All
         )
-
         return cls._get_interactions(args, done_callback)
 
     def _upload(self, done_callback=None):
@@ -85,18 +84,18 @@ class Interaction(object):
             Logs.error("An interaction can only be uploaded once")
             return
 
-        def set_callback(indices):
-            index = indices[0]
-            self.index = index
+        def set_callback(line_index):
+            self.index = line_index
             if done_callback is not None:
-                done_callback()
+                done_callback(line_index)
 
         id = PluginNetwork._instance.send(Messages.create_interactions, [self], True)
         result = nanome.PluginInstance._save_callback(id, set_callback if done_callback else None)
-        if done_callback is None and nanome.PluginInstance._instance.is_async:
+        is_async_plugin = nanome.PluginInstance._instance.is_async
+        if done_callback is None and is_async_plugin:
             result.real_set_result = result.set_result
-            result.set_result = lambda args: set_callback(*args)
-            done_callback = lambda *args: result.real_set_result(args)
+            result.set_result = lambda line_index: set_callback(line_index)
+            done_callback = lambda line_index: result.real_set_result(line_index)
         return result
 
     @classmethod
@@ -131,13 +130,14 @@ class Interaction(object):
 
     @classmethod
     def _get_interactions(cls, args, done_callback):
-        def set_callback(interactions):
+        def set_callback(interactions=None):
+            interactions = interactions or []
             done_callback(interactions)
 
         id = PluginNetwork._instance.send(Messages.get_interactions, args, True)
-        result = nanome.PluginInstance._save_callback(id, set_callback if done_callback else None)
+        fut = nanome.PluginInstance._save_callback(id, set_callback if done_callback else None)
         if done_callback is None and nanome.PluginInstance._instance.is_async:
-            result.real_set_result = result.set_result
-            result.set_result = lambda args: set_callback(*args)
-            done_callback = lambda *args: result.real_set_result(args)
-        return result
+            fut.real_set_result = fut.set_result
+            fut.set_result = lambda interaction_list: set_callback(interaction_list)
+            done_callback = lambda interaction_lines: fut.real_set_result(interaction_lines)
+        return fut
