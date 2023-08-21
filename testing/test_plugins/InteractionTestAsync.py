@@ -29,9 +29,11 @@ class InteractionTest(nanome.AsyncPluginInstance):
         workspace = await self.request_workspace()
         # Draw an interaction between two random atoms.
         [atom1, atom2] = random.sample(list(self.iter(workspace)), 2)
-        interaction = Interaction(enums.InteractionKind.HydrogenBond, Color.Blue(), atom1.index, atom2.index)
+        interaction = Interaction(enums.InteractionKind.HydrogenBond, [atom1.index], [atom2.index])
+        assert interaction.index == -1
         Logs.debug("Upload interaction")
         await interaction.upload()
+        assert interaction.index != -1
         Logs.debug("Done")
 
     def iter(self, workspace):
