@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 
 class InteractionSerializer(TypeSerializer):
     def version(self):
-        return 0
+        return 1
 
     def name(self):
         return "Interaction"
@@ -27,6 +27,7 @@ class InteractionSerializer(TypeSerializer):
             context.write_int(value.atom2_conformation)
         else:
             context.write_bool(False)
+        context.write_bool(value.visible)
 
     def deserialize(self, version, context):
         from nanome.util.enums import InteractionKind
@@ -42,8 +43,9 @@ class InteractionSerializer(TypeSerializer):
             atom2_conf = context.read_int()
         else:
             atom2_conf = None
+        visible = context.read_bool()
         
-        result = Interaction(kind, atom1_arr, atom2_arr, atom1_conf, atom2_conf)
+        result = Interaction(kind, atom1_arr, atom2_arr, atom1_conf, atom2_conf, visible)
         result.index = idx
 
         return result

@@ -20,13 +20,14 @@ class Interaction(object):
     :type atom2_conf: int
     """
 
-    def __init__(self, kind=None, atom1_idx_arr=None, atom2_idx_arr=None, atom1_conf=None, atom2_conf=None):
+    def __init__(self, kind=None, atom1_idx_arr=None, atom2_idx_arr=None, atom1_conf=None, atom2_conf=None, visible=True):
         self.index = -1
         self.kind = kind
         self.atom1_idx_arr = atom1_idx_arr
         self.atom2_idx_arr = atom2_idx_arr
         self.atom1_conformation = atom1_conf
         self.atom2_conformation = atom2_conf
+        self.visible = visible
 
     def upload(self, done_callback=None):
         """
