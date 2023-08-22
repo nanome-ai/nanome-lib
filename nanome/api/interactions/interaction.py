@@ -81,9 +81,9 @@ class Interaction(object):
         return cls._get_interactions(args, done_callback)
 
     def _upload(self, done_callback=None):
-        if self.index != -1:
-            Logs.error("An interaction can only be uploaded once")
-            return
+        # if self.index != -1:
+        #     Logs.error("An interaction can only be uploaded once")
+        #     return
 
         def set_callback(line_index):
             self.index = line_index
@@ -101,10 +101,10 @@ class Interaction(object):
 
     @classmethod
     def _upload_multiple(cls, interactions, done_callback=None):
-        for interaction in interactions:
-            if interaction.index != -1:
-                Logs.error("An interaction can only be uploaded once")
-                return
+        # for interaction in interactions:
+        #     if interaction.index != -1:
+        #         Logs.error("An interaction can only be uploaded once")
+        #         return
 
         def set_callback(indices):
             if type(indices) is int:
