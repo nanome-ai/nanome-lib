@@ -12,7 +12,7 @@ class CreateInteractions(serializer_fields.TypeSerializer):
         self._interaction_array.set_type(self._interaction)
 
     def version(self):
-        return 0
+        return 1
 
     def name(self):
         return "CreateInteractions"
@@ -26,7 +26,7 @@ class CreateInteractions(serializer_fields.TypeSerializer):
 
 class DeleteInteractions(serializer_fields.TypeSerializer):
     def version(self):
-        return 0
+        return 1
 
     def name(self):
         return "DeleteInteractions"
@@ -45,7 +45,7 @@ class GetInteractions(serializer_fields.TypeSerializer):
         self._interaction_array.set_type(self._interaction)
 
     def version(self):
-        return 0
+        return 1
 
     def name(self):
         return "GetInteractions"
