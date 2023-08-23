@@ -1,3 +1,4 @@
+import asyncio
 import nanome
 from nanome.util import enums, async_callback, Color, Logs
 from nanome.api.interactions.interaction import Interaction
@@ -34,6 +35,15 @@ class InteractionTest(nanome.AsyncPluginInstance):
         Logs.debug("Upload interaction")
         await Interaction.upload_multiple([interaction])
         assert interaction.index != -1
+
+        interaction.visible = False
+        interaction.upload()
+        self.send_notification(enums.NotificationTypes.message, "Interaction should now be invisible")
+        await asyncio.sleep(1)
+        interaction.visible = True
+        await interaction.upload()
+        self.send_notification(enums.NotificationTypes.message, "Interaction should now be visible")
+        
         Logs.debug("Done")
 
     def iter(self, workspace):
