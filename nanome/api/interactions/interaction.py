@@ -42,11 +42,11 @@ class Interaction(object):
         """
         return cls._upload_multiple(interactions, done_callback)
 
-    def destroy(self, done_callback=None):
+    def destroy(self):
         """
         | Remove the interaction from the Nanome App and destroy it.
         """
-        return self._destroy(done_callback)
+        return self._destroy()
 
     @classmethod
     def destroy_multiple(cls, interactions):
@@ -68,7 +68,7 @@ class Interaction(object):
         :param ***_idx: Index or array of indices for a structure type
         :type ***_idx: int or List[int]
         :param type_filer: Filter to return only one type of interaction
-        :type type_filer: :class:`~nanome.util.enums.InteractionType`
+        :type type_filer: :class:`~nanome.util.enums.InteractionKind`
         """
         args = (
             complexes_idx if isinstance(complexes_idx, list) else [complexes_idx] if isinstance(complexes_idx, int) else [],

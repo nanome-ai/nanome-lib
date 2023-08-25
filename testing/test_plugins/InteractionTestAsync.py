@@ -22,11 +22,22 @@ test_pdbs = os.path.join(os.path.dirname(__file__), '..', 'test_assets', 'pdb')
 
 class InteractionTest(nanome.AsyncPluginInstance):
 
-    def start(self):
-        # Create fresh workspace and load it into Nanome
+    @async_callback
+    async def start(self):
+        self.starting_ws = await self.request_workspace()
+    
+    async def setup_test_workspace(self):
+        """Create fresh workspace and load it into Nanome."""
         self.pdb_file = os.path.join(test_pdbs, '1tyl.pdb')
         self.complex = Complex.io.from_pdb(path=self.pdb_file)
         self.complex.name = "1tyl"
+        workspace = Workspace()
+        self.update_workspace(workspace)
+        await self.send_files_to_load(self.pdb_file)
+        ws = await self.request_workspace()
+        self.complex = ws.complexes[0]
+        assert self.complex.index != -1
+        # Find ligand atom and pocket atom to draw interactions between
         self.ligand_res = next(res for res in self.complex.residues if res.name == "TYL")
         self.ligand_atom = next(atom for atom in self.ligand_res.atoms)
         self.pocket_res = next(
@@ -35,14 +46,30 @@ class InteractionTest(nanome.AsyncPluginInstance):
             and res.chain.name == "D"    
         )
         self.pocket_atom = next(atom for atom in self.pocket_res.atoms)
-        workspace = Workspace()
-        workspace.complexes.append(self.complex)
-        self.update_workspace(workspace)
-    
+        # Make sure test atoms are visible
+        for atom in [self.pocket_atom, self.ligand_atom]:
+            atom.set_visible(True)
+            atom.atom_mode = enums.AtomRenderingMode.Wire
+        self.update_structures_shallow([self.pocket_atom, self.ligand_atom])
+
     @async_callback
     async def on_run(self):
+        await self.setup_test_workspace()
+        try:
+            await self.run_tests()
+        except Exception:
+            Logs.error("Tests failed.")
+            pass
+        # Set original workspace back
+        self.update_workspace(self.starting_ws)
+
+    @async_callback
+    async def run_tests(self):
         await self.test_upload()
         await self.test_upload_multiple()
+        await self.test_toggle_visibility()
+        await self.test_filter_by_kind()
+        Logs.message("All tests passed!")
 
     async def test_upload_multiple(self):
         interactions = await Interaction.get()
@@ -59,6 +86,7 @@ class InteractionTest(nanome.AsyncPluginInstance):
         interactions = await Interaction.get()
         assert len(interactions) == 2
         Interaction.destroy_multiple([interaction1, interaction2])
+        interactions = await Interaction.get()
         assert len(interactions) == 0
         Logs.message("InteractionTest: test_upload_multiple passed")
     
@@ -74,42 +102,66 @@ class InteractionTest(nanome.AsyncPluginInstance):
         assert len(interactions) == 1
         interaction1.destroy()
         
-        interactions = Interaction.get()
+        interactions = await Interaction.get()
         assert len(interactions) == 0
         Logs.message("InteractionTest: test_upload passed")
 
-    @async_callback
-    async def on_run_old(self):
-        Logs.debug("Getting interactions")
+    async def test_toggle_visibility(self):
         interactions = await Interaction.get()
-        if len(interactions) > 0:
-            Logs.debug("Destroy interactions")
-            Interaction.destroy_multiple(interactions)
-        Logs.debug("Request workspace")
-        workspace = await self.request_workspace()
-        
-        # Draw an interaction between two random atoms.
-        [atom1, atom2] = random.sample(list(self.iter(workspace)), 2)
-        interaction = Interaction(enums.InteractionKind.HydrogenBond, [atom1.index], [atom2.index])
-        assert interaction.index == -1
-        Logs.debug("Upload interaction")
-        await Interaction.upload_multiple([interaction])
-        assert interaction.index != -1
-
-        interaction.visible = False
-        interaction.upload()
-        self.send_notification(enums.NotificationTypes.message, "Interaction should now be invisible")
-        await asyncio.sleep(1)
-        interaction.visible = True
+        assert len(interactions) == 0
+        interaction = Interaction(
+            enums.InteractionKind.HydrogenBond,
+            [self.pocket_atom.index],
+            [self.ligand_atom.index])
+        assert interaction.visible == True
         await interaction.upload()
-        self.send_notification(enums.NotificationTypes.message, "Interaction should now be visible")
+
+        # Check that interaction is visible
+        # TODO: Why does visible get set to False, even though it's sent as True
+        interactions = await Interaction.get()
+        assert len(interactions) == 1
+        interaction = interactions[0]
+        assert interaction.visible == True  # This fails.
         
-        Logs.debug("Done")
+        # TODO: Re-uploading creates a new interaction with new index, instead of updating values on exising
+        interaction.visible = False
+        await interaction.upload()
+        interactions = await Interaction.get()
+        assert len(interactions) == 1
+        interaction = interactions[0]
+        # TODO: The value says it's false, but it's still visible in the workspace
+        assert interaction.visible == False  # This fails
+        Interaction.destroy_multiple([interaction])
 
-    def iter(self, workspace):
-        for complex in workspace.complexes:
-            for atom in complex.atoms:
-                yield atom
+    async def test_filter_by_kind(self):
+        interactions = await Interaction.get()
+        assert len(interactions) == 0
+        interaction1 = Interaction(
+            enums.InteractionKind.HydrogenBond,
+            [self.pocket_atom.index],
+            [self.ligand_atom.index])
+        interaction2 = Interaction(
+            enums.InteractionKind.Covalent,
+            [self.pocket_atom.index],
+            [self.ligand_atom.index])
+        
+        # Draw another interaction connecting a different atom
+        ligand_atom2 = next(atom for atom in self.ligand_res.atoms if atom.index != self.ligand_atom.index)
+        interaction3 = Interaction(
+            enums.InteractionKind.Covalent,
+            [self.pocket_atom.index],
+            [ligand_atom2.index])
+        await Interaction.upload_multiple([interaction1, interaction2, interaction3])
+        
+        interactions = await Interaction.get()
+        assert len(interactions) == 3
 
+        covalent_interactions = await Interaction.get(kind=enums.InteractionKind.Covalent)
+        assert len(covalent_interactions) == 2
+
+        Interaction.destroy_multiple([interaction1, interaction2])
+        interactions = await Interaction.get()
+        assert len(interactions) == 0
+        Logs.message("InteractionTest: test_upload_multiple passed")
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, InteractionTest)

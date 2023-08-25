@@ -1,6 +1,5 @@
 import nanome
 from nanome._internal.structure.models import _Atom
-from nanome.util import Logs
 from . import Base
 from ._deprecated import AtomDeprecated
 
