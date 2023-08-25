@@ -1,3 +1,5 @@
+import sys
+import traceback
 import nanome
 import os
 import unittest
@@ -19,79 +21,19 @@ PDBOPTIONS.write_bonds = True
 # Plugin
 test_pdbs = os.path.join(os.path.dirname(__file__), '..', 'test_assets', 'pdb')
 
+
 class InteractionTest(nanome.AsyncPluginInstance):
 
     @async_callback
     async def start(self):
         self.starting_ws = await self.request_workspace()
-    
-    async def setup_test_workspace(self):
-        """Create fresh workspace and load it into Nanome."""
-        self.pdb_file = os.path.join(test_pdbs, '1tyl.pdb')
-        self.complex = Complex.io.from_pdb(path=self.pdb_file)
-        self.complex.name = "1tyl"
-        workspace = Workspace()
-        self.update_workspace(workspace)
-        await self.send_files_to_load(self.pdb_file)
-        ws = await self.request_workspace()
-        self.complex = ws.complexes[0]
-        assert self.complex.index != -1
-        # Find ligand atom and pocket atom to draw interactions between
-        self.ligand_res = next(res for res in self.complex.residues if res.name == "TYL")
-        self.ligand_atom = next(atom for atom in self.ligand_res.atoms)
-        self.pocket_res = next(
-            res for res in self.complex.residues
-            if res.name == "TYR"
-            and res.chain.name == "D"    
-        )
-        self.pocket_atom = next(atom for atom in self.pocket_res.atoms)
-        # Make sure test atoms are visible
-        for atom in [self.pocket_atom, self.ligand_atom]:
-            atom.set_visible(True)
-            atom.atom_mode = enums.AtomRenderingMode.Wire
-        self.update_structures_shallow([self.pocket_atom, self.ligand_atom])
 
     @async_callback
     async def on_run(self):
         await self.setup_test_workspace()
-
-        result = unittest.TestResult()
-        # loader = unittest.TestLoader()
-        # suite = unittest.TestSuite()
-
-        test_fns = [fn for fn in dir(self) if fn.startswith('test_')]
-        for test_fn in test_fns:
-            try:
-                
-                # Ensure each test starts with interactions cleared.
-                interactions = await Interaction.get()
-                if interactions:
-                    Interaction.destroy_multiple(interactions)
-                
-                # Run test
-                fn = getattr(self, test_fn)
-                await fn()
-                result.testsRun += 1
-            except Exception as e:
-                result.testsRun += 1
-                result.failures.append((str(test_fn), str(e)))
-        # Display results
-        Logs.message("Ran {} tests".format(result.testsRun))
-        Logs.message("Failures: {}".format(len(result.failures)))
-        Logs.message("Errors: {}".format(len(result.errors)))
-        # Display detailed information about test failures
-        for test, tb in result.failures + result.errors:
-            Logs.message("Test failed: {}".format(test))
+        await self.run_test_suite()
         # Set original workspace back
         self.update_workspace(self.starting_ws)
-
-    @async_callback
-    async def run_tests(self):
-        await self.test_upload()
-        await self.test_upload_multiple()
-        await self.test_toggle_visibility()
-        await self.test_filter_by_kind()
-        Logs.message("All tests passed!")
 
     async def test_upload_multiple(self):
         interactions = await Interaction.get()
@@ -185,5 +127,59 @@ class InteractionTest(nanome.AsyncPluginInstance):
         interactions = await Interaction.get()
         assert len(interactions) == 0
         Logs.message("InteractionTest: test_upload_multiple passed")
+
+    async def setup_test_workspace(self):
+        """Create fresh workspace and load it into Nanome."""
+        self.pdb_file = os.path.join(test_pdbs, '1tyl.pdb')
+        self.complex = Complex.io.from_pdb(path=self.pdb_file)
+        self.complex.name = "1tyl"
+        workspace = Workspace()
+        self.update_workspace(workspace)
+        await self.send_files_to_load(self.pdb_file)
+        ws = await self.request_workspace()
+        self.complex = ws.complexes[0]
+        assert self.complex.index != -1
+        # Find ligand atom and pocket atom to draw interactions between
+        self.ligand_res = next(res for res in self.complex.residues if res.name == "TYL")
+        self.ligand_atom = next(atom for atom in self.ligand_res.atoms)
+        self.pocket_res = next(
+            res for res in self.complex.residues
+            if res.name == "TYR"
+            and res.chain.name == "D"    
+        )
+        self.pocket_atom = next(atom for atom in self.pocket_res.atoms)
+        # Make sure test atoms are visible
+        for atom in [self.pocket_atom, self.ligand_atom]:
+            atom.set_visible(True)
+            atom.atom_mode = enums.AtomRenderingMode.Wire
+        self.update_structures_shallow([self.pocket_atom, self.ligand_atom])
+    
+    async def run_test_suite(self):
+        result = unittest.TestResult()
+        test_fns = [fn for fn in dir(self) if fn.startswith('test_')]
+        for test_fn in test_fns:
+            try:
+                # Ensure each test starts with interactions cleared.
+                interactions = await Interaction.get()
+                if interactions:
+                    Interaction.destroy_multiple(interactions)
+                # Run test
+                fn = getattr(self, test_fn)
+                await fn()
+                result.testsRun += 1
+            except Exception as e:
+                result.testsRun += 1
+                _, _, tb = sys.exc_info()
+                result.failures.append((str(test_fn), tb))
+
+        # Display results
+        Logs.message("Ran {} tests".format(result.testsRun))
+        Logs.message("Failures: {}".format(len(result.failures)))
+        Logs.message("Errors: {}".format(len(result.errors)))
+        # Display detailed information about test failures
+        for test, tb in result.failures + result.errors:
+            Logs.message("Test failed: {}".format(test))
+            Logs.message(traceback.print_tb(tb))
+
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, InteractionTest)
