@@ -1,7 +1,6 @@
-import asyncio
 import nanome
 import os
-import random
+import unittest
 from nanome.util import enums, async_callback, Logs
 from nanome.api.structure import Complex, Workspace
 from nanome.api.interactions.interaction import Interaction
@@ -55,11 +54,34 @@ class InteractionTest(nanome.AsyncPluginInstance):
     @async_callback
     async def on_run(self):
         await self.setup_test_workspace()
-        try:
-            await self.run_tests()
-        except Exception:
-            Logs.error("Tests failed.")
-            pass
+
+        result = unittest.TestResult()
+        # loader = unittest.TestLoader()
+        # suite = unittest.TestSuite()
+
+        test_fns = [fn for fn in dir(self) if fn.startswith('test_')]
+        for test_fn in test_fns:
+            try:
+                
+                # Ensure each test starts with interactions cleared.
+                interactions = await Interaction.get()
+                if interactions:
+                    Interaction.destroy_multiple(interactions)
+                
+                # Run test
+                fn = getattr(self, test_fn)
+                await fn()
+                result.testsRun += 1
+            except Exception as e:
+                result.testsRun += 1
+                result.failures.append((str(test_fn), str(e)))
+        # Display results
+        Logs.message("Ran {} tests".format(result.testsRun))
+        Logs.message("Failures: {}".format(len(result.failures)))
+        Logs.message("Errors: {}".format(len(result.errors)))
+        # Display detailed information about test failures
+        for test, tb in result.failures + result.errors:
+            Logs.message("Test failed: {}".format(test))
         # Set original workspace back
         self.update_workspace(self.starting_ws)
 
@@ -156,10 +178,10 @@ class InteractionTest(nanome.AsyncPluginInstance):
         interactions = await Interaction.get()
         assert len(interactions) == 3
 
-        covalent_interactions = await Interaction.get(kind=enums.InteractionKind.Covalent)
+        covalent_interactions = await Interaction.get(type_filter=enums.InteractionKind.Covalent)
         assert len(covalent_interactions) == 2
 
-        Interaction.destroy_multiple([interaction1, interaction2])
+        Interaction.destroy_multiple([interaction1, interaction2, interaction3])
         interactions = await Interaction.get()
         assert len(interactions) == 0
         Logs.message("InteractionTest: test_upload_multiple passed")
