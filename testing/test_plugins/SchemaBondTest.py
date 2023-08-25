@@ -14,9 +14,25 @@ class SchemaBondTest(nanome.AsyncPluginInstance):
 
     @async_callback
     async def start(self):
-        await self.run_test()
+        # await self.test_bonds()
+        await self.test_atom_colors()
 
-    async def run_test(self):
+    async def test_atom_colors(self):
+        shallow = await self.request_complex_list()
+        index = shallow[0].index
+
+        [comp] = await self.request_complexes([index])
+        # Change atom colors
+        for atom in comp.atoms:
+            atom.atom_color = Color.Red()
+        comp_data = schemas.ComplexSchema().dump(comp)
+        comp_data_str = json.dumps(comp_data)
+        new_comp = schemas.ComplexSchema().loads(comp_data_str)
+        for atom in new_comp.atoms:
+            assert atom.atom_color.rgb == Color.Red().rgb
+        await self.update_structures_deep([new_comp])
+
+    async def test_bonds(self):
         shallow = await self.request_complex_list()
         index = shallow[0].index
 
@@ -37,10 +53,8 @@ class SchemaBondTest(nanome.AsyncPluginInstance):
         [updated_comp] = await self.request_complexes([index])
         updated_bond_count = len(list(updated_comp.bonds))
         updated_atom_count = len(list(updated_comp.atoms))
-        # this assertion fails
         assert bond_count == updated_bond_count
         assert atom_count == updated_atom_count
-        Logs.message('done')
 
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, False, SchemaBondTest)
