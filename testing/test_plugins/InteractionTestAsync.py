@@ -131,19 +131,17 @@ class InteractionTest(nanome.AsyncPluginInstance):
     async def setup_test_workspace(self):
         """Create fresh workspace and load it into Nanome."""
         self.pdb_file = os.path.join(test_pdbs, '1tyl.pdb')
-        self.complex = Complex.io.from_pdb(path=self.pdb_file)
-        self.complex.name = "1tyl"
         workspace = Workspace()
         self.update_workspace(workspace)
         await self.send_files_to_load(self.pdb_file)
         ws = await self.request_workspace()
-        self.complex = ws.complexes[0]
-        assert self.complex.index != -1
+        comp = ws.complexes[0]
+        assert comp.index != -1
         # Find ligand atom and pocket atom to draw interactions between
-        self.ligand_res = next(res for res in self.complex.residues if res.name == "TYL")
+        self.ligand_res = next(res for res in comp.residues if res.name == "TYL")
         self.ligand_atom = next(atom for atom in self.ligand_res.atoms)
         self.pocket_res = next(
-            res for res in self.complex.residues
+            res for res in comp.residues
             if res.name == "TYR"
             and res.chain.name == "D"    
         )
