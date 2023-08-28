@@ -1,3 +1,4 @@
+import asyncio
 import sys
 import traceback
 import nanome
@@ -9,7 +10,7 @@ from nanome.api.interactions.interaction import Interaction
 
 
 # Config
-NAME = "Test Interactions"
+NAME = "[test] Interactions"
 DESCRIPTION = "A simple plugin demonstrating how plugin system can be used to extend Nanome capabilities"
 CATEGORY = "Simple Actions"
 HAS_ADVANCED_OPTIONS = False
@@ -133,6 +134,7 @@ class InteractionTest(nanome.AsyncPluginInstance):
         self.pdb_file = os.path.join(test_pdbs, '1tyl.pdb')
         workspace = Workspace()
         self.update_workspace(workspace)
+        await asyncio.sleep(1)  # Wait for workspace to be loaded. V annoying.
         await self.send_files_to_load(self.pdb_file)
         ws = await self.request_workspace()
         comp = ws.complexes[0]
