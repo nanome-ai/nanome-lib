@@ -105,6 +105,7 @@ def get_plugin_class_from_file(file_path, plugin_class_name):
     plugin_class = getattr(module, plugin_class_name)
     return plugin_class
 
+
 if __name__ == "__main__":
     plugin_id = int(sys.argv[1])
     session_id = int(sys.argv[2])
