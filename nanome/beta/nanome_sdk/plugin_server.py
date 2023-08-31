@@ -149,8 +149,9 @@ class PluginServer:
             'NANOME_VERSION_TABLE': json.dumps(version_table),
         }
         plugin_class_filepath = os.path.abspath(sys.modules[plugin_class.__module__].__file__)
+        plugin_class_name = plugin_class.__name__
         session_process = await asyncio.create_subprocess_exec(
-            sys.executable, run_session_loop_py, str(plugin_id), str(session_id), self.plugin_name, plugin_class_filepath,
+            sys.executable, run_session_loop_py, str(plugin_id), str(session_id), self.plugin_name, plugin_class_filepath, plugin_class_name,
             stdin=asyncio.subprocess.PIPE,
             stdout=asyncio.subprocess.PIPE,
             cwd=os.getcwd(),
