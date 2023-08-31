@@ -65,10 +65,10 @@ async def _route_incoming_payload(payload, plugin_instance):
         payload, plugin_instance.client.version_table)
     message = CommandMessageSerializer._commands[command_hash]
     logger.debug(f"Session Received command: {message.name()}, Request ID {request_id}")
-    if request_id in plugin_instance.request_futs:
+    if request_id in plugin_instance.client.request_futs:
         # If this is a response to a request, set the future result
         try:
-            fut = plugin_instance.request_futs[request_id]
+            fut = plugin_instance.client.request_futs[request_id]
         except KeyError:
             logger.warning(f"Could not find future for request_id {request_id}")
             return
@@ -98,11 +98,14 @@ async def _route_incoming_payload(payload, plugin_instance):
         task = asyncio.create_task(plugin_instance.on_complex_added_removed())
         return task
 
+
 if __name__ == "__main__":
     plugin_id = int(sys.argv[1])
     session_id = int(sys.argv[2])
     plugin_name = sys.argv[3]
     plugin_class_filepath = sys.argv[4]
+
+
     version_table = json.loads(os.environ['NANOME_VERSION_TABLE'])
     plugin_instance = plugin_class()
     session_coro = start_session(plugin_instance, plugin_name, plugin_id, session_id, version_table)
