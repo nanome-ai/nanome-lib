@@ -4,7 +4,8 @@ from nanome.beta.nanome_sdk import PluginServer, NanomePlugin
 from nanome.util import Logs
 
 
-class VNMPlugin(NanomePlugin):
+class SDKPlugin(NanomePlugin):
+    """Test basic plugin using the Nanome SDK."""
 
     async def on_start(self):
         self.menu = self.ui_manager.create_new_menu()
@@ -18,15 +19,11 @@ class VNMPlugin(NanomePlugin):
         Logs.message("Saved to DB!")
 
 
-def main():
+if __name__ == "__main__":
     server = PluginServer()
     host = os.environ['NTS_HOST']
     port = int(os.environ['NTS_PORT'])
-    name = "VNM Test"
-    description = "Nanome plugin to load Cryo-EM maps and display them in Nanome as iso-surfaces"
-    plugin_class = VNMPlugin
+    name = "SDK Test"
+    description = "Test the nanome sdk"
+    plugin_class = SDKPlugin
     asyncio.run(server.run(host, port, name, description, plugin_class))
-
-
-if __name__ == "__main__":
-    main()
