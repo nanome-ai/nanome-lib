@@ -95,7 +95,7 @@ async def _route_incoming_payload(payload, plugin_instance):
 
 def create_module_from_file(file_path, module_name=None):
     if module_name is None:
-        module_name = "arbitrary_module_name"
+        module_name = "nanome_plugin_module"
     # Create a module spec
     spec = importlib.util.spec_from_file_location(module_name, file_path)
     # Create a new, empty module
