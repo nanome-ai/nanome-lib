@@ -98,7 +98,6 @@ async def _route_incoming_payload(payload, plugin_instance):
         task = asyncio.create_task(plugin_instance.on_complex_added_removed())
         return task
 
-
 if __name__ == "__main__":
     plugin_id = int(sys.argv[1])
     session_id = int(sys.argv[2])
