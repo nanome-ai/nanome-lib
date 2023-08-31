@@ -59,10 +59,10 @@ async def _route_incoming_payload(payload, plugin_instance):
         payload, plugin_instance.client.version_table)
     message = CommandMessageSerializer._commands[command_hash]
     logger.debug(f"Session Received command: {message.name()}, Request ID {request_id}")
-    if request_id in plugin_instance.request_futs:
+    if request_id in plugin_instance.client.request_futs:
         # If this is a response to a request, set the future result
         try:
-            fut = plugin_instance.request_futs[request_id]
+            fut = plugin_instance.client.request_futs[request_id]
         except KeyError:
             logger.warning(f"Could not find future for request_id {request_id}")
             return
@@ -93,17 +93,17 @@ async def _route_incoming_payload(payload, plugin_instance):
         return task
 
 
-def create_module_from_file(file_path, module_name=None):
-    if module_name is None:
-        module_name = "nanome_plugin_module"
+def get_plugin_class_from_file(file_path, plugin_class_name):
+    """Create a module from a file path, and import plugin class."""
+    module_name = "nanome_plugin_module"
     # Create a module spec
     spec = importlib.util.spec_from_file_location(module_name, file_path)
     # Create a new, empty module
     module = importlib.util.module_from_spec(spec)
     # Execute the module and populate it
     spec.loader.exec_module(module)
-    return module
-
+    plugin_class = getattr(module, plugin_class_name)
+    return plugin_class
 
 if __name__ == "__main__":
     plugin_id = int(sys.argv[1])
@@ -111,8 +111,7 @@ if __name__ == "__main__":
     plugin_name = sys.argv[3]
     plugin_class_filepath = sys.argv[4]
     plugin_class_name = sys.argv[5]
-    plugin_module = create_module_from_file(plugin_class_filepath)
-    plugin_class = getattr(plugin_module, plugin_class_name)
+    plugin_class = get_plugin_class_from_file(plugin_class_filepath, plugin_class_name)
     plugin_instance = plugin_class()
 
     version_table = json.loads(os.environ['NANOME_VERSION_TABLE'])
