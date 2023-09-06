@@ -26,8 +26,11 @@ class UIManager:
             cls.instance = super(UIManager, cls).__new__(cls)
         return cls.instance
 
-    def create_new_menu(self, json_path):
-        menu = ui.Menu.io.from_json(json_path)
+    def create_new_menu(self, json_path=None):
+        if json_path:
+            menu = ui.Menu.io.from_json(json_path)
+        else:
+            menu = ui.Menu()
         self._menus.append(menu)
         return menu
 
