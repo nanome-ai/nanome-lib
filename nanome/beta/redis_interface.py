@@ -5,14 +5,27 @@ import uuid
 import time
 
 from nanome import PluginInstance
+from nanome._internal.network import Packet
 from nanome.api import schemas
+from nanome.api.serializers import CommandMessageSerializer
 from nanome.util import Logs
 from marshmallow import fields
 from nanome.api.schemas.api_definitions import api_function_definitions
+import random
 
 __all__ = ['PluginInstanceRedisInterface', 'StreamRedisInterface']
 
 NTS_RESPONSE_TIMEOUT = os.environ.get('NTS_RESPONSE_TIMEOUT', 30)
+import sys
+import os
+
+
+
+def random_request_id():
+    """Generate a random but valid request id."""
+    max_req_id = 4294967295
+    request_id = random.randint(0, max_req_id)
+    return request_id
 
 
 class StreamRedisInterface:
@@ -50,12 +63,17 @@ class PluginInstanceRedisInterface:
         self.redis = redis.Redis(host=redis_host, port=redis_port, password=redis_password)
         self.plugin_class = PluginInstance
         self.channel = redis_channel
+        self.plugin_id = None
+        self.session_id = None
+        self.version_table = None
 
     def set_channel(self, value):
         self.channel = value
 
-    def ping(self):
+    def connect(self):
+        """Ping Redis, and then get data from plugin required for serialization."""
         self.redis.ping()
+        self.get_plugin_data()
 
     def create_writing_stream(self, indices_list, stream_type):
         """Return a stream wrapped in the RedisStreamInterface"""
@@ -240,6 +258,24 @@ class PluginInstanceRedisInterface:
         return response
 
     def get_plugin_data(self):
+        breakpoint()
         function_name = 'get_plugin_data'
         response = self._rpc_request(function_name)
         return response
+
+    @staticmethod
+    def pack_message(self, message_type, args, expects_response=False):
+        request_id = random_request_id()
+        serializer = CommandMessageSerializer()
+        message = serializer.serialize_message(request_id, message_type, args, self.version_table, expects_response)
+        packet = Packet()
+        packet.set(self.session_id, Packet.packet_type_message_to_client, self.plugin_id)
+        packet.write(message)
+        pack = packet.pack()
+        # if expects_response:
+        #     # Store future to receive any response required
+        #     fut = asyncio.Future()
+        #     self.request_futs[request_id] = fut
+        # self.logger.debug(f'Sending Message: {message_type.name} Size: {len(pack)} bytes')
+        return pack
+
