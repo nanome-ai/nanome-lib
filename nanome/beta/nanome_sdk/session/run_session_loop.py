@@ -105,7 +105,6 @@ if __name__ == "__main__":
     plugin_name = sys.argv[3]
     plugin_class_filepath = sys.argv[4]
 
-
     version_table = json.loads(os.environ['NANOME_VERSION_TABLE'])
     plugin_instance = plugin_class()
     session_coro = start_session(plugin_instance, plugin_name, plugin_id, session_id, version_table)
