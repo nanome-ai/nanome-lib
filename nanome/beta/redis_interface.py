@@ -18,7 +18,6 @@ import random
 __all__ = ['PluginInstanceRedisInterface', 'StreamRedisInterface']
 
 NTS_RESPONSE_TIMEOUT = os.environ.get('NTS_RESPONSE_TIMEOUT', 30)
-import sys
 import os
 
 
@@ -97,8 +96,10 @@ class PluginInstanceRedisInterface:
 
     def request_complexes(self, comp_id_list):
         function_name = 'request_complexes'
-        args = [comp_id_list]
-        response = self._rpc_request(function_name, args=args)
+        message_type = Messages.complexes_request
+        args = comp_id_list
+        expects_response = True
+        response = self._send_message(message_type, function_name, args, expects_response)
         return response
 
     def update_structures_shallow(self, struct_list):
@@ -115,12 +116,13 @@ class PluginInstanceRedisInterface:
 
     def request_complex_list(self):
         function_name = 'request_complex_list'
-        message_type = Messages.complexes_request
+        message_type = Messages.complex_list_request
         args = None
         expects_response = True
-        self.send_message(message_type, function_name, args, expects_response)
+        response = self._send_message(message_type, function_name, args, expects_response)
+        return response
     
-    def send_message(self, message_type: Messages, function_name, args, expects_response):
+    def _send_message(self, message_type: Messages, function_name, args, expects_response):
         request_id, packet = self.build_packet(message_type, args, expects_response)
         message = self.build_message(function_name, request_id, packet, expects_response)
         response = self._rpc_request(message, expects_response=expects_response)
@@ -213,13 +215,11 @@ class PluginInstanceRedisInterface:
                 raise TimeoutError(f"Timeout waiting for response from RPC {function_name}")
             if not message:
                 continue
-
             if message.get('type') == 'message':
-                response_channel = next(iter(pubsub.channels.keys())).decode('utf-8')
                 Logs.message(f"Response received on channel {response_channel}")
-                message_data = message['data']
-                # response_data = json.loads(message_data_str)
+                pickled_message_data = message['data']
                 pubsub.unsubscribe()
+                message_data = pickle.loads(pickled_message_data)
                 return message_data
 
     def upload_shapes(self, shape_list):
@@ -245,8 +245,7 @@ class PluginInstanceRedisInterface:
         function_name = 'get_plugin_data'
         expects_response = True
         message = self.build_message(function_name, None, None, expects_response)
-        pickled_response = self._rpc_request(message, expects_response=expects_response)
-        response = pickle.loads(pickled_response)
+        response = self._rpc_request(message, expects_response=expects_response)
         return response
 
     def build_packet(self, message_type, args=None, expects_response=False):

@@ -10,5 +10,8 @@ REDIS_PASSWORD = None
 REDIS_CHANNEL = 'LVPL8'
 plugin = PluginInstanceRedisInterface(REDIS_HOST, REDIS_PORT, REDIS_PASSWORD, REDIS_CHANNEL)
 plugin.connect()
-plugin.request_complex_list()
-pass
+shallow_comps = plugin.request_complex_list()
+comp_ids = [comp.index for comp in shallow_comps]
+comps = plugin.request_complexes(comp_ids)
+for comp in comps:
+    assert len(list(comp.atoms)) > 0
