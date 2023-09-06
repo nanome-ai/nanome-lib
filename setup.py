@@ -19,16 +19,16 @@ setup(
     platforms="any",
     keywords=['virtual-reality', 'chemistry', 'python', 'api', 'plugin'],
     install_requires=[
-        'tblib==1.7.0',
-        'graypy==2.1.0'
+        'tblib>=1.7.0',
+        'graypy>=2.1.0'
     ],
     extras_require={
         'schemas': [
-            'marshmallow==3.18.0'
+            'marshmallow>=3.18.0'
         ],
         'beta': [
-            'redis==4.1.3',
-            'marshmallow==3.18.0'
+            'redis>=4.1.3',
+            'marshmallow>=3.18.0'
         ]
     },
     classifiers=[
