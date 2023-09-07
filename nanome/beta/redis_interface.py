@@ -1,19 +1,15 @@
-import json
-import pickle
 import os
+import pickle
+import random
 import redis
-import uuid
 import time
+import uuid
 
 from nanome import PluginInstance
 from nanome._internal.enums import Messages
 from nanome._internal.network import Packet
-from nanome.api import schemas
 from nanome.api.serializers import CommandMessageSerializer
-from nanome.util import Logs
-from marshmallow import fields
-from nanome.api.schemas.api_definitions import api_function_definitions
-import random
+from nanome.util import Logs, enums
 
 __all__ = ['PluginInstanceRedisInterface', 'StreamRedisInterface']
 
@@ -80,53 +76,54 @@ class PluginInstanceRedisInterface:
 
     def create_writing_stream(self, indices_list, stream_type):
         """Return a stream wrapped in the RedisStreamInterface"""
-        function_name = 'create_writing_stream'
-        args = [indices_list, stream_type]
-        stream = self._rpc_request(function_name, args=args)
-        if stream:
-            stream_interface = StreamRedisInterface(stream, self)
-            response = stream_interface
+        message_type = Messages.stream_create
+        expects_response = True
+        args = (stream_type, indices_list, enums.StreamDirection.writing)
+        response = self._send_message(message_type, args, expects_response)
         return response
 
     def request_workspace(self):
-        function_name = 'request_workspace'
-        args = []
-        response = self._rpc_request(function_name, args=args)
-        return response
-
-    def request_complexes(self, comp_id_list):
-        function_name = 'request_complexes'
-        message_type = Messages.complexes_request
-        args = comp_id_list
+        message_type = Messages.workspace_request
         expects_response = True
-        response = self._send_message(message_type, function_name, args, expects_response)
+        args = None
+        response = self._send_message(message_type, args, expects_response)
         return response
 
-    def update_structures_shallow(self, struct_list):
-        function_name = 'update_structures_shallow'
-        args = [struct_list]
-        response = self._rpc_request(function_name, args=args)
+    def request_complexes(self, id_list):
+        message_type = Messages.complexes_request
+        expects_response = True
+        args = id_list
+        response = self._send_message(message_type, args, expects_response)
         return response
+
+    def update_structures_shallow(self, structures):
+        message_type = Messages.structures_shallow_update
+        expects_response = False
+        args = structures
+        self._send_message(message_type, args, expects_response)
 
     def update_structures_deep(self, struct_list):
-        function_name = 'update_structures_deep'
-        args = [struct_list]
-        response = self._rpc_request(function_name, args=args)
+        message_type = Messages.structures_deep_update
+        expects_response = True
+        args = struct_list
+        response = self._send_message(message_type, args, expects_response)
         return response
 
     def request_complex_list(self):
-        function_name = 'request_complex_list'
         message_type = Messages.complex_list_request
         args = None
         expects_response = True
-        response = self._send_message(message_type, function_name, args, expects_response)
+        response = self._send_message(message_type, args, expects_response)
         return response
     
-    def _send_message(self, message_type: Messages, function_name, args, expects_response):
+    def _send_message(self, message_type: Messages, args, expects_response):
+        function_name = message_type.name
         request_id, packet = self.build_packet(message_type, args, expects_response)
         message = self.build_message(function_name, request_id, packet, expects_response)
-        response = self._rpc_request(message, expects_response=expects_response)
-        return response
+        serialized_response = self._rpc_request(message, expects_response=expects_response)
+        if serialized_response is not None:
+            response = self._deserialize_payload(serialized_response)
+            return response
 
     def stream_update(self, stream_id, stream_data):
         function_name = 'stream_update'
@@ -140,11 +137,11 @@ class PluginInstanceRedisInterface:
         response = self._rpc_request(function_name, args=args)
         return response
 
-    def zoom_on_structures(self, struct_list):
-        function_name = 'zoom_on_structures'
-        args = [struct_list]
-        response = self._rpc_request(function_name, args=args)
-        return response
+    def zoom_on_structures(self, structures):
+        message_type = Messages.structures_zoom
+        expects_response = False
+        args = structures
+        self._send_message(message_type, args, expects_response)
 
     def send_notification(self):
         function_name = 'send_notification'
@@ -152,16 +149,17 @@ class PluginInstanceRedisInterface:
         response = self._rpc_request(function_name, args=args)
         return response
 
-    def center_on_structures(self, struct_list):
-        function_name = 'center_on_structures'
-        args = [struct_list]
-        response = self._rpc_request(function_name, args=args)
-        return response
+    def center_on_structures(self, structures):
+        message_type = Messages.structures_center
+        expects_response = False
+        args = structures
+        self._send_message(message_type, args, expects_response)
 
-    def add_to_workspace(self, comp_list):
-        function_name = 'add_to_workspace'
-        args = [comp_list]
-        response = self._rpc_request(function_name, args=args)
+    def add_to_workspace(self, complex_list):
+        message_type = Messages.add_to_workspace
+        expects_response = True
+        args = complex_list
+        response = self._send_message(message_type, args, expects_response)
         return response
 
     def add_bonds(self, comp_list):
@@ -170,29 +168,31 @@ class PluginInstanceRedisInterface:
         response = self._rpc_request(function_name, args=args)
         return response
 
-    def open_url(self, url):
-        function_name = 'open_url'
-        args = [url]
-        response = self._rpc_request(function_name, args=args)
-        return response
+    def open_url(self, url, desktop_browser=False):
+        message_type = Messages.open_url
+        expects_response = False
+        args = (url, desktop_browser)
+        self._send_message(message_type, args, expects_response)
 
     def request_presenter_info(self):
-        function_name = 'request_presenter_info'
-        args = []
-        response = self._rpc_request(function_name, args=args)
-        return response
+        message_type = Messages.presenter_info_request
+        expects_response = True
+        args = None
+        result = self._send_message(message_type, args, expects_response)
+        return result
 
     def request_controller_transforms(self):
-        function_name = 'request_controller_transforms'
-        args = []
-        response = self._rpc_request(function_name, args=args)
-        return response
+        message_type = Messages.controller_transforms_request
+        expects_response = True
+        args = None
+        result = self._send_message(message_type, args, expects_response)
+        return result
 
-    def apply_color_scheme(self, color_scheme, color_scheme_target, apply_to_all):
-        function_name = 'apply_color_scheme'
-        args = [color_scheme, color_scheme_target, apply_to_all]
-        response = self._rpc_request(function_name, args=args)
-        return response
+    def apply_color_scheme(self, color_scheme, target, only_carbons):
+        message_type = Messages.apply_color_scheme
+        expects_response = False
+        args = (color_scheme, target, only_carbons)
+        self._send_message(message_type, args, expects_response)
 
     def _rpc_request(self, message, expects_response=False):
         """Publish an RPC request to redis, and await response.
@@ -228,10 +228,10 @@ class PluginInstanceRedisInterface:
         :arg: shape_list: List of shapes to upload.
         :rtype: list. List of shape IDs.
         """
-        function_name = 'upload_shapes'
-        args = [shape_list]
-        response = self._rpc_request(function_name, args=args)
-        return response
+        message_type = Messages.set_shape
+        expects_response = False
+        args = shape_list
+        self._send_message(message_type, args, expects_response)
 
     def stream_update(self, stream_id, stream_data):
         """Update stream with data.
@@ -257,6 +257,31 @@ class PluginInstanceRedisInterface:
         packet.write(message)
         return request_id, packet
 
+    def update_content(self, *content):
+        message_type = Messages.content_update
+        expects_response = False
+        args = list(content)
+        self._send_message(message_type, args, expects_response)
+
+    def update_node(self, *nodes):
+        message_type = Messages.node_update
+        expects_response = False
+        args = nodes
+        self._send_message(message_type, args, expects_response)
+
+    def set_menu_transform(self, index, position, rotation, scale):
+        message_type = Messages.menu_transform_set
+        expects_response = False
+        args = [index, position, rotation, scale]
+        self._send_message(message_type, args, expects_response)
+    
+    def request_menu_transform(self, index):
+        message_type = Messages.menu_transform_request
+        expects_response = True
+        args = [index]
+        response = self._send_message(message_type, args, expects_response)
+        return response
+
     @staticmethod
     def build_message(function_name, request_id, packet=None, expects_response=False):
         response_channel = str(uuid.uuid4())
@@ -270,7 +295,12 @@ class PluginInstanceRedisInterface:
         if expects_response:
             message['response_channel'] = response_channel
         return message
-
+    
+    def _deserialize_payload(self, payload: bytearray):
+        serializer = CommandMessageSerializer()
+        received_obj_list, command_hash, request_id = serializer.deserialize_command(
+            payload, self.version_table)
+        return received_obj_list
 
 
 
