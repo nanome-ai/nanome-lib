@@ -1,6 +1,5 @@
 import os
 import asyncio
-import importlib.util
 import inspect
 import json
 import logging
@@ -13,6 +12,13 @@ from nanome.api import control, ui, structure
 from nanome.beta.nanome_sdk.session import NanomePlugin
 from nanome.beta.nanome_sdk import utils
 from nanome.beta.nanome_sdk.logs import configure_session_logging
+
+# Make sure plugin folder is in path
+# Bold assumption that plugin is always in `plugin` folder
+# in working directory
+plugin_path = os.getcwd()  # Starting directory (/app)
+sys.path.append(plugin_path)
+from plugin import plugin_class  # noqa: E402
 
 
 logger = logging.getLogger(__name__)
@@ -98,18 +104,6 @@ async def _route_incoming_payload(payload, plugin_instance):
         return task
 
 
-def create_module_from_file(file_path, module_name=None):
-    if module_name is None:
-        module_name = "arbitrary_module_name"
-    # Create a module spec
-    spec = importlib.util.spec_from_file_location(module_name, file_path)
-    # Create a new, empty module
-    module = importlib.util.module_from_spec(spec)
-    # Execute the module and populate it
-    spec.loader.exec_module(module)
-    return module
-
-
 if __name__ == "__main__":
     plugin_id = int(sys.argv[1])
     session_id = int(sys.argv[2])
@@ -120,6 +114,7 @@ if __name__ == "__main__":
     plugin_instance = plugin_class()
 
     version_table = json.loads(os.environ['NANOME_VERSION_TABLE'])
-    loop = asyncio.get_event_loop()
+    plugin_instance = plugin_class()
     session_coro = start_session(plugin_instance, plugin_name, plugin_id, session_id, version_table)
+    loop = asyncio.get_event_loop()
     session_loop = loop.run_until_complete(session_coro)
