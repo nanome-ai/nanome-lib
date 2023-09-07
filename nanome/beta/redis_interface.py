@@ -240,7 +240,7 @@ class PluginInstanceRedisInterface:
         # Set the datatype
         # This needs some work
         data_sample = data[0]
-        if isinstance(data_sample, int)or isinstance(data_sample, float):
+        if isinstance(data_sample, int) or isinstance(data_sample, float):
             data_type = enums.StreamDataType.byte
         elif isinstance(data_sample, str):
             data_type = enums.StreamDataType.string

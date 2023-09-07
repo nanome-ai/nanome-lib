@@ -24,7 +24,7 @@ stream_id, error, _ = plugin.create_writing_stream(atom_indices, stream_type)[1:
 
 # RGB values of the rainbow
 roygbiv = [
-    (255, 0 , 0),  # Red
+    (255, 0, 0),  # Red
     (255, 127, 0),  # Orange
     (255, 255, 0),  # Yellow
     (0, 255, 0),  # Green
