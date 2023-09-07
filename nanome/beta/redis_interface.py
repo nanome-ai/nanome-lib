@@ -93,26 +93,14 @@ class PluginInstanceRedisInterface:
         response = self._send_message(message_type, args, expects_response)
         return response
 
-    def _send_message(self, message_type: Messages, args, expects_response):
+    def _send_message(self, message_type: Messages, fn_args, expects_response):
         function_name = message_type.name
-        request_id, packet = self.build_packet(message_type, args, expects_response)
+        request_id, packet = self.build_packet(message_type, fn_args, expects_response)
         message = self.build_message(function_name, request_id, packet, expects_response)
         serialized_response = self._rpc_request(message, expects_response=expects_response)
         if serialized_response is not None:
             response = self._deserialize_payload(serialized_response)
             return response
-
-    def stream_update(self, stream_id, stream_data):
-        function_name = 'stream_update'
-        args = [stream_id, stream_data]
-        response = self._rpc_request(function_name, args=args)
-        return response
-
-    def update_workspace(self, workspace):
-        function_name = 'update_workspace'
-        args = [workspace]
-        response = self._rpc_request(function_name, args=args)
-        return response
 
     def zoom_on_structures(self, structures):
         message_type = Messages.structures_zoom
@@ -120,11 +108,11 @@ class PluginInstanceRedisInterface:
         args = structures
         self._send_message(message_type, args, expects_response)
 
-    def send_notification(self):
-        function_name = 'send_notification'
-        args = []
-        response = self._rpc_request(function_name, args=args)
-        return response
+    async def send_notification(self, notification_type: enums.NotificationTypes, message):
+        message_type = Messages.notification_send
+        expects_response = False
+        args = [notification_type, message]
+        self._send_message(message_type, args, expects_response)
 
     def center_on_structures(self, structures):
         message_type = Messages.structures_center
@@ -137,12 +125,6 @@ class PluginInstanceRedisInterface:
         expects_response = True
         args = complex_list
         response = self._send_message(message_type, args, expects_response)
-        return response
-
-    def add_bonds(self, comp_list):
-        function_name = 'add_bonds'
-        args = [comp_list]
-        response = self._rpc_request(function_name, args=args)
         return response
 
     def open_url(self, url, desktop_browser=False):
@@ -210,14 +192,6 @@ class PluginInstanceRedisInterface:
         args = shape_list
         self._send_message(message_type, args, expects_response)
 
-    def stream_update(self, stream_id, stream_data):
-        """Update stream with data.
-        """
-        function_name = 'stream_update'
-        args = [stream_id, stream_data]
-        response = self._rpc_request(function_name, args=args)
-        return response
-
     def get_plugin_data(self):
         function_name = 'get_plugin_data'
         expects_response = True
@@ -256,6 +230,25 @@ class PluginInstanceRedisInterface:
         message_type = Messages.menu_transform_request
         expects_response = True
         args = [index]
+        response = self._send_message(message_type, args, expects_response)
+        return response
+
+    def update_stream(self, stream_id, data):
+        message_type = Messages.stream_feed
+        expects_response = True
+
+        # Set the datatype
+        # This needs some work
+        data_sample = data[0]
+        if isinstance(data_sample, int)or isinstance(data_sample, float):
+            data_type = enums.StreamDataType.byte
+        elif isinstance(data_sample, str):
+            data_type = enums.StreamDataType.string
+        else:
+            raise ValueError("Invalid data type for stream")
+
+        args = [stream_id, data, data_type]
+
         response = self._send_message(message_type, args, expects_response)
         return response
 
