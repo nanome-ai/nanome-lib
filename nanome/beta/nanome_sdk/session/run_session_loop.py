@@ -73,7 +73,7 @@ async def _route_incoming_payload(payload, plugin_instance):
             logger.warning(f"Could not find future for request_id {request_id}")
             return
         else:
-            fut.set_result(received_obj_list)
+            fut.set_result(payload)
 
     # Messages that get handled by the UIManager
     ui_messages = [
