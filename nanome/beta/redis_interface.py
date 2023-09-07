@@ -92,7 +92,7 @@ class PluginInstanceRedisInterface:
         expects_response = True
         response = self._send_message(message_type, args, expects_response)
         return response
-    
+
     def _send_message(self, message_type: Messages, args, expects_response):
         function_name = message_type.name
         request_id, packet = self.build_packet(message_type, args, expects_response)
@@ -251,7 +251,7 @@ class PluginInstanceRedisInterface:
         expects_response = False
         args = [index, position, rotation, scale]
         self._send_message(message_type, args, expects_response)
-    
+
     def request_menu_transform(self, index):
         message_type = Messages.menu_transform_request
         expects_response = True
@@ -272,12 +272,9 @@ class PluginInstanceRedisInterface:
         if expects_response:
             message['response_channel'] = response_channel
         return message
-    
+
     def _deserialize_payload(self, payload: bytearray):
         serializer = CommandMessageSerializer()
         received_obj_list, command_hash, request_id = serializer.deserialize_command(
             payload, self.version_table)
         return received_obj_list
-
-
-

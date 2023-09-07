@@ -22,7 +22,7 @@ class SessionClient:
         self.logger = logging.getLogger(__name__)
         self.request_futs = {}
         self.reader = self.writer = None
-        self.deserialize_payloads = True # By default, convert received payloads into Nanome objects.
+        self.deserialize_payloads = True  # By default, convert received payloads into Nanome objects.
 
     def __new__(cls, *args, **kwargs):
         # Create Singleton object
