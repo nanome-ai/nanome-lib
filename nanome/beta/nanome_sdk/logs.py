@@ -75,6 +75,10 @@ class SessionLoggingHandler(graypy.handler.BaseGELFHandler):
         """Get presenter info from plugin instance and store on handler."""
         client = self.plugin_instance.client
         presenter_info = await client.request_presenter_info()
+        # If client.deserialize_payloads is disabled, we need to manually
+        # deserialize the payload. 
+        if not client.deserialize_payloads and isinstance(presenter_info, bytearray):
+            presenter_info = client._deserialize_payload(presenter_info)
         self.org_id = presenter_info.org_id
         self.org_name = presenter_info.org_name
         self.account_id = presenter_info.account_id
