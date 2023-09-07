@@ -42,7 +42,7 @@ class SessionClient:
         expects_response = True
         args = None
         request_id = self._send_message(message_type, args, expects_response)
-        result = self._process_payload(request_id)
+        result = await self._process_payload(request_id)
         return result
 
     async def send_connect(self, plugin_id, session_id, version_table):
@@ -67,7 +67,7 @@ class SessionClient:
         expects_response = True
         args = None
         request_id = self._send_message(message_type, args, expects_response)
-        result = self._process_payload(request_id)
+        result = await self._process_payload(request_id)
         return result
 
     async def request_complexes(self, id_list):
@@ -75,7 +75,7 @@ class SessionClient:
         expects_response = True
         args = id_list
         request_id = self._send_message(message_type, args, expects_response)
-        result = self._process_payload(request_id)
+        result = await self._process_payload(request_id)
         return result
 
     def update_workspace(self, workspace):
@@ -94,9 +94,7 @@ class SessionClient:
         message_type = Messages.structures_deep_update
         expects_response = True
         args = structures
-        request_id = self._send_message(message_type, args, expects_response)
-        result = self._process_payload(request_id)
-        return result
+        self._send_message(message_type, args, expects_response)
 
     def update_structures_shallow(self, structures):
         message_type = Messages.structures_shallow_update
@@ -121,8 +119,6 @@ class SessionClient:
         expects_response = True
         args = complex_list
         request_id = self._send_message(message_type, args, expects_response)
-        result = self._process_payload(request_id)
-        return result
 
     async def remove_from_workspace(self, complex_list):
         """By removing all atoms from complexes, we can remove them from the workspace."""
@@ -136,7 +132,7 @@ class SessionClient:
             empty_complexes.append(empty)
         args = empty_complexes
         request_id = self._send_message(message_type, args, expects_response)
-        result = self._process_payload(request_id)
+        result = await self._process_payload(request_id)
         return result
 
     def update_content(self, *content):
@@ -162,7 +158,7 @@ class SessionClient:
         expects_response = True
         args = [index]
         request_id = self._send_message(message_type, args, expects_response)
-        result = self._process_payload(request_id)
+        result = await self._process_payload(request_id)
         return result
 
     async def save_files(self, file_list):
@@ -170,7 +166,7 @@ class SessionClient:
         expects_response = True
         args = file_list
         request_id = self._send_message(message_type, args, expects_response)
-        result = self._process_payload(request_id)
+        result = await self._process_payload(request_id)
         return result
 
     async def create_writing_stream(self, indices_list, stream_type):
@@ -178,7 +174,7 @@ class SessionClient:
         expects_response = True
         args = (stream_type, indices_list, enums.StreamDirection.writing)
         request_id = self._send_message(message_type, args, expects_response)
-        result = self._process_payload(request_id)
+        result = await self._process_payload(request_id)
         return result
 
     async def create_reading_stream(self, indices_list, stream_type):
@@ -186,7 +182,7 @@ class SessionClient:
         expects_response = True
         args = (stream_type, indices_list, enums.StreamDirection.reading)
         request_id = self._send_message(message_type, args, expects_response)
-        result = self._process_payload(request_id)
+        result = await self._process_payload(request_id)
         return result
 
     async def add_volume(self, comp, volume, properties, complex_to_align_index=-1):
@@ -194,7 +190,7 @@ class SessionClient:
         expects_response = True
         args = (comp, complex_to_align_index, volume, properties)
         request_id = self._send_message(message_type, args, expects_response)
-        result = self._process_payload(request_id)
+        result = await self._process_payload(request_id)
         return result
 
     def open_url(self, url, desktop_browser=False):
@@ -208,7 +204,7 @@ class SessionClient:
         expects_response = True
         args = None
         request_id = self._send_message(message_type, args, expects_response)
-        result = self._process_payload(request_id)
+        result = await self._process_payload(request_id)
         return result
 
     async def request_controller_transforms(self):
@@ -216,7 +212,7 @@ class SessionClient:
         expects_response = True
         args = None
         request_id = self._send_message(message_type, args, expects_response)
-        result = self._process_payload(request_id)
+        result = await self._process_payload(request_id)
         return result
 
     def set_plugin_list_button(self, button: ui.Button, text: str = None, usable: bool = None):
@@ -230,7 +226,7 @@ class SessionClient:
         expects_response = True
         args = (files_list, True, True)
         request_id = self._send_message(message_type, args, expects_response)
-        result = self._process_payload(request_id)
+        result = await self._process_payload(request_id)
         return result
 
     async def shapes_upload_multiple(self, shape_list):
@@ -252,7 +248,7 @@ class SessionClient:
         expects_response = True
         args = (format, entities)
         request_id = self._send_message(message_type, args, expects_response)
-        result = self._process_payload(request_id)
+        result = await self._process_payload(request_id)
         return result
 
     def apply_color_scheme(self, color_scheme, target, only_carbons):
