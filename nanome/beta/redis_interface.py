@@ -165,7 +165,7 @@ class PluginInstanceRedisInterface:
         result = self._send_message(message_type, args, expects_response)
         return result
 
-    def apply_color_scheme(self, color_scheme, target, only_carbons):
+    def apply_color_scheme(self, color_scheme, target, only_carbons=False):
         message_type = Messages.apply_color_scheme
         expects_response = False
         args = (color_scheme, target, only_carbons)
