@@ -124,7 +124,7 @@ class PluginServer:
                 await self.start_session_process(version_table, packet, self.plugin_class)
             else:
                 process = self._sessions[session_id]
-                logger.debug(f"Writing line to session {session_id}: {len(received_bytes)} bytes")
+                # logger.debug(f"Writing line to session {session_id}: {len(received_bytes)} bytes")
                 process.stdin.write(received_bytes)
                 await process.stdin.drain()
 
@@ -164,7 +164,7 @@ class PluginServer:
         payload_length = unpacked[4]
 
         connect_data += await session_process.stdout.readexactly(payload_length)
-        logger.debug(f"Writing line to NTS: {len(connect_data)} bytes")
+        # logger.debug(f"Writing line to NTS: {len(connect_data)} bytes")
         self.nts_writer.write(connect_data)
         self._sessions[session_id] = session_process
         self.polling_tasks[session_id] = asyncio.create_task(self.poll_session(session_process))

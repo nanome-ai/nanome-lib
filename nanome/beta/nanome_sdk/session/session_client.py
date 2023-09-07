@@ -285,10 +285,10 @@ class SessionClient:
         del self.request_futs[request_id]
         result = payload
         if self.deserialize_payloads:
-            result = self.deserialize_payload(payload)
+            result = self._deserialize_payload(payload)
         return result
 
-    def deserialize_payload(self, payload: bytearray):
+    def _deserialize_payload(self, payload: bytearray):
         serializer = CommandMessageSerializer()
         received_obj_list, _, _ = serializer.deserialize_command(payload, self.version_table)
         return received_obj_list

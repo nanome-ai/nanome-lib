@@ -11,10 +11,10 @@ from nanome._internal.network import Packet
 from nanome.api.serializers import CommandMessageSerializer
 from nanome.util import Logs, enums
 
-__all__ = ['PluginInstanceRedisInterface', 'StreamRedisInterface']
+__all__ = ['PluginInstanceRedisInterface']
+
 
 NTS_RESPONSE_TIMEOUT = os.environ.get('NTS_RESPONSE_TIMEOUT', 30)
-import os
 
 
 def random_request_id():
@@ -22,29 +22,6 @@ def random_request_id():
     max_req_id = 4294967295
     request_id = random.randint(0, max_req_id)
     return request_id
-
-
-class StreamRedisInterface:
-    """Gets wrapped around a stream object on creation, and is used to send data to the stream through redis.
-
-    The PluginService has functions set up to handle streams, because streams on the client side aren't networked.
-    This should not be called explicitly, but used through the RedisPluginInterface class.
-    """
-
-    def __init__(self, stream_data, plugin_interface):
-        self.stream_id = stream_data['id']
-        # self.error = stream_data['error']
-        self._plugin_interface = plugin_interface
-
-    def update(self, stream_data):
-        response = self._plugin_interface._rpc_request(
-            'stream_update', args=[self.stream_id, stream_data])
-        return response
-
-    def destroy(self):
-        response = self._plugin_interface._rpc_request(
-            'stream_destroy', args=[self.stream_id])
-        return response
 
 
 class PluginInstanceRedisInterface:
