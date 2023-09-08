@@ -95,8 +95,8 @@ async def _route_incoming_payload(payload, plugin_instance):
         ui_manager = plugin_instance.ui_manager
         ui_command = ui_manager.find_command(command_hash)
         serializer = CommandMessageSerializer()
-        received_obj_list, command_hash, request_id = serializer.deserialize_command(
-            payload, plugin_instance.client.version_table)
+        received_obj_list, _, _ = serializer.deserialize_command(
+            payload, version_table)
         await ui_manager.handle_ui_command(ui_command, received_obj_list)
     elif isinstance(message, structure.messages.ComplexAddedRemoved):
         logger.debug("Complex Added/Removed")
