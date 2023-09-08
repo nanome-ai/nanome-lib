@@ -94,11 +94,13 @@ class SessionClient:
         message_type = Messages.structures_deep_update
         expects_response = True
         args = structures
-        self._send_message(message_type, args, expects_response)
+        request_id = self._send_message(message_type, args, expects_response)
+        result = await self._process_payload(request_id)
+        return result
 
     def update_structures_shallow(self, structures):
         message_type = Messages.structures_shallow_update
-        expects_response = True
+        expects_response = False
         args = structures
         self._send_message(message_type, args, expects_response)
 
@@ -118,7 +120,7 @@ class SessionClient:
         message_type = Messages.add_to_workspace
         expects_response = True
         args = complex_list
-        request_id = self._send_message(message_type, args, expects_response)
+        self._send_message(message_type, args, expects_response)
 
     async def remove_from_workspace(self, complex_list):
         """By removing all atoms from complexes, we can remove them from the workspace."""

@@ -100,8 +100,8 @@ class PluginInstanceRedisInterface:
 
     def _send_message(self, message_type: Messages, fn_args, expects_response):
         function_name = message_type.name
-        request_id, packet = self.build_packet(message_type, fn_args, expects_response)
-        message = self.build_message(function_name, request_id, packet, expects_response)
+        request_id, packet = self._build_packet(message_type, fn_args, expects_response)
+        message = self._build_message(function_name, request_id, packet, expects_response)
         serialized_response = self._rpc_request(message, expects_response=expects_response)
         if serialized_response is not None:
             response = self._deserialize_payload(serialized_response)
@@ -203,11 +203,11 @@ class PluginInstanceRedisInterface:
     def get_plugin_data(self):
         function_name = 'get_plugin_data'
         expects_response = True
-        message = self.build_message(function_name, None, None, expects_response)
+        message = self._build_message(function_name, None, None, expects_response)
         response = self._rpc_request(message, expects_response=expects_response)
         return response
 
-    def build_packet(self, message_type, args=None, expects_response=False):
+    def _build_packet(self, message_type, args=None, expects_response=False):
         serializer = CommandMessageSerializer()
         request_id = random_request_id()
         message = serializer.serialize_message(request_id, message_type, args, self.version_table, expects_response)
@@ -259,7 +259,7 @@ class PluginInstanceRedisInterface:
         self._send_message(message_type, args, expects_response)
 
     @staticmethod
-    def build_message(function_name, request_id, packet=None, expects_response=False):
+    def _build_message(function_name, request_id, packet=None, expects_response=False):
         response_channel = str(uuid.uuid4())
         message = {
             'function': function_name,
