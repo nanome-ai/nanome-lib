@@ -6,6 +6,7 @@ import logging
 import logging.config
 import sys
 from nanome._internal.network import Packet
+from nanome._internal.network.context import ContextDeserialization
 from nanome.api.serializers import CommandMessageSerializer
 from nanome.api import control, ui, structure
 from nanome.beta.nanome_sdk.session import NanomePlugin
@@ -60,9 +61,10 @@ async def _start_session_loop(plugin_instance):
 
 
 async def _route_incoming_payload(payload, plugin_instance):
-    serializer = CommandMessageSerializer()
-    received_obj_list, command_hash, request_id = serializer.deserialize_command(
-        payload, plugin_instance.client.version_table)
+    version_table = plugin_instance.client.version_table
+    context = ContextDeserialization(payload, version_table, packet_debugging=False)
+    request_id = context.read_uint()
+    command_hash = context.read_uint()
     message = CommandMessageSerializer._commands[command_hash]
     logger.debug(f"Session Received command: {message.name()}, Request ID {request_id}")
     if request_id in plugin_instance.client.request_futs:
@@ -73,7 +75,7 @@ async def _route_incoming_payload(payload, plugin_instance):
             logger.warning(f"Could not find future for request_id {request_id}")
             return
         else:
-            fut.set_result(received_obj_list)
+            fut.set_result(payload)
 
     # Messages that get handled by the UIManager
     ui_messages = [
@@ -92,6 +94,9 @@ async def _route_incoming_payload(payload, plugin_instance):
         # See if we have a registered callback for this button
         ui_manager = plugin_instance.ui_manager
         ui_command = ui_manager.find_command(command_hash)
+        serializer = CommandMessageSerializer()
+        received_obj_list, _, _ = serializer.deserialize_command(
+            payload, version_table)
         await ui_manager.handle_ui_command(ui_command, received_obj_list)
     elif isinstance(message, structure.messages.ComplexAddedRemoved):
         logger.debug("Complex Added/Removed")

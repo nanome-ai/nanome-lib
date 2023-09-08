@@ -22,6 +22,7 @@ class SessionClient:
         self.logger = logging.getLogger(__name__)
         self.request_futs = {}
         self.reader = self.writer = None
+        self.deserialize_payloads = True  # By default, convert received payloads into Nanome objects.
 
     def __new__(cls, *args, **kwargs):
         # Create Singleton object
@@ -41,8 +42,7 @@ class SessionClient:
         expects_response = True
         args = None
         request_id = self._send_message(message_type, args, expects_response)
-        result = await self.request_futs[request_id]
-        del self.request_futs[request_id]
+        result = await self._process_payload(request_id)
         return result
 
     async def send_connect(self, plugin_id, session_id, version_table):
@@ -67,8 +67,7 @@ class SessionClient:
         expects_response = True
         args = None
         request_id = self._send_message(message_type, args, expects_response)
-        result = await self.request_futs[request_id]
-        del self.request_futs[request_id]
+        result = await self._process_payload(request_id)
         return result
 
     async def request_complexes(self, id_list):
@@ -76,8 +75,7 @@ class SessionClient:
         expects_response = True
         args = id_list
         request_id = self._send_message(message_type, args, expects_response)
-        result = await self.request_futs[request_id]
-        del self.request_futs[request_id]
+        result = await self._process_payload(request_id)
         return result
 
     def update_workspace(self, workspace):
@@ -97,13 +95,12 @@ class SessionClient:
         expects_response = True
         args = structures
         request_id = self._send_message(message_type, args, expects_response)
-        result = await self.request_futs[request_id]
-        del self.request_futs[request_id]
+        result = await self._process_payload(request_id)
         return result
 
     def update_structures_shallow(self, structures):
         message_type = Messages.structures_shallow_update
-        expects_response = True
+        expects_response = False
         args = structures
         self._send_message(message_type, args, expects_response)
 
@@ -123,10 +120,7 @@ class SessionClient:
         message_type = Messages.add_to_workspace
         expects_response = True
         args = complex_list
-        request_id = self._send_message(message_type, args, expects_response)
-        result = await self.request_futs[request_id]
-        del self.request_futs[request_id]
-        return result
+        self._send_message(message_type, args, expects_response)
 
     async def remove_from_workspace(self, complex_list):
         """By removing all atoms from complexes, we can remove them from the workspace."""
@@ -140,8 +134,7 @@ class SessionClient:
             empty_complexes.append(empty)
         args = empty_complexes
         request_id = self._send_message(message_type, args, expects_response)
-        result = await self.request_futs[request_id]
-        del self.request_futs[request_id]
+        result = await self._process_payload(request_id)
         return result
 
     def update_content(self, *content):
@@ -167,8 +160,7 @@ class SessionClient:
         expects_response = True
         args = [index]
         request_id = self._send_message(message_type, args, expects_response)
-        result = await self.request_futs[request_id]
-        del self.request_futs[request_id]
+        result = await self._process_payload(request_id)
         return result
 
     async def save_files(self, file_list):
@@ -176,8 +168,7 @@ class SessionClient:
         expects_response = True
         args = file_list
         request_id = self._send_message(message_type, args, expects_response)
-        result = await self.request_futs[request_id]
-        del self.request_futs[request_id]
+        result = await self._process_payload(request_id)
         return result
 
     async def create_writing_stream(self, indices_list, stream_type):
@@ -185,8 +176,7 @@ class SessionClient:
         expects_response = True
         args = (stream_type, indices_list, enums.StreamDirection.writing)
         request_id = self._send_message(message_type, args, expects_response)
-        result = await self.request_futs[request_id]
-        del self.request_futs[request_id]
+        result = await self._process_payload(request_id)
         return result
 
     async def create_reading_stream(self, indices_list, stream_type):
@@ -194,8 +184,7 @@ class SessionClient:
         expects_response = True
         args = (stream_type, indices_list, enums.StreamDirection.reading)
         request_id = self._send_message(message_type, args, expects_response)
-        result = await self.request_futs[request_id]
-        del self.request_futs[request_id]
+        result = await self._process_payload(request_id)
         return result
 
     async def add_volume(self, comp, volume, properties, complex_to_align_index=-1):
@@ -203,8 +192,7 @@ class SessionClient:
         expects_response = True
         args = (comp, complex_to_align_index, volume, properties)
         request_id = self._send_message(message_type, args, expects_response)
-        result = await self.request_futs[request_id]
-        del self.request_futs[request_id]
+        result = await self._process_payload(request_id)
         return result
 
     def open_url(self, url, desktop_browser=False):
@@ -218,8 +206,7 @@ class SessionClient:
         expects_response = True
         args = None
         request_id = self._send_message(message_type, args, expects_response)
-        result = await self.request_futs[request_id]
-        del self.request_futs[request_id]
+        result = await self._process_payload(request_id)
         return result
 
     async def request_controller_transforms(self):
@@ -227,8 +214,7 @@ class SessionClient:
         expects_response = True
         args = None
         request_id = self._send_message(message_type, args, expects_response)
-        result = await self.request_futs[request_id]
-        del self.request_futs[request_id]
+        result = await self._process_payload(request_id)
         return result
 
     def set_plugin_list_button(self, button: ui.Button, text: str = None, usable: bool = None):
@@ -242,8 +228,7 @@ class SessionClient:
         expects_response = True
         args = (files_list, True, True)
         request_id = self._send_message(message_type, args, expects_response)
-        result = await self.request_futs[request_id]
-        del self.request_futs[request_id]
+        result = await self._process_payload(request_id)
         return result
 
     async def shapes_upload_multiple(self, shape_list):
@@ -254,9 +239,10 @@ class SessionClient:
         result = await self.request_futs[request_id]
         del self.request_futs[request_id]
         # Make sure indices get set.
-        indices = result[0]
-        for shape, index in zip(shape_list, indices):
-            shape._index = index
+        if not isinstance(result, bytearray):
+            indices = result[0]
+            for shape, index in zip(shape_list, indices):
+                shape._index = index
         return shape_list
 
     async def request_export(self, format, entities=None):
@@ -264,8 +250,7 @@ class SessionClient:
         expects_response = True
         args = (format, entities)
         request_id = self._send_message(message_type, args, expects_response)
-        result = await self.request_futs[request_id]
-        del self.request_futs[request_id]
+        result = await self._process_payload(request_id)
         return result
 
     def apply_color_scheme(self, color_scheme, target, only_carbons):
@@ -292,3 +277,16 @@ class SessionClient:
         # self.logger.debug(f'Sending Message: {message_type.name} Size: {len(pack)} bytes')
         self.writer.write(pack)
         return request_id
+
+    async def _process_payload(self, request_id: int):
+        payload = await self.request_futs[request_id]
+        del self.request_futs[request_id]
+        result = payload
+        if self.deserialize_payloads:
+            result = self._deserialize_payload(payload)
+        return result
+
+    def _deserialize_payload(self, payload: bytearray):
+        serializer = CommandMessageSerializer()
+        received_obj_list, _, _ = serializer.deserialize_command(payload, self.version_table)
+        return received_obj_list
