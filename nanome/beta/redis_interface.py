@@ -9,6 +9,7 @@ from nanome import PluginInstance
 from nanome._internal.enums import Messages
 from nanome._internal.network import Packet
 from nanome.api.serializers import CommandMessageSerializer
+from nanome.api.streams import Stream
 from nanome.util import Logs, enums
 
 __all__ = ['PluginInstanceRedisInterface']
@@ -57,7 +58,11 @@ class PluginInstanceRedisInterface:
         expects_response = True
         args = (stream_type, indices_list, enums.StreamDirection.writing)
         response = self._send_message(message_type, args, expects_response)
-        return response
+        err_code, stream_args = response[0], response[1:] 
+        if err_code != 0:
+            raise ValueError(f"Error creating stream: {err_code}")
+        stream = Stream(None, *stream_args)
+        return stream
 
     def request_workspace(self):
         message_type = Messages.workspace_request
@@ -233,24 +238,22 @@ class PluginInstanceRedisInterface:
         response = self._send_message(message_type, args, expects_response)
         return response
 
-    def update_stream(self, stream_id, data):
+    def update_stream(self, stream, data):
         message_type = Messages.stream_feed
         expects_response = True
 
-        # Set the datatype
-        # This needs some work
-        data_sample = data[0]
-        if isinstance(data_sample, int) or isinstance(data_sample, float):
-            data_type = enums.StreamDataType.byte
-        elif isinstance(data_sample, str):
-            data_type = enums.StreamDataType.string
-        else:
-            raise ValueError("Invalid data type for stream")
-
+        stream_id = stream.id
+        data_type = stream.data_type
         args = [stream_id, data, data_type]
 
         response = self._send_message(message_type, args, expects_response)
         return response
+
+    def destroy_stream(self, stream):
+        message_type = Messages.stream_destroy
+        expects_response = False
+        args = stream.id
+        self._send_message(message_type, args, expects_response)
 
     @staticmethod
     def build_message(function_name, request_id, packet=None, expects_response=False):
