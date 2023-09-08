@@ -21,8 +21,6 @@ jobs:
           token: ${{ secrets.NANOME_BOT_PAT }}
       - name: Install Python 3
         uses: actions/setup-python@v1
-        with:
-          python-version: 3.11.5
       - name: Install Dependencies
         run: |
           python -m pip install bump2version setuptools wheel twine
