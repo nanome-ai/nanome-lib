@@ -193,9 +193,12 @@ class PluginInstanceRedisInterface:
         :rtype: list. List of shape IDs.
         """
         message_type = Messages.set_shape
-        expects_response = False
+        expects_response = True
         args = shape_list
-        self._send_message(message_type, args, expects_response)
+        shape_indices, _bytes = self._send_message(message_type, args, expects_response)
+        for shape, shape_index in zip(shape_list, shape_indices):
+            shape._index = shape_index
+        return shape_list
 
     def get_plugin_data(self):
         function_name = 'get_plugin_data'
