@@ -61,6 +61,7 @@ async def _start_session_loop(plugin_instance):
 
 
 async def _route_incoming_payload(payload, plugin_instance):
+    version_table = plugin_instance.client.version_table
     context = ContextDeserialization(payload, version_table, packet_debugging=False)
     request_id = context.read_uint()
     command_hash = context.read_uint()
