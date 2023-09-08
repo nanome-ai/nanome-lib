@@ -58,7 +58,7 @@ class PluginInstanceRedisInterface:
         expects_response = True
         args = (stream_type, indices_list, enums.StreamDirection.writing)
         response = self._send_message(message_type, args, expects_response)
-        err_code, stream_args = response[0], response[1:] 
+        err_code, stream_args = response[0], response[1:]
         if err_code != 0:
             raise ValueError(f"Error creating stream: {err_code}")
         stream = Stream(None, *stream_args)
