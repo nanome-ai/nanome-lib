@@ -313,7 +313,7 @@ class IntegrationSerializer(TypeSerializer):
         Hashes.IntegrationHashes[IntegrationCommands.import_file]: ImportFileSerializer(),
         Hashes.IntegrationHashes[IntegrationCommands.generate_molecule_image]: GenerateMoleculeImageSerializer(),
         Hashes.IntegrationHashes[IntegrationCommands.export_smiles]: ExportSmilesSerializer(),
-        Hashes.IntegrationHashes[IntegrationCommands.import_smiles]: ImportSmilesSerializer()
+        Hashes.IntegrationHashes[IntegrationCommands.import_smiles]: ImportSmilesSerializer(),
         Hashes.IntegrationHashes[IntegrationCommands.run_interactions]: RunInteractionsSerializer()
     }
 
