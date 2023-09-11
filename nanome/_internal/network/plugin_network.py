@@ -23,7 +23,7 @@ class PluginNetwork(object):
         self._serializer._plugin_id = plugin_id
         self._plugin_id = plugin_id
         self._command_id = 0
-        self.__version_table = version_table
+        self._version_table = version_table
 
         CachedImageField.session = session_id
         PluginNetwork._instance = self
@@ -62,7 +62,7 @@ class PluginNetwork(object):
 
     @classmethod
     def send(cls, code, arg, expects_response):
-        return cls.__send(code, cls._instance.__version_table, arg, expects_response)
+        return cls.__send(code, cls._instance._version_table, arg, expects_response)
 
     @classmethod
     def __send(cls, code, version_table, arg, expects_response):
@@ -100,7 +100,7 @@ class PluginNetwork(object):
                 return False
 
             received_object, command_hash, request_id = self._serializer.deserialize_command(
-                payload, self.__version_table)
+                payload, self._version_table)
             if received_object == None and command_hash == None and request_id == None:
                 return True  # Happens if deserialize_command returns None, an error message is already displayed in that case
 
