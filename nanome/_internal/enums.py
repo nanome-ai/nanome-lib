@@ -210,6 +210,7 @@ class IntegrationCommands(CommandEnum):
     import_file = auto()
     export_smiles = auto()
     import_smiles = auto()
+    run_interactions = auto()
 
 
 class Permissions(CommandEnum):

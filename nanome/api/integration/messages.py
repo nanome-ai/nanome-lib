@@ -198,6 +198,20 @@ class ImportSmilesSerializer(TypeSerializer):
         return strings
 
 
+class RunInteractionsSerializer(TypeSerializer):
+    def version(self):
+        return 0
+
+    def name(self):
+        return "RunInteractions"
+
+    def serialize(self, version, value, context):
+        pass
+
+    def deserialize(self, version, context):
+        return
+
+
 class RemoveHydrogenSerializer(TypeSerializer):
     def __init__(self):
         self.array_serializer = ArrayField()
@@ -300,6 +314,7 @@ class IntegrationSerializer(TypeSerializer):
         Hashes.IntegrationHashes[IntegrationCommands.generate_molecule_image]: GenerateMoleculeImageSerializer(),
         Hashes.IntegrationHashes[IntegrationCommands.export_smiles]: ExportSmilesSerializer(),
         Hashes.IntegrationHashes[IntegrationCommands.import_smiles]: ImportSmilesSerializer()
+        Hashes.IntegrationHashes[IntegrationCommands.run_interactions]: RunInteractionsSerializer()
     }
 
     def version(self):
