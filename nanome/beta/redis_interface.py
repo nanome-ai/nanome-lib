@@ -258,6 +258,24 @@ class PluginInstanceRedisInterface:
         args = stream.id
         self._send_message(message_type, args, expects_response)
 
+    def send_files_to_load(self, files_list):
+        message_type = Messages.load_file
+        expects_response = True
+        files_and_data = []
+        for file in files_list:
+            if isinstance(file, tuple):
+                full_path, file_name = file
+                file_name += '.' + full_path.split('.')[-1]
+            else:
+                full_path = file.replace('\\', '/')
+                file_name = full_path.split('/')[-1]
+            with open(full_path, 'rb') as content_file:
+                data = content_file.read()
+            files_and_data.append((file_name, data))
+        fn_args = (files_and_data, True, True)  # idk what the True, True does
+        response = self._send_message(message_type, fn_args, expects_response)
+        return response
+
     @staticmethod
     def _build_message(function_name, request_id, packet=None, expects_response=False):
         response_channel = str(uuid.uuid4())
