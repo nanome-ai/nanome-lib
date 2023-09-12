@@ -92,7 +92,7 @@ class PluginInstanceRedisInterface:
 
     def update_structures_shallow(self, structures: List[workspace_struct]):
         """Update the specific molecular structures in the scene to match the structures in parameter.
-        
+
         Only updates the structure's data, will not update children or other descendents.
         """
         message_type = Messages.structures_shallow_update
@@ -130,7 +130,7 @@ class PluginInstanceRedisInterface:
 
     def zoom_on_structures(self, structures: workspace_struct) -> None:
         """Repositions and resizes the workspace such that the provided structure(s) will be in the
-        
+
         center of the users view.
         """
         message_type = Messages.structures_zoom
@@ -160,7 +160,7 @@ class PluginInstanceRedisInterface:
         response = self._send_message(message_type, args, expects_response)
         return response
 
-    def open_url(self, url: str, desktop_browser: bool=False) -> None:
+    def open_url(self, url: str, desktop_browser: bool = False) -> None:
         """Open a URL in the user's browser."""
         message_type = Messages.open_url
         expects_response = False
@@ -177,7 +177,7 @@ class PluginInstanceRedisInterface:
 
     def request_controller_transforms(self):
         """Requests presenter controller info.
-        
+
         (head position, head rotation, left controller position,
         left controller rotation, right controller position,
         right controller rotation)
@@ -188,7 +188,7 @@ class PluginInstanceRedisInterface:
         result = self._send_message(message_type, args, expects_response)
         return result
 
-    def apply_color_scheme(self, color_scheme: enums.ColorScheme, target: enums.ColorSchemeTarget, only_carbons: bool=False):
+    def apply_color_scheme(self, color_scheme: enums.ColorScheme, target: enums.ColorSchemeTarget, only_carbons: bool = False):
         """Applies a color scheme to selected atoms."""
         message_type = Messages.apply_color_scheme
         expects_response = False
