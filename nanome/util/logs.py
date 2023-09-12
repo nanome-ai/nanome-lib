@@ -72,8 +72,7 @@ class Logs(object):
     def debug(cls, *args, **kwargs):
         """
         | Prints a debug message.
-
-        Prints only if plugin started in verbose mode (with -v argument)
+        | Prints only if plugin started in verbose mode (with -v argument)
 
         :param args: Variable length argument list
         :type args: Anything printable
