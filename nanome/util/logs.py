@@ -19,12 +19,13 @@ class Logs(object):
     @classmethod
     def error(cls, *args, **kwargs):
         """
-        | Prints an error
+        | Prints an error.
 
         :param args: Variable length argument list
         :type args: Anything printable
 
         :param kwargs: Keyword arguments to pass to python logging module.
+
         For options, see https://github.com/python/cpython/blob/main/Lib/logging/__init__.py#L1604
         """
         module = cls.caller_name()
@@ -36,12 +37,13 @@ class Logs(object):
     @classmethod
     def warning(cls, *args, **kwargs):
         """
-        | Prints a warning
+        | Prints a warning.
 
         :param args: Variable length argument list
         :type args: Anything printable
 
         :param kwargs: Keyword arguments to pass to python logging module.
+
         For options, see https://github.com/python/cpython/blob/main/Lib/logging/__init__.py#L1604
         """
         module = cls.caller_name()
@@ -52,12 +54,13 @@ class Logs(object):
     @classmethod
     def message(cls, *args, **kwargs):
         """
-        | Prints a message
+        | Prints a message.
 
         :param args: Variable length argument list
         :type args: Anything printable
 
         :param kwargs: Keyword arguments to pass to python logging module.
+
         For options, see https://github.com/python/cpython/blob/main/Lib/logging/__init__.py#L1604
         """
         module = cls.caller_name()
@@ -68,13 +71,15 @@ class Logs(object):
     @classmethod
     def debug(cls, *args, **kwargs):
         """
-        | Prints a debug message
-        | Prints only if plugin started in verbose mode (with -v argument)
+        | Prints a debug message.
+
+        Prints only if plugin started in verbose mode (with -v argument)
 
         :param args: Variable length argument list
         :type args: Anything printable
 
         :param kwargs: Keyword arguments to pass to python logging module.
+
         For options, see https://github.com/python/cpython/blob/main/Lib/logging/__init__.py#L1604
         """
         module = cls.caller_name()
