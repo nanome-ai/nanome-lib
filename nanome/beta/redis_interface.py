@@ -4,17 +4,27 @@ import random
 import redis
 import time
 import uuid
-
+from typing import List, Union
 from nanome import PluginInstance
 from nanome._internal.enums import Messages
 from nanome._internal.network import Packet
 from nanome.api.serializers import CommandMessageSerializer
 from nanome.api.streams import Stream
-from nanome.util import Logs, enums
+from nanome.api import shapes, structure, ui, user
+from nanome.util import Logs, enums, Vector3, Quaternion
+from nanome.util.file import LoadInfoDone
 
 __all__ = ['PluginInstanceRedisInterface']
 
+workspace_struct = Union[
+    structure.Complex, structure.Molecule, structure.Chain,
+    structure.Residue, structure.Atom, structure.Bond]
 
+ui_content = Union[
+    ui.Button, ui.Label, ui.Mesh, ui.Image,
+    ui.Dropdown, ui.DropdownItem, ui.LoadingBar,
+    ui.Slider, ui.TextInput
+]
 NTS_RESPONSE_TIMEOUT = os.environ.get('NTS_RESPONSE_TIMEOUT', 30)
 
 
@@ -41,9 +51,6 @@ class PluginInstanceRedisInterface:
         self.session_id = None
         self.version_table = None
 
-    def set_channel(self, value):
-        self.channel = value
-
     def connect(self):
         """Ping Redis, and then get data from plugin required for serialization."""
         self.redis.ping()
@@ -52,8 +59,8 @@ class PluginInstanceRedisInterface:
         self.session_id = plugin_data['session_id']
         self.version_table = plugin_data['version_table']
 
-    def create_writing_stream(self, indices_list, stream_type):
-        """Return a stream wrapped in the RedisStreamInterface"""
+    def create_writing_stream(self, indices_list: List[int], stream_type: enums.StreamType) -> Stream:
+        """Create a stream allowing the plugin to continuously update properties of many objects."""
         message_type = Messages.stream_create
         expects_response = True
         args = (stream_type, indices_list, enums.StreamDirection.writing)
@@ -64,34 +71,48 @@ class PluginInstanceRedisInterface:
         stream = Stream(None, *stream_args)
         return stream
 
-    def request_workspace(self):
+    def request_workspace(self) -> structure.Workspace:
+        """Request the entire workspace, in deep mode"""
         message_type = Messages.workspace_request
         expects_response = True
         args = None
         response = self._send_message(message_type, args, expects_response)
         return response
 
-    def request_complexes(self, id_list):
+    def request_complexes(self, id_list: List[int]) -> List[structure.Complex]:
+        """Requests a list of complexes by their indices.
+
+        Complexes returned contains the full structure (atom/bond/residue/chain/molecule)
+        """
         message_type = Messages.complexes_request
         expects_response = True
         args = id_list
         response = self._send_message(message_type, args, expects_response)
         return response
 
-    def update_structures_shallow(self, structures):
+    def update_structures_shallow(self, structures: List[workspace_struct]):
+        """Update the specific molecular structures in the scene to match the structures in parameter.
+
+        Only updates the structure's data, will not update children or other descendents.
+        """
         message_type = Messages.structures_shallow_update
         expects_response = False
         args = structures
         self._send_message(message_type, args, expects_response)
 
-    def update_structures_deep(self, struct_list):
+    def update_structures_deep(self, struct_list: List[workspace_struct]):
+        """Update the specific molecular structures in the scene to match the structures in parameter.
+
+        Will also update descendent structures and can be used to remove descendent structures.
+        """
         message_type = Messages.structures_deep_update
         expects_response = True
         args = struct_list
         response = self._send_message(message_type, args, expects_response)
         return response
 
-    def request_complex_list(self):
+    def request_complex_list(self) -> List[structure.Complex]:
+        """Request the list of all complexes in the workspace, in shallow mode."""
         message_type = Messages.complex_list_request
         args = None
         expects_response = True
@@ -107,38 +128,47 @@ class PluginInstanceRedisInterface:
             response = self._deserialize_payload(serialized_response)
             return response
 
-    def zoom_on_structures(self, structures):
+    def zoom_on_structures(self, structures: workspace_struct) -> None:
+        """Repositions and resizes the workspace such that the provided structure(s) will be in the
+
+        center of the users view.
+        """
         message_type = Messages.structures_zoom
         expects_response = False
         args = structures
         self._send_message(message_type, args, expects_response)
 
-    async def send_notification(self, notification_type: enums.NotificationTypes, message):
+    async def send_notification(self, notification_type: enums.NotificationTypes, message: str):
+        """Send a notification to the user"""
         message_type = Messages.notification_send
         expects_response = False
         args = [notification_type, message]
         self._send_message(message_type, args, expects_response)
 
-    def center_on_structures(self, structures):
+    def center_on_structures(self, structures: workspace_struct):
+        """Repositions the workspace such that the provided structure(s) will be in the center of the world."""
         message_type = Messages.structures_center
         expects_response = False
         args = structures
         self._send_message(message_type, args, expects_response)
 
-    def add_to_workspace(self, complex_list):
+    def add_to_workspace(self, complex_list: List[structure.Complex]):
+        """Add a list of complexes to the current workspace."""
         message_type = Messages.add_to_workspace
         expects_response = True
         args = complex_list
         response = self._send_message(message_type, args, expects_response)
         return response
 
-    def open_url(self, url, desktop_browser=False):
+    def open_url(self, url: str, desktop_browser: bool = False) -> None:
+        """Open a URL in the user's browser."""
         message_type = Messages.open_url
         expects_response = False
         args = (url, desktop_browser)
         self._send_message(message_type, args, expects_response)
 
-    def request_presenter_info(self):
+    def request_presenter_info(self) -> user.PresenterInfo:
+        """Get info about the presenter."""
         message_type = Messages.presenter_info_request
         expects_response = True
         args = None
@@ -146,13 +176,20 @@ class PluginInstanceRedisInterface:
         return result
 
     def request_controller_transforms(self):
+        """Requests presenter controller info.
+
+        (head position, head rotation, left controller position,
+        left controller rotation, right controller position,
+        right controller rotation)
+        """
         message_type = Messages.controller_transforms_request
         expects_response = True
         args = None
         result = self._send_message(message_type, args, expects_response)
         return result
 
-    def apply_color_scheme(self, color_scheme, target, only_carbons=False):
+    def apply_color_scheme(self, color_scheme: enums.ColorScheme, target: enums.ColorSchemeTarget, only_carbons: bool = False):
+        """Applies a color scheme to selected atoms."""
         message_type = Messages.apply_color_scheme
         expects_response = False
         args = (color_scheme, target, only_carbons)
@@ -186,7 +223,7 @@ class PluginInstanceRedisInterface:
                 message_data = pickle.loads(pickled_message_data)
                 return message_data
 
-    def upload_shapes(self, shape_list):
+    def upload_shapes(self, shape_list: List[shapes.Shape]):
         """Upload a list of shapes to the server.
 
         :arg: shape_list: List of shapes to upload.
@@ -200,7 +237,8 @@ class PluginInstanceRedisInterface:
             shape._index = shape_index
         return shape_list
 
-    def get_plugin_data(self):
+    def get_plugin_data(self) -> dict:
+        """Custom function to get data necessary for serialization from the remote plugin."""
         function_name = 'get_plugin_data'
         expects_response = True
         message = self._build_message(function_name, None, None, expects_response)
@@ -216,32 +254,38 @@ class PluginInstanceRedisInterface:
         packet.write(message)
         return request_id, packet
 
-    def update_content(self, *content):
+    def update_content(self, *content: ui_content) -> None:
+        """Update specific UI elements (button, slider, list...)
+        """
         message_type = Messages.content_update
         expects_response = False
         args = list(content)
         self._send_message(message_type, args, expects_response)
 
-    def update_node(self, *nodes):
+    def update_node(self, *nodes: List[ui.LayoutNode]) -> None:
+        """Updates layout nodes and their children."""
         message_type = Messages.node_update
         expects_response = False
         args = nodes
         self._send_message(message_type, args, expects_response)
 
-    def set_menu_transform(self, index, position, rotation, scale):
+    def set_menu_transform(self, index: int, position: Vector3, rotation: Quaternion, scale: Vector3):
+        """Update the position, scale, and rotation of the menu."""
         message_type = Messages.menu_transform_set
         expects_response = False
         args = [index, position, rotation, scale]
         self._send_message(message_type, args, expects_response)
 
-    def request_menu_transform(self, index):
+    def request_menu_transform(self, index: int):
+        """Requests spatial information of the plugin menu (position, rotation, scale)."""
         message_type = Messages.menu_transform_request
         expects_response = True
         args = [index]
         response = self._send_message(message_type, args, expects_response)
         return response
 
-    def update_stream(self, stream, data):
+    def update_stream(self, stream: Stream, data: List):
+        """Feed new data into an existing stream."""
         message_type = Messages.stream_feed
         expects_response = True
 
@@ -252,13 +296,15 @@ class PluginInstanceRedisInterface:
         response = self._send_message(message_type, args, expects_response)
         return response
 
-    def destroy_stream(self, stream):
+    def destroy_stream(self, stream: Stream):
+        """Delete an existing stream."""
         message_type = Messages.stream_destroy
         expects_response = False
         args = stream.id
         self._send_message(message_type, args, expects_response)
 
-    def send_files_to_load(self, files_list):
+    def send_files_to_load(self, files_list: List[str]) -> LoadInfoDone:
+        """Send a molecular structure file (PDB, SDF, etc.) to the workspace to render."""
         message_type = Messages.load_file
         expects_response = True
         files_and_data = []

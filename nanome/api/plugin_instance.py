@@ -132,7 +132,7 @@ class PluginInstance:
 
     def request_complex_list(self, callback=None):
         """
-        | Request the list of all complexes in the workspace, in shallow mode
+        | Request the list of all complexes in the workspace, in shallow mode.
 
         :param callback: Callback to receive list of complexes.
         :type callback: Callable[[List[Complex]], None]
