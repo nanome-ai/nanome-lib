@@ -89,7 +89,7 @@ Common Operations
 *****************
 
 Load PDB/SDF/MMCIF as a Nanome Complex
-================================
+======================================
 .. code-block:: python
 
     from nanome.api.structure import Complex
@@ -103,7 +103,7 @@ Load PDB/SDF/MMCIF as a Nanome Complex
 
 
 Export Nanome Complex as PDB/SDF/MMCIF
-================================
+======================================
 .. code-block:: python
 
     from nanome.api.structure import Complex
