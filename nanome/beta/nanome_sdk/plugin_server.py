@@ -45,7 +45,8 @@ class PluginServer:
             self.poll_nts_task = asyncio.create_task(self.poll_nts())
             await self.poll_nts_task
         except Exception as e:
-            logger.error(e)
+            use_exc_info = sys.exc_info()[0] is not None
+            logger.error(e, exc_info=use_exc_info)
         finally:
             self.keep_alive_task.cancel()
             self.poll_nts_task.cancel()
