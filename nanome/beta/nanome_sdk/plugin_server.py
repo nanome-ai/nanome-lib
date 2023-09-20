@@ -131,9 +131,12 @@ class PluginServer:
 
         elif packet_type == PacketTypes.client_disconnection:
             logger.info(f"Disconnecting Session {session_id}.")
-            popen = self._sessions[session_id]
-            popen.kill()
-            del self._sessions[session_id]
+            if session_id in self._sessions.keys():
+                popen = self._sessions[session_id]
+                popen.kill()
+                del self._sessions[session_id]
+            else:
+                logger.warning(f"Session {session_id} process was already disconnected.")
 
         elif packet_type == PacketTypes.keep_alive:
             plugin_id = packet.plugin_id
