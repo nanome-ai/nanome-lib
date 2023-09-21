@@ -284,7 +284,7 @@ class SessionClient:
         return request_id
 
     async def _process_payload(self, request_id: int):
-        """Process a response payload from NTS, and deserialize."""
+        """Wait for a response from NTS, and return deserialized result."""
         payload = await self.request_futs[request_id]
         del self.request_futs[request_id]
         result = payload
