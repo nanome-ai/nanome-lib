@@ -238,8 +238,7 @@ class SessionClient:
         expects_response = True
         args = shape_list
         request_id = self._send_message(message_type, args, expects_response)
-        result = await self.request_futs[request_id]
-        del self.request_futs[request_id]
+        result = await self._process_payload(request_id)
         # Make sure indices get set.
         if not isinstance(result, bytearray):
             indices = result[0]
@@ -264,7 +263,11 @@ class SessionClient:
     def add_bonds(self, comp_list):
         Bonding.start(comp_list)
 
-    def _send_message(self, message_type, args, expects_response=False):
+    def _send_message(self, message_type, args, expects_response=False) -> int:
+        """Serialize message, and forward it to NTS.
+        
+        Return request id if expecting a response, otherwise return None.
+        """
         request_id = utils.random_request_id()
         serializer = CommandMessageSerializer()
         message = serializer.serialize_message(request_id, message_type, args, self.version_table, expects_response)
@@ -281,6 +284,7 @@ class SessionClient:
         return request_id
 
     async def _process_payload(self, request_id: int):
+        """Process a response payload from NTS, and deserialize."""
         payload = await self.request_futs[request_id]
         del self.request_futs[request_id]
         result = payload
