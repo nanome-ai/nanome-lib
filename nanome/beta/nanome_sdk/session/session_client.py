@@ -265,7 +265,7 @@ class SessionClient:
 
     def _send_message(self, message_type, args, expects_response=False) -> int:
         """Serialize message, and forward it to NTS.
-        
+
         Return request id if expecting a response, otherwise return None.
         """
         request_id = utils.random_request_id()
