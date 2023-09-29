@@ -152,6 +152,11 @@ class Complex(_Complex, ComplexDeprecated, Base):
     def set_current_frame(self, value):
         self.current_frame = value
 
+    @property
+    def current_conformer(self):
+        current_mol = next(mol for i, mol in enumerate(self.molecules) if i == self.current_frame)
+        return current_mol.current_conformer
+
     # returns true if the complex is selected on nanome.
     def get_selected(self):
         return self._selected
