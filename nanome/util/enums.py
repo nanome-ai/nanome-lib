@@ -262,7 +262,7 @@ class InteractionKind(IntEnum):
     | Types of interactions that can be created within Nanome.
     | Used internally
     """
-    All = 0 # Used to return any interaction kind when getting interactions
+    All = 0  # Used to return any interaction kind when getting interactions
     Covalent = 1
     HydrogenBond = 2
     Ionic = 3
@@ -283,6 +283,7 @@ class InteractionKind(IntEnum):
     HalogenPi = 18
     MetsulphurPi = 19
     Proximal = 20
+
 
 class ColorScheme(IntEnum):
     """

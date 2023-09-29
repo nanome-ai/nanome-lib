@@ -54,7 +54,7 @@ class InteractionTest(nanome.AsyncPluginInstance):
         interactions = await Interaction.get()
         assert len(interactions) == 0
         Logs.message("InteractionTest: test_upload_multiple passed")
-    
+
     async def test_upload(self):
         interactions = await Interaction.get()
         assert len(interactions) == 0
@@ -66,7 +66,7 @@ class InteractionTest(nanome.AsyncPluginInstance):
         interactions = await Interaction.get()
         assert len(interactions) == 1
         interaction1.destroy()
-        
+
         interactions = await Interaction.get()
         assert len(interactions) == 0
         Logs.message("InteractionTest: test_upload passed")
@@ -87,7 +87,7 @@ class InteractionTest(nanome.AsyncPluginInstance):
         assert len(interactions) == 1
         interaction = interactions[0]
         assert interaction.visible == True  # This fails.
-        
+
         # TODO: Re-uploading creates a new interaction with new index, instead of updating values on exising
         interaction.visible = False
         await interaction.upload()
@@ -109,7 +109,7 @@ class InteractionTest(nanome.AsyncPluginInstance):
             enums.InteractionKind.Covalent,
             [self.pocket_atom.index],
             [self.ligand_atom.index])
-        
+
         # Draw another interaction connecting a different atom
         ligand_atom2 = next(atom for atom in self.ligand_res.atoms if atom.index != self.ligand_atom.index)
         interaction3 = Interaction(
@@ -117,7 +117,7 @@ class InteractionTest(nanome.AsyncPluginInstance):
             [self.pocket_atom.index],
             [ligand_atom2.index])
         await Interaction.upload_multiple([interaction1, interaction2, interaction3])
-        
+
         interactions = await Interaction.get()
         assert len(interactions) == 3
 
@@ -145,7 +145,7 @@ class InteractionTest(nanome.AsyncPluginInstance):
         self.pocket_res = next(
             res for res in comp.residues
             if res.name == "TYR"
-            and res.chain.name == "D"    
+            and res.chain.name == "D"
         )
         self.pocket_atom = next(atom for atom in self.pocket_res.atoms)
         # Make sure test atoms are visible
@@ -153,7 +153,7 @@ class InteractionTest(nanome.AsyncPluginInstance):
             atom.set_visible(True)
             atom.atom_mode = enums.AtomRenderingMode.Wire
         self.update_structures_shallow([self.pocket_atom, self.ligand_atom])
-    
+
     async def run_test_suite(self):
         result = unittest.TestResult()
         test_fns = [fn for fn in dir(self) if fn.startswith('test_')]

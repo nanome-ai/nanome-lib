@@ -177,7 +177,7 @@ class Messages(CommandEnum):
     # Shapes
     set_shape = auto()
     delete_shape = auto()
-    
+
     # Interactions
     create_interactions = auto()
     get_interactions = auto()

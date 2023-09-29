@@ -30,7 +30,6 @@ class InteractionTest(nanome.PluginInstance):
         interaction.upload()
         nanome.util.Logs.debug("Done")
 
-
     def on_interactions_received(self, interactions):
         if len(interactions) > 0:
             nanome.util.Logs.debug("Destroy interactions")

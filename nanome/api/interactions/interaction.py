@@ -54,7 +54,7 @@ class Interaction(object):
         | Remove multiple interactions from the Nanome App and destroy them.
         """
         return cls._destroy_multiple(interactions)
-    
+
     @classmethod
     def get(cls, done_callback=None, complexes_idx=None, molecules_idx=None, chains_idx=None,
             residues_idx=None, atom_idx=None, type_filter=None):
@@ -96,7 +96,7 @@ class Interaction(object):
         if done_callback is None and is_async_plugin:
             result.real_set_result = result.set_result
             result.set_result = lambda line_index: set_callback(line_index)
-            done_callback = lambda line_index: result.real_set_result(line_index)
+            def done_callback(line_index): return result.real_set_result(line_index)
         return result
 
     @classmethod
@@ -119,7 +119,7 @@ class Interaction(object):
         if done_callback is None and nanome.PluginInstance._instance.is_async:
             result.real_set_result = result.set_result
             result.set_result = lambda indices: set_callback(indices)
-            done_callback = lambda indices: result.real_set_result(indices)
+            def done_callback(indices): return result.real_set_result(indices)
         return result
 
     def _destroy(self):
@@ -142,5 +142,5 @@ class Interaction(object):
         if done_callback is None and nanome.PluginInstance._instance.is_async:
             fut.real_set_result = fut.set_result
             fut.set_result = lambda interaction_list: set_callback(interaction_list)
-            done_callback = lambda interaction_lines: fut.real_set_result(interaction_lines)
+            def done_callback(interaction_lines): return fut.real_set_result(interaction_lines)
         return fut

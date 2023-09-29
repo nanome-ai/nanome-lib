@@ -60,4 +60,3 @@ class GetInteractions(serializer_fields.TypeSerializer):
 
     def deserialize(self, version, context):
         return context.read_using_serializer(self._interaction_array)
-    

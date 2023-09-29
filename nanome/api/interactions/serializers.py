@@ -44,7 +44,7 @@ class InteractionSerializer(TypeSerializer):
         else:
             atom2_conf = None
         visible = context.read_bool()
-        
+
         result = Interaction(kind, atom1_arr, atom2_arr, atom1_conf, atom2_conf, visible)
         result.index = idx
 
