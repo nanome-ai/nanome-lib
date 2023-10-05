@@ -6,7 +6,7 @@ import os
 import unittest
 from nanome.util import enums, async_callback, Logs
 from nanome.api.structure import Complex, Workspace
-from nanome.api.interactions.interaction import Interaction
+from nanome.api.interactions import Interaction
 
 
 # Config
@@ -86,7 +86,7 @@ class InteractionTest(nanome.AsyncPluginInstance):
         interactions = await Interaction.get()
         assert len(interactions) == 1
         interaction = interactions[0]
-        assert interaction.visible == True  # This fails.
+        assert interaction.visible is True  # This fails.
 
         # TODO: Re-uploading creates a new interaction with new index, instead of updating values on exising
         interaction.visible = False
@@ -95,7 +95,7 @@ class InteractionTest(nanome.AsyncPluginInstance):
         assert len(interactions) == 1
         interaction = interactions[0]
         # TODO: The value says it's false, but it's still visible in the workspace
-        assert interaction.visible == False  # This fails
+        assert interaction.visible is False  # This fails
         Interaction.destroy_multiple([interaction])
 
     async def test_filter_by_kind(self):
@@ -180,6 +180,22 @@ class InteractionTest(nanome.AsyncPluginInstance):
         for test, tb in result.failures + result.errors:
             Logs.message("Test failed: {}".format(test))
             Logs.message(traceback.print_tb(tb))
+
+    async def test_workspace_index_numbering(self):
+        ws = await self.request_workspace()
+        assert len(ws.complexes) == 1
+        comp = ws.complexes[0]
+        starting_comp_index = comp.index
+
+        # Add empty workspace
+        self.update_workspace(Workspace())
+        await self.request_complex_list()
+
+        # Recreate workspace, and we would expect complex index to stay the same
+        self.update_workspace(ws)
+        await asyncio.sleep(1)  # Wait for workspace to be loaded. V annoying.
+        [updated_comp] = await self.request_complex_list()
+        assert updated_comp.index == starting_comp_index
 
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, InteractionTest)

@@ -82,7 +82,6 @@ class CommandMessageSerializer(object):
             return (None, None, None)
 
         try:
-            logger.debug("Received command: " + command.name())
             received_object = context.read_using_serializer(command)
         except (BufferError, struct.error) as err:
             logger.error(err, exc_info=1)
