@@ -26,6 +26,7 @@ registered_commands = [
     (Commands.dssp_add_done, messages.AddDSSP(), simple_callbacks.simple_callback_arg),
     (Commands.bonds_add_done, messages.AddBonds(), simple_callbacks.simple_callback_arg),
     (Commands.complex_updated, messages.ComplexUpdated(), callbacks.complex_updated),
+    (Commands.workspace_updated, messages.WorkspaceUpdated(), simple_callbacks.simple_callback_no_arg),
     (Commands.selection_changed, messages.SelectionChanged(), callbacks.selection_changed),
     (Commands.compute_hbonds_done, messages.ComputeHBonds(), simple_callbacks.simple_callback_no_arg),
     (Commands.substructure_response, messages.RequestSubstructure(), simple_callbacks.simple_callback_arg),

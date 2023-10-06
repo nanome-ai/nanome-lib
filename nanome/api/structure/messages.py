@@ -46,6 +46,20 @@ class ComplexAddedRemoved(serializer_fields.TypeSerializer):
         return None
 
 
+class WorkspaceUpdated(serializer_fields.TypeSerializer):
+    def version(self):
+        return 0
+
+    def name(self):
+        return "WorkspaceUpdated"
+
+    def serialize(self, version, value, data):
+        pass
+
+    def deserialize(self, version, data):
+        return None
+
+
 class ComplexUpdated(serializer_fields.TypeSerializer):
 
     def __init__(self):

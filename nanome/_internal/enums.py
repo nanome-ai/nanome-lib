@@ -53,6 +53,7 @@ class Commands(CommandEnum):
     bonds_add_done = auto()
     dssp_add_done = auto()
     complex_updated = auto()
+    workspace_updated = auto()
     selection_changed = auto()
     compute_hbonds_done = auto()
 
