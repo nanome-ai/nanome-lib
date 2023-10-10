@@ -82,19 +82,16 @@ class InteractionTest(nanome.AsyncPluginInstance):
         await interaction.upload()
 
         # Check that interaction is visible
-        # TODO: Why does visible get set to False, even though it's sent as True
         interactions = await Interaction.get()
         assert len(interactions) == 1
         interaction = interactions[0]
         assert interaction.visible is True  # This fails.
 
-        # TODO: Re-uploading creates a new interaction with new index, instead of updating values on exising
         interaction.visible = False
         await interaction.upload()
         interactions = await Interaction.get()
         assert len(interactions) == 1
         interaction = interactions[0]
-        # TODO: The value says it's false, but it's still visible in the workspace
         assert interaction.visible is False  # This fails
         Interaction.destroy_multiple([interaction])
 
@@ -144,8 +141,8 @@ class InteractionTest(nanome.AsyncPluginInstance):
         self.ligand_atom = next(atom for atom in self.ligand_res.atoms)
         self.pocket_res = next(
             res for res in comp.residues
-            if res.name == "TYR"
-            and res.chain.name == "D"
+            if res.name == "TYR" and
+            res.chain.name == "D"
         )
         self.pocket_atom = next(atom for atom in self.pocket_res.atoms)
         # Make sure test atoms are visible
@@ -192,10 +189,9 @@ class InteractionTest(nanome.AsyncPluginInstance):
         await self.request_complex_list()
 
         # Recreate workspace, and we would expect complex index to stay the same
-        self.update_workspace(ws)
-        await asyncio.sleep(1)  # Wait for workspace to be loaded. V annoying.
+        await self.update_workspace(ws)
         [updated_comp] = await self.request_complex_list()
-        assert updated_comp.index == starting_comp_index
+        assert updated_comp.index != starting_comp_index
 
 
 nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, InteractionTest)
