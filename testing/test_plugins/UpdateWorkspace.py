@@ -1,41 +1,43 @@
-import json
 import nanome
-from nanome.util import async_callback, Logs, Color
-from nanome.api import schemas, structure
+import sys
+import time
 
-NAME = "Schema Test"
-DESCRIPTION = "Tests async/await in plugins."
-CATEGORY = "testing"
+# Config
+
+NAME = "Update Workspace"
+DESCRIPTION = "A simple plugin demonstrating how plugin system can be used to extend Nanome capabilities"
+CATEGORY = "Simple Actions"
 HAS_ADVANCED_OPTIONS = False
 
+# Plugin
 
-class SchemaTest(nanome.AsyncPluginInstance):
 
+class UpdateWorkspace(nanome.PluginInstance):
     def start(self):
-        self.on_run()
+        print("Start UpdateWorkspace Plugin")
 
-    @async_callback
-    async def on_run(self):
-        shallow = await self.request_complex_list()
-        index = shallow[0].index
+    def on_workspace_received(self, workspace):
+        print("running")
+        atom_count = 0
+        bond_count = 0
+        for complex in workspace.complexes:
+            for molecule in complex.molecules:
+                for chain in molecule.chains:
+                    for residue in chain.residues:
+                        for bond in residue.bonds:
+                            bond_count += 1
+                        for atom in residue.atoms:
+                            atom.position.x = -atom.position.x
+                            atom.surface_rendering = True
+                            atom.surface_color = nanome.util.Color.Red()
+                            atom_count += 1
 
-        [comp] = await self.request_complexes([index])
-        bond_count = len(list(comp.bonds))
-        comp_data = json.dumps(schemas.ComplexSchema().dump(comp))
-        new_comp = schemas.ComplexSchema().loads(comp_data)
-        new_comp_bond_count = len(list(new_comp.bonds))
-        assert bond_count == new_comp_bond_count
+        print("bonds:", bond_count)
+        print("flipped", atom_count, "atoms")
+        self.update_workspace(workspace)
 
-        # for res in new_comp.residues:
-        #     res.ribbon_color = Color.Blue()
-        await self.update_structures_deep([new_comp])
-        
-        # Get complex from workspace again, and check bond count 
-        [updated_comp] = await self.request_complexes([index])
-        updated_bond_count = len(list(updated_comp.bonds))
-        # this assertion fails
-        assert bond_count == updated_bond_count
-        Logs.message('done')
+    def on_run(self):
+        self.request_workspace(self.on_workspace_received)
 
 
-nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, False, SchemaTest)
+nanome.Plugin.setup(NAME, DESCRIPTION, CATEGORY, HAS_ADVANCED_OPTIONS, UpdateWorkspace)
