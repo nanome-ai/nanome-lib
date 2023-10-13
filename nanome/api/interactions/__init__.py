@@ -15,4 +15,5 @@ registered_messages = [
     (Messages.create_interactions, messages.CreateInteractions()),
     (Messages.get_interactions, messages.GetInteractions()),
     (Messages.delete_interactions, messages.DeleteInteractions()),
+    (Messages.interactions_calc_done, messages.InteractionsCalcDone()),
 ]
