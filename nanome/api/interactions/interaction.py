@@ -137,3 +137,7 @@ class Interaction(object):
             fut.set_result = lambda interaction_list: set_callback(interaction_list)
             def done_callback(interaction_lines): return fut.real_set_result(interaction_lines)
         return fut
+
+    @classmethod
+    def signal_calculation_done(cls):
+        PluginNetwork._instance.send(Messages.interactions_calc_done, None, False)

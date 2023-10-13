@@ -60,3 +60,17 @@ class GetInteractions(serializer_fields.TypeSerializer):
 
     def deserialize(self, version, context):
         return context.read_using_serializer(self._interaction_array)
+
+
+class InteractionsCalcDone(serializer_fields.TypeSerializer):
+    def version(self):
+        return 0
+
+    def name(self):
+        return "InteractionsCalcDone"
+
+    def serialize(self, version, value, context):
+        pass
+
+    def deserialize(self, version, context):
+        raise NotImplementedError()

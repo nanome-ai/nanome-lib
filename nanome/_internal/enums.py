@@ -183,6 +183,7 @@ class Messages(CommandEnum):
     create_interactions = auto()
     get_interactions = auto()
     delete_interactions = auto()
+    interactions_calc_done = auto()
 
     # Other
     add_volume = auto()
