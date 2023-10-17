@@ -121,7 +121,6 @@ class Interaction(object):
     @classmethod
     def _destroy_multiple(cls, interactions):
         indices = [x.index for x in interactions]
-        Logs.debug(f"Destroying {len(indices)} interactions")
         PluginNetwork._instance.send(Messages.delete_interactions, indices, False)
 
     @classmethod
