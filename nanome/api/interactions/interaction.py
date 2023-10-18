@@ -1,5 +1,5 @@
 import nanome
-from nanome.util import Logs, enums
+from nanome.util import enums
 from nanome._internal.network import PluginNetwork
 from nanome._internal.enums import Messages
 
