@@ -1,7 +1,7 @@
 from nanome._internal.structure.models import _Complex
 from nanome._internal.network import PluginNetwork
 from nanome._internal.enums import Messages
-from nanome.util import Matrix, Logs
+from nanome.util import Matrix
 from .io import ComplexIO
 from . import Base
 from ._deprecated import ComplexDeprecated
