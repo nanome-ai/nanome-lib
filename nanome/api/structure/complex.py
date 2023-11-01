@@ -160,6 +160,17 @@ class Complex(_Complex, ComplexDeprecated, Base):
         if current_mol:
             return current_mol.current_conformer
 
+    @property
+    def current_molecule(self):
+        """
+        | Represents the current molecule the complex is in.
+
+        :type: :class:`~nanome.structure.Molecule`
+        """
+        return next((
+            mol for i, mol in enumerate(self.molecules)
+            if i == self.current_frame), None)
+
     # returns true if the complex is selected on nanome.
     def get_selected(self):
         return self._selected
