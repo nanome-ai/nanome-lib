@@ -270,8 +270,8 @@ class InteractionKind(IntEnum):
     MetalComplex = 5
     Aromatic = 6
     Hydrophobic = 7
-    VanDerWall = 8
-    VanDerWallClash = 9
+    VanDerWaals = 8
+    VanDerWaalsClash = 9
     WeakHBond = 10
     Polar = 11
     WeakPolar = 12
