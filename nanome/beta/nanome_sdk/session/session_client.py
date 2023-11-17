@@ -78,11 +78,13 @@ class SessionClient:
         result = await self._process_payload(request_id)
         return result
 
-    def update_workspace(self, workspace):
+    async def update_workspace(self, workspace):
         message_type = Messages.workspace_update
-        expects_response = False
+        expects_response = True
         args = [workspace]
-        self._send_message(message_type, args, expects_response)
+        request_id = self._send_message(message_type, args, expects_response)
+        result = await self._process_payload(request_id)
+        return result
 
     async def send_notification(self, notification_type, message):
         message_type = Messages.notification_send

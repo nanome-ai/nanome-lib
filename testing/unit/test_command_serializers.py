@@ -6,8 +6,8 @@ from nanome import util
 from nanome._internal import network
 from nanome._internal.enums import Messages
 from nanome.api.serializers import CommandMessageSerializer
-from nanome.api import structure, shapes, ui
-from nanome.util import enums
+from nanome.api import structure, shapes, interactions, ui
+from nanome.util import enums, color
 
 test_assets = os.getcwd() + ("/testing/test_assets")
 
@@ -21,7 +21,7 @@ class CommandDeserializerTestCase(unittest.TestCase):
         self.serializer = CommandMessageSerializer()
 
     def test_registered_commands(self):
-        self.assertEqual(len(self.serializer._commands), 57)
+        self.assertEqual(len(self.serializer._commands), 60)
 
     def test_deserialize_command(self):
         """Test that we can deserialze bytes from test ReceiveWorkspace Message."""
@@ -55,7 +55,7 @@ class MessageSerializeTestCase(unittest.TestCase):
             self.version_table = json.load(f)
 
     def test_registered_messages(self):
-        self.assertEqual(len(self.serializer._messages), 56)
+        self.assertEqual(len(self.serializer._messages), 60)
 
     def test_connect(self):
         message_type = Messages.connect
@@ -277,6 +277,28 @@ class MessageSerializeTestCase(unittest.TestCase):
         message_type = Messages.delete_shape
         shape_index = 2
         args = [shape_index]
+        expects_response = True
+        payload = self.serializer.serialize_message(self.request_id, message_type, args, self.version_table, expects_response)
+        self.assertTrue(isinstance(payload, memoryview))
+
+    def test_create_interactions(self):
+        message_type = Messages.create_interactions
+        ser_args = [interactions.Interaction(enums.InteractionKind.HydrogenBond, [0], [1])]
+        expects_response = True
+        payload = self.serializer.serialize_message(self.request_id, message_type, ser_args, self.version_table, expects_response)
+        self.assertTrue(isinstance(payload, memoryview))
+
+    def test_delete_interactions(self):
+        message_type = Messages.delete_interactions
+        interaction_index = 2
+        args = [interaction_index]
+        expects_response = False
+        payload = self.serializer.serialize_message(self.request_id, message_type, args, self.version_table, expects_response)
+        self.assertTrue(isinstance(payload, memoryview))
+
+    def test_get_interactions(self):
+        message_type = Messages.get_interactions
+        args = ([], [], [], [], [], enums.InteractionKind.All)
         expects_response = True
         payload = self.serializer.serialize_message(self.request_id, message_type, args, self.version_table, expects_response)
         self.assertTrue(isinstance(payload, memoryview))

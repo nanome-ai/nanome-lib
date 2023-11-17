@@ -112,6 +112,9 @@ if __name__ == "__main__":
 
     version_table = json.loads(os.environ['NANOME_VERSION_TABLE'])
     plugin_instance = plugin_class()
+
+    version_table = json.loads(os.environ['NANOME_VERSION_TABLE'])
+    plugin_instance = plugin_class()
     session_coro = start_session(plugin_instance, plugin_name, plugin_id, session_id, version_table)
     loop = asyncio.get_event_loop()
     session_loop = loop.run_until_complete(session_coro)

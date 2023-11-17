@@ -53,6 +53,7 @@ class Commands(CommandEnum):
     bonds_add_done = auto()
     dssp_add_done = auto()
     complex_updated = auto()
+    workspace_updated = auto()
     selection_changed = auto()
     compute_hbonds_done = auto()
 
@@ -92,6 +93,10 @@ class Commands(CommandEnum):
     # Shapes
     set_shape_result = auto()
     delete_shape_result = auto()
+
+    # Interactions
+    create_interactions_result = auto()
+    get_interactions_response = auto()
 
     # Other
     add_volume_done = auto()
@@ -174,6 +179,12 @@ class Messages(CommandEnum):
     set_shape = auto()
     delete_shape = auto()
 
+    # Interactions
+    create_interactions = auto()
+    get_interactions = auto()
+    delete_interactions = auto()
+    interactions_calc_done = auto()
+
     # Other
     add_volume = auto()
     open_url = auto()
@@ -201,6 +212,7 @@ class IntegrationCommands(CommandEnum):
     import_file = auto()
     export_smiles = auto()
     import_smiles = auto()
+    run_interactions = auto()
 
 
 class Permissions(CommandEnum):

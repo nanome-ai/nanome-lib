@@ -257,6 +257,34 @@ class ShapeAnchorType(IntEnum):
     Atom = 2
 
 
+class InteractionKind(IntEnum):
+    """
+    | Types of interactions that can be created within Nanome.
+    | Used internally
+    """
+    All = 0  # Used to return any interaction kind when getting interactions
+    Covalent = 1
+    HydrogenBond = 2
+    Ionic = 3
+    XBond = 4
+    MetalComplex = 5
+    Aromatic = 6
+    Hydrophobic = 7
+    VanDerWaals = 8
+    VanDerWaalsClash = 9
+    WeakHBond = 10
+    Polar = 11
+    WeakPolar = 12
+    Clash = 13
+    Carbonyl = 14
+    CarbonPi = 15
+    CationPi = 16
+    DonorPi = 17
+    HalogenPi = 18
+    MetsulphurPi = 19
+    Proximal = 20
+
+
 class ColorScheme(IntEnum):
     """
     | Color schemes for all structure representations.

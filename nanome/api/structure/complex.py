@@ -1,7 +1,7 @@
 from nanome._internal.structure.models import _Complex
 from nanome._internal.network import PluginNetwork
 from nanome._internal.enums import Messages
-from nanome.util import Matrix, Logs
+from nanome.util import Matrix
 from .io import ComplexIO
 from . import Base
 from ._deprecated import ComplexDeprecated
@@ -151,6 +151,23 @@ class Complex(_Complex, ComplexDeprecated, Base):
 
     def set_current_frame(self, value):
         self.current_frame = value
+
+    @property
+    def current_conformer(self):
+        current_mol = self.current_molecule
+        if current_mol:
+            return current_mol.current_conformer
+
+    @property
+    def current_molecule(self):
+        """
+        | Represents the current molecule the complex is in.
+
+        :type: :class:`~nanome.structure.Molecule`
+        """
+        return next((
+            mol for i, mol in enumerate(self.molecules)
+            if i == self.current_frame), None)
 
     # returns true if the complex is selected on nanome.
     def get_selected(self):

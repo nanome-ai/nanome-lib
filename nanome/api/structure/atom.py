@@ -1,6 +1,5 @@
 import nanome
 from nanome._internal.structure.models import _Atom
-from nanome.util import Logs
 from . import Base
 from ._deprecated import AtomDeprecated
 
@@ -63,6 +62,24 @@ class Atom(_Atom, AtomDeprecated, Base):
         self._hydrogened = value
         self._watered = value
         self._hetatomed = value
+
+    @property
+    def index(self):
+        """
+        | Represents the index of the atom in the Nanome workspace.
+
+        :type: :class:`int`
+        """
+        return self._index
+
+    @index.setter
+    def index(self, value):
+        """
+        | Represents the index of the atom in the Nanome workspace.
+
+        :type: :class:`int`
+        """
+        self._index = value
 
     @property
     def selected(self):

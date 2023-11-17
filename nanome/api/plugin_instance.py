@@ -155,14 +155,16 @@ class PluginInstance:
         id = self._network.send(Messages.complexes_request, id_list, expects_response)
         return self._save_callback(id, callback)
 
-    def update_workspace(self, workspace):
+    def update_workspace(self, workspace, callback=None):
         """
         | Replace the current workspace in the scene by the workspace in parameter
 
         :param workspace: New workspace
         :type workspace: :class:`~nanome.structure.Workspace`
         """
-        self._network.send(Messages.workspace_update, workspace, False)
+        expects_response = callback is not None or self.is_async
+        id = self._network.send(Messages.workspace_update, workspace, expects_response)
+        return self._save_callback(id, callback)
 
     def send_notification(self, type, message):
         """
