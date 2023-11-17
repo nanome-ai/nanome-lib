@@ -154,9 +154,7 @@ class Complex(_Complex, ComplexDeprecated, Base):
 
     @property
     def current_conformer(self):
-        current_mol = next((
-            mol for i, mol in enumerate(self.molecules)
-            if i == self.current_frame), None)
+        current_mol = self.current_molecule
         if current_mol:
             return current_mol.current_conformer
 
