@@ -130,8 +130,7 @@ class InteractionTest(nanome.AsyncPluginInstance):
         """Create fresh workspace and load it into Nanome."""
         self.pdb_file = os.path.join(test_pdbs, '1tyl.pdb')
         workspace = Workspace()
-        self.update_workspace(workspace)
-        await asyncio.sleep(1)  # Wait for workspace to be loaded. V annoying.
+        await self.update_workspace(workspace)
         await self.send_files_to_load(self.pdb_file)
         ws = await self.request_workspace()
         comp = ws.complexes[0]
