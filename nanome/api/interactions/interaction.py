@@ -67,8 +67,8 @@ class Interaction(object):
         :type done_callback: Callable[List[:class:`~nanome.api.interaction`]]
         :param ***_idx: Index or array of indices for a structure type
         :type ***_idx: int or List[int]
-        :param type_filer: Filter to return only one type of interaction
-        :type type_filer: :class:`~nanome.util.enums.InteractionKind`
+        :param type_filter: Filter to return only one type of interaction
+        :type type_filter: :class:`~nanome.util.enums.InteractionKind`
         """
         args = (
             complexes_idx if isinstance(complexes_idx, list) else [complexes_idx] if isinstance(complexes_idx, int) else [],
