@@ -21,7 +21,7 @@ class CommandDeserializerTestCase(unittest.TestCase):
         self.serializer = CommandMessageSerializer()
 
     def test_registered_commands(self):
-        self.assertEqual(len(self.serializer._commands), 57)
+        self.assertEqual(len(self.serializer._commands), 60)
 
     def test_deserialize_command(self):
         """Test that we can deserialze bytes from test ReceiveWorkspace Message."""
@@ -55,7 +55,7 @@ class MessageSerializeTestCase(unittest.TestCase):
             self.version_table = json.load(f)
 
     def test_registered_messages(self):
-        self.assertEqual(len(self.serializer._messages), 56)
+        self.assertEqual(len(self.serializer._messages), 60)
 
     def test_connect(self):
         message_type = Messages.connect
@@ -283,9 +283,9 @@ class MessageSerializeTestCase(unittest.TestCase):
 
     def test_create_interactions(self):
         message_type = Messages.create_interactions
-        args = [interactions.Interaction(enums.InteractionKind.HydrogenBond, color.Color.Blue, 0, 0)]
+        ser_args = [interactions.Interaction(enums.InteractionKind.HydrogenBond, [0], [1])]
         expects_response = True
-        payload = self.serializer.serialize_message(self.request_id, message_type, args, self.version_table, expects_response)
+        payload = self.serializer.serialize_message(self.request_id, message_type, ser_args, self.version_table, expects_response)
         self.assertTrue(isinstance(payload, memoryview))
 
     def test_delete_interactions(self):
