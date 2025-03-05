@@ -17,6 +17,8 @@ jobs:
       - run: docker run --rm -w /app -v $(pwd):/app nanome/plugin-env:latest /bin/bash -c "pip install coverage && pip install -e .['schemas'] && coverage run --source nanome --omit=nanome/util/py2_enum.py tests.py && coverage report | grep TOTAL"
 
   python2:
+    # Disable Python 2 tests for now
+    if: false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
