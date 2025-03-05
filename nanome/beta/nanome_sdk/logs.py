@@ -107,7 +107,7 @@ def configure_main_process_logging(nts_writer, plugin_id, plugin_name):
 async def configure_session_logging(nts_writer, plugin_id, plugin_name, session_id, plugin_instance):
     """Configure logging handler to send logs to main process."""
     logger = logging.getLogger()
-    verbose = str2bool(os.environ.get("PLUGIN_VERBOSE"))
+    verbose = str2bool(os.environ.get("PLUGIN_VERBOSE", False))
     level = logging.DEBUG if verbose else logging.INFO
     logger.setLevel(level)
     session_handler = SessionLoggingHandler(nts_writer, plugin_id, plugin_name, session_id, plugin_instance)

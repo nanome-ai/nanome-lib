@@ -45,8 +45,12 @@ logger = logging.getLogger(__name__)
 
 def str2bool(v):
     """Accept various truthy/falsey values as boolean arguments."""
+    if v is None:
+        return False
     if isinstance(v, bool):
         return v
+    if not isinstance(v, str):
+        raise argparse.ArgumentTypeError('Boolean value expected.')
     if v.lower() in ('yes', 'true', 't', 'y', '1'):
         return True
     elif v.lower() in ('no', 'false', 'f', 'n', '0'):
